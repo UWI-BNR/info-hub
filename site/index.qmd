@@ -2,7 +2,7 @@
 title: "BNR Information Hub"
 ---
 
-This is a Quarto website.
+Hello. This is a Quarto website.
 
 Created by Ian Hambleton.
 

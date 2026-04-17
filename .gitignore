@@ -9,6 +9,7 @@ __pycache__/
 .venv/
 venv/
 env/
+venv-info-hub/
 
 # Quarto render and cache files
 .quarto/
