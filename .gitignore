@@ -1,0 +1,60 @@
+# Local machine setup notes
+local-setup-notes.md
+setup-checks/
+
+# Python cache and environments
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Quarto render and cache files
+.quarto/
+_freeze/
+
+# Rendered site output
+_site/
+site/_site/
+
+# Temporary and log files
+*.tmp
+*.temp
+*.log
+
+# Generated outputs
+outputs/tables/*
+outputs/figures/*
+outputs/data/*
+outputs/logs/*
+outputs/build/*
+
+# Keep output folder placeholders
+!outputs/tables/.gitkeep
+!outputs/figures/.gitkeep
+!outputs/data/.gitkeep
+!outputs/logs/.gitkeep
+!outputs/build/.gitkeep
+
+# Operating system clutter
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor files
+.vscode/
+*.code-workspace
+
+# Python test/cache tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# R/RStudio clutter, only if R appears later
+.Rhistory
+.RData
+.Rproj.user/
