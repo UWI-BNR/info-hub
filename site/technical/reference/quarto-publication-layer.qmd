@@ -1,0 +1,142 @@
+---
+title: "Quarto publication layer"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Quarto publication layer
+
+## Purpose
+
+This page explains how Quarto is used to publish the BNR `info-hub`.
+
+Quarto is the publication layer. It turns approved outputs, narrative text, figures, downloads, and documentation into a static website.
+
+## What Quarto does
+
+Quarto creates:
+
+- website pages
+- static briefing pages
+- technical documentation
+- operations manual pages
+- PDF briefings via Typst
+- release catalogue pages
+- dashboard pages, if added later
+
+## What Quarto should not do
+
+Quarto should not replace Stata as the analytics engine.
+
+Production Quarto pages should not contain hidden analytical logic that changes published BNR results. They should publish, explain, or link to outputs already created by the compute layer.
+
+## Site source and site output
+
+The Quarto source lives in:
+
+```text
+site/
+```
+
+The rendered site is created in:
+
+```text
+site/_site/
+```
+
+Do not edit `_site/` manually. It is generated output and ignored by Git.
+
+## Main publication folders
+
+```text
+site/
+├── surveillance/
+├── methods-data/
+├── downloads/
+├── operations-manual/
+├── technical/
+└── assets/
+```
+
+## Static briefing pages
+
+The HTML and PDF versions of a briefing may use separate QMD files.
+
+Example:
+
+```text
+site/surveillance/cvd/briefings/
+├── case-counts.qmd
+└── case-counts-pdf.qmd
+```
+
+This is intentional. The HTML and PDF outputs have different layout needs.
+
+## HTML briefing role
+
+The HTML page should:
+
+- explain the briefing
+- display the Stata-generated figures
+- summarise findings
+- link to public CSV files
+- link to metadata and build records
+- link to the PDF briefing
+
+## PDF briefing role
+
+The PDF QMD should:
+
+- create a compact formal briefing
+- use the same approved figures
+- avoid web-only download cards
+- avoid hidden analysis
+- be suitable for email, print, and formal sharing
+
+## Download files
+
+Stata-generated public outputs are copied into:
+
+```text
+site/downloads/files/briefings/{briefing_id}/
+```
+
+The HTML pages and release catalogue link to this site-accessible copy.
+
+## Render commands
+
+Preview the whole site:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto preview --port 4200
+```
+
+Render the whole site:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render
+```
+
+Render one PDF briefing:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+
+## Design principle
+
+:::{.callout-tip collapse="true"}
+## Keep pages attractive but simple
+
+Use cards, grids, callouts, and clean headings for HTML pages.
+
+Use a tighter, more formal layout for PDFs.
+
+Do not force one QMD file to do everything if it makes the file hard to maintain.
+:::

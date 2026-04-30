@@ -1,0 +1,117 @@
+---
+title: "Render or preview the site"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Render or preview the site
+
+## Purpose
+
+This guide explains how to preview and render the BNR `info-hub` Quarto website.
+
+Use preview while editing. Use render when checking the full site before committing or publishing.
+
+## Important folder rule
+
+Run Quarto commands from the `site/` folder:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+
+# Stage 1: Preview the site
+
+:::{.callout-note collapse="true"}
+## Step 1. Move to the site folder
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Start preview
+
+```powershell
+quarto preview --port 4200
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## If preview looks stale
+
+Stop preview with:
+
+```text
+Ctrl + C
+```
+
+Then restart:
+
+```powershell
+quarto preview --port 4200
+```
+:::
+
+# Stage 2: Render the full site
+
+:::{.callout-note collapse="true"}
+## Step 1. Run full render
+
+```powershell
+quarto render
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check the rendered output
+
+Quarto writes the rendered site to:
+
+```text
+site/_site/
+```
+
+This folder is generated and ignored by Git.
+
+Do not manually edit files in `_site/`.
+:::
+
+# Stage 3: Render one page only
+
+:::{.callout-note collapse="true"}
+## Render a single HTML page
+
+```powershell
+quarto render surveillance/cvd/briefings/case-counts.qmd
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Render a single Typst PDF page
+
+```powershell
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+:::
+
+# Stage 4: Common checks
+
+:::{.callout-tip collapse="true"}
+## Website checks
+
+Check:
+
+- top navigation works
+- briefing pages render
+- figures appear
+- download links work
+- release catalogue links work
+- PDF link works
+- no private paths appear
+- no confidential data appear
+:::

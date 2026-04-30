@@ -1,0 +1,193 @@
+---
+title: "Run a static briefing"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Run a static briefing
+
+## Purpose
+
+This guide explains how to run a static BNR briefing through the new `info-hub` workflow.
+
+It uses the 2023 CVD case-count briefing as the example.
+
+The pathway is:
+
+```text
+Stata DO file -> outputs/public/briefings/{briefing_id}/ -> site/downloads/files/briefings/{briefing_id}/ -> Quarto HTML/PDF -> release catalogue
+```
+
+## Current pilot briefing
+
+| Item | Value |
+|---|---|
+| Briefing | CVD case counts, 2023 |
+| Briefing ID | `cvd_cases_2023_v1` |
+| Main Stata file | `scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do` |
+| HTML page | `site/surveillance/cvd/briefings/case-counts.qmd` |
+| PDF page | `site/surveillance/cvd/briefings/case-counts-pdf.qmd` |
+| Canonical output bundle | `outputs/public/briefings/cvd_cases_2023_v1/` |
+| Site download copy | `site/downloads/files/briefings/cvd_cases_2023_v1/` |
+
+# Stage 1: Confirm prerequisites
+
+:::{.callout-note collapse="true"}
+## Step 1. Confirm the local Stata path file exists
+
+Check that this file exists:
+
+```text
+scripts/stata/config/bnr_paths_LOCAL.do
+```
+
+This file is machine-specific and must not be committed to Git.
+
+If it is missing, copy and edit:
+
+```text
+scripts/stata/config/bnr_paths_TEMPLATE.do
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Step 2. Confirm private data remain outside the repo
+
+The Stata briefing expects confidential source data and private prepared datasets under:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub-private
+```
+
+Do not place confidential data under `info-hub/`.
+:::
+
+# Stage 2: Run the Stata briefing
+
+:::{.callout-note collapse="true"}
+## Step 1. Open Stata from the repo root
+
+In Stata, run:
+
+```stata
+cd "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Run the briefing DO file
+
+```stata
+do "scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do"
+```
+
+The DO file should create:
+
+- public CSV tables
+- public PNG figures
+- public figure-ready CSV data
+- `meta.yml`
+- `build.yml`
+:::
+
+# Stage 3: Check the canonical output bundle
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the output folder
+
+Expected folder:
+
+```text
+outputs/public/briefings/cvd_cases_2023_v1/
+```
+
+Expected contents:
+
+```text
+tables/
+figures/
+data/
+meta.yml
+build.yml
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Expected files
+
+```text
+tables/cases_2023_sex_event.csv
+tables/age70_2023_sex_event.csv
+figures/cases_2023_cum_week.png
+figures/cases_2023_age70.png
+data/cases_2023_cum_week.csv
+data/cases_2023_age70.csv
+meta.yml
+build.yml
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## If an output is wrong
+
+Do not manually edit generated outputs.
+
+Fix the Stata DO file and rerun it.
+:::
+
+# Stage 4: Copy approved Stata outputs into the site
+
+:::{.callout-note collapse="true"}
+## Step 1. Copy the output bundle
+
+From PowerShell, run:
+
+```powershell
+$repo = "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+$briefing = "cvd_cases_2023_v1"
+
+$source = "$repo\outputs\public\briefings\$briefing"
+$target = "$repo\site\downloads\files\briefings\$briefing"
+
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+Copy-Item "$source\*" $target -Recurse -Force
+```
+:::
+
+# Stage 5: Render the PDF briefing
+
+:::{.callout-note collapse="true"}
+## Step 1. Render the PDF QMD
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+:::
+
+# Stage 6: Preview and check
+
+:::{.callout-note collapse="true"}
+## Step 1. Preview the site
+
+```powershell
+quarto preview --port 4200
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## What to check
+
+Check:
+
+- HTML page renders
+- PDF link works
+- figures appear
+- CSV links work
+- metadata and build links work
+- release catalogue entry works
+- no private local paths appear
+:::

@@ -1,0 +1,148 @@
+---
+title: "Naming rules"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Naming rules
+
+## Purpose
+
+This page records naming rules for the BNR `info-hub`.
+
+Good naming keeps the repository readable, reduces broken links, and helps future users understand which files are source files, generated outputs, public artefacts, or local-only files.
+
+## Naming principles
+
+Use names that are:
+
+- short enough to avoid path-length problems
+- clear enough to understand outside their folder
+- stable over time
+- easy to sort
+- safe in Stata, Quarto, Git, and Windows
+
+## Main naming rules
+
+| File type | Rule | Example |
+|---|---|---|
+| Quarto website files | dashes | `case-counts.qmd` |
+| Stata DO files | underscores | `cvd_cases_2023.do` |
+| ADO files | no dashes | `bnryaml.ado` |
+| public briefing folders | underscores | `cvd_cases_2023_v1` |
+| generated output files | underscores | `cases_2023_cum_week.csv` |
+| human-facing link text | plain language | `Download cumulative weekly case data` |
+
+## Static briefing folder names
+
+Use:
+
+```text
+{domain}_{topic}_{period}_{version}
+```
+
+Example:
+
+```text
+cvd_cases_2023_v1
+```
+
+## Files inside a bundle
+
+The folder carries the full identity, so filenames inside a bundle can be shorter.
+
+Good examples:
+
+```text
+tables/cases_2023_sex_event.csv
+figures/cases_2023_cum_week.png
+data/cases_2023_cum_week.csv
+meta.yml
+build.yml
+```
+
+Avoid names that are too short to be useful after download:
+
+```text
+cum_week.csv
+age70.png
+```
+
+Avoid names that are unnecessarily long:
+
+```text
+table_cvd_cases_hospital_registered_sex_eventtype_2018_2023_barbados_public_release_v1.csv
+```
+
+## Web-facing pages
+
+Use dashes for website pages:
+
+```text
+case-counts.qmd
+case-counts-pdf.qmd
+release-catalogue.qmd
+set-up-local-development.qmd
+```
+
+Dashes are easier to read in URLs.
+
+## Stata-facing files
+
+Use underscores for Stata workflow files:
+
+```text
+cvd_cases_2023.do
+bnrcvd_prep_2023_v1.do
+bnrcvd_globals.do
+bnr_paths_LOCAL.do
+```
+
+This avoids quoting problems and keeps Stata-facing files consistent with generated output names.
+
+## ADO files
+
+ADO filenames should be command-safe.
+
+Use:
+
+```text
+bnryaml.ado
+```
+
+Avoid:
+
+```text
+bnr-yaml.ado
+```
+
+## ZIP bundles
+
+Optional public ZIP bundles should use clear standalone names.
+
+Example:
+
+```text
+bnr_cvd_cases_2023_v1.zip
+```
+
+A ZIP bundle should contain approved tables, figure data, metadata, and build files. It may also contain a PDF copy if a formal frozen release package is needed.
+
+## Working rule
+
+:::{.callout-tip collapse="true"}
+## If a filename looks unclear outside its folder, improve it
+
+A file may be short, but it should not be cryptic.
+
+The best balance is:
+
+```text
+briefing folder = full product identity
+file name = short but standalone
+website link text = plain-language public label
+```
+:::

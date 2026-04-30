@@ -1,0 +1,122 @@
+---
+title: "GitHub Pages deployment"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# GitHub Pages deployment
+
+## Purpose
+
+This page explains how the BNR `info-hub` is deployed as a static website through GitHub Pages.
+
+The site is built by Quarto and published as static files. No live server, database connection, or runtime application is required for routine public viewing.
+
+## Static site model
+
+The model is:
+
+```text
+Quarto source files -> rendered _site folder -> GitHub Pages website
+```
+
+The public website should not need access to confidential data or Stata.
+
+## Local render versus GitHub render
+
+During local development, render or preview from:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+
+Preview locally:
+
+```powershell
+quarto preview --port 4200
+```
+
+Render locally:
+
+```powershell
+quarto render
+```
+
+The local rendered site appears in:
+
+```text
+site/_site/
+```
+
+This folder is ignored by Git.
+
+## GitHub Actions
+
+The remote repo can use GitHub Actions to render the Quarto site and publish it through GitHub Pages.
+
+Because GitHub Actions cannot access licensed Stata or confidential private data, all Stata-generated public artefacts needed by the site must already be present in the repo.
+
+This is why approved Stata outputs are copied into:
+
+```text
+site/downloads/files/
+```
+
+before publishing.
+
+## What GitHub Pages should publish
+
+GitHub Pages should publish the rendered static site, including:
+
+- HTML pages
+- CSS and assets
+- public figures
+- public CSV files
+- public YAML metadata
+- Quarto-generated PDFs
+- release catalogue pages
+
+## What GitHub Pages should not need
+
+GitHub Pages should not need:
+
+- confidential data
+- REDCap exports
+- private `.dta` files
+- Stata execution
+- local path files
+- private logs
+
+## Deployment checklist
+
+:::{.callout-note collapse="true"}
+## Before pushing a release
+
+Check:
+
+1. The site renders locally.
+2. The briefing page opens.
+3. The PDF link works after render.
+4. CSV download links work.
+5. Metadata and build record links work.
+6. The release catalogue has been updated.
+7. Git status shows only intended files.
+:::
+
+## Troubleshooting deployment
+
+If the GitHub Pages site does not update:
+
+1. Check the GitHub Actions tab.
+2. Open the failed workflow.
+3. Read the first error, not just the final error.
+4. Confirm all linked files exist in the repo.
+5. Confirm `_quarto.yml` has not been broken.
+6. Re-render locally if needed.
+
+## Working principle
+
+The deployed site should be reproducible from the tracked repository contents and approved public outputs.

@@ -1,0 +1,122 @@
+---
+title: "Update the release catalogue"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Update the release catalogue
+
+## Purpose
+
+This guide explains how to update the BNR public release catalogue after adding or revising a public output product.
+
+The release catalogue is the public index of BNR analytical products available through the Information Hub.
+
+## Catalogue location
+
+```text
+site/downloads/release-catalogue.qmd
+```
+
+# Stage 1: Confirm the release details
+
+:::{.callout-note collapse="true"}
+## Step 1. Identify the release
+
+For each release, confirm:
+
+- title
+- briefing ID
+- product type
+- domain
+- target period
+- baseline period if relevant
+- status
+- web briefing link
+- PDF briefing link
+- table links
+- figure data links
+- metadata link
+- build record link
+:::
+
+:::{.callout-tip collapse="true"}
+## Current pilot example
+
+```text
+Title: Hospital Cardiovascular Cases in Barbados, 2023
+Briefing ID: cvd_cases_2023_v1
+Product type: Static briefing
+Domain: Cardiovascular disease
+Target year: 2023
+Baseline: 2018-2022
+Status: Draft / pilot
+```
+:::
+
+# Stage 2: Add or update the entry
+
+:::{.callout-note collapse="true"}
+## Step 1. Open the catalogue
+
+```text
+site/downloads/release-catalogue.qmd
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Add a release card
+
+Each release should include:
+
+- short summary
+- detail table
+- web briefing link
+- PDF link
+- public tables
+- figure data
+- figures
+- metadata
+- build record
+:::
+
+:::{.callout-warning collapse="true"}
+## Status field
+
+Use a clear release status.
+
+| Status | Meaning |
+|---|---|
+| Draft / pilot | Product is being tested and may still change. |
+| Approved | Product has been reviewed and approved for public release. |
+| Superseded | Product remains available but has been replaced by a newer version. |
+| Archived | Product is retained for historical reference. |
+:::
+
+# Stage 3: Check links
+
+:::{.callout-note collapse="true"}
+## Step 1. Preview the site
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto preview --port 4200
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Links to check
+
+Check:
+
+- web briefing
+- PDF briefing
+- CSV tables
+- figure data
+- figure images
+- metadata YAML
+- build YAML
+:::

@@ -1,0 +1,6 @@
+﻿---
+title: "About the BNR"
+format: html
+---
+
+This page will introduce the Barbados National Registry and its role in chronic disease surveillance.

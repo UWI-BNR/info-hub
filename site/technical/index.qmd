@@ -1,0 +1,62 @@
+﻿---
+title: "Technical Manual"
+pagetitle: "BNR Technical Manual"
+title-block-style: none
+toc: true
+toc-title: "On this page"
+toc-depth: 2
+number-sections: false
+---
+
+The Technical Manual explains how to maintain the BNR info-hub publication infrastructure.
+
+It covers local setup, static briefing workflows, approved output bundles, Quarto rendering, PDF briefings, release catalogue updates, GitHub Pages deployment, and troubleshooting.
+
+For registry operating procedures, use the BNR Operations Manual.
+
+## How-to guides
+
+Practical step-by-step guides for running, updating, rendering, and publishing the BNR information hub.
+
+Suggested and current pages:
+
+- [Set up local development](how-to/set-up-local-development.qmd)
+- [Start an editing session](how-to/start-an-editing-session.qmd)
+- [Check Git status before commit](how-to/check-git-status-before-commit.qmd)
+- [Run a static briefing](how-to/run-static-briefing.qmd)
+- [Add a new static briefing](how-to/add-new-static-briefing.qmd)
+- [Copy an output bundle](how-to/copy-output-bundle.qmd)
+- [Create a public ZIP bundle](how-to/create-public-zip-bundle.qmd)
+- [Render a PDF briefing](how-to/render-pdf-briefing.qmd)
+- [Update the release catalogue](how-to/update-release-catalogue.qmd)
+- [Render the site](how-to/render-site.qmd)
+- [Publish the site](how-to/publish-site.qmd)
+
+## Reference
+
+Stable reference material describing the publication architecture, output contract, naming rules, release catalogue, and deployment pathway.
+
+Suggested and current pages:
+
+- [Repository structure](reference/repository-structure.qmd)
+- [Compute layer: Stata](reference/compute-layer-stata.qmd)
+- [Output contract](reference/output-contract.qmd)
+- [Naming rules](reference/naming-rules.qmd)
+- [Quarto publication layer](reference/quarto-publication-layer.qmd)
+- [PDF briefing route](reference/pdf-briefing-route.qmd)
+- [Release catalogue](reference/release-catalogue.qmd)
+- [GitHub Pages deployment](reference/github-pages-deployment.qmd)
+- [Confidential data boundary](reference/confidential-data-boundary.qmd)
+
+## Troubleshooting
+
+Guidance for common technical problems encountered when rendering, publishing, checking outputs, or maintaining the repository.
+
+Suggested and current pages:
+
+- [Quarto render errors](troubleshooting/quarto-render-errors.qmd)
+- [PDF render errors](troubleshooting/pdf-render-errors.qmd)
+- [Missing output files](troubleshooting/missing-output-files.qmd)
+- [Broken download links](troubleshooting/broken-download-links.qmd)
+- [Stata path errors](troubleshooting/stata-path-errors.qmd)
+- [Git status cleanup](troubleshooting/git-status-cleanup.qmd)

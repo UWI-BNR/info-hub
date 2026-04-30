@@ -1,0 +1,148 @@
+---
+title: "Copy an output bundle into the site"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Copy an output bundle into the site
+
+## Purpose
+
+This guide explains how to copy approved Stata-generated output bundles into the Quarto site download area.
+
+This copy step is a deliberate publication boundary.
+
+```text
+canonical Stata output -> approved site copy -> Quarto publication
+```
+
+## Folder model
+
+| Folder | Purpose |
+|---|---|
+| `outputs/public/briefings/{briefing_id}/` | canonical Stata-generated public output bundle |
+| `site/downloads/files/briefings/{briefing_id}/` | website-accessible copy used by Quarto pages |
+
+# Stage 1: Identify the briefing ID
+
+:::{.callout-note collapse="true"}
+## Step 1. Confirm the briefing ID
+
+For the case-count pilot:
+
+```text
+cvd_cases_2023_v1
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Naming rule
+
+Use a stable ID:
+
+```text
+domain_topic_year_version
+```
+
+Example:
+
+```text
+cvd_cases_2023_v1
+```
+:::
+
+# Stage 2: Check the source bundle
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the source folder
+
+```text
+outputs/public/briefings/cvd_cases_2023_v1/
+```
+
+Expected structure:
+
+```text
+tables/
+figures/
+data/
+meta.yml
+build.yml
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## If the source bundle is missing
+
+Do not create it manually.
+
+Run the relevant Stata briefing DO file.
+:::
+
+# Stage 3: Copy the bundle
+
+:::{.callout-note collapse="true"}
+## Step 1. Run the copy command
+
+From PowerShell:
+
+```powershell
+$repo = "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+$briefing = "cvd_cases_2023_v1"
+
+$source = "$repo\outputs\public\briefings\$briefing"
+$target = "$repo\site\downloads\files\briefings\$briefing"
+
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+Copy-Item "$source\*" $target -Recurse -Force
+```
+:::
+
+# Stage 4: Optional clean copy
+
+:::{.callout-warning collapse="true"}
+## Clean-copy command
+
+Use this only when you are sure the site copy should be fully replaced.
+
+```powershell
+$repo = "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+$briefing = "cvd_cases_2023_v1"
+
+$source = "$repo\outputs\public\briefings\$briefing"
+$target = "$repo\site\downloads\files\briefings\$briefing"
+
+if (Test-Path $target) {
+  Remove-Item $target -Recurse -Force
+}
+
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+Copy-Item "$source\*" $target -Recurse -Force
+```
+:::
+
+# Stage 5: Check links
+
+:::{.callout-note collapse="true"}
+## Step 1. Preview the site
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto preview --port 4200
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Links to check
+
+Check links to:
+
+- CSV tables
+- figure data
+- PNG figures
+- `meta.yml`
+- `build.yml`
+:::

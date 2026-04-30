@@ -1,0 +1,8 @@
+﻿---
+title: "CVD Briefings"
+format: html
+---
+
+# CVD Briefings
+
+This section will contain short public-facing CVD briefing products.

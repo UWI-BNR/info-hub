@@ -1,0 +1,133 @@
+---
+title: "BNR audit summary"
+subtitle: "BNR Audit Summary"
+pagetitle: "BNR Information Hub | Audit Summary"
+
+description: "Page presents the summary BNR audit performed by Ian Hambleton in Aug-2025."
+keywords:
+  - BNR
+  - Barbados National Registry
+  - surveillance
+  - chronic disease
+  - methods
+
+author:
+  - name: "Barbados National Registry"
+    affiliation: "George Alleyne Chronic Disease Research Centre"
+
+date: "2026-04-30"
+date-modified: last-modified
+
+categories:
+  - methods
+  - surveillance
+  - BNR
+
+# Rendering behaviour
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    number-sections: false
+    smooth-scroll: true
+    code-fold: true
+    code-tools: false
+    anchor-sections: true
+    link-external-newwindow: true
+
+# Page behaviour
+title-block-style: none
+page-layout: article
+toc-location: right
+
+# Search/listing metadata
+listing-date-sort: "date desc"
+
+# Editorial status metadata
+status: "draft"
+owner: "BNR"
+reviewer: ""
+approved-by: ""
+approval-date: ""
+version: "0.1"
+
+# BNR workflow metadata
+bnr-section: "methods"
+bnr-subsection: ""
+bnr-page-type: "guidance"
+bnr-audience:
+  - public
+bnr-data-sensitivity: "public"
+bnr-last-reviewed: ""
+bnr-next-review-due: ""
+
+# Optional: prevent code from executing unless deliberately enabled
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+---
+
+# Barbados National Registry (BNR): Process Audit Executive Summary  
+*Prepared for the BNR Advisory Committee and the Barbados Ministry of Health and Wellness,*
+*October, 2025*
+
+---
+
+## Purpose of the Audit
+This review was undertaken to strengthen the efficiency, accuracy, and long-term sustainability of the Barbados National Registry’s Cardiovascular Disease (BNR–CVD) system. It builds on strong national progress since the registry’s establishment and responds to new opportunities to modernise data capture, quality control, and reporting as Barbados moves further into the digital era.
+
+## What We Did
+Originally focused on the BNR-CVD analytics process, the audit was broadened when early findings revealed upstream data-quality issues. We conducted a desk-based review of systems, documentation, and workflows across the full data-handling pathway. This evidence-driven approach gave us an understanding of current processes and forms a strong basis for a second review involving stakeholder interviews to refine recommendations.
+
+---
+
+## Key Findings at a Glance
+| **Process Area** | **Current Challenges** | **Improvement Opportunity** |
+|------------------|------------------------|-----------------------------|
+| **Case Capture & Preparation<br/>(Pre-REDCap)** | Mortality data recoding remains incomplete. Underlying cause of death (UCOD) coding would be ideal but carries substantial resource and system implications. Current keyword-based approaches limit precision, reproducibility, and survival linkage. | Adopt a pragmatic Phase 2 approach by systematically coding the full ICD-10 spectrum using structured regular expressions, explicitly coding “junk” causes for redistribution across CVD deaths, and introducing sensitivity measures to support robust linkage with incident cases for survival analytics. |
+| **Data Entry & Quality Control<br/>(Within-REDCap)** | The 2023 database rebuild left some validation and documentation gaps. | Lock and stabilise the REDCap platform, reinstate data checks, and build a living data dictionary. |
+| **Analysis & Reporting<br/>(Post-REDCap)** | No single “official” cumulative dataset and reliance on older Stata scripts. | Establish dataset governance, modernise analytics, and deliver faster, policy-relevant reporting. |
+
+Across all stages, the audit found dedicated staff working within a complex system that has evolved over many years. The findings point to a clear opportunity to improve any remaining limitations, build on existing strengths and transform the registry into a model of digital public health reporting.
+
+---
+
+## Five Immediate Priorities (0–9 months)
+| **#** | **Action** | **Transformational Benefit** |
+|:--:|----------------|------------------------------|
+| 1️⃣ | Finalise and approve a single cumulative dataset (to Dec 2023). | Creates an authoritative national CVD record. |
+| 2️⃣ | Lock the production REDCap version and reinstate validation rules. | Protects data integrity and comparability. |
+| 3️⃣ | Define and safeguard a 30–40-variable **Core Dataset**. | Guarantees completeness of key national indicators. |
+| 4️⃣ | Re-establish true national reporting by stabilising incidence and mortality monitoring. | Restores credibility of national CVD statistics and provides a dependable foundation for surveillance and policy. |
+| 5️⃣ | Implement a structured ICD-10 coding framework using systematic regular-expression methods, including explicit identification and redistribution of “junk” codes, with sensitivity analyses for survival linkage. | Delivers reproducible mortality classification to support incidence–mortality linkage and survival analytics without the full resource burden of national UCOD implementation. |
+
+---
+
+## Phased Improvement Plan
+| **Stage** | **Timeline** | **Strategic Goal** |
+|------------|--------------|--------------------|
+| **Stage 1** | 0–9 months | Stabilise data foundation and governance. |
+| **Stage 2** | 9–18 months | Modernise analytics and documentation using open, interoperable standards. |
+| **Stage 3** | 18–36 months | Expand registry coverage and integrate new conditions within a digital-ready platform. |
+
+
+---
+
+## Expected National Gains
+- A **trusted, auditable national CVD dataset** supporting evidence-based decisions.  
+- **Shorter, more frequent, and policy-focused reporting** for senior decision-makers.  
+- **Open-standard, cloud-ready documentation** positioning Barbados at the forefront of the Caribbean’s digital health transformation.
+
+---
+
+## Endorsement Requested
+The BNR seeks Advisory Committee and Ministry support to proceed with this proposed modernisation. These improvements will transform the BNR from a valuable legacy system into a **cutting-edge national digital health resource** ready for the next decade of data-driven decision-making.
+
+---
+
+*Lead: BNR Technical Team  |  Support: GA-CDRC  &  CaribData  |  Date: October 2025*
+
+</br>

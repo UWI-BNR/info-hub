@@ -1,0 +1,68 @@
+﻿---
+title: "Methods"
+pagetitle: "BNR Methods"
+---
+
+These pages explain how BNR statistics are produced, what the main indicators mean, and how the figures should be interpreted.
+
+This section is public-facing. It should be technically thorough, but written in plain language.
+
+## About BNR methods
+
+Purpose: introduce the methods section, explain how BNR methods are documented, and describe how changes are recorded over time.
+
+Suggested future pages:
+
+- `about/purpose-of-methods.qmd`
+- `about/how-bnr-produces-statistics.qmd`
+- `about/how-methods-are-updated.qmd`
+- `about/version-history.qmd`
+
+## Surveillance areas and indicators
+
+Purpose: document the main surveillance domains and the indicators used for public reporting.
+
+Suggested future pages:
+
+- `indicators/cardiovascular-disease.qmd`
+- `indicators/hypertension.qmd`
+- `indicators/diabetes.qmd`
+- `indicators/cancer.qmd`
+- `indicators/mortality.qmd`
+- `indicators/primary-care-monitoring.qmd`
+
+## Data sources, definitions, and coverage
+
+Purpose: explain where BNR data come from, what records are included, and how core definitions are applied.
+
+Suggested future pages:
+
+- `data-sources/overview.qmd`
+- `data-sources/case-definitions.qmd`
+- `data-sources/inclusion-exclusion-rules.qmd`
+- `data-sources/population-denominators.qmd`
+- `data-sources/age-groups-and-standardisation.qmd`
+- `data-sources/linkage-and-record-matching.qmd`
+
+## Responsible data use and confidentiality
+
+Purpose: describe how BNR protects confidentiality, applies disclosure control, and handles requests for data access.
+
+Suggested future pages:
+
+- `responsible-data-use/confidentiality.qmd`
+- `responsible-data-use/what-data-can-be-shared.qmd`
+- `responsible-data-use/requesting-bnr-data.qmd`
+- `responsible-data-use/disclosure-control.qmd`
+- `responsible-data-use/data-sharing-decisions.qmd`
+
+## Interpreting BNR outputs
+
+Purpose: help users understand what BNR statistics can and cannot show.
+
+Suggested future pages:
+
+- `interpretation/rates-and-trends.qmd`
+- `interpretation/data-quality-and-completeness.qmd`
+- `interpretation/known-limitations.qmd`
+- `interpretation/using-bnr-data-responsibly.qmd`

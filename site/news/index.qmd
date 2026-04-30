@@ -1,0 +1,6 @@
+﻿---
+title: "Latest"
+format: html
+---
+
+This page will provide latest reports etc... as a blog style listing

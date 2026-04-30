@@ -1,0 +1,137 @@
+---
+title: "Start an editing session"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Start an editing session
+
+## Purpose
+
+This guide explains how to begin routine work on the BNR `info-hub`.
+
+Use it when the repository is already set up on your machine and you want to edit pages, run a briefing, preview the site, or prepare a commit.
+
+## Standard local path
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub
+```
+
+Future users may have a different path. They should record it in their local setup notes.
+
+# Stage 1: Open the repo
+
+:::{.callout-note collapse="true"}
+## Step 1. Open the project folder
+
+Open VS Code and open:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub
+```
+
+Open the terminal with:
+
+```text
+Ctrl + J
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Confirm the terminal location
+
+Run:
+
+```powershell
+pwd
+```
+
+If needed, move to the repo root:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+```
+:::
+
+# Stage 2: Check current repo state
+
+:::{.callout-note collapse="true"}
+## Step 1. Check Git status
+
+Run:
+
+```powershell
+git status
+```
+
+Review existing changed or untracked files before starting new work.
+:::
+
+:::{.callout-tip collapse="true"}
+## What to look for
+
+Expected changes may include:
+
+```text
+site/...
+scripts/stata/...
+outputs/public/...
+site/downloads/files/...
+DECISIONS.md
+CHANGELOG.md
+```
+
+Unexpected files may include:
+
+```text
+site/_site/
+site/.quarto/
+*.log
+*.dta
+private data
+local path files
+```
+:::
+
+# Stage 3: Start preview if needed
+
+:::{.callout-note collapse="true"}
+## Step 1. Move to the site folder
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Start Quarto preview
+
+```powershell
+quarto preview --port 4200
+```
+:::
+
+# Stage 4: End cleanly
+
+:::{.callout-note collapse="true"}
+## Step 1. Stop preview
+
+Press:
+
+```text
+Ctrl + C
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check Git before leaving
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+git status
+```
+:::

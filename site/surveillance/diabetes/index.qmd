@@ -1,0 +1,6 @@
+﻿---
+title: "Diabetes Surveillance"
+format: html
+---
+
+This section will contain diabetes outputs.

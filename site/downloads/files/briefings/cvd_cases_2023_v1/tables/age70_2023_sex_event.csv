@@ -1,0 +1,9 @@
+etype,sex,age70,cases,total_cases,percent
+Stroke,Female,<70 years,120,312,38.46154
+Stroke,Female,70 years and older,192,312,61.53846
+Stroke,Male,<70 years,168,312,53.846153
+Stroke,Male,70 years and older,144,312,46.153847
+AMI,Female,<70 years,52,105,49.523811
+AMI,Female,70 years and older,53,105,50.476189
+AMI,Male,<70 years,89,141,63.120567
+AMI,Male,70 years and older,52,141,36.879433

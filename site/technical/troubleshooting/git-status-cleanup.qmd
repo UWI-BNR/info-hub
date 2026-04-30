@@ -1,0 +1,180 @@
+---
+title: "Clean up Git status"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Clean up Git status
+
+
+## Purpose
+
+Use this guide before committing changes to the BNR `info-hub` repository.
+
+The goal is to commit only intentional source files, approved public outputs, and documentation updates.
+
+Do not commit private data, local configuration, generated site output, caches, logs, or temporary files.
+
+# Stage 1: Check Git status
+
+:::{.callout-note collapse="true"}
+## Step 1. Run Git status from the repo root
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+git status
+```
+
+For a shorter view:
+
+```powershell
+git status -s
+```
+:::
+
+# Stage 2: Know what should usually be tracked
+
+Expected tracked changes may include:
+
+```text
+scripts/stata/
+site/
+site/downloads/files/
+outputs/public/
+README.md
+DECISIONS.md
+CHANGELOG.md
+```
+
+For the case-count pilot, expected tracked changes may include:
+
+```text
+scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do
+scripts/stata/common/bnrcvd_prep_2023_v1.do
+scripts/stata/common/bnrcvd_globals.do
+outputs/public/briefings/cvd_cases_2023_v1/
+site/downloads/files/briefings/cvd_cases_2023_v1/
+site/surveillance/cvd/briefings/case-counts.qmd
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+site/downloads/release-catalogue.qmd
+site/technical/
+site/operations-manual/
+```
+
+# Stage 3: Know what should not be tracked
+
+These should normally not be committed:
+
+```text
+site/_site/
+site/.quarto/
+site/_freeze/
+local-setup-notes.md
+scripts/stata/config/bnr_paths_LOCAL.do
+info-hub-private/
+*.dta
+*.log
+*.smcl
+*.gph
+```
+
+:::{.callout-warning collapse="true"}
+## Confidential data boundary
+
+Confidential source data and private working files must stay outside the repo in:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub-private\
+```
+
+They should never appear in Git status.
+:::
+
+# Stage 4: Check ignored files if needed
+
+To check whether a file is ignored:
+
+```powershell
+git check-ignore -v path\to\file
+```
+
+Example:
+
+```powershell
+git check-ignore -v scripts\stata\config\bnr_paths_LOCAL.do
+```
+
+This should show that the local path file is ignored.
+
+# Stage 5: Stage only intended files
+
+Stage by folder or file:
+
+```powershell
+git add scripts\stata
+
+git add outputs\public
+
+git add site\surveillance\cvd\briefings
+
+git add site\downloads
+
+git add site\technical
+
+git add site\operations-manual
+```
+
+Then check status again:
+
+```powershell
+git status
+```
+
+:::{.callout-warning collapse="true"}
+## Avoid careless `git add .`
+
+Avoid:
+
+```powershell
+git add .
+```
+
+unless you have already checked that no unwanted files appear in Git status.
+:::
+
+# Stage 6: Commit with a clear message
+
+Example:
+
+```powershell
+git commit -m "Add static CVD case-count briefing workflow"
+```
+
+For documentation-only changes:
+
+```powershell
+git commit -m "Add technical manual troubleshooting guides"
+```
+
+# Stage 7: Final safety check before push
+
+Before pushing, run:
+
+```powershell
+git status
+```
+
+Expected result:
+
+```text
+nothing to commit, working tree clean
+```
+
+Then push:
+
+```powershell
+git push
+```

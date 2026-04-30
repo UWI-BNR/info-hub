@@ -1,0 +1,163 @@
+---
+title: "Compute layer: Stata"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Compute layer: Stata
+
+## Purpose
+
+This page explains how Stata is used as the primary analytics engine for the BNR `info-hub`.
+
+The publication system may use Quarto, Typst, GitHub Pages, and small helper tools, but the core surveillance analytics should remain in Stata unless a future architectural decision changes this.
+
+## Core principle
+
+```text
+Stata computes. Quarto publishes.
+```
+
+Stata should create:
+
+- public CSV tables
+- public figure files
+- figure-ready CSV data
+- private prepared datasets
+- metadata files
+- build records
+- logs
+
+Stata should not be responsible for final website layout or final PDF styling.
+
+## Stata folder structure
+
+```text
+scripts/stata/
+├── ado/
+├── common/
+├── config/
+└── briefings/
+```
+
+## Configuration files
+
+The simple local path pattern is:
+
+```text
+scripts/stata/config/bnr_paths_TEMPLATE.do
+scripts/stata/config/bnr_paths_LOCAL.do
+```
+
+The template is tracked in Git. The local file is machine-specific and ignored by Git.
+
+A briefing DO file should begin with:
+
+```stata
+do "scripts/stata/config/bnr_paths_LOCAL.do"
+do "scripts/stata/common/bnrcvd_globals.do"
+```
+
+## Static briefing scripts
+
+A static briefing should normally have one main analytical DO file.
+
+Example:
+
+```text
+scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do
+```
+
+This keeps the analytical logic for a fixed briefing in one place.
+
+Shared preparation logic may sit under:
+
+```text
+scripts/stata/common/
+```
+
+Example:
+
+```text
+scripts/stata/common/bnrcvd_prep_2023_v1.do
+```
+
+## Why one main DO file per static briefing?
+
+For static occasional briefings, reproducibility is easier when one main file recreates the product.
+
+The DO file should be clearly sectioned:
+
+```stata
+* 0. Setup
+* 1. Inputs and constants
+* 2. Validation checks
+* 3. Data preparation
+* 4. Tables
+* 5. Figures
+* 6. Metadata and build record
+* 7. Final checks
+```
+
+The file does not need to be short. It needs to be readable, stable, and rebuildable.
+
+## Shared files
+
+Use shared files only where they reduce duplication without hiding important logic.
+
+| File type | Example | Use |
+|---|---|---|
+| config | `bnr_paths_LOCAL.do` | local paths |
+| common DO | `bnrcvd_prep_2023_v1.do` | shared CVD 2023 preparation |
+| globals | `bnrcvd_globals.do` | shared colours and session values |
+| ADO | `bnryaml.ado` | reusable helper command |
+
+## Logs and private work files
+
+Private intermediate files should live outside the repo, usually under:
+
+```text
+info-hub-private/work/
+```
+
+These files are rebuildable artefacts. If a future user cannot find one, the expected action is to rerun the relevant DO file.
+
+## What not to do
+
+:::{.callout-warning collapse="true"}
+## Avoid these patterns
+
+- Do not put confidential data inside `info-hub/`.
+- Do not write final website content from Stata.
+- Do not use Quarto to recreate Stata analysis logic.
+- Do not depend on today's date in filenames for static products.
+- Do not infer the target year from the latest available year for static briefings.
+:::
+
+## Static briefing parameters
+
+Static briefing DO files should set fixed parameters near the top.
+
+Example:
+
+```stata
+local target_year     2023
+local baseline_start  2018
+local baseline_end    2022
+local briefing_id     "cvd_cases_2023_v1"
+```
+
+This prevents a static 2023 briefing from silently changing when newer data become available.
+
+## Output responsibility
+
+The Stata job is complete when it has written a complete public output bundle to:
+
+```text
+outputs/public/briefings/{briefing_id}/
+```
+
+Quarto then publishes and explains that bundle.

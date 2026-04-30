@@ -1,0 +1,161 @@
+---
+title: "Add a new static briefing"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Add a new static briefing
+
+## Purpose
+
+This guide explains how to add a new static BNR briefing using the 2023 CVD case-count pilot as the template.
+
+A static briefing is a fixed reporting product that must be reproducible later. It should not silently update when newer data become available.
+
+## Standard pattern
+
+Each static briefing normally has:
+
+```text
+one main Stata DO file
+one public output bundle
+one HTML QMD page
+one PDF QMD page
+one release catalogue entry
+```
+
+# Stage 1: Choose the briefing ID
+
+:::{.callout-note collapse="true"}
+## Step 1. Name the briefing
+
+Use a stable ID:
+
+```text
+domain_topic_year_version
+```
+
+Examples:
+
+```text
+cvd_cases_2023_v1
+cvd_case_fatality_2023_v1
+cvd_length_of_stay_2023_v1
+```
+:::
+
+# Stage 2: Create the Stata folder
+
+:::{.callout-note collapse="true"}
+## Step 1. Create a briefing folder
+
+Example:
+
+```text
+scripts/stata/briefings/cvd_cases_2023/
+```
+
+Place the main analytical DO file in this folder.
+:::
+
+:::{.callout-tip collapse="true"}
+## Keep one main DO file where practical
+
+For static briefings, one main analytical DO file per briefing is usually easier to reproduce and hand over.
+
+Shared helpers can live in:
+
+```text
+scripts/stata/common/
+scripts/stata/ado/
+scripts/stata/config/
+```
+:::
+
+# Stage 3: Write the public output bundle
+
+:::{.callout-note collapse="true"}
+## Step 1. Use the standard bundle structure
+
+```text
+outputs/public/briefings/{briefing_id}/
+├── tables/
+├── figures/
+├── data/
+├── meta.yml
+└── build.yml
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Do not write confidential data here
+
+Only approved aggregate outputs, figure-ready public data, public metadata, and public build records should be written to `outputs/public/`.
+:::
+
+# Stage 4: Create HTML and PDF QMD files
+
+:::{.callout-note collapse="true"}
+## Step 1. Create the HTML QMD
+
+Example:
+
+```text
+site/surveillance/cvd/briefings/case-counts.qmd
+```
+
+The HTML page should explain the briefing, embed public figures, summarise findings, and link to outputs.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Create the PDF QMD
+
+Example:
+
+```text
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+
+The PDF page should be shorter and more print-oriented than the HTML page.
+:::
+
+# Stage 5: Add the public release entry
+
+:::{.callout-note collapse="true"}
+## Step 1. Update the release catalogue
+
+Edit:
+
+```text
+site/downloads/release-catalogue.qmd
+```
+
+Include the web page, PDF, tables, figure data, metadata, and build record.
+:::
+
+# Stage 6: Preview and check
+
+:::{.callout-note collapse="true"}
+## Step 1. Preview the site
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto preview --port 4200
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Final checks
+
+Check:
+
+- HTML page
+- PDF render
+- release catalogue
+- download links
+- metadata and build files
+- Git status
+:::

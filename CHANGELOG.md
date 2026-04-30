@@ -83,6 +83,52 @@ The setup was designed for future users who may be confident Stata users but new
 
 ---
 
+## 2026-04-26
+
+### Quarto site spine and first Stata publication pilot
+
+**Changes**
+
+- Expanded the Quarto site navigation from a starter Home/About structure to the first full information architecture.
+- Created the planned section structure for:
+  - About
+  - Surveillance Outputs
+  - Methods & Data
+  - Dashboards
+  - Downloads
+  - Operations Manual
+  - Technical documentation
+  - Archive
+- Selected simple CVD case counts as the first Stata-to-Quarto pilot pathway.
+- Added a formal architectural decision that Quarto should publish only approved public output bundles.
+- Established `outputs/public/` as the preferred location for publication-ready artefacts consumed by the Quarto site.
+
+**Reason**
+
+The project is moving from local setup into the porting and build phase.
+
+The old Material for MkDocs site is being used as a content source, not as the structural template for the new Quarto site. The new site requires a cleaner architecture before detailed content migration begins.
+
+Simple case counts were selected as the first Stata pilot because they provide a low-complexity test of the compute-to-publication pathway before more complex indicators such as incidence, mortality, survival, or case-fatality are refactored.
+
+**Impact**
+
+- The Quarto site now has a clearer long-term structure.
+- The first analytic pilot is defined.
+- The compute and publication layers remain separated.
+- GitHub Pages deployment can be designed around approved public outputs rather than confidential data or live Stata execution.
+- The Operations Manual will need to document how outputs are generated, checked, promoted, published, and archived.
+
+**Documentation Updated**
+
+- `site/_quarto.yml`
+- `DECISIONS.md`
+- `CHANGELOG.md`
+- `site/operations-manual/`
+- `site/technical/`
+
+---
+
 ## Template for future entries
 
 Use the following structure for future changelog entries.

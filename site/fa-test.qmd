@@ -1,0 +1,7 @@
+---
+title: "Font Awesome HTML test"
+format:
+  html: default
+---
+
+{{< fa chart-line >}} Font Awesome HTML test

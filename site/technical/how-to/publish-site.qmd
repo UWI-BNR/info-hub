@@ -1,0 +1,105 @@
+---
+title: "Publish the site"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Publish the site
+
+## Purpose
+
+This guide explains the final technical checks before publishing the BNR `info-hub` through GitHub Pages.
+
+Publication should happen only after BNR review and release approval have been completed where required.
+
+# Stage 1: Render locally
+
+:::{.callout-note collapse="true"}
+## Step 1. Render the site
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Check after render
+
+Check:
+
+- site renders without errors
+- HTML briefing works
+- PDF briefing works
+- release catalogue works
+- download links work
+:::
+
+# Stage 2: Check Git status
+
+:::{.callout-note collapse="true"}
+## Step 1. Return to the repo root
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+git status
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Do not commit generated or private files
+
+Do not commit:
+
+- `site/_site/`
+- `site/.quarto/`
+- private data
+- private logs
+- `bnr_paths_LOCAL.do`
+- local setup notes
+:::
+
+# Stage 3: Commit changes
+
+:::{.callout-note collapse="true"}
+## Step 1. Stage intended files
+
+Use VS Code Source Control or selective command-line Git.
+
+Example:
+
+```powershell
+git add site scripts outputs/public docs README.md CHANGELOG.md DECISIONS.md
+```
+
+Adjust the command to match the files actually changed.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Commit
+
+```powershell
+git commit -m "Add CVD case-count static briefing workflow"
+```
+:::
+
+# Stage 4: Push to GitHub
+
+:::{.callout-note collapse="true"}
+## Step 1. Push
+
+```powershell
+git push
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check deployment
+
+Check GitHub Actions or GitHub Pages deployment status in the GitHub repository.
+
+When deployment completes, open the public site and check the changed pages.
+:::

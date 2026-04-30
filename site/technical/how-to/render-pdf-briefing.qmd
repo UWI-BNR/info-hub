@@ -1,0 +1,134 @@
+---
+title: "Render a PDF briefing"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Render a PDF briefing
+
+## Purpose
+
+This guide explains how to render a PDF briefing using Quarto and Typst.
+
+The PDF briefing is separate from the HTML briefing because print layout and web layout have different needs.
+
+## Current pattern
+
+| Output | File |
+|---|---|
+| HTML briefing | `site/surveillance/cvd/briefings/case-counts.qmd` |
+| PDF briefing source | `site/surveillance/cvd/briefings/case-counts-pdf.qmd` |
+| Rendered PDF | generated under `site/_site/` during Quarto render |
+
+## Design rule
+
+Stata-generated files are copied into:
+
+```text
+site/downloads/files/
+```
+
+Quarto-generated PDFs are created by Quarto during render.
+
+# Stage 1: Check the PDF QMD
+
+:::{.callout-note collapse="true"}
+## Step 1. Open the PDF source file
+
+For the case-count pilot:
+
+```text
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+:::
+
+:::{.callout-tip collapse="true"}
+## Expected YAML pattern
+
+```yaml
+format:
+  typst:
+    output-file: bnr_cvd_cases_2023_v1.pdf
+    toc: false
+    number-sections: false
+```
+:::
+
+# Stage 2: Render the PDF
+
+:::{.callout-note collapse="true"}
+## Step 1. Move to the site folder
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Render the PDF QMD
+
+```powershell
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 3. Check the rendered PDF
+
+The rendered PDF should appear under `_site`.
+
+Example:
+
+```text
+site/_site/surveillance/cvd/briefings/bnr_cvd_cases_2023_v1.pdf
+```
+:::
+
+# Stage 3: Link the PDF from the HTML page
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the HTML link
+
+For the HTML and PDF files in the same source folder, use:
+
+```markdown
+[Download the PDF briefing](bnr_cvd_cases_2023_v1.pdf)
+```
+:::
+
+# Stage 4: Common PDF problems
+
+:::{.callout-warning collapse="true"}
+## Bibliography or CSL error
+
+If Typst reports an unknown CSL style, the PDF QMD may be inheriting site-level bibliography settings.
+
+For a briefing PDF with no references, use:
+
+```yaml
+bibliography: []
+citeproc: false
+csl: apa
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Missing images
+
+Check image paths from the PDF QMD location.
+
+For QMD files in:
+
+```text
+site/surveillance/cvd/briefings/
+```
+
+paths back to site downloads usually start with:
+
+```text
+../../../downloads/files/
+```
+:::

@@ -1,0 +1,58 @@
+---
+title: "Technical how-to guides"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Technical how-to guides
+
+## Purpose
+
+This section contains practical guides for maintaining the BNR `info-hub` infrastructure.
+
+The guides are written for skilled Stata users who may be new to Quarto, Git, GitHub Pages, Python virtual environments, and static website publication.
+
+The normal static briefing pathway is:
+
+```text
+run Stata -> inspect output bundle -> copy approved files into the site -> render Quarto -> check HTML/PDF -> update catalogue -> commit and publish
+```
+
+These guides focus on the web and publication infrastructure. Registry operations, REDCap procedures, review, sign-off, and disclosure decisions belong in the BNR Operations Manual.
+
+## Where to start
+
+| Task | Guide |
+|---|---|
+| Set up the repo on a new laptop | [Set up local development](set-up-local-development.qmd) |
+| Start routine work | [Start an editing session](start-an-editing-session.qmd) |
+| Run a Stata static briefing | [Run a static briefing](run-static-briefing.qmd) |
+| Copy approved Stata outputs into the site | [Copy an output bundle](copy-output-bundle.qmd) |
+| Render or preview the site | [Render or preview the site](render-site.qmd) |
+| Render a PDF briefing | [Render a PDF briefing](render-pdf-briefing.qmd) |
+| Update the release catalogue | [Update the release catalogue](update-release-catalogue.qmd) |
+| Add another briefing | [Add a new static briefing](add-new-static-briefing.qmd) |
+| Create a ZIP package | [Create a public ZIP bundle](create-public-zip-bundle.qmd) |
+| Publish the site | [Publish the site](publish-site.qmd) |
+| Check files before commit | [Check Git status before commit](check-git-status-before-commit.qmd) |
+
+## Important boundaries
+
+| Folder | Meaning |
+|---|---|
+| `info-hub/` | Git repository: scripts, Quarto site, documentation, approved public outputs |
+| `info-hub-private/` | Local-only private area: confidential data, private prepared datasets, private logs |
+| `outputs/public/` | Canonical Stata-generated public output bundles |
+| `site/downloads/files/` | Site-accessible copy of approved Stata-generated outputs |
+| `site/_site/` | Quarto-rendered site output; generated and ignored by Git |
+
+## Working rule
+
+```text
+Stata computes.
+Quarto publishes.
+Git records only what is safe and intended.
+```

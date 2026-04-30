@@ -1,0 +1,57 @@
+---
+title: "Technical reference"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Technical reference
+
+## Purpose
+
+This section explains the infrastructure behind the BNR `info-hub`.
+
+Use the **How-To Guides** when you need to perform a task. Use this reference section when you need to understand how the repository, Stata workflow, output bundles, Quarto publication layer, naming rules, and deployment pathway fit together.
+
+The Technical Manual is deliberately separate from the BNR Operations Manual:
+
+- the **Operations Manual** explains how BNR operates as a registry and surveillance system
+- the **Technical Manual** explains how to maintain the website, scripts, output bundles, PDF route, and deployment workflow
+
+## Reference pages
+
+| Page | Use it to understand |
+|---|---|
+| [Repository structure](repository-structure.qmd) | What each top-level folder is for |
+| [Compute layer: Stata](compute-layer-stata.qmd) | How Stata remains the primary analytics engine |
+| [Output contract](output-contract.qmd) | How generated outputs pass from Stata to Quarto |
+| [Quarto publication layer](quarto-publication-layer.qmd) | How HTML pages, PDFs, downloads, and catalogues are published |
+| [PDF briefing route](pdf-briefing-route.qmd) | How Typst PDFs are generated from PDF-focused QMD files |
+| [Release catalogue](release-catalogue.qmd) | How released products are indexed for public users |
+| [Naming rules](naming-rules.qmd) | How files, folders, scripts, and outputs should be named |
+| [Confidential data boundary](confidential-data-boundary.qmd) | What may enter the repo and what must remain local-only |
+| [GitHub Pages deployment](github-pages-deployment.qmd) | How the static site is published |
+
+## Working principle
+
+The infrastructure should remain understandable to a skilled Stata user who is not a specialist web developer.
+
+When a technical choice is possible, prefer the option that is:
+
+- easier to explain
+- easier to inspect
+- easier to hand over
+- less dependent on hidden automation
+- less likely to expose confidential data
+
+:::{.callout-tip collapse="true"}
+## How to use this reference section
+
+Start with [Output contract](output-contract.qmd) if you are trying to understand how Stata output becomes web content.
+
+Start with [Confidential data boundary](confidential-data-boundary.qmd) if you are unsure whether a file can be committed to Git.
+
+Start with [Repository structure](repository-structure.qmd) if you are unsure where a file should live.
+:::

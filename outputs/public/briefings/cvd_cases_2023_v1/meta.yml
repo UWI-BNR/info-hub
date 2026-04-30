@@ -1,0 +1,25 @@
+briefing_id: cvd_cases_2023_v1
+title: Hospital Cardiovascular Cases in Barbados, 2023
+product_type: static_briefing_output_bundle
+registry: BNR-CVD
+geography: Barbados
+time_period: 2018-2023
+target_year: 2023
+baseline_period: 2018-2022
+unit_of_analysis: hospital-registered cardiovascular event
+included_events: stroke and acute myocardial infarction
+source_summary: hospital admissions recorded by the Barbados National Registry
+description: public aggregate outputs for the 2023 CVD case-count briefing
+disclosure_status: aggregate public output
+license: CC BY 4.0
+contact: Barbados National Registry
+outputs:
+  tables:
+    - tables/cases_2023_sex_event.csv
+    - tables/age70_2023_sex_event.csv
+  figures:
+    - figures/cases_2023_cum_week.png
+    - figures/cases_2023_age70.png
+  data:
+    - data/cases_2023_cum_week.csv
+    - data/cases_2023_age70.csv

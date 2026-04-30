@@ -1,0 +1,118 @@
+---
+title: "Fix missing output files"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Fix missing output files
+
+
+## Purpose
+
+Use this guide when a table, figure, figure-ready data file, metadata file, or build file is missing from a static briefing bundle.
+
+The expected source bundle for the case-count pilot is:
+
+```text
+outputs/public/briefings/cvd_cases_2023_v1/
+```
+
+The expected website copy is:
+
+```text
+site/downloads/files/briefings/cvd_cases_2023_v1/
+```
+
+# Stage 1: Check the canonical output bundle
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the source output folder
+
+From PowerShell:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+Get-ChildItem outputs\public\briefings\cvd_cases_2023_v1 -Recurse
+```
+
+Expected files include:
+
+```text
+tables/cases_2023_sex_event.csv
+tables/age70_2023_sex_event.csv
+figures/cases_2023_cum_week.png
+figures/cases_2023_age70.png
+data/cases_2023_cum_week.csv
+data/cases_2023_age70.csv
+meta.yml
+build.yml
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## If a file is missing here
+
+If a file is missing from `outputs/public/`, do not create it by hand.
+
+Rerun the Stata briefing DO file:
+
+```stata
+cd "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+do "scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do"
+```
+:::
+
+# Stage 2: Check the site-accessible copy
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the site copy
+
+From PowerShell:
+
+```powershell
+Get-ChildItem site\downloads\files\briefings\cvd_cases_2023_v1 -Recurse
+```
+
+The same Stata-generated files should appear in the site copy.
+:::
+
+:::{.callout-tip collapse="true"}
+## If files exist in outputs/public but not site/downloads/files
+
+Copy the approved bundle again:
+
+```powershell
+$repo = "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+$source = "$repo\outputs\public\briefings\cvd_cases_2023_v1"
+$target = "$repo\site\downloads\files\briefings\cvd_cases_2023_v1"
+
+New-Item -ItemType Directory -Force -Path $target | Out-Null
+Copy-Item "$source\*" $target -Recurse -Force
+```
+:::
+
+# Stage 3: Check naming
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the briefing ID
+
+The briefing ID must match across:
+
+```text
+outputs/public/briefings/cvd_cases_2023_v1/
+site/downloads/files/briefings/cvd_cases_2023_v1/
+site/downloads/release-catalogue.qmd
+site/surveillance/cvd/briefings/case-counts.qmd
+```
+
+A broken link is often caused by a small mismatch such as `case` versus `cases`.
+:::
+
+:::{.callout-warning collapse="true"}
+## Do not edit generated files manually
+
+If a CSV, PNG, `meta.yml`, or `build.yml` is wrong, fix the code that created it and regenerate it.
+:::

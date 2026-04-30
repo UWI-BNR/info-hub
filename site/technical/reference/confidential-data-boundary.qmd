@@ -1,0 +1,137 @@
+---
+title: "Confidential data boundary"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Confidential data boundary
+
+## Purpose
+
+This page explains the boundary between the Git-tracked `info-hub` repository and the local-only private working area.
+
+This boundary is one of the most important safeguards in the project.
+
+## Core rule
+
+```text
+Confidential data must never be required to render the Quarto site.
+```
+
+The website should be renderable using only source files, public approved outputs, and non-confidential assets.
+
+## Two-folder model
+
+Use two sibling folders:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\
+├── info-hub\
+└── info-hub-private\
+```
+
+## `info-hub/`
+
+This is the Git repository.
+
+It may contain:
+
+- Stata scripts
+- Quarto source files
+- documentation
+- site assets
+- approved public output bundles
+- public CSV files
+- public PNG figures
+- public metadata and build records
+
+## `info-hub-private/`
+
+This is local-only.
+
+It may contain:
+
+- confidential source data
+- REDCap exports
+- frozen private datasets
+- private prepared Stata datasets
+- private YAML metadata for internal prepared datasets
+- logs
+- review exports
+- temporary files
+
+It should not be committed to Git.
+
+## Private work files
+
+Private prepared `.dta` files may live in:
+
+```text
+info-hub-private/work/
+```
+
+These are rebuildable artefacts.
+
+If a future user cannot find one, the expected action is to rerun the relevant DO file.
+
+## Public output bundles
+
+Approved public outputs live in:
+
+```text
+info-hub/outputs/public/briefings/{briefing_id}/
+```
+
+These should contain only public aggregate or otherwise approved artefacts.
+
+## Site download copy
+
+After review, approved Stata-generated outputs are copied to:
+
+```text
+info-hub/site/downloads/files/briefings/{briefing_id}/
+```
+
+This makes them available to Quarto and GitHub Pages.
+
+## What must not be committed
+
+:::{.callout-warning collapse="true"}
+## Never commit these files
+
+- raw REDCap exports
+- identifiable or potentially identifiable datasets
+- private `.dta` files
+- private logs containing file paths or record-level details
+- local machine path files
+- files from `info-hub-private/`
+- temporary analysis files
+:::
+
+## Git protection
+
+The `.gitignore` file protects common private and generated files, but it is not the only safeguard.
+
+The stronger safeguard is structural: keep confidential data outside the repo entirely.
+
+## Public metadata versus private metadata
+
+Private YAML metadata beside private `.dta` files supports internal audit and debugging.
+
+Public `meta.yml` and `build.yml` files in release bundles are curated for publication.
+
+Do not automatically promote private YAML metadata to public release metadata.
+
+## Pre-commit check
+
+Before committing, run:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+git status
+```
+
+Review every added file. If you do not recognise a file, do not commit it until its purpose is clear.

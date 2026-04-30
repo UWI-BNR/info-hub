@@ -1,0 +1,8 @@
+﻿---
+title: "Primary Care Surveillance"
+format: html
+---
+
+# Primary Care Surveillance
+
+This section will prepare for hypertension and diabetes surveillance outputs.

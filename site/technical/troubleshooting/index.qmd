@@ -1,0 +1,63 @@
+---
+title: "Troubleshooting"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Troubleshooting
+
+
+## Purpose
+
+This section helps users diagnose and fix common problems in the BNR `info-hub` technical workflow.
+
+It is written for users who are comfortable with Stata, but may be less familiar with Git, Quarto, Typst, PowerShell, and static website publishing.
+
+The normal troubleshooting pathway is:
+
+```text
+read the first error -> identify the affected layer -> check paths and files -> fix the smallest problem -> rerun the same command
+```
+
+## Start here
+
+| Problem | Use this guide |
+|---|---|
+| Stata cannot find a file or path | [Fix Stata path errors](stata-path-errors.qmd) |
+| A table, figure, metadata file, or build file is missing | [Fix missing output files](missing-output-files.qmd) |
+| A download link fails on the website | [Fix broken download links](broken-download-links.qmd) |
+| Quarto preview or render fails | [Fix Quarto render errors](quarto-render-errors.qmd) |
+| A PDF briefing does not render | [Fix PDF render errors](pdf-render-errors.qmd) |
+| Git shows unexpected files | [Clean up Git status](git-status-cleanup.qmd) |
+
+## The three layers to check
+
+```text
+Stata compute layer
+  scripts/stata/ -> outputs/public/
+
+Publication source layer
+  site/ -> site/downloads/files/
+
+Rendered website layer
+  site/_site/
+```
+
+:::{.callout-tip collapse="true"}
+## First rule
+
+Do not start by changing several files at once.
+
+First rerun the exact command that failed. Then read the first error message, not the last one. The first error usually identifies the true problem.
+:::
+
+:::{.callout-warning collapse="true"}
+## Files that should not be edited manually
+
+Do not manually edit generated outputs unless there is a clear reason and the change is documented.
+
+If a generated file is wrong, update the Stata or Quarto source that created it and regenerate the output.
+:::

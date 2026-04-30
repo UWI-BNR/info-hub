@@ -1,0 +1,98 @@
+﻿---
+title: "Operations Manual"
+pagetitle: "BNR Operations Manual"
+---
+
+This manual describes the routine processes used to operate the BNR system.
+
+It is intended primarily for BNR staff and authorised collaborators. It should be practical, procedural, and suitable for handover.
+
+## Operating model and responsibilities
+
+Purpose: describe how BNR work is organised, who is responsible for each part of the process, and how routine reporting cycles are managed.
+
+Suggested future pages:
+
+- `operating-model/purpose-of-manual.qmd`
+- `operating-model/roles-and-responsibilities.qmd`
+- `operating-model/routine-reporting-cycle.qmd`
+- `operating-model/workflow-overview.qmd`
+- `operating-model/handover-checklist.qmd`
+
+## Pre-REDCap processes
+
+Purpose: document the work that takes place before data are entered into REDCap.
+
+Suggested future pages:
+
+- `pre-redcap/case-ascertainment.qmd`
+- `pre-redcap/source-document-review.qmd`
+- `pre-redcap/minimum-information-required.qmd`
+- `pre-redcap/abstraction-preparation.qmd`
+- `pre-redcap/unclear-or-incomplete-source-information.qmd`
+- `pre-redcap/pre-entry-quality-checks.qmd`
+
+## REDCap processes
+
+Purpose: document the operational use of REDCap for registry data entry, checking, correction, and export.
+
+Suggested future pages:
+
+- `redcap/entering-registry-data.qmd`
+- `redcap/editing-existing-records.qmd`
+- `redcap/managing-required-fields.qmd`
+- `redcap/redcap-data-quality-checks.qmd`
+- `redcap/queries-and-corrections.qmd`
+- `redcap/exporting-approved-datasets.qmd`
+
+## Post-REDCap processes
+
+Purpose: document what happens after REDCap export, including dataset freezing, analytics, logs, and output checking.
+
+Suggested future pages:
+
+- `post-redcap/dataset-freeze.qmd`
+- `post-redcap/dataset-versioning.qmd`
+- `post-redcap/running-stata-analytics-jobs.qmd`
+- `post-redcap/reviewing-logs.qmd`
+- `post-redcap/checking-generated-tables-and-figures.qmd`
+- `post-redcap/reviewing-quality-control-outputs.qmd`
+
+## Data governance and sharing
+
+Purpose: document the internal process for assessing data requests, protecting confidentiality, and managing data sharing agreements.
+
+Suggested future pages:
+
+- `data-governance/assessing-data-requests.qmd`
+- `data-governance/data-sharing-agreement.qmd`
+- `data-governance/confidentiality-rules.qmd`
+- `data-governance/data-trust-agreement.qmd`
+- `data-governance/recording-approvals-and-conditions.qmd`
+- `data-governance/rejected-or-deferred-requests.qmd`
+
+## Release, correction, and archiving
+
+Purpose: document the process for reviewing, approving, publishing, correcting, and archiving BNR outputs.
+
+Suggested future pages:
+
+- `release-archive/pre-publication-review.qmd`
+- `release-archive/release-sign-off.qmd`
+- `release-archive/handling-corrections.qmd`
+- `release-archive/republishing-updated-outputs.qmd`
+- `release-archive/archiving-completed-releases.qmd`
+- `release-archive/operational-changelog.qmd`
+
+## Refit record and institutional memory
+
+Purpose: preserve the audit trail and institutional memory behind the BNR refit.
+
+Suggested future pages:
+
+- `refit-record/legacy-bnr-audit.qmd`
+- `refit-record/issues-identified-before-refit.qmd`
+- `refit-record/refit-decisions.qmd`
+- `refit-record/what-changed-and-why.qmd`
+- `refit-record/known-legacy-constraints.qmd`
+- `refit-record/items-deferred-for-future-phases.qmd`

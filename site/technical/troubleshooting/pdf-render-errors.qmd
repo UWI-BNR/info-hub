@@ -1,0 +1,138 @@
+---
+title: "Fix PDF render errors"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Fix PDF render errors
+
+
+## Purpose
+
+Use this guide when a Quarto Typst PDF briefing fails to render or renders but does not look right.
+
+For the case-count pilot:
+
+```text
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+
+Standard render command:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+
+# Stage 1: Check the PDF QMD location
+
+The PDF QMD should sit beside the HTML briefing QMD:
+
+```text
+site/surveillance/cvd/briefings/case-counts.qmd
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+
+# Stage 2: Check the YAML header
+
+A simple Typst PDF header looks like this:
+
+```yaml
+---
+title: "Hospital Cardiovascular Cases in Barbados"
+subtitle: "BNR CVD case-count briefing, 2023"
+author: "Barbados National Registry"
+date: "2026-04-28"
+bibliography: []
+citeproc: false
+csl: apa
+format:
+  typst:
+    output-file: bnr_cvd_cases_2023_v1.pdf
+    toc: false
+    number-sections: false
+    papersize: a4
+    margin:
+      top: 1.8cm
+      bottom: 1.7cm
+      left: 1.8cm
+      right: 1.8cm
+    mainfont: "Open Sans"
+    fontsize: 10pt
+    linkcolor: "#e87a00"
+    fig-cap-location: bottom
+---
+```
+
+:::{.callout-warning collapse="true"}
+## Avoid `csl: null`
+
+Do not use:
+
+```yaml
+csl: null
+```
+
+Quarto expects `csl` to be a string.
+:::
+
+# Stage 3: Check inherited bibliography errors
+
+If the PDF fails with:
+
+```text
+unknown style: https://www.zotero.org/styles/harvard-cite-them-right
+```
+
+add:
+
+```yaml
+bibliography: []
+citeproc: false
+csl: apa
+```
+
+# Stage 4: Check image paths
+
+If the PDF QMD sits here:
+
+```text
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+
+then image paths to the site download folder usually start with:
+
+```text
+../../../downloads/files/briefings/cvd_cases_2023_v1/figures/
+```
+
+Example:
+
+```markdown
+![Cumulative CVD cases](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100%}
+```
+
+# Stage 5: Understand where the PDF is created
+
+When rendering inside a Quarto website project, the PDF is generated under `_site/`:
+
+```text
+site/_site/surveillance/cvd/briefings/bnr_cvd_cases_2023_v1.pdf
+```
+
+This is expected. Do not edit `_site/` directly.
+
+# Stage 6: Check the visual result
+
+After a successful render, open the PDF and check:
+
+- title block
+- logo placement if used
+- figure size and clarity
+- page breaks
+- font readability
+- absence of private paths
+- citation/build note if included

@@ -1,0 +1,8 @@
+﻿---
+title: "BNR Refit"
+format: html
+---
+
+# BNR Refit
+
+This page will describe the BNR Refit and the move toward reproducible, semi-automated surveillance reporting.

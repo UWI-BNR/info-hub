@@ -353,6 +353,42 @@ The system needs to remain usable by future staff and collaborators with mixed t
 
 ---
 
+---
+
+## AD-016: Quarto publishes only approved public output bundles
+
+**Decision**
+
+The Quarto publication layer must consume only outputs that have been approved for publication.
+
+The preferred publication-ready output location is:
+
+- `outputs/public/tables/`
+- `outputs/public/figures/`
+- `outputs/public/data/`
+- `outputs/public/metadata/`
+- `outputs/public/build/`
+
+Confidential source data, intermediate working files, draft outputs, unpublished logs, and non-approved artefacts must not be required for Quarto rendering or GitHub Pages deployment.
+
+**Reason**
+
+The BNR `info-hub` is a static publication site. It should not require access to confidential data or licensed Stata execution during routine website rendering.
+
+This protects the separation between compute and publication, supports publication governance, and allows GitHub Actions to render the site using only disclosure-cleared artefacts.
+
+**Implications**
+
+- Stata remains responsible for generating analytic outputs.
+- Quarto remains responsible for publishing, explaining, and linking to approved outputs.
+- GitHub Actions should not need to run Stata or access confidential data.
+- Generated outputs must be reviewed before promotion to `outputs/public/`.
+- Public output bundles should include metadata and build information.
+- The Operations Manual must document how outputs are generated, checked, approved, promoted, rendered, and archived.
+- The first pilot for this approach will be a simple CVD case-count pathway.
+
+---
+
 # Decision Change Process
 
 If a future change affects the project architecture, workflow, tooling, or handover model:

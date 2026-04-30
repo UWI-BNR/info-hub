@@ -1,0 +1,128 @@
+---
+title: "PDF briefing route"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# PDF briefing route
+
+## Purpose
+
+This page explains the PDF briefing route for BNR static briefings.
+
+The PDF route uses Quarto and Typst. Stata creates the figures and output data. Quarto creates the formatted PDF briefing.
+
+## Current pattern
+
+For each static briefing, use two QMD files when needed:
+
+```text
+case-counts.qmd       -> HTML briefing
+case-counts-pdf.qmd   -> PDF briefing
+```
+
+This keeps web layout and print layout separate.
+
+## Why separate HTML and PDF QMD files?
+
+The HTML page can use:
+
+- cards
+- grids
+- callouts
+- download panels
+- wide web layout
+
+The PDF version needs:
+
+- controlled page flow
+- formal title block
+- shorter text
+- clear figure sizing
+- cleaner page breaks
+
+Trying to force both outputs from one QMD can create excessive conditional formatting.
+
+## Render command
+
+From the `site/` folder:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+```
+
+## Where the PDF appears
+
+When rendering inside a Quarto website project, the generated PDF appears under `_site/`.
+
+Example:
+
+```text
+site/_site/surveillance/cvd/briefings/bnr_cvd_cases_2023_v1.pdf
+```
+
+This is expected.
+
+The `_site/` folder is generated output and is ignored by Git.
+
+## Link from HTML page
+
+The HTML briefing can link to the generated PDF using a relative link.
+
+Example from:
+
+```text
+site/surveillance/cvd/briefings/case-counts.qmd
+```
+
+use:
+
+```markdown
+[Download the PDF briefing](bnr_cvd_cases_2023_v1.pdf)
+```
+
+After a full site render, this link should resolve inside `_site/`.
+
+## Bibliography note
+
+The site-level `_quarto.yml` may define bibliography or CSL settings. If a PDF briefing does not need citations, override bibliography processing in the PDF QMD.
+
+Example YAML:
+
+```yaml
+bibliography: []
+citeproc: false
+csl: apa
+```
+
+This prevents Typst from inheriting a site-wide CSL URL that it cannot resolve.
+
+## Logo and house style
+
+Store PDF-ready logos under:
+
+```text
+site/assets/images/logos/
+```
+
+Keep source-quality original logos separately if needed.
+
+Use optimised image files for PDF rendering.
+
+:::{.callout-tip collapse="true"}
+## Practical logo guidance
+
+A small PDF logo does not need to be a multi-megabyte image.
+
+For a crest or logo displayed at about 18--25 mm high, an optimised PNG of roughly 400--600 pixels high is usually enough.
+:::
+
+## Future improvement
+
+Once several PDFs use the same layout, create a light reusable Typst style file or template.
+
+Do not start with a complex Quarto extension unless the repeated PDF workflow justifies it.

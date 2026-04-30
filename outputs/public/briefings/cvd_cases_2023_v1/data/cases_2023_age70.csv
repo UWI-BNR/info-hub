@@ -1,0 +1,9 @@
+etype,sex,age70,period,event,denom,perc
+Stroke,Female,<70 years,"5-year baseline, 2018-2022",116.6,286.60001,40.68388
+Stroke,Female,<70 years,2023,120,312,38.46154
+Stroke,Male,<70 years,"5-year baseline, 2018-2022",155.8,280,55.642857
+Stroke,Male,<70 years,2023,168,312,53.846153
+AMI,Female,<70 years,"5-year baseline, 2018-2022",50.6,115.2,43.923615
+AMI,Female,<70 years,2023,52,105,49.523804
+AMI,Male,<70 years,"5-year baseline, 2018-2022",91.2,144.8,62.983429
+AMI,Male,<70 years,2023,89,141,63.120575

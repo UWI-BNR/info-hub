@@ -1,0 +1,99 @@
+---
+title: "Create a public ZIP bundle"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Create a public ZIP bundle
+
+## Purpose
+
+This guide explains how to create an optional public ZIP package for a static briefing release.
+
+The ZIP bundle is useful when users want to download all approved tables, figure data, metadata, and build files together.
+
+## Current status
+
+ZIP bundles are optional. They should be created only after the main static briefing workflow is stable.
+
+## Recommended ZIP name
+
+```text
+bnr_cvd_cases_2023_v1.zip
+```
+
+## What to include
+
+A public ZIP bundle should include:
+
+```text
+tables/
+data/
+meta.yml
+build.yml
+```
+
+It may include figures if useful:
+
+```text
+figures/
+```
+
+It should not include:
+
+- confidential data
+- private prepared `.dta` files
+- private logs
+- local path files
+
+# Stage 1: Confirm the approved site copy
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the site download folder
+
+```text
+site/downloads/files/briefings/cvd_cases_2023_v1/
+```
+:::
+
+# Stage 2: Create the ZIP file
+
+:::{.callout-note collapse="true"}
+## Step 1. Run PowerShell compression
+
+```powershell
+$repo = "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+$briefing = "cvd_cases_2023_v1"
+$zipName = "bnr_cvd_cases_2023_v1.zip"
+
+$source = "$repo\site\downloads\files\briefings\$briefing"
+$zip = "$source\$zipName"
+
+if (Test-Path $zip) {
+  Remove-Item $zip -Force
+}
+
+Compress-Archive -Path "$source\tables", "$source\data", "$source\meta.yml", "$source\build.yml" -DestinationPath $zip
+```
+:::
+
+# Stage 3: Link the ZIP file
+
+:::{.callout-note collapse="true"}
+## Step 1. Add a link to the HTML briefing or catalogue
+
+Example:
+
+```markdown
+[Download full public ZIP bundle](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip)
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Check the ZIP before publishing
+
+Open the ZIP and confirm it contains only approved public files.
+:::

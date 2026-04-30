@@ -1,0 +1,129 @@
+---
+title: "Fix broken download links"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Fix broken download links
+
+
+## Purpose
+
+Use this guide when a link on the website does not open a table, figure, metadata file, build file, or PDF briefing.
+
+Broken links usually come from:
+
+- the file was not copied into `site/downloads/files/`
+- the relative path is wrong
+- the file name changed
+- the site was not rerendered after adding the file
+
+# Stage 1: Identify the page and link
+
+:::{.callout-note collapse="true"}
+## Step 1. Record the failing link
+
+Record:
+
+- the page containing the link
+- the link text
+- the expected file
+- the error seen in the browser
+
+Example:
+
+```text
+Page: site/downloads/release-catalogue.qmd
+Link: Download cumulative weekly case data
+Expected file: cases_2023_cum_week.csv
+```
+:::
+
+# Stage 2: Check whether the file exists
+
+:::{.callout-note collapse="true"}
+## Step 1. Check the site download folder
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+Get-ChildItem site\downloads\files\briefings\cvd_cases_2023_v1 -Recurse
+```
+
+Confirm the file exists with the exact spelling used in the link.
+:::
+
+# Stage 3: Check relative links
+
+## Links from the case-count HTML briefing
+
+The HTML briefing lives here:
+
+```text
+site/surveillance/cvd/briefings/case-counts.qmd
+```
+
+Links from this file to the site download folder should start with:
+
+```text
+../../../downloads/files/briefings/cvd_cases_2023_v1/
+```
+
+Example:
+
+```markdown
+[Download cumulative weekly case data](../../../downloads/files/briefings/cvd_cases_2023_v1/data/cases_2023_cum_week.csv)
+```
+
+## Links from the release catalogue
+
+The release catalogue lives here:
+
+```text
+site/downloads/release-catalogue.qmd
+```
+
+Links from this file to the site download folder should start with:
+
+```text
+files/briefings/cvd_cases_2023_v1/
+```
+
+Example:
+
+```markdown
+[Download cumulative weekly case data](files/briefings/cvd_cases_2023_v1/data/cases_2023_cum_week.csv)
+```
+
+# Stage 4: Check PDF links
+
+Quarto-generated PDFs are generated during render.
+
+If the PDF QMD is:
+
+```text
+site/surveillance/cvd/briefings/case-counts-pdf.qmd
+```
+
+the rendered PDF should appear under:
+
+```text
+site/_site/surveillance/cvd/briefings/bnr_cvd_cases_2023_v1.pdf
+```
+
+From the HTML briefing, use a local link such as:
+
+```markdown
+[Download the PDF briefing](bnr_cvd_cases_2023_v1.pdf)
+```
+
+# Stage 5: Rerender and retest
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto preview --port 4200
+```
+
+Then retest the link in the browser.

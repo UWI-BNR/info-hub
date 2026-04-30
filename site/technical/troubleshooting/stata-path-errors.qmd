@@ -1,0 +1,164 @@
+---
+title: "Fix Stata path errors"
+subtitle: "BNR info-hub Technical Manual"
+format:
+  html:
+    toc: true
+    number-sections: true
+---
+
+# Fix Stata path errors
+
+
+## Purpose
+
+Use this guide when a Stata DO file cannot find a path, dataset, ADO file, output folder, or local configuration file.
+
+The usual causes are:
+
+- Stata was started from the wrong working directory
+- `bnr_paths_LOCAL.do` is missing or has the wrong paths
+- the private data folder is missing
+- the expected frozen dataset is not in the expected location
+- an ADO helper is not in `scripts/stata/ado/`
+
+# Stage 1: Confirm the working directory
+
+:::{.callout-note collapse="true"}
+## Step 1. Check where Stata is running
+
+In Stata, run:
+
+```stata
+pwd
+```
+
+The result should be the repo root:
+
+```text
+C:/yoshimi-hot/output/analyse-bnr/info-hub
+```
+
+If not, set it explicitly:
+
+```stata
+cd "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+```
+:::
+
+# Stage 2: Check local path configuration
+
+:::{.callout-note collapse="true"}
+## Step 1. Confirm the local path file exists
+
+From the repo root in Stata, run:
+
+```stata
+confirm file "scripts/stata/config/bnr_paths_LOCAL.do"
+```
+
+If this fails, copy:
+
+```text
+scripts/stata/config/bnr_paths_TEMPLATE.do
+```
+
+and rename the copy to:
+
+```text
+scripts/stata/config/bnr_paths_LOCAL.do
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check the first two globals
+
+Open:
+
+```text
+scripts/stata/config/bnr_paths_LOCAL.do
+```
+
+Check these lines:
+
+```stata
+global BNR_REPO     "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+global BNR_PRIVATE  "C:/yoshimi-hot/output/analyse-bnr/info-hub-private"
+```
+
+Both paths must match the local machine.
+:::
+
+:::{.callout-warning collapse="true"}
+## Do not commit local paths
+
+`bnr_paths_LOCAL.do` is machine-specific and should not be committed to Git.
+
+Only the template should be committed:
+
+```text
+scripts/stata/config/bnr_paths_TEMPLATE.do
+```
+:::
+
+# Stage 3: Check the private data folder
+
+:::{.callout-note collapse="true"}
+## Step 1. Confirm the private folder exists
+
+In PowerShell, run:
+
+```powershell
+Test-Path C:\yoshimi-hot\output\analyse-bnr\info-hub-private
+```
+
+Expected result:
+
+```text
+True
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Confirm the frozen dataset location
+
+The 2023 CVD prep file expects the frozen source dataset under:
+
+```text
+info-hub-private/data/frozen/releases/y2023/m12/
+```
+
+For the case-count pilot, the expected dataset is:
+
+```text
+bnr-cvd-indiv-full-202312-v01.dta
+```
+:::
+
+# Stage 4: Check ADO helpers
+
+:::{.callout-note collapse="true"}
+## Step 1. Confirm active ADO files
+
+Active ADO helpers should live here:
+
+```text
+scripts/stata/ado/
+```
+
+In Stata, after loading local paths, run:
+
+```stata
+adopath
+```
+
+Check that the project ADO folder appears.
+:::
+
+# Stage 5: Rerun the failing command
+
+After fixing a path issue, rerun the same command that failed, for example:
+
+```stata
+do "scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do"
+```

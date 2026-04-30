@@ -1,61 +1,199 @@
-# Local machine setup notes
+# =========================================================
+# BNR info-hub .gitignore
+# =========================================================
+#
+# Purpose:
+# - keep local machine files out of Git
+# - protect confidential or accidental data files
+# - ignore generated working outputs
+# - allow approved public output bundles under outputs/public/
+# - keep the repository handover-ready and clean
+#
+# Confidential source data should normally live outside this repo in:
+# IAN LOCATION: C:\yoshimi-hot\output\analyse-bnr\info-hub-private\
+# GENERALLY: <your-path>\analyse-bnr\info-hub-private\
+# =========================================================
+
+
+# =========================================================
+# Local machine setup and configuration
+# =========================================================
+#
+# The /local/ folder is for machine-specific settings only.
+# It may contain local paths, usernames, private drive locations,
+# and other details that should never be committed.
+#
+# Shared Stata configuration files and templates belong under:
+# scripts/stata/config/
+#
+# Normal Stata jobs should call:
+# scripts/stata/config/bnr_load_paths.do
+#
+# They should not directly call files under /local/.
+
 local-setup-notes.md
+
+/local/
+/local/**
+
+# Machine-specific Stata path configuration
+/scripts/stata/config/bnr_paths_LOCAL.do
+
+# =========================================================
+# Accidental confidential or local-only folders inside repo
+# =========================================================
+
+/data/
+/data-private/
+/private/
+/confidential/
+
+
+# =========================================================
+# Setup check outputs
+# =========================================================
+#
+# Keep setup-checks ignored unless we later decide to track formal
+# setup validation scripts or templates.
+
 setup-checks/
 
+
+# =========================================================
 # Python cache and environments
+# =========================================================
+
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+
 .venv/
 venv/
 env/
+venv-*/
 venv-info-hub/
 
-# Quarto render and cache files
-.quarto/
-_freeze/
-
-# Rendered site output
-_site/
-site/_site/
-
-# Temporary and log files
-*.tmp
-*.temp
-*.log
-
-# Generated outputs
-outputs/tables/*
-outputs/figures/*
-outputs/data/*
-outputs/logs/*
-outputs/build/*
-
-# Keep output folder placeholders
-!outputs/tables/.gitkeep
-!outputs/figures/.gitkeep
-!outputs/data/.gitkeep
-!outputs/logs/.gitkeep
-!outputs/build/.gitkeep
-
-# Operating system clutter
-Thumbs.db
-.DS_Store
-desktop.ini
-
-# Editor files
-.vscode/
-*.code-workspace
-
-# Python test/cache tooling
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
+
+# =========================================================
+# Quarto render and cache files
+# =========================================================
+
+.quarto/
+_freeze/
+_site/
+_site-version/
+
+site/.quarto/
+site/_freeze/
+site/_site/
+
+
+# =========================================================
+# Outputs policy
+# =========================================================
+#
+# Generated outputs are ignored by default.
+# Approved public output bundles are allowed under outputs/public/.
+#
+# Stata .dta files remain ignored by default even under outputs/public/.
+# If a de-identified public Stata dataset is ever formally approved,
+# add it deliberately with git add -f, or create a narrower exception
+# and document the decision.
+
+# Legacy / general generated output folders
+/outputs/tables/*
+!/outputs/tables/.gitkeep
+
+/outputs/figures/*
+!/outputs/figures/.gitkeep
+
+/outputs/data/*
+!/outputs/data/.gitkeep
+
+/outputs/logs/*
+!/outputs/logs/.gitkeep
+
+/outputs/build/*
+!/outputs/build/.gitkeep
+
+# Local working outputs
+/outputs/work/
+/outputs/private/
+/outputs/tmp/
+/outputs/temp/
+
+# Approved public output bundles
+!/outputs/public/
+!/outputs/public/**
+
+# But still block Stata data files by default
+/outputs/public/**/*.dta
+
+
+# =========================================================
+# Stata local/generated files
+# =========================================================
+
+*.dta
+*.gph
+*.ster
+*.smcl
+*.log
+
+
+# =========================================================
+# Temporary files
+# =========================================================
+
+*.tmp
+*.temp
+*.bak
+*.old
+~$*
+
+
+# =========================================================
+# Operating system clutter
+# =========================================================
+
+Thumbs.db
+.DS_Store
+desktop.ini
+
+
+# =========================================================
+# Editor files
+# =========================================================
+
+.vscode/
+*.code-workspace
+
+
+# =========================================================
 # Jupyter notebook checkpoints
+# =========================================================
+
 .ipynb_checkpoints/
 
+
+# =========================================================
 # R/RStudio clutter, only if R appears later
+# =========================================================
+
 .Rhistory
 .RData
 .Rproj.user/
+
+
+# =========================================================
+# Lua / language server local config
+# =========================================================
+
+/.luarc.json
+/.quarto/
+**/*.quarto_ipynb

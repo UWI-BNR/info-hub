@@ -1,0 +1,1530 @@
+---
+title: "Set up local development"
+pagetitle: "BNR Technical Manual | Set up local development"
+title-block-style: none
+
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    number-sections: false
+    smooth-scroll: true
+---
+
+## Purpose
+
+This guide explains how to set up a Windows laptop for local development of the BNR `info-hub`.
+
+It is written for skilled Stata users who may be new to Git, GitHub, Python, Quarto, virtual environments, GitHub Actions, and static website development.
+
+The normal user pathway is:
+
+```text
+check tools -> install missing tools -> clone repo -> create local notes -> create Python venv -> test Stata -> test Quarto -> use launcher
+```
+
+This guide assumes that the repository scaffold has already been created and pushed to GitHub. Future users should not normally recreate the scaffold manually.
+
+## What this guide covers
+
+This guide covers:
+
+- checking the local toolchain
+- installing missing software
+- cloning the `info-hub` repository
+- creating local setup notes
+- creating a project Python virtual environment
+- installing Python packages inside the virtual environment
+- confirming Stata can run from the project folder
+- confirming Stata can see Python if needed
+- rendering and previewing the Quarto site
+- using the one-click edit-session launcher
+- maintaining key project files
+- understanding how GitHub Pages deployment works
+
+This guide does not cover registry analytics development, indicator specification, data cleaning, or writing site content.
+
+## Standard local path
+
+The current working path is:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub
+```
+
+Future users may choose a different local path, but should record it in `local-setup-notes.md`.
+
+## Core tools
+
+| Tool | Role |
+|---|---|
+| VS Code | Main editor |
+| PowerShell | Main terminal for setup commands |
+| Git | Version control |
+| GitHub | Remote repository and deployment trigger |
+| Stata | Primary analytics engine |
+| Quarto | Website, report, PDF, slide, and dashboard rendering |
+| Python | Lightweight support tool only |
+| Firefox | Preferred local preview browser |
+
+Stata remains the primary analytics tool. Python is used only for lightweight support tasks such as dashboard support, metadata handling, file handling, and simple visualisation.
+
+## Repository model
+
+The basic workflow is:
+
+```text
+Stata scripts -> generated outputs -> Quarto publication site
+```
+
+The key folders are:
+
+```text
+scripts/  -> code that creates outputs
+outputs/  -> machine-generated files
+site/     -> Quarto website and publication files
+docs/     -> setup and developer documentation
+```
+
+Generated files in `outputs/` should normally be created by code and not manually edited.
+
+# Setup overview
+
+| Stage | Purpose | Usually done by |
+|---|---|---|
+| 1 | Check local tools | every user |
+| 2 | Install missing tools | every user on a new machine |
+| 3 | Clone repo | every user |
+| 4 | Maintain local setup notes | every user |
+| 5 | Create Python virtual environment | every user |
+| 6 | Check Stata execution | every user |
+| 7 | Install or confirm Quarto site extensions | project setup lead, then future users only check |
+| 8 | Test Quarto render and preview | every user |
+| 9 | Use edit-session launcher | every Windows user |
+| 10 | Maintain key project files | project contributors |
+| 11 | Understand deployment | project maintainers |
+
+One-time scaffold creation notes are included only as an appendix.
+
+{{< fa location-dot >}}  Hello There Logo
+
+# Stage 1: Check local tools
+
+Start by checking what is already installed. On a new laptop, assume that most tools may be missing. Stata may be the main exception.
+
+:::{.callout-note collapse="true"}
+## Step 1. Open a terminal
+
+Open VS Code if it is already installed.
+
+Open the terminal with:
+
+```text
+Ctrl + J
+```
+
+This guide uses PowerShell inside VS Code.
+
+Check the current folder with:
+
+```powershell
+pwd
+```
+
+If VS Code is not installed yet, open PowerShell from the Windows Start menu instead.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check installed versions
+
+Run these commands in PowerShell.
+
+```powershell
+git --version
+python --version
+pip --version
+quarto --version
+quarto check
+code --version
+```
+
+Check whether WinGet is available:
+
+```powershell
+winget --version
+```
+
+Check Stata manually by opening Stata and typing:
+
+```stata
+about
+```
+
+Record what works and what is missing in `local-setup-notes.md`.
+:::
+
+:::{.callout-tip collapse="true"}
+## What to record
+
+Use this section in `local-setup-notes.md`:
+
+```markdown
+## Tool versions
+
+Git:
+Python:
+pip:
+Quarto:
+PDF/LaTeX tools:
+VS Code:
+Stata:
+Firefox:
+WinGet:
+```
+:::
+
+# Stage 2: Install missing tools
+
+Use this stage only for tools that are missing or outdated.
+
+Most commands in this guide should be run from **PowerShell opened inside VS Code**. On a new machine, that means VS Code should be installed first. After VS Code is installed, open the project or a working folder in VS Code and use `Ctrl + J` to open the integrated terminal.
+
+Where possible, this guide uses `winget`, the Windows Package Manager command-line tool. Microsoft distributes WinGet as part of the Windows **App Installer** package on modern Windows systems. If `winget` is missing, the first step is to register or install App Installer before using the remaining command-line installation steps.
+
+:::{.callout-warning collapse="true"}
+## Before installing
+
+Install only what is missing.
+
+After each installation, fully close and reopen VS Code before rechecking the command. This refreshes the terminal environment.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 1. Install VS Code first
+
+VS Code is the main editor for this project. It also provides the PowerShell terminal used for most setup commands.
+
+On a new machine, install VS Code before the remaining tools.
+
+First check whether VS Code is already installed. Open PowerShell from the Windows Start menu and run:
+
+```powershell
+code --version
+```
+
+If VS Code is missing and `winget` is available, install it with:
+
+```powershell
+winget install --id Microsoft.VisualStudioCode -e --source winget
+```
+
+If `winget` is not available yet, download and install VS Code manually from the official Visual Studio Code website.
+
+After installation:
+
+1. open VS Code
+2. open a folder such as the future project parent folder
+3. press `Ctrl + J` to open the integrated terminal
+4. confirm that the terminal is PowerShell
+5. run:
+
+```powershell
+code --version
+pwd
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check whether WinGet is available
+
+WinGet is useful because it lets us install several tools from the PowerShell command line.
+
+In the VS Code PowerShell terminal, run:
+
+```powershell
+winget --version
+```
+
+If this returns a version number, continue to the next step.
+
+If `winget` is not recognised, first try registering the Windows App Installer package:
+
+```powershell
+Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+```
+
+Close and reopen VS Code, then check again:
+
+```powershell
+winget --version
+```
+
+If `winget` is still missing, install or update **App Installer** from the Microsoft Store. You can open the Store page from PowerShell with:
+
+```powershell
+start ms-windows-store://pdp/?ProductId=9NBLGGH4NNS1
+```
+
+After installing or updating App Installer, close and reopen VS Code and check again:
+
+```powershell
+winget --version
+```
+
+If WinGet still cannot be installed, use the official web installers for Git, Python, Quarto, and Firefox instead.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 3. Install Git
+
+Git is needed to clone the repository, commit changes, and push to GitHub.
+
+Check first:
+
+```powershell
+git --version
+```
+
+If Git is missing, install it with:
+
+```powershell
+winget install --id Git.Git -e --source winget
+```
+
+During installation, choose the option that allows Git to be used from the command line and third-party software.
+
+After installation, fully close and reopen VS Code, then check again:
+
+```powershell
+git --version
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 4. Install Python
+
+Python is used as a lightweight support tool. It is not the main analytics engine.
+
+Check first:
+
+```powershell
+python --version
+pip --version
+```
+
+If Python is missing, install Python 3.13 with:
+
+```powershell
+winget install --id Python.Python.3.13 -e --source winget
+```
+
+After installation, fully close and reopen VS Code, then check again:
+
+```powershell
+python --version
+pip --version
+where.exe python
+```
+
+If `python --version` works but `where.exe python` does not, also check:
+
+```powershell
+py --version
+py -0p
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 5. Install Quarto
+
+Quarto is used to render the website, reports, slides, dashboards, and PDF documents.
+
+Check first:
+
+```powershell
+quarto --version
+quarto check
+```
+
+If Quarto is missing, install it with:
+
+```powershell
+winget install --id Posit.Quarto -e --source winget
+```
+
+If the WinGet installation does not work cleanly, download the Windows installer from the Quarto website and install it manually.
+
+After installation, fully close and reopen VS Code, then check again:
+
+```powershell
+quarto --version
+quarto check
+where.exe quarto
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 6. Install TinyTeX for PDF rendering
+
+Quarto needs a LaTeX engine to render PDF files.
+
+Check Quarto tools:
+
+```powershell
+quarto list tools
+```
+
+If no TeX installation is available, install TinyTeX with:
+
+```powershell
+quarto install tinytex
+```
+
+Then check again:
+
+```powershell
+quarto list tools
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 7. Install helpful VS Code extensions
+
+Install the Quarto extension:
+
+```powershell
+code --install-extension quarto.quarto
+```
+
+Install the Python extension:
+
+```powershell
+code --install-extension ms-python.python
+```
+
+Install the Stata Enhanced extension:
+
+```powershell
+code --install-extension kylebarron.stata-enhanced
+```
+
+These extensions make editing Quarto, Python, and Stata files easier.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 8. Install Firefox if needed
+
+Firefox is the preferred local preview browser for this project.
+
+If Firefox is missing, install it with:
+
+```powershell
+winget install --id Mozilla.Firefox -e --source winget
+```
+
+The edit-session launcher uses Firefox if it is available. If Firefox is not installed, the launcher opens the preview URL in the default browser.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 9. Stata installation
+
+Stata is normally installed manually through the institution's licensed installer.
+
+After Stata is installed, open Stata and type:
+
+```stata
+about
+```
+
+Record the Stata version in `local-setup-notes.md`.
+:::
+
+# Stage 3: Clone the repository
+
+:::{.callout-note collapse="true"}
+## Step 1. Move to the parent folder
+
+Open PowerShell.
+
+Move to the parent folder:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr
+```
+
+Check the folder:
+
+```powershell
+pwd
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Clone the repository
+
+If `info-hub` is not already present, clone the repo:
+
+```powershell
+git clone https://github.com/UWI-BNR/info-hub.git
+```
+
+Move into the repo:
+
+```powershell
+cd info-hub
+```
+
+Confirm Git recognises the repo:
+
+```powershell
+git status
+```
+
+Confirm the remote:
+
+```powershell
+git remote -v
+```
+
+The remote should include:
+
+```text
+https://github.com/UWI-BNR/info-hub.git
+```
+:::
+
+# Stage 4: Maintain local setup notes
+
+Each user should keep their own local setup notes. These notes are useful for troubleshooting but are not committed to Git.
+
+:::{.callout-note collapse="true"}
+## Step 1. Create local setup notes
+
+From the repo root:
+
+```powershell
+New-Item local-setup-notes.md
+code local-setup-notes.md
+```
+
+If the file already exists, open it instead:
+
+```powershell
+code local-setup-notes.md
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Add the local notes template
+
+Copy this into `local-setup-notes.md`:
+
+```markdown
+# Local setup notes
+
+## Machine details
+
+User:
+Machine name:
+Operating system:
+Date setup started:
+Repo path:
+
+## Tool versions
+
+Git:
+Python:
+pip:
+Quarto:
+PDF/LaTeX tools:
+VS Code:
+Stata:
+Firefox:
+WinGet:
+
+## Python virtual environment
+
+Virtual environment used:
+Virtual environment path:
+Activation command:
+Python path inside venv:
+Packages installed from requirements.txt:
+Package import check passed:
+requirements-freeze.txt refreshed:
+Notes:
+
+## Stata local execution
+
+Stata version:
+Stata opens from Windows Start menu:
+Repo working directory set successfully:
+Test do-file ran successfully:
+Log file created:
+Log file path:
+Notes:
+
+## Local Quarto preview behaviour
+
+Quarto preview tested:
+Preview command used:
+Preview updated after editing index.qmd:
+Browser refresh needed:
+Stale preview issue observed:
+Touch _quarto.yml helper needed:
+Decision:
+Notes:
+
+## Setup issues and fixes
+
+| Date | Issue | Fix or decision |
+|---|---|---|
+|  |  |  |
+
+## Local decisions
+
+| Date | Decision | Reason |
+|---|---|---|
+|  |  |  |
+```
+
+`local-setup-notes.md` is ignored by Git because it is machine-specific.
+:::
+
+# Stage 5: Create the Python virtual environment
+
+## Why use a virtual environment?
+
+A virtual environment keeps the project Python packages separate from the global Windows Python installation.
+
+The project virtual environment is called:
+
+```text
+venv-info-hub
+```
+
+This name is deliberately explicit for novice users.
+
+:::{.callout-note collapse="true"}
+## Step 1. Create the virtual environment
+
+From the repo root:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub
+python -m venv venv-info-hub
+```
+
+Check that it exists:
+
+```powershell
+dir venv-info-hub
+```
+
+Expected folders include:
+
+```text
+Scripts
+Lib
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Activate the virtual environment
+
+Activate the environment:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+```
+
+The prompt should show:
+
+```text
+(venv-info-hub)
+```
+
+If activation is blocked, run this once:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+When prompted, type:
+
+```text
+Y
+```
+
+Then activate again:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 3. Confirm the active Python
+
+Run:
+
+```powershell
+where.exe python
+```
+
+The first path should include:
+
+```text
+C:\yoshimi-hot\output\analyse-bnr\info-hub\venv-info-hub\Scripts\python.exe
+```
+:::
+
+:::{.callout-important collapse="true"}
+## Step 4. Install packages inside the virtual environment
+
+Install Python packages only after the virtual environment is active.
+
+Upgrade pip inside the virtual environment:
+
+```powershell
+python -m pip install --upgrade pip
+```
+
+Install packages from `requirements.txt`:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+Check imports:
+
+```powershell
+python -c "import pandas, numpy, matplotlib, plotly, plotnine, altair, yaml, jupyter; print('Python venv package check passed')"
+```
+
+Refresh the exact package record:
+
+```powershell
+python -m pip freeze > requirements-freeze.txt
+```
+
+Deactivate when finished:
+
+```powershell
+deactivate
+```
+:::
+
+## `requirements.txt` and `requirements-freeze.txt`
+
+`requirements.txt` is the simple project package list.
+
+Most users install from it:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+`requirements-freeze.txt` records exact installed package versions from a working environment.
+
+It is useful for troubleshooting and exact reproduction. Refresh it after successfully installing packages inside the virtual environment.
+
+# Stage 6: Confirm Stata execution
+
+:::{.callout-note collapse="true"}
+## Step 1. Create a simple Stata test file
+
+From the repo root:
+
+```powershell
+mkdir setup-checks -Force
+New-Item setup-checks\stata-path-check.do
+code setup-checks\stata-path-check.do
+```
+
+Add:
+
+```stata
+clear all
+capture log close
+log using "setup-checks/stata-path-check.log", replace text
+
+display "Stata local execution check"
+pwd
+
+display c(current_date)
+display c(current_time)
+
+sysuse auto, clear
+summarize price mpg
+
+log close
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Run the Stata test
+
+Open Stata.
+
+Set the working folder:
+
+```stata
+cd "C:\yoshimi-hot\output\analyse-bnr\info-hub"
+```
+
+Run the test:
+
+```stata
+do "setup-checks/stata-path-check.do"
+```
+
+Confirm the log exists:
+
+```text
+setup-checks\stata-path-check.log
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 3. Check Stata can find Python if needed
+
+In PowerShell, activate the virtual environment and find Python:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+where.exe python
+```
+
+In Stata, check Python:
+
+```stata
+python query
+```
+
+If Stata does not have the correct Python path, set it permanently. Replace the path below with the Python path from the virtual environment:
+
+```stata
+set python_exec "C:\yoshimi-hot\output\analyse-bnr\info-hub\venv-info-hub\Scripts\python.exe", permanently
+```
+
+Check again:
+
+```stata
+python query
+```
+
+Run a simple Python check from Stata:
+
+```stata
+python:
+import sys
+print("Python is available from Stata")
+print(sys.version)
+print(sys.executable)
+end
+```
+:::
+
+# Stage 7: Install or confirm Quarto site extensions
+
+Quarto extensions add extra functionality to a Quarto project. For this site, the first recommended extension is Font Awesome, which allows simple icons to be used in pages, callouts, cards, dashboards, and slide decks.
+
+Most future users should not need to install this extension manually if the `_extensions/` folder has already been committed to GitHub. They should only check that it exists after cloning the repo.
+
+:::{.callout-note collapse="true"}
+## Step 1. Move into the Quarto site folder
+
+Open PowerShell inside VS Code and move to the Quarto site folder:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+```
+
+Confirm that the folder contains `_quarto.yml`:
+
+```powershell
+dir
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Check whether Font Awesome is already installed
+
+Run:
+
+```powershell
+dir _extensions
+```
+
+If Font Awesome is already installed, you should see a folder path similar to:
+
+```text
+_extensions\quarto-ext\fontawesome
+```
+
+If the folder exists, no installation is needed.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 3. Install Font Awesome if missing
+
+Only run this if `_extensions\quarto-ext\fontawesome` is missing.
+
+From the `site/` folder, run:
+
+```powershell
+quarto add quarto-ext/fontawesome
+```
+
+Quarto may ask for confirmation. Answer yes.
+
+This creates an `_extensions/` folder inside the Quarto site project.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 4. Test Font Awesome in a page
+
+Open the homepage:
+
+```powershell
+code index.qmd
+```
+
+Add a short temporary test line:
+
+```markdown
+{ {< fa chart-line >} } Font Awesome test
+```
+
+Render the site:
+
+```powershell
+quarto render
+```
+
+Open or refresh the site preview and confirm that the icon appears.
+
+After testing, remove the temporary line unless you want to keep it.
+:::
+
+:::{.callout-note collapse="true"}
+## Step 5. Check Git can see the extension
+
+Return to the repo root:
+
+```powershell
+cd ..
+```
+
+Check Git status:
+
+```powershell
+git status
+```
+
+The `_extensions/` folder should be visible to Git after installation. It should be committed because Quarto extensions are part of the site source, not a local machine setting.
+:::
+
+:::{.callout-tip collapse="true"}
+## How to use Font Awesome later
+
+Use icons sparingly to improve visual signposting. For example:
+
+```markdown
+{ {< fa chart-line >} } Surveillance outputs
+
+{ {< fa file-pdf >} } Reports
+
+{ {< fa database >} } Data
+
+{{< fa book >}} Operations Manual
+```
+
+Avoid using icons as decoration only. They should help users scan pages more easily.
+:::
+
+
+
+# Stage 8: Test Quarto render and preview
+
+:::{.callout-note collapse="true"}
+## Step 1. Render the site once
+
+From the repo root:
+
+```powershell
+cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
+quarto render
+```
+
+Check that `_site` exists:
+
+```powershell
+dir
+```
+
+Open the rendered homepage:
+
+```powershell
+start _site\index.html
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Step 2. Test local preview
+
+From the `site/` folder:
+
+```powershell
+quarto preview --host 127.0.0.1 --port 4200
+```
+
+Make a small temporary edit to `index.qmd`, save it, and confirm the browser preview updates.
+
+Stop preview with:
+
+```text
+Ctrl + C
+```
+
+If asked to terminate, type:
+
+```text
+Y
+```
+:::
+
+:::{.callout-important collapse="true"}
+## Preview helper script deferred
+
+The stale-preview workaround script is not currently required.
+
+It should only be added if preview repeatedly fails to update after saved changes.
+
+If stale preview becomes a recurring issue, add a small PowerShell helper under:
+
+```text
+scripts/powershell/
+```
+:::
+
+# Stage 9: Use the edit-session launcher
+
+## Purpose
+
+The edit-session launcher starts a normal local editing session with one double-click.
+
+It should:
+
+- open VS Code
+- activate the project virtual environment for preview
+- start Quarto preview from `site/`
+- open Firefox at `http://127.0.0.1:4200/`
+- leave one command window open to monitor Quarto preview
+
+The batch file is stored in the repo root:
+
+```text
+start-info-hub-edit.bat
+```
+
+:::{.callout-note collapse="true"}
+## Batch file content
+
+```bat
+@echo off
+REM ============================================================
+REM BNR info-hub edit session launcher
+REM Opens VS Code and starts a local Quarto preview server.
+REM Created: 17-APR-2026
+REM ============================================================
+
+set "REPO=C:\yoshimi-hot\output\analyse-bnr\info-hub"
+set "SITE=%REPO%\site"
+set "VENV=%REPO%\venv-info-hub"
+set "PORT=4200"
+set "URL=http://127.0.0.1:%PORT%/"
+
+if not exist "%REPO%" (
+    echo ERROR: Repo folder not found:
+    echo %REPO%
+    pause
+    exit /b 1
+)
+
+if not exist "%SITE%\_quarto.yml" (
+    echo ERROR: Quarto site config not found:
+    echo %SITE%\_quarto.yml
+    echo.
+    echo Check that the Quarto site has been initialised inside the site folder.
+    pause
+    exit /b 1
+)
+
+if not exist "%VENV%\Scripts\activate.bat" (
+    echo ERROR: Python virtual environment not found:
+    echo %VENV%
+    echo.
+    echo Expected activation file:
+    echo %VENV%\Scripts\activate.bat
+    pause
+    exit /b 1
+)
+
+cd /d "%REPO%"
+
+set "VSCODE=%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"
+
+if not exist "%VSCODE%" (
+    set "VSCODE=%PROGRAMFILES%\Microsoft VS Code\Code.exe"
+)
+
+if exist "%VSCODE%" (
+    powershell -NoProfile -WindowStyle Hidden -Command "Start-Process -FilePath '%VSCODE%' -ArgumentList '%REPO%'"
+) else (
+    echo WARNING: VS Code executable not found in expected locations.
+    echo Opening the repo folder in File Explorer instead.
+    powershell -NoProfile -WindowStyle Hidden -Command "Start-Process -FilePath '%REPO%'"
+)
+
+start "BNR info-hub Quarto Preview" cmd /k "cd /d ""%REPO%"" && call ""%VENV%\Scripts\activate.bat"" && cd /d ""%SITE%"" && quarto preview --host 127.0.0.1 --port %PORT% --no-browser"
+
+timeout /t 5 >nul
+
+if exist "C:\Program Files\Mozilla Firefox\firefox.exe" (
+    powershell -NoProfile -WindowStyle Hidden -Command "Start-Process -FilePath 'C:\Program Files\Mozilla Firefox\firefox.exe' -ArgumentList '%URL%'"
+) else (
+    powershell -NoProfile -WindowStyle Hidden -Command "Start-Process '%URL%'"
+)
+
+exit
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Expected launcher behaviour
+
+After double-clicking `start-info-hub-edit.bat`:
+
+- VS Code opens
+- Firefox opens at `http://127.0.0.1:4200/`
+- one command window remains open for Quarto preview
+- the preview window shows that it is watching files for changes
+
+The Quarto preview window should show something like:
+
+```text
+Watching files for changes
+Browse at http://localhost:4200/
+Listening on http://127.0.0.1:4200/
+```
+:::
+
+# Stage 10: Maintain key project files
+
+Several top-level files should be actively maintained. These files are part of the operating system of the project, not incidental paperwork.
+
+:::{.callout-note collapse="true"}
+## `README.md`
+
+Purpose: orient new users when they open the repository.
+
+Maintain when:
+
+- the project purpose changes
+- the folder structure changes
+- the setup pathway changes
+- the main tools change
+- the site purpose changes
+
+Good README content includes:
+
+- site purpose
+- repository purpose
+- main tools
+- folder structure
+- compute-to-publication model
+- where to start
+:::
+
+:::{.callout-note collapse="true"}
+## `DECISIONS.md`
+
+Purpose: record major architectural and workflow decisions.
+
+Maintain when the project makes or changes a decision about:
+
+- Stata as the primary compute tool
+- Python's role
+- Quarto site structure
+- Operations Manual structure
+- output naming conventions
+- deployment model
+- separation between compute and publication
+- whether a new dependency or workflow is justified
+
+This file explains why the project is designed as it is.
+:::
+
+:::{.callout-note collapse="true"}
+## `CHANGELOG.md`
+
+Purpose: record meaningful project changes.
+
+Maintain when a change affects:
+
+- repository structure
+- workflow
+- methodology
+- publication
+- generated outputs
+- deployment
+- handover
+
+Do not use it as a full Git commit log. Use it for changes future users need to understand.
+:::
+
+:::{.callout-note collapse="true"}
+## `.gitignore`
+
+Purpose: prevent local clutter, generated files, cache files, virtual environments, and machine-specific notes from being committed.
+
+Maintain when:
+
+- a new generated folder is created
+- a new local-only file type appears
+- a virtual environment name changes
+- Quarto or Python creates new cache files
+- a file is accidentally staged that should remain local
+
+Examples of things that should normally be ignored:
+
+```text
+venv-info-hub/
+local-setup-notes.md
+site/_site/
+.quarto/
+outputs/tables/*
+outputs/figures/*
+outputs/data/*
+outputs/logs/*
+outputs/build/*
+```
+:::
+
+:::{.callout-note collapse="true"}
+## `.gitattributes`
+
+Purpose: standardise line endings and identify binary files.
+
+Maintain when:
+
+- repeated Git line-ending warnings occur
+- a new file type is added regularly
+- binary files need to be protected from text conversion
+
+This file helps Windows and non-Windows users collaborate without unnecessary line-ending noise.
+:::
+
+:::{.callout-note collapse="true"}
+## `requirements.txt`
+
+Purpose: list the core Python packages needed by the project.
+
+Maintain when:
+
+- a new Python package becomes genuinely required
+- a package is no longer needed
+- a package needs a minimum or fixed version for compatibility
+
+Keep this file short and understandable. Do not add packages just because they might be useful.
+:::
+
+:::{.callout-note collapse="true"}
+## `requirements-freeze.txt`
+
+Purpose: record the exact Python package versions installed in a working virtual environment.
+
+Refresh after:
+
+- creating the virtual environment
+- installing from `requirements.txt`
+- adding or removing a Python package
+- solving a Python package compatibility issue
+
+Command:
+
+```powershell
+python -m pip freeze > requirements-freeze.txt
+```
+
+Most users should install from `requirements.txt`, not from `requirements-freeze.txt`.
+:::
+
+:::{.callout-note collapse="true"}
+## `site/_extensions/`
+
+Purpose: store Quarto extensions used by the site.
+
+Maintain when:
+
+- a Quarto extension is added
+- a Quarto extension is updated
+- a Quarto extension is removed
+- GitHub Actions fails because an extension is missing
+
+Current expected extension:
+
+```text
+site/_extensions/quarto-ext/fontawesome
+```
+
+Quarto extensions are part of the site source. They should normally be committed to GitHub so future users and GitHub Actions can render the site without reinstalling extensions manually.
+:::
+
+:::{.callout-note collapse="true"}
+## `site/_quarto.yml`
+
+Purpose: control the Quarto website configuration.
+
+Maintain when:
+
+- navigation changes
+- sidebars change
+- site title changes
+- themes or formats change
+- output options change
+
+Edit carefully. Small changes can affect the whole website.
+:::
+
+:::{.callout-note collapse="true"}
+## `.github/workflows/publish-site.yml`
+
+Purpose: render and publish the Quarto site through GitHub Actions.
+
+Maintain when:
+
+- deployment behaviour changes
+- Python version changes
+- Quarto setup changes
+- render folder changes
+- GitHub Pages publication method changes
+
+Do not edit casually. Workflow changes can stop the site from publishing.
+:::
+
+:::{.callout-note collapse="true"}
+## `start-info-hub-edit.bat`
+
+Purpose: start a local editing session quickly.
+
+Maintain when:
+
+- the local repo path changes
+- the virtual environment name changes
+- the preview port changes
+- the preferred browser changes
+- the Quarto site folder changes
+
+This file is useful for Windows users but may need local adjustment if paths differ.
+:::
+
+:::{.callout-warning collapse="true"}
+## `local-setup-notes.md`
+
+Purpose: store user-specific setup notes.
+
+This file is maintained by each user but is not committed to Git.
+
+It may contain:
+
+- local paths
+- machine name
+- installed tool versions
+- setup issues
+- local decisions
+- Python and Stata paths
+
+Because it is machine-specific, it is ignored by Git.
+:::
+
+# Stage 11: GitHub Pages deployment
+
+## Purpose
+
+The site is published by GitHub Actions.
+
+The normal deployment workflow is:
+
+```text
+edit locally -> commit -> push to GitHub -> GitHub renders and publishes site
+```
+
+Local users should not normally commit the rendered `site/_site/` folder.
+
+:::{.callout-note collapse="true"}
+## Deployment workflow file
+
+The deployment workflow is stored at:
+
+```text
+.github/workflows/publish-site.yml
+```
+
+The workflow should:
+
+- trigger on push to `main`
+- install Quarto
+- install Python dependencies from `requirements.txt`
+- render the site from `site/`
+- upload `site/_site` as the GitHub Pages artifact
+- deploy to GitHub Pages
+:::
+
+:::{.callout-note collapse="true"}
+## Check deployment after a push
+
+After pushing to GitHub:
+
+1. Open the repo on GitHub.
+2. Click `Actions`.
+3. Open the latest `Publish Quarto site` run.
+4. Confirm the build and deploy jobs passed.
+5. Check `Settings > Pages` for the published URL.
+
+The URL will usually be:
+
+```text
+https://uwi-bnr.github.io/info-hub/
+```
+:::
+
+# Troubleshooting
+
+:::{.callout-warning collapse="true"}
+## PowerShell blocks virtual environment activation
+
+If activation fails with a script execution error, run:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Then activate again:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Git line-ending warnings
+
+Warnings such as this are usually harmless on Windows:
+
+```text
+CRLF will be replaced by LF the next time Git touches it
+```
+
+The repo uses `.gitattributes` to standardise line endings.
+
+If needed, run:
+
+```powershell
+git add --renormalize .
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## GitHub does not update after commit
+
+A local commit does not update GitHub until it is pushed.
+
+Run:
+
+```powershell
+git push origin main
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Quarto preview opens the wrong browser
+
+Use `--no-browser` in the preview command, then open the preferred browser separately.
+
+The launcher already does this:
+
+```powershell
+quarto preview --host 127.0.0.1 --port 4200 --no-browser
+```
+:::
+
+:::{.callout-warning collapse="true"}
+## Port 4200 is already in use
+
+Stop the existing preview server with:
+
+```text
+Ctrl + C
+```
+
+Or change the launcher to use another port.
+:::
+
+# Appendix A: One-time project scaffold notes
+
+These steps were part of the original project setup. Future users should normally inherit this structure by cloning the remote repository.
+
+## Current top-level structure
+
+```text
+info-hub/
+├── .github/
+├── assets/
+├── docs/
+├── outputs/
+├── scripts/
+├── setup-checks/
+├── site/
+├── .gitattributes
+├── .gitignore
+├── CHANGELOG.md
+├── DECISIONS.md
+├── README.md
+├── requirements.txt
+├── requirements-freeze.txt
+└── start-info-hub-edit.bat
+```
+
+## Current site structure
+
+```text
+site/
+├── about/
+├── assets/
+├── dashboards/
+├── data/
+├── downloads/
+├── operations-manual/
+├── publications/
+├── slides/
+├── technical/
+└── workflow/
+```
+
+`site/publications/` replaces the earlier risk of having both `site/reports/` and `site/reporting/`.
+
+## Project governance files
+
+| File | Purpose |
+|---|---|
+| `README.md` | Repo overview and orientation |
+| `DECISIONS.md` | Architectural decision register |
+| `CHANGELOG.md` | Institutional record of meaningful changes |
+| `.gitignore` | Prevents local/generated files from being committed |
+| `.gitattributes` | Standardises line endings across machines |
+| `requirements.txt` | Simple Python package list |
+| `requirements-freeze.txt` | Exact package version snapshot |
+| `start-info-hub-edit.bat` | One-click Windows edit-session launcher |
