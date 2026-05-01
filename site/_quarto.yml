@@ -143,6 +143,8 @@ website:
 
         - section: "Data use"
           contents:
+            - text: "Data Sharing Agreement"
+              href: methods/responsible-data-use/dsa-methods.qmd
             # - text: "Confidentiality"
             #   href: methods/responsible-data-use/confidentiality.qmd
             # - text: "Sharing"
@@ -234,8 +236,21 @@ website:
 
         - section: "Data Governance"
           contents:
-            - text: "Dissemination"
+            - text: "Data Sharing Guide"
+              href: operations/data-governance/sharing-guide.qmd
+            - text: "Data Sharing Process"
+              href: operations/data-governance/sharing-sop.qmd
+            - text: "Data Release"
+              href: operations/data-governance/dataset-release.qmd
+            - text: "Data Dissemination"
               href: operations/data-governance/dataset-dissemination.qmd
+            - text: "Data Access Statement"
+              href: operations/data-governance/data-access-statement.qmd
+            - text: "Data Access Agreement"
+              href: operations/data-governance/dsa-om.qmd
+            - text: "Data Trust Framework"
+              href: operations/data-governance/dtrust.qmd
+
             # - text: "Requests"
             #   href: operations/data-governance/assessing-data-requests.qmd
             # - text: "Sharing"
@@ -351,4 +366,4 @@ website:
             - text: "Git cleanup"
               href: technical/troubleshooting/git-status-cleanup.qmd
 
-# file touch4
+# file touch8

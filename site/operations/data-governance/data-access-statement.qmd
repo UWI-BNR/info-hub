@@ -1,0 +1,110 @@
+---
+title: "BNR Data Access Statement"
+subtitle: "BNR Operations Manual | Data Access Statement"
+description: "BNR Operations Manual | Data Access Statement"
+date: last-modified
+date-format: "D MMMM YYYY"
+lang: en-GB
+
+# Keep the title available for navigation/search metadata,
+# but prevent Quarto from rendering the visible HTML title block.
+title-block-style: none
+
+# Optional page classification.
+# Useful later for listings, search, release notes, or internal review.
+categories:
+  - bnr
+  - cvd
+  - data
+  - governance
+
+# HTML-only rendering for now.
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    toc-location: right
+    toc-expand: 2
+
+    number-sections: false
+    anchor-sections: true
+    smooth-scroll: true
+
+    code-copy: true
+    code-fold: true
+    code-tools: false
+    code-overflow: wrap
+
+    link-external-icon: false
+    link-external-newwindow: false
+
+    page-layout: article
+
+# Execution defaults.
+# For ported markdown pages, this should normally do nothing.
+# It is included to prevent accidental noisy output if a code block is later added.
+execute:
+  echo: false
+  warning: false
+  message: false
+  error: false
+  freeze: auto
+
+# Page status.
+# Change to true for draft pages that should not be rendered/published.
+draft: false
+
+# Commenting system enabled
+comments:
+  hypothesis:
+    theme: clean
+---
+
+### Data Access Statement
+
+The Barbados National Registry for Chronic Non-Communicable Disease (BNR) is a national surveillance system operated by the George Alleyne Chronic Disease Research Centre, The University of the West Indies, on behalf of the Ministry of Health and Wellness. The BNR collects, manages, and reports data on heart attack, stroke, and cancer to inform national and regional health policy.
+
+BNR data are protected under national data protection and ethical governance frameworks. Access to data is managed through a structured, tiered system that balances openness with confidentiality:
+
+**a. Public data:**
+Aggregated, anonymised statistics are freely available through BNR publications, reports, and public dashboards.  
+
+**b. Restricted data:** 
+De-identified datasets may be shared with approved partners for bona fide research or public health purposes. Access requires a formal Data Sharing Agreement and, where applicable, ethical approval.  
+
+**c. Controlled data:** 
+Identifiable or linkable data remain securely within the BNR and are not shared externally.
+
+All data requests are reviewed to ensure they meet legal, ethical, and scientific standards and that they align with the mission of the BNR to improve public health in Barbados and the wider Caribbean. Approved users must agree to conditions of responsible use, confidentiality, and the return or destruction of data upon project completion.
+
+
+
+> Copy the statement for your own use:
+
+```{.markdown}
+1. BNR Data Access Statement
+
+The Barbados National Registry for Chronic Non-Communicable Disease (BNR) is a national surveillance system operated by the George Alleyne Chronic Disease Research Centre, The University of the West Indies, on behalf of the Ministry of Health and Wellness. The BNR collects, manages, and reports data on heart attack, stroke, and cancer to inform national and regional health policy.
+
+BNR data are protected under national data protection and ethical governance frameworks. Access to data is managed through a structured, tiered system that balances openness with confidentiality:
+
+a. Public data: 
+Aggregated, anonymised statistics are freely available through BNR publications, reports, and public dashboards.  
+
+b. Restricted data: 
+De-identified datasets may be shared with approved partners for bona fide research or public health purposes. Access requires a formal Data Sharing Agreement and, where applicable, ethical approval.  
+
+c. Controlled data: 
+Identifiable or linkable data remain securely within the BNR and are not shared externally.
+
+All data requests are reviewed to ensure they meet legal, ethical, and scientific standards and that they align with the mission of the BNR to improve public health in Barbados and the wider Caribbean. Approved users must agree to conditions of responsible use, confidentiality, and the return or destruction of data upon project completion.
+```
+
+> For more information, or to request access to BNR data, please contact:  
+> **The BNR Director**  
+George Alleyne Chronic Disease Research Centre  
+The University of the West Indies, Cave Hill Campus  
+Email: [bnr@uwi.edu](mailto:bnr@uwi.edu)
+
+_Last update: May 2026_

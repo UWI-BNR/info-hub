@@ -1,0 +1,76 @@
+---
+title: "Research Data Sharing Agreement"
+subtitle: "_For access to restricted, de-identified data for approved research use_"
+description: "Public-facing BNR Research Data Sharing Agreement for approved access to restricted, de-identified registry data."
+date: last-modified
+date-format: "D MMMM YYYY"
+lang: en-GB
+
+title-block-style: none
+
+categories:
+  - bnr
+  - methods
+  - data
+  - governance
+  - data-sharing
+
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    toc-location: right
+    toc-expand: 2
+
+    number-sections: false
+    anchor-sections: true
+    smooth-scroll: true
+
+    code-copy: true
+    code-fold: false
+    code-tools: false
+
+    link-external-icon: false
+    link-external-newwindow: false
+
+    page-layout: article
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  error: false
+  freeze: auto
+
+draft: false
+---
+
+This page provides the BNR Research Data Sharing Agreement for researchers and research teams requesting access to restricted, de-identified registry data.
+
+Approval is not automatic. Each request is reviewed in relation to the purpose of the work, the sensitivity of the data, the proposed safeguards, and the public health value of the request.
+
+::: {.callout-note title="Submitting this agreement"}
+Complete the agreement, then use your browser's **Print** option to save the completed page as a PDF.
+
+Email the completed PDF to the BNR team using the agreed submission route. This website does not store or submit the information entered on this page.
+:::
+
+{{< include ../../_shared/data-sharing-agreement-body.qmd >}}
+
+## Before submitting
+
+Before submitting the completed agreement, please check that:
+
+- all researcher and institution details are complete;
+- the project title and purpose are clearly stated;
+- the disease area, period covered, and requested format are specified;
+- ethics approval details are included, where applicable;
+- storage and security arrangements are suitable for restricted, de-identified data;
+- the agreement has been signed and dated.
+
+## Questions about data access
+
+Requests for access to restricted BNR data are reviewed by the BNR team.
+
+The BNR may request further information before approving a data release.

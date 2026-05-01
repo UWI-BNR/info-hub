@@ -1,0 +1,171 @@
+---
+title: "Data Trust Framework"
+subtitle: "_For fair, transparent, and responsible use of BNR data_"
+description: "BNR Operations Manual | Data Trust Framework"
+date: last-modified
+date-format: "D MMMM YYYY"
+lang: en-GB
+
+# Keep the title available for navigation/search metadata,
+# but prevent Quarto from rendering the visible HTML title block.
+title-block-style: none
+
+categories:
+  - bnr
+  - cvd
+  - data
+  - governance
+
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    toc-location: right
+    toc-expand: 2
+
+    number-sections: false
+    anchor-sections: true
+    smooth-scroll: true
+
+    code-copy: true
+    code-fold: false
+    code-tools: false
+
+    link-external-icon: false
+    link-external-newwindow: false
+
+    page-layout: article
+
+execute:
+  echo: false
+  warning: false
+  message: false
+  error: false
+  freeze: auto
+
+draft: false
+
+# Commenting system enabled for review.
+# Consider removing this block before final publication.
+comments:
+  hypothesis:
+    theme: clean
+---
+
+## 1. Purpose of the BNR Data Trust
+
+The **BNR Data Trust** is a small technical sub-group of the existing **BNR Advisory Committee**. 
+
+Its purpose is to ensure that all data shared from the Barbados National Registry for Chronic Non-Communicable Disease (BNR) are handled safely, fairly, and in line with national law and good research practice.  
+
+The Data Trust:
+
+- Reviews requests for access to restricted or controlled BNR data.  
+- Confirms that each request meets ethical, legal, and technical standards.  
+- Ensures data use benefits public health and aligns with BNR goals.  
+- Reports all decisions and recommendations through the BNR Advisory Committee to the Ministry of Health and Wellness.
+
+This structure keeps oversight **lean, technical, and accountable**, without creating new bureaucracy.
+
+
+## 2. Guiding Principles
+
+The Data Trust works under the same principles that guide all BNR activities:
+
+1. **Transparency** – All data requests and decisions are recorded and reported through the Advisory Committee.  
+2. **Accountability** – Every data release is traceable and approved by named individuals.  
+3. **Fairness** – Data are shared on equal terms with all legitimate research partners.  
+4. **Proportionality** – Data are only as detailed as necessary for the approved use.  
+5. **Public Benefit** – All approved data use must support better health knowledge or policy.
+
+
+## 3. Composition of the Data Trust
+
+The Data Trust is intentionally small and technical.  
+It draws members from within the BNR and its host institution, the George Alleyne Chronic Disease Research Centre (GA-CDRC) with one external academic representative from the University of the West Indies (UWI)
+
+**Members:**
+
+- BNR Technical Lead (Chair)  
+- BNR Data Manager or Senior Analyst  
+- GA-CDRC Data Governance Representative  
+- UWI Faculty Representative (external to GA-CDRC)  
+
+Members serve two-year terms, renewable by agreement. The Trust may invite temporary advisers (e.g. legal or ethics experts) when needed but keeps decision-making to the core group.
+
+
+## 4. Responsibilities of the Data Trust
+
+The Data Trust is responsible for:
+
+1. **Reviewing and approving** requests for restricted or controlled data.  
+2. **Ensuring compliance** with the Barbados Data Protection Act (2019).  
+3. **Verifying** that each request has appropriate ethical or institutional approval.  
+4. **Advising** on data anonymisation, security, and storage conditions.  
+5. **Monitoring** active data sharing agreements for adherence to conditions of use.  
+6. **Reporting** all approved or declined requests to the BNR Advisory Committee.  
+
+The Trust operates as the *technical decision arm*, while the Advisory Committee provides the *broader policy and stakeholder oversight*.
+
+
+## 5. Decision Process
+
+1. **Initial Review:** The BNR Technical Lead screens the request for completeness and risk level.  
+2. **Trust Review:** The Data Trust assesses:
+   - The purpose and expected benefit of the request.  
+   - The data detail and potential for re-identification.  
+   - The adequacy of ethics approval and data protection measures.  
+3. **Decision:** The Trust may:
+   - **Approve** the request with conditions.  
+   - **Request clarifications** or additional safeguards.  
+   - **Decline** the request if it poses high risk or lacks justification.  
+4. **Recording:** Every decision is logged in the **BNR Data Release Register**.  
+5. **Reporting:** A summary of approvals is submitted to the **BNR Advisory Committee** at its next meeting for formal noting and inclusion in minutes.
+
+
+## 6. Relationship Between the Data Trust, Advisory Committee, and Data Sharing Agreements
+
+| Tool or Body | Role | Description |
+|---------------|------|--------------|
+| **Data Sharing Agreement (DSA)** | Legal record of one data release | Signed by the BNR Technical Lead and data recipient before any restricted dataset is shared. Defines purpose, conditions, and duration. |
+| **Data Trust (subset of Advisory Committee)** | Technical review and approval | Evaluates and approves data requests for compliance and public benefit. Maintains the Data Release Register. |
+| **BNR Advisory Committee** | Oversight and accountability | Receives and endorses Data Trust reports, ensures policy alignment, and provides a public record of data sharing activities. |
+
+In short: **the Data Trust makes the technical decision**, and **the Advisory Committee provides the official oversight and record**.
+
+
+## 7. Meetings and Reporting
+
+- The Data Trust meets **as needed**, usually quarterly or when new data requests are received.  
+- Summary reports of all decisions are presented at each Advisory Committee meeting.  
+- An **annual summary of data sharing activity** (number of requests, approvals, data types, and outcomes) is prepared by the BNR Technical Lead and included in the BNR Annual Report.  
+- All approved projects are listed on the BNR website for transparency.
+
+
+## 8. Handling Concerns or Breaches
+
+If a data user fails to meet their responsibilities or a data breach occurs:
+
+1. The user must notify the BNR Technical Lead immediately.  
+2. The Technical Lead informs the Data Trust, which reviews the issue.  
+3. If serious, the matter is escalated to the **BNR Advisory Committee** and, if necessary, to the **Data Protection Commissioner**.  
+4. Access may be suspended or future data requests declined.
+
+
+## 9. Review and Updates
+
+This Data Trust Framework is reviewed **every two years** by the BNR Technical Lead and the Advisory Committee.  
+Updates are approved by the Advisory Committee and endorsed by the Ministry of Health and Wellness.
+
+
+### In Summary
+
+The **BNR Data Trust** is a focused, technical sub-group of the **BNR Advisory Committee**.  
+It ensures that:
+
+- Data sharing decisions are made carefully and consistently,  
+- Legal and ethical standards are upheld, and  
+- The Advisory Committee — and by extension the public — can see how BNR data are being used for good.
+
+By combining tight technical control with open reporting, the BNR maintains a practical, trustworthy system for sharing data safely and responsibly.

@@ -1,0 +1,289 @@
+::: {.callout-important title="We do not store your data"}
+**This is not an online form. Nothing you type is submitted to the website or stored by the BNR Information Hub.**  
+:::
+
+::: {.callout-note title="How to complete this agreement"}
+To use this form, complete all fields, then print or save the page as a PDF for signature and submission.
+:::
+
+## 1. Purpose of this agreement
+
+This agreement allows an approved researcher or research team to access **restricted, de-identified data** from the Barbados National Registry for Chronic Non-Communicable Disease (BNR).
+
+It supports the use of data for public health and academic research while ensuring compliance with the **Barbados Data Protection Act (2019)** and BNR’s duty of confidentiality.
+
+## 2. Parties
+
+**Data Custodian:**  
+The Barbados National Registry for Chronic Non-Communicable Disease (BNR)  
+George Alleyne Chronic Disease Research Centre  
+The University of the West Indies, Cave Hill Campus  
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Data User / Researcher</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="data-user-name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="data-user-name" placeholder="Full name">
+    </div>
+
+    <div class="mb-3">
+      <label for="data-user-institution" class="form-label">Institution</label>
+      <input type="text" class="form-control" id="data-user-institution" placeholder="Institution or organisation">
+    </div>
+
+    <div class="mb-3">
+      <label for="data-user-address" class="form-label">Address</label>
+      <textarea class="form-control" id="data-user-address" rows="3" placeholder="Institutional address"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="data-user-email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="data-user-email" placeholder="name@example.org">
+    </div>
+
+  </div>
+</div>
+```
+
+## 3. Description of data
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Data requested</strong>
+  </div>
+
+  <div class="card-body">
+
+    <p class="mb-2"><strong>Type of data</strong></p>
+    <p>Restricted, de-identified dataset</p>
+
+    <p class="mb-2"><strong>Disease area(s)</strong></p>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="disease-heart-attack">
+      <label class="form-check-label" for="disease-heart-attack">Heart attack</label>
+    </div>
+
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="disease-stroke">
+      <label class="form-check-label" for="disease-stroke">Stroke</label>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="disease-cancer">
+      <label class="form-check-label" for="disease-cancer">Cancer</label>
+    </div>
+
+    <div class="mb-3">
+      <label for="period-covered" class="form-label">Period covered</label>
+      <input type="text" class="form-control" id="period-covered" placeholder="For example: 2019–2023">
+    </div>
+
+    <div class="mb-3">
+      <label for="data-format" class="form-label">Format</label>
+      <input type="text" class="form-control" id="data-format" placeholder="For example: CSV, Stata, Excel">
+    </div>
+
+    <div class="mb-3">
+      <label for="version-released" class="form-label">Version / date released</label>
+      <input type="text" class="form-control" id="version-released" placeholder="Dataset version and release date">
+    </div>
+
+  </div>
+</div>
+```
+
+All direct identifiers, including names, addresses, and ID numbers, have been removed.
+
+Although the data are de-identified, users must handle them with care to prevent any risk of re-identification.
+
+## 4. Agreed purpose
+
+The data are supplied **only for the approved research project** listed below.
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Approved research project</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="project-title" class="form-label">Project title</label>
+      <input type="text" class="form-control" id="project-title" placeholder="Full project title">
+    </div>
+
+    <div class="mb-3">
+      <label for="project-description" class="form-label">Brief description</label>
+      <textarea class="form-control" id="project-description" rows="4" placeholder="Briefly describe the purpose of the research and planned analysis"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="ethics-reference" class="form-label">Ethics approval reference, if applicable</label>
+      <input type="text" class="form-control" id="ethics-reference" placeholder="Ethics committee reference or approval number">
+    </div>
+
+  </div>
+</div>
+```
+
+The data may also be used for **closely related analyses, peer-review, or follow-up publications** linked to this project, provided that the BNR is notified.
+
+## 5. Conditions of use
+
+The Researcher agrees to:
+
+1. Keep the data secure and limit access to authorised project team members.
+2. Not attempt to identify individuals or link BNR data to other datasets without BNR approval.
+3. Use the data only for research that has ethical or institutional approval.
+4. Not share the data with anyone outside the approved research team.
+5. Retain the data only while the research, analysis, and related publications are active, then either archive them securely within the institution or delete them under institutional policy.
+6. Acknowledge the BNR and the Ministry of Health and Wellness in all outputs.
+7. Share with the BNR a copy or citation of any reports or publications arising from this work.
+8. Report any suspected data breach or misuse immediately to the BNR Technical Lead.
+
+## 6. Data retention and security
+
+The Researcher agrees that the data will be stored and managed as follows:
+
+- Store data on secure, password-protected and encrypted institutional systems.
+- Institutional or cloud storage is acceptable if compliant with recognised standards, such as ISO 27001 or equivalent.
+- Do not store data on personal laptops or unencrypted media.
+- Data may be archived for reproducibility and verification within the research institution, under the same or higher level of security.
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Secure storage location</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="storage-location" class="form-label">Where will the data be stored?</label>
+      <textarea class="form-control" id="storage-location" rows="3" placeholder="Describe the approved storage location, system, or institutional environment"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="access-list" class="form-label">Who will have access?</label>
+      <textarea class="form-control" id="access-list" rows="3" placeholder="List authorised project team members or roles"></textarea>
+    </div>
+
+  </div>
+</div>
+```
+
+## 7. Governance and oversight
+
+All data sharing is subject to:
+
+- approval by the **BNR Technical Lead**, and
+- ethical approval by a recognised Research Ethics Committee, if required.
+
+The BNR may withdraw access if these terms are breached or if continuing use no longer meets the public interest test under the **Barbados Data Protection Act (2019)**.
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>BNR review and approval</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="bnr-review-status" class="form-label">BNR review status</label>
+      <input type="text" class="form-control" id="bnr-review-status" placeholder="For example: approved, approved with conditions, not approved">
+    </div>
+
+    <div class="mb-3">
+      <label for="bnr-conditions" class="form-label">Conditions of approval, if any</label>
+      <textarea class="form-control" id="bnr-conditions" rows="3" placeholder="List any conditions attached to this data release"></textarea>
+    </div>
+
+  </div>
+</div>
+```
+
+## 8. Signatures
+
+### For the Barbados National Registry
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Data Custodian approval</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="custodian-name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="custodian-name">
+    </div>
+
+    <div class="mb-3">
+      <label for="custodian-title" class="form-label">Title</label>
+      <input type="text" class="form-control" id="custodian-title">
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 mb-3">
+        <label for="custodian-signature" class="form-label">Signature</label>
+        <input type="text" class="form-control" id="custodian-signature">
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="custodian-date" class="form-label">Date</label>
+        <input type="text" class="form-control" id="custodian-date" placeholder="DD Month YYYY">
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+### For the Researcher
+
+```{=html}
+<div class="card mb-4">
+  <div class="card-header">
+    <strong>Data User agreement</strong>
+  </div>
+
+  <div class="card-body">
+
+    <div class="mb-3">
+      <label for="researcher-name-signature" class="form-label">Name</label>
+      <input type="text" class="form-control" id="researcher-name-signature">
+    </div>
+
+    <div class="mb-3">
+      <label for="researcher-institution-signature" class="form-label">Institution</label>
+      <input type="text" class="form-control" id="researcher-institution-signature">
+    </div>
+
+    <div class="row">
+      <div class="col-md-8 mb-3">
+        <label for="researcher-signature" class="form-label">Signature</label>
+        <input type="text" class="form-control" id="researcher-signature">
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label for="researcher-date" class="form-label">Date</label>
+        <input type="text" class="form-control" id="researcher-date" placeholder="DD Month YYYY">
+      </div>
+    </div>
+
+  </div>
+</div>
+```
+
+_Last updated: May 2026_
