@@ -21,7 +21,7 @@ toc: false
 
 <p class="bnr-intro-sub">With clear, reliable evidence, we help guide decisions that strengthen care and improve health outcomes.</p>
 
-::: {.d-flex .gap-3 .justify-content-center .flex-wrap .mt-4}
+::: {.d-flex .gap-3 .justify-content-center .flex-wrap .mt-4 .bnr-home-actions}
 [View latest data](latest/index.qmd){.btn .btn-primary}
 [Explore surveillance areas](#surveillance-areas){.btn .btn-outline-primary}
 :::
@@ -87,10 +87,10 @@ Following diabetes care helps show how people are being monitored, supported, an
 We publish methods, definitions, data notes, and release updates so users can understand how BNR information is produced and how it should be interpreted.
 
 ::: {.bnr-utility-links}
-[Methods and definitions](methods/index.qmd){.btn .btn-outline-primary}
-[Data sources](data/index.qmd){.btn .btn-outline-primary}
-[Quality checks](quality/index.qmd){.btn .btn-outline-primary}
-[Release notes](latest/index.qmd){.btn .btn-outline-primary}
+[Methods and definitions](./methods/index.qmd){.btn .btn-outline-primary}
+[Data sources](./downloads/index.qmd){.btn .btn-outline-primary}
+[Quality checks](./operations/index.qmd){.btn .btn-outline-primary}
+[Release notes](./downloads/release-catalogue.qmd){.btn .btn-outline-primary}
 :::
 
 :::

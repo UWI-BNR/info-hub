@@ -171,6 +171,7 @@ $secondary: #001f3d;
   margin: 0 auto 2.15rem auto;
   font-size: clamp(1.45rem, 2.1vw, 1.95rem);
   line-height: 1.35;
+  color: #4f565c;
 }
 
 /*
@@ -182,7 +183,7 @@ $secondary: #001f3d;
   margin: 0 auto 2.15rem auto;
   font-size: clamp(1.15rem, 1.55vw, 1.4rem);
   line-height: 1.45;
-  color: #4f565c;
+  color: #000000;
 }
 
 
@@ -201,6 +202,29 @@ $secondary: #001f3d;
   max-width: 1180px;
   margin: 3rem auto;
   padding: 0 1.25rem;
+}
+
+
+/* =========================================================================
+   MAIN LANDING PAGE ACTION BUTTONS
+   ========================================================================= */
+
+/*
+   These are the two buttons below the landing page intro text:
+   - View latest data
+   - Explore surveillance areas
+
+   Quarto renders these links inside an inner paragraph. The spacing
+   therefore needs to be applied to that paragraph, not only to the
+   outer .bnr-home-actions wrapper.
+*/
+
+.bnr-home-actions > p {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 1rem;
+  margin-bottom: 0;
 }
 
 
@@ -252,11 +276,20 @@ $secondary: #001f3d;
    Kept because this worked well visually.
 */
 
+/* Understanding the numbers button links */
+
 .bnr-utility-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  justify-content: center;
+  column-gap: 0.75rem;
+  row-gap: 0.85rem;
   margin-top: 1.25rem;
+}
+
+.bnr-utility-links .btn {
+  margin-top: 0.15rem;
+  margin-bottom: 0.15rem;
 }
 
 

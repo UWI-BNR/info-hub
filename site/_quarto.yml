@@ -232,8 +232,10 @@ website:
             # - text: "QC outputs"
             #   href: operations/post-redcap/reviewing-quality-control-outputs.qmd
 
-        - section: "Governance"
+        - section: "Data Governance"
           contents:
+            - text: "Dissemination"
+              href: operations/data-governance/dataset-dissemination.qmd
             # - text: "Requests"
             #   href: operations/data-governance/assessing-data-requests.qmd
             # - text: "Sharing"
@@ -262,7 +264,7 @@ website:
             # - text: "Changelog"
             #   href: operations/release-archive/operational-changelog.qmd
 
-        - section: "Refit"
+        - section: "Refit" 
           contents:
             - text: "Summary"
               href: operations/refit-record/index.qmd
@@ -349,3 +351,4 @@ website:
             - text: "Git cleanup"
               href: technical/troubleshooting/git-status-cleanup.qmd
 
+# file touch4
