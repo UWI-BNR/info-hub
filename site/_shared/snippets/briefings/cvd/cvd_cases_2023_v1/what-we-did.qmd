@@ -1,0 +1,3 @@
+## What we did
+
+We reviewed all hospital-registered strokes and heart attacks for 2023 and compared them with the previous five years. We examined who was affected: men and women under 70 and those 70 and older. We also tracked how cases built up week by week. By comparing 2023 counts with the five-year average, we could see when numbers rose above or fell below what would normally be expected.

@@ -1,58 +1,62 @@
-﻿---
+---
 title: "Hospital Cardiovascular Cases in Barbados"
-subtitle: "BNR CVD case-count briefing, 2023"
-description: "A public-facing BNR briefing on hospital-registered stroke and heart attack cases in Barbados during 2023."
+subtitle: "BNR CVD briefing, 2023"
 format:
   html:
+    body-classes: bnr-briefing-page
     toc: true
     toc-depth: 2
 page-layout: full
 ---
 
-# Hospital Cardiovascular Cases in Barbados
+[Download PDF briefing](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.pdf){.btn .btn-outline-primary}
 
-::: {.callout-note appearance="simple"}
-This briefing was produced from Stata-generated outputs and published through Quarto. The analysis is fixed to the 2023 briefing dataset and is designed to be reproducible as a static reporting product.
-:::
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
 
-::: {.grid .mb-4}
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
 
-::: {.g-col-12 .g-col-lg-8}
-::: {.card .border-0 .shadow-sm .h-100}
+The briefing focuses on three questions:
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-## A simple count, a clear signal
+### How many?
 
-Counts are the foundation of surveillance. Before rates, trends, models, or dashboards can be interpreted, the basic question must be answered clearly:
-
-**How many people were admitted to hospital with stroke or heart attack, and how did 2023 compare with recent years?**
-
-This briefing summarises hospital-registered cardiovascular cases in Barbados during 2023, comparing weekly case accumulation with the average pattern from 2018 to 2022.
+We counted hospital-registered stroke and heart attack events during 2023.
 
 :::
 :::
 :::
 
-::: {.g-col-12 .g-col-lg-4}
-::: {.card .border-0 .shadow-sm .h-100}
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### Briefing snapshot
+### When?
 
-| Item | Detail |
-|---|---|
-| Product | Static briefing |
-| Briefing ID | `cvd_cases_2023_v1` |
-| Target year | 2023 |
-| Baseline | 2018–2022 |
-| Events | Stroke and heart attack |
-| Unit | Hospital-registered event |
+We tracked how cases accumulated week by week through the year.
 
 :::
 :::
 :::
 
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### Who?
+
+We summarised cases by event type, sex, and age group.
+
 :::
+:::
+:::
+
+:::
+
 
 ## Headline findings
 
@@ -66,7 +70,7 @@ This briefing summarises hospital-registered cardiovascular cases in Barbados du
 
 # 312
 
-Stroke cases in 2023
+Stroke cases<br>in 2023
 
 :::
 :::
@@ -80,7 +84,7 @@ Stroke cases in 2023
 
 # 312
 
-Stroke cases in 2023
+Stroke cases<br>in 2023
 
 :::
 :::
@@ -94,7 +98,7 @@ Stroke cases in 2023
 
 # 105
 
-Heart attack cases in 2023
+Heart attack cases<br>in 2023
 
 :::
 :::
@@ -108,7 +112,7 @@ Heart attack cases in 2023
 
 # 141
 
-Heart attack cases in 2023
+Heart attack cases<br>in 2023
 
 :::
 :::
@@ -116,55 +120,19 @@ Heart attack cases in 2023
 
 :::
 
-## What we did
-
-We reviewed hospital-registered strokes and heart attacks recorded by the Barbados National Registry for 2023 and compared them with the previous five years.
-
-The briefing focuses on three questions:
-
-::: {.grid}
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### How many?
-
-We counted hospital-registered stroke and heart attack events during 2023.
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### When?
-
-We tracked how cases accumulated week by week through the year.
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### Who?
-
-We summarised cases by event type, sex, and age group.
-
-:::
-:::
-:::
-
-:::
 
 ## Cumulative weekly cases
 
 The figure below compares cumulative 2023 case counts with the average annual pattern from 2018 to 2022.
+
+```{=html}
+<p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+  <span style="color: rgb(71, 45, 117);">Stroke</span>
+  and
+  <span style="color: rgb(164, 22, 26);">heart attack</span>
+  cases in 2023 compared with the five-year average
+</p>
+```
 
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
@@ -174,13 +142,21 @@ The figure below compares cumulative 2023 case counts with the average annual pa
 :::
 :::
 
-::: {.callout-tip appearance="simple"}
 Stroke cases remained above the recent five-year average through much of 2023, while heart attack cases were lower than the recent average for much of the year.
-:::
 
 ## Cases by age, sex, and event type
 
 The figure below shows the age profile of hospital-registered stroke and heart attack cases, comparing people under 70 with those aged 70 or older.
+
+```{=html}
+<p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+  Proportion of
+  <span style="color: rgb(71, 45, 117);">stroke</span>
+  and
+  <span style="color: rgb(164, 22, 26);">heart attack</span>
+  cases occurring before age 70
+</p>
+```
 
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
@@ -190,19 +166,29 @@ The figure below shows the age profile of hospital-registered stroke and heart a
 :::
 :::
 
-::: {.callout-note appearance="simple"}
-A substantial share of cardiovascular events occurred before age 70, especially among men. This highlights the continuing burden of premature cardiovascular disease.
-:::
-
 ## Interpretation
 
-The 2023 case-count pattern shows a contrast between stroke and heart attack activity. Stroke cases were consistently higher than the recent five-year average, while heart attack cases were lower for much of the year.
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
 
-This difference may reflect changes in disease occurrence, health-seeking behaviour, recognition of emergency symptoms, hospital presentation patterns, or post-pandemic service use. Counts alone cannot explain why the pattern changed, but they provide a clear early signal for further investigation.
+## Premature cardiovascular disease
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
 
 ## Download the outputs
 
-::: {.grid}
+::: {.g-col-12 .mb-4}
+::: {.card .border-0 .shadow-sm .h-100}
+::: {.card-body}
+
+### Briefing document
+
+- [Download PDF briefing](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.pdf)
+
+:::
+:::
+:::
+
+::: {.grid .gap-4}
 
 ::: {.g-col-12 .g-col-md-6}
 ::: {.card .border-0 .shadow-sm .h-100}
@@ -258,12 +244,6 @@ This difference may reflect changes in disease occurrence, health-seeking behavi
 
 :::
 
-## Method note
+## Suggested Citation
 
-This briefing uses hospital-registered cardiovascular events recorded by the Barbados National Registry. The target year is 2023. The baseline comparison uses the average annual pattern from 2018 to 2022.
-
-The Stata compute layer generated the tables, figures, figure-ready data, public metadata, and build record. This Quarto page publishes and explains those approved outputs. It does not recreate the analysis.
-
-## Citation
-
-Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies.
+> Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html. Accessed: [insert date accessed].

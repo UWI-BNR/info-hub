@@ -1,0 +1,3 @@
+## Why this matters
+
+Counts are the simplest and most transparent way to show what is happening in our hospital. Each number represents a person who suffered a heart attack or stroke, and together they show the pressure on our health system. Before we can interpret trends or calculate rates, we must first be confident in these raw numbers: how many people were affected, and when. Presenting counts provides the foundation for our remaining surveillance results.

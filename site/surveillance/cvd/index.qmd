@@ -1,6 +1,39 @@
-﻿---
+---
 title: "Cardiovascular Disease Surveillance"
-format: html
+description: "BNR surveillance outputs for stroke, heart attack, and related cardiovascular disease indicators."
+title-block-style: none
+
+listing:
+  - id: cvd-outputs
+    contents:
+      - "briefings/*.qmd"
+    type: default
+    sort: "date desc"
+    categories: true
+    sort-ui: true
+    filter-ui: true
+    page-size: 10
+
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 2
+    toc-location: right
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-icon: false
+    link-external-newwindow: false
+    page-layout: article
 ---
 
-This section will contain cardiovascular disease outputs.
+The Barbados National Registry monitors major cardiovascular events, including stroke and heart attack, to support public health planning, service improvement, and population health surveillance.
+
+This section brings together public-facing CVD outputs, including briefings, data releases, figures, metadata, and supporting methods.
+
+## Latest CVD outputs
+
+The outputs below are generated from approved BNR publication pages. New briefings will appear here as they are added to the CVD surveillance section.
+
+::: {#cvd-outputs}
+:::

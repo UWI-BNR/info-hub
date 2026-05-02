@@ -36,27 +36,25 @@ Briefing created by the Barbados National Registry, The University of the West I
 - Stroke cases remained above the recent five-year average through much of the year.
 - A substantial share of cardiovascular events occurred before age 70.
 
-## Why this matters
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
 
-Counts are the foundation of surveillance. Before rates, trends, models, or dashboards can be interpreted, the basic number of hospital-registered events must be clear.
-
-## What we did
-
-We reviewed hospital-registered strokes and heart attacks for 2023 and compared them with the average pattern from 2018 to 2022.
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
 
 ## Cumulative weekly cases
 
-![Cumulative CVD cases in 2023 compared with the 2018–2022 average.](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100%}
+![Cumulative CVD cases in 2023 compared with the 2018–2022 average.](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100%}
 
 ## Cases by age, sex, and event type
 
-![Age distribution of hospital-registered stroke and heart attack cases.](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){width=100%}
+![Age distribution of hospital-registered stroke and heart attack cases.](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){width=100%}
 
 ## Interpretation
 
-The 2023 case-count pattern shows a contrast between stroke and heart attack activity. Stroke cases were consistently higher than the recent five-year average, while heart attack cases were lower for much of the year.
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
 
-This difference may reflect changes in disease occurrence, health-seeking behaviour, recognition of emergency symptoms, hospital presentation patterns, or post-pandemic service use. Counts alone cannot explain why the pattern changed, but they provide a clear early signal for further investigation.
+## Premature cardiovascular disease
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
 
 ## Outputs
 

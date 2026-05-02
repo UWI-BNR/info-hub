@@ -325,3 +325,28 @@ $secondary: #001f3d;
     padding: 0 1rem;
   }
 }
+
+
+/* =========================================================================
+   BRIEFING PAGES
+   ========================================================================= */
+
+/*
+   Briefing pages use headings for correct document structure.
+   The Flatly theme adds horizontal rules under some headings. On briefing
+   pages these lines create too much visual clutter, so we remove them only
+   for pages marked with body-classes: bnr-briefing-page.
+*/
+
+body.bnr-briefing-page h2,
+body.bnr-briefing-page h2.anchored,
+body.bnr-briefing-page h3,
+body.bnr-briefing-page h3.anchored,
+body.bnr-briefing-page main h2,
+body.bnr-briefing-page main h3,
+body.bnr-briefing-page .quarto-document-content h2,
+body.bnr-briefing-page .quarto-document-content h3 {
+  border-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  box-shadow: none !important;
+}
