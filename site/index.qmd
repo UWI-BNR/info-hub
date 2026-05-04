@@ -17,7 +17,7 @@ toc: false
 
 ::: {.bnr-home-section .bnr-intro-section}
 
-<p class="bnr-intro-main">We track major chronic diseases and primary care indicators to understand Barbados’ changing health burden.</p>
+<p class="bnr-intro-main">We track major chronic diseases and primary care indicators to understand Barbados’ changing health patterns.</p>
 
 <p class="bnr-intro-sub">With clear, reliable evidence, we help guide decisions that strengthen care and improve health outcomes.</p>
 

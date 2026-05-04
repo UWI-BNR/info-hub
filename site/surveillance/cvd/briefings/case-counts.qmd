@@ -1,6 +1,9 @@
 ---
 title: "Hospital Cardiovascular Cases in Barbados"
+author: Ian Hambleton
 subtitle: "BNR CVD briefing, 2023"
+date: 31-Oct-2025
+sidebar: cvd
 format:
   html:
     body-classes: bnr-briefing-page
@@ -58,61 +61,54 @@ We summarised cases by event type, sex, and age group.
 :::
 
 
+
 ## Headline findings
 
 ::: {.grid .mb-4}
 
-::: {.g-col-12 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body .text-center}
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
 
-### Women
-
-# 312
-
-Stroke cases<br>in 2023
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
+<p class="display-6 fw-semibold mb-1">312</p>
+<p class="mb-0 small">Stroke cases<br>in 2023</p>
 
 :::
 :::
 :::
 
-::: {.g-col-12 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body .text-center}
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
 
-### Men
-
-# 312
-
-Stroke cases<br>in 2023
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
+<p class="display-6 fw-semibold mb-1">312</p>
+<p class="mb-0 small">Stroke cases<br>in 2023</p>
 
 :::
 :::
 :::
 
-::: {.g-col-12 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body .text-center}
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
 
-### Women
-
-# 105
-
-Heart attack cases<br>in 2023
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
+<p class="display-6 fw-semibold mb-1">105</p>
+<p class="mb-0 small">Heart attack cases<br>in 2023</p>
 
 :::
 :::
 :::
 
-::: {.g-col-12 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body .text-center}
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
 
-### Men
-
-# 141
-
-Heart attack cases<br>in 2023
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
+<p class="display-6 fw-semibold mb-1">141</p>
+<p class="mb-0 small">Heart attack cases<br>in 2023</p>
 
 :::
 :::
@@ -139,6 +135,8 @@ The figure below compares cumulative 2023 case counts with the average annual pa
 
 ![Cumulative CVD cases in 2023 compared with the 2018–2022 average.](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){fig-alt="Line chart showing cumulative weekly stroke and heart attack cases in 2023 compared with the five-year average for 2018 to 2022." width="100%"}
 
+[Open full-size cumulative cases figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){.small}
+
 :::
 :::
 
@@ -163,6 +161,8 @@ The figure below shows the age profile of hospital-registered stroke and heart a
 
 ![Age distribution of hospital-registered stroke and heart attack cases.](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
 
+[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){.small}
+
 :::
 :::
 
@@ -176,73 +176,14 @@ The figure below shows the age profile of hospital-registered stroke and heart a
 
 ## Download the outputs
 
-::: {.g-col-12 .mb-4}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
+The briefing outputs are available in three formats.
 
-### Briefing document
+| Description |  | Download |
+|---|:---:|---|
+| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](../pdf/bnr_cvd_cases_2023_v1.pdf) |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_cases_2023_v1/workbook/bnr_cvd_cases_2023_v1.xlsx) |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip) |
 
-- [Download PDF briefing](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.pdf)
-
-:::
-:::
-:::
-
-::: {.grid .gap-4}
-
-::: {.g-col-12 .g-col-md-6}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### Tables
-
-- [Download 2023 case counts by sex and event type](../../../downloads/files/briefings/cvd_cases_2023_v1/tables/cases_2023_sex_event.csv)
-- [Download 2023 case counts by age group, sex, and event type](../../../downloads/files/briefings/cvd_cases_2023_v1/tables/age70_2023_sex_event.csv)
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### Figure data
-
-- [Download cumulative weekly case data](../../../downloads/files/briefings/cvd_cases_2023_v1/data/cases_2023_cum_week.csv)
-- [Download age-group figure data](../../../downloads/files/briefings/cvd_cases_2023_v1/data/cases_2023_age70.csv)
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### Figures
-
-- [Download cumulative weekly case figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png)
-- [Download age-group figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png)
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6}
-::: {.card .border-0 .shadow-sm .h-100}
-::: {.card-body}
-
-### Metadata
-
-- [Download public metadata](../../../downloads/files/briefings/cvd_cases_2023_v1/meta.yml)
-- [Download build record](../../../downloads/files/briefings/cvd_cases_2023_v1/build.yml)
-
-:::
-:::
-:::
-
-:::
 
 ## Suggested Citation
 

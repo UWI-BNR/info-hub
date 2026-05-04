@@ -1,0 +1,44 @@
+schema: bnr_briefing_metadata_v1
+briefing_id: cvd_cases_2023_v1
+
+title: |-
+  Hospital cardiovascular cases in Barbados, 2023
+
+description: |-
+  Public aggregate output package for the BNR CVD case-count briefing.
+
+registry: BNR-CVD
+geography: Barbados
+target_year: 2023
+baseline_period: 2018-2022
+
+limitations: |-
+  Counts describe hospital-ascertained cases and should not be interpreted as population incidence.
+
+datasets:
+  - id: cvd_cases_weekly
+    dta: datasets/cvd_cases_weekly.dta
+    csv: datasets/cvd_cases_weekly.csv
+    yml: metadata/cvd_cases_weekly.yml
+  - id: cvd_cases_age_group
+    dta: datasets/cvd_cases_age_group.dta
+    csv: datasets/cvd_cases_age_group.csv
+    yml: metadata/cvd_cases_age_group.yml
+
+figures:
+  - id: cvd_cases_weekly
+    file: figures/cvd_cases_weekly.png
+    source_dataset: cvd_cases_weekly
+  - id: cvd_cases_age_group
+    file: figures/cvd_cases_age_group.png
+    source_dataset: cvd_cases_age_group
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+build:
+  build_date:  4 May 2026
+  analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do

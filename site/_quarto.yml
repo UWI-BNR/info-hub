@@ -2,7 +2,8 @@ project:
   type: website
   resources:
     - assets/images/**
-    - assets/fonts/**  
+    - assets/fonts/**
+    - downloads/files/**
   output-dir: _site
   preview:
     port: 4200
@@ -91,6 +92,27 @@ website:
         text: About
 
   sidebar:
+    - id: cvd
+      title: "CVD surveillance"
+      style: "docked"
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "CVD home"
+          href: surveillance/cvd/index.qmd
+
+        - section: "Briefings"
+          contents:
+            - text: "Hospital CVD cases, 2023"
+              href: surveillance/cvd/briefings/case-counts.qmd
+
+        - section: "Downloads"
+          contents:
+            - text: "Data & downloads"
+              href: downloads/index.qmd
+            - text: "Release catalogue"
+              href: downloads/release-catalogue.qmd
+
     - id: methods
       title: "Methods"
       style: "docked"
@@ -364,6 +386,6 @@ website:
             - text: "Stata paths"
               href: technical/troubleshooting/stata-path-errors.qmd
             - text: "Git cleanup"
-              href: technical/troubleshooting/git-status-cleanup.qmd
+              href: technical/troubleshooting/git-status-cleanup.qm1
 
-# file touch6
+# file touch2

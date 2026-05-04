@@ -1,4 +1,5 @@
-/**************************************************************************
+/* 
+* =====================================================================
  DO-FILE:     cvd_cases_2023.do
  PROJECT:     BNR info-hub
  PURPOSE:     Recreate the static 2023 CVD case-count briefing outputs
@@ -14,72 +15,124 @@
    Publication layout is handled by Quarto.
 
  OUTPUT BUNDLE:
-   outputs/public/briefings/cvd_cases_2023_v1/
+  STAGING: outputs/staging/briefings/cvd_cases_2023_v1/
+  PUBLIC:  outputs/public/briefings/cvd_cases_2023_v1/
 
-   tables/
-     cases_2023_sex_event.csv
-     age70_2023_sex_event.csv
+  readme.txt
 
-   figures/
-     cases_2023_cum_week.png
-     cases_2023_age70.png
+  datasets/
+    cvd_cases_weekly.dta
+    cvd_cases_weekly.csv
+    cvd_cases_weekly.yml
+    cvd_cases_age_group.dta
+    cvd_cases_age_group.csv
+    cvd_cases_age_group.yml
 
-   data/
-     cases_2023_cum_week.csv
-     cases_2023_age70.csv
+  figures/
+    cvd_cases_weekly.png
+    cvd_cases_age_group.png
 
-   meta.yml
-   build.yml
-**************************************************************************/
+  workbook/
+    bnr_cvd_cases_2023_v1.xlsx
+
+  metadata/
+    briefing.yml
+
+  ZIP:
+    bnr_cvd_cases_2023_v1.zip
+    Stored inside the public briefing folder.
+* =====================================================================
+*/
 
 
-** ------------------------------------------------
-** ----- INITIALIZE DO FILE -----------------------
-** ------------------------------------------------
-
-version 19
+* ==============================================================
+* DO NOT TOUCH: INITIALIZE DO FILE 
+* ==============================================================
 clear all
 set more off
 
-* Load local paths and shared settings
-do "scripts/stata/config/bnr_paths_LOCAL.do"
-do "scripts/stata/common/bnrcvd_globals.do"
+* ==============================================================
+* DO NOT TOUCH:    SET LOCAL PATH LOCATION
+*                  AND LOAD SHARED SETTINGS 
+* ==============================================================
+local localpath "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+do "`localpath'/scripts/stata/config/bnr_paths_LOCAL.do"
+do "`localpath'/scripts/stata/common/bnrcvd_globals.do"
 
-* Fixed static briefing parameters
-local target_year     2023
-local baseline_start  2018
-local baseline_end    2022
-local briefing_id     "cvd_cases_2023_v1"
+** ==============================================================
+** EDIT BLOCK A: BRIEFING SETTINGS
+** ==============================================================
+* For a new briefing, start here.
+* Change these local macros before changing the standard release machinery.
+local target_year       2023
+local baseline_start    2018
+local baseline_end      2022
+local briefing_id       "cvd_cases_2023_v1"
+local briefing_name     "cvd_cases_2023"
+local output1           "cvd_cases_weekly"
+local output2           "cvd_cases_age_group"
 
-* Output bundle locations
-local bundle "$BNR_PUBLIC/briefings/`briefing_id'"
-local tables "`bundle'/tables"
-local figures "`bundle'/figures"
-local dataout "`bundle'/data"
 
 * Private log file
 cap log close
-log using "$BNR_PRIVATE_LOGS/cvd_cases_2023", replace
-
-display as text "BNR CVD case-count briefing build"
-display as result "  Briefing ID:   `briefing_id'"
-display as result "  Target year:   `target_year'"
-display as result "  Baseline:      `baseline_start'-`baseline_end'"
-display as result "  Output bundle: `bundle'"
+log using "$BNR_PRIVATE_LOGS/`briefing_name'", replace
 
 
-** ------------------------------------------------
-** ----- PREPARE SHARED 2023 CVD ANALYSIS DATA ----
-** ------------------------------------------------
+* ==============================================================
+* DO NOT TOUCH: STANDARD OUTPUT FOLDER SETUP
+* ==============================================================
+* The staging folder is the build area.
+* The public folder is the approved release copy created at the end (see section 10 below)
 
+* STAGING OUTPUT bundle locations
+* Ensure locations exist
+local stagingbriefing "$BNR_STAGING/briefings/`briefing_id'"
+local stagingdatasets "`stagingbriefing'/datasets"
+local stagingfigures "`stagingbriefing'/figures"
+local stagingworkbook "`stagingbriefing'/workbook"
+local stagingmetadata "`stagingbriefing'/metadata"
+cap mkdir "$BNR_STAGING/briefings"
+cap mkdir "`stagingbriefing'"
+cap mkdir "`stagingdatasets'"
+cap mkdir "`stagingfigures'"
+cap mkdir "`stagingworkbook'"
+cap mkdir "`stagingmetadata'"
+
+display as text _n ///
+    "------------------------------------------------------------" _n ///
+    "BNR CVD case-count briefing build" _n ///
+    "------------------------------------------------------------" _n ///
+    as result "  Briefing ID:     `briefing_id'" _n ///
+    as result "  Target year:     `target_year'" _n ///
+    as result "  Baseline:        `baseline_start'-`baseline_end'" _n ///
+    as result "  Staging bundle:  `stagingbriefing'" _n ///
+    as text "------------------------------------------------------------" _n
+
+
+* ==============================================================
+* DO NOT TOUCH: PREPARE SHARED 2023 CVD ANALYSIS DATA
+* ==============================================================
+* ----- PREPARE SHARED 2023 CVD ANALYSIS DATA ----
 * This creates the private prepared datasets used by the 2023 briefings.
-do "scripts/stata/common/bnrcvd_prep_2023_v1.do"
+qui do "scripts/stata/common/bnrcvd_prep_2023_v1.do"
 
 
-** --------------------------------------------------------------
-** (1) LOAD PREPARED COUNT DATASET
-** --------------------------------------------------------------
 
+
+** ==============================================================
+** EDIT BLOCK B: BRIEFING-SPECIFIC DATA PREPARATION AND ANALYSIS
+** ==============================================================
+* For a new briefing, adapt Sections B1, B3, B4, B5, and B6 as needed.
+* The standard release pattern is:
+*   1. create final public dataset
+*   2. label variables
+*   3. add structured dataset notes using notes _dta:
+*   4. export CSV and save DTA to stagingdatasets/
+*   5. export related figure to stagingfigures/, if relevant
+
+** ==============================================================
+** (EDIT BLOCK - SECTION B1): LOAD PREPARED COUNT DATASET
+** ==============================================================
 use "$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.dta", clear
 
 * Broad restrictions
@@ -103,56 +156,65 @@ if r(N) == 0 {
     exit 2000
 }
 
-gen event = 1
+
+** =========================================================================
+** (EDIT BLOCK - SECTION B2): 
+**                      INTERNAL TABLE: 2023 CASES BY SEX AND EVENT TYPE
+**                                      This table is not published for now.
+** =========================================================================
+    gen event = 1 
+
+** Count by year / event type 
+    #delimit ; 
+    table (yoe) (etype), 
+            nototals
+            statistic(count event) 
+            ;
+    #delimit cr
+
+** Count by year / event type and sex 
+    #delimit ; 
+    table (yoe) (etype sex), 
+            nototals
+            statistic(count event) 
+            ;
+    #delimit cr
 
 
-** --------------------------------------------------------------
-** (2) PUBLIC TABLE: 2023 CASES BY SEX AND EVENT TYPE
-** --------------------------------------------------------------
+** =============================================================================
+** (EDIT BLOCK - SECTION B3): 
+**                      INTERNAL TABLE: 2023 CASES BY AGE70, SEX, AND EVENT TYPE
+**                                      This table is not published for now.
+** =====================================+++++++++++++++=========================
 
-preserve
+    
+    ** Percentage 70+ - by sex / event type
+    #delimit ; 
+    table (sex) (etype age70), 
+            nototals
+            statistic(percent, across(age70)) 
+            ;
+    #delimit cr 
 
-    keep if yoe == `target_year'
-
-    collapse (sum) cases = event, by(etype sex)
-
-    label var etype "Event type"
-    label var sex   "Sex"
-    label var cases "Number of hospital-registered CVD cases"
-
-    export delimited using "`tables'/cases_2023_sex_event.csv", replace
-
-restore
-
-
-** --------------------------------------------------------------
-** (3) PUBLIC TABLE: 2023 CASES BY AGE70, SEX, AND EVENT TYPE
-** --------------------------------------------------------------
-
-preserve
-
-    keep if yoe == `target_year'
-
-    collapse (sum) cases = event, by(etype sex age70)
-
-    bysort etype sex: egen total_cases = total(cases)
-    gen percent = 100 * cases / total_cases
-
-    label var etype       "Event type"
-    label var sex         "Sex"
-    label var age70       "Age group"
-    label var cases       "Number of hospital-registered CVD cases"
-    label var total_cases "Total cases in event type and sex group"
-    label var percent     "Percentage of cases in age group"
-
-    export delimited using "`tables'/age70_2023_sex_event.csv", replace
-
-restore
+** Percentage 70+ - by sex and year / event type
+    #delimit ; 
+    table (sex yoe) (etype age70), 
+            nototals
+            statistic(percent, across(age70)) 
+            ;
+    #delimit cr 
 
 
-** --------------------------------------------------------------
-** (4) FIGURE 1: CUMULATIVE WEEKLY COUNT, 2023 VS BASELINE
-** --------------------------------------------------------------
+** ==============================================================
+** (EDIT BLOCK - SECTION B4): 
+**              RELEASED DATASET AND FIGURE 1:
+**              CUMULATIVE WEEKLY COUNT, 2023 VS BASELINE
+** ==============================================================
+* EDITABLE FOR NEW BRIEFINGS.
+* This section creates:
+*   - datasets/cvd_cases_weekly.dta
+*   - datasets/cvd_cases_weekly.csv
+*   - figures/cvd_cases_weekly.png
 
 preserve
 
@@ -180,15 +242,49 @@ preserve
 
     gen cases_diff_cum = cevent3 - cevent2
 
-    label var etype          "Event type"
-    label var woe            "Week of year"
-    label var event2         "Baseline average weekly cases, 2018-2022"
-    label var cevent2        "Baseline average cumulative cases, 2018-2022"
-    label var event3         "Weekly cases, 2023"
-    label var cevent3        "Cumulative cases, 2023"
-    label var cases_diff_cum "2023 cumulative cases minus baseline average"
+    rename event2 eventbase 
+    rename cevent2 ceventbase 
+    rename event3 event 
+    rename cevent3 cevent 
+    label var etype           "Event type"
+    label var woe             "Week of year"
+    label var eventbase       "Baseline average weekly cases, 2018-2022"
+    label var ceventbase      "Baseline average cumulative cases, 2018-2022"
+    label var event           "Weekly cases, 2023"
+    label var cevent          "Cumulative cases, 2023"
+    label var cases_diff_cum  "2023 cumulative cases minus baseline average"
 
-    export delimited using "`dataout'/cases_2023_cum_week.csv", replace
+    ** STANDARD RELEASE PATTERN FOR THIS DATASET
+    ** The CSV is the open data file; the DTA carries labels and notes.
+    ** For future templates, keep this save/export pattern unless the
+    ** release standard changes.
+
+    ** CSV DATASET EXPORT
+    export delimited using "`stagingdatasets'/`output1'.csv", replace
+
+    ** DTA DATASET EXPORT
+    notes drop _all
+
+    label data "BNR-CVD Registry: weekly case-count data for 2023 CVD briefing"
+
+    notes _dta: title: Weekly hospital CVD cases, Barbados, 2023
+    notes _dta: version: v1
+    notes _dta: created: 2026-05-04
+    notes _dta: creator: Ian Hambleton, Analyst
+    notes _dta: registry: BNR-CVD
+    notes _dta: content: Weekly and cumulative aggregate case counts
+    notes _dta: tier: Public aggregate output
+    notes _dta: temporal: 2018-2023
+    notes _dta: spatial: Barbados
+    notes _dta: unit_of_analysis: Event type by week of year
+    notes _dta: description: Weekly and cumulative hospital-ascertained stroke and heart attack case counts for 2023 compared with the 2018-2022 annual average.
+    notes _dta: limitations: Counts describe hospital-ascertained cases and should not be interpreted as population incidence.
+    notes _dta: language: en
+    notes _dta: software: StataNow 19
+    notes _dta: rights: CC BY 4.0 Attribution
+    notes _dta: source: Barbados National Registry approved cardiovascular registry extract
+    notes _dta: contact: Barbados National Registry
+    save "`stagingdatasets'/`output1'.dta", replace 
 
     #delimit ;
         graph twoway
@@ -218,14 +314,21 @@ preserve
                 ;
     #delimit cr
 
-    graph export "`figures'/cases_2023_cum_week.png", replace width(3000)
+    graph export "`stagingfigures'/`output1'.png", replace width(3000)
 
 restore
 
 
-** --------------------------------------------------------------
-** (5) FIGURE 2: AGE70 DISTRIBUTION, 2023 VS BASELINE
-** --------------------------------------------------------------
+** ==============================================================
+** (EDIT BLOCK - SECTION B5): 
+**                  RELEASED DATASET AND FIGURE 2:
+**                  AGE70 DISTRIBUTION, 2023 VS BASELINE
+** ==============================================================
+* EDITABLE FOR NEW BRIEFINGS.
+* This section creates:
+*   - datasets/cvd_cases_age_group.dta
+*   - datasets/cvd_cases_age_group.csv
+*   - figures/cvd_cases_age_group.png
 
 preserve
 
@@ -323,7 +426,7 @@ preserve
             ;
     #delimit cr
 
-    graph export "`figures'/cases_2023_age70.png", replace width(3000)
+    graph export "`stagingfigures'/`output2'.png", replace width(3000)
 
     * Remove graph-only offset before exporting figure-ready data
     replace perc = perc - 110 if etype == 2
@@ -340,81 +443,401 @@ preserve
     label var denom  "Total event count. For baseline, annual average."
     label var perc   "Percentage under 70 years"
 
-    export delimited using "`dataout'/cases_2023_age70.csv", replace
+    ** STANDARD RELEASE PATTERN FOR THIS DATASET
+    ** The CSV is the open data file; the DTA carries labels and notes.
+    ** For future templates, keep this save/export pattern unless the
+    ** release standard changes.
+
+    ** CSV DATASET EXPORT
+    export delimited using "`stagingdatasets'/`output2'.csv", replace
+
+    ** DTA DATASET EXPORT
+    notes drop _all
+
+    label data "BNR-CVD Registry: age-group case-count data for 2023 CVD briefing"
+
+    notes _dta: title: Hospital CVD cases by broad age group, Barbados, 2023
+    notes _dta: version: v1
+    notes _dta: created: 2026-05-04
+    notes _dta: creator: Ian Hambleton, Analyst
+    notes _dta: registry: BNR-CVD
+    notes _dta: content: Aggregate age-group distribution for hospital-ascertained CVD cases
+    notes _dta: tier: Public aggregate output
+    notes _dta: temporal: 2018-2023
+    notes _dta: spatial: Barbados
+    notes _dta: unit_of_analysis: Event type by sex and period
+    notes _dta: description: Aggregated hospital-ascertained stroke and heart attack case counts by sex and broad age group, comparing 2023 with the 2018-2022 annual average.
+    notes _dta: limitations: This dataset is prepared for the age-distribution figure. The percentage variable records the percentage under 70 years; the percentage aged 70 years and older is its complement.
+    notes _dta: language: en
+    notes _dta: software: StataNow 19
+    notes _dta: rights: CC BY 4.0 Attribution
+    notes _dta: source: Barbados National Registry approved cardiovascular registry extract
+    notes _dta: contact: Barbados National Registry
+    save "`stagingdatasets'/`output2'.dta", replace 
 
 restore
 
 
-** --------------------------------------------------------------
-** (6) PUBLIC RELEASE METADATA
-** --------------------------------------------------------------
 
-file open meta using "`bundle'/meta.yml", write replace text
+** ==============================================================
+** DO NOT TOUCH: STANDARD METADATA, WORKBOOK, AND PUBLISH STEPS
+** ==============================================================
+* Sections 7-10 create release metadata, workbook, public copy, and ZIP.
+* Do not edit these sections for a new briefing unless the release
+* package standard changes. Dataset-specific information should come
+* from the DTA labels, DTA notes, and the briefing settings above.
 
-file write meta "briefing_id: cvd_cases_2023_v1" _n
-file write meta "title: Hospital Cardiovascular Cases in Barbados, 2023" _n
-file write meta "product_type: static_briefing_output_bundle" _n
-file write meta "registry: BNR-CVD" _n
-file write meta "geography: Barbados" _n
-file write meta "time_period: 2018-2023" _n
-file write meta "target_year: 2023" _n
-file write meta "baseline_period: 2018-2022" _n
-file write meta "unit_of_analysis: hospital-registered cardiovascular event" _n
-file write meta "included_events: stroke and acute myocardial infarction" _n
-file write meta "source_summary: hospital admissions recorded by the Barbados National Registry" _n
-file write meta "description: public aggregate outputs for the 2023 CVD case-count briefing" _n
-file write meta "disclosure_status: aggregate public output" _n
-file write meta "license: CC BY 4.0" _n
-file write meta "contact: Barbados National Registry" _n
-file write meta "outputs:" _n
-file write meta "  tables:" _n
-file write meta "    - tables/cases_2023_sex_event.csv" _n
-file write meta "    - tables/age70_2023_sex_event.csv" _n
-file write meta "  figures:" _n
-file write meta "    - figures/cases_2023_cum_week.png" _n
-file write meta "    - figures/cases_2023_age70.png" _n
-file write meta "  data:" _n
-file write meta "    - data/cases_2023_cum_week.csv" _n
-file write meta "    - data/cases_2023_age70.csv" _n
+** ==============================================================
+** (EDIT BLOCK - SECTION B7): 
+**              CREATE DATASET-LEVEL YAML METADATA FILES
+** ==============================================================
+* Need to edit filenames to match those created in analyses above 
+bnr_yml, ///
+    dtafile("`stagingdatasets'/`output1'.dta") ///
+    ymlfile("`stagingmetadata'/`output1'.yml") ///
+    datasetid("`output1'")
 
-file close meta
+bnr_yml, ///
+    dtafile("`stagingdatasets'/`output2'.dta") ///
+    ymlfile("`stagingmetadata'/`output2'.yml") ///
+    datasetid("`output2'")
 
 
-** --------------------------------------------------------------
-** (7) BUILD RECORD
-** --------------------------------------------------------------
 
-file open build using "`bundle'/build.yml", write replace text
+** ==============================================================
+** (EDIT BLOCK - SECTION B8): 
+**          CREATE BRIEFING-LEVEL YAML METADATA FILE
+** ==============================================================
+* Need to edit metadata details
+* Purpose:
+*   Create one short metadata file for the briefing output bundle.
+*
+* Dataset-specific metadata are stored in:
+*   metadata/cvd_cases_weekly.yml
+*   metadata/cvd_cases_age_group.yml
+*
+* Output:
+*   metadata/briefing.yml
 
-file write build "briefing_id: cvd_cases_2023_v1" _n
-file write build "build_date: ${todayiso}" _n
-file write build "stata_version: ${stata_v}" _n
-file write build "analyst: ${analyst}" _n
-file write build "analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do" _n
-file write build "prep_script: scripts/stata/common/bnrcvd_prep_2023_v1.do" _n
-file write build "source_data_freeze: releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta" _n
-file write build "prepared_private_dataset: info-hub-private/work/bnrcvd_count_2023_v1.dta" _n
-file write build "public_output_bundle: outputs/public/briefings/cvd_cases_2023_v1" _n
-file write build "publication_status: draft_pending_review" _n
+tempname briefingyml
 
-file close build
+file open `briefingyml' using "`stagingmetadata'/briefing.yml", ///
+    write replace text
+
+file write `briefingyml' "schema: bnr_briefing_metadata_v1" _n
+file write `briefingyml' "briefing_id: `briefing_id'" _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "title: |-" _n
+file write `briefingyml' "  Hospital cardiovascular cases in Barbados, 2023" _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "description: |-" _n
+file write `briefingyml' "  Public aggregate output package for the BNR CVD case-count briefing." _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "registry: BNR-CVD" _n
+file write `briefingyml' "geography: Barbados" _n
+file write `briefingyml' "target_year: `target_year'" _n
+file write `briefingyml' "baseline_period: `baseline_start'-`baseline_end'" _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "limitations: |-" _n
+file write `briefingyml' "  Counts describe hospital-ascertained cases and should not be interpreted as population incidence." _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "datasets:" _n
+file write `briefingyml' "  - id: `output1'" _n
+file write `briefingyml' "    dta: datasets/`output1'.dta" _n
+file write `briefingyml' "    csv: datasets/`output1'.csv" _n
+file write `briefingyml' "    yml: metadata/`output1'.yml" _n
+file write `briefingyml' "  - id: `output2'" _n
+file write `briefingyml' "    dta: datasets/`output2'.dta" _n
+file write `briefingyml' "    csv: datasets/`output2'.csv" _n
+file write `briefingyml' "    yml: metadata/`output2'.yml" _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "figures:" _n
+file write `briefingyml' "  - id: `output1'" _n
+file write `briefingyml' "    file: figures/`output1'.png" _n
+file write `briefingyml' "    source_dataset: `output1'" _n
+file write `briefingyml' "  - id: `output2'" _n
+file write `briefingyml' "    file: figures/`output2'.png" _n
+file write `briefingyml' "    source_dataset: `output2'" _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "rights: |-" _n
+file write `briefingyml' "  Public release. Cite the Barbados National Registry when reusing." _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "contact: |-" _n
+file write `briefingyml' "  Barbados National Registry." _n
+file write `briefingyml' "" _n
+
+file write `briefingyml' "build:" _n
+file write `briefingyml' "  build_date: `c(current_date)'" _n
+file write `briefingyml' "  analysis_script: scripts/stata/briefings/cvd_cases_2023/`briefing_name'.do" _n
+
+file close `briefingyml'
+
+display as result "Briefing-level YAML created:"
+display as result "  `stagingmetadata'/briefing.yml"
 
 
-** --------------------------------------------------------------
-** (8) FINAL CHECK
-** --------------------------------------------------------------
 
-display as text "Created public output bundle:"
-display as result "`bundle'"
+** ==============================================================
+** (SECTION 9) CREATE XLSX WORKBOOK BUNDLE
+** ==============================================================
+*
+* Purpose:
+*   Create a human-friendly Excel workbook from the released Stata
+*   datasets already saved in the staging bundle.
+*
+* The workbook is a convenience copy only.
+* The canonical public files remain:
+*   - DTA files
+*   - CSV files
+*   - YML metadata files
+*
+* Workbook sheets:
+*   readme
+*   cvd_cases_weekly
+*   meta_weekly
+*   vars_weekly
+*   cvd_cases_age_group
+*   meta_age_group
+*   vars_age_group
 
-display as text "Expected public files:"
-display as result "`tables'/cases_2023_sex_event.csv"
-display as result "`tables'/age70_2023_sex_event.csv"
-display as result "`figures'/cases_2023_cum_week.png"
-display as result "`figures'/cases_2023_age70.png"
-display as result "`dataout'/cases_2023_cum_week.csv"
-display as result "`dataout'/cases_2023_age70.csv"
-display as result "`bundle'/meta.yml"
-display as result "`bundle'/build.yml"
+local workbook_file "`stagingworkbook'/bnr_`briefing_id'.xlsx"
 
-cap log close
+cap erase "`workbook_file'"
+
+
+** ==============================================================
+** 9.0 Create simple README text file
+** ==============================================================
+
+tempname readme
+
+file open `readme' using "`stagingbriefing'/readme.txt", ///
+    write replace text
+
+file write `readme' "BNR CVD case-count briefing output package" _n
+file write `readme' "" _n
+file write `readme' "Briefing ID: `briefing_id'" _n
+file write `readme' "Target year: `target_year'" _n
+file write `readme' "Baseline period: `baseline_start'-`baseline_end'" _n
+file write `readme' "" _n
+file write `readme' "This package contains public aggregate outputs for the BNR CVD case-count briefing." _n
+file write `readme' "" _n
+file write `readme' "Contents:" _n
+file write `readme' "- datasets/: DTA, CSV, and YML files for each released dataset" _n
+file write `readme' "- figures/: PNG figures used in the briefing" _n
+file write `readme' "- workbook/: Excel workbook containing data and metadata sheets" _n
+file write `readme' "- metadata/: briefing-level metadata" _n
+file write `readme' "" _n
+file write `readme' "The DTA files contain Stata labels, value labels, and dataset notes." _n
+file write `readme' "The CSV files are open machine-readable versions of the released datasets." _n
+file write `readme' "The YML files contain metadata exported from the Stata datasets." _n
+file write `readme' "" _n
+file write `readme' "These are aggregate hospital-ascertained case counts and should not be interpreted as population incidence." _n
+file write `readme' "" _n
+file write `readme' "Please cite the Barbados National Registry when reusing these outputs." _n
+
+file close `readme'
+
+
+
+
+** ==============================================================
+** 9.1 Create workbook README sheet
+** ==============================================================
+
+clear
+set obs 9
+
+gen str40  field = ""
+gen str200 value = ""
+
+replace field = "Briefing ID" in 1
+replace value = "`briefing_id'" in 1
+
+replace field = "Title" in 2
+replace value = "Hospital cardiovascular cases in Barbados, 2023" in 2
+
+replace field = "Target year" in 3
+replace value = "`target_year'" in 3
+
+replace field = "Baseline period" in 4
+replace value = "`baseline_start'-`baseline_end'" in 4
+
+replace field = "Registry" in 5
+replace value = "BNR-CVD" in 5
+
+replace field = "Geography" in 6
+replace value = "Barbados" in 6
+
+replace field = "Contents" in 7
+replace value = "Data sheets, dataset metadata sheets, and variable metadata sheets" in 7
+
+replace field = "Data note" in 8
+replace value = "Aggregate hospital-ascertained case counts" in 8
+
+replace field = "Limitation" in 9
+replace value = "Counts should not be interpreted as population incidence" in 9
+
+export excel using "`workbook_file'", ///
+    sheet("readme") firstrow(variables) replace
+
+
+** ==============================================================
+** 9.2 Add weekly cases dataset and metadata
+** ==============================================================
+
+bnr_workbook, ///
+    dtafile("`stagingdatasets'/`output1'.dta") ///
+    xlsxfile("`workbook_file'") ///
+    datasetid("`output1'") ///
+    datasheet("`output1'") ///
+    metasheet("meta_weekly") ///
+    varsheet("vars_weekly")
+
+
+** ==============================================================
+** 9.3 Add age-group cases dataset and metadata
+** ==============================================================
+
+bnr_workbook, ///
+    dtafile("`stagingdatasets'/`output2'.dta") ///
+    xlsxfile("`workbook_file'") ///
+    datasetid("`output2'") ///
+    datasheet("`output2'") ///
+    metasheet("meta_age_group") ///
+    varsheet("vars_age_group")
+
+
+display as result "Workbook created:"
+display as result "  `workbook_file'"
+
+
+
+
+
+** ==============================================================
+** (SECTION 10) PUBLISH STAGING BUNDLE TO PUBLIC RELEASE FOLDER
+** ==============================================================
+*
+* Purpose:
+*   Copy the completed staging bundle into the public release area
+*   and create a ZIP package for public download.
+*
+* Source:
+*   outputs/staging/briefings/{briefing_id}/
+*
+* Target:
+*   outputs/public/briefings/{briefing_id}/
+*
+* ZIP:
+*   outputs/public/briefings/{briefing_id}/bnr_{briefing_id}.zip
+*
+* This block does not create analytical outputs.
+* It only copies files already created in staging.
+
+** ==============================================================
+** 10.1 Define public release folders and ZIP path
+** ==============================================================
+
+local publicbriefing "$BNR_PUBLIC/briefings/`briefing_id'"
+local publicdatasets "`publicbriefing'/datasets"
+local publicfigures  "`publicbriefing'/figures"
+local publicworkbook "`publicbriefing'/workbook"
+local publicmetadata "`publicbriefing'/metadata"
+
+local publiczip "`publicbriefing'/bnr_`briefing_id'.zip"
+
+
+** ==============================================================
+** 10.2 Ensure public release folders exist
+** ==============================================================
+
+cap mkdir "$BNR_PUBLIC"
+cap mkdir "$BNR_PUBLIC/briefings"
+
+cap mkdir "`publicbriefing'"
+cap mkdir "`publicdatasets'"
+cap mkdir "`publicfigures'"
+cap mkdir "`publicworkbook'"
+cap mkdir "`publicmetadata'"
+
+
+** ==============================================================
+** 10.3 Remove old files from public release folders
+** ==============================================================
+*
+* This prevents old files remaining in public/ after a filename change
+* or after a file is removed from the staging bundle.
+
+local oldfiles : dir "`publicbriefing'" files "*"
+foreach file of local oldfiles {
+    erase "`publicbriefing'/`file'"
+}
+
+foreach folder in datasets figures workbook metadata {
+
+    local oldfiles : dir "`publicbriefing'/`folder'" files "*"
+
+    foreach file of local oldfiles {
+        erase "`publicbriefing'/`folder'/`file'"
+    }
+}
+
+cap erase "`publiczip'"
+
+
+** ==============================================================
+** 10.4 Copy root-level files
+** ==============================================================
+
+copy "`stagingbriefing'/readme.txt" ///
+     "`publicbriefing'/readme.txt", replace
+
+
+** ==============================================================
+** 10.5 Copy staged subfolder files
+** ==============================================================
+
+foreach folder in datasets figures workbook metadata {
+
+    local files : dir "`stagingbriefing'/`folder'" files "*"
+
+    foreach file of local files {
+
+        copy "`stagingbriefing'/`folder'/`file'" ///
+             "`publicbriefing'/`folder'/`file'", replace
+    }
+}
+
+
+** ==============================================================
+** 10.6 Create ZIP package from public release folder
+** ==============================================================
+*
+* The ZIP contains the briefing folder itself, so extraction creates
+* a clean top-level folder rather than scattering files.
+
+shell powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -LiteralPath '`publicbriefing'' -DestinationPath '`publiczip'' -Force"
+
+
+** ==============================================================
+** 10.7 Confirm public release bundle
+** ==============================================================
+
+display as text _n ///
+    "------------------------------------------------------------" _n ///
+    "BNR CVD case-count briefing public bundle prepared" _n ///
+    "------------------------------------------------------------" _n ///
+    as result "  Briefing ID:       `briefing_id'" _n ///
+    as result "  Staging folder:    `stagingbriefing'" _n ///
+    as result "  Public folder:     `publicbriefing'" _n ///
+    as result "  ZIP package:       `publiczip'" _n ///
+    as text "------------------------------------------------------------" _n

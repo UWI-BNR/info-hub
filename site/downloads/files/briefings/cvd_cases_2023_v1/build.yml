@@ -1,5 +1,5 @@
 briefing_id: cvd_cases_2023_v1
-build_date: 2026-04-28
+build_date: 2026-05-03
 stata_version: 19
 analyst: ianha
 analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do

@@ -632,62 +632,72 @@ order treatloc1 treatloc2 treatloc3 treatloc4 treatloc5, after(parish)
 ** --------------------------------------------------------------
 ** (4) FULL DATASET - interim dataset - save
 ** --------------------------------------------------------------
-   label data "BNR-CVD: FULL dataset - prepared by Ian Hambleton, 2025-11-30"
-   notes _dta: title: BNR-CVD: FULL dataset - prepared by Ian Hambleton, November-2025
-   notes _dta: version: v1
-   notes _dta: created: 2026-11-20
-   notes _dta: creator: Ian Hambleton, Analyst
-   notes _dta: registry: BNR-CVD
-   notes _dta: content: Full historical record of CVD cases to end-Dec 2023 
-   notes _dta: tier: Individual-level dataset
-   notes _dta: temporal: 2009-2023
-   notes _dta: spatial: Barbados
-   notes _dta: unit_of_analysis: One row per event
-   notes _dta: description: identifiable stroke and heart attack cases 
-   notes _dta: language: en
-   notes _dta: software: StataNow 19
-   notes _dta: rights: CC BY 4.0 Attribution
-   notes _dta: source: Barbados National Registry approved cardiovascular registry extract
-   notes _dta: contact: Barbados National Registry
+   label data "BNR-CVD: FULL dataset - prepared by Ian Hambleton, ${todayiso}"
+   note : Input dataset = 2009-2023_identifiable_restructured_cvd.dta
+   note : Prepared by Ian Hambleton, GA-CDRC, UWI
+   note : Date created = ${todayiso}
+   note : Input dataset created by J.Campbell, 25-Oct-2025 
    save "$BNR_PRIVATE_WORK/bnrcvd_full_2023_v1.dta", replace
 
-   bnr_yml, ///
-    dtafile("$BNR_PRIVATE_WORK/bnrcvd_full_2023_v1.dta") ///
-    ymlfile("$BNR_PRIVATE_WORK/bnrcvd_full_2023_v1.yml") ///
-    datasetid("bnrcvd_full_2023_v1")
 
 
-
+** Associated YAML metadata file - create and save
+   local dataset "$BNR_PRIVATE_WORK/bnrcvd_full_2023_v1.dta"
+   * Generate YAML
+   bnryaml using "`dataset'", ///
+      title("BNR-CVD Full Dataset (Identifiable)") ///
+      version("1.0") ///
+      created("${todayiso}") ///
+      creator("Ian Hambleton") ///
+      tier("FULL") ///
+      temporal("2009-01 to 2023-12") ///
+      spatial("Barbados") ///
+      description("Confirmed cardiovascular events; interim prep1 dataset.") ///
+      registry("CVD") ///
+      content("INDIV") ///
+      language("en") ///
+      format("Stata 19") ///
+      rights("Restricted - internal analytical use only") ///
+      source("Hospital admissions (QEH) and national death registration") ///
+      contact("ian.hambleton@uwi.edu") /// 
+      outfile("$BNR_PRIVATE_WORK/bnrcvd_full_2023_v1.yml")
 
 ** --------------------------------------------------------------
 ** (5) COUNT DATASET DATASET - interim dataset - save
 ** --------------------------------------------------------------
 preserve
    keep eid dco dco_alt etype doe yoe moe agey age5 age70 sex
-   label data "BNR-CVD COUNT dataset: prepared by Ian Hambleton, 2025-11-30"
-   notes _dta: title: BNR-CVD COUNT Dataset (Identifiable)
-   notes _dta: version: v1
-   notes _dta: created: 2025-11-30
-   notes _dta: creator: Ian Hambleton, Analyst
-   notes _dta: registry: BNR-CVD
-   notes _dta: content: Restricted historical record of CVD cases to end-Dec 2023 
-   notes _dta: tier: Individual-level dataset
-   notes _dta: temporal: 2009-2023
-   notes _dta: spatial: Barbados
-   notes _dta: unit_of_analysis: One row per event
-   notes _dta: description: Deindentified event dataset for analysis of counts / incidence. 
-   notes _dta: language: en
-   notes _dta: software: StataNow 19
-   notes _dta: rights: CC BY 4.0 Attribution
-   notes _dta: source: Barbados National Registry approved cardiovascular registry extract
-   notes _dta: contact: Barbados National Registry
+   label data "BNR-CVD COUNT dataset: prepared by Ian Hambleton, ${todayiso}"
+   note : Input dataset = 2009-2023_identifiable_restructured_cvd.dta
+   note : Prepared by Ian Hambleton, GA-CDRC, UWI
+   note : Date created = ${todayiso}
+   note : Input dataset created by J.Campbell, 25-Oct-2025 
    save "$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.dta", replace
-
-   bnr_yml, ///
-    dtafile("$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.dta") ///
-    ymlfile("$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.yml") ///
-    datasetid("bnrcvd_count_2023_v1")
+** Associated YAML metadata file - create and save
+   local dataset "$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.dta"
+   * Generate YAML
+   bnryaml using "`dataset'", ///
+      title("BNR-CVD COUNT Dataset (Identifiable)") ///
+      version("1.0") ///
+      created("${todayiso}") ///
+      creator("Ian Hambleton") ///
+      tier("DEID") ///
+      temporal("2009-01 to 2023-12") ///
+      spatial("Barbados") ///
+      description("Deindentified event dataset for analysis of counts / incidence.") ///
+      registry("CVD") ///
+      content("INDIV") ///
+      language("en") ///
+      format("Stata 19") ///
+      rights("Restricted - internal analytical use only") ///
+      source("Hospital admissions (QEH) and national death registration") ///
+      contact("ian.hambleton@uwi.edu") /// 
+      outfile("$BNR_PRIVATE_WORK/bnrcvd_count_2023_v1.yml")
 restore
+
+
+
+
 
 
 ** --------------------------------------------------------------
@@ -695,30 +705,32 @@ restore
 ** --------------------------------------------------------------
 preserve
    keep eid dco dco_alt etype doe yoe moe agey age5 age70 sex parish dodi sadi dod
-
-   label data "BNR-CVD CASE-FATALITY dataset: prepared by Ian Hambleton, 2025-11-30"
-   notes _dta: title: BNR-CVD COUNT Dataset (Identifiable)
-   notes _dta: version: v1
-   notes _dta: created: 2025-11-30
-   notes _dta: creator: Ian Hambleton, Analyst
-   notes _dta: registry: BNR-CVD
-   notes _dta: content: Restricted historical record of CVD cases to end-Dec 2023 
-   notes _dta: tier: Individual-level dataset
-   notes _dta: temporal: 2009-2023
-   notes _dta: spatial: Barbados
-   notes _dta: unit_of_analysis: One row per event
-   notes _dta: description: Deindentified event dataset for analysis of counts / incidence. 
-   notes _dta: language: en
-   notes _dta: software: StataNow 19
-   notes _dta: rights: CC BY 4.0 Attribution
-   notes _dta: source: Barbados National Registry approved cardiovascular registry extract
-   notes _dta: contact: Barbados National Registry
+   label data "BNR-CVD CASE-FATALITY dataset: prepared by Ian Hambleton, ${todayiso}"
+   note : Input dataset = 2009-2023_identifiable_restructured_cvd.dta
+   note : Prepared by Ian Hambleton, GA-CDRC, UWI
+   note : Date created = ${todayiso}
+   note : Input dataset created by J.Campbell, 25-Oct-2025 
    save "$BNR_PRIVATE_WORK/bnrcvd_case_fatality_2023_v1.dta", replace
-
-   bnr_yml, ///
-    dtafile("$BNR_PRIVATE_WORK/bnrcvd_case_fatality_2023_v1.dta") ///
-    ymlfile("$BNR_PRIVATE_WORK/bnrcvd_case_fatality_2023_v1.yml") ///
-    datasetid("bnrcvd_case_fatality_2023_v1")
+** Associated YAML metadata file - create and save
+   local dataset "$BNR_PRIVATE_WORK/bnrcvd_case_fatality_2023_v1.dta"
+   * Generate YAML
+   bnryaml using "`dataset'", ///
+      title("BNR-CVD CASE FATALITY Dataset (Identifiable)") ///
+      version("1.0") ///
+      created("${todayiso}") ///
+      creator("Ian Hambleton") ///
+      tier("DEID") ///
+      temporal("2009-01 to 2023-12") ///
+      spatial("Barbados") ///
+      description("Deindentified event dataset with deaths joined for analysis of in-hospital deaths.") ///
+      registry("CVD") ///
+      content("INDIV") ///
+      language("en") ///
+      format("Stata 19") ///
+      rights("Restricted - internal analytical use only") ///
+      source("Hospital admissions (QEH) and national death registration") ///
+      contact("ian.hambleton@uwi.edu") /// 
+      outfile("$BNR_PRIVATE_WORK/bnrcvd_case_fatality_2023_v1.yml")
 restore
 
 
@@ -727,29 +739,33 @@ restore
 ** --------------------------------------------------------------
 preserve
    keep eid dco dco_alt etype doe yoe moe doa htoa mtoa agey age5 age70 sex parish dodi sadi dod
-   label data "BNR-CVD LENGTH of STAY dataset: prepared by Ian Hambleton, 2025-11-30"
-   notes _dta: title: BNR-CVD COUNT Dataset (Identifiable)
-   notes _dta: version: v1
-   notes _dta: created: 2025-11-30
-   notes _dta: creator: Ian Hambleton, Analyst
-   notes _dta: registry: BNR-CVD
-   notes _dta: content: Restricted historical record of CVD cases to end-Dec 2023 
-   notes _dta: tier: Individual-level dataset
-   notes _dta: temporal: 2009-2023
-   notes _dta: spatial: Barbados
-   notes _dta: unit_of_analysis: One row per event
-   notes _dta: description: Deindentified event dataset with deaths joined for analysis of in-hospital length of stay. 
-   notes _dta: language: en
-   notes _dta: software: StataNow 19
-   notes _dta: rights: CC BY 4.0 Attribution
-   notes _dta: source: Barbados National Registry approved cardiovascular registry extract
-   notes _dta: contact: Barbados National Registry
+   label data "BNR-CVD LENGTH of STAY dataset: prepared by Ian Hambleton, ${todayiso}"
+   note : Input dataset = 2009-2023_identifiable_restructured_cvd.dta
+   note : Prepared by Ian Hambleton, GA-CDRC, UWI
+   note : Date created = ${todayiso}
+   note : Input dataset created by J.Campbell, 25-Oct-2025 
    save "$BNR_PRIVATE_WORK/bnrcvd_los_2023_v1.dta", replace
 
-   bnr_yml, ///
-    dtafile("$BNR_PRIVATE_WORK/bnrcvd_los_2023_v1.dta") ///
-    ymlfile("$BNR_PRIVATE_WORK/bnrcvd_los_2023_v1.yml") ///
-    datasetid("bnrcvd_los_2023_v1")
+** Associated YAML metadata file - create and save
+   local dataset "$BNR_PRIVATE_WORK/bnrcvd_los_2023_v1.dta"
+   * Generate YAML
+   bnryaml using "`dataset'", ///
+      title("BNR-CVD LENGTH OF STAY Dataset (Identifiable)") ///
+      version("1.0") ///
+      created("${todayiso}") ///
+      creator("Ian Hambleton") ///
+      tier("DEID") ///
+      temporal("2009-01 to 2023-12") ///
+      spatial("Barbados") ///
+      description("Deindentified event dataset with deaths joined for analysis of in-hospital length of stay.") ///
+      registry("CVD") ///
+      content("INDIV") ///
+      language("en") ///
+      format("Stata 19") ///
+      rights("Restricted - internal analytical use only") ///
+      source("Hospital admissions (QEH) and national death registration") ///
+      contact("ian.hambleton@uwi.edu") /// 
+      outfile("$BNR_PRIVATE_WORK/bnrcvd_los_2023_v1.yml")
 restore
 
 
@@ -784,26 +800,35 @@ restore
          htype reperf repertype ///
          ecg doecg    ///
          dmed1 dmed5 
-   label data "BNR-CVD PERFORMANCE-METRICS dataset: prepared by Ian Hambleton, 2025-11-30"
-   notes _dta: title: BNR-CVD COUNT Dataset (Identifiable)
-   notes _dta: version: v1
-   notes _dta: created: 2025-11-30
-   notes _dta: creator: Ian Hambleton, Analyst
-   notes _dta: registry: BNR-CVD
-   notes _dta: content: Restricted historical record of CVD cases to end-Dec 2023 
-   notes _dta: tier: Individual-level dataset
-   notes _dta: temporal: 2009-2023
-   notes _dta: spatial: Barbados
-   notes _dta: unit_of_analysis: One row per event
-   notes _dta: description: Deindentified event dataset for analysis of performance metrics 
-   notes _dta: language: en
-   notes _dta: software: StataNow 19
-   notes _dta: rights: CC BY 4.0 Attribution
-   notes _dta: source: Barbados National Registry approved cardiovascular registry extract
-   notes _dta: contact: Barbados National Registry
+   label data "BNR-CVD PERFORMANCE-METRICS dataset: prepared by Ian Hambleton, ${todayiso}"
+   note : Input dataset = 2009-2023_identifiable_restructured_cvd.dta
+   note : Prepared by Ian Hambleton, GA-CDRC, UWI
+   note : Date created = ${todayiso}
+   note : Input dataset created by J.Campbell, 25-Oct-2025 
    save "$BNR_PRIVATE_WORK/bnrcvd_performance_2023_v1.dta", replace
+** Associated YAML metadata file - create and save
+   local dataset "$BNR_PRIVATE_WORK/bnrcvd_performance_2023_v1.dta"
+   * Generate YAML
+   bnryaml using "`dataset'", ///
+      title("BNR-CVD COUNT Dataset (Identifiable)") ///
+      version("1.0") ///
+      created("${todayiso}") ///
+      creator("Ian Hambleton") ///
+      tier("DEID") ///
+      temporal("2009-01 to 2023-12") ///
+      spatial("Barbados") ///
+      description("Deindentified event dataset for analysis of performance metrics.") ///
+      registry("CVD") ///
+      content("INDIV") ///
+      language("en") ///
+      format("Stata 19") ///
+      rights("Restricted - internal analytical use only") ///
+      source("Hospital admissions (QEH)") ///
+      contact("ian.hambleton@uwi.edu") /// 
+      outfile("$BNR_PRIVATE_WORK/bnrcvd_performance_2023_v1.yml")
 
-   bnr_yml, ///
-    dtafile("$BNR_PRIVATE_WORK/bnrcvd_performance_2023_v1.dta") ///
-    ymlfile("$BNR_PRIVATE_WORK/bnrcvd_performance_2023_v1.yml") ///
-    datasetid("bnrcvd_performance_2023_v1")
+
+
+
+
+

@@ -1,0 +1,108 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_cases_weekly
+
+files:
+  dta: datasets/cvd_cases_weekly.dta
+  csv: datasets/cvd_cases_weekly.csv
+  yml: metadata/cvd_cases_weekly.yml
+
+metadata:
+  title: |-
+    Weekly hospital CVD cases, Barbados, 2023
+  version: |-
+    v1
+  created: |-
+    2026-05-04
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Weekly and cumulative aggregate case counts
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2018-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by week of year
+  description: |-
+    Weekly and cumulative hospital-ascertained stroke and heart attack case counts for 2023 compared with the 2018-2022 annual average.
+  limitations: |-
+    Counts describe hospital-ascertained cases and should not be interpreted as population incidence.
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      Event type
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 
+
+  - name: woe
+    type: float
+    format: %9.0g
+    label: |-
+      Week of year
+    value_label: 
+    categories: |-
+      
+
+  - name: eventbase
+    type: double
+    format: %9.0g
+    label: |-
+      Baseline average weekly cases, 2018-2022
+    value_label: 
+    categories: |-
+      
+
+  - name: ceventbase
+    type: float
+    format: %9.0g
+    label: |-
+      Baseline average cumulative cases, 2018-2022
+    value_label: 
+    categories: |-
+      
+
+  - name: event
+    type: double
+    format: %9.0g
+    label: |-
+      Weekly cases, 2023
+    value_label: 
+    categories: |-
+      
+
+  - name: cevent
+    type: float
+    format: %9.0g
+    label: |-
+      Cumulative cases, 2023
+    value_label: 
+    categories: |-
+      
+
+  - name: cases_diff_cum
+    type: float
+    format: %9.0g
+    label: |-
+      2023 cumulative cases minus baseline average
+    value_label: 
+    categories: |-
+      
+

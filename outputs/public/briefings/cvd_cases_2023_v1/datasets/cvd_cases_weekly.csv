@@ -1,4 +1,4 @@
-etype,woe,event2,cevent2,event3,cevent3,cases_diff_cum
+etype,woe,eventbase,ceventbase,event,cevent,cases_diff_cum
 Stroke,1,12.6,12.6,12,12,-.60000038
 Stroke,2,10.8,23.4,18,30,6.6000004
 Stroke,3,9.4,32.799999,18,48,15.200001
