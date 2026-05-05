@@ -1,8 +1,4 @@
 ---
-title: "Hospital Cardiovascular Cases in Barbados"
-subtitle: "BNR CVD case-count briefing, 2023"
-author: "Barbados National Registry"
-date: "28 Apr 2026"
 format:
   revealjs:
     output-file: bnr_cvd_cases_2023_v1_slides.html
@@ -10,6 +6,7 @@ format:
     width: 1600
     height: 900
     margin: 0.06
+    slide-level: 2
     slide-number: c/t
     transition: fade
     controls: true
@@ -17,6 +14,8 @@ format:
     center: false
     logo: ../../../../assets/images/uwi-crestonly-20p.png
     footer: "Barbados National Registry | The University of the West Indies"
+    css:
+      - ../../../../assets/css/reveal-fonts.css
     include-in-header:
       text: |
         <style>
@@ -31,14 +30,14 @@ format:
           }
 
           .reveal {
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: "BNR Sans", Arial, sans-serif;
             color: #222;
           }
 
           .reveal h1,
           .reveal h2,
           .reveal h3 {
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: "BNR Sans", Arial, sans-serif;
             font-weight: 650;
             color: var(--bnr-navy);
             letter-spacing: -0.02em;
@@ -54,7 +53,9 @@ format:
             line-height: 1.25;
           }
 
-          .reveal ul { margin-top: 0.2em; }
+          .reveal ul {
+            margin-top: 0.2em;
+          }
 
           .title-wrap {
             display: grid;
@@ -67,6 +68,23 @@ format:
           .title-wrap img {
             width: 96px;
             height: auto;
+          }
+
+          .title-heading {
+            font-family: "BNR Sans", Arial, sans-serif;
+            font-size: 1.95em;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 0 0 0.35em 0;
+          }
+
+          .title-subtitle {
+            font-size: 0.86em;
+            font-weight: 700;
+            color: #222;
+            margin-top: 0.15em;
           }
 
           .deck-kicker {
@@ -121,8 +139,15 @@ format:
             color: var(--bnr-grey);
           }
 
-          .stroke { color: var(--stroke-purple); font-weight: 700; }
-          .heart { color: var(--heart-red); font-weight: 700; }
+          .stroke {
+            color: var(--stroke-purple);
+            font-weight: 700;
+          }
+
+          .heart {
+            color: var(--heart-red);
+            font-weight: 700;
+          }
 
           .figure-title {
             font-size: 1.02em;
@@ -145,28 +170,49 @@ format:
             border: none;
           }
 
-          .small-citation {
-            font-size: 0.52em;
+          .audience-citation {
+            font-size: 0.82em;
+            color: #222;
+            line-height: 1.35;
+            max-width: 1180px;
+            margin-top: 0.8em;
+          }
+
+          .briefing-url-label {
+            font-size: 0.72em;
             color: var(--bnr-grey);
+            font-weight: 700;
+            margin-top: 1.3em;
+            margin-bottom: 0.25em;
+          }
+
+          .briefing-url {
+            font-size: 0.82em;
             line-height: 1.25;
+            color: var(--bnr-teal);
+            font-weight: 700;
+            word-break: break-word;
+            max-width: 1180px;
+          }
+
+          .briefing-url a {
+            color: var(--bnr-teal);
+            text-decoration: underline;
+            text-decoration-thickness: 0.08em;
+            text-underline-offset: 0.12em;
           }
         </style>
 ---
 
-<!--
-Suggested location: place this file alongside the current PDF QMD.
-That keeps the relative paths to the UWI crest and BNR figures unchanged.
--->
 
-## {.title-slide}
 
 ::: {.title-wrap}
 ![](../../../../assets/images/uwi-crestonly-20p.png)
 
 ::: {}
-# Hospital Cardiovascular Cases in Barbados
+<div class="title-heading">Hospital Cardiovascular Cases in Barbados</div>
 
-**BNR CVD case-count briefing, 2023**
+<div class="title-subtitle">BNR CVD case-count briefing, 2023</div>
 
 ::: {.deck-kicker}
 Briefing created by the Barbados National Chronic Disease Registry, The University of the West Indies  
@@ -230,7 +276,7 @@ We reviewed all hospital-registered strokes and heart attacks for 2023 and compa
 
 ::: {.columns}
 ::: {.column width="68%"}
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){fig-alt="Cumulative CVD cases in 2023 compared with the 2018 to 2022 average."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){fig-alt="Cumulative CVD cases in 2023 compared with the 2018 to 2022 average."}
 :::
 
 ::: {.column width="32%"}
@@ -271,7 +317,7 @@ Simple counts act as an early warning for changes in both care-seeking behaviour
 
 ::: {.columns}
 ::: {.column width="68%"}
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
 :::
 
 ::: {.column width="32%"}
@@ -301,6 +347,14 @@ The persistence of high proportions of early events shows that much of Barbadosâ
 
 Tables, figure data, metadata, and build records are available in the online briefing.
 
-::: {.small-citation}
-Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html. Accessed: [insert date accessed].
+::: {.audience-citation}
+Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Accessed: [insert date accessed].
+:::
+
+::: {.briefing-url-label}
+Online briefing
+:::
+
+::: {.briefing-url}
+[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html](https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html)
 :::

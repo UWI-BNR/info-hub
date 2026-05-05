@@ -1,0 +1,44 @@
+/* BNR reveal.js presentation fonts.
+   This file is used only by slide decks, not by the main website. */
+
+@font-face {
+  font-family: "BNR Sans";
+  src: url("../font/noto-sans/noto-sans-latin-300-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BNR Sans";
+  src: url("../font/noto-sans/noto-sans-latin-300-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BNR Sans";
+  src: url("../font/noto-sans/noto-sans-latin-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BNR Sans";
+  src: url("../font/noto-sans/noto-sans-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.reveal,
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal p,
+.reveal li,
+.reveal .title-heading {
+  font-family: "BNR Sans", Arial, sans-serif;
+}

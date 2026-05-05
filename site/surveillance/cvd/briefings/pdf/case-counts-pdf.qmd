@@ -13,7 +13,9 @@ format:
       bottom: 0.70in
       left: 0.65in
       right: 0.65in
-    mainfont: "Segoe UI"
+    mainfont: "Noto Sans"
+    font-paths:
+      - "../../../../assets/font/noto-sans"
     fontsize: 10pt
     linkcolor: "#e87a00"
     fig-cap-location: bottom
@@ -21,8 +23,8 @@ format:
       text: |
         #let bnr_grey = rgb("#666666")
         #let bnr_light_grey = rgb("#B8B8B8")
-        #let body_font = "Segoe UI"
-        #let heading_font = "Segoe UI"
+        #let body_font = "Noto Sans"
+        #let heading_font = "Noto Sans"
 
         #set text(font: body_font, size: 10pt)
 
@@ -62,8 +64,8 @@ format:
 #let bnr_sand = rgb("#D89C60")
 #let bnr_grey = rgb("#666666")
 #let uwi_logo = "../../../../assets/images/uwi-crestonly-20p.png"
-#let body_font = "Segoe UI"
-#let heading_font = "Segoe UI"
+#let body_font = "Noto Sans"
+#let heading_font = "Noto Sans"
 
 #block[
   #grid(
@@ -102,7 +104,7 @@ format:
 ```{=typst}
 #v(6pt)
 #block(width: 100%)[
-  #text(font: "Segoe UI", size: 12.6pt, weight: "semibold")[
+  #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
     #text(fill: rgb("#8B6FB4"))[Stroke]
     and
     #text(fill: rgb("#A4161A"))[heart attack]
@@ -112,7 +114,7 @@ format:
 #v(3pt)
 ```
 
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100% fig-alt="Cumulative CVD cases in 2023 compared with the 2018–2022 average."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){width=100% fig-alt="Cumulative CVD cases in 2023 compared with the 2018–2022 average."}
 
 {{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
 
@@ -123,7 +125,7 @@ format:
 ```{=typst}
 #v(6pt)
 #block(width: 100%)[
-  #text(font: "Segoe UI", size: 12.6pt, weight: "semibold")[
+  #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
     Proportion of
     #text(fill: rgb("#8B6FB4"))[stroke]
     and
@@ -134,7 +136,7 @@ format:
 #v(3pt)
 ```
 
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){width=100% fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){width=100% fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
 
 {{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
 
@@ -145,7 +147,7 @@ Tables, figure data, metadata, and build records are available in the online bri
 ## Citation
 
 ```{=typst}
-#text(font: "Segoe UI", size: 8.4pt, fill: rgb("#666666"))[
+#text(font: "Noto Sans", size: 8.4pt, fill: rgb("#666666"))[
   Barbados National Registry. #emph[Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023]. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: #link("https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html")[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html]. Accessed: [insert date accessed].
 ]
 ```

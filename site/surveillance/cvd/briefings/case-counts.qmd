@@ -20,7 +20,7 @@ Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF ver
 
 ::: {.bnr-utility-links}
 [Open PDF briefing](pdf/bnr_cvd_cases_2023_v1.pdf){.btn .btn-outline-primary target="_blank" rel="noopener"}
-[Open presentation slides](slides/case-counts-revealjs.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Open presentation slides](slides/bnr_cvd_cases_2023_v1_slides.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
 :::
 
 :::
@@ -184,10 +184,10 @@ The briefing outputs are available in three formats.
 
 | Description |  | Download |
 |---|:---:|---|
-| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_cases_2023_v1.pdf) |
-| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/case-counts-revealjs.html) |
-| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_cases_2023_v1/workbook/bnr_cvd_cases_2023_v1.xlsx) |
-| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip) |
+| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_cases_2023_v1.pdf){download="bnr_cvd_cases_2023_v1.pdf"} |
+| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_cases_2023_v1_slides.html){target="_blank" rel="noopener"} |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_cases_2023_v1/workbook/bnr_cvd_cases_2023_v1.xlsx){download="bnr_cvd_cases_2023_v1.xlsx"} |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip){download="bnr_cvd_cases_2023_v1.zip"} |
 
 
 ## Suggested Citation
