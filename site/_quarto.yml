@@ -105,6 +105,8 @@ website:
           contents:
             - text: "Hospital CVD cases, 2023"
               href: surveillance/cvd/briefings/case-counts.qmd
+            - text: "Hospital CVD incidence, 2010-2023"
+              href: surveillance/cvd/briefings/case-incidence.qmd
 
         - section: "Downloads"
           contents:
@@ -388,4 +390,4 @@ website:
             - text: "Git cleanup"
               href: technical/troubleshooting/git-status-cleanup.qm1
 
-# file touch2
+# file touch3

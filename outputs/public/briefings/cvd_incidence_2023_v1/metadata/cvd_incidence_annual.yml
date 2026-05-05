@@ -1,0 +1,90 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_incidence_annual
+
+files:
+  dta: datasets/cvd_incidence_annual.dta
+  csv: datasets/cvd_incidence_annual.csv
+  yml: metadata/cvd_incidence_annual.yml
+
+metadata:
+  title: |-
+    BNR-CVD annual incidence (Aggregated) (2010-2023)
+  version: |-
+    v1
+  created: |-
+    2026-05-05
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Annual incidence rates
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2010-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by sex and period
+  description: |-
+    Annual age-standardized incidence (2010-2023), for hospital events and DCO events. We looked at all heart attack and stroke events that were treated in hospital or recorded as the main cause of death.
+  limitations: |-
+    Based on hospital CVD event and DCO events only
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event type (stroke=1, AMI=2)
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 
+
+  - name: sex
+    type: float
+    format: %9.0g
+    label: |-
+      female=1, male=2, both=3
+    value_label: sex_
+    categories: |-
+      1=female; 2=male; 3=both; 
+
+  - name: year
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event year (yyyy)
+    value_label: 
+    categories: |-
+      
+
+  - name: rateadj0
+    type: double
+    format: %8.2f
+    label: |-
+      Age Standardized rates - hospital events
+    value_label: 
+    categories: |-
+      
+
+  - name: rateadj1
+    type: double
+    format: %8.2f
+    label: |-
+      Age Standardized rates - Hospital + Death Certificate Only (DCO) events
+    value_label: 
+    categories: |-
+      
+

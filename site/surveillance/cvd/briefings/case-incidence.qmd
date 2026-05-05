@@ -1,5 +1,5 @@
 ---
-title: "Hospital Cardiovascular Cases in Barbados"
+title: "Hospital Cardiovascular incidence in Barbados"
 author: Ian Hambleton
 subtitle: "BNR CVD briefing, 2023"
 date: 31-Oct-2025
@@ -25,11 +25,11 @@ Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF ver
 
 :::
 
-{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/why-this-matters.qmd >}}
 
-{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/what-we-did.qmd >}}
 
-The briefing focuses on three questions:
+The briefing focuses on XXX questions:
 
 ::: {.grid}
 
@@ -37,21 +37,9 @@ The briefing focuses on three questions:
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### How many?
+### XXX?
 
-We counted hospital-registered stroke and heart attack events during 2023.
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body}
-
-### When?
-
-We tracked how cases accumulated week by week through the year.
+XXX
 
 :::
 :::
@@ -61,9 +49,21 @@ We tracked how cases accumulated week by week through the year.
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### Who?
+### XX?
 
-We summarised cases by event type, sex, and age group.
+XXX
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### XXX?
+
+XXX
 
 :::
 :::
@@ -128,55 +128,48 @@ We summarised cases by event type, sex, and age group.
 :::
 
 
-## Weekly cases in 2023
+## CVD Incidence
 
 ```{=html}
 <p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
-  <span style="color: rgb(139, 111, 180);">Stroke</span>
-  and
-  <span style="color: rgb(164, 22, 26);">heart attack</span>
-  cases in 2023 compared with the five-year average
+  <span style="color: rgb(164, 22, 26);">Heart attacks</span>
+  leave more deaths unseen than 
+  <span style="color: rgb(139, 111, 180);">Strokes</span>
 </p>
 ```
 
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
 
-![](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){fig-alt="Line chart showing cumulative weekly stroke and heart attack cases in 2023 compared with the five-year average for 2018 to 2022." width="100%"}
+![](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){fig-alt="Line chart showing annual incidence rates from 2010 to 2023." width="100%"}
 
-[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_weekly.png){.small target="_blank" rel="noopener"}
+[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
 
-{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
-
-## Cases by age and sex
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/results1.qmd >}}
 
 ```{=html}
 <p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
-  Proportion of
-  <span style="color: rgb(139, 111, 180);">stroke</span>
-  and
-  <span style="color: rgb(164, 22, 26);">heart attack</span>
-  cases occurring before age 70
+  Hospital rates show a decade of rising 
+  <span style="color: rgb(139, 111, 180);">strokes</span>
+  and a persistent excess among men
 </p>
 ```
 
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
 
-![](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
+![](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
 
-[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){.small target="_blank" rel="noopener"}
+[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
 
 
-## Premature cardiovascular disease
-
-{{< include ../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/results2.qmd >}}
 
 ## Download the outputs
 
