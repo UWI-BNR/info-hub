@@ -350,3 +350,18 @@ body.bnr-briefing-page .quarto-document-content h3 {
   padding-bottom: 0 !important;
   box-shadow: none !important;
 }
+
+/* Briefing top action card.
+   Uses the landing-page utility card style, but with tighter internal spacing. */
+
+.bnr-briefing-action-card {
+  padding: 1.1rem 1.25rem;
+}
+
+.bnr-briefing-action-card .bnr-utility-links {
+  margin-top: 0.85rem;
+}
+
+.bnr-briefing-action-card h3 {
+  margin-top: 0;
+}

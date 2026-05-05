@@ -1,0 +1,108 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_cases_age_group
+
+files:
+  dta: datasets/cvd_cases_age_group.dta
+  csv: datasets/cvd_cases_age_group.csv
+  yml: metadata/cvd_cases_age_group.yml
+
+metadata:
+  title: |-
+    Hospital CVD cases by broad age group, Barbados, 2023
+  version: |-
+    v1
+  created: |-
+    2026-05-04
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Aggregate age-group distribution for hospital-ascertained CVD cases
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2018-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by sex and period
+  description: |-
+    Aggregated hospital-ascertained stroke and heart attack case counts by sex and broad age group, comparing 2023 with the 2018-2022 annual average.
+  limitations: |-
+    This dataset is prepared for the age-distribution figure. The percentage variable records the percentage under 70 years; the percentage aged 70 years and older is its complement.
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      Event type
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 
+
+  - name: sex
+    type: float
+    format: %8.0g
+    label: |-
+      Sex
+    value_label: sex_
+    categories: |-
+      1=Female; 2=Male; 
+
+  - name: age70
+    type: float
+    format: %18.0g
+    label: |-
+      Age group
+    value_label: age70_
+    categories: |-
+      0=<70 years; 
+
+  - name: period
+    type: float
+    format: %26.0g
+    label: |-
+      Time period
+    value_label: period_
+    categories: |-
+      2=5-year baseline, 2018-2022; 3=2023; 
+
+  - name: event
+    type: double
+    format: %9.0g
+    label: |-
+      Event count. For baseline, annual average.
+    value_label: 
+    categories: |-
+      
+
+  - name: denom
+    type: float
+    format: %9.0g
+    label: |-
+      Total event count. For baseline, annual average.
+    value_label: 
+    categories: |-
+      
+
+  - name: perc
+    type: float
+    format: %9.0g
+    label: |-
+      Percentage under 70 years
+    value_label: 
+    categories: |-
+      
+

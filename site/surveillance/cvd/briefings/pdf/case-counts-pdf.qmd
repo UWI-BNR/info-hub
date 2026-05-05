@@ -1,8 +1,4 @@
 ---
-title: "Hospital Cardiovascular Cases in Barbados"
-subtitle: "BNR CVD case-count briefing, 2023"
-author: "Barbados National Registry"
-date: "2026-04-28"
 bibliography: []
 citeproc: false
 csl: apa
@@ -11,23 +7,90 @@ format:
     output-file: bnr_cvd_cases_2023_v1.pdf
     toc: false
     number-sections: false
-    papersize: a4
+    papersize: us-letter
     margin:
-      top: 1.8cm
-      bottom: 1.7cm
-      left: 1.8cm
-      right: 1.8cm
-    mainfont: "Open Sans"
+      top: 0.65in
+      bottom: 0.70in
+      left: 0.65in
+      right: 0.65in
+    mainfont: "Segoe UI"
     fontsize: 10pt
     linkcolor: "#e87a00"
     fig-cap-location: bottom
+    include-in-header:
+      text: |
+        #let bnr_grey = rgb("#666666")
+        #let bnr_light_grey = rgb("#B8B8B8")
+        #let body_font = "Segoe UI"
+        #let heading_font = "Segoe UI"
+
+        #set text(font: body_font, size: 10pt)
+
+        #show heading.where(level: 1): set text(
+          font: heading_font,
+          weight: "semibold",
+          size: 14pt
+        )
+
+        #show heading.where(level: 2): set text(
+          font: heading_font,
+          weight: "semibold",
+          size: 13pt
+        )
+
+        #show heading.where(level: 3): set text(
+          font: heading_font,
+          weight: "semibold",
+          size: 11.2pt
+        )
+
+        #set page(
+          footer: context [
+            #line(length: 100%, stroke: (paint: bnr_light_grey, thickness: 0.35pt))
+            #v(3pt)
+            #grid(
+              columns: (1fr, auto),
+              [#text(font: body_font, size: 7.3pt, fill: bnr_grey)[Barbados National Registry | The University of the West Indies]],
+              [#text(font: body_font, size: 7.3pt, fill: bnr_grey)[Page #counter(page).display("1")]]
+            )
+          ]
+        )
 ---
 
-# Hospital Cardiovascular Cases in Barbados
+```{=typst}
+#let bnr_navy = rgb("#001F3D")
+#let bnr_sand = rgb("#D89C60")
+#let bnr_grey = rgb("#666666")
+#let uwi_logo = "../../../../assets/images/uwi-crestonly-20p.png"
+#let body_font = "Segoe UI"
+#let heading_font = "Segoe UI"
 
-**BNR CVD case-count briefing, 2023**
+#block[
+  #grid(
+    columns: (42pt, 1fr),
+    column-gutter: 9pt,
+    align(top, image(uwi_logo, height: 38pt)),
+    [
+      #text(font: heading_font, size: 16pt, weight: "semibold", fill: rgb("#000000"))[Hospital Cardiovascular Cases in Barbados]
+      #linebreak()
+      #text(font: body_font, size: 9.4pt, fill: bnr_grey)[Briefing created by the Barbados National Chronic Disease Registry, The University of the West Indies.]
+      #linebreak()
+      #text(font: body_font, size: 9.4pt, style: "italic", fill: bnr_grey)[Group Contacts • Christina Howitt (BNR lead) • Ian Hambleton (analytics) • Updated on 28 Apr 2026]
+    ]
+  )
+  #v(5pt)
+  #align(center)[
+    #text(font: body_font, size: 9.4pt, fill: bnr_grey)[For all our surveillance outputs • https://uwi-bnr.github.io/info-hub/]
+  ]
+  #v(5pt)
+  #line(length: 100%, stroke: (paint: rgb("#555555"), thickness: 0.55pt))
+]
+#v(8pt)
+```
 
-Briefing created by the Barbados National Registry, The University of the West Indies.
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
 
 ## Key messages
 
@@ -36,23 +99,42 @@ Briefing created by the Barbados National Registry, The University of the West I
 - Stroke cases remained above the recent five-year average through much of the year.
 - A substantial share of cardiovascular events occurred before age 70.
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
+```{=typst}
+#v(6pt)
+#block(width: 100%)[
+  #text(font: "Segoe UI", size: 12.6pt, weight: "semibold")[
+    #text(fill: rgb("#8B6FB4"))[Stroke]
+    and
+    #text(fill: rgb("#A4161A"))[heart attack]
+    cases in 2023 compared with the five-year average
+  ]
+]
+#v(3pt)
+```
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
-
-## Cumulative weekly cases
-
-![Cumulative CVD cases in 2023 compared with the 2018–2022 average.](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100%}
-
-## Cases by age, sex, and event type
-
-![Age distribution of hospital-registered stroke and heart attack cases.](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){width=100%}
-
-## Interpretation
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){width=100% fig-alt="Cumulative CVD cases in 2023 compared with the 2018–2022 average."}
 
 {{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
 
-## Premature cardiovascular disease
+```{=typst}
+#pagebreak()
+```
+
+```{=typst}
+#v(6pt)
+#block(width: 100%)[
+  #text(font: "Segoe UI", size: 12.6pt, weight: "semibold")[
+    Proportion of
+    #text(fill: rgb("#8B6FB4"))[stroke]
+    and
+    #text(fill: rgb("#A4161A"))[heart attack]
+    cases occurring before age 70
+  ]
+]
+#v(3pt)
+```
+
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){width=100% fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
 
 {{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
 
@@ -62,4 +144,8 @@ Tables, figure data, metadata, and build records are available in the online bri
 
 ## Citation
 
-Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies.
+```{=typst}
+#text(font: "Segoe UI", size: 8.4pt, fill: rgb("#666666"))[
+  Barbados National Registry. #emph[Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023]. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: #link("https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html")[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html]. Accessed: [insert date accessed].
+]
+```

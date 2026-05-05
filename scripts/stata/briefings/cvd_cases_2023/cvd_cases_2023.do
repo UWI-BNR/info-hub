@@ -307,7 +307,7 @@ preserve
                 ytitle(" ", color(gs8) size(4.5) margin(l=1 r=1 t=1 b=1))
 
                 text(6.5 52 "5-year average", place(w) size(8) color(gs4))
-                text(-40 26 "Cumulative CVD cases in 2023 compared to 5-year average (2018-2022)", place(c) size(8) color(gs4))
+                /// text(-40 26 "Cumulative CVD cases in 2023 compared to 5-year average (2018-2022)", place(c) size(8) color(gs4))
 
                 legend(off)
                 name(cases_2023_cum_week, replace)
@@ -841,3 +841,12 @@ display as text _n ///
     as result "  Public folder:     `publicbriefing'" _n ///
     as result "  ZIP package:       `publiczip'" _n ///
     as text "------------------------------------------------------------" _n
+
+
+
+
+
+** ==============================================================
+** 11 MIRROR public release bundle --> Site bundle
+** ==============================================================
+do "scripts/stata/common/mirror_public_to_site.do" "`briefing_id'"

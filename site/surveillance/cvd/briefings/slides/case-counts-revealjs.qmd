@@ -1,0 +1,306 @@
+---
+title: "Hospital Cardiovascular Cases in Barbados"
+subtitle: "BNR CVD case-count briefing, 2023"
+author: "Barbados National Registry"
+date: "28 Apr 2026"
+format:
+  revealjs:
+    output-file: bnr_cvd_cases_2023_v1_slides.html
+    theme: simple
+    width: 1600
+    height: 900
+    margin: 0.06
+    slide-number: c/t
+    transition: fade
+    controls: true
+    progress: true
+    center: false
+    logo: ../../../../assets/images/uwi-crestonly-20p.png
+    footer: "Barbados National Registry | The University of the West Indies"
+    include-in-header:
+      text: |
+        <style>
+          :root {
+            --bnr-navy: #001F3D;
+            --bnr-teal: #045174;
+            --bnr-sand: #D89C60;
+            --bnr-orange: #E87A00;
+            --bnr-grey: #5f6368;
+            --stroke-purple: rgb(139, 111, 180);
+            --heart-red: rgb(164, 22, 26);
+          }
+
+          .reveal {
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #222;
+          }
+
+          .reveal h1,
+          .reveal h2,
+          .reveal h3 {
+            font-family: "Segoe UI", Arial, sans-serif;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+          }
+
+          .reveal h1 { font-size: 1.95em; }
+          .reveal h2 { font-size: 1.45em; margin-bottom: 0.55em; }
+          .reveal h3 { font-size: 1.05em; }
+
+          .reveal p,
+          .reveal li {
+            font-size: 0.78em;
+            line-height: 1.25;
+          }
+
+          .reveal ul { margin-top: 0.2em; }
+
+          .title-wrap {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 28px;
+            align-items: start;
+            margin-top: 70px;
+          }
+
+          .title-wrap img {
+            width: 96px;
+            height: auto;
+          }
+
+          .deck-kicker {
+            color: var(--bnr-grey);
+            font-size: 0.62em;
+            margin-top: 0.9em;
+          }
+
+          .deck-rule {
+            width: 100%;
+            height: 4px;
+            background: var(--bnr-sand);
+            margin-top: 28px;
+          }
+
+          .large-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--bnr-navy);
+            line-height: 1;
+          }
+
+          .label {
+            color: var(--bnr-grey);
+            font-size: 0.56em;
+            line-height: 1.15;
+            margin-top: 0.25em;
+          }
+
+          .number-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            margin: 34px 0 20px 0;
+          }
+
+          .number-card {
+            border-top: 5px solid var(--bnr-sand);
+            background: #f7f7f7;
+            padding: 20px 18px 18px 18px;
+            min-height: 130px;
+          }
+
+          .insight-box {
+            background: #f7f7f7;
+            border-left: 7px solid var(--bnr-sand);
+            padding: 20px 24px;
+            margin-top: 22px;
+          }
+
+          .muted {
+            color: var(--bnr-grey);
+          }
+
+          .stroke { color: var(--stroke-purple); font-weight: 700; }
+          .heart { color: var(--heart-red); font-weight: 700; }
+
+          .figure-title {
+            font-size: 1.02em;
+            font-weight: 700;
+            margin-bottom: 0.55em;
+          }
+
+          .figure-note {
+            font-size: 0.56em;
+            color: var(--bnr-grey);
+            margin-top: 0.4em;
+          }
+
+          .reveal .slide-logo {
+            max-height: 54px !important;
+          }
+
+          .reveal section img {
+            box-shadow: none;
+            border: none;
+          }
+
+          .small-citation {
+            font-size: 0.52em;
+            color: var(--bnr-grey);
+            line-height: 1.25;
+          }
+        </style>
+---
+
+<!--
+Suggested location: place this file alongside the current PDF QMD.
+That keeps the relative paths to the UWI crest and BNR figures unchanged.
+-->
+
+## {.title-slide}
+
+::: {.title-wrap}
+![](../../../../assets/images/uwi-crestonly-20p.png)
+
+::: {}
+# Hospital Cardiovascular Cases in Barbados
+
+**BNR CVD case-count briefing, 2023**
+
+::: {.deck-kicker}
+Briefing created by the Barbados National Chronic Disease Registry, The University of the West Indies  
+Group Contacts • Christina Howitt (BNR lead) • Ian Hambleton (analytics) • Updated on 28 Apr 2026
+:::
+
+::: {.deck-rule}
+:::
+:::
+:::
+
+## Key messages
+
+::: {.number-grid}
+::: {.number-card}
+<div class="large-number">312</div>
+<div class="label">strokes recorded in women in 2023</div>
+:::
+
+::: {.number-card}
+<div class="large-number">312</div>
+<div class="label">strokes recorded in men in 2023</div>
+:::
+
+::: {.number-card}
+<div class="large-number">105</div>
+<div class="label">heart attacks recorded in women in 2023</div>
+:::
+
+::: {.number-card}
+<div class="large-number">141</div>
+<div class="label">heart attacks recorded in men in 2023</div>
+:::
+:::
+
+::: {.insight-box}
+Stroke cases remained above the recent five-year average through much of the year, while heart attacks remained below average for much of the year.
+:::
+
+## Why this matters
+
+Counts are the simplest and most transparent way to show what is happening in our hospital.
+
+- Each number represents a person who suffered a heart attack or stroke.
+- Together, these numbers show pressure on the health system.
+- Before interpreting trends or calculating rates, we need confidence in the raw counts.
+
+::: {.insight-box}
+Case counts are the foundation for later surveillance outputs: trends, rates, inequalities, and service-readiness indicators.
+:::
+
+## What we did
+
+We reviewed all hospital-registered strokes and heart attacks for 2023 and compared them with the previous five years.
+
+- We examined who was affected: men and women, under 70 and 70 or older.
+- We tracked how cases built up week by week.
+- We compared 2023 counts with the five-year average to identify when numbers were above or below expected levels.
+
+## <span class="stroke">Stroke</span> and <span class="heart">heart attack</span> cases in 2023 compared with the five-year average
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_cum_week.png){fig-alt="Cumulative CVD cases in 2023 compared with the 2018 to 2022 average."}
+:::
+
+::: {.column width="32%"}
+### Main pattern
+
+- Strokes stayed consistently above the five-year average.
+- By year end, stroke counts were about 60 cases higher than expected.
+- Heart attacks remained below average for much of 2023.
+
+::: {.figure-note}
+Figure source: BNR hospital-registered stroke and heart attack cases.
+:::
+:::
+:::
+
+## Interpretation
+
+In 2023, the Barbados National Registry recorded:
+
+- 312 strokes in women and 312 in men.
+- 105 heart attacks in women and 141 in men.
+
+::: {.insight-box}
+The contrast between stroke and heart attack patterns may reflect how quickly each emergency is recognised and treated, as well as lingering post-COVID changes in health-seeking behaviour.
+:::
+
+## What the contrast may suggest
+
+Stroke patients may reach hospital sooner through family or bystander action. People with heart attack symptoms may delay seeking care.
+
+This means hospital activity may shift even when underlying disease burden is also changing.
+
+::: {.insight-box}
+Simple counts act as an early warning for changes in both care-seeking behaviour and system readiness.
+:::
+
+## Proportion of <span class="stroke">stroke</span> and <span class="heart">heart attack</span> cases occurring before age 70
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
+:::
+
+::: {.column width="32%"}
+### Premature burden
+
+- Among men, over half of strokes affected those under 70.
+- Nearly two-thirds of heart attacks in men occurred before age 70.
+- Among women, around 40% of strokes and nearly half of heart attacks occurred before age 70.
+
+::: {.figure-note}
+Age threshold: before age 70.
+:::
+:::
+:::
+
+## Premature cardiovascular disease
+
+Across both sexes, a large share of cardiovascular events continue to occur before age 70.
+
+This highlights the ongoing burden of premature cardiovascular disease in Barbados.
+
+::: {.insight-box}
+The persistence of high proportions of early events shows that much of Barbados’ cardiovascular disease remains preventable.
+:::
+
+## Outputs and citation
+
+Tables, figure data, metadata, and build records are available in the online briefing.
+
+::: {.small-citation}
+Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html. Accessed: [insert date accessed].
+:::
