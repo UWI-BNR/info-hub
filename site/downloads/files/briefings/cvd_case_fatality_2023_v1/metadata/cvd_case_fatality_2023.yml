@@ -1,0 +1,198 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_case_fatality_2023
+
+files:
+  dta: datasets/cvd_case_fatality_2023.dta
+  csv: datasets/cvd_case_fatality_2023.csv
+  yml: metadata/cvd_case_fatality_2023.yml
+
+metadata:
+  title: |-
+    BNR-CVD annual case-fatality (Aggregated) (2012-2023)
+  version: |-
+    v1
+  created: |-
+    2026-05-06
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Annual case-fatality rates
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2012-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by sex and period
+  description: |-
+    Annual age-standardized case-fatality (2012-2023), for hospital events.
+  limitations: |-
+    Based on hospital CVD events
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      CVD Event Type (AMI=2, Stroke=1)
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 
+
+  - name: sex
+    type: float
+    format: %8.0g
+    label: |-
+      Patient sex (1=female, 2=male)
+    value_label: sex_
+    categories: |-
+      1=Female; 2=Male; 
+
+  - name: year2
+    type: float
+    format: %9.0g
+    label: |-
+      Two year intervals between 2010 and 2023
+    value_label: year2_
+    categories: |-
+      1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 8=2010-2011; 9=2012-2013; 10=2014-2015; 11=2016-2017; 12=2018-2019; 13=2020-2021; 
+
+  - name: event
+    type: double
+    format: %9.0g
+    label: |-
+      Number of events
+    value_label: 
+    categories: |-
+      
+
+  - name: cf1
+    type: double
+    format: %8.0g
+    label: |-
+      Case-fatality, Confirmed Alive at discharge
+    value_label: 
+    categories: |-
+      
+
+  - name: cf2
+    type: double
+    format: %8.0g
+    label: |-
+      Case-fatality, Probably Alive at discharge (death>28 days after event)
+    value_label: 
+    categories: |-
+      
+
+  - name: cf3
+    type: double
+    format: %8.0g
+    label: |-
+      Case-fatality, Confirmed CF
+    value_label: 
+    categories: |-
+      
+
+  - name: cf4
+    type: double
+    format: %8.0g
+    label: |-
+      Case-fatality, Probably CF (death within 7 days of event)
+    value_label: 
+    categories: |-
+      
+
+  - name: cf5
+    type: double
+    format: %8.0g
+    label: |-
+      Case-fatality, Possibly CF (death 7-28 days of event)
+    value_label: 
+    categories: |-
+      
+
+  - name: ccase
+    type: float
+    format: %4.1f
+    label: |-
+      Confirmed hospital deaths (percentage)
+    value_label: 
+    categories: |-
+      
+
+  - name: pcase
+    type: float
+    format: %4.1f
+    label: |-
+      Confirmed + Probable hospital deaths (percentage)
+    value_label: 
+    categories: |-
+      
+
+  - name: est
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability (modelled, unadjusted)
+    value_label: 
+    categories: |-
+      
+
+  - name: est_lb
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability Lower Bound (modelled, unadjusted)
+    value_label: 
+    categories: |-
+      
+
+  - name: est_ub
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability Upper Bound (modelled, unadjusted)
+    value_label: 
+    categories: |-
+      
+
+  - name: adj
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability (modelled, age adjusted)
+    value_label: 
+    categories: |-
+      
+
+  - name: adj_lb
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability Lower Bound (modelled, age adjusted)
+    value_label: 
+    categories: |-
+      
+
+  - name: adj_ub
+    type: float
+    format: %9.3f
+    label: |-
+      CF probability Upper Bound (modelled, age adjusted)
+    value_label: 
+    categories: |-
+      
+

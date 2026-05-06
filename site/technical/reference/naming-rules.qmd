@@ -84,7 +84,6 @@ Use dashes for website pages:
 ```text
 case-counts.qmd
 case-counts-pdf.qmd
-release-catalogue.qmd
 set-up-local-development.qmd
 ```
 

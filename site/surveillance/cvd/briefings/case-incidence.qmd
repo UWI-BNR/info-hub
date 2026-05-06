@@ -1,8 +1,15 @@
 ---
-title: "Hospital Cardiovascular incidence in Barbados"
+title: "CVD incidence in Barbados, 2010-2023"
 author: Ian Hambleton
-subtitle: "BNR CVD briefing, 2023"
-date: 31-Oct-2025
+subtitle: "BNR briefing, 2023"
+title-block-style: none
+date: 7-Nov-2025
+date-format: DD MMM YYYY
+categories:
+  - CVD
+  - Briefing
+  - Incidence
+  - 2023
 sidebar: cvd
 format:
   html:
@@ -19,8 +26,8 @@ page-layout: full
 Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF version is designed for printing, sharing, and citation.
 
 ::: {.bnr-utility-links}
-[Open PDF briefing](pdf/bnr_cvd_cases_2023_v1.pdf){.btn .btn-outline-primary target="_blank" rel="noopener"}
-[Open presentation slides](slides/bnr_cvd_cases_2023_v1_slides.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Open PDF briefing](pdf/bnr_cvd_incidence_2023_v1.pdf){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Open presentation slides](slides/bnr_cvd_incidence_2023_v1_slides.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
 :::
 
 :::
@@ -29,7 +36,8 @@ Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF ver
 
 {{< include ../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/what-we-did.qmd >}}
 
-The briefing focuses on XXX questions:
+
+This briefing focuses on three questions:
 
 ::: {.grid}
 
@@ -37,21 +45,9 @@ The briefing focuses on XXX questions:
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### XXX?
+### How has incidence changed?
 
-XXX
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body}
-
-### XX?
-
-XXX
+How have age-standardised stroke and heart attack incidence rates change in Barbados between 2010 and 2023?
 
 :::
 :::
@@ -61,9 +57,21 @@ XXX
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### XXX?
+### What is missed by hospital data alone?
 
-XXX
+How much do incidence estimates change when death-certificate-only events are included alongside hospital-registered events?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### Where are rates highest?
+
+How do incidence patterns differ by event type, sex, and time period?
 
 :::
 :::
@@ -75,57 +83,64 @@ XXX
 
 ## Headline findings
 
+Age-standardised incidence rates per 100,000 population, 2023.
+
 ::: {.grid .mb-4}
 
 ::: {.g-col-6 .g-col-md-3}
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body .text-center .p-3}
 
-<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
-<p class="display-6 fw-semibold mb-1">312</p>
-<p class="mb-0 small">Stroke cases<br>in 2023</p>
-
-:::
-:::
-:::
-
-::: {.g-col-6 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body .text-center .p-3}
-
-<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
-<p class="display-6 fw-semibold mb-1">312</p>
-<p class="mb-0 small">Stroke cases<br>in 2023</p>
-
-:::
-:::
-:::
-
-::: {.g-col-6 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body .text-center .p-3}
-
-<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
-<p class="display-6 fw-semibold mb-1">105</p>
-<p class="mb-0 small">Heart attack cases<br>in 2023</p>
-
-:::
-:::
-:::
-
-::: {.g-col-6 .g-col-md-3}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body .text-center .p-3}
-
-<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
 <p class="display-6 fw-semibold mb-1">141</p>
-<p class="mb-0 small">Heart attack cases<br>in 2023</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
+<p class="display-6 fw-semibold mb-1">198</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+<p class="display-6 fw-semibold mb-1">90</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+<p class="display-6 fw-semibold mb-1">145</p>
+<p class="mb-0 small">per 100,000</p>
 
 :::
 :::
 :::
 
 :::
+
 
 
 ## CVD Incidence
@@ -177,12 +192,12 @@ The briefing outputs are available in three formats.
 
 | Description |  | Download |
 |---|:---:|---|
-| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_cases_2023_v1.pdf){download="bnr_cvd_cases_2023_v1.pdf"} |
-| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_cases_2023_v1_slides.html){target="_blank" rel="noopener"} |
-| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_cases_2023_v1/workbook/bnr_cvd_cases_2023_v1.xlsx){download="bnr_cvd_cases_2023_v1.xlsx"} |
-| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip){download="bnr_cvd_cases_2023_v1.zip"} |
+| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_incidence_2023_v1.pdf){download="bnr_cvd_incidence_2023_v1.pdf"} |
+| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_incidence_2023_v1_slides.html){target="_blank" rel="noopener"} |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_incidence_2023_v1/workbook/bnr_cvd_incidence_2023_v1.xlsx){download="bnr_cvd_incidence_2023_v1.xlsx"} |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_incidence_2023_v1/bnr_cvd_incidence_2023_v1.zip){download="bnr_cvd_incidence_2023_v1.zip"} |
 
 
 ## Suggested Citation
 
-> Barbados National Registry. *Hospital Cardiovascular Cases in Barbados: BNR CVD case-count briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-counts.html. Accessed: [insert date accessed].
+> Barbados National Registry. *Hospital Cardiovascular Incidence in Barbados: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-incidence.html. Accessed: [insert date accessed].

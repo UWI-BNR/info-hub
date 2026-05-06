@@ -40,5 +40,5 @@ contact: |-
   Barbados National Registry.
 
 build:
-  build_date:  5 May 2026
+  build_date:  6 May 2026
   analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_incidence_2023.do

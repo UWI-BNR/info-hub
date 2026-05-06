@@ -1,0 +1,337 @@
+---
+format:
+  revealjs:
+    output-file: bnr_cvd_incidence_2023_v1_slides.html
+    theme: simple
+    width: 1600
+    height: 900
+    margin: 0.06
+    slide-level: 2
+    slide-number: c/t
+    transition: fade
+    controls: true
+    progress: true
+    center: false
+    logo: ../../../../assets/images/uwi-crestonly-20p.png
+    footer: "Barbados National Registry | The University of the West Indies"
+    css:
+      - ../../../../assets/css/reveal-fonts.css
+    include-in-header:
+      text: |
+        <style>
+          :root {
+            --bnr-navy: #001F3D;
+            --bnr-teal: #045174;
+            --bnr-sand: #D89C60;
+            --bnr-orange: #E87A00;
+            --bnr-grey: #5f6368;
+            --stroke-purple: rgb(139, 111, 180);
+            --heart-red: rgb(164, 22, 26);
+          }
+
+          .reveal {
+            font-family: "BNR Sans", Arial, sans-serif;
+            color: #222;
+          }
+
+          .reveal h1,
+          .reveal h2,
+          .reveal h3 {
+            font-family: "BNR Sans", Arial, sans-serif;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+          }
+
+          .reveal h1 { font-size: 1.95em; }
+          .reveal h2 { font-size: 1.45em; margin-bottom: 0.55em; }
+          .reveal h3 { font-size: 1.05em; }
+
+          .reveal p,
+          .reveal li {
+            font-size: 0.78em;
+            line-height: 1.25;
+          }
+
+          .title-wrap {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 28px;
+            align-items: start;
+            margin-top: 70px;
+          }
+
+          .title-wrap img {
+            width: 96px;
+            height: auto;
+          }
+
+          .title-heading {
+            font-family: "BNR Sans", Arial, sans-serif;
+            font-size: 1.95em;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 0 0 0.35em 0;
+          }
+
+          .title-subtitle {
+            font-size: 0.86em;
+            font-weight: 700;
+            color: #222;
+            margin-top: 0.15em;
+          }
+
+          .deck-kicker {
+            color: var(--bnr-grey);
+            font-size: 0.62em;
+            margin-top: 0.9em;
+          }
+
+          .deck-rule {
+            width: 100%;
+            height: 4px;
+            background: var(--bnr-sand);
+            margin-top: 28px;
+          }
+
+          .large-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--bnr-navy);
+            line-height: 1;
+          }
+
+          .label {
+            color: var(--bnr-grey);
+            font-size: 0.56em;
+            line-height: 1.15;
+            margin-top: 0.25em;
+          }
+
+          .number-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            margin: 34px 0 20px 0;
+          }
+
+          .number-card {
+            border-top: 5px solid var(--bnr-sand);
+            background: #f7f7f7;
+            padding: 20px 18px 18px 18px;
+            min-height: 130px;
+          }
+
+          .insight-box {
+            background: #f7f7f7;
+            border-left: 7px solid var(--bnr-sand);
+            padding: 20px 24px;
+            margin-top: 22px;
+          }
+
+          .muted { color: var(--bnr-grey); }
+
+          .stroke {
+            color: var(--stroke-purple);
+            font-weight: 700;
+          }
+
+          .heart {
+            color: var(--heart-red);
+            font-weight: 700;
+          }
+
+          .figure-note {
+            font-size: 0.56em;
+            color: var(--bnr-grey);
+            margin-top: 0.4em;
+          }
+
+          .reveal .slide-logo {
+            max-height: 54px !important;
+          }
+
+          .reveal section img {
+            box-shadow: none;
+            border: none;
+          }
+
+          .audience-citation {
+            font-size: 0.82em;
+            color: #222;
+            line-height: 1.35;
+            max-width: 1180px;
+            margin-top: 0.8em;
+          }
+
+          .briefing-url-label {
+            font-size: 0.72em;
+            color: var(--bnr-grey);
+            font-weight: 700;
+            margin-top: 1.3em;
+            margin-bottom: 0.25em;
+          }
+
+          .briefing-url {
+            font-size: 0.82em;
+            line-height: 1.25;
+            color: var(--bnr-teal);
+            font-weight: 700;
+            word-break: break-word;
+            max-width: 1180px;
+          }
+
+          .briefing-url a {
+            color: var(--bnr-teal);
+            text-decoration: underline;
+            text-decoration-thickness: 0.08em;
+            text-underline-offset: 0.12em;
+          }
+        </style>
+---
+
+::: {.title-wrap}
+![](../../../../assets/images/uwi-crestonly-20p.png)
+
+::: {}
+<div class="title-heading">CVD Incidence in Barbados, 2010-2023</div>
+
+<div class="title-subtitle">BNR CVD briefing, 2023</div>
+
+::: {.deck-kicker}
+Briefing created by the Barbados National Chronic Disease Registry, The University of the West Indies  
+Group Contacts - Christina Howitt (BNR lead) - Ian Hambleton (analytics) - Updated on 7 Nov 2025
+:::
+
+::: {.deck-rule}
+:::
+:::
+:::
+
+## Key messages
+
+Age-standardised incidence rates per 100,000 population, 2023.
+
+::: {.number-grid}
+::: {.number-card}
+<div class="large-number">141</div>
+<div class="label">stroke incidence among women</div>
+:::
+
+::: {.number-card}
+<div class="large-number">198</div>
+<div class="label">stroke incidence among men</div>
+:::
+
+::: {.number-card}
+<div class="large-number">90</div>
+<div class="label">heart attack incidence among women</div>
+:::
+
+::: {.number-card}
+<div class="large-number">145</div>
+<div class="label">heart attack incidence among men</div>
+:::
+:::
+
+::: {.insight-box}
+Incidence rates were higher among men for both stroke and heart attack.
+:::
+
+## Why this matters
+
+Incidence rates show the rate at which new cardiovascular events are occurring in the population.
+
+- Counts show pressure on services.
+- Incidence rates allow fairer comparison over time.
+- Including deaths before hospital care gives a fuller view of disease burden.
+
+::: {.insight-box}
+For heart attacks, hospital data alone can miss a substantial part of the burden.
+:::
+
+## What we did
+
+We estimated annual age-standardised incidence rates for stroke and heart attack in Barbados from 2010 to 2023.
+
+- We examined hospital-registered events.
+- We added death-certificate-only events to estimate fuller population burden.
+- We compared incidence patterns by event type, sex, and period.
+
+## Annual <span class="stroke">stroke</span> and <span class="heart">heart attack</span> incidence rates, 2010-2023
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){fig-alt="Annual age-standardised cardiovascular incidence rates from 2010 to 2023."}
+:::
+
+::: {.column width="32%"}
+### Main pattern
+
+- Stroke incidence was higher than heart attack incidence.
+- Men had higher rates than women.
+- Death-certificate-only events increased measured incidence, especially for heart attacks.
+
+::: {.figure-note}
+Rates are age-standardised per 100,000 population.
+:::
+:::
+:::
+
+## Interpretation
+
+Hospital data and death certificates tell different parts of the incidence story.
+
+Hospital data capture treated events. Death-certificate-only events capture people whose cardiovascular event was recorded as the underlying cause of death but who were not captured as hospital cases.
+
+::: {.insight-box}
+Combining both sources gives a more complete view of cardiovascular burden.
+:::
+
+## Incidence differences by event type, sex, and period
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){fig-alt="Rate-ratio figure showing cardiovascular incidence differences by event type, sex, and period."}
+:::
+
+::: {.column width="32%"}
+### Sex differences
+
+- Men had higher incidence rates across the briefing outputs.
+- The male excess was visible for both stroke and heart attack.
+- These differences remain important for prevention and service planning.
+
+::: {.figure-note}
+Figure source: BNR incidence briefing outputs.
+:::
+:::
+:::
+
+## What this means
+
+The incidence briefing shows continuing cardiovascular burden in Barbados.
+
+The pattern is not only about hospital workload. It also reflects underlying disease risk, care-seeking, emergency response, and deaths occurring before hospital care.
+
+::: {.insight-box}
+Routine incidence monitoring helps turn registry data into planning intelligence.
+:::
+
+## Outputs and citation
+
+Tables, figure data, metadata, workbook files, and build records are available in the online briefing.
+
+::: {.audience-citation}
+Barbados National Registry. *CVD Incidence in Barbados, 2010-2023: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Accessed: [insert date accessed].
+:::
+
+::: {.briefing-url-label}
+Online briefing
+:::
+
+::: {.briefing-url}
+[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-incidence.html](https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-incidence.html)
+:::

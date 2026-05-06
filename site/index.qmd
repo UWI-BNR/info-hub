@@ -90,7 +90,6 @@ We publish methods, definitions, data notes, and release updates so users can un
 [Methods and definitions](./methods/index.qmd){.btn .btn-outline-primary}
 [Data sources](./downloads/index.qmd){.btn .btn-outline-primary}
 [Quality checks](./operations/index.qmd){.btn .btn-outline-primary}
-[Release notes](./downloads/release-catalogue.qmd){.btn .btn-outline-primary}
 :::
 
 :::

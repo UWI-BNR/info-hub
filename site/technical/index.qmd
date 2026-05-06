@@ -28,7 +28,6 @@ Suggested and current pages:
 - [Copy an output bundle](how-to/copy-output-bundle.qmd)
 - [Create a public ZIP bundle](how-to/create-public-zip-bundle.qmd)
 - [Render a PDF briefing](how-to/render-pdf-briefing.qmd)
-- [Update the release catalogue](how-to/update-release-catalogue.qmd)
 - [Render the site](how-to/render-site.qmd)
 - [Publish the site](how-to/publish-site.qmd)
 
@@ -44,7 +43,6 @@ Suggested and current pages:
 - [Naming rules](reference/naming-rules.qmd)
 - [Quarto publication layer](reference/quarto-publication-layer.qmd)
 - [PDF briefing route](reference/pdf-briefing-route.qmd)
-- [Release catalogue](reference/release-catalogue.qmd)
 - [GitHub Pages deployment](reference/github-pages-deployment.qmd)
 - [Confidential data boundary](reference/confidential-data-boundary.qmd)
 

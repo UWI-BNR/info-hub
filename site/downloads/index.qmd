@@ -1,6 +1,48 @@
-﻿---
-title: "Downloads"
-format: html
+---
+title: "Data Downloads"
+description: "Approved Barbados National Registry surveillance outputs and downloadable public data packages."
+page-layout: full
+sidebar: false
+
+listing:
+  - id: bnr-downloads
+    contents:
+      - "downloads.yml"
+    template: downloads-table.ejs.md
+    sort: "updated desc"
+    sort-ui:
+      - updated
+      - format
+    filter-ui: true
+    page-size: 25
+    field-display-names:
+      surveillance_area: "Area"
+      period: "Period"
+      briefing_title: "Output"
+      title: "Artefact"
+      format: "Format"
+      updated: "Updated"
+    field-types:
+      updated: date
+      size_bytes: number
+      sort_order: number
+
+format:
+  html:
+    toc: false
+    anchor-sections: true
+    link-external-icon: false
+    link-external-newwindow: false
 ---
 
-This section will provide access to approved downloadable BNR outputs.
+This page provides public downloads from approved Barbados National Registry surveillance outputs. Use the table to find briefing packages, datasets, figures, workbooks, and supporting files. The search box can be used to filter by topic, year, output, artefact type, or file format.
+
+## Reuse and citation
+
+Please cite the Barbados National Registry when reusing these outputs. Suggested citation:
+
+> *Barbados National Registry. Data and downloads: approved surveillance outputs and public data resources. George Alleyne Chronic Disease Research Centre, The University of the West Indies, Cave Hill Campus. Available from: [page URL]. Accessed [day month year].*
+
+::: {#bnr-downloads}
+:::
+

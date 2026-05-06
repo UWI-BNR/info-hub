@@ -1,0 +1,96 @@
+schema: bnr_download_manifest_v1
+briefing_id: cvd_case_fatality_2023_v1
+domain: cvd
+surveillance_area: CVD
+period: 2023
+release_date: 2026-05-06
+
+title: |-
+  Case-fatality in Barbados
+
+description: |-
+  Public aggregate output package for the BNR CVD case-fatality briefing.
+
+briefing_page: surveillance/cvd/briefings/case-fatality.qmd
+
+downloads:
+  - id: cvd_case_fatality_2023_v1_zip
+    title: Full public output package
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_cvd_case_fatality_2023_v1.zip
+    href: files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip
+    description: |-
+      Complete public download package containing datasets, figures, metadata, workbook, and README file.
+    include_in_listing: true
+    sort_order: 10
+  - id: cvd_case_fatality_2023_v1_readme
+    title: README file
+    artefact_type: Documentation
+    format: TXT
+    file: readme.txt
+    href: files/briefings/cvd_case_fatality_2023_v1/readme.txt
+    description: |-
+      Plain-text guide to the contents of the public output package.
+    include_in_listing: true
+    sort_order: 20
+  - id: cvd_case_fatality_2023_v1_workbook
+    title: Excel workbook
+    artefact_type: Workbook
+    format: XLSX
+    file: workbook/bnr_cvd_case_fatality_2023_v1.xlsx
+    href: files/briefings/cvd_case_fatality_2023_v1/workbook/bnr_cvd_case_fatality_2023_v1.xlsx
+    description: |-
+      Spreadsheet version of the released datasets, with metadata and variable information sheets.
+    include_in_listing: true
+    sort_order: 30
+  - id: cvd_case_fatality_2023_csv
+    title: Annual case-fatality dataset
+    artefact_type: Dataset
+    format: CSV
+    file: datasets/cvd_case_fatality_2023.csv
+    href: files/briefings/cvd_case_fatality_2023_v1/datasets/cvd_case_fatality_2023.csv
+    description: |-
+      Open machine-readable dataset of weekly and cumulative hospital CVD case counts for 2023 compared with the 2018-2022 baseline average.
+    include_in_listing: true
+    sort_order: 40
+  - id: cvd_case_fatality_2023_dta
+    title: Annual case-fatality dataset, Stata format
+    artefact_type: Dataset
+    format: DTA
+    file: datasets/cvd_case_fatality_2023.dta
+    href: files/briefings/cvd_case_fatality_2023_v1/datasets/cvd_case_fatality_2023.dta
+    description: |-
+      Stata dataset version of the weekly CVD case-fatality data, including labels and dataset notes.
+    include_in_listing: true
+    sort_order: 50
+  - id: cvd_case_fatality_2023_metadata
+    title: Weekly case-fatality metadata
+    artefact_type: Metadata
+    format: YML
+    file: metadata/cvd_case_fatality_2023.yml
+    href: files/briefings/cvd_case_fatality_2023_v1/metadata/cvd_case_fatality_2023.yml
+    description: |-
+      Dataset-level metadata for the weekly CVD case-fatality dataset.
+    include_in_listing: true
+    sort_order: 60
+  - id: cvd_case_fatality_2023_figure
+    title: Weekly case-fatality figure
+    artefact_type: Figure
+    format: PNG
+    file: figures/cvd_case_fatality_2023.png
+    href: files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png
+    description: |-
+      Figure showing annual case-fatality.
+    include_in_listing: true
+    sort_order: 100
+  - id: cvd_case_fatality_2023_v1_briefing_metadata
+    title: Briefing-level metadata
+    artefact_type: Metadata
+    format: YML
+    file: metadata/briefing.yml
+    href: files/briefings/cvd_case_fatality_2023_v1/metadata/briefing.yml
+    description: |-
+      Briefing-level metadata describing the public CVD case-fatality output package.
+    include_in_listing: true
+    sort_order: 120

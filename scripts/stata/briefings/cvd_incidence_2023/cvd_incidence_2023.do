@@ -961,6 +961,202 @@ display as result "  `workbook_file'"
 
 
 ** ==============================================================
+** 9.4 CREATE BRIEFING DOWNLOAD MANIFEST
+** ==============================================================
+*
+* Purpose:
+*   Create a briefing-level downloads.yml file.
+*
+* This file describes the public downloadable artefacts in this
+* briefing bundle. It is not the final site-wide downloads catalogue.
+*
+* The Quarto publication layer will later collect downloads.yml files
+* from all briefing folders and build the sortable/filterable downloads
+* page.
+*
+* Output:
+*   outputs/staging/briefings/{briefing_id}/downloads.yml
+
+local release_date = string(daily("`c(current_date)'", "DMY"), "%tdCCYY-NN-DD")
+local site_base    "files/briefings/`briefing_id'"
+
+tempname downloads_yml
+
+file open `downloads_yml' using "`stagingbriefing'/downloads.yml", ///
+    write replace text
+
+file write `downloads_yml' "schema: bnr_download_manifest_v1" _n
+file write `downloads_yml' "briefing_id: `briefing_id'" _n
+file write `downloads_yml' "domain: cvd" _n
+file write `downloads_yml' "surveillance_area: CVD" _n
+file write `downloads_yml' "period: 2010-2023" _n
+file write `downloads_yml' "release_date: `release_date'" _n
+file write `downloads_yml' "" _n
+
+file write `downloads_yml' "title: |-" _n
+file write `downloads_yml' "  Incidence in Barbados, 2010-2023" _n
+file write `downloads_yml' "" _n
+
+file write `downloads_yml' "description: |-" _n
+file write `downloads_yml' "  Public aggregate output package for the BNR CVD incidence briefing." _n
+file write `downloads_yml' "" _n
+
+file write `downloads_yml' "briefing_page: surveillance/cvd/briefings/case-incidence.qmd" _n
+file write `downloads_yml' "" _n
+
+file write `downloads_yml' "downloads:" _n
+
+* Full ZIP package
+file write `downloads_yml' "  - id: `briefing_id'_zip" _n
+file write `downloads_yml' "    title: Full public output package" _n
+file write `downloads_yml' "    artefact_type: ZIP package" _n
+file write `downloads_yml' "    format: ZIP" _n
+file write `downloads_yml' "    file: bnr_`briefing_id'.zip" _n
+file write `downloads_yml' "    href: `site_base'/bnr_`briefing_id'.zip" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Complete public download package containing datasets, figures, metadata, workbook, and README file." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 10" _n
+
+* README
+file write `downloads_yml' "  - id: `briefing_id'_readme" _n
+file write `downloads_yml' "    title: README file" _n
+file write `downloads_yml' "    artefact_type: Documentation" _n
+file write `downloads_yml' "    format: TXT" _n
+file write `downloads_yml' "    file: readme.txt" _n
+file write `downloads_yml' "    href: `site_base'/readme.txt" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Plain-text guide to the contents of the public output package." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 20" _n
+
+* Workbook
+file write `downloads_yml' "  - id: `briefing_id'_workbook" _n
+file write `downloads_yml' "    title: Excel workbook" _n
+file write `downloads_yml' "    artefact_type: Workbook" _n
+file write `downloads_yml' "    format: XLSX" _n
+file write `downloads_yml' "    file: workbook/bnr_`briefing_id'.xlsx" _n
+file write `downloads_yml' "    href: `site_base'/workbook/bnr_`briefing_id'.xlsx" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Spreadsheet version of the released datasets, with metadata and variable information sheets." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 30" _n
+
+* Annual incidence CSV
+file write `downloads_yml' "  - id: `output1'_csv" _n
+file write `downloads_yml' "    title: Annual incidence dataset" _n
+file write `downloads_yml' "    artefact_type: Dataset" _n
+file write `downloads_yml' "    format: CSV" _n
+file write `downloads_yml' "    file: datasets/`output1'.csv" _n
+file write `downloads_yml' "    href: `site_base'/datasets/`output1'.csv" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Open machine-readable dataset of annual age-standardised CVD incidence rates for Barbados, 2010-2023." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 40" _n
+
+* Annual incidence DTA
+file write `downloads_yml' "  - id: `output1'_dta" _n
+file write `downloads_yml' "    title: Annual incidence dataset, Stata format" _n
+file write `downloads_yml' "    artefact_type: Dataset" _n
+file write `downloads_yml' "    format: DTA" _n
+file write `downloads_yml' "    file: datasets/`output1'.dta" _n
+file write `downloads_yml' "    href: `site_base'/datasets/`output1'.dta" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Stata dataset version of the annual CVD incidence data, including labels and dataset notes." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 50" _n
+
+* Annual incidence metadata
+file write `downloads_yml' "  - id: `output1'_metadata" _n
+file write `downloads_yml' "    title: Annual incidence metadata" _n
+file write `downloads_yml' "    artefact_type: Metadata" _n
+file write `downloads_yml' "    format: YML" _n
+file write `downloads_yml' "    file: metadata/`output1'.yml" _n
+file write `downloads_yml' "    href: `site_base'/metadata/`output1'.yml" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Dataset-level metadata for the annual CVD incidence dataset." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 60" _n
+
+* Incidence rate-ratio CSV
+file write `downloads_yml' "  - id: `output2'_csv" _n
+file write `downloads_yml' "    title: Incidence rate-ratio dataset" _n
+file write `downloads_yml' "    artefact_type: Dataset" _n
+file write `downloads_yml' "    format: CSV" _n
+file write `downloads_yml' "    file: datasets/`output2'.csv" _n
+file write `downloads_yml' "    href: `site_base'/datasets/`output2'.csv" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Open machine-readable dataset of age-standardised CVD incidence rate ratios by event type, sex, and period." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 70" _n
+
+* Incidence rate-ratio DTA
+file write `downloads_yml' "  - id: `output2'_dta" _n
+file write `downloads_yml' "    title: Incidence rate-ratio dataset, Stata format" _n
+file write `downloads_yml' "    artefact_type: Dataset" _n
+file write `downloads_yml' "    format: DTA" _n
+file write `downloads_yml' "    file: datasets/`output2'.dta" _n
+file write `downloads_yml' "    href: `site_base'/datasets/`output2'.dta" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Stata dataset version of the CVD incidence rate-ratio data, including labels and dataset notes." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 80" _n
+
+* Incidence rate-ratio metadata
+file write `downloads_yml' "  - id: `output2'_metadata" _n
+file write `downloads_yml' "    title: Incidence rate-ratio metadata" _n
+file write `downloads_yml' "    artefact_type: Metadata" _n
+file write `downloads_yml' "    format: YML" _n
+file write `downloads_yml' "    file: metadata/`output2'.yml" _n
+file write `downloads_yml' "    href: `site_base'/metadata/`output2'.yml" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Dataset-level metadata for the CVD incidence rate-ratio dataset." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 90" _n
+
+* Annual incidence figure
+file write `downloads_yml' "  - id: `output1'_figure" _n
+file write `downloads_yml' "    title: Annual incidence figure" _n
+file write `downloads_yml' "    artefact_type: Figure" _n
+file write `downloads_yml' "    format: PNG" _n
+file write `downloads_yml' "    file: figures/`output1'.png" _n
+file write `downloads_yml' "    href: `site_base'/figures/`output1'.png" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Figure showing annual age-standardised CVD incidence rates in Barbados, 2010-2023." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 100" _n
+
+* Incidence rate-ratio figure
+file write `downloads_yml' "  - id: `output2'_figure" _n
+file write `downloads_yml' "    title: Incidence rate-ratio figure" _n
+file write `downloads_yml' "    artefact_type: Figure" _n
+file write `downloads_yml' "    format: PNG" _n
+file write `downloads_yml' "    file: figures/`output2'.png" _n
+file write `downloads_yml' "    href: `site_base'/figures/`output2'.png" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Figure showing age-standardised CVD incidence rate ratios by event type, sex, and period." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 110" _n
+
+* Briefing-level metadata
+file write `downloads_yml' "  - id: `briefing_id'_briefing_metadata" _n
+file write `downloads_yml' "    title: Briefing-level metadata" _n
+file write `downloads_yml' "    artefact_type: Metadata" _n
+file write `downloads_yml' "    format: YML" _n
+file write `downloads_yml' "    file: metadata/briefing.yml" _n
+file write `downloads_yml' "    href: `site_base'/metadata/briefing.yml" _n
+file write `downloads_yml' "    description: |-" _n
+file write `downloads_yml' "      Briefing-level metadata describing the public CVD incidence output package." _n
+file write `downloads_yml' "    include_in_listing: true" _n
+file write `downloads_yml' "    sort_order: 120" _n
+
+file close `downloads_yml'
+
+display as result "Download manifest created:"
+display as result "  `stagingbriefing'/downloads.yml"
+
+
+** ==============================================================
 ** (SECTION 10) PUBLISH STAGING BUNDLE TO PUBLIC RELEASE FOLDER
 ** ==============================================================
 *
@@ -1038,6 +1234,8 @@ cap erase "`publiczip'"
 copy "`stagingbriefing'/readme.txt" ///
      "`publicbriefing'/readme.txt", replace
 
+copy "`stagingbriefing'/downloads.yml" ///
+     "`publicbriefing'/downloads.yml", replace
 
 ** ==============================================================
 ** 10.5 Copy staged subfolder files

@@ -4,6 +4,8 @@ project:
     - assets/images/**
     - assets/fonts/**
     - downloads/files/**
+  pre-render:
+    - python scripts/build_download_catalogue.py
   output-dir: _site
   preview:
     port: 4200
@@ -52,8 +54,6 @@ website:
     center:
       - text: "Data & downloads"
         href: downloads/index.qmd
-      - text: "Release catalogue"
-        href: downloads/release-catalogue.qmd
       - text: "Operations Manual"
         href: operations/index.qmd
       - text: "Technical Manual"
@@ -98,22 +98,22 @@ website:
       search: true
       collapse-level: 1
       contents:
-        - text: "CVD home"
-          href: surveillance/cvd/index.qmd
+        # - text: "CVD home"
+        #   href: surveillance/cvd/listing.qmd
 
         - section: "Briefings"
           contents:
-            - text: "Hospital CVD cases, 2023"
+            - text: "CVD cases, 2023"
               href: surveillance/cvd/briefings/case-counts.qmd
-            - text: "Hospital CVD incidence, 2010-2023"
+            - text: "CVD incidence, 2023"
               href: surveillance/cvd/briefings/case-incidence.qmd
+            - text: "CVD case fatality, 2023"
+              href: surveillance/cvd/briefings/case-fatality.qmd
 
         - section: "Downloads"
           contents:
             - text: "Data & downloads"
               href: downloads/index.qmd
-            - text: "Release catalogue"
-              href: downloads/release-catalogue.qmd
 
     - id: methods
       title: "Methods"
@@ -347,8 +347,6 @@ website:
               href: technical/how-to/create-public-zip-bundle.qmd
             - text: "Render PDF"
               href: technical/how-to/render-pdf-briefing.qmd
-            - text: "Update catalogue"
-              href: technical/how-to/update-release-catalogue.qmd
             - text: "Render site"
               href: technical/how-to/render-site.qmd
             - text: "Publish site"
@@ -368,8 +366,6 @@ website:
               href: technical/reference/quarto-publication-layer.qmd
             - text: "PDF route"
               href: technical/reference/pdf-briefing-route.qmd
-            - text: "Catalogue"
-              href: technical/reference/release-catalogue.qmd
             - text: "GitHub Pages"
               href: technical/reference/github-pages-deployment.qmd
             - text: "Data boundary"
@@ -390,4 +386,4 @@ website:
             - text: "Git cleanup"
               href: technical/troubleshooting/git-status-cleanup.qm1
 
-# file touch3
+# file touch8

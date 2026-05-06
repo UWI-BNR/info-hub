@@ -29,7 +29,6 @@ The Technical Manual is deliberately separate from the BNR Operations Manual:
 | [Output contract](output-contract.qmd) | How generated outputs pass from Stata to Quarto |
 | [Quarto publication layer](quarto-publication-layer.qmd) | How HTML pages, PDFs, downloads, and catalogues are published |
 | [PDF briefing route](pdf-briefing-route.qmd) | How Typst PDFs are generated from PDF-focused QMD files |
-| [Release catalogue](release-catalogue.qmd) | How released products are indexed for public users |
 | [Naming rules](naming-rules.qmd) | How files, folders, scripts, and outputs should be named |
 | [Confidential data boundary](confidential-data-boundary.qmd) | What may enter the repo and what must remain local-only |
 | [GitHub Pages deployment](github-pages-deployment.qmd) | How the static site is published |

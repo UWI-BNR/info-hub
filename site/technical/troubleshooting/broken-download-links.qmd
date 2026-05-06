@@ -36,7 +36,7 @@ Record:
 Example:
 
 ```text
-Page: site/downloads/release-catalogue.qmd
+Page: site/downloads/index.qmd
 Link: Download cumulative weekly case data
 Expected file: cases_2023_cum_week.csv
 ```
@@ -75,26 +75,6 @@ Example:
 
 ```markdown
 [Download cumulative weekly case data](../../../downloads/files/briefings/cvd_cases_2023_v1/data/cases_2023_cum_week.csv)
-```
-
-## Links from the release catalogue
-
-The release catalogue lives here:
-
-```text
-site/downloads/release-catalogue.qmd
-```
-
-Links from this file to the site download folder should start with:
-
-```text
-files/briefings/cvd_cases_2023_v1/
-```
-
-Example:
-
-```markdown
-[Download cumulative weekly case data](files/briefings/cvd_cases_2023_v1/data/cases_2023_cum_week.csv)
 ```
 
 # Stage 4: Check PDF links

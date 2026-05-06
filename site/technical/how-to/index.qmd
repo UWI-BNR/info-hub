@@ -33,7 +33,6 @@ These guides focus on the web and publication infrastructure. Registry operation
 | Copy approved Stata outputs into the site | [Copy an output bundle](copy-output-bundle.qmd) |
 | Render or preview the site | [Render or preview the site](render-site.qmd) |
 | Render a PDF briefing | [Render a PDF briefing](render-pdf-briefing.qmd) |
-| Update the release catalogue | [Update the release catalogue](update-release-catalogue.qmd) |
 | Add another briefing | [Add a new static briefing](add-new-static-briefing.qmd) |
 | Create a ZIP package | [Create a public ZIP bundle](create-public-zip-bundle.qmd) |
 | Publish the site | [Publish the site](publish-site.qmd) |

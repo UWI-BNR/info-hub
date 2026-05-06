@@ -122,21 +122,8 @@ site/surveillance/cvd/briefings/case-counts-pdf.qmd
 The PDF page should be shorter and more print-oriented than the HTML page.
 :::
 
-# Stage 5: Add the public release entry
 
-:::{.callout-note collapse="true"}
-## Step 1. Update the release catalogue
-
-Edit:
-
-```text
-site/downloads/release-catalogue.qmd
-```
-
-Include the web page, PDF, tables, figure data, metadata, and build record.
-:::
-
-# Stage 6: Preview and check
+# Stage 5: Preview and check
 
 :::{.callout-note collapse="true"}
 ## Step 1. Preview the site

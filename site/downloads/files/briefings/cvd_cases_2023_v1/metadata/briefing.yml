@@ -2,7 +2,7 @@ schema: bnr_briefing_metadata_v1
 briefing_id: cvd_cases_2023_v1
 
 title: |-
-  Hospital cardiovascular cases in Barbados, 2023
+  CVD cases in Barbados, 2023
 
 description: |-
   Public aggregate output package for the BNR CVD case-count briefing.
@@ -40,5 +40,5 @@ contact: |-
   Barbados National Registry.
 
 build:
-  build_date:  5 May 2026
+  build_date:  6 May 2026
   analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_cases_2023.do

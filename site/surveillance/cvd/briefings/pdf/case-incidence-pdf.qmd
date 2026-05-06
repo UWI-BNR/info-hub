@@ -1,0 +1,127 @@
+---
+bibliography: []
+citeproc: false
+csl: apa
+format:
+  typst:
+    output-file: bnr_cvd_incidence_2023_v1.pdf
+    toc: false
+    number-sections: false
+    papersize: us-letter
+    margin:
+      top: 0.65in
+      bottom: 0.70in
+      left: 0.65in
+      right: 0.65in
+    mainfont: "Noto Sans"
+    font-paths:
+      - "../../../../assets/font/noto-sans"
+    fontsize: 10pt
+    linkcolor: "#e87a00"
+    fig-cap-location: bottom
+    include-in-header:
+      text: |
+        #let bnr_grey = rgb("#666666")
+        #let bnr_light_grey = rgb("#B8B8B8")
+        #let body_font = "Noto Sans"
+        #let heading_font = "Noto Sans"
+
+        #set text(font: body_font, size: 10pt)
+
+        #show heading.where(level: 1): set text(font: heading_font, weight: "semibold", size: 14pt)
+        #show heading.where(level: 2): set text(font: heading_font, weight: "semibold", size: 13pt)
+        #show heading.where(level: 3): set text(font: heading_font, weight: "semibold", size: 11.2pt)
+
+        #set page(
+          footer: context [
+            #line(length: 100%, stroke: (paint: bnr_light_grey, thickness: 0.35pt))
+            #v(3pt)
+            #grid(
+              columns: (1fr, auto),
+              [#text(font: body_font, size: 7.3pt, fill: bnr_grey)[Barbados National Registry | The University of the West Indies]],
+              [#text(font: body_font, size: 7.3pt, fill: bnr_grey)[Page #counter(page).display("1")]]
+            )
+          ]
+        )
+---
+
+```{=typst}
+#let bnr_grey = rgb("#666666")
+#let uwi_logo = "../../../../assets/images/uwi-crestonly-20p.png"
+#let body_font = "Noto Sans"
+#let heading_font = "Noto Sans"
+
+#block[
+  #grid(
+    columns: (42pt, 1fr),
+    column-gutter: 9pt,
+    align(top, image(uwi_logo, height: 38pt)),
+    [
+      #text(font: heading_font, size: 16pt, weight: "semibold")[CVD Incidence in Barbados, 2010-2023]
+      #linebreak()
+      #text(font: body_font, size: 9.4pt, fill: bnr_grey)[Briefing created by the Barbados National Chronic Disease Registry, The University of the West Indies.]
+      #linebreak()
+      #text(font: body_font, size: 9.4pt, style: "italic", fill: bnr_grey)[Group Contacts - Christina Howitt (BNR lead) - Ian Hambleton (analytics) - Updated on 7 Nov 2025]
+    ]
+  )
+  #v(5pt)
+  #align(center)[
+    #text(font: body_font, size: 9.4pt, fill: bnr_grey)[For all our surveillance outputs - https://uwi-bnr.github.io/info-hub/]
+  ]
+  #v(5pt)
+  #line(length: 100%, stroke: (paint: rgb("#555555"), thickness: 0.55pt))
+]
+#v(8pt)
+```
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/why-this-matters.qmd >}}
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/what-we-did.qmd >}}
+
+## Key messages
+
+- In 2023, age-standardised stroke incidence was 141 per 100,000 among women and 198 per 100,000 among men.
+- In 2023, age-standardised heart attack incidence was 90 per 100,000 among women and 145 per 100,000 among men.
+- Including death-certificate-only events increases measured incidence, especially for heart attacks.
+- Hospital-based stroke incidence rose over the surveillance period and remained higher among men.
+
+```{=typst}
+#v(6pt)
+#block(width: 100%)[
+  #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
+    Age-standardised cardiovascular incidence rates, 2010-2023
+  ]
+]
+#v(3pt)
+```
+
+![](../../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){width=100% fig-alt="Line chart showing annual age-standardised cardiovascular incidence rates from 2010 to 2023."}
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/results1.qmd >}}
+
+
+```{=typst}
+#v(6pt)
+#block(width: 100%)[
+  #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
+    Incidence differences by event type, sex, and period
+  ]
+]
+#v(3pt)
+```
+
+![](../../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){width=80% fig-alt="Rate-ratio figure showing cardiovascular incidence differences by event type, sex, and period."}
+
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_incidence_2023_v1/results2.qmd >}}
+
+## Outputs
+
+Tables, figure data, metadata, workbook files, and build records are available in the online briefing.
+
+## Citation
+
+```{=typst}
+#text(font: "Noto Sans", size: 8.4pt, fill: rgb("#666666"))[
+  Barbados National Registry. #emph[CVD Incidence in Barbados, 2010-2023: BNR CVD briefing, 2023]. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: #link("https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-incidence.html")[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-incidence.html]. Accessed: [insert date accessed].
+]
+```

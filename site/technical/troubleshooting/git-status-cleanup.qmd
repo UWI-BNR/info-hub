@@ -59,7 +59,6 @@ outputs/public/briefings/cvd_cases_2023_v1/
 site/downloads/files/briefings/cvd_cases_2023_v1/
 site/surveillance/cvd/briefings/case-counts.qmd
 site/surveillance/cvd/briefings/case-counts-pdf.qmd
-site/downloads/release-catalogue.qmd
 site/technical/
 site/operations-manual/
 ```

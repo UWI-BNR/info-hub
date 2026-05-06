@@ -1,0 +1,136 @@
+schema: bnr_download_manifest_v1
+briefing_id: cvd_cases_2023_v1
+domain: cvd
+surveillance_area: CVD
+period: 2023
+release_date: 2026-05-06
+
+title: |-
+  Cases in Barbados
+
+description: |-
+  Public aggregate output package for the BNR CVD case-count briefing.
+
+briefing_page: surveillance/cvd/briefings/case-counts.qmd
+
+downloads:
+  - id: cvd_cases_2023_v1_zip
+    title: Full public output package
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_cvd_cases_2023_v1.zip
+    href: files/briefings/cvd_cases_2023_v1/bnr_cvd_cases_2023_v1.zip
+    description: |-
+      Complete public download package containing datasets, figures, metadata, workbook, and README file.
+    include_in_listing: true
+    sort_order: 10
+  - id: cvd_cases_2023_v1_readme
+    title: README file
+    artefact_type: Documentation
+    format: TXT
+    file: readme.txt
+    href: files/briefings/cvd_cases_2023_v1/readme.txt
+    description: |-
+      Plain-text guide to the contents of the public output package.
+    include_in_listing: true
+    sort_order: 20
+  - id: cvd_cases_2023_v1_workbook
+    title: Excel workbook
+    artefact_type: Workbook
+    format: XLSX
+    file: workbook/bnr_cvd_cases_2023_v1.xlsx
+    href: files/briefings/cvd_cases_2023_v1/workbook/bnr_cvd_cases_2023_v1.xlsx
+    description: |-
+      Spreadsheet version of the released datasets, with metadata and variable information sheets.
+    include_in_listing: true
+    sort_order: 30
+  - id: cvd_cases_weekly_csv
+    title: Weekly case-count dataset
+    artefact_type: Dataset
+    format: CSV
+    file: datasets/cvd_cases_weekly.csv
+    href: files/briefings/cvd_cases_2023_v1/datasets/cvd_cases_weekly.csv
+    description: |-
+      Open machine-readable dataset of weekly and cumulative hospital CVD case counts for 2023 compared with the 2018-2022 baseline average.
+    include_in_listing: true
+    sort_order: 40
+  - id: cvd_cases_weekly_dta
+    title: Weekly case-count dataset, Stata format
+    artefact_type: Dataset
+    format: DTA
+    file: datasets/cvd_cases_weekly.dta
+    href: files/briefings/cvd_cases_2023_v1/datasets/cvd_cases_weekly.dta
+    description: |-
+      Stata dataset version of the weekly CVD case-count data, including labels and dataset notes.
+    include_in_listing: true
+    sort_order: 50
+  - id: cvd_cases_weekly_metadata
+    title: Weekly case-count metadata
+    artefact_type: Metadata
+    format: YML
+    file: metadata/cvd_cases_weekly.yml
+    href: files/briefings/cvd_cases_2023_v1/metadata/cvd_cases_weekly.yml
+    description: |-
+      Dataset-level metadata for the weekly CVD case-count dataset.
+    include_in_listing: true
+    sort_order: 60
+  - id: cvd_cases_age_group_csv
+    title: Case-count age-group dataset
+    artefact_type: Dataset
+    format: CSV
+    file: datasets/cvd_cases_age_group.csv
+    href: files/briefings/cvd_cases_2023_v1/datasets/cvd_cases_age_group.csv
+    description: |-
+      Open machine-readable dataset of hospital CVD case counts by event type, sex, broad age group, and period.
+    include_in_listing: true
+    sort_order: 70
+  - id: cvd_cases_age_group_dta
+    title: Case-count age-group dataset, Stata format
+    artefact_type: Dataset
+    format: DTA
+    file: datasets/cvd_cases_age_group.dta
+    href: files/briefings/cvd_cases_2023_v1/datasets/cvd_cases_age_group.dta
+    description: |-
+      Stata dataset version of the CVD age-group case-count data, including labels and dataset notes.
+    include_in_listing: true
+    sort_order: 80
+  - id: cvd_cases_age_group_metadata
+    title: Case-count age-group metadata
+    artefact_type: Metadata
+    format: YML
+    file: metadata/cvd_cases_age_group.yml
+    href: files/briefings/cvd_cases_2023_v1/metadata/cvd_cases_age_group.yml
+    description: |-
+      Dataset-level metadata for the CVD age-group case-count dataset.
+    include_in_listing: true
+    sort_order: 90
+  - id: cvd_cases_weekly_figure
+    title: Weekly case-count figure
+    artefact_type: Figure
+    format: PNG
+    file: figures/cvd_cases_weekly.png
+    href: files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png
+    description: |-
+      Figure showing cumulative 2023 hospital CVD cases compared with the 2018-2022 baseline average.
+    include_in_listing: true
+    sort_order: 100
+  - id: cvd_cases_age_group_figure
+    title: Case-count age-group figure
+    artefact_type: Figure
+    format: PNG
+    file: figures/cvd_cases_age_group.png
+    href: files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png
+    description: |-
+      Figure showing the broad age-group distribution of 2023 hospital CVD cases compared with the 2018-2022 baseline average.
+    include_in_listing: true
+    sort_order: 110
+  - id: cvd_cases_2023_v1_briefing_metadata
+    title: Briefing-level metadata
+    artefact_type: Metadata
+    format: YML
+    file: metadata/briefing.yml
+    href: files/briefings/cvd_cases_2023_v1/metadata/briefing.yml
+    description: |-
+      Briefing-level metadata describing the public CVD case-count output package.
+    include_in_listing: true
+    sort_order: 120

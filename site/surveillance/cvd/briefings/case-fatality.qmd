@@ -1,0 +1,196 @@
+﻿---
+title: "CVD case fatality in Barbados, 2012-2023"
+author: Ian Hambleton
+subtitle: "BNR briefing, 2023"
+title-block-style: none
+date: 14-Nov-2025
+date-format: DD MMM YYYY
+categories:
+  - CVD
+  - Briefing
+  - Case fatality
+  - 2023
+sidebar: cvd
+format:
+  html:
+    body-classes: bnr-briefing-page
+    toc: true
+    toc-depth: 2
+page-layout: full
+---
+
+::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
+
+### View other formats
+
+Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF version is designed for printing, sharing, and citation.
+
+::: {.bnr-utility-links}
+[Open PDF briefing](pdf/bnr_cvd_case_fatality_2023_v1.pdf){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Open presentation slides](slides/bnr_cvd_case_fatality_2023_v1_slides.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
+:::
+
+:::
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/why-this-matters.qmd >}}
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-we-did.qmd >}}
+
+
+This briefing focuses on three questions:
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### How has incidence changed?
+
+How have age-standardised stroke and heart attack incidence rates change in Barbados between 2010 and 2023?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### What is missed by hospital data alone?
+
+How much do incidence estimates change when death-certificate-only events are included alongside hospital-registered events?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### Where are rates highest?
+
+How do incidence patterns differ by event type, sex, and time period?
+
+:::
+:::
+:::
+
+:::
+
+
+
+## Headline findings
+
+Age-standardised incidence rates per 100,000 population, 2023.
+
+::: {.grid .mb-4}
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
+<p class="display-6 fw-semibold mb-1">141</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
+<p class="display-6 fw-semibold mb-1">198</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+<p class="display-6 fw-semibold mb-1">90</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+<p class="display-6 fw-semibold mb-1">145</p>
+<p class="mb-0 small">per 100,000</p>
+
+:::
+:::
+:::
+
+:::
+
+
+
+## CVD Case fatality
+
+```{=html}
+<p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+  Case fatality is higher in women for  
+  <span style="color: rgb(164, 22, 26);">Heart attacks</span>
+  and  
+  <span style="color: rgb(139, 111, 180);">Strokes</span>
+</p>
+```
+
+::: {.card .border-0 .shadow-sm .mb-4}
+::: {.card-body}
+
+![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing annual incidence rates from 2010 to 2023." width="100%"}
+
+[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){.small target="_blank" rel="noopener"}
+
+:::
+:::
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/results1.qmd >}}
+
+::: {.card .border-0 .shadow-sm .mb-4}
+::: {.card-body}
+
+![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
+
+[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){.small target="_blank" rel="noopener"}
+
+:::
+:::
+
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-this-means.qmd >}}
+
+## Download the outputs
+
+The briefing outputs are available in three formats.
+
+| Description |  | Download |
+|---|:---:|---|
+| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_case_fatality_2023_v1.pdf){download="bnr_cvd_case_fatality_2023_v1.pdf"} |
+| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_case_fatality_2023_v1_slides.html){target="_blank" rel="noopener"} |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_incidence_2023_v1/workbook/bnr_cvd_case_fatality_2023_v1.xlsx){download="bnr_cvd_case_fatality_2023_v1.xlsx"} |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_incidence_2023_v1/bnr_cvd_case_fatality_2023_v1.zip){download="bnr_cvd_case_fatality_2023_v1.zip"} |
+
+
+## Suggested Citation
+
+> Barbados National Registry. *Hospital Cardiovascular Incidence in Barbados: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-case-fatality.html. Accessed: [insert date accessed].

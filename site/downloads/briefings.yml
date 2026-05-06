@@ -1,0 +1,21 @@
+- title: "Hospital Cardiovascular Cases in Barbados"
+  subtitle: "BNR CVD case-count briefing, 2023"
+  description: "Includes HTML briefing, PDF briefing, presentation slides, Excel workbook, CSV datasets, figure files, metadata, README, and full ZIP package."
+  date: 2025-10-31
+  path: "../surveillance/cvd/briefings/case-counts.html"
+  categories:
+    - CVD
+    - Briefing
+    - Case counts
+    - 2023
+
+- title: "Hospital Cardiovascular incidence in Barbados"
+  subtitle: "BNR CVD incidence briefing, 2023"
+  description: "Includes HTML briefing and related public download files as they become available."
+  date: 2025-10-31
+  path: "../surveillance/cvd/briefings/case-incidence.html"
+  categories:
+    - CVD
+    - Briefing
+    - Incidence
+    - 2023

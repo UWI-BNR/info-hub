@@ -1,8 +1,16 @@
 ---
-title: "Hospital Cardiovascular Cases in Barbados"
+title: "CVD Cases in Barbados, 2023"
 author: Ian Hambleton
-subtitle: "BNR CVD briefing, 2023"
+subtitle: "BNR briefing, 2023"
+description: "Hospital-registered stroke and heart attack cases in Barbados in 2023, with PDF briefing, presentation slides, Excel workbook, and full public output package."
+title-block-style: none
 date: 31-Oct-2025
+date-format: DD MMM YYYY
+categories:
+  - CVD
+  - Briefing
+  - Count
+  - 2023
 sidebar: cvd
 format:
   html:
@@ -144,7 +152,7 @@ We summarised cases by event type, sex, and age group.
 
 ![](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){fig-alt="Line chart showing cumulative weekly stroke and heart attack cases in 2023 compared with the five-year average for 2018 to 2022." width="100%"}
 
-[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_weekly.png){.small target="_blank" rel="noopener"}
+[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
@@ -166,9 +174,9 @@ We summarised cases by event type, sex, and age group.
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
 
-![](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
+![](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
 
-[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cases_2023_age70.png){.small target="_blank" rel="noopener"}
+[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
