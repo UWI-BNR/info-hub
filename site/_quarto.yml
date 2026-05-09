@@ -2,6 +2,7 @@ project:
   type: website
   resources:
     - assets/images/**
+    - "assets/images/listings/*"
     - assets/fonts/**
     - downloads/files/**
   pre-render:
@@ -19,9 +20,9 @@ format:
       light:
         - flatly
         - assets/scss/bnr.scss
-      dark:
-        - darkly
-        - assets/scss/bnr.scss
+#      dark:
+#        - darkly
+#        - assets/scss/bnr.scss
     toc: true
     toc-depth: 3
     anchor-sections: true
@@ -52,7 +53,7 @@ website:
     border: true
     left: "© 2026, The UWI"
     center:
-      - text: "Data & downloads"
+      - text: "Data Downloads"
         href: downloads/index.qmd
       - text: "Operations Manual"
         href: operations/index.qmd
@@ -386,4 +387,4 @@ website:
             - text: "Git cleanup"
               href: technical/troubleshooting/git-status-cleanup.qm1
 
-# file touch8
+# file touch1

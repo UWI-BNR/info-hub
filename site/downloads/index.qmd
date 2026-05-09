@@ -1,6 +1,6 @@
 ---
 title: "Data Downloads"
-description: "Approved Barbados National Registry surveillance outputs and downloadable public data packages."
+description: "Approved Barbados National Registry public output packages."
 page-layout: full
 sidebar: false
 
@@ -12,15 +12,14 @@ listing:
     sort: "updated desc"
     sort-ui:
       - updated
-      - format
+      - briefing_title
     filter-ui: true
     page-size: 25
     field-display-names:
       surveillance_area: "Area"
       period: "Period"
       briefing_title: "Output"
-      title: "Artefact"
-      format: "Format"
+      description: "Contents"
       updated: "Updated"
     field-types:
       updated: date
@@ -35,7 +34,11 @@ format:
     link-external-newwindow: false
 ---
 
-This page provides public downloads from approved Barbados National Registry surveillance outputs. Use the table to find briefing packages, datasets, figures, workbooks, and supporting files. The search box can be used to filter by topic, year, output, artefact type, or file format.
+This page provides public download packages from approved Barbados National Registry surveillance outputs. 
+
+> Each `ZIP` package contains the approved public files for one output. Depending on the briefing, this may include datasets, figures, metadata, an Excel workbook, and a README file. To download individual files, and to download the briefing **PDF** or **Slide-deck**, jump to the relevant briefings page. 
+
+Use the search box to filter by topic, year, surveillance area, or output title.
 
 ## Reuse and citation
 

@@ -26,6 +26,11 @@ import sys
 # Important:
 #   Paths are resolved from this script's location, not from the current
 #   terminal working directory.
+#
+# Public catalogue rule:
+#   The central downloads page lists ZIP packages only.
+#   Briefing-level manifests may still contain README, XLSX, CSV, DTA, YML,
+#   PNG, HTML, PDF, and other records for release inventory purposes.
 # ---------------------------------------------------------------------------
 
 
@@ -328,6 +333,14 @@ def build_catalogue():
             if include_in_listing is False:
                 continue
 
+            item_format = str(item.get("format", "")).strip().upper()
+
+            # The central downloads catalogue lists ZIP packages only.
+            # Other manifest items remain useful as briefing-level release
+            # inventory records, but are not displayed on the public catalogue.
+            if item_format != "ZIP":
+                continue
+
             href = str(item.get("href", "")).strip()
             file_path = str(item.get("file", "")).strip()
             title = str(item.get("title", "")).strip()
@@ -359,7 +372,7 @@ def build_catalogue():
                     "domain": domain,
                     "period": period,
                     "artefact_type": item.get("artefact_type", ""),
-                    "format": item.get("format", ""),
+                    "format": item_format,
                     "description": item.get("description", ""),
                     "href": href,
                     "path": href,

@@ -365,3 +365,41 @@ body.bnr-briefing-page .quarto-document-content h3 {
 .bnr-briefing-action-card h3 {
   margin-top: 0;
 }
+
+
+/* =========================================================================
+   DOWNLOAD TABLE - column widths
+   ========================================================================= */
+
+/* Downloads table column sizing */
+.bnr-download-table {
+  table-layout: auto;
+}
+
+/* Keep the updated date on one line */
+.bnr-download-table .listing-updated,
+.bnr-download-table th:nth-child(5) {
+  white-space: nowrap;
+  width: 8rem;
+}
+
+/* Keep the ZIP button compact */
+.bnr-download-table td:last-child,
+.bnr-download-table th:last-child {
+  white-space: nowrap;
+  width: 6rem;
+}
+
+/* Make Oupout fixed width */
+.bnr-download-table .listing-description,
+.bnr-download-table th:nth-child(3) {
+  width: 20%;
+  max-width: 22rem;
+}
+
+/* Make Contents fixed width */
+.bnr-download-table .listing-description,
+.bnr-download-table th:nth-child(4) {
+  width: 32%;
+  max-width: 22rem;
+}

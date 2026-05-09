@@ -1,8 +1,10 @@
 ---
 title: "CVD Cases in Barbados, 2023"
-author: Ian Hambleton
 subtitle: "BNR briefing, 2023"
-description: "Hospital-registered stroke and heart attack cases in Barbados in 2023, with PDF briefing, presentation slides, Excel workbook, and full public output package."
+author: Ian Hambleton
+description: "How many strokes and heart attacks were registered each week"
+image: "/assets/images/listings/listing_shore.webp"
+image-alt: "BNR surveillance briefing illustration."
 title-block-style: none
 date: 31-Oct-2025
 date-format: DD MMM YYYY

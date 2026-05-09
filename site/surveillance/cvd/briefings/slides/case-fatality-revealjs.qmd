@@ -1,0 +1,347 @@
+---
+format:
+  revealjs:
+    output-file: bnr_cvd_case_fatality_2023_v1_slides.html
+    theme: simple
+    width: 1600
+    height: 900
+    margin: 0.06
+    slide-level: 2
+    slide-number: c/t
+    transition: fade
+    controls: true
+    progress: true
+    center: false
+    logo: ../../../../assets/images/uwi-crestonly-20p.png
+    footer: "Barbados National Registry | The University of the West Indies"
+    css:
+      - ../../../../assets/css/reveal-fonts.css
+    include-in-header:
+      text: |
+        <style>
+          :root {
+            --bnr-navy: #001F3D;
+            --bnr-teal: #045174;
+            --bnr-sand: #D89C60;
+            --bnr-orange: #E87A00;
+            --bnr-grey: #5f6368;
+            --stroke-purple: rgb(139, 111, 180);
+            --heart-red: rgb(164, 22, 26);
+          }
+
+          .reveal {
+            font-family: "BNR Sans", Arial, sans-serif;
+            color: #222;
+          }
+
+          .reveal h1,
+          .reveal h2,
+          .reveal h3 {
+            font-family: "BNR Sans", Arial, sans-serif;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+          }
+
+          .reveal h1 { font-size: 1.95em; }
+          .reveal h2 { font-size: 1.45em; margin-bottom: 0.55em; }
+          .reveal h3 { font-size: 1.05em; }
+
+          .reveal p,
+          .reveal li {
+            font-size: 0.78em;
+            line-height: 1.25;
+          }
+
+          .reveal ul {
+            margin-top: 0.2em;
+          }
+
+          .title-wrap {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 28px;
+            align-items: start;
+            margin-top: 70px;
+          }
+
+          .title-wrap img {
+            width: 96px;
+            height: auto;
+          }
+
+          .title-heading {
+            font-family: "BNR Sans", Arial, sans-serif;
+            font-size: 1.95em;
+            font-weight: 650;
+            color: var(--bnr-navy);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 0 0 0.35em 0;
+          }
+
+          .title-subtitle {
+            font-size: 0.86em;
+            font-weight: 700;
+            color: #222;
+            margin-top: 0.15em;
+          }
+
+          .deck-kicker {
+            color: var(--bnr-grey);
+            font-size: 0.62em;
+            margin-top: 0.9em;
+          }
+
+          .deck-rule {
+            width: 100%;
+            height: 4px;
+            background: var(--bnr-sand);
+            margin-top: 28px;
+          }
+
+          .large-number {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: var(--bnr-navy);
+            line-height: 1;
+          }
+
+          .label {
+            color: var(--bnr-grey);
+            font-size: 0.56em;
+            line-height: 1.15;
+            margin-top: 0.25em;
+          }
+
+          .number-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            margin: 34px 0 20px 0;
+          }
+
+          .number-card {
+            border-top: 5px solid var(--bnr-sand);
+            background: #f7f7f7;
+            padding: 20px 18px 18px 18px;
+            min-height: 130px;
+          }
+
+          .insight-box {
+            background: #f7f7f7;
+            border-left: 7px solid var(--bnr-sand);
+            padding: 20px 24px;
+            margin-top: 22px;
+          }
+
+          .muted {
+            color: var(--bnr-grey);
+          }
+
+          .stroke {
+            color: var(--stroke-purple);
+            font-weight: 700;
+          }
+
+          .heart {
+            color: var(--heart-red);
+            font-weight: 700;
+          }
+
+          .figure-title {
+            font-size: 1.02em;
+            font-weight: 700;
+            margin-bottom: 0.55em;
+          }
+
+          .figure-note {
+            font-size: 0.56em;
+            color: var(--bnr-grey);
+            margin-top: 0.4em;
+          }
+
+          .reveal .slide-logo {
+            max-height: 54px !important;
+          }
+
+          .reveal section img {
+            box-shadow: none;
+            border: none;
+          }
+
+          .audience-citation {
+            font-size: 0.82em;
+            color: #222;
+            line-height: 1.35;
+            max-width: 1180px;
+            margin-top: 0.8em;
+          }
+
+          .briefing-url-label {
+            font-size: 0.72em;
+            color: var(--bnr-grey);
+            font-weight: 700;
+            margin-top: 1.3em;
+            margin-bottom: 0.25em;
+          }
+
+          .briefing-url {
+            font-size: 0.82em;
+            line-height: 1.25;
+            color: var(--bnr-teal);
+            font-weight: 700;
+            word-break: break-word;
+            max-width: 1180px;
+          }
+
+          .briefing-url a {
+            color: var(--bnr-teal);
+            text-decoration: underline;
+            text-decoration-thickness: 0.08em;
+            text-underline-offset: 0.12em;
+          }
+        </style>
+---
+
+## Title {.unlisted}
+
+::: {.title-wrap}
+![](../../../../assets/images/uwi-crestonly-20p.png)
+
+::: {}
+<div class="title-heading">CVD Case Fatality in Barbados</div>
+<div class="title-subtitle">BNR CVD case-fatality briefing, 2023</div>
+<div class="deck-kicker">Barbados National Registry | The University of the West Indies</div>
+<div class="deck-kicker">Updated on 06 May 2026</div>
+<div class="deck-rule"></div>
+:::
+:::
+
+## Key messages
+
+::: {.number-grid}
+::: {.number-card}
+<div class="label">Women | Stroke</div>
+<div class="large-number">29%</div>
+<div class="label">age-adjusted case fatality, 2022-2023</div>
+:::
+
+::: {.number-card}
+<div class="label">Men | Stroke</div>
+<div class="large-number">30%</div>
+<div class="label">age-adjusted case fatality, 2022-2023</div>
+:::
+
+::: {.number-card}
+<div class="label">Women | Heart attack</div>
+<div class="large-number">16%</div>
+<div class="label">age-adjusted case fatality, 2022-2023</div>
+:::
+
+::: {.number-card}
+<div class="label">Men | Heart attack</div>
+<div class="large-number">14%</div>
+<div class="label">age-adjusted case fatality, 2022-2023</div>
+:::
+:::
+
+::: {.insight-box}
+Before age adjustment, women had higher case fatality than men for both conditions. Age explained part - but not all - of this gap.
+:::
+
+## Why case fatality matters
+
+Case-fatality rates show what happens after patients reach hospital care.
+
+- They describe the short-term consequences of cardiovascular events.
+- They complement case counts and incidence rates.
+- They help identify whether outcomes differ by event type, sex, and age.
+
+::: {.insight-box}
+Case fatality is not a measure of population risk. It is a measure of survival among people who had a hospital-registered event.
+:::
+
+## What we did
+
+We reviewed hospital-registered stroke and heart attack events in Barbados and summarised case fatality by event type, sex, and age profile.
+
+- We used two-year periods to stabilise the estimates.
+- We compared crude, unadjusted modelled, and age-adjusted modelled probabilities.
+- We examined whether the higher case fatality observed among women was explained by age.
+
+## Higher case fatality in women after <span class="heart">heart attack</span> and <span class="stroke">stroke</span>
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing case fatality after hospital-registered stroke and heart attack in Barbados by sex."}
+:::
+
+::: {.column width="32%"}
+### Main pattern
+
+- Stroke case fatality changed little over time.
+- Heart attack case fatality fluctuated and showed some evidence of an upward trend.
+- Before age adjustment, women had higher case fatality than men for both conditions.
+
+::: {.figure-note}
+Figure source: BNR hospital-registered stroke and heart attack events.
+:::
+:::
+:::
+
+## Interpretation
+
+Women admitted with heart attack or stroke were, on average, older than men.
+
+::: {.insight-box}
+The older age profile among women explained part of the female excess in case fatality, but did not remove it completely.
+:::
+
+This means the observed difference should be interpreted as a signal for further review rather than as evidence of one single cause.
+
+## Age profile and case fatality
+
+::: {.columns}
+::: {.column width="68%"}
+![](../../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){fig-alt="Bar chart showing the age profile of hospital-registered stroke and heart attack events by sex and case-fatality status."}
+:::
+
+::: {.column width="32%"}
+### Older age profile
+
+- Women were more likely than men to be aged 70 or older at the time of their event.
+- Women who died in hospital were also older on average.
+- Age explained part - but not all - of the female excess in case fatality.
+
+::: {.figure-note}
+Age threshold: 70 years or older.
+:::
+:::
+:::
+
+## What this means
+
+Case-fatality rates show how outcomes differ after patients reach hospital care.
+
+The persistence of higher rates among women - only partly explained by their older age profile - highlights the need to understand whether differences in presentation, treatment, severity, comorbidity, or recovery may affect survival.
+
+::: {.insight-box}
+The practical next step is not to assume a single explanation, but to review the patient pathway from symptom onset through hospital treatment and discharge outcome.
+:::
+
+## Outputs and citation
+
+Tables, figure data, metadata, and build records are available in the online briefing.
+
+::: {.audience-citation}
+Barbados National Registry. *CVD Case Fatality in Barbados: BNR CVD case-fatality briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Accessed: [insert date accessed].
+:::
+
+::: {.briefing-url-label}
+Online briefing
+:::
+
+::: {.briefing-url}
+[https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-fatality.html](https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-fatality.html)
+:::

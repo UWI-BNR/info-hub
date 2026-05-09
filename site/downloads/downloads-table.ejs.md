@@ -6,8 +6,7 @@
       <th scope="col">Area</th>
       <th scope="col">Period</th>
       <th scope="col">Output</th>
-      <th scope="col">Artefact</th>
-      <th scope="col">Format</th>
+      <th scope="col">Contents</th>
       <th scope="col">Updated</th>
       <th scope="col">Download</th>
     </tr>
@@ -20,7 +19,7 @@
         String(item.path || "").trim() !== "" &&
         String(item.title || "").trim() !== "" &&
         String(item.briefing_id || "").trim() !== "" &&
-        String(item.format || "").trim() !== ""
+        String(item.format || "").trim().toUpperCase() === "ZIP"
       );
     %>
 
@@ -38,15 +37,18 @@
           <%- item.briefing_title %>
         </td>
 
-        <td class="listing-title">
-          <%- item.title %>
+        <td class="listing-description">
+          <%- item.description || item.title %>
+
+          <span class="visually-hidden listing-title">
+            <%- item.title %>
+          </span>
+
           <span class="visually-hidden listing-artefact_type">
             <%- item.artefact_type %>
           </span>
-        </td>
 
-        <td class="listing-format">
-          <span class="badge text-bg-light border">
+          <span class="visually-hidden listing-format">
             <%- item.format %>
           </span>
         </td>
@@ -59,7 +61,7 @@
           <a class="btn btn-sm btn-outline-primary"
              href="<%- item.path %>"
              download>
-             Download
+             ZIP
           </a>
         </td>
       </tr>

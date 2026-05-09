@@ -1,7 +1,10 @@
 ---
 title: "CVD incidence in Barbados, 2010-2023"
-author: Ian Hambleton
 subtitle: "BNR briefing, 2023"
+author: Ian Hambleton
+description: "How often strokes and heart attacks occurred in the population"
+image: "/assets/images/listings/listing_mangrove_reflections.webp"
+image-alt: "BNR surveillance briefing illustration."
 title-block-style: none
 date: 7-Nov-2025
 date-format: DD MMM YYYY

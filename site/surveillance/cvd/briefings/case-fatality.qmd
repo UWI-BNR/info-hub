@@ -1,7 +1,10 @@
-﻿---
+---
 title: "CVD case fatality in Barbados, 2012-2023"
-author: Ian Hambleton
 subtitle: "BNR briefing, 2023"
+author: Ian Hambleton
+description: "Deaths before discharge after stroke and heart attack"
+image: "/assets/images/listings/listing_reef_shallows.webp"
+image-alt: "BNR surveillance briefing illustration."
 title-block-style: none
 date: 14-Nov-2025
 date-format: DD MMM YYYY
@@ -45,21 +48,9 @@ This briefing focuses on three questions:
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### How has incidence changed?
+### How high is case fatality?
 
-How have age-standardised stroke and heart attack incidence rates change in Barbados between 2010 and 2023?
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-4}
-::: {.card .border-0 .shadow-sm .h-100 .bg-light}
-::: {.card-body}
-
-### What is missed by hospital data alone?
-
-How much do incidence estimates change when death-certificate-only events are included alongside hospital-registered events?
+What proportion of hospital-registered strokes and heart attacks resulted in death?
 
 :::
 :::
@@ -69,9 +60,21 @@ How much do incidence estimates change when death-certificate-only events are in
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body}
 
-### Where are rates highest?
+### Has case fatality changed?
 
-How do incidence patterns differ by event type, sex, and time period?
+How did case fatality change between 2012–2013 and 2022–2023?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### Are patterns different by sex?
+
+How do case-fatality patterns differ between women and men, and between strokes and heart attacks?
 
 :::
 :::
@@ -83,7 +86,7 @@ How do incidence patterns differ by event type, sex, and time period?
 
 ## Headline findings
 
-Age-standardised incidence rates per 100,000 population, 2023.
+Age-adjusted modelled case-fatality probability, 2022–2023.
 
 ::: {.grid .mb-4}
 
@@ -91,10 +94,10 @@ Age-standardised incidence rates per 100,000 population, 2023.
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body .text-center .p-3}
 
-<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
-<p class="display-6 fw-semibold mb-1">141</p>
-<p class="mb-0 small">per 100,000</p>
+<p class="display-6 fw-semibold mb-1">29%</p>
+<p class="mb-0 small">case fatality</p>
 
 :::
 :::
@@ -104,10 +107,10 @@ Age-standardised incidence rates per 100,000 population, 2023.
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body .text-center .p-3}
 
-<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
-<p class="display-6 fw-semibold mb-1">198</p>
-<p class="mb-0 small">per 100,000</p>
+<p class="display-6 fw-semibold mb-1">30%</p>
+<p class="mb-0 small">case fatality</p>
 
 :::
 :::
@@ -117,10 +120,10 @@ Age-standardised incidence rates per 100,000 population, 2023.
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body .text-center .p-3}
 
-<p class="text-uppercase fw-semibold small text-muted mb-1">Women </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
-<p class="display-6 fw-semibold mb-1">90</p>
-<p class="mb-0 small">per 100,000</p>
+<p class="display-6 fw-semibold mb-1">16%</p>
+<p class="mb-0 small">case fatality</p>
 
 :::
 :::
@@ -130,10 +133,10 @@ Age-standardised incidence rates per 100,000 population, 2023.
 ::: {.card .border-0 .shadow-sm .h-100 .bg-light}
 ::: {.card-body .text-center .p-3}
 
-<p class="text-uppercase fw-semibold small text-muted mb-1">Men </p>
+<p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
-<p class="display-6 fw-semibold mb-1">145</p>
-<p class="mb-0 small">per 100,000</p>
+<p class="display-6 fw-semibold mb-1">14%</p>
+<p class="mb-0 small">case fatality</p>
 
 :::
 :::
@@ -147,7 +150,7 @@ Age-standardised incidence rates per 100,000 population, 2023.
 
 ```{=html}
 <p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
-  Case fatality is higher in women for  
+  Higher Case fatality among women for  
   <span style="color: rgb(164, 22, 26);">Heart attacks</span>
   and  
   <span style="color: rgb(139, 111, 180);">Strokes</span>
@@ -187,8 +190,8 @@ The briefing outputs are available in three formats.
 |---|:---:|---|
 | PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_case_fatality_2023_v1.pdf){download="bnr_cvd_case_fatality_2023_v1.pdf"} |
 | View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_case_fatality_2023_v1_slides.html){target="_blank" rel="noopener"} |
-| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_incidence_2023_v1/workbook/bnr_cvd_case_fatality_2023_v1.xlsx){download="bnr_cvd_case_fatality_2023_v1.xlsx"} |
-| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_incidence_2023_v1/bnr_cvd_case_fatality_2023_v1.zip){download="bnr_cvd_case_fatality_2023_v1.zip"} |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/workbook/bnr_cvd_case_fatality_2023_v1.xlsx){download="bnr_cvd_case_fatality_2023_v1.xlsx"} |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip){download="bnr_cvd_case_fatality_2023_v1.zip"} |
 
 
 ## Suggested Citation
