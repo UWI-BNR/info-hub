@@ -5,6 +5,7 @@ project:
     - "assets/images/listings/*"
     - assets/fonts/**
     - downloads/files/**
+    - downloads/**
   pre-render:
     - python scripts/build_download_catalogue.py
   output-dir: _site
@@ -110,10 +111,11 @@ website:
               href: surveillance/cvd/briefings/case-incidence.qmd
             - text: "CVD case fatality, 2023"
               href: surveillance/cvd/briefings/case-fatality.qmd
-
+        - text: "Annual tabulations"
+          href: surveillance/cvd/tabulations/
         - section: "Downloads"
           contents:
-            - text: "Data & downloads"
+            - text: "Data Downloads"
               href: downloads/index.qmd
 
     - id: methods

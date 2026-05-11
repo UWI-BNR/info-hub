@@ -403,3 +403,49 @@ body.bnr-briefing-page .quarto-document-content h3 {
   width: 32%;
   max-width: 22rem;
 }
+
+
+
+
+/* ------------------------------------------------------------
+   BNR tabulations
+   Minimal CSS for Quarto-readable Markdown tables.
+
+   Tables are wrapped in Bootstrap's built-in .table-responsive
+   class in the QMD, so no custom table-width rules are needed.
+   ------------------------------------------------------------ */
+
+/* Prevent wide tables from forcing the Quarto content column
+   into the right-hand navigation area. */
+#quarto-document-content {
+  min-width: 0;
+}
+
+/* Remove bottom gap inside Bootstrap responsive table wrappers */
+.table-responsive > table {
+  margin-bottom: 0;
+}
+
+/* ------------------------------------------------------------
+   BNR year tabsets
+   Keeps annual tab labels on one horizontal row.
+   ------------------------------------------------------------ */
+
+.bnr-year-tabs > .nav-tabs {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.15rem;
+}
+
+.bnr-year-tabs > .nav-tabs .nav-item {
+  flex: 0 0 auto;
+}
+
+.bnr-year-tabs > .nav-tabs .nav-link {
+  white-space: nowrap;
+}
+
+.bnr-year-tabs > .tab-content {
+  margin-top: 1rem;
+}

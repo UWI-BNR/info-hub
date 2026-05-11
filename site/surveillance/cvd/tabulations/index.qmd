@@ -1,0 +1,324 @@
+---
+title: "CVD annual tabulations"
+format:
+  html:
+    page-layout: article
+---
+
+<br>
+Reference tables from the Barbados National Registry CVD surveillance.
+
+::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
+
+### Download these tables
+
+These tables are designed as a companion to our CVD briefings. Use this button to download an `xlsx` version of all tables.
+
+::: {.bnr-utility-links}
+[Tabulations workbook](../../../downloads/annual/cvd/latest/workbook/workbook_cvd_annual_tabulations.xlsx){.btn .btn-outline-primary target="_blank" rel="noopener"}
+:::
+
+:::
+
+
+
+## Table 1. Annual event count by year 
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_01_event_counts_new.md >}}
+
+:::
+
+## Table 2. Weekly event count by year
+
+These tables show weekly counts of CVD events by event type. Select a year to view the corresponding weekly tabulation.
+
+::: {.panel-tabset .bnr-year-tabs}
+
+### 2023
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2023.md >}}
+
+:::
+
+### 2022
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2022.md >}}
+
+:::
+
+### 2021
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2021.md >}}
+
+:::
+
+### 2020
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2020.md >}}
+
+:::
+
+### 2019
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2019.md >}}
+
+:::
+
+### 2018
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2018.md >}}
+
+:::
+
+### 2017
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2017.md >}}
+
+:::
+
+### 2016
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2016.md >}}
+
+:::
+
+### 2015
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2015.md >}}
+
+:::
+
+### 2014
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2014.md >}}
+
+:::
+
+### 2013
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2013.md >}}
+
+:::
+
+### 2012
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2012.md >}}
+
+:::
+
+### 2011
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2011.md >}}
+
+:::
+
+### 2010
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_weekly_counts_2010.md >}}
+
+:::
+
+:::
+
+
+## Table 3. Event percentage among younger and older adults
+
+This table shows the percentage distribution of stroke and AMI events among younger adults and older adults, by event type, sex, and time period.
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_03_age70_percent.md >}}
+
+:::
+
+
+## Table 4. Event percentage by 10-year age group
+
+This table shows the percentage distribution of stroke and AMI events across 10-year age groups, by event type, sex, and time period.
+
+::: {.bnr-markdown-table .bnr-table-center}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_04_age10_percent.md >}}
+
+:::
+
+
+## Table 5. CVD incidence rates by year
+
+These tables show crude and age-adjusted CVD incidence rates by event type, sex, and DCO inclusion status. Select a year to view the corresponding annual tabulation.
+
+::: {.panel-tabset .bnr-year-tabs}
+
+### 2023
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2023.md >}}
+
+:::
+
+### 2022
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2022.md >}}
+
+:::
+
+### 2021
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2021.md >}}
+
+:::
+
+### 2020
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2020.md >}}
+
+:::
+
+### 2019
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2019.md >}}
+
+:::
+
+### 2018
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2018.md >}}
+
+:::
+
+### 2017
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2017.md >}}
+
+:::
+
+### 2016
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2016.md >}}
+
+:::
+
+### 2015
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2015.md >}}
+
+:::
+
+### 2014
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2014.md >}}
+
+:::
+
+### 2013
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2013.md >}}
+
+:::
+
+### 2012
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2012.md >}}
+
+:::
+
+### 2011
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2011.md >}}
+
+:::
+
+### 2010
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rates_2010.md >}}
+
+:::
+
+:::
+
+
+
+## Table 6. CVD incidence rate ratios
+
+This table shows incidence rate ratios for hospital events across 2-year time periods, compared with 2010-2011.
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_06_incidence_rate_ratios.md >}}
+
+:::
+
+IRR = incidence rate ratio. Confidence limits are 95% limits. Each 2-year time period is compared with 2010-2011.
+
+
+
+
+## Table 7. CVD in-hospital case fatality
+
+This table shows in-hospital case fatality percentages for CVD events by 2-year time period, event type, and sex.
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_07_case_fatality.md >}}
+
+:::
+
+
+

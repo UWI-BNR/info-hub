@@ -375,7 +375,7 @@ label var lbsrr_etype "Lower bound of ratio of adjusted rate - by CVD event type
 label var ubsrr_etype "Upper bound of ratio of adjusted rate - by CVD event type"
 
 save `bnr_incidence', replace
-
+save "${data}/bnrcvd-incidence.dta", replace 
 
 ** ---------------------------------------------
 ** (7) ANALYTICS 1 - EVENT to DCO GAP OVER TIME
@@ -601,8 +601,8 @@ save `bnr_incidence2', replace
 replace yaxis = yaxis+2 if yaxis>=9 & yaxis<=14 
 replace yaxis = yaxis+1 if yaxis>=3 & yaxis<=8 
 label define yaxis_ 1 "Stroke (vs. AMI)" 2 "CVD in Men (vs. Women)"      ///
-            4 "2012-2013 (vs. 2010-11)" 5 "2014-2015" 6 "2016-2017" 7 "2018-2019" 8 "2020-2021" 9 "2022-2023"     ///
-            11 "2012-2013" 12 "2014-2015" 13 "2016-2017" 14 "2018-2019" 15 "2020-2021" 16 "2022-2023"
+            4 "Stroke<br>2012-2013 (vs. 2010-11)" 5 "Stroke<br>2014-2015" 6 "Stroke<br>2016-2017" 7 "Stroke<br>2018-2019" 8 "Stroke<br>2020-2021" 9 "Stroke<br>2022-2023"     ///
+            11 "AMI<br>2012-2013" 12 "AMI<br>2014-2015" 13 "AMI<br>2016-2017" 14 "AMI<br>2018-2019" 15 "AMI<br>2020-2021" 16 "AMI<br>2022-2023"
 label values yaxis yaxis_ 
 
 ** Save dataset for use in:
@@ -612,7 +612,10 @@ label var srr "Age-standardised rate ratios"
 label var lb_srr "Lower bound of SRR"
 label var ub_srr "Upper bound of SRR"
 format srr lb_srr ub_srr %5.3f 
-**save "${tempdata}/bnrcvd-incidence-rate-ratios.dta", replace 
+
+** Save dataset for use in:
+** bnrcvd-2023-tabulations.do
+    save "${tempdata}/bnrcvd-incidence-rate-ratios.dta", replace 
 
 ** Visual CI tweaks (inaccurate but improve the visual and do not affect the story)
 replace lb_srr = lb_srr - 0.05 if yaxis==1

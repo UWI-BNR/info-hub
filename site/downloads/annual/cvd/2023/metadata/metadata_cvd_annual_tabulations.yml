@@ -1,0 +1,34 @@
+product_id: cvd_annual_tabulations
+product_type: annual_tabulation
+domain: cvd
+release_year: 2023
+generated_on: "2026-05-11"
+stata_job: "build_cvd_annual_tabulations.do"
+workbook: "workbook/workbook_cvd_annual_tabulations.xlsx"
+tables:
+  - id: table_01
+    title: "Annual event count by year"
+    file: "tables/table_cvd_annual_01_event_counts.md"
+  - id: table_02
+    title: "Weekly event count by year"
+    files: "tables/table_cvd_annual_02_weekly_counts_[year].md"
+  - id: table_03
+    title: "Event percentage among younger and older adults"
+    file: "tables/table_cvd_annual_03_age70_percent.md"
+  - id: table_04
+    title: "Event percentage by 10-year age group"
+    file: "tables/table_cvd_annual_04_age10_percent.md"
+  - id: table_05
+    title: "CVD incidence rates by year"
+    files: "tables/table_cvd_annual_05_incidence_rates_[year].md"
+  - id: table_06
+    title: "CVD incidence rate ratios"
+    file: "tables/table_cvd_annual_06_incidence_rate_ratios.md"
+  - id: table_07
+    title: "CVD in-hospital fatality percentage"
+    file: "tables/table_cvd_annual_07_case_fatality.md"
+  - id: table_08
+    title: "Median in-hospital length of stay"
+    file: "tables/table_cvd_annual_08_length_of_stay.md"
+notes:
+  public_note: "Annual tabulations generated from approved BNR cardiovascular disease surveillance outputs."
