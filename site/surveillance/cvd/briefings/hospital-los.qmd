@@ -1,0 +1,217 @@
+---
+title: "Hospital length of stay in Barbados, 2010-2023"
+subtitle: "BNR briefing, 2023"
+author: Ian Hambleton
+description: "How long people stayed in hospital after stroke and heart attack events"
+image: "/assets/images/listings/listing_mangrove_reflections.webp"
+image-alt: "BNR surveillance briefing illustration."
+title-block-style: none
+date: 13-Nov-2025
+date-format: DD MMM YYYY
+categories:
+  - CVD
+  - Briefing
+  - Length of stay
+  - 2023
+sidebar: cvd
+format:
+  html:
+    body-classes: bnr-briefing-page
+    toc: true
+    toc-depth: 2
+page-layout: full
+---
+
+::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
+
+### View other formats
+
+Use the slide deck for meetings, teaching, or stakeholder briefings. The PDF version is designed for printing, sharing, and citation.
+
+::: {.bnr-utility-links}
+[Open PDF briefing](pdf/bnr_cvd_los_2023_v1.pdf){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Open presentation slides](slides/bnr_cvd_los_2023_v1_slides.html){.btn .btn-outline-primary target="_blank" rel="noopener"}
+:::
+
+:::
+
+## Why This Matters | What We Did
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_los_2023_v1/why-this-matters.qmd >}}
+
+This briefing focuses on three questions:
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### How long do patients stay?
+
+What is the typical length of hospital stay after stroke and heart attack events in Barbados?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### Has length of stay changed?
+
+How has median length of stay changed between 2010 and 2023, by event type and sex?
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body}
+
+### What does this mean for bed demand?
+
+How do changes in typical length of stay translate into extra pressure on hospital bed capacity?
+
+:::
+:::
+:::
+
+:::
+
+
+
+## Headline findings
+
+Length of stay turns CVD surveillance data into service-planning intelligence: it shows not only how many patients were admitted, but how long hospital beds were typically occupied.
+
+::: {.grid .mb-4}
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke<br>2022-2023</p>
+<p class="display-6 fw-semibold mb-1">10 days</p>
+<p class="mb-0 small">median hospital stay</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">AMI<br>2022-2023</p>
+<p class="display-6 fw-semibold mb-1">6 days</p>
+<p class="mb-0 small">median hospital stay</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke<br>in 2023</p>
+<p class="display-6 fw-semibold mb-1">1,372</p>
+<p class="mb-0 small">extra typical bed-days<br>vs 2014</p>
+
+:::
+:::
+:::
+
+::: {.g-col-6 .g-col-md-3}
+::: {.card .border-0 .shadow-sm .h-100 .bg-light}
+::: {.card-body .text-center .p-3}
+
+<p class="text-uppercase fw-semibold small text-muted mb-1">Stroke + AMI<br>in 2023</p>
+<p class="display-6 fw-semibold mb-1">1,684</p>
+<p class="mb-0 small">extra typical bed-days<br>vs 2014</p>
+
+:::
+:::
+:::
+
+:::
+
+In 2022-2023, the typical hospital stay after stroke was longer than after AMI. Stroke also accounted for most of the additional typical bed-day pressure in 2023, compared with the 2014 baseline.
+
+
+
+## Median length of stay
+
+```{=html}
+<p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+  Typical hospital stay gives a service-planning view of
+  <span style="color: rgb(139, 111, 180);">stroke</span>
+  and
+  <span style="color: rgb(164, 22, 26);">heart attack</span>
+  burden
+</p>
+```
+
+::: {.card .border-0 .shadow-sm .mb-4}
+::: {.card-body}
+
+![](../../../downloads/files/briefings/cvd_los_2023_v1/figures/cvd_los_median.png){fig-alt="Figure showing median length of hospital stay for stroke and heart attack events in Barbados from 2010 to 2023." width="100%"}
+
+[Open full-size median length-of-stay figure](../../../downloads/files/briefings/cvd_los_2023_v1/figures/cvd_los_median.png){.small target="_blank" rel="noopener"}
+
+:::
+:::
+
+## Key Messages | What This Mean
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_los_2023_v1/what-this-means1.qmd >}}
+
+
+
+## Extra typical bed-days
+
+```{=html}
+<p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+  Small changes in typical length of stay can accumulate into
+  <span style="color: rgb(4, 81, 116);">visible bed demand</span>
+</p>
+```
+
+::: {.card .border-0 .shadow-sm .mb-4}
+::: {.card-body}
+
+![](../../../downloads/files/briefings/cvd_los_2023_v1/figures/cvd_los_bed_demand.png){fig-alt="Figure showing extra typical bed-days for stroke and heart attack events in Barbados from 2014 to 2023." width="100%"}
+
+[Open full-size bed-demand figure](../../../downloads/files/briefings/cvd_los_2023_v1/figures/cvd_los_bed_demand.png){.small target="_blank" rel="noopener"}
+
+:::
+:::
+
+## Translating Hospital Stays into Demand for Hospital Beds
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_los_2023_v1/translating.qmd >}}
+
+## Key Messages | What This Means
+
+{{< include ../../../_shared/snippets/briefings/cvd/cvd_los_2023_v1/what-this-means2.qmd >}}
+
+
+
+## Download the outputs
+
+The briefing outputs are available in four formats.
+
+| Description |  | Download |
+|---|:---:|---|
+| PDF briefing for reading or printing | {{< fa file-pdf >}} | [Download PDF briefing](pdf/bnr_cvd_los_2023_v1.pdf){download="bnr_cvd_los_2023_v1.pdf"} |
+| View and use our briefing slide deck | {{< fa display >}} | [Open briefing slides](slides/bnr_cvd_los_2023_v1_slides.html){target="_blank" rel="noopener"} |
+| Excel workbook with data and metadata worksheets | {{< fa file-excel >}} | [Download Excel workbook](../../../downloads/files/briefings/cvd_los_2023_v1/workbook/bnr_cvd_los_2023_v1.xlsx){download="bnr_cvd_los_2023_v1.xlsx"} |
+| Full public output package, including DTA, CSV, YML, PNG, workbook, and README files | {{< fa file-zipper >}} | [Download ZIP package](../../../downloads/files/briefings/cvd_los_2023_v1/bnr_cvd_los_2023_v1.zip){download="bnr_cvd_los_2023_v1.zip"} |
+
+
+## Suggested Citation
+
+> Barbados National Registry. *Hospital length of stay in Barbados, 2010-2023: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/hospital-los.html. Accessed: [insert date accessed].

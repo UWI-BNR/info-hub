@@ -834,51 +834,211 @@ table (year2) (etype sex), ///
 
 
 
+
+
+** --------------------------------------------------------------
+** TABLE 8: Median length of hospital stay
+**          - Event type
+**          - Year
+**          - Sex
+**
+** Website output:
+**   - Quarto-readable Markdown
+**   - One short table per year
+**
+** Workbook output:
+**   - XLSX sheet with original richer Stata table structure
+**
+** Design:
+**   - Year handled by Quarto tabset
+**   - Rows: event type + sex
+**   - Columns: median, lower quartile, upper quartile
+** --------------------------------------------------------------
+
+use "${tempdata}/bnrcvd-length-of-stay.dta", clear
+
+keep if cf == 1
+keep if inrange(yoe, 2010, 2023)
+
+label var sex         "Patient sex"
+label var etype       "CVD event type"
+label var los_primary "Length of stay"
+
+** --------------------------------------------------------------
+** Website Markdown exports
+** --------------------------------------------------------------
+
+forval yr = 2010(1)2023 {
+
+    preserve
+
+        keep if yoe == `yr'
+
+        ** Flat row dimension for Markdown
+        egen event_sex = group(etype sex), label
+        label var event_sex "Event group"
+
+        collect clear
+
+        table (event_sex), ///
+            statistic(median los_primary) ///
+            statistic(p25 los_primary) ///
+            statistic(p75 los_primary) ///
+            nototals ///
+            nformat(%5.0f)
+
+        ** Put the three LOS measures into columns
+        collect layout (event_sex) (result)
+
+        ** Public-facing column labels
+        collect label levels result ///
+            median "Median" ///
+            p25    "Lower quartile" ///
+            p75    "Upper quartile", modify
+
+        collect style header event_sex, title(label) level(label)
+        collect style header result, title(hide) level(label)
+
+        collect style cell, nformat(%5.0f)
+        collect style cell, halign(center)
+        collect style cell cell_type[column-header], halign(center)
+        collect style cell cell_type[row-header], halign(center)
+
+        collect export ///
+            "`table_dir'/table_cvd_annual_08_length_of_stay_`yr'.md", ///
+            replace as(md)
+
+    restore
+}
+
+
+** --------------------------------------------------------------
+** Workbook export
+**
+** XLSX can retain the original richer Stata table structure.
+** --------------------------------------------------------------
+
+capture drop year
+gen byte year = 2024 - yoe if inrange(yoe, 2010, 2023)
+labmask year, values(yoe)
+
+label var year "Year"
+
+table (year) (etype sex), ///
+    statistic(median los_primary) ///
+    statistic(p25 los_primary) ///
+    statistic(p75 los_primary) ///
+    nototals ///
+    nformat(%5.0f) ///
+    export("`workbook'", modify as(xlsx) sheet("Table8", replace)) ///
+    note(Prepared by Ian Hambleton on ${todayiso}, for the Barbados National Registry) ///
+    title(Table 8. CVD Typical Median In-Hospital Length of Stay, 2010 to 2023)
+
+
 /*
+** --------------------------------------------------------------
+** TABLE 8: Median length of hospital stay
+**          - Event type
+**          - Year
+**          - Sex
+**
+** Website output:
+**   - Quarto-readable Markdown
+**
+** Workbook output:
+**   - XLSX sheet with original richer Stata table structure
+**
+** Design:
+**   - Flat row dimensions: year + LOS measure
+**   - Flat column dimension: event type + sex
+**   - No nested Markdown column headers
+** --------------------------------------------------------------
+
+use "${tempdata}/bnrcvd-length-of-stay.dta", clear
+
+keep if cf == 1
+keep if inrange(yoe, 2010, 2023)
+
+capture drop year
+gen byte year = 2024 - yoe if inrange(yoe, 2010, 2023)
+labmask year, values(yoe)
+
+label var year       "Year"
+label var sex        "Patient sex"
+label var etype      "CVD event type"
+label var los_primary "Length of stay"
+
+** --------------------------------------------------------------
+** Markdown export
+**
+** Flatten the nested etype sex column structure for Markdown.
+** The result dimension is placed in the rows:
+**   Year | Measure | Stroke female | Stroke male | ...
+** --------------------------------------------------------------
+
+preserve
+
+    egen event_sex = group(etype sex), label
+    label var event_sex ""
+
+    collect clear
+
+    table (year) (event_sex), ///
+        statistic(median los_primary) ///
+        statistic(p25 los_primary) ///
+        statistic(p75 los_primary) ///
+        nototals ///
+        nformat(%5.0f)
+
+    ** Put the three LOS measures into rows rather than nested headers.
+    collect layout (year#result) (event_sex)
+
+    ** Relabel the result levels for clearer public display.
+    collect label levels result ///
+        median "Median" ///
+        p25    "Lower quartile" ///
+        p75    "Upper quartile", modify
+
+    collect label dim result "Measure", modify
+
+    ** Header styling for Quarto-readable Markdown.
+    collect style header year, title(label) level(label)
+    collect style header result, title(label) level(label)
+    collect style header event_sex, title(hide) level(label)
+
+    collect style cell, nformat(%5.0f)
+    collect style cell, halign(center)
+    collect style cell cell_type[column-header], halign(center)
+    collect style cell cell_type[row-header], halign(center)
+
+    collect export ///
+        "`table_dir'/table_cvd_annual_08_length_of_stay.md", ///
+        replace as(md)
+
+restore
 
 
 ** --------------------------------------------------------------
-** TABLE 8: Median Length of Stay
-**          - Event Type
-**          - Event Type & Year
-**          - Broad age groups (<70 yrs, 70 yrs and older)
+** Workbook export
+**
+** XLSX can retain the original richer Stata table structure.
 ** --------------------------------------------------------------
-use "${tempdata}/bnrcvd-length-of-stay.dta", clear 
-keep if cf==1 
-        #delimit ; 
-        gen year = 1 if yoe == 2023;  replace year = 2 if yoe == 2022;  replace year = 3 if yoe == 2021;
-        replace year = 4 if yoe == 2020;  replace year = 5 if yoe == 2019;  replace year = 6 if yoe == 2018;
-        replace year = 7 if yoe == 2017;  replace year = 8 if yoe == 2016;  replace year = 9 if yoe == 2015;
-        replace year = 10 if yoe == 2014; replace year = 11 if yoe == 2013; replace year = 12 if yoe == 2012;
-        replace year = 13 if yoe == 2011; replace year = 14 if yoe == 2010;
-        #delimit cr 
-        labmask year, values(yoe)
-        label var year "CVD Event Year"
-        label var sex "Patient sex" 
-        label var etype "CVD Event Type"
 
-        #delimit ; 
-        table (year) (etype sex) , 
-                statistic(median los_primary)  
-                statistic(p25 los_primary)  
-                statistic(p75 los_primary)  
-                nformat(%5.0f)
-                export("`table_dir'/table_cvd_annual_08_length_of_stay.md", replace as(md))
-                note(Prepared by Ian Hambleton on ${todayiso}, for the Barbados National Registry)            
-                title(Table 8. CVD Typical (Median) In-Hospital Length of Stay (2010 to 2023))
-                ;
-        table (year) (etype sex) , 
-                statistic(median los_primary)  
-                statistic(p25 los_primary)  
-                statistic(p75 los_primary)  
-                nformat(%5.0f)
-                export("`workbook'", modify as(xlsx) sheet("Table8", replace))
-                note(Prepared by Ian Hambleton on ${todayiso}, for the Barbados National Registry)            
-                title(Table 8. CVD Typical (Median) In-Hospital Length of Stay (2010 to 2023))
-                ;
-        #delimit cr 
+table (year) (etype sex), ///
+    statistic(median los_primary) ///
+    statistic(p25 los_primary) ///
+    statistic(p75 los_primary) ///
+    nototals ///
+    nformat(%5.0f) ///
+    export("`workbook'", modify as(xlsx) sheet("Table8", replace)) ///
+    note(Prepared by Ian Hambleton on ${todayiso}, for the Barbados National Registry) ///
+    title(Table 8. CVD Typical Median In-Hospital Length of Stay, 2010 to 2023)
+
+
+
 
 */
+
 ** --------------------------------------------------------------
 ** Write annual tabulations metadata
 ** --------------------------------------------------------------

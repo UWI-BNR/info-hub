@@ -31,6 +31,11 @@ import sys
 #   The central downloads page lists ZIP packages only.
 #   Briefing-level manifests may still contain README, XLSX, CSV, DTA, YML,
 #   PNG, HTML, PDF, and other records for release inventory purposes.
+#
+# Preview-safety rule:
+#   The output file is written only when its content has changed. This prevents
+#   Quarto preview from entering a live-reload loop when this script is run as
+#   a pre-render step.
 # ---------------------------------------------------------------------------
 
 
@@ -39,6 +44,26 @@ SITE_ROOT = SCRIPT_PATH.parent.parent
 
 BRIEFINGS_DIR = SITE_ROOT / "downloads" / "files" / "briefings"
 OUTPUT_FILE = SITE_ROOT / "downloads" / "downloads.yml"
+
+
+def write_text_if_changed(path, content):
+    """
+    Write text only when the file content has actually changed.
+
+    Returns:
+        True  if the file was written
+        False if the existing file was already identical
+    """
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    if path.exists():
+        old_content = path.read_text(encoding="utf-8")
+        if old_content == content:
+            return False
+
+    path.write_text(content, encoding="utf-8", newline="\n")
+    return True
 
 
 def coerce_value(value):
@@ -238,13 +263,24 @@ def yaml_value(value, indent=2):
     return f'"{escaped}"'
 
 
-def write_catalogue(rows):
-    """Write the flattened site-wide downloads catalogue."""
-    OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
+def sort_order_value(value):
+    """Return a safe integer sort order."""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 9999
 
+
+def write_catalogue(rows):
+    """
+    Write the flattened site-wide downloads catalogue.
+
+    Returns:
+        True  if downloads.yml was written
+        False if downloads.yml was already up to date
+    """
     if not rows:
-        OUTPUT_FILE.write_text("[]\n", encoding="utf-8")
-        return
+        return write_text_if_changed(OUTPUT_FILE, "[]\n")
 
     fields = [
         "title",
@@ -275,7 +311,8 @@ def write_catalogue(rows):
                 f"  {field}: {yaml_value(row.get(field, ''), indent=4)}"
             )
 
-    OUTPUT_FILE.write_text("\n".join(output_lines) + "\n", encoding="utf-8")
+    output_text = "\n".join(output_lines) + "\n"
+    return write_text_if_changed(OUTPUT_FILE, output_text)
 
 
 def build_catalogue():
@@ -289,7 +326,8 @@ def build_catalogue():
         print("")
         print("WARNING: Briefings folder was not found.")
         print("Writing empty downloads.yml.")
-        write_catalogue([])
+        was_written = write_catalogue([])
+        print("Catalogue status: written" if was_written else "Catalogue status: unchanged")
         return 0
 
     manifest_paths = sorted(BRIEFINGS_DIR.glob("*/downloads.yml"))
@@ -300,7 +338,8 @@ def build_catalogue():
         print("")
         print("WARNING: No briefing-level downloads.yml files were found.")
         print("Writing empty downloads.yml.")
-        write_catalogue([])
+        was_written = write_catalogue([])
+        print("Catalogue status: written" if was_written else "Catalogue status: unchanged")
         return 0
 
     rows = []
@@ -359,7 +398,7 @@ def build_catalogue():
             size_bytes = 0
             size = ""
 
-            if href and actual_path.exists():
+            if actual_path.exists():
                 size_bytes = actual_path.stat().st_size
                 size = format_size(size_bytes)
 
@@ -389,15 +428,17 @@ def build_catalogue():
             row.get("updated", ""),
             row.get("surveillance_area", ""),
             row.get("briefing_id", ""),
-            int(row.get("sort_order", 9999)),
+            sort_order_value(row.get("sort_order", 9999)),
+            row.get("title", ""),
         )
     )
 
-    write_catalogue(rows)
+    was_written = write_catalogue(rows)
 
     print("")
-    print(f"Download catalogue written: {OUTPUT_FILE}")
-    print(f"Download rows written:      {len(rows)}")
+    print(f"Download catalogue checked: {OUTPUT_FILE}")
+    print(f"Download rows found:        {len(rows)}")
+    print("Catalogue status: written" if was_written else "Catalogue status: unchanged")
 
     return 0
 

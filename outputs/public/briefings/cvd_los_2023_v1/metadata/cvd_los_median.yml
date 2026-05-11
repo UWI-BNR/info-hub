@@ -1,0 +1,135 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_los_median
+
+files:
+  dta: datasets/cvd_los_median.dta
+  csv: datasets/cvd_los_median.csv
+  yml: metadata/cvd_los_median.yml
+
+metadata:
+  title: |-
+    BNR-CVD Length of In-Hospital Stay (Aggregated)
+  version: |-
+    v1
+  created: |-
+    2026-05-06
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Annual median length of stay
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2010-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by period
+  description: |-
+    Annual median length of stay in days.
+  limitations: |-
+    Based on hospital CVD events
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: indicator
+    type: float
+    format: %9.0g
+    label: |-
+      unique summary measure indicator
+    value_label: 
+    categories: |-
+      
+
+  - name: sex
+    type: float
+    format: %8.0g
+    label: |-
+      female=1, male=2, both=3
+    value_label: sex_
+    categories: |-
+      1=Female; 2=Male; 3=Both; 
+
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event type (stroke=1, AMI=2)
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 3=Both; 
+
+  - name: year2
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event year (yyyy)
+    value_label: year2_
+    categories: |-
+      0=All years; 1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 
+
+  - name: los50
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 50th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los25
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 25th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los75
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 75th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los05
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 5th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los95
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 95th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: nevent
+    type: long
+    format: %9.0g
+    label: |-
+      Number of events
+    value_label: 
+    categories: |-
+      
+

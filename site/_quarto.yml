@@ -4,10 +4,14 @@ project:
     - assets/images/**
     - "assets/images/listings/*"
     - assets/fonts/**
-    - downloads/files/**
     - downloads/**
   pre-render:
     - python scripts/build_download_catalogue.py
+  render:
+    - "*.qmd"
+    - "**/*.qmd"
+    - "!downloads/annual/cvd/latest/tables/*.md"
+    - "!downloads/annual/cvd/**/*.md"
   output-dir: _site
   preview:
     port: 4200
@@ -111,6 +115,8 @@ website:
               href: surveillance/cvd/briefings/case-incidence.qmd
             - text: "CVD case fatality, 2023"
               href: surveillance/cvd/briefings/case-fatality.qmd
+            - text: "CVD hospital stay, 2023"
+              href: surveillance/cvd/briefings/hospital-los.qmd
         - text: "Annual tabulations"
           href: surveillance/cvd/tabulations/
         - section: "Downloads"

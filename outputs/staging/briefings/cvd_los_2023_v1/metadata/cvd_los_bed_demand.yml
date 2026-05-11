@@ -1,0 +1,135 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_los_bed_demand
+
+files:
+  dta: datasets/cvd_los_bed_demand.dta
+  csv: datasets/cvd_los_bed_demand.csv
+  yml: metadata/cvd_los_bed_demand.yml
+
+metadata:
+  title: |-
+    BNR-CVD Extra typical bed days (Aggregated)
+  version: |-
+    v1
+  created: |-
+    2026-05-06
+  creator: |-
+    Ian Hambleton, Analyst
+  registry: |-
+    BNR-CVD
+  content: |-
+    Annual typical bed-days (based on median stay in days)
+  tier: |-
+    Public aggregate output
+  temporal: |-
+    2010-2023
+  spatial: |-
+    Barbados
+  unit_of_analysis: |-
+    Event type by period
+  description: |-
+    Annual typical bed days, based on median length of stay in days.
+  limitations: |-
+    Based on hospital CVD events
+  language: |-
+    en
+  software: |-
+    StataNow 19
+  rights: |-
+    CC BY 4.0 Attribution
+  source: |-
+    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+  contact: |-
+    Barbados National Registry
+
+variables:
+  - name: indicator
+    type: float
+    format: %9.0g
+    label: |-
+      unique summary measure indicator
+    value_label: 
+    categories: |-
+      
+
+  - name: etype
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event type (stroke=1, AMI=2)
+    value_label: etype_
+    categories: |-
+      1=Stroke; 2=AMI; 
+
+  - name: yoe
+    type: float
+    format: %9.0g
+    label: |-
+      CVD event year (yyyy)
+    value_label: 
+    categories: |-
+      
+
+  - name: los50
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 50th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los25
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 25th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los75
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 75th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los05
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 5th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: los95
+    type: float
+    format: %9.0g
+    label: |-
+      Length of hospital stay: 95th percentile
+    value_label: 
+    categories: |-
+      
+
+  - name: nevent
+    type: long
+    format: %9.0g
+    label: |-
+      Number of events
+    value_label: 
+    categories: |-
+      
+
+  - name: exdays
+    type: float
+    format: %9.0g
+    label: |-
+      Extra typical bed-days per year compared to 2014
+    value_label: 
+    categories: |-
+      
+

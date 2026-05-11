@@ -322,3 +322,124 @@ This table shows in-hospital case fatality percentages for CVD events by 2-year 
 
 
 
+## Table 8. CVD in-hospital length of stay
+
+These tables show median in-hospital length of stay, with lower and upper quartiles, by event type and sex. Select a year to view the corresponding annual tabulation.
+
+::: {.panel-tabset .bnr-year-tabs}
+
+### 2023
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2023.md >}}
+
+:::
+
+### 2022
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2022.md >}}
+
+:::
+
+### 2021
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2021.md >}}
+
+:::
+
+### 2020
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2020.md >}}
+
+:::
+
+### 2019
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2019.md >}}
+
+:::
+
+### 2018
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2018.md >}}
+
+:::
+
+### 2017
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2017.md >}}
+
+:::
+
+### 2016
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2016.md >}}
+
+:::
+
+### 2015
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2015.md >}}
+
+:::
+
+### 2014
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2014.md >}}
+
+:::
+
+### 2013
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2013.md >}}
+
+:::
+
+### 2012
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2012.md >}}
+
+:::
+
+### 2011
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2011.md >}}
+
+:::
+
+### 2010
+
+::: {.table-responsive}
+
+{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_08_length_of_stay_2010.md >}}
+
+:::
+
+:::
+
+

@@ -820,7 +820,7 @@ file write `briefingyml' "" _n
 
 file write `briefingyml' "build:" _n
 file write `briefingyml' "  build_date: `c(current_date)'" _n
-file write `briefingyml' "  analysis_script: scripts/stata/briefings/cvd_cases_2023/`briefing_name'.do" _n
+file write `briefingyml' "  analysis_script: scripts/stata/briefings/cvd_incidence_2023/`briefing_name'.do" _n
 
 file close `briefingyml'
 
