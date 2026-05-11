@@ -3,7 +3,7 @@ title: "Hospital length of stay in Barbados, 2010-2023"
 subtitle: "BNR briefing, 2023"
 author: Ian Hambleton
 description: "How long people stayed in hospital after stroke and heart attack events"
-image: "/assets/images/listings/listing_mangrove_reflections.webp"
+image: "/assets/images/listings/listing_sugarcane_field.webp"
 image-alt: "BNR surveillance briefing illustration."
 title-block-style: none
 date: 13-Nov-2025
