@@ -297,7 +297,7 @@ website:
             # - text: "Rejected"
             #   href: operations/data-governance/rejected-or-deferred-requests.qmd
 
-        - section: "Release"
+        - section: "Data Releases"
           contents:
             # - text: "Review"
             #   href: operations/release-archive/pre-publication-review.qmd
@@ -311,23 +311,36 @@ website:
             #   href: operations/release-archive/archiving-completed-releases.qmd
             # - text: "Changelog"
             #   href: operations/release-archive/operational-changelog.qmd
+            - section: "CVD dataset"
+              contents:
+                - text: "Overview"
+                  href: operations/cvd-dataset/index.qmd
+                - text: "Data dictionary"
+                  href: operations/cvd-dataset/cvd-datadictionary.qmd
+                - text: "Metadata"
+                  href: operations/cvd-dataset/cvd-metadata.qmd
+                - text: "Data quality"
+                  href: operations/cvd-dataset/cvd-dataquality.qmd
+            - section: "Hypertension dataset"
+              contents:
+                - text: "XX"
+                  href: operations/hypertension-dataset/index.qmd
+            - section: "Diabetes dataset"
+              contents:
+                - text: "XX"
+                  href: operations/diabetes-dataset/index.qmd
 
-        - section: "Refit" 
+        - section: "The BNR Refit" 
           contents:
             - text: "Summary"
-              href: operations/refit-record/index.qmd
-            - text: "Full"
-              href: operations/refit-record/findings.qmd
-            # - text: "Issues"
-            #   href: operations/refit-record/issues-identified-before-refit.qmd
-            # - text: "Decisions"
-            #   href: operations/refit-record/refit-decisions.qmd
-            # - text: "Changes"
-            #   href: operations/refit-record/what-changed-and-why.qmd
-            # - text: "Constraints"
-            #   href: operations/refit-record/known-legacy-constraints.qmd
-            # - text: "Deferred"
-            #   href: operations/refit-record/items-deferred-for-future-phases.qmd
+              href: operations/bnr-refit/index.qmd
+            - text: "Audit Summary"
+              href: operations/bnr-refit/audit-summary.qmd
+            - text: "Audit Full"
+              href: operations/bnr-refit/audit-full.qmd
+            - text: "CVD dataset rebuild"
+              href: operations/bnr-refit/cvd-data-rebuild.qmd  
+
 
     - id: technical
       title: "Technical"

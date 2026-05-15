@@ -852,18 +852,14 @@ file write `downloads_yml' "surveillance_area: CVD" _n
 file write `downloads_yml' "period: 2010-2023" _n
 file write `downloads_yml' "release_date: `release_date'" _n
 file write `downloads_yml' "" _n
-
 file write `downloads_yml' "title: |-" _n
 file write `downloads_yml' "  Hospital length of stay in Barbados, 2010-2023" _n
 file write `downloads_yml' "" _n
-
 file write `downloads_yml' "description: |-" _n
 file write `downloads_yml' "  Public aggregate output package for the BNR CVD length of stay briefing." _n
 file write `downloads_yml' "" _n
-
 file write `downloads_yml' "briefing_page: surveillance/cvd/briefings/hospital-los.qmd" _n
 file write `downloads_yml' "" _n
-
 file write `downloads_yml' "downloads:" _n
 
 * Full ZIP package

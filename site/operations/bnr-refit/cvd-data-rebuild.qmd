@@ -1,0 +1,230 @@
+﻿---
+title: "CVD Dataset rebuild 2025"
+description: "Our Data Preparation Process"
+keywords:
+  - BNR
+  - Barbados National Registry
+  - surveillance
+  - chronic disease
+  - methods
+
+author:
+  - name: "Barbados National Registry"
+    affiliation: "George Alleyne Chronic Disease Research Centre"
+
+date: "2025-10-30"
+date-format: DD-MMM-YYYY
+date-modified: last-modified
+
+categories:
+  - methods
+  - surveillance
+  - BNR
+  - CVD
+  - data
+
+# Rendering behaviour
+format:
+  html:
+    toc: true
+    toc-title: "On this page"
+    toc-depth: 3
+    number-sections: false
+    smooth-scroll: true
+    code-fold: true
+    code-tools: false
+    anchor-sections: true
+    link-external-newwindow: true
+
+# Page behaviour
+title-block-style: none
+page-layout: article
+toc-location: right
+
+# Search/listing metadata
+listing-date-sort: "date desc"
+
+# Editorial status metadata
+status: "draft"
+owner: "BNR"
+reviewer: ""
+approved-by: ""
+approval-date: ""
+version: "0.1"
+
+# BNR workflow metadata
+bnr-section: "methods"
+bnr-subsection: ""
+bnr-page-type: "guidance"
+bnr-audience:
+  - public
+bnr-data-sensitivity: "public"
+bnr-last-reviewed: ""
+bnr-next-review-due: ""
+
+# Optional: prevent code from executing unless deliberately enabled
+execute:
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+---
+
+
+## Re-creating the Historical CVD Dataset (2009–2023)
+
+The historical Barbados National Registry (BNR) cardiovascular dataset, covering 2009–2023, was rebuilt from scratch to establish a definitive, auditable record of confirmed cardiovascular events. Over time, multiple parallel datasets, partial updates, and undocumented processing scripts had led to inconsistencies, duplication, and incomplete metadata, making it impossible to verify lineage or ensure analytical reproducibility. The refit process therefore began by consolidating all available source files from the registry’s data archive, indexing and de-duplicating them, and validating file contents against hospital admissions and national death registrations. Using a “data forensics” approach, every data source was traced, verified, and re-imported through a single controlled workflow. Standardised naming conventions, tiered access levels, and structured YAML metadata files were introduced to document each dataset’s scope, provenance, and version. This end-to-end rebuild restored data integrity, simplified ongoing maintenance, and created a transparent foundation for future CVD surveillance and analysis.
+
+::: {.callout-note title="CVD Dataset re-creation: details" collapse="true"}
+
+## Cumulative CVD Dataset Creation Process (2009–2023)
+
+### Overview
+The aim was to rebuild a single, verified **cumulative cardiovascular dataset (2009–2023)** combining event data and death data. This work corrected earlier inconsistencies, removed duplicates, and established a version-controlled dataset to support the BNR Refit project.
+
+
+### Step-by-Step Process Flow
+
+### Stage 1 — Prepare Event Data (2022 and 2023)
+
+1. **Export 2022 data** from REDCap using the *Stata export* option.  
+2. **Create and save** a Stata event dataset for 2022.  
+3. **Review all records** flagged as *ineligible* or *duplicate* to confirm correct classification.  
+4. **Remove** confirmed ineligible and duplicate cases.  
+5. **Repeat steps 1–4** for **2023** data.  
+6. **Combine** the cleaned 2022 and 2023 event datasets to form a single “eligible” dataset.  
+> Note: Historically, each year has been cleaned independently, but both years were processed together for this cumulative build. **In the future, our advice is to move to monthly extracts / data releases**.
+
+
+### Stage 2 — Prepare Death Data (2022 + 2023)
+
+7. **Export death records** from REDCap using the *Excel export* option for both 2022 and 2023.  
+8. **Merge the Excel files manually** into a single workbook.  
+9. **Import the workbook into Stata**, apply variable formatting, and save as a Stata dataset.  
+10. **Clean all variables**, remove duplicates, and create a final cleaned death dataset.
+
+
+### Stage 3 — Match and Merge
+
+11. **Prepare both datasets** (events and deaths) for merging by standardising identifiers and variable names.  
+12. **Match and merge** death records with event records to identify deaths among known cases.  
+13. **Verify merged data** for duplicates and inconsistencies.
+
+
+### Stage 4 — Append to Historical Dataset
+
+14. **Retrieve the existing cumulative events dataset (2009–2021).**  
+15. **Clean remaining variables** to align variable names, formats, and identifiers with the 2022–2023 dataset structure, which inturn aligns with the current REDCap database structure.  
+16. **Append the 2022 + 2023 data** to the historical dataset, producing a new **cumulative identifiable dataset (2009–2023).**  
+17. **Save and archive** this dataset as the *single verified cumulative record* for cardiovascular disease in Barbados.
+
+
+### Dataset Governance Links
+According to the audit findings:
+
+- This cumulative dataset now serves as the **official, version-controlled record** for all future analyses.  
+- Each future update should follow a **formal sign-off process** with version numbering and a release log.  
+- Cleaning and analysis must remain **separate** to preserve data integrity and reproducibility.  
+- Future cumulative releases should occur monthly to encourage/ensure timely data Quality Control.
+
+
+### Process Summary Diagram
+
+``` {mermaid}
+graph TD
+A[Data Export] --> B["Clean (per year)"]
+B --> C["Combine Years (2022 + 2023 incidence)"]
+C --> D["Clean Deaths (2022 + 2023)"]
+D --> E["Merge Incidence + Deaths"]
+E --> F["Append to Cumulative (2009–2023)"]
+F --> G["Verify + Archive"]
+```
+
+:::
+
+
+::: {.callout-note title="Case Example 1: Tracing Missing Identifiers in Historical BNR Datasets" collapse="true"}
+
+## **Case Example 1:** Tracing Missing Identifiers in Historical BNR Datasets
+
+This investigation, completed in **October 2025**, is a clear example of the **data forensics** work that has underpinned the BNR Refit. It's an example of how we identified and corrected a long-standing technical issue that had potentially affected the integrity of the cumulative cardiovascular dataset.
+
+### The Problem We Identified
+
+During the reconstruction of the **2009–2023 BNR cardiovascular (CVD) dataset**, we noticed that several historical files contained large amounts of missing information for key identifiable variables — **date of birth (DOB), names, and national registration numbers**. This problem was not consistent across years or disease types, with the **stroke registry** showing the highest level of missingness.
+
+### What We Did
+The BNR team shared with us their documentation and data repository, named `DM/`and stored in a secure, encrypted cloud folder using the zero-knowledge platform `sync.com`. We used this folder as our source for all BNR documentation and data. The `DM/` folder has a cumulative filesize of 121GB (as of 31-Oct-2025) and has has no associated documentation of its contents or structure. We downloaded the entire `DM/` resource to a fully encrypted local PC, indexed it's contents using the open source file-search software `Everything 1.4.1.1026`. 
+
+Over time we narrowed a potential historical dataset record to an undocumented folder deep in the `DM/` folder structure:
+
+`.\DM\Stata\Stata do files\Statistics\analysis\dataset_preperations\BNR_for_research_use\versions\`
+
+This folder contained subfolders from `version04` to `version09`, each representing data containing 1 additional year of BNR data. Each version folder contained around one-dozen stroke datasets, without associated metadata (for a total of around 80 - datasets). We recreated this environment locally, and reviewed associated Stata `.do` files (`1b_prep_BNR-S_09-14.do` through `1b_prep_BNR-S_09-20.do`) to understand the genesis of each dataset.   
+
+### Our Findings
+
+Our line-by-line review of these Stata algorithms — highlighted the origin of the problem:
+
+> The 2018 cumulative dataset (version 07) had been built using an **anonymised base file** rather than the fully identifiable version from 2009–2017.  
+
+> Each subsequent year’s dataset was appended to this anonymised file, propagating the loss of identifiers into every new cumulative dataset thereafter.
+
+This meant that, by 2020, identifiers such as DOB, last name, and national registration number were systematically missing in many stroke cases — making it impossible to link events or deaths reliably across years. 
+
+### **A simple problem, a simple fix, but a problem that persisted through to 2023 because of inadquate QC and undocumented processing.**
+
+:::
+
+
+::: {.callout-note title="Case Example 2: Duplicate Datasets in the BNR Document Repository" collapse="true"}
+
+## **Case Example 2:** Duplicate Datasets in the BNR Document Repository  
+To explore the structure and duplication of Stata datasets in the `DM/` directory, which—at 121GB as of 31 October 2025—represents the single largest uncurated data resource in the BNR archive.
+
+
+### The Problem We Identified
+
+The `DM/` directory has accumulated datasets from multiple generations of BNR work since 2008, with minimal accompanying documentation and no indexing. Its purpose, subfolder structure, and internal logic are undocumented. To assess the value and recoverability of these data, we began a forensic-style audit of its contents. Below we report the start of this process.
+
+We began by downloading the entire `DM/` directory to a fully encrypted local PC to ensure secure offline processing. Using the open-source file indexing software *Everything v1.4.1.1026*, we created a searchable index of all file types and then extracted location and naming metadata for all Stata datasets (`*.dta`) across all subfolders.
+
+
+### Our Findings
+
+A total of **5,452 datasets** were identified. Of these, 3,553 datasets (65%) were exact filename duplicates — leaving 1,889 unique dataset filenames (35%) across the entire resource.
+
+The distribution of duplicates per dataset ranged from one duplicate (two total occurrences) up to 36 duplicates of a single filename. This highlights the extensive replication and versioning that has occurred over time, generally without easily traceable documentation.[^1]
+
+[^1]: Traceability to some extent is possible using associated Stata `.do` files, when they exist, and when they can be located. Without clear linkage documentation between `.do` file and `.dta`, this potentential audit source becomes laborious at best.
+
+The figure below summarises the number of duplicated file occurrences:
+
+
+***Figure.** Distribution of the number of duplicate Stata datasets within the DM/ folder.*
+
+![Distribution of duplicate dataset filenames in the DM/ directory](../../assets/images/filename-distribution.jpg)  
+
+***note:** "10" represents 10 or more instances of a single dataset.*
+
+
+### Folder-Level Observations
+
+- **415 separate subfolders** contained one or more Stata datasets.  
+- Individual folder contents ranged from a single file to almost 400 datasets, generally without associated metadata.  
+- The duplication pattern suggests uncontrolled versioning, likely from repeated manual backups, merges between CVD components, and untracked output directories from prior analyses.
+
+
+### Interpretation
+
+This review provides a quantitative baseline for the degree of redundancy and uncontrolled data growth within the BNR file ecosystem. It suggests that more than half of the cumulative dataset volume is likely duplicated data, implying substantial inefficiencies in storage and high risk for analytic error.
+
+The findings underscore the need for:
+
+- Creation of a definitive BNR historical data record,
+- A centralised data versioning protocol, and 
+- Consolidation of duplicate datasets (when necessary, resource allowing) via hash-based file comparison  
+
+These results also illustrate the challenge faced during the BNR Refit in reconstructing the definitive historical dataset series, and serve as a concrete example of the legacy issues that must be resolved before reliable trend analysis or open data release can proceed.
+
+:::
