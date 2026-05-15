@@ -132,73 +132,34 @@ website:
       contents:
         - text: "Home"
           href: methods/index.qmd
-
         - section: "About"
           contents:
-            # - text: "Purpose"
-            #   href: methods/about/purpose-of-methods.qmd
-            # - text: "Production"
-            #   href: methods/about/how-bnr-produces-statistics.qmd
-            # - text: "Updates"
-            #   href: methods/about/how-methods-are-updated.qmd
-            # - text: "Versions"
-            #   href: methods/about/version-history.qmd
-
-        - section: "Indicators"
+            # - text: "XXX"
+            #   href: methods/about/XXX.qmd
+        - section: "Our Indicators"
           contents:
-            # - text: "CVD"
-            #   href: methods/indicators/cardiovascular-disease.qmd
-            # - text: "Hypertension"
-            #   href: methods/indicators/hypertension.qmd
-            # - text: "Diabetes"
-            #   href: methods/indicators/diabetes.qmd
-            # - text: "Cancer"
-            #   href: methods/indicators/cancer.qmd
-            # - text: "Mortality"
-            #   href: methods/indicators/mortality.qmd
-            # - text: "Primary care"
-            #   href: methods/indicators/primary-care-monitoring.qmd
-
-        - section: "Sources"
+            # - text: "XXX"
+            #   href: methods/indicators/XXX.qmd
+        - section: "Our Methods"
+          contents:
+            # - text: "XXX"
+            #   href: methods/indicators/XXX.qmd
+        - section: "Data Sources"
           contents:
             # - text: "Overview"
             #   href: methods/data-sources/overview.qmd
-            # - text: "Definitions"
-            #   href: methods/data-sources/case-definitions.qmd
-            # - text: "Inclusion"
-            #   href: methods/data-sources/inclusion-exclusion-rules.qmd
-            # - text: "Denominators"
-            #   href: methods/data-sources/population-denominators.qmd
-            # - text: "Age standardisation"
-            #   href: methods/data-sources/age-groups-and-standardisation.qmd
-            # - text: "Linkage"
-            #   href: methods/data-sources/linkage-and-record-matching.qmd
-
-        - section: "Data use"
+        - section: "Apply to use data"
           contents:
             - text: "Data Sharing Agreement"
               href: methods/responsible-data-use/dsa-methods.qmd
             # - text: "Confidentiality"
             #   href: methods/responsible-data-use/confidentiality.qmd
-            # - text: "Sharing"
-            #   href: methods/responsible-data-use/what-data-can-be-shared.qmd
-            # - text: "Requests"
-            #   href: methods/responsible-data-use/requesting-bnr-data.qmd
-            # - text: "Disclosure"
-            #   href: methods/responsible-data-use/disclosure-control.qmd
-            # - text: "Decisions"
-            #   href: methods/responsible-data-use/data-sharing-decisions.qmd
-
-        - section: "Interpret"
-          contents:
+      #  - section: "How to Interpret"
+      #    contents:
             # - text: "Rates"
             #   href: methods/interpretation/rates-and-trends.qmd
-            # - text: "Completeness"
-            #   href: methods/interpretation/data-quality-and-completeness.qmd
-            # - text: "Limits"
-            #   href: methods/interpretation/known-limitations.qmd
-            # - text: "Responsible use"
-            #   href: methods/interpretation/using-bnr-data-responsibly.qmd
+        - text: "Future Pages"
+          href: methods/future-pages.qmd
 
     - id: operations
       title: "Operations"
@@ -209,126 +170,72 @@ website:
         - text: "Home"
           href: operations/index.qmd
 
-        - section: "Model"
+        - section: "Operating Model & Governance"
           contents:
             # - text: "Purpose"
             #   href: operations/operating-model/purpose-of-manual.qmd
-            # - text: "Roles"
-            #   href: operations/operating-model/roles-and-responsibilities.qmd
-            # - text: "Cycle"
-            #   href: operations/operating-model/routine-reporting-cycle.qmd
-            # - text: "Workflow"
-            #   href: operations/operating-model/workflow-overview.qmd
-            # - text: "Handover"
-            #   href: operations/operating-model/handover-checklist.qmd
 
         - section: "Pre-REDCap"
           contents:
             # - text: "Ascertainment"
             #   href: operations/pre-redcap/case-ascertainment.qmd
-            # - text: "Source review"
-            #   href: operations/pre-redcap/source-document-review.qmd
-            # - text: "Minimum data"
-            #   href: operations/pre-redcap/minimum-information-required.qmd
-            # - text: "Abstraction"
-            #   href: operations/pre-redcap/abstraction-preparation.qmd
-            # - text: "Unclear records"
-            #   href: operations/pre-redcap/unclear-or-incomplete-source-information.qmd
-            # - text: "Pre-entry QC"
-            #   href: operations/pre-redcap/pre-entry-quality-checks.qmd
 
         - section: "REDCap"
           contents:
             # - text: "Data entry"
             #   href: operations/redcap/entering-registry-data.qmd
-            # - text: "Editing"
-            #   href: operations/redcap/editing-existing-records.qmd
-            # - text: "Required fields"
-            #   href: operations/redcap/managing-required-fields.qmd
-            # - text: "REDCap QC"
-            #   href: operations/redcap/redcap-data-quality-checks.qmd
-            # - text: "Queries"
-            #   href: operations/redcap/queries-and-corrections.qmd
-            # - text: "Export"
-            #   href: operations/redcap/exporting-approved-datasets.qmd
 
         - section: "Post-REDCap"
           contents:
             # - text: "Freeze"
             #   href: operations/post-redcap/dataset-freeze.qmd
-            # - text: "Versioning"
-            #   href: operations/post-redcap/dataset-versioning.qmd
-            # - text: "Stata jobs"
-            #   href: operations/post-redcap/running-stata-analytics-jobs.qmd
-            # - text: "Logs"
-            #   href: operations/post-redcap/reviewing-logs.qmd
-            # - text: "Outputs"
-            #   href: operations/post-redcap/checking-generated-tables-and-figures.qmd
-            # - text: "QC outputs"
-            #   href: operations/post-redcap/reviewing-quality-control-outputs.qmd
 
-        - section: "Data Governance"
+        - section: "Data Methods"
           contents:
+            - text: "Statistical Analysis Plan"
+              href: operations/data/sap.qmd
+            - text: "Surveillance Metrics"
+              href: operations/data/sap-metrics.qmd
             - text: "Data Sharing Guide"
-              href: operations/data-governance/sharing-guide.qmd
+              href: operations/data/data-governance/sharing-guide.qmd
             - text: "Data Sharing Process"
-              href: operations/data-governance/sharing-sop.qmd
+              href: operations/data/data-governance/sharing-sop.qmd
             - text: "Data Release"
-              href: operations/data-governance/dataset-release.qmd
+              href: operations/data/data-governance/dataset-release.qmd
             - text: "Data Dissemination"
-              href: operations/data-governance/dataset-dissemination.qmd
-            - text: "Data Access Statement"
-              href: operations/data-governance/data-access-statement.qmd
-            - text: "Data Access Agreement"
-              href: operations/data-governance/dsa-om.qmd
-            - text: "Data Trust Framework"
-              href: operations/data-governance/dtrust.qmd
-
-            # - text: "Requests"
-            #   href: operations/data-governance/assessing-data-requests.qmd
-            # - text: "Sharing"
-            #   href: operations/data-governance/data-sharing-agreement.qmd
-            # - text: "Confidentiality"
-            #   href: operations/data-governance/confidentiality-rules.qmd
-            # - text: "Data trust"
-            #   href: operations/data-governance/data-trust-agreement.qmd
-            # - text: "Approvals"
-            #   href: operations/data-governance/recording-approvals-and-conditions.qmd
-            # - text: "Rejected"
-            #   href: operations/data-governance/rejected-or-deferred-requests.qmd
-
-        - section: "Data Releases"
-          contents:
-            # - text: "Review"
-            #   href: operations/release-archive/pre-publication-review.qmd
-            # - text: "Sign-off"
-            #   href: operations/release-archive/release-sign-off.qmd
-            # - text: "Corrections"
-            #   href: operations/release-archive/handling-corrections.qmd
-            # - text: "Republish"
-            #   href: operations/release-archive/republishing-updated-outputs.qmd
-            # - text: "Archive"
-            #   href: operations/release-archive/archiving-completed-releases.qmd
-            # - text: "Changelog"
-            #   href: operations/release-archive/operational-changelog.qmd
-            - section: "CVD dataset"
+              href: operations/data/data-governance/dataset-dissemination.qmd
+            - section: "Data Governance"
               contents:
-                - text: "Overview"
-                  href: operations/cvd-dataset/index.qmd
-                - text: "Data dictionary"
-                  href: operations/cvd-dataset/cvd-datadictionary.qmd
-                - text: "Metadata"
-                  href: operations/cvd-dataset/cvd-metadata.qmd
-                - text: "Data quality"
-                  href: operations/cvd-dataset/cvd-dataquality.qmd
-            - section: "Hypertension dataset"
+                - text: "Data Access Statement"
+                  href: operations/data/data-governance/data-access-statement.qmd
+                - text: "Data Access Agreement"
+                  href: operations/data/data-governance/dsa-om.qmd
+                - text: "Data Trust Framework"
+                  href: operations/data/data-governance/dtrust.qmd
+              # - text: "Requests"
+              #   href: operations/data/data-governance/assessing-data-requests.qmd
+            - section: "Data Releases"
               contents:
-                - text: "XX"
-                  href: operations/hypertension-dataset/index.qmd
-            - section: "Diabetes dataset"
-              contents:
-                - text: "XX"
-                  href: operations/diabetes-dataset/index.qmd
+                # - text: "Review"
+                #   href: operations/data/release-archive/pre-publication-review.qmd
+                - section: "CVD dataset"
+                  contents:
+                    - text: "Overview"
+                      href: operations/data/cvd-dataset/index.qmd
+                    - text: "Data dictionary"
+                      href: operations/data/cvd-dataset/cvd-datadictionary.qmd
+                    - text: "Metadata"
+                      href: operations/data/cvd-dataset/cvd-metadata.qmd
+                    - text: "Data quality"
+                      href: operations/data/cvd-dataset/cvd-dataquality.qmd
+                - section: "Hypertension dataset"
+                  contents:
+                    - text: "XX"
+                      href: operations/data/hypertension-dataset/index.qmd
+                - section: "Diabetes dataset"
+                  contents:
+                    - text: "XX"
+                      href: operations/data/diabetes-dataset/index.qmd
 
         - section: "The BNR Refit" 
           contents:
@@ -341,6 +248,9 @@ website:
             - text: "CVD dataset rebuild"
               href: operations/bnr-refit/cvd-data-rebuild.qmd  
 
+        - text: "Future Pages"
+          href: operations/future-pages.qmd
+
 
     - id: technical
       title: "Technical"
@@ -350,62 +260,64 @@ website:
       contents:
         - text: "Home"
           href: technical/index.qmd
+        - text: "Future Pages"
+          href: technical/future-pages.qmd
 
         - section: "How-to"
           contents:
-            - text: "Local setup"
-              href: technical/how-to/set-up-local-development.qmd
-            - text: "Start editing"
-              href: technical/how-to/start-an-editing-session.qmd
-            - text: "Check Git"
-              href: technical/how-to/check-git-status-before-commit.qmd
-            - text: "Run briefing"
-              href: technical/how-to/run-static-briefing.qmd
-            - text: "Add briefing"
-              href: technical/how-to/add-new-static-briefing.qmd
-            - text: "Copy bundle"
-              href: technical/how-to/copy-output-bundle.qmd
-            - text: "Public ZIP"
-              href: technical/how-to/create-public-zip-bundle.qmd
-            - text: "Render PDF"
-              href: technical/how-to/render-pdf-briefing.qmd
-            - text: "Render site"
-              href: technical/how-to/render-site.qmd
-            - text: "Publish site"
-              href: technical/how-to/publish-site.qmd
+      #      - text: "Local setup"
+      #        href: technical/how-to/set-up-local-development.qmd
+      #      - text: "Start editing"
+      #        href: technical/how-to/start-an-editing-session.qmd
+      #      - text: "Check Git"
+      #        href: technical/how-to/check-git-status-before-commit.qmd
+      #      - text: "Run briefing"
+      #        href: technical/how-to/run-static-briefing.qmd
+      #      - text: "Add briefing"
+      #        href: technical/how-to/add-new-static-briefing.qmd
+      #      - text: "Copy bundle"
+      #        href: technical/how-to/copy-output-bundle.qmd
+      #      - text: "Public ZIP"
+      #        href: technical/how-to/create-public-zip-bundle.qmd
+      #      - text: "Render PDF"
+      #        href: technical/how-to/render-pdf-briefing.qmd
+      #      - text: "Render site"
+      #        href: technical/how-to/render-site.qmd
+      #      - text: "Publish site"
+      #        href: technical/how-to/publish-site.qmd
 
         - section: "Reference"
           contents:
-            - text: "Repository"
-              href: technical/reference/repository-structure.qmd
-            - text: "Compute"
-              href: technical/reference/compute-layer-stata.qmd
-            - text: "Output contract"
-              href: technical/reference/output-contract.qmd
-            - text: "Naming"
-              href: technical/reference/naming-rules.qmd
-            - text: "Quarto layer"
-              href: technical/reference/quarto-publication-layer.qmd
-            - text: "PDF route"
-              href: technical/reference/pdf-briefing-route.qmd
-            - text: "GitHub Pages"
-              href: technical/reference/github-pages-deployment.qmd
-            - text: "Data boundary"
-              href: technical/reference/confidential-data-boundary.qmd
+      #      - text: "Repository"
+      #        href: technical/reference/repository-structure.qmd
+      #      - text: "Compute"
+      #        href: technical/reference/compute-layer-stata.qmd
+      #      - text: "Output contract"
+      #        href: technical/reference/output-contract.qmd
+      #      - text: "Naming"
+      #        href: technical/reference/naming-rules.qmd
+      #      - text: "Quarto layer"
+      #        href: technical/reference/quarto-publication-layer.qmd
+      #      - text: "PDF route"
+      #        href: technical/reference/pdf-briefing-route.qmd
+      #      - text: "GitHub Pages"
+      #        href: technical/reference/github-pages-deployment.qmd
+      #      - text: "Data boundary"
+      #        href: technical/reference/confidential-data-boundary.qmd
 
         - section: "Fixes"
           contents:
-            - text: "Quarto"
-              href: technical/troubleshooting/quarto-render-errors.qmd
-            - text: "PDF"
-              href: technical/troubleshooting/pdf-render-errors.qmd
-            - text: "Missing files"
-              href: technical/troubleshooting/missing-output-files.qmd
-            - text: "Broken links"
-              href: technical/troubleshooting/broken-download-links.qmd
-            - text: "Stata paths"
-              href: technical/troubleshooting/stata-path-errors.qmd
-            - text: "Git cleanup"
-              href: technical/troubleshooting/git-status-cleanup.qm1
+      #      - text: "Quarto"
+      #        href: technical/troubleshooting/quarto-render-errors.qmd
+      #      - text: "PDF"
+      #        href: technical/troubleshooting/pdf-render-errors.qmd
+      #      - text: "Missing files"
+      #        href: technical/troubleshooting/missing-output-files.qmd
+      #      - text: "Broken links"
+      #        href: technical/troubleshooting/broken-download-links.qmd
+      #      - text: "Stata paths"
+      #        href: technical/troubleshooting/stata-path-errors.qmd
+      #      - text: "Git cleanup"
+      #        href: technical/troubleshooting/git-status-cleanup.qm1
 
 # file touch1

@@ -154,7 +154,7 @@ Minor wording fixes do not normally require a changelog entry.
 
 ## Current agreement template
 
-{{< include ../../_shared/data-sharing-agreement-body.qmd >}}
+{{< include ../../../_shared/data-sharing-agreement-body.qmd >}}
 
 ## Internal pre-release checklist
 

@@ -1,0 +1,60 @@
+schema: bnr_release_control_v1
+briefing_id: cvd_incidence_2023_v1
+briefing_name: cvd_incidence_2023
+output_type: briefing
+domain: cvd
+surveillance_area: CVD
+registry: BNR-CVD
+geography: Barbados
+period: 2023
+target_year: 2023
+baseline_start: 2010
+baseline_end: 2022
+release_date: 2026-05-15
+analysis_script: scripts/stata/briefings/cvd_incidence_2023/cvd_incidence_2023.do
+
+title: |-
+  Barbados CVD incidence rates, 2010-2023
+
+short_title: |-
+  Incidence in Barbados
+
+description: |-
+  Public aggregate output package for the BNR CVD incidence briefing.
+
+limitations: |-
+  Counts describe hospital-ascertained cases and death-certified cases only.
+
+data_note: |-
+  Aggregate annual age-standardised CVD incidence rates and incidence rate ratios.
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+briefing_page: surveillance/cvd/briefings/case-incidence.qmd
+released_datasets: cvd_incidence_annual cvd_incidence_rate_ratios
+released_figures: cvd_incidence_annual cvd_incidence_rate_ratios
+
+create_workbook: 1
+create_zip: 1
+list_zip: 1
+workbook_file: bnr_cvd_incidence_2023_v1.xlsx
+
+workbook_sheets:
+  - dataset_id: cvd_incidence_annual
+    data_sheet: cvd_incidence_annual
+    metadata_sheet: meta_cvd_incidence_annual
+    variable_sheet: vars_cvd_incidence_annual
+  - dataset_id: cvd_incidence_rate_ratios
+    data_sheet: cvd_incidence_rate_ratios
+    metadata_sheet: meta_cvd_incidence_rate_ratios
+    variable_sheet: vars_cvd_incidence_rate_ratios
+
+zip_title: |-
+  Full public output package
+
+zip_description: |-
+  Complete public download package containing datasets, figures, metadata, workbook, and README file.

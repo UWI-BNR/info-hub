@@ -1,15 +1,17 @@
 schema: bnr_download_manifest_v1
 briefing_id: cvd_los_2023_v1
+briefing_name: cvd_los_2023
+output_type: briefing
 domain: cvd
 surveillance_area: CVD
-period: 2010-2023
-release_date: 2026-05-11
+period: 2023
+release_date: 2026-05-15
 
 title: |-
-  Hospital length of stay in Barbados, 2010-2023
+  Barbados CVD length of stay, 2010-2023
 
 description: |-
-  Public aggregate output package for the BNR CVD length of stay briefing.
+  Public aggregate output package for the BNR CVD length-of-stay briefing.
 
 briefing_page: surveillance/cvd/briefings/hospital-los.qmd
 
@@ -24,113 +26,3 @@ downloads:
       Complete public download package containing datasets, figures, metadata, workbook, and README file.
     include_in_listing: true
     sort_order: 10
-  - id: cvd_los_2023_v1_readme
-    title: README file
-    artefact_type: Documentation
-    format: TXT
-    file: readme.txt
-    href: files/briefings/cvd_los_2023_v1/readme.txt
-    description: |-
-      Plain-text guide to the contents of the public output package.
-    include_in_listing: true
-    sort_order: 20
-  - id: cvd_los_2023_v1_workbook
-    title: Excel workbook
-    artefact_type: Workbook
-    format: XLSX
-    file: workbook/bnr_cvd_los_2023_v1.xlsx
-    href: files/briefings/cvd_los_2023_v1/workbook/bnr_cvd_los_2023_v1.xlsx
-    description: |-
-      Spreadsheet version of the released datasets, with metadata and variable information sheets.
-    include_in_listing: true
-    sort_order: 30
-  - id: cvd_los_median_csv
-    title: Annual length of stay dataset
-    artefact_type: Dataset
-    format: CSV
-    file: datasets/cvd_los_median.csv
-    href: files/briefings/cvd_los_2023_v1/datasets/cvd_los_median.csv
-    description: |-
-      Open machine-readable dataset of median annual CVD length of stay for Barbados, 2010-2023.
-    include_in_listing: true
-    sort_order: 40
-  - id: cvd_los_median_dta
-    title: Annual length of stay dataset, Stata format
-    artefact_type: Dataset
-    format: DTA
-    file: datasets/cvd_los_median.dta
-    href: files/briefings/cvd_los_2023_v1/datasets/cvd_los_median.dta
-    description: |-
-      Stata dataset version of the median annual CVD length of stay data, including labels and dataset notes.
-    include_in_listing: true
-    sort_order: 50
-  - id: cvd_los_median_metadata
-    title: Annual length of stay metadata
-    artefact_type: Metadata
-    format: YML
-    file: metadata/cvd_los_median.yml
-    href: files/briefings/cvd_los_2023_v1/metadata/cvd_los_median.yml
-    description: |-
-      Dataset-level metadata for the median annual CVD length of stay dataset.
-    include_in_listing: true
-    sort_order: 60
-  - id: cvd_los_bed_demand_csv
-    title: Bed day demand dataset
-    artefact_type: Dataset
-    format: CSV
-    file: datasets/cvd_los_bed_demand.csv
-    href: files/briefings/cvd_los_2023_v1/datasets/cvd_los_bed_demand.csv
-    description: |-
-      Open machine-readable dataset of CVD bed day demand .
-    include_in_listing: true
-    sort_order: 70
-  - id: cvd_los_bed_demand_dta
-    title: Bed day demand dataset, Stata format
-    artefact_type: Dataset
-    format: DTA
-    file: datasets/cvd_los_bed_demand.dta
-    href: files/briefings/cvd_los_2023_v1/datasets/cvd_los_bed_demand.dta
-    description: |-
-      Stata dataset version of CVD bed day demand, including labels and dataset notes.
-    include_in_listing: true
-    sort_order: 80
-  - id: cvd_los_bed_demand_metadata
-    title: Bed day demand metadata
-    artefact_type: Metadata
-    format: YML
-    file: metadata/cvd_los_bed_demand.yml
-    href: files/briefings/cvd_los_2023_v1/metadata/cvd_los_bed_demand.yml
-    description: |-
-      Dataset-level metadata for CVD bed day demand.
-    include_in_listing: true
-    sort_order: 90
-  - id: cvd_los_median_figure
-    title: Annual length of stay figure
-    artefact_type: Figure
-    format: PNG
-    file: figures/cvd_los_median.png
-    href: files/briefings/cvd_los_2023_v1/figures/cvd_los_median.png
-    description: |-
-      Figure showing median annual CVD length of stay data.
-    include_in_listing: true
-    sort_order: 100
-  - id: cvd_los_bed_demand_figure
-    title: Bed day demand figure
-    artefact_type: Figure
-    format: PNG
-    file: figures/cvd_los_bed_demand.png
-    href: files/briefings/cvd_los_2023_v1/figures/cvd_los_bed_demand.png
-    description: |-
-      Figure showing age-standardised CVD bed day demand.
-    include_in_listing: true
-    sort_order: 110
-  - id: cvd_los_2023_v1_briefing_metadata
-    title: Briefing-level metadata
-    artefact_type: Metadata
-    format: YML
-    file: metadata/briefing.yml
-    href: files/briefings/cvd_los_2023_v1/metadata/briefing.yml
-    description: |-
-      Briefing-level metadata describing the public CVD length of stay output package.
-    include_in_listing: true
-    sort_order: 120

@@ -1,0 +1,16 @@
+schema: bnr_download_manifest_v1
+briefing_id: cvd_forensics_2025_v1
+briefing_name: cvd_forensics_2025
+output_type: supporting_artefact
+domain: cvd
+surveillance_area: CVD
+period: 2025
+release_date: 2026-05-15
+
+title: |-
+  CVD dataset file-structure audit figure
+
+description: |-
+  Supporting process artefact showing duplicate CVD dataset file instances identified during the BNR refit.
+
+downloads: []

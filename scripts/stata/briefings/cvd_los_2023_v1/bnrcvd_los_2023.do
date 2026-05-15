@@ -1,36 +1,79 @@
 /* 
 * =====================================================================
- DO-FILE:     cvd_los_2023.do
+ DO-FILE:     bnrcvd_los_2023.do
  PROJECT:     BNR info-hub
- PURPOSE:     Recreate the static 2023 CVD length of stay briefing outputs
+ PURPOSE:     Recreate the static 2023 CVD length-of-stay briefing outputs
 
  AUTHOR:      Ian R Hambleton
- VERSION:     v1.0
+ VERSION:     v1.1
 
  NOTES:
-   This DO file creates the approved output bundle for the static
-   2023 CVD length of stay briefing.
+   This DO file is the analyst-owned build file for the 2023 CVD
+   length-of-stay briefing.
 
-   It does not create the final PDF briefing.
-   Publication layout is handled by Quarto.
+   The design principle is:
+
+     One briefing or output package = one analyst-owned DO file.
+
+   This file should contain all briefing-specific analytical work:
+     - loading the prepared CVD analysis dataset;
+     - deriving the released datasets;
+     - applying variable labels and dataset notes;
+     - exporting CSV/DTA files into the staging folder;
+     - exporting PNG figures into the staging folder;
+     - writing a small release-control file for the standard publisher.
+
+   The repeated release machinery is intentionally NOT written out in
+   full here. The final section calls a shared helper DO file which will
+   create package metadata, README, workbook, downloads.yml, public copy,
+   ZIP package, and the website mirror.
+
+   This keeps future briefing builds simpler: a future analyst should
+   copy this file, edit the settings block and the analysis section, and
+   leave the standard release blocks untouched.
+
+ OUTPUT TYPE:
+   output_type = briefing
+
+   The physical release path still uses the historical briefings/ folder
+   name. In this system, that folder should be understood as the standard
+   pathway for versioned public output packages created by Stata jobs.
+   Most are narrative briefings, but the same pathway may also hold
+   supporting artefacts, tabulations, or monitoring outputs. The specific
+   type is recorded in output_type.
 
  OUTPUT BUNDLE:
   STAGING: outputs/staging/briefings/cvd_los_2023_v1/
   PUBLIC:  outputs/public/briefings/cvd_los_2023_v1/
+  SITE:    site/downloads/files/briefings/cvd_los_2023_v1/
 
-  readme.txt
+  Created directly by this DO file:
 
   datasets/
-    XXX
+    cvd_los_median.dta
+    cvd_los_median.csv
+    cvd_los_bed_demand.dta
+    cvd_los_bed_demand.csv
 
   figures/
-    XXX
+    cvd_los_median.png
+    cvd_los_bed_demand.png
+
+  metadata/
+    release_control.yml
+
+  Created later by the standard publish helper:
+
+  readme.txt
+  downloads.yml
+
+  metadata/
+    cvd_los_median.yml
+    cvd_los_bed_demand.yml
+    briefing.yml
 
   workbook/
     bnr_cvd_los_2023_v1.xlsx
-
-  metadata/
-    briefing.yml
 
   ZIP:
     bnr_cvd_los_2023_v1.zip
@@ -38,53 +81,177 @@
 * =====================================================================
 */
 
-* ==============================================================
-* DO NOT TOUCH: INITIALIZE DO FILE 
-* ==============================================================
+
+* ============================================================================
+* DO NOT TOUCH: INITIALIZE DO FILE
+* ============================================================================
+* Keep the top of every briefing DO file predictable. This improves
+* handover, makes logs easier to interpret, and reduces accidental state
+* carried over from an earlier Stata session.
+
 clear all
 set more off
 
-* ==============================================================
-* DO NOT TOUCH:    SET LOCAL PATH LOCATION
-*                  AND LOAD SHARED SETTINGS 
-* ==============================================================
+
+* ============================================================================
+* DO NOT TOUCH: SET LOCAL PROJECT PATH AND LOAD SHARED SETTINGS
+* ============================================================================
+* localpath is the only machine-specific path in this DO file.
+* All other important folders are defined in the shared path/config files.
+*
+* bnr_paths_LOCAL.do:
+*   Defines local repository/output paths such as BNR_STAGING,
+*   BNR_PUBLIC, BNR_PRIVATE_LOGS, and BNR_PRIVATE_WORK.
+*
+* bnrcvd_globals.do:
+*   Defines shared CVD display settings, including graph colours and
+*   other CVD-specific constants.
+
 local localpath "C:/yoshimi-hot/output/analyse-bnr/info-hub"
 do "`localpath'/scripts/stata/config/bnr_paths_LOCAL.do"
 do "`localpath'/scripts/stata/common/bnrcvd_globals.do"
 
 
-
-** ==============================================================
-** EDIT BLOCK A: BRIEFING SETTINGS
-** ==============================================================
+* ============================================================================
+* EDIT BLOCK A: BRIEFING / OUTPUT PACKAGE SETTINGS
+* ============================================================================
 * For a new briefing, start here.
-* Change these local macros before changing the standard release machinery.
+*
+* Future users should usually change this block and the analysis section only.
+* The standard folder setup, release-control writer, and publish helper should
+* remain unchanged unless the BNR release standard itself changes.
+*
+* output_type distinguishes different kinds of public output package while
+* preserving the existing briefings/ physical pathway:
+*
+*   briefing              = narrative public analytical briefing
+*   supporting_artefact   = supporting figure/table/file used by the site
+*   tabulation            = routine table set
+*   monitoring            = QC/process/performance output
+*
+* This output is a narrative public briefing.
+
 local target_year       2023
 local baseline_start    2010
 local baseline_end      2021
+
 local briefing_id       "cvd_los_2023_v1"
 local briefing_name     "cvd_los_2023"
+local output_type       "briefing"
+
+local briefing_title    "Barbados CVD length of stay, 2010-2023"
+local briefing_short    "Length of stay in Barbados"
+local briefing_page     "surveillance/cvd/briefings/hospital-los.qmd"
+
+local surveillance_area "CVD"
+local domain            "cvd"
+local registry          "BNR-CVD"
+local geography         "Barbados"
+local period            "`target_year'"
+
+local briefing_description ///
+    "Public aggregate output package for the BNR CVD length-of-stay briefing."
+
+local briefing_limitations ///
+    "Length of stay is based on hospital-ascertained CVD events only."
+
+local data_note ///
+    "Aggregate hospital-ascertained length-of-stay and bed-day demand outputs."
+
+local rights_note ///
+    "Public release. Cite the Barbados National Registry when reusing."
+
+local contact_note ///
+    "Barbados National Registry."
+
+
+* ----------------------------------------------------------------------------
+* Released artefact names
+* ----------------------------------------------------------------------------
+* output1 and output2 are retained because they are used in the analytical
+* sections below. For future briefings, replace these with clear, stable,
+* lowercase file stems.
+*
+* Each released dataset should be saved as:
+*   datasets/{output}.dta
+*   datasets/{output}.csv
+*
+* Each released figure should be saved as:
+*   figures/{output}.png
+
 local output1           "cvd_los_median"
 local output2           "cvd_los_bed_demand"
 
-* Private log file
+local released_datasets "cvd_los_median cvd_los_bed_demand"
+local released_figures  "cvd_los_median cvd_los_bed_demand"
+
+
+* ----------------------------------------------------------------------------
+* Workbook and download settings
+* ----------------------------------------------------------------------------
+* These settings tell the standard publish helper what convenience artefacts
+* to create after the analysis has finished.
+*
+* create_workbook = 1 creates an XLSX workbook from released DTA datasets.
+* create_zip      = 1 creates bnr_{briefing_id}.zip in public/.
+* list_zip        = 1 lists the ZIP package on the central downloads page.
+*
+* For a supporting artefact with no public ZIP listing, use:
+*   local create_workbook 0
+*   local create_zip      0
+*   local list_zip        0
+
+local create_workbook   1
+local create_zip        1
+local list_zip          1
+
+local workbook_file     "bnr_`briefing_id'.xlsx"
+
+local workbook_dataset1 "cvd_los_median"
+local workbook_data1    "cvd_los_median"
+local workbook_meta1    "meta_cvd_los_median"
+local workbook_vars1    "vars_cvd_los_median"
+
+local workbook_dataset2 "cvd_los_bed_demand"
+local workbook_data2    "cvd_los_bed_demand"
+local workbook_meta2    "meta_cvd_los_bed_demand"
+local workbook_vars2    "vars_cvd_los_bed_demand"
+
+local zip_title ///
+    "Full public output package"
+
+local zip_description ///
+    "Complete public download package containing datasets, figures, metadata, workbook, and README file."
+
+
+* ============================================================================
+* DO NOT TOUCH: OPEN PRIVATE LOG
+* ============================================================================
+* Logs are written outside the public release bundle. They are part of the
+* private audit trail for the build and should not be published.
+
 cap log close
 log using "$BNR_PRIVATE_LOGS/`briefing_name'", replace
 
 
-* ==============================================================
-* DO NOT TOUCH: STANDARD OUTPUT FOLDER SETUP
-* ==============================================================
-* The staging folder is the build area.
-* The public folder is the approved release copy created at the end (see section 10 below)
+* ============================================================================
+* DO NOT TOUCH: STANDARD STAGING FOLDER SETUP
+* ============================================================================
+* The staging folder is the build area for this briefing/output package.
+*
+* The public folder is NOT created here. Public release and website mirroring
+* are handled by the shared publish helper at the end of the DO file.
+*
+* The physical folder name remains briefings/ for continuity with the current
+* BNR publication pathway. The specific kind of output is recorded using the
+* output_type local above.
 
-* STAGING OUTPUT bundle locations
-* Ensure locations exist
 local stagingbriefing "$BNR_STAGING/briefings/`briefing_id'"
 local stagingdatasets "`stagingbriefing'/datasets"
-local stagingfigures "`stagingbriefing'/figures"
+local stagingfigures  "`stagingbriefing'/figures"
 local stagingworkbook "`stagingbriefing'/workbook"
 local stagingmetadata "`stagingbriefing'/metadata"
+
 cap mkdir "$BNR_STAGING/briefings"
 cap mkdir "`stagingbriefing'"
 cap mkdir "`stagingdatasets'"
@@ -92,15 +259,18 @@ cap mkdir "`stagingfigures'"
 cap mkdir "`stagingworkbook'"
 cap mkdir "`stagingmetadata'"
 
+
 display as text _n ///
     "------------------------------------------------------------" _n ///
     "BNR CVD length-of-stay briefing build" _n ///
     "------------------------------------------------------------" _n ///
     as result "  Briefing ID:     `briefing_id'" _n ///
+    as result "  Output type:     `output_type'" _n ///
     as result "  Target year:     `target_year'" _n ///
     as result "  Baseline:        `baseline_start'-`baseline_end'" _n ///
     as result "  Staging bundle:  `stagingbriefing'" _n ///
     as text "------------------------------------------------------------" _n
+
 
 * ==============================================================
 * DO NOT TOUCH: PREPARE SHARED 2023 CVD ANALYSIS DATA
@@ -115,9 +285,19 @@ qui do "scripts/stata/common/bnrcvd_prep_2023_v1.do"
 ** ==============================================================
 ** EDIT BLOCK B: BRIEFING-SPECIFIC DATA PREPARATION AND ANALYSIS
 ** ==============================================================
-* For a new briefing, adapt Section B as needed.
-
-** ==============================================================
+* For a new briefing, adapt the analytical sections below as needed.
+* Keep the release-control and publish sections at the end unchanged unless
+* the standard BNR release process itself changes.
+*
+* The standard dataset/figure pattern is:
+*   1. create a final public aggregate dataset;
+*   2. label all variables clearly;
+*   3. add structured dataset notes using notes _dta:;
+*   4. export CSV and save DTA to stagingdatasets/;
+*   5. export related figures to stagingfigures/, if relevant.
+*
+* The invariant helper called later will convert DTA labels and notes into
+* YAML metadata and will publish the completed staging folder.
 ** (EDIT BLOCK - SECTION B1): LOAD PREPARED COUNT DATASET
 ** ==============================================================
     use "${tempdata}\bnrcvd_los_2023_v1.dta", clear 
@@ -422,11 +602,8 @@ replace yaxis = yaxis + 1 if yaxis >=14
     ** CSV DATASET EXPORT
     export delimited using "`stagingdatasets'/`output1'.csv", replace
 
-    ** YML file export: create YML metadata file associated with dataset
-    bnr_yml, ///
-        dtafile("`stagingdatasets'/`output1'.dta") ///
-        ymlfile("`stagingmetadata'/`output1'.yml") ///
-        datasetid("`output1'")
+    ** Dataset-level YAML metadata is created later by bnr_publish_briefing.do
+    ** from the released DTA labels and notes.
 
 ** FIGURE 2 
 use `pid_los', clear
@@ -598,546 +775,155 @@ global ex50_ami : display %4.1f `ex50_ami'
     ** CSV DATASET EXPORT
     export delimited using "`stagingdatasets'/`output2'.csv", replace
 
-    ** YML file export: create YML metadata file associated with dataset
-    bnr_yml, ///
-        dtafile("`stagingdatasets'/`output2'.dta") ///
-        ymlfile("`stagingmetadata'/`output2'.yml") ///
-        datasetid("`output2'")
+    ** Dataset-level YAML metadata is created later by bnr_publish_briefing.do
+    ** from the released DTA labels and notes.
 
 
 
-** ==============================================================
-** (EDIT BLOCK - SECTION B8): 
-**          CREATE BRIEFING-LEVEL YAML METADATA FILE
-** ==============================================================
-* Need to edit metadata details
+** ============================================================================
+** DO NOT TOUCH: STANDARD RELEASE CONTROL AND PUBLISH STEP
+** ============================================================================
+* The analytics section above has created all briefing-specific public artefacts
+* in the staging folder.
+*
+* This final section deliberately stays short. It writes one small control file
+* that describes the release package, then calls the standard invariant helper.
+*
+* The helper, which is shared across briefing/output packages, will handle:
+*   - dataset-level YAML metadata using bnr_yml;
+*   - briefing-level metadata;
+*   - README creation;
+*   - workbook creation, when requested;
+*   - simplified downloads.yml creation;
+*   - staging/ to public/ copy;
+*   - ZIP creation, when requested;
+*   - public/ to site/downloads/ mirror.
+*
+* This keeps all briefing-specific work in one DO file while avoiding repeated
+* copy/paste release machinery at the end of every briefing.
+
+
+** ============================================================================
+** DO NOT TOUCH: WRITE RELEASE CONTROL FILE
+** ============================================================================
 * Purpose:
-*   Create one short metadata file for the briefing output bundle.
+*   Create metadata/release_control.yml.
 *
-* Dataset-specific metadata are stored in:
-*   metadata/cvd_incidence_annual.yml
-*   metadata/cvd_incidence_rate_ratios.yml
+* This is the contract between the analyst-owned DO file and the invariant
+* publish helper. Future analysts should edit the locals in EDIT BLOCK A, not
+* the file-writing code below.
 *
-* Output:
-*   metadata/briefing.yml
-tempname briefingyml
-
-file open `briefingyml' using "`stagingmetadata'/briefing.yml", ///
-    write replace text
-
-file write `briefingyml' "schema: bnr_briefing_metadata_v1" _n
-file write `briefingyml' "briefing_id: `briefing_id'" _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "title: |-" _n
-file write `briefingyml' "  Barbados CVD length of stay, 2010-2023" _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "description: |-" _n
-file write `briefingyml' "  Public aggregate output package for the BNR CVD length of stay briefing." _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "registry: BNR-CVD" _n
-file write `briefingyml' "geography: Barbados" _n
-file write `briefingyml' "target_year: `target_year'" _n
-file write `briefingyml' "baseline_period: `baseline_start'-`baseline_end'" _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "limitations: |-" _n
-file write `briefingyml' "  Counts describe hospital-ascertained cases only." _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "datasets:" _n
-file write `briefingyml' "  - id: `output1'" _n
-file write `briefingyml' "    dta: datasets/`output1'.dta" _n
-file write `briefingyml' "    csv: datasets/`output1'.csv" _n
-file write `briefingyml' "    yml: metadata/`output1'.yml" _n
-file write `briefingyml' "  - id: `output2'" _n
-file write `briefingyml' "    dta: datasets/`output2'.dta" _n
-file write `briefingyml' "    csv: datasets/`output2'.csv" _n
-file write `briefingyml' "    yml: metadata/`output2'.yml" _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "figures:" _n
-file write `briefingyml' "  - id: `output1'" _n
-file write `briefingyml' "    file: figures/`output1'.png" _n
-file write `briefingyml' "    source_dataset: `output1'" _n
-file write `briefingyml' "  - id: `output2'" _n
-file write `briefingyml' "    file: figures/`output2'.png" _n
-file write `briefingyml' "    source_dataset: `output2'" _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "rights: |-" _n
-file write `briefingyml' "  Public release. Cite the Barbados National Registry when reusing." _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "contact: |-" _n
-file write `briefingyml' "  Barbados National Registry." _n
-file write `briefingyml' "" _n
-
-file write `briefingyml' "build:" _n
-file write `briefingyml' "  build_date: `c(current_date)'" _n
-file write `briefingyml' "  analysis_script: scripts/stata/briefings/cvd_los_2023/`briefing_name'.do" _n
-
-file close `briefingyml'
-
-display as result "Briefing-level YAML created:"
-display as result "  `stagingmetadata'/briefing.yml"
-
-
-
-** ==============================================================
-** (SECTION 9) CREATE XLSX WORKBOOK BUNDLE
-** ==============================================================
-*
-* Purpose:
-*   Create a human-friendly Excel workbook from the released Stata
-*   datasets already saved in the staging bundle.
-*
-* The workbook is a convenience copy only.
-* The canonical public files remain:
-*   - DTA files
-*   - CSV files
-*   - YML metadata files
-*
-* Workbook sheets:
-*   readme
-*   cvd_cases_weekly
-*   meta_weekly
-*   vars_weekly
-*   cvd_cases_age_group
-*   meta_age_group
-*   vars_age_group
-
-local workbook_file "`stagingworkbook'/bnr_`briefing_id'.xlsx"
-
-cap erase "`workbook_file'"
-
-
-** ==============================================================
-** 9.0 Create simple README text file
-** ==============================================================
-
-tempname readme
-
-file open `readme' using "`stagingbriefing'/readme.txt", ///
-    write replace text
-
-file write `readme' "BNR CVD length of stay briefing output package" _n
-file write `readme' "" _n
-file write `readme' "Briefing ID: `briefing_id'" _n
-file write `readme' "Target year: `target_year'" _n
-file write `readme' "Baseline period: `baseline_start'-`baseline_end'" _n
-file write `readme' "" _n
-file write `readme' "This package contains public aggregate outputs for the BNR CVD length of stay briefing." _n
-file write `readme' "" _n
-file write `readme' "Contents:" _n
-file write `readme' "- datasets/: DTA, CSV, and YML files for each released dataset" _n
-file write `readme' "- figures/: PNG figures used in the briefing" _n
-file write `readme' "- workbook/: Excel workbook containing data and metadata sheets" _n
-file write `readme' "- metadata/: briefing-level metadata" _n
-file write `readme' "" _n
-file write `readme' "The DTA files contain Stata labels, value labels, and dataset notes." _n
-file write `readme' "The CSV files are open machine-readable versions of the released datasets." _n
-file write `readme' "The YML files contain metadata exported from the Stata datasets." _n
-file write `readme' "" _n
-file write `readme' "These length of stay data are based on aggregate hospital-ascertained case counts." _n
-file write `readme' "" _n
-file write `readme' "Please cite the Barbados National Registry when reusing these outputs." _n
-
-file close `readme'
-
-
-
-
-** ==============================================================
-** 9.1 Create workbook README sheet
-** ==============================================================
-
-clear
-set obs 9
-
-gen str40  field = ""
-gen str200 value = ""
-
-replace field = "Briefing ID" in 1
-replace value = "`briefing_id'" in 1
-
-replace field = "Title" in 2
-replace value = "Hospital cardiovascular length of stay in Barbados, 2023" in 2
-
-replace field = "Target year" in 3
-replace value = "`target_year'" in 3
-
-replace field = "Baseline period" in 4
-replace value = "`baseline_start'-`baseline_end'" in 4
-
-replace field = "Registry" in 5
-replace value = "BNR-CVD" in 5
-
-replace field = "Geography" in 6
-replace value = "Barbados" in 6
-
-replace field = "Contents" in 7
-replace value = "Data sheets, dataset metadata sheets, and variable metadata sheets" in 7
-
-replace field = "Data note" in 8
-replace value = "Aggregate hospital-ascertained length of stay" in 8
-
-replace field = "Limitation" in 9
-replace value = "length of stay based on hospital cases" in 9
-
-export excel using "`workbook_file'", ///
-    sheet("readme") firstrow(variables) replace
-
-
-** ==============================================================
-** 9.2 Add weekly cases dataset and metadata
-** ==============================================================
-
-bnr_workbook, ///
-    dtafile("`stagingdatasets'/`output1'.dta") ///
-    xlsxfile("`workbook_file'") ///
-    datasetid("`output1'") ///
-    datasheet("`output1'") ///
-    metasheet("meta_`output1'") ///
-    varsheet("vars_`output1'")
-
-
-** ==============================================================
-** 9.3 Add age-group cases dataset and metadata
-** ==============================================================
-
-bnr_workbook, ///
-    dtafile("`stagingdatasets'/`output2'.dta") ///
-    xlsxfile("`workbook_file'") ///
-    datasetid("`output2'") ///
-    datasheet("`output2'") ///
-    metasheet("meta_`output2'") ///
-    varsheet("vars_`output2'")
-
-display as result "Workbook created:"
-display as result "  `workbook_file'"
-
-
-** ==============================================================
-** 9.4 CREATE BRIEFING DOWNLOAD MANIFEST
-** ==============================================================
-*
-* Purpose:
-*   Create a briefing-level downloads.yml file.
-*
-* This file describes the public downloadable artefacts in this
-* briefing bundle. It is not the final site-wide downloads catalogue.
-*
-* The Quarto publication layer will later collect downloads.yml files
-* from all briefing folders and build the sortable/filterable downloads
-* page.
-*
-* Output:
-*   outputs/staging/briefings/{briefing_id}/downloads.yml
+* Why a control file?
+*   A called helper DO file should not depend on locals that happen to exist in
+*   the calling DO file. Writing a small control file makes the handover between
+*   the analysis layer and release layer explicit and auditable.
 
 local release_date = string(daily("`c(current_date)'", "DMY"), "%tdCCYY-NN-DD")
-local site_base    "files/briefings/`briefing_id'"
+local analysis_script "scripts/stata/briefings/cvd_los_2023/`briefing_name'.do"
+local control_file "`stagingmetadata'/release_control.yml"
 
-tempname downloads_yml
+tempname release_control
 
-file open `downloads_yml' using "`stagingbriefing'/downloads.yml", ///
+file open `release_control' using "`control_file'", ///
     write replace text
 
-file write `downloads_yml' "schema: bnr_download_manifest_v1" _n
-file write `downloads_yml' "briefing_id: `briefing_id'" _n
-file write `downloads_yml' "domain: cvd" _n
-file write `downloads_yml' "surveillance_area: CVD" _n
-file write `downloads_yml' "period: 2010-2023" _n
-file write `downloads_yml' "release_date: `release_date'" _n
-file write `downloads_yml' "" _n
-file write `downloads_yml' "title: |-" _n
-file write `downloads_yml' "  Hospital length of stay in Barbados, 2010-2023" _n
-file write `downloads_yml' "" _n
-file write `downloads_yml' "description: |-" _n
-file write `downloads_yml' "  Public aggregate output package for the BNR CVD length of stay briefing." _n
-file write `downloads_yml' "" _n
-file write `downloads_yml' "briefing_page: surveillance/cvd/briefings/hospital-los.qmd" _n
-file write `downloads_yml' "" _n
-file write `downloads_yml' "downloads:" _n
+file write `release_control' "schema: bnr_release_control_v1" _n
+file write `release_control' "briefing_id: `briefing_id'" _n
+file write `release_control' "briefing_name: `briefing_name'" _n
+file write `release_control' "output_type: `output_type'" _n
+file write `release_control' "domain: `domain'" _n
+file write `release_control' "surveillance_area: `surveillance_area'" _n
+file write `release_control' "registry: `registry'" _n
+file write `release_control' "geography: `geography'" _n
+file write `release_control' "period: `period'" _n
+file write `release_control' "target_year: `target_year'" _n
+file write `release_control' "baseline_start: `baseline_start'" _n
+file write `release_control' "baseline_end: `baseline_end'" _n
+file write `release_control' "release_date: `release_date'" _n
+file write `release_control' "analysis_script: `analysis_script'" _n
+file write `release_control' "" _n
 
-* Full ZIP package
-file write `downloads_yml' "  - id: `briefing_id'_zip" _n
-file write `downloads_yml' "    title: Full public output package" _n
-file write `downloads_yml' "    artefact_type: ZIP package" _n
-file write `downloads_yml' "    format: ZIP" _n
-file write `downloads_yml' "    file: bnr_`briefing_id'.zip" _n
-file write `downloads_yml' "    href: `site_base'/bnr_`briefing_id'.zip" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Complete public download package containing datasets, figures, metadata, workbook, and README file." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 10" _n
+file write `release_control' "title: |-" _n
+file write `release_control' "  `briefing_title'" _n
+file write `release_control' "" _n
 
-* README
-file write `downloads_yml' "  - id: `briefing_id'_readme" _n
-file write `downloads_yml' "    title: README file" _n
-file write `downloads_yml' "    artefact_type: Documentation" _n
-file write `downloads_yml' "    format: TXT" _n
-file write `downloads_yml' "    file: readme.txt" _n
-file write `downloads_yml' "    href: `site_base'/readme.txt" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Plain-text guide to the contents of the public output package." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 20" _n
+file write `release_control' "short_title: |-" _n
+file write `release_control' "  `briefing_short'" _n
+file write `release_control' "" _n
 
-* Workbook
-file write `downloads_yml' "  - id: `briefing_id'_workbook" _n
-file write `downloads_yml' "    title: Excel workbook" _n
-file write `downloads_yml' "    artefact_type: Workbook" _n
-file write `downloads_yml' "    format: XLSX" _n
-file write `downloads_yml' "    file: workbook/bnr_`briefing_id'.xlsx" _n
-file write `downloads_yml' "    href: `site_base'/workbook/bnr_`briefing_id'.xlsx" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Spreadsheet version of the released datasets, with metadata and variable information sheets." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 30" _n
+file write `release_control' "description: |-" _n
+file write `release_control' "  `briefing_description'" _n
+file write `release_control' "" _n
 
-* Annual incidence CSV
-file write `downloads_yml' "  - id: `output1'_csv" _n
-file write `downloads_yml' "    title: Annual length of stay dataset" _n
-file write `downloads_yml' "    artefact_type: Dataset" _n
-file write `downloads_yml' "    format: CSV" _n
-file write `downloads_yml' "    file: datasets/`output1'.csv" _n
-file write `downloads_yml' "    href: `site_base'/datasets/`output1'.csv" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Open machine-readable dataset of median annual CVD length of stay for Barbados, 2010-2023." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 40" _n
+file write `release_control' "limitations: |-" _n
+file write `release_control' "  `briefing_limitations'" _n
+file write `release_control' "" _n
 
-* Annual incidence DTA
-file write `downloads_yml' "  - id: `output1'_dta" _n
-file write `downloads_yml' "    title: Annual length of stay dataset, Stata format" _n
-file write `downloads_yml' "    artefact_type: Dataset" _n
-file write `downloads_yml' "    format: DTA" _n
-file write `downloads_yml' "    file: datasets/`output1'.dta" _n
-file write `downloads_yml' "    href: `site_base'/datasets/`output1'.dta" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Stata dataset version of the median annual CVD length of stay data, including labels and dataset notes." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 50" _n
+file write `release_control' "data_note: |-" _n
+file write `release_control' "  `data_note'" _n
+file write `release_control' "" _n
 
-* Annual incidence metadata
-file write `downloads_yml' "  - id: `output1'_metadata" _n
-file write `downloads_yml' "    title: Annual length of stay metadata" _n
-file write `downloads_yml' "    artefact_type: Metadata" _n
-file write `downloads_yml' "    format: YML" _n
-file write `downloads_yml' "    file: metadata/`output1'.yml" _n
-file write `downloads_yml' "    href: `site_base'/metadata/`output1'.yml" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Dataset-level metadata for the median annual CVD length of stay dataset." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 60" _n
+file write `release_control' "rights: |-" _n
+file write `release_control' "  `rights_note'" _n
+file write `release_control' "" _n
 
-* Incidence rate-ratio CSV
-file write `downloads_yml' "  - id: `output2'_csv" _n
-file write `downloads_yml' "    title: Bed day demand dataset" _n
-file write `downloads_yml' "    artefact_type: Dataset" _n
-file write `downloads_yml' "    format: CSV" _n
-file write `downloads_yml' "    file: datasets/`output2'.csv" _n
-file write `downloads_yml' "    href: `site_base'/datasets/`output2'.csv" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Open machine-readable dataset of CVD bed day demand ." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 70" _n
+file write `release_control' "contact: |-" _n
+file write `release_control' "  `contact_note'" _n
+file write `release_control' "" _n
 
-* Incidence rate-ratio DTA
-file write `downloads_yml' "  - id: `output2'_dta" _n
-file write `downloads_yml' "    title: Bed day demand dataset, Stata format" _n
-file write `downloads_yml' "    artefact_type: Dataset" _n
-file write `downloads_yml' "    format: DTA" _n
-file write `downloads_yml' "    file: datasets/`output2'.dta" _n
-file write `downloads_yml' "    href: `site_base'/datasets/`output2'.dta" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Stata dataset version of CVD bed day demand, including labels and dataset notes." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 80" _n
+file write `release_control' "briefing_page: `briefing_page'" _n
+file write `release_control' "released_datasets: `released_datasets'" _n
+file write `release_control' "released_figures: `released_figures'" _n
+file write `release_control' "" _n
 
-* Incidence rate-ratio metadata
-file write `downloads_yml' "  - id: `output2'_metadata" _n
-file write `downloads_yml' "    title: Bed day demand metadata" _n
-file write `downloads_yml' "    artefact_type: Metadata" _n
-file write `downloads_yml' "    format: YML" _n
-file write `downloads_yml' "    file: metadata/`output2'.yml" _n
-file write `downloads_yml' "    href: `site_base'/metadata/`output2'.yml" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Dataset-level metadata for CVD bed day demand." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 90" _n
+file write `release_control' "create_workbook: `create_workbook'" _n
+file write `release_control' "create_zip: `create_zip'" _n
+file write `release_control' "list_zip: `list_zip'" _n
+file write `release_control' "workbook_file: `workbook_file'" _n
+file write `release_control' "" _n
 
-* Annual incidence figure
-file write `downloads_yml' "  - id: `output1'_figure" _n
-file write `downloads_yml' "    title: Annual length of stay figure" _n
-file write `downloads_yml' "    artefact_type: Figure" _n
-file write `downloads_yml' "    format: PNG" _n
-file write `downloads_yml' "    file: figures/`output1'.png" _n
-file write `downloads_yml' "    href: `site_base'/figures/`output1'.png" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Figure showing median annual CVD length of stay data." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 100" _n
+file write `release_control' "workbook_sheets:" _n
+file write `release_control' "  - dataset_id: `workbook_dataset1'" _n
+file write `release_control' "    data_sheet: `workbook_data1'" _n
+file write `release_control' "    metadata_sheet: `workbook_meta1'" _n
+file write `release_control' "    variable_sheet: `workbook_vars1'" _n
+file write `release_control' "  - dataset_id: `workbook_dataset2'" _n
+file write `release_control' "    data_sheet: `workbook_data2'" _n
+file write `release_control' "    metadata_sheet: `workbook_meta2'" _n
+file write `release_control' "    variable_sheet: `workbook_vars2'" _n
+file write `release_control' "" _n
 
-* Incidence rate-ratio figure
-file write `downloads_yml' "  - id: `output2'_figure" _n
-file write `downloads_yml' "    title: Bed day demand figure" _n
-file write `downloads_yml' "    artefact_type: Figure" _n
-file write `downloads_yml' "    format: PNG" _n
-file write `downloads_yml' "    file: figures/`output2'.png" _n
-file write `downloads_yml' "    href: `site_base'/figures/`output2'.png" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Figure showing age-standardised CVD bed day demand." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 110" _n
+file write `release_control' "zip_title: |-" _n
+file write `release_control' "  `zip_title'" _n
+file write `release_control' "" _n
 
-* Briefing-level metadata
-file write `downloads_yml' "  - id: `briefing_id'_briefing_metadata" _n
-file write `downloads_yml' "    title: Briefing-level metadata" _n
-file write `downloads_yml' "    artefact_type: Metadata" _n
-file write `downloads_yml' "    format: YML" _n
-file write `downloads_yml' "    file: metadata/briefing.yml" _n
-file write `downloads_yml' "    href: `site_base'/metadata/briefing.yml" _n
-file write `downloads_yml' "    description: |-" _n
-file write `downloads_yml' "      Briefing-level metadata describing the public CVD length of stay output package." _n
-file write `downloads_yml' "    include_in_listing: true" _n
-file write `downloads_yml' "    sort_order: 120" _n
+file write `release_control' "zip_description: |-" _n
+file write `release_control' "  `zip_description'" _n
 
-file close `downloads_yml'
+file close `release_control'
 
-display as result "Download manifest created:"
-display as result "  `stagingbriefing'/downloads.yml"
+display as result "Release control file created:"
+display as result "  `control_file'"
 
 
-** ==============================================================
-** (SECTION 10) PUBLISH STAGING BUNDLE TO PUBLIC RELEASE FOLDER
-** ==============================================================
+** ============================================================================
+** DO NOT TOUCH: PUBLISH BRIEFING OUTPUT PACKAGE
+** ============================================================================
+* The shared helper owns the invariant release machinery. It should be kept
+* common across BNR briefing/output package DO files.
 *
-* Purpose:
-*   Copy the completed staging bundle into the public release area
-*   and create a ZIP package for public download.
+* Expected behaviour:
+*   Source:
+*     outputs/staging/briefings/{briefing_id}/
 *
-* Source:
-*   outputs/staging/briefings/{briefing_id}/
+*   Public target:
+*     outputs/public/briefings/{briefing_id}/
 *
-* Target:
-*   outputs/public/briefings/{briefing_id}/
+*   Website mirror:
+*     site/downloads/files/briefings/{briefing_id}/
 *
-* ZIP:
-*   outputs/public/briefings/{briefing_id}/bnr_{briefing_id}.zip
-*
-* This block does not create analytical outputs.
-* It only copies files already created in staging.
+* The helper should be tolerant of partial packages, so that the same pathway
+* can be used for both full briefings and smaller supporting artefacts.
 
-** ==============================================================
-** 10.1 Define public release folders and ZIP path
-** ==============================================================
-
-local publicbriefing "$BNR_PUBLIC/briefings/`briefing_id'"
-local publicdatasets "`publicbriefing'/datasets"
-local publicfigures  "`publicbriefing'/figures"
-local publicworkbook "`publicbriefing'/workbook"
-local publicmetadata "`publicbriefing'/metadata"
-
-local publiczip "`publicbriefing'/bnr_`briefing_id'.zip"
-
-
-** ==============================================================
-** 10.2 Ensure public release folders exist
-** ==============================================================
-
-cap mkdir "$BNR_PUBLIC"
-cap mkdir "$BNR_PUBLIC/briefings"
-
-cap mkdir "`publicbriefing'"
-cap mkdir "`publicdatasets'"
-cap mkdir "`publicfigures'"
-cap mkdir "`publicworkbook'"
-cap mkdir "`publicmetadata'"
-
-
-** ==============================================================
-** 10.3 Remove old files from public release folders
-** ==============================================================
-*
-* This prevents old files remaining in public/ after a filename change
-* or after a file is removed from the staging bundle.
-
-local oldfiles : dir "`publicbriefing'" files "*"
-foreach file of local oldfiles {
-    erase "`publicbriefing'/`file'"
-}
-
-foreach folder in datasets figures workbook metadata {
-
-    local oldfiles : dir "`publicbriefing'/`folder'" files "*"
-
-    foreach file of local oldfiles {
-        erase "`publicbriefing'/`folder'/`file'"
-    }
-}
-
-cap erase "`publiczip'"
-
-
-** ==============================================================
-** 10.4 Copy root-level files
-** ==============================================================
-
-copy "`stagingbriefing'/readme.txt" ///
-     "`publicbriefing'/readme.txt", replace
-
-copy "`stagingbriefing'/downloads.yml" ///
-     "`publicbriefing'/downloads.yml", replace
-
-** ==============================================================
-** 10.5 Copy staged subfolder files
-** ==============================================================
-
-foreach folder in datasets figures workbook metadata {
-
-    local files : dir "`stagingbriefing'/`folder'" files "*"
-
-    foreach file of local files {
-
-        copy "`stagingbriefing'/`folder'/`file'" ///
-             "`publicbriefing'/`folder'/`file'", replace
-    }
-}
-
-
-** ==============================================================
-** 10.6 Create ZIP package from public release folder
-** ==============================================================
-*
-* The ZIP contains the briefing folder itself, so extraction creates
-* a clean top-level folder rather than scattering files.
-
-shell powershell -NoProfile -ExecutionPolicy Bypass -Command "Compress-Archive -LiteralPath '`publicbriefing'' -DestinationPath '`publiczip'' -Force"
-
-
-** ==============================================================
-** 10.7 Confirm public release bundle
-** ==============================================================
-
-display as text _n ///
-    "------------------------------------------------------------" _n ///
-    "BNR CVD case-count briefing public bundle prepared" _n ///
-    "------------------------------------------------------------" _n ///
-    as result "  Briefing ID:       `briefing_id'" _n ///
-    as result "  Staging folder:    `stagingbriefing'" _n ///
-    as result "  Public folder:     `publicbriefing'" _n ///
-    as result "  ZIP package:       `publiczip'" _n ///
-    as text "------------------------------------------------------------" _n
-
-
-
-
-
-** ==============================================================
-** 11 MIRROR public release bundle --> Site bundle
-** ==============================================================
-do "scripts/stata/common/mirror_public_to_site.do" "`briefing_id'"
+do "`localpath'/scripts/stata/common/bnr_publish_briefing.do" ///
+    "`briefing_id'"

@@ -1,0 +1,499 @@
+﻿---
+title: "BNR Metric Specification Register"
+subtitle: "Standing definitions for approved information hub metrics"
+date: "2026-05-15"
+version: "Draft v0.1"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+## Document control
+
+| Item | Detail |
+|---|---|
+| Document name | BNR Metric Specification Register |
+| Short name | Metric register |
+| Version | Draft v0.1 |
+| Date | 15 May 2026 |
+| Owner | BNR Analytics Team |
+| Companion document | [BNR Information Hub Statistical Analysis Plan](sap.qmd) |
+
+## Purpose
+
+This register defines approved BNR information hub metrics.
+
+The metric system is the permanent BNR deliverable. Briefings are temporary interpretations that consume those metrics. A briefing may go beyond the defined core metrics where needed for research, interpretation or communication.
+
+This register is designed to be expanded over time. The first version focuses on core cardiovascular disease metrics required for routine surveillance, public reporting and operational monitoring.
+
+## How to read this register
+
+Each metric has a stable identifier, a short definition, an equation, and a small set of required metadata.
+
+| Item | Meaning |
+|---|---|
+| Metric ID | Stable identifier, for example `CVD-RATE-001` |
+| Status | Draft, approved, pilot, retired or internal |
+| Metric type | Count, percentage, rate, ratio, distribution, descriptive summary or data quality metric |
+| Numerator | What is counted in the top line of the calculation |
+| Denominator | What is counted in the bottom line, where relevant |
+| Unit of analysis | Event, person, admission, death, bed-day, record or population |
+| Stratifications | Standard breakdowns such as period, event type, sex or age group |
+| Output | Metric outputs should include the metric ID, release, period, stratum, statistic, value, unit, numerator, denominator, confidence interval where relevant, and status flag |
+
+Stratifications are dimensions of a metric. They do not create separate metrics unless the definition or method changes.
+
+For example, stroke counts and AMI counts are both stratifications of the hospital-registered CVD event count metric. They do not need separate metric definitions.
+
+## CVD burden metrics
+
+### CVD-BURDEN-001: Hospital-registered CVD event count
+
+**Definition.**  
+The number of eligible hospital-registered CVD events recorded by the BNR in a reporting period.
+
+**Equation.**
+
+$$
+\text{Count} = \sum_{i=1}^{n} I_i
+$$
+
+where \(I_i = 1\) when record \(i\) is an eligible CVD event, and \(I_i = 0\) otherwise.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-BURDEN-001 |
+| Metric name | Hospital-registered CVD event count |
+| Status | Draft |
+| Priority | Core |
+| Plain-language description | The number of hospital-registered CVD events recorded by the BNR in a reporting period. |
+| Metric type | Count |
+| Numerator | Eligible hospital-registered CVD events |
+| Denominator | Not applicable |
+| Unit of analysis | Event |
+| Population and exclusions | Barbados residents with confirmed hospital-registered CVD events; exclude non-residents, duplicates and records outside the reporting period. DCO-only records are excluded unless source status explicitly includes them. |
+| Stratifications | Required: period, event type. Optional: sex, age group, source status. |
+| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_burden.do` |
+| Notes | Stroke and AMI are stratifications of this metric, not separate metrics. |
+
+### CVD-BURDEN-002: CVD event distribution
+
+**Definition.**  
+The percentage distribution of CVD events across event type, sex, age group or another standard dimension.
+
+**Equation.**
+
+$$
+\text{Percentage} = \frac{x_c}{N_p} \times 100
+$$
+
+where \(x_c\) is the number of events in the selected category, and \(N_p\) is the number of events in the parent group.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-BURDEN-002 |
+| Metric name | CVD event distribution |
+| Status | Draft |
+| Priority | Supporting |
+| Plain-language description | The percentage distribution of CVD events across event type, sex, age group or another standard dimension. |
+| Metric type | Distribution |
+| Numerator | Eligible CVD events in the selected category |
+| Denominator | Eligible CVD events in the parent group |
+| Unit of analysis | Event |
+| Population and exclusions | Same event set as CVD-BURDEN-001. |
+| Stratifications | Required: period and selected distribution dimension. Optional: event type, sex, age group, source status. |
+| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_burden.do` |
+| Notes | Used for age, sex and event-type composition summaries. |
+
+## CVD rate metrics
+
+### CVD-RATE-001: Crude hospital-registered CVD event rate
+
+**Definition.**  
+The number of eligible hospital-registered CVD events relative to the resident population.
+
+**Equation.**
+
+$$
+\text{Rate per 100,000} = \frac{x}{N} \times 100{,}000
+$$
+
+where \(x\) is the number of eligible CVD events, and \(N\) is the resident population denominator for the same period and stratum.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-RATE-001 |
+| Metric name | Crude hospital-registered CVD event rate |
+| Status | Draft |
+| Priority | Core |
+| Plain-language description | The number of hospital-registered CVD events relative to the resident population. |
+| Metric type | Rate |
+| Numerator | Eligible hospital-registered CVD events in the reporting period |
+| Denominator | Resident population for the same period and stratum |
+| Unit of analysis | Event and population |
+| Population and exclusions | Barbados residents; exclude non-residents, duplicates and DCO-only records unless explicitly included. |
+| Stratifications | Required: period, event type. Optional: sex, age group, source status. |
+| Uncertainty / suppression | 95% confidence interval using Poisson or exact Poisson method. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_rate.do` |
+| Notes | Stroke and AMI rates are stratifications of this metric. |
+
+### CVD-RATE-002: Age-standardised hospital-registered CVD event rate
+
+**Definition.**  
+The directly age-standardised rate of eligible hospital-registered CVD events.
+
+**Equation.**
+
+$$
+\text{Age-standardised rate} = \sum_{a=1}^{A} w_a r_a
+$$
+
+where \(r_a\) is the age-specific rate in age group \(a\), and \(w_a\) is the standard population weight for age group \(a\).
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-RATE-002 |
+| Metric name | Age-standardised hospital-registered CVD event rate |
+| Status | Draft |
+| Priority | Core |
+| Plain-language description | The CVD event rate adjusted to a standard age structure, allowing fairer comparison across groups or years. |
+| Metric type | Age-standardised rate |
+| Numerator | Eligible hospital-registered CVD events by age group |
+| Denominator | Resident population by age group |
+| Unit of analysis | Event and population |
+| Population and exclusions | Same event set as CVD-RATE-001. |
+| Stratifications | Required: period, event type. Optional: sex, source status. |
+| Uncertainty / suppression | 95% confidence interval using the approved direct standardisation method. Suppress or flag unstable estimates according to disclosure rules. |
+| Responsible code | `metric_cvd_rate.do` |
+| Notes | The standard population must be recorded in metadata. |
+
+### CVD-RATE-003: CVD event rate ratio
+
+**Definition.**  
+A comparison of two CVD event rates, such as female versus male or current year versus baseline.
+
+**Equation.**
+
+$$
+\text{Rate ratio} = \frac{R_{\text{comparison}}}{R_{\text{reference}}}
+$$
+
+where \(R_{\text{comparison}}\) is the comparison rate and \(R_{\text{reference}}\) is the reference rate.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-RATE-003 |
+| Metric name | CVD event rate ratio |
+| Status | Draft |
+| Priority | Secondary |
+| Plain-language description | A comparison of two CVD event rates, such as female versus male or current year versus baseline. |
+| Metric type | Ratio |
+| Numerator | Comparison rate |
+| Denominator | Reference rate |
+| Unit of analysis | Comparison of rates |
+| Population and exclusions | Same event set as the relevant source rate metric. |
+| Stratifications | Required: period, event type, comparison type. Optional: sex, source status. |
+| Uncertainty / suppression | Confidence interval method to be recorded in metric metadata. Suppress or flag unstable ratios where source estimates are unstable. |
+| Responsible code | `metric_cvd_rate.do` |
+| Notes | Routine examples may include female-to-male, current-to-baseline or stroke-to-AMI comparisons. |
+
+## CVD outcome metrics
+
+### CVD-OUTCOME-001: In-hospital case fatality
+
+**Definition.**  
+The percentage of eligible hospital-registered CVD events where the patient died before discharge.
+
+**Equation.**
+
+$$
+\text{Case fatality} = \frac{d}{n} \times 100
+$$
+
+where \(d\) is the number of in-hospital deaths after eligible CVD events, and \(n\) is the number of eligible CVD events with known discharge outcome.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-OUTCOME-001 |
+| Metric name | In-hospital case fatality |
+| Status | Draft |
+| Priority | Core |
+| Plain-language description | The percentage of hospital-registered CVD events where the patient died before discharge. |
+| Metric type | Percentage |
+| Numerator | Eligible events where the patient died before discharge |
+| Denominator | Eligible hospital-registered events with known discharge outcome |
+| Unit of analysis | Hospital-registered event |
+| Population and exclusions | Hospital-registered CVD events among Barbados residents; exclude DCO-only records, non-residents, duplicates and records with unknown discharge outcome. |
+| Stratifications | Required: period, event type. Optional: sex, age group. |
+| Uncertainty / suppression | 95% binomial confidence interval for crude estimates. Model-based interval for age-adjusted estimates where used. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_outcome.do` |
+| Notes | Stroke and AMI case fatality are stratifications of this metric. |
+
+### CVD-OUTCOME-002: Age at CVD event or death
+
+**Definition.**  
+The age distribution of people with eligible hospital-registered CVD events, optionally stratified by survival status.
+
+**Equation.**
+
+$$
+\text{Median age} = \operatorname{median}(a_i)
+$$
+
+where \(a_i\) is age at event for eligible record \(i\).
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-OUTCOME-002 |
+| Metric name | Age at CVD event or death |
+| Status | Draft |
+| Priority | Supporting |
+| Plain-language description | The age distribution of people with hospital-registered CVD events, optionally stratified by survival status. |
+| Metric type | Descriptive summary |
+| Numerator | Not applicable |
+| Denominator | Eligible events in the selected group |
+| Unit of analysis | Event |
+| Population and exclusions | Eligible hospital-registered CVD events; exclude records missing age or required dates. |
+| Stratifications | Required: period, event type. Optional: sex, outcome status. |
+| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_outcome.do` or `metric_cvd_burden.do` |
+| Notes | This is a contextual metric, not a primary burden metric. |
+
+## CVD hospital-use metrics
+
+### CVD-HOSP-001: Length of stay after hospital-registered CVD event
+
+**Definition.**  
+The number of days spent in hospital after a registered CVD event.
+
+**Equation.**
+
+$$
+\text{Length of stay}_i = \text{date of discharge}_i - \text{date of admission}_i
+$$
+
+where \(i\) is an eligible hospital admission linked to a CVD event.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-HOSP-001 |
+| Metric name | Length of stay after hospital-registered CVD event |
+| Status | Draft |
+| Priority | Core |
+| Plain-language description | The number of days spent in hospital after a registered CVD event. |
+| Metric type | Descriptive summary |
+| Numerator | Not applicable |
+| Denominator | Eligible admissions with valid admission and discharge dates |
+| Unit of analysis | Hospital admission linked to CVD event |
+| Population and exclusions | Hospital-registered CVD events with valid admission and discharge dates; exclude DCO-only records, missing dates and implausible date sequences. |
+| Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
+| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_hosp.do` |
+| Notes | Median and interquartile range are preferred for public interpretation. |
+
+### CVD-HOSP-002: CVD hospital bed-days
+
+**Definition.**  
+The total number of hospital bed-days used by people admitted with registered CVD events.
+
+**Equation.**
+
+$$
+\text{Total bed-days} = \sum_{i=1}^{n} \text{length of stay}_i
+$$
+
+where \(n\) is the number of eligible admissions.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-HOSP-002 |
+| Metric name | CVD hospital bed-days |
+| Status | Draft |
+| Priority | Core for service planning |
+| Plain-language description | The total number of hospital bed-days used by people admitted with registered CVD events. |
+| Metric type | Count / service-use metric |
+| Numerator | Sum of length of stay across eligible admissions |
+| Denominator | Optional: eligible admissions, where reporting bed-days per event |
+| Unit of analysis | Bed-day |
+| Population and exclusions | Same event set as CVD-HOSP-001. |
+| Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
+| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_hosp.do` |
+| Notes | This is a service-use metric, not an incidence metric. |
+
+### CVD-HOSP-003: Prolonged stay after hospital-registered CVD event
+
+**Definition.**  
+The percentage of eligible CVD admissions with a hospital stay above an approved prolonged-stay threshold.
+
+**Equation.**
+
+$$
+\text{Prolonged stay percentage} = \frac{p}{n} \times 100
+$$
+
+where \(p\) is the number of eligible admissions above the prolonged-stay threshold, and \(n\) is the number of eligible admissions with valid length of stay.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-HOSP-003 |
+| Metric name | Prolonged stay after hospital-registered CVD event |
+| Status | Draft |
+| Priority | Secondary |
+| Plain-language description | The percentage of eligible CVD admissions with a hospital stay above an approved prolonged-stay threshold. |
+| Metric type | Percentage |
+| Numerator | Eligible admissions with length of stay above the approved threshold |
+| Denominator | Eligible admissions with valid length of stay |
+| Unit of analysis | Hospital admission linked to CVD event |
+| Population and exclusions | Same event set as CVD-HOSP-001. |
+| Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
+| Uncertainty / suppression | 95% binomial confidence interval where useful. Suppress or flag low-count strata according to disclosure rules. |
+| Responsible code | `metric_cvd_hosp.do` |
+| Notes | Prolonged-stay threshold to be confirmed before approval. |
+
+## CVD data quality metrics
+
+### CVD-DQ-001: CVD data release size
+
+**Definition.**  
+The number of records included in an approved CVD analytical data release.
+
+**Equation.**
+
+$$
+\text{Release size} = \sum_{i=1}^{n} I_i
+$$
+
+where \(I_i = 1\) when record \(i\) is included in the approved release.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-DQ-001 |
+| Metric name | CVD data release size |
+| Status | Draft |
+| Priority | Core QA |
+| Plain-language description | The number of records included in an approved CVD analytical data release. |
+| Metric type | Data quality count |
+| Numerator | Records in the approved release |
+| Denominator | Not applicable |
+| Unit of analysis | Record |
+| Population and exclusions | All records in the approved release. |
+| Stratifications | Required: release ID. Optional: event type, source status. |
+| Uncertainty / suppression | Not applicable. |
+| Responsible code | `metric_cvd_dq.do` |
+| Notes | Used to confirm release size and compare with previous releases. |
+
+### CVD-DQ-002: Completeness of key CVD variables
+
+**Definition.**  
+The percentage of eligible records with complete values for key variables needed for analysis.
+
+**Equation.**
+
+$$
+\text{Completeness} = \frac{c}{n} \times 100
+$$
+
+where \(c\) is the number of records with a non-missing value for the selected variable, and \(n\) is the number of records eligible for completeness assessment.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-DQ-002 |
+| Metric name | Completeness of key CVD variables |
+| Status | Draft |
+| Priority | Core QA |
+| Plain-language description | The percentage of eligible records with complete values for key variables needed for analysis. |
+| Metric type | Data quality percentage |
+| Numerator | Records with non-missing value for the selected variable |
+| Denominator | Records eligible for completeness assessment |
+| Unit of analysis | Record |
+| Population and exclusions | Records in the approved release eligible for the assessed variable; exclude records where the variable is not applicable. |
+| Stratifications | Required: release ID, variable name. Optional: event type, source status. |
+| Uncertainty / suppression | No routine confidence interval. Flag variables below agreed completeness thresholds. |
+| Responsible code | `metric_cvd_dq.do` |
+| Notes | Key variables include event date, sex, age or date of birth, admission date, discharge date and discharge outcome. |
+
+### CVD-DQ-003: Duplicate candidate count
+
+**Definition.**  
+The number and percentage of records flagged as possible duplicates using the approved duplicate-screening rule.
+
+**Equation.**
+
+$$
+\text{Duplicate candidate percentage} = \frac{d}{n} \times 100
+$$
+
+where \(d\) is the number of records flagged as duplicate candidates, and \(n\) is the number of records assessed for duplication.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-DQ-003 |
+| Metric name | Duplicate candidate count |
+| Status | Draft |
+| Priority | Core QA |
+| Plain-language description | The number of records flagged as possible duplicates using the approved duplicate-screening rule. |
+| Metric type | Data quality count / percentage |
+| Numerator | Records flagged as duplicate candidates |
+| Denominator | Records assessed for duplication |
+| Unit of analysis | Record |
+| Population and exclusions | Records in the approved release eligible for duplicate screening. |
+| Stratifications | Required: release ID. Optional: event type, source status. |
+| Uncertainty / suppression | Not applicable. |
+| Responsible code | `metric_cvd_dq.do` |
+| Notes | This is a screening metric, not final duplicate adjudication. |
+
+### CVD-DQ-004: Timeliness of abstraction
+
+**Definition.**   
+The time between event, discharge or source availability and completion of abstraction.
+
+**Equation.**
+
+$$
+\text{Abstraction lag}_i = \text{date abstraction completed}_i - \text{reference start date}_i
+$$
+
+where \(i\) is an eligible record with valid abstraction timing fields.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-DQ-004 |
+| Metric name | Timeliness of abstraction |
+| Status | Draft |
+| Priority | Process monitoring |
+| Plain-language description | The time between event, discharge or source availability and completion of abstraction. |
+| Metric type | Process monitoring summary |
+| Numerator | Not applicable |
+| Denominator | Records with required abstraction timing fields |
+| Unit of analysis | Record |
+| Population and exclusions | Records with valid abstraction timing fields; exclude records missing required dates. |
+| Stratifications | Required: release ID. Optional: event type, source status. |
+| Uncertainty / suppression | No routine confidence interval. Flag values outside agreed operational targets. |
+| Responsible code | `metric_cvd_dq.do` |
+| Notes | Reference start date and target threshold to be confirmed by BNR operations. |
+
+## Future metric families
+
+Future versions of this register may add:
+
+| Family | Examples |
+|---|---|
+| Hypertension metrics | Prevalence, control, treatment, follow-up, complications |
+| Diabetes metrics | Prevalence, incidence, HbA1c control, care processes, complications |
+| Cancer metrics | Incidence, stage, treatment pathway, survival |
+| Mortality metrics | Cause-specific mortality, place of death, coding quality |
+| Registry process metrics | Abstraction lag, release readiness, unresolved queries |
+| Data sharing metrics | Public outputs, downloads, approved data packages |
+
+Future metric additions should follow the same principle: define the metric once, then treat subgroup outputs as dimensions wherever possible.
+
+## Change history
+
+| Version | Date | Summary | Author |
+|---|---|---|---|
+| Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR information hub |

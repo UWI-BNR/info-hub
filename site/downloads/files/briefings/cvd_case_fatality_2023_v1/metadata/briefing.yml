@@ -1,19 +1,36 @@
 schema: bnr_briefing_metadata_v1
 briefing_id: cvd_case_fatality_2023_v1
+briefing_name: cvd_case_fatality_2023
+output_type: briefing
+domain: cvd
+surveillance_area: CVD
+registry: BNR-CVD
+geography: Barbados
+period: 2023
+release_date: 2026-05-15
 
 title: |-
-  CVD cases in Barbados, 2023
+  CVD case-fatality in Barbados, 2012-2023
+
+short_title: |-
+  Case-fatality in Barbados
 
 description: |-
   Public aggregate output package for the BNR CVD case-fatality briefing.
 
-registry: BNR-CVD
-geography: Barbados
-target_year: 2023
-baseline_period: 2018-2022
-
 limitations: |-
   Case-fatality based on hospital-ascertained cases only.
+
+data_note: |-
+  Aggregate case-fatality estimates for hospital-ascertained CVD cases.
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+briefing_page: surveillance/cvd/briefings/case-fatality.qmd
 
 datasets:
   - id: cvd_case_fatality_2023
@@ -24,14 +41,12 @@ datasets:
 figures:
   - id: cvd_case_fatality_2023
     file: figures/cvd_case_fatality_2023.png
-    source_dataset: cvd_case_fatality_2023
-
-rights: |-
-  Public release. Cite the Barbados National Registry when reusing.
-
-contact: |-
-  Barbados National Registry.
+  - id: cvd_case_fatality_age_group
+    file: figures/cvd_case_fatality_age_group.png
 
 build:
-  build_date:  6 May 2026
-  analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_case_fatality_2023.do
+  build_date: 15 May 2026
+  build_time: 09:53:09
+  stata_version: 19.5
+  analyst: ianha
+  analysis_script: scripts/stata/briefings/cvd_case_fatality_2023/cvd_case_fatality_2023.do

@@ -1,21 +1,35 @@
-BNR CVD case-fatality briefing output package
+CVD case-fatality in Barbados, 2012-2023
 
 Briefing ID: cvd_case_fatality_2023_v1
-Target year: 2023
-Baseline period: 2018-2022
+Output type: briefing
+Domain: cvd
+Surveillance area: CVD
+Registry: BNR-CVD
+Geography: Barbados
+Period: 2023
+Release date: 2026-05-15
 
-This package contains public aggregate outputs for the BNR CVD case-fatality briefing.
+Description:
+Public aggregate output package for the BNR CVD case-fatality briefing.
 
 Contents:
-- datasets/: DTA, CSV, and YML files for each released dataset
-- figures/: PNG figures used in the briefing
-- workbook/: Excel workbook containing data and metadata sheets
-- metadata/: briefing-level metadata
+- datasets/: released DTA and CSV datasets
+- figures/: PNG figures used by the public site or briefing
+- metadata/: dataset-level and briefing-level metadata
+- workbook/: Excel workbook containing released data and metadata sheets
+- downloads.yml: manifest used by the BNR website downloads catalogue
 
-The DTA files contain Stata labels, value labels, and dataset notes.
+Dataset notes:
+The DTA files contain Stata variable labels, value labels, and dataset notes.
 The CSV files are open machine-readable versions of the released datasets.
 The YML files contain metadata exported from the Stata datasets.
 
-Based on aggregate hospital-ascertained case counts.
+Limitations:
+Case-fatality based on hospital-ascertained cases only.
 
-Please cite the Barbados National Registry when reusing these outputs.
+Rights and reuse:
+Public release. Cite the Barbados National Registry when reusing.
+
+Contact:
+Barbados National Registry.
+

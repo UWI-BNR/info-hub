@@ -1,0 +1,45 @@
+schema: bnr_briefing_metadata_v1
+briefing_id: cvd_forensics_2025_v1
+briefing_name: cvd_forensics_2025
+output_type: supporting_artefact
+domain: cvd
+surveillance_area: CVD
+registry: BNR-CVD
+geography: Barbados
+period: 2025
+release_date: 2026-05-15
+
+title: |-
+  CVD dataset file-structure audit figure
+
+short_title: |-
+  Dataset file-structure audit
+
+description: |-
+  Supporting process artefact showing duplicate CVD dataset file instances identified during the BNR refit.
+
+limitations: |-
+  This is a process-audit artefact, not a statistical surveillance output.
+
+data_note: |-
+  Figure-only supporting artefact based on an inventory of Stata DTA files in the historical DM folder.
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+datasets:
+  []
+
+figures:
+  - id: cvd_file_instances
+    file: figures/cvd_file_instances.png
+
+build:
+  build_date: 15 May 2026
+  build_time: 10:05:57
+  stata_version: 19
+  analyst: ianha
+  analysis_script: scripts/stata/refit/bnrcvd-2023-forensics2.do

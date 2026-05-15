@@ -1,0 +1,60 @@
+schema: bnr_release_control_v1
+briefing_id: cvd_los_2023_v1
+briefing_name: cvd_los_2023
+output_type: briefing
+domain: cvd
+surveillance_area: CVD
+registry: BNR-CVD
+geography: Barbados
+period: 2023
+target_year: 2023
+baseline_start: 2010
+baseline_end: 2021
+release_date: 2026-05-15
+analysis_script: scripts/stata/briefings/cvd_los_2023/cvd_los_2023.do
+
+title: |-
+  Barbados CVD length of stay, 2010-2023
+
+short_title: |-
+  Length of stay in Barbados
+
+description: |-
+  Public aggregate output package for the BNR CVD length-of-stay briefing.
+
+limitations: |-
+  Length of stay is based on hospital-ascertained CVD events only.
+
+data_note: |-
+  Aggregate hospital-ascertained length-of-stay and bed-day demand outputs.
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+briefing_page: surveillance/cvd/briefings/hospital-los.qmd
+released_datasets: cvd_los_median cvd_los_bed_demand
+released_figures: cvd_los_median cvd_los_bed_demand
+
+create_workbook: 1
+create_zip: 1
+list_zip: 1
+workbook_file: bnr_cvd_los_2023_v1.xlsx
+
+workbook_sheets:
+  - dataset_id: cvd_los_median
+    data_sheet: cvd_los_median
+    metadata_sheet: meta_cvd_los_median
+    variable_sheet: vars_cvd_los_median
+  - dataset_id: cvd_los_bed_demand
+    data_sheet: cvd_los_bed_demand
+    metadata_sheet: meta_cvd_los_bed_demand
+    variable_sheet: vars_cvd_los_bed_demand
+
+zip_title: |-
+  Full public output package
+
+zip_description: |-
+  Complete public download package containing datasets, figures, metadata, workbook, and README file.

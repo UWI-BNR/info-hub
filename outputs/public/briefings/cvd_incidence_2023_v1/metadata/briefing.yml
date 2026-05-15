@@ -1,19 +1,36 @@
 schema: bnr_briefing_metadata_v1
 briefing_id: cvd_incidence_2023_v1
+briefing_name: cvd_incidence_2023
+output_type: briefing
+domain: cvd
+surveillance_area: CVD
+registry: BNR-CVD
+geography: Barbados
+period: 2023
+release_date: 2026-05-15
 
 title: |-
   Barbados CVD incidence rates, 2010-2023
 
-description: |-
-  Public aggregate output package for the BNR CVD case-incidence briefing.
+short_title: |-
+  Incidence in Barbados
 
-registry: BNR-CVD
-geography: Barbados
-target_year: 2023
-baseline_period: 2010-2022
+description: |-
+  Public aggregate output package for the BNR CVD incidence briefing.
 
 limitations: |-
-  Counts describe hospital-ascertained cases and Death-certified cases only.
+  Counts describe hospital-ascertained cases and death-certified cases only.
+
+data_note: |-
+  Aggregate annual age-standardised CVD incidence rates and incidence rate ratios.
+
+rights: |-
+  Public release. Cite the Barbados National Registry when reusing.
+
+contact: |-
+  Barbados National Registry.
+
+briefing_page: surveillance/cvd/briefings/case-incidence.qmd
 
 datasets:
   - id: cvd_incidence_annual
@@ -28,17 +45,12 @@ datasets:
 figures:
   - id: cvd_incidence_annual
     file: figures/cvd_incidence_annual.png
-    source_dataset: cvd_incidence_annual
   - id: cvd_incidence_rate_ratios
     file: figures/cvd_incidence_rate_ratios.png
-    source_dataset: cvd_incidence_rate_ratios
-
-rights: |-
-  Public release. Cite the Barbados National Registry when reusing.
-
-contact: |-
-  Barbados National Registry.
 
 build:
-  build_date: 11 May 2026
-  analysis_script: scripts/stata/briefings/cvd_cases_2023/cvd_incidence_2023.do
+  build_date: 15 May 2026
+  build_time: 09:52:04
+  stata_version: 19.5
+  analyst: ianha
+  analysis_script: scripts/stata/briefings/cvd_incidence_2023/cvd_incidence_2023.do

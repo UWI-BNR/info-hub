@@ -1,0 +1,438 @@
+﻿---
+title: "BNR Information Hub Statistical Analysis Plan"
+subtitle: "Standing analytical methods for BNR metrics and published analytical outputs"
+date: "2026-05-15"
+version: "Draft v0.1"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+---
+
+# BNR Information Hub Statistical Analysis Plan
+
+## Document control
+
+| Item | Detail |
+|---|---|
+| Document name | BNR Information Hub Statistical Analysis Plan |
+| Short name | Info-hub SAP |
+| Version | Draft v0.1 |
+| Date | 15 May 2026 |
+| Owner | BNR Analytics Team |
+| Companion document | [BNR Metric Specification Register](sap-metrics.qmd) |
+
+## Purpose
+
+This Statistical Analysis Plan defines the standing analytical methods used to produce BNR information hub metrics and published analytical outputs.
+
+The metric system is the permanent BNR deliverable. Briefings are temporary interpretations that consume those metrics. A briefing may go beyond the defined core metrics where this supports a specific research, interpretation or communication purpose.
+
+This SAP exists to ensure that BNR outputs are reproducible, auditable, interpretable and consistent across data releases.
+
+## Scope
+
+This SAP applies to:
+
+- routine surveillance metrics
+- data quality metrics
+- process monitoring metrics
+- public dashboards
+- static briefings
+- downloadable analytical datasets
+- tables and figures derived from approved BNR data releases
+
+Individual metric definitions are maintained in the companion [BNR Metric Specification Register](sap-metrics.qmd).
+
+## Core principles
+
+All BNR information hub analytics follow these principles:
+
+1. Metrics are defined before routine production.
+2. Approved metric definitions are stable across data releases.
+3. Stratifications are dimensions, not separate metrics, unless the definition or method changes.
+4. Stata is the primary analytical engine for core surveillance computation.
+5. Quarto is used to publish and present approved outputs, not to define core analytical logic.
+6. Outputs are deterministic and reproducible from approved data releases and versioned code.
+7. Metadata is part of the analytical product.
+8. Briefings may interpret, combine or extend metrics, but do not redefine core metrics.
+
+## Data release model
+
+Routine metrics are calculated from approved BNR data releases.
+
+Each analytical cycle uses a defined data freeze. If the underlying data are corrected or updated after that freeze, the change is handled as a new analytical cycle.
+
+Each metric run should record, at minimum:
+
+- data release identifier
+- source dataset version
+- run date
+- responsible Stata DO or ADO file
+- data status, such as final or provisional
+
+## Units of analysis
+
+BNR metrics may use different units of analysis. The unit must be explicit in the [BNR Metric Specification Register](sap-metrics.qmd).
+
+| Unit | Definition |
+|---|---|
+| Event | A registered CVD event, such as stroke or acute myocardial infarction |
+| Person | A unique individual in the registry or linked source system |
+| Admission | A hospital admission associated with a registered event |
+| Death | A death record or death outcome associated with a registered event |
+| Bed-day | One occupied hospital bed for one day |
+| Population | Resident population denominator used for rate calculation |
+| Record | A row in a registry or release dataset, usually used for data quality metrics |
+
+The same individual may contribute more than one event where the metric is event-based.
+
+## Standard CVD data sources
+
+Current CVD metrics may use:
+
+| Source | Use |
+|---|---|
+| BNR CVD registry data | Case ascertainment, event characteristics, admissions and outcomes |
+| Death certificate data | Death certificate only cases and death outcomes where used |
+| Population denominator data | Crude and age-standardised rate calculation |
+| Data release metadata | Dataset versioning, release status and provenance |
+
+Additional sources may be added for future surveillance domains.
+
+## Standard inclusion rules
+
+Unless a metric-specific definition states otherwise, CVD metrics include:
+
+- confirmed BNR events
+- Barbados residents
+- events occurring within the defined reporting period
+- records included in the approved analytical data release
+- hospital-registered stroke and acute myocardial infarction events for current CVD reporting
+
+The [BNR Metric Specification Register](sap-metrics.qmd) must define whether a metric includes all events, first-ever events, hospitalised events, death certificate only events, or another specified event set.
+
+## Standard exclusion rules
+
+Unless a metric-specific definition states otherwise, CVD metrics exclude:
+
+- non-residents
+- duplicate records
+- records outside the reporting period
+- records failing the approved case definition
+- records with missing required values for the metric being calculated
+
+Death certificate only cases are included or excluded according to the metric definition. They must not be silently removed.
+
+## Standard dimensions
+
+Dimensions are the approved ways a metric may be stratified. Stratification does not create a new metric unless the definition or method changes.
+
+Standard CVD dimensions include:
+
+| Dimension | Example values |
+|---|---|
+| Period | Year, quarter, month, week, rolling period |
+| Event type | All CVD, stroke, acute myocardial infarction |
+| Sex | Female, male, all |
+| Age group | All ages, standard BNR age groups |
+| Source status | Hospital-registered, death certificate only, all sources |
+| Outcome status | Survived to discharge, died in hospital, unknown |
+| Data release | Current release, historical release |
+
+A metric does not need to use every dimension.
+
+## Period definitions
+
+Calendar year is the standard annual reporting period.
+
+Monthly and weekly outputs may be produced for operational monitoring. Weekly metrics should use one documented week definition consistently.
+
+Rolling periods may be used for smoothing, baseline comparison or small-number stability. The number of years in the rolling period must be recorded in the metric output.
+
+## Statistical methods
+
+### Count metrics
+
+Count metrics report the number of eligible units in a defined period and stratum.
+
+$$
+\text{Count} = \sum_{i=1}^{n} I_i
+$$
+
+where \(I_i = 1\) when record \(i\) meets the metric definition, and \(I_i = 0\) otherwise.
+
+Counts should normally be reported alongside relevant denominators, percentages or rates when used for interpretation.
+
+### Percentage metrics
+
+Percentage metrics report a numerator as a share of an eligible denominator.
+
+$$
+\text{Percentage} = \frac{x}{n} \times 100
+$$
+
+where \(x\) is the number meeting the metric condition and \(n\) is the eligible denominator.
+
+Where appropriate, percentage metrics should include 95% confidence intervals using a documented binomial method.
+
+### Rate metrics
+
+Rate metrics report the number of events relative to a population denominator.
+
+$$
+\text{Rate per 100,000} = \frac{x}{N} \times 100{,}000
+$$
+
+where \(x\) is the number of eligible events and \(N\) is the resident population denominator.
+
+The denominator source, age bands and reference period must be documented.
+
+### Age-standardised rates
+
+Age-standardised rates are used when comparing populations or time periods with different age structures.
+
+Direct age-standardisation is the default method unless a metric-specific definition states otherwise.
+
+$$
+\text{Age-standardised rate} = \sum_{a=1}^{A} w_a r_a
+$$
+
+where \(r_a\) is the age-specific rate in age group \(a\), and \(w_a\) is the corresponding standard population weight.
+
+The [BNR Metric Specification Register](metric-specification-register.qmd) must define the age bands, denominator source and standard population.
+
+### Ratio metrics
+
+Ratio metrics compare two rates, percentages or counts.
+
+$$
+\text{Ratio} = \frac{\text{comparison estimate}}{\text{reference estimate}}
+$$
+
+The comparison group and reference group must be explicit.
+
+Ratio metrics should only be added to the register when they are expected to be routinely produced and interpreted. Ad hoc ratios may appear in briefings as research outputs.
+
+### Model-adjusted metrics
+
+Model-adjusted metrics may be used where crude stratification is insufficient.
+
+Examples include:
+
+- age-adjusted case-fatality percentage
+- model-based rate ratio
+- trend estimate
+
+The model form, adjustment variables, reference group and prediction method must be documented in the [BNR Metric Specification Register](sap-metrics.qmd).
+
+Model-adjusted metrics should be used sparingly and only when they add clear interpretive value.
+
+### Length-of-stay metrics
+
+Length of stay is calculated from admission and discharge dates.
+
+$$
+\text{Length of stay}_i = \text{date of discharge}_i - \text{date of admission}_i
+$$
+
+The metric definition must specify handling of:
+
+- same-day discharge
+- in-hospital death
+- missing dates
+- implausible date sequences
+
+Median and interquartile range are preferred for public reporting because length of stay is usually skewed.
+
+### Bed-day metrics
+
+Bed-day metrics describe hospital service use.
+
+$$
+\text{Total bed-days} = \sum_{i=1}^{n} \text{length of stay}_i
+$$
+
+Bed-day metrics should be interpreted as service-use measures, not disease incidence measures.
+
+## Data quality metrics
+
+Data quality metrics are part of the routine metric system.
+
+They may describe:
+
+- release size
+- missingness
+- duplicate candidates
+- invalid dates
+- implausible values
+- unknown outcomes
+- abstraction lag
+- release readiness
+
+Data quality metrics may be internal only, public, or partially public depending on governance decisions.
+
+## Uncertainty intervals
+
+Uncertainty intervals should be produced when they support interpretation.
+
+| Metric type | Default uncertainty approach |
+|---|---|
+| Count | Usually none, unless modelled or compared |
+| Percentage | Binomial confidence interval |
+| Crude rate | Poisson or exact Poisson confidence interval |
+| Age-standardised rate | Standard direct standardisation confidence interval |
+| Model-adjusted estimate | Model-based confidence interval |
+| Median | Optional bootstrap or distribution-free interval, where needed |
+
+The method used must be recorded in the output metadata or metric register.
+
+## Small numbers and disclosure control
+
+All public outputs must comply with agreed disclosure control rules.
+
+Metric values may be flagged as:
+
+- final
+- provisional
+- suppressed
+- low count
+- unstable
+- data quality warning
+- internal only
+
+Suppression rules should be implemented consistently in Stata wherever possible, not manually in Quarto.
+
+Where values are not suppressed but are unstable, public interpretation should avoid overstatement.
+
+## Missing data
+
+The handling of missing data must be explicit.
+
+Default rules are:
+
+- missing values in required numerator fields exclude a record from that metric
+- missing denominator fields exclude a record from denominator-based metrics
+- missing outcome values exclude records from outcome metrics unless unknown is a valid category
+- missingness should be reported as a data quality metric where it affects interpretation
+
+Imputation is not used for routine public metrics unless a metric-specific definition explicitly approves it.
+
+## Baseline comparisons
+
+Baseline comparisons may use historical reference periods such as a five-year average.
+
+The metric definition must state:
+
+- baseline years
+- inclusion rules for baseline data
+- whether the baseline is fixed or rolling
+- whether baseline values are means, medians, ranges or intervals
+- whether the comparison is descriptive or inferential
+
+Baseline metrics should not be confused with forecast or expected-value models unless such models are explicitly defined.
+
+## Output requirements
+
+Routine metric outputs should be written in long format wherever possible.
+
+The minimum preferred output structure is:
+
+| Field | Purpose |
+|---|---|
+| metric_id | Links the output row to the metric register |
+| release_id | Identifies the data release |
+| period | Reporting period |
+| strata | Compact description of the stratum, or separate dimension variables if easier |
+| statistic | Count, rate, percentage, median, mean or other statistic |
+| value | Main estimate |
+| unit | Count, percent, per 100,000, days, bed-days or ratio |
+| numerator | Numerator, where applicable |
+| denominator | Denominator, where applicable |
+| lower_ci | Lower confidence interval, where applicable |
+| upper_ci | Upper confidence interval, where applicable |
+| status_flag | Final, provisional, suppressed, low count, unstable or warning status |
+
+Other metadata should be stored once at dataset or build level rather than repeated unnecessarily in every row.
+
+## Metadata requirements
+
+Every routine metric output must include metadata describing:
+
+- metric definition
+- numerator
+- denominator
+- inclusion and exclusion rules
+- source dataset
+- data release
+- calculation method
+- standardisation method, where applicable
+- dimensions included
+- limitations
+- responsible code file
+- run date
+
+Where possible, metadata should be stored both in the Stata dataset and as a companion YAML file.
+
+## Quality assurance
+
+Each analytical cycle should include:
+
+- confirmation of approved data release
+- validation of required variables
+- dataset signature or release identifier check
+- comparison with previous release totals
+- review of data quality flags
+- review of suppressed or unstable outputs
+- Stata log review
+- human sign-off before public publication
+
+Any material difference from the approved metric definition must be documented before publication.
+
+## Publication rules
+
+The information hub publishes static outputs.
+
+Quarto pages may:
+
+- read approved metric outputs
+- present metric values
+- visualise approved data
+- provide interpretation
+- link to downloads
+
+Quarto pages must not silently redefine numerators, denominators, exclusions or statistical methods.
+
+## Briefings
+
+Briefings are narrative or research products.
+
+A briefing may:
+
+- use approved core metrics
+- combine several metrics
+- visualise selected metrics
+- interpret observed patterns
+- include additional bespoke analysis
+- explore research questions not covered by the metric register
+
+Where a briefing includes analysis outside the metric register, that analysis should be documented within the briefing materials and should not be treated as a new core metric unless it is later approved and added to the register.
+
+## Change control
+
+Changes to this SAP are required when:
+
+- a core analytical method changes
+- the data release model changes
+- disclosure rules change
+- standard dimensions change
+- a new surveillance domain introduces methods not covered here
+- output metadata requirements change
+
+Changes to individual metric definitions are recorded in the [BNR Metric Specification Register](sap-metrics.qmd).
+
+## Version history
+
+| Version | Date | Summary | Author |
+|---|---|---|---|
+| Draft v0.1 | 2026-05-15 | Initial draft SAP for the BNR information hub metric system |

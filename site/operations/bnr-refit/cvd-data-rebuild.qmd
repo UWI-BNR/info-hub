@@ -203,7 +203,7 @@ The figure below summarises the number of duplicated file occurrences:
 
 ***Figure.** Distribution of the number of duplicate Stata datasets within the DM/ folder.*
 
-![Distribution of duplicate dataset filenames in the DM/ directory](../../assets/images/filename-distribution.jpg)  
+![Distribution of duplicate dataset filenames in the DM/ directory](../../downloads/files/briefings/cvd_forensics_2025_v1/figures/cvd_file_instances.png)  
 
 ***note:** "10" represents 10 or more instances of a single dataset.*
 
