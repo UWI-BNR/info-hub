@@ -1,5 +1,5 @@
 ---
-title: "Latest outputs"
+title: "Latest Surveillance Outputs"
 description: "Latest public outputs from the Barbados National Registry Information Hub."
 title-block-style: none
 
@@ -31,9 +31,22 @@ format:
     page-layout: full
 ---
 
-The latest public outputs from the Barbados National Registry are listed below. These include surveillance briefings, downloadable data packages, and other approved reporting outputs.
 
-Use the search box or category filters to find outputs by topic, condition, or output type.
+::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
+
+### Live surveillance
+
+Explore the current monthly BNR CVD metrics dashboard, including hospital-registered CVD burden counts and stratified views.
+
+::: {.bnr-utility-links}
+[Live CVD surveillance](../surveillance/cvd/metrics/index.qmd){.btn .btn-outline-primary}
+:::
+
+:::
+
+
+## Latest outputs
+The latest public outputs from the Barbados National Registry are listed below. These include surveillance briefings, downloadable data packages, and other approved reporting outputs. Use the search box or category filters to find outputs by topic, condition, or output type.
 
 ::: {#latest-outputs}
 :::

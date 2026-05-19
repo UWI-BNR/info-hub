@@ -22,8 +22,7 @@ toc: false
 <p class="bnr-intro-sub">With clear, reliable evidence, we help guide decisions that strengthen care and improve health outcomes.</p>
 
 ::: {.d-flex .gap-3 .justify-content-center .flex-wrap .mt-4 .bnr-home-actions}
-[View latest data](news/index.qmd){.btn .btn-primary}
-[Explore surveillance areas](#surveillance-areas){.btn .btn-outline-primary}
+[View latest data](news/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::

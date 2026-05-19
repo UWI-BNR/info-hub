@@ -1,0 +1,1558 @@
+---
+title: "CVD Surveillance Metrics"
+subtitle: "Live updates"
+format:
+  dashboard:
+    orientation: rows
+    scrolling: true
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{=html}
+<style>
+/* ------------------------------------------------------------
+   TOP TITLE / NAVIGATION SPACING
+
+   These rules add breathing space between:
+   - the dashboard title
+   - the subtitle
+   - the dashboard tabs
+------------------------------------------------------------ */
+
+.quarto-dashboard #title-block-header,
+#title-block-header.quarto-title-block {
+  margin-bottom: 1.0rem !important;
+}
+
+.quarto-dashboard .quarto-title .title,
+.quarto-title .title {
+  margin-bottom: 0.45rem !important;
+}
+
+.quarto-dashboard .quarto-title .subtitle,
+.quarto-title .subtitle {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.85rem !important;
+}
+
+.quarto-dashboard .nav-tabs,
+.quarto-dashboard .navbar-nav,
+.quarto-dashboard .dashboard-nav,
+.quarto-dashboard .bslib-navs {
+  margin-top: 0.45rem !important;
+}
+
+
+/* ------------------------------------------------------------
+   DASHBOARD CARD SPACING
+
+   Quarto dashboard cards have generous default padding. These rules
+   make the dashboard denser so charts and tables are visible without
+   excessive scrolling.
+------------------------------------------------------------ */
+
+.quarto-dashboard .card,
+.quarto-dashboard .bslib-card {
+  margin-bottom: 0.35rem !important;
+  min-height: 0 !important;
+}
+
+.quarto-dashboard .card-header,
+.quarto-dashboard .bslib-card .card-header {
+  padding: 0.3rem 0.65rem !important;
+  min-height: 0 !important;
+}
+
+.quarto-dashboard .card-body,
+.quarto-dashboard .bslib-card .card-body {
+  padding: 0.5rem 0.7rem !important;
+}
+
+.quarto-dashboard .card-title,
+.quarto-dashboard h2.card-title {
+  margin-bottom: 0.2rem !important;
+  font-size: 1rem !important;
+}
+
+.quarto-dashboard .dashboard-page,
+.quarto-dashboard .dashboard-row,
+.quarto-dashboard .dashboard-column {
+  gap: 0.18rem !important;
+}
+
+/* Top-align content inside dashboard cards */
+.quarto-dashboard .card,
+.quarto-dashboard .bslib-card,
+.quarto-dashboard .card-body,
+.quarto-dashboard .bslib-card .card-body,
+.quarto-dashboard .html-fill-container,
+.quarto-dashboard .html-fill-item {
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  align-content: flex-start !important;
+}
+
+
+/* ------------------------------------------------------------
+   SIDEBAR: LIGHT FLATLY-COMPATIBLE TREATMENT
+
+   Flatly uses clean light greys and a dark blue-grey text colour.
+   This keeps the sidebar quieter than the default darker grey.
+------------------------------------------------------------ */
+
+.quarto-dashboard .sidebar,
+.quarto-dashboard .bslib-sidebar-layout > .sidebar,
+.quarto-dashboard .bslib-sidebar-layout > aside {
+  background-color: #f8f9fa !important;
+  border-right: 1px solid #dfe6e9 !important;
+}
+
+.quarto-dashboard .sidebar label,
+.quarto-dashboard .bslib-sidebar-layout > .sidebar label,
+.quarto-dashboard .bslib-sidebar-layout > aside label {
+  color: #2c3e50 !important;
+  font-weight: 600;
+}
+
+.quarto-dashboard .sidebar select,
+.quarto-dashboard .sidebar input,
+.quarto-dashboard .bslib-sidebar-layout > .sidebar select,
+.quarto-dashboard .bslib-sidebar-layout > .sidebar input,
+.quarto-dashboard .bslib-sidebar-layout > aside select,
+.quarto-dashboard .bslib-sidebar-layout > aside input {
+  border-color: #bdc3c7 !important;
+}
+
+
+/* ------------------------------------------------------------
+   OBSERVABLE OUTPUTS
+
+   Observable tables and plots can otherwise look slightly different
+   from surrounding Bootstrap text.
+------------------------------------------------------------ */
+
+.observablehq table {
+  margin-bottom: 0.2rem !important;
+  font-size: 0.92rem;
+}
+
+.observablehq p {
+  margin-bottom: 0.3rem;
+}
+
+
+/* ------------------------------------------------------------
+   OBSERVABLE PLOT TEXT AND LEGENDS
+
+   This forces Observable Plot SVG text and Plot legends to use the same
+   readable size as the CVD-BURDEN-001 charts. This is especially important
+   for the CVD-BURDEN-002 stacked bar charts.
+------------------------------------------------------------ */
+
+.observablehq svg text {
+  font-size: 15px !important;
+  font-family: inherit !important;
+}
+
+.observablehq .plot-swatches,
+.observablehq .plot-swatches *,
+.observablehq .plot-swatches-wrap,
+.observablehq .plot-swatches-wrap *,
+.observablehq .plot-ramp,
+.observablehq .plot-ramp * {
+  font-size: 15px !important;
+  font-family: inherit !important;
+}
+
+
+/* ------------------------------------------------------------
+   INTERPRETATION PANEL
+------------------------------------------------------------ */
+
+.bnr-interpretation {
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.bnr-interpretation-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+}
+
+.bnr-interpretation-grid {
+  display: grid;
+  grid-template-columns: minmax(120px, 160px) 1fr;
+  gap: 0.25rem 0.75rem;
+}
+
+.bnr-interpretation-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.bnr-interpretation-value {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+
+/* ------------------------------------------------------------
+   HEADLINE CARDS
+------------------------------------------------------------ */
+
+.bnr-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(150px, 1fr));
+  gap: 0.7rem;
+  margin-bottom: 0.75rem;
+}
+
+.bnr-headline-card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.35rem;
+  padding: 0.7rem 0.75rem;
+  background: #fff;
+}
+
+.bnr-headline-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 0.15rem;
+}
+
+.bnr-headline-value {
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.bnr-headline-note {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+
+/* ------------------------------------------------------------
+   CHART TITLES AND LEGENDS
+------------------------------------------------------------ */
+
+.bnr-chart-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0.25rem 0 0.35rem 0;
+  color: #2c3e50;
+}
+
+.bnr-trend-note {
+  margin: 0 0 0.4rem 0;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.bnr-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1.2rem;
+  align-items: center;
+  margin: 0 0 0.45rem 0;
+  font-size: 0.92rem !important;
+  line-height: 1.25;
+}
+
+.bnr-chart-legend,
+.bnr-chart-legend * {
+  font-size: 0.92rem !important;
+}
+
+.bnr-chart-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bnr-legend-line {
+  display: inline-block;
+  width: 28px;
+  height: 0;
+  border-top: 3px solid;
+}
+
+.bnr-legend-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 0.2rem;
+  flex: 0 0 auto;
+}
+
+
+/* ------------------------------------------------------------
+   DISABLED SIDEBAR CONTROL
+
+   CVD-BURDEN-002 is an annual distribution view. The Time view
+   selector is therefore shown but greyed out.
+------------------------------------------------------------ */
+
+.bnr-disabled-note {
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 0.15rem;
+}
+
+.bnr-disabled-control {
+  opacity: 0.55;
+}
+
+
+/* ------------------------------------------------------------
+   METRIC 2 CHART GRID
+------------------------------------------------------------ */
+
+.bnr-two-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+}
+
+
+/* ------------------------------------------------------------
+   BOTTOM NOTE ON METRIC VIEW
+------------------------------------------------------------ */
+
+.bnr-more-metrics {
+  margin-top: 0.85rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #e9ecef;
+  font-size: 0.95rem;
+}
+
+
+/* ------------------------------------------------------------
+   CUSTOM DATA TABLE
+------------------------------------------------------------ */
+
+.bnr-data-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.bnr-data-summary {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+}
+
+.bnr-data-scroll {
+  width: 100%;
+  max-height: 720px;
+  overflow: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.bnr-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.bnr-data-table th,
+.bnr-data-table td {
+  padding: 0.35rem 0.45rem;
+  border-bottom: 1px solid #e9ecef;
+  white-space: nowrap;
+}
+
+.bnr-data-table th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 1;
+  font-weight: 600;
+}
+
+.bnr-data-table tr:nth-child(even) {
+  background: #fbfbfb;
+}
+
+
+/* ------------------------------------------------------------
+   COMPACT DATA TAB CARDS
+
+   Quarto dashboard cards can vertically centre content inside a tall
+   fill-card. These rules force metadata/download content to sit at the
+   top and reduce empty vertical space.
+------------------------------------------------------------ */
+
+.quarto-dashboard .card:has(.bnr-data-package),
+.quarto-dashboard .bslib-card:has(.bnr-data-package),
+.quarto-dashboard .card:has(.bnr-metadata-table),
+.quarto-dashboard .bslib-card:has(.bnr-metadata-table),
+.quarto-dashboard .card:has(.bnr-download-table),
+.quarto-dashboard .bslib-card:has(.bnr-download-table) {
+  min-height: 0 !important;
+  height: auto !important;
+  align-self: start !important;
+}
+
+.quarto-dashboard .card:has(.bnr-data-package) .card-body,
+.quarto-dashboard .bslib-card:has(.bnr-data-package) .card-body,
+.quarto-dashboard .card:has(.bnr-metadata-table) .card-body,
+.quarto-dashboard .bslib-card:has(.bnr-metadata-table) .card-body,
+.quarto-dashboard .card:has(.bnr-download-table) .card-body,
+.quarto-dashboard .bslib-card:has(.bnr-download-table) .card-body {
+  display: block !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  align-content: flex-start !important;
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.quarto-dashboard .card:has(.bnr-data-package) .html-fill-container,
+.quarto-dashboard .card:has(.bnr-data-package) .html-fill-item,
+.quarto-dashboard .bslib-card:has(.bnr-data-package) .html-fill-container,
+.quarto-dashboard .bslib-card:has(.bnr-data-package) .html-fill-item {
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+}
+
+/* Close the large blank gap between the two cards on the Data tab. */
+.quarto-dashboard .dashboard-page:has(.bnr-data-package),
+.quarto-dashboard .dashboard-row:has(.bnr-data-package),
+.quarto-dashboard .dashboard-column:has(.bnr-data-package),
+.quarto-dashboard .html-fill-container:has(.bnr-data-package),
+.quarto-dashboard .html-fill-item:has(.bnr-data-package),
+.quarto-dashboard .bslib-grid:has(.bnr-data-package),
+.quarto-dashboard .bslib-grid-item:has(.bnr-data-package) {
+  row-gap: 0.18rem !important;
+  gap: 0.18rem !important;
+  min-height: 0 !important;
+}
+
+.quarto-dashboard .dashboard-row:has(.bnr-data-package),
+.quarto-dashboard .dashboard-column:has(.bnr-data-package),
+.quarto-dashboard .html-fill-item:has(.bnr-data-package),
+.quarto-dashboard .bslib-grid-item:has(.bnr-data-package) {
+  height: auto !important;
+  flex: 0 0 auto !important;
+}
+
+.quarto-dashboard .card:has(.bnr-data-package),
+.quarto-dashboard .bslib-card:has(.bnr-data-package),
+.quarto-dashboard .card:has(.bnr-data-table),
+.quarto-dashboard .bslib-card:has(.bnr-data-table) {
+  margin-bottom: 0.18rem !important;
+  min-height: 0 !important;
+}
+
+
+/* ------------------------------------------------------------
+   METADATA AND DOWNLOAD TABLES
+------------------------------------------------------------ */
+
+.bnr-data-package h3 {
+  font-size: 1rem;
+  margin: 0.15rem 0 0.35rem 0;
+}
+
+.bnr-downloads-title {
+  margin-top: 0.2rem !important;
+  padding-top: 1.0rem !important;
+}
+
+.bnr-metadata-table,
+.bnr-download-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  margin-bottom: 0.2rem;
+}
+
+.bnr-metadata-table th,
+.bnr-metadata-table td,
+.bnr-download-table th,
+.bnr-download-table td {
+  padding: 0.30rem 0.55rem;
+  border-bottom: 1px solid #e9ecef;
+  vertical-align: top;
+}
+
+.bnr-metadata-table th,
+.bnr-download-table th {
+  background: #f8f9fa;
+  font-weight: 700;
+}
+
+.bnr-metadata-table td:first-child {
+  width: 190px;
+  font-weight: 600;
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE BEHAVIOUR
+------------------------------------------------------------ */
+
+@media (max-width: 900px) {
+  .bnr-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bnr-interpretation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// LOAD DASHBOARD DATA
+//
+// This dashboard reads the current public metric CSV. The CSV is created
+// upstream by Stata and mirrored into the website downloads folder.
+// The dashboard does not calculate official BNR metrics from raw data.
+// -----------------------------------------------------------------------------
+
+burden = FileAttachment("../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv")
+  .csv({typed: true})
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// GENERAL HELPER FUNCTIONS
+//
+// These helpers keep later code readable. They are intentionally plain rather
+// than clever, so future maintainers can follow the dashboard logic.
+// -----------------------------------------------------------------------------
+
+// Return unique non-empty values from a column, sorted alphabetically.
+uniqueSorted = (data, column) =>
+  Array.from(
+    new Set(
+      data
+        .map(d => d[column])
+        .filter(d => d !== null && d !== undefined && d !== "")
+    )
+  ).sort()
+
+// Return unique numeric values from a column, sorted numerically.
+uniqueNumericSorted = (data, column) =>
+  Array.from(
+    new Set(
+      data
+        .map(d => d[column])
+        .filter(d => d !== null && d !== undefined && !isNaN(d))
+    )
+  ).sort((a, b) => a - b)
+
+// Format a metric value using its unit.
+formatValue = (x, unit) => {
+  if (x === null || x === undefined || isNaN(x)) return "—";
+  if (unit === "percent") return `${x.toFixed(1)}%`;
+  if (unit === "count") return Math.round(x).toLocaleString();
+  return x.toLocaleString();
+}
+
+// Format comparator means, keeping one decimal place for counts.
+formatMean = (x, unit) => {
+  if (x === null || x === undefined || isNaN(x)) return "—";
+  if (unit === "count") return x.toFixed(1);
+  if (unit === "percent") return `${x.toFixed(1)}%`;
+  return x.toFixed(1);
+}
+
+// Convert machine-readable values into more readable labels.
+displayLabel = (x) => {
+  if (x === null || x === undefined || x === "") return "—";
+  return String(x).replaceAll("_", " ");
+}
+
+// Public-facing label for sex values.
+sexLabel = (x) => {
+  if (x === "all") return "All";
+  if (x === "female") return "Women";
+  if (x === "male") return "Men";
+  return displayLabel(x);
+}
+
+// Return the latest row in a filtered dataset.
+// Latest is defined by period_year and then period_month.
+latestValue = (data) => {
+  if (data.length === 0) return null;
+
+  const sorted = [...data].sort((a, b) =>
+    (a.period_year - b.period_year) ||
+    ((a.period_month ?? 0) - (b.period_month ?? 0))
+  );
+
+  return sorted[sorted.length - 1];
+}
+
+// Convert a metric row into a JavaScript Date for plotting.
+// Monthly rows are placed at the first day of the month.
+// Annual rows are placed at the first day of the year.
+periodDate = (d) => {
+  if (d.period_start instanceof Date) return d.period_start;
+
+  if (d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
+    return new Date(d.period_year, d.period_month - 1, 1);
+  }
+
+  return new Date(d.period_year, 0, 1);
+}
+
+// Sort rows chronologically.
+periodSort = (a, b) =>
+  (a.period_year - b.period_year) ||
+  ((a.period_month ?? 0) - (b.period_month ?? 0))
+
+// Safe conversion for table cells.
+safeCell = (x) => {
+  if (x === null || x === undefined || Number.isNaN(x)) return "";
+  return String(x);
+}
+
+// Check whether a row has a usable numeric value.
+hasValue = (d) =>
+  d !== null &&
+  d !== undefined &&
+  d.value !== null &&
+  d.value !== undefined &&
+  !isNaN(d.value)
+
+// Pretty display for period labels.
+// Monthly periods appear as "Dec 2023" rather than "2023_m12".
+periodPretty = (d) => {
+  if (!d) return "No value available";
+
+  if (d.period_type === "monthly" && d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
+    const dt = new Date(d.period_year, d.period_month - 1, 1);
+    return dt.toLocaleString("en-GB", {month: "short", year: "numeric"});
+  }
+
+  return String(d.period_year);
+}
+
+// Find the comparator row matching an observed row and sex.
+// Used for the headline cards in CVD-BURDEN-001.
+lookupComparator = (rows, observedRow, sex) => {
+  if (!observedRow) return null;
+
+  return rows.find(d =>
+    d.sex === sex &&
+    d.period === observedRow.period &&
+    d.event_type === observedRow.event_type &&
+    d.age_group === observedRow.age_group
+  ) ?? null;
+}
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// METRIC INTERPRETATION TEXT
+//
+// These descriptions are currently embedded in the dashboard. Later, these
+// could be read from the metric YAML or the metric specification register.
+// -----------------------------------------------------------------------------
+
+metricDescription = (metric_id, count_view = "monthly") => {
+  if (metric_id === "CVD-BURDEN-001") {
+    if (count_view === "monthly") {
+      return {
+        title: "Hospital-registered CVD event count",
+        what: "This view shows the number of hospital-registered CVD events recorded each month.",
+        numerator: "Hospital-registered CVD events in the selected month.",
+        denominator: "Not applicable. This is a count, not a percentage or rate.",
+        interpretation: "Use this view to monitor short-term changes in hospital-registered CVD event burden. Monthly counts are not age-stratified in this dashboard. The comparator is the average for the same calendar month over the previous five years."
+      };
+    }
+
+    return {
+      title: "Hospital-registered CVD event count",
+      what: "This view shows the number of hospital-registered CVD events recorded each year.",
+      numerator: "Hospital-registered CVD events in the selected year.",
+      denominator: "Not applicable. This is a count, not a percentage or rate.",
+      interpretation: "Use this view to compare annual registered CVD event burden over time. The comparator is the average of the previous five calendar years."
+    };
+  }
+
+  if (metric_id === "CVD-BURDEN-002") {
+    return {
+      title: "Distribution of hospital-registered CVD events",
+      what: "This view shows how registered CVD events are distributed by age group and sex.",
+      numerator: "Events in the selected category, such as an age group or sex group.",
+      denominator: "All eligible events in the relevant parent group for the selected event type and year.",
+      interpretation: "These percentages describe the composition of registered CVD events. They are not population risks, incidence rates, or measures of disease probability."
+    };
+  }
+
+  return {
+    title: "Selected metric",
+    what: "This dashboard shows approved aggregate BNR metric outputs.",
+    numerator: "See the metric specification register.",
+    denominator: "See the metric specification register.",
+    interpretation: "Use this dashboard to explore approved aggregate metric rows."
+  };
+}
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// SMALL RENDERING HELPERS
+//
+// These functions return HTML fragments. Keeping them here avoids repeating
+// the same table / card / note code throughout the dashboard.
+// -----------------------------------------------------------------------------
+
+// Interpretation panel at the top of the metric view.
+// Keep this deliberately short: title, what this shows, interpretation.
+renderInterpretation = (description) => html`
+  <div class="bnr-interpretation">
+    <div class="bnr-interpretation-title">${description.title}</div>
+    <div class="bnr-interpretation-grid">
+      <div class="bnr-interpretation-label">What this shows</div>
+      <div class="bnr-interpretation-value">${description.what}</div>
+
+      <div class="bnr-interpretation-label">Interpretation</div>
+      <div class="bnr-interpretation-value">${description.interpretation}</div>
+    </div>
+  </div>
+`
+
+// Headline number card.
+renderHeadlineCard = (label, row, valueFormatter = formatValue, showPeriod = true) => html`
+  <div class="bnr-headline-card">
+    <div class="bnr-headline-label">${label}</div>
+    <div class="bnr-headline-value">${row ? valueFormatter(row.value, row.unit) : "—"}</div>
+    ${showPeriod
+      ? html`<div class="bnr-headline-note">${row ? periodPretty(row) : "No value available"}</div>`
+      : html`<div class="bnr-headline-note">&nbsp;</div>`}
+  </div>
+`
+
+// Custom data table. This avoids the default row limits of Inputs.table.
+renderMetricTable = (rows, title) => html`
+  <div class="bnr-data-title">${title}</div>
+  <div class="bnr-data-summary">
+    <strong>Rows displayed:</strong> ${rows.length.toLocaleString()}
+  </div>
+  <div class="bnr-data-scroll">
+    <table class="bnr-data-table">
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Metric ID</th>
+          <th>Statistic</th>
+          <th>Event type</th>
+          <th>Sex</th>
+          <th>Age group</th>
+          <th>Value</th>
+          <th>Unit</th>
+          <th>Numerator</th>
+          <th>Denominator</th>
+          <th>Comparator N</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(d => html`
+          <tr>
+            <td>${safeCell(d.period)}</td>
+            <td>${safeCell(d.metric_id)}</td>
+            <td>${safeCell(d.statistic)}</td>
+            <td>${safeCell(d.event_type)}</td>
+            <td>${safeCell(d.sex)}</td>
+            <td>${safeCell(d.age_group)}</td>
+            <td>${safeCell(d.value)}</td>
+            <td>${safeCell(d.unit)}</td>
+            <td>${safeCell(d.numerator)}</td>
+            <td>${safeCell(d.denominator)}</td>
+            <td>${safeCell(d.comparison_n)}</td>
+            <td>${safeCell(d.status_flag)}</td>
+          </tr>
+        `)}
+      </tbody>
+    </table>
+  </div>
+`
+
+// Short note placed under each metric view.
+renderMoreMetricsNote = () => html`
+  <div class="bnr-more-metrics">
+    For a full range of monthly metrics, you can view the metrics briefing
+    <a href="#">here</a>, and download the associated datasets
+    <a href="#">here</a>.
+  </div>
+`
+
+// Compact metadata table for the Data tab.
+renderMetadataTable = (rows) => html`
+  <table class="bnr-metadata-table">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows.map(d => html`
+        <tr>
+          <td>${d.item}</td>
+          <td>${d.value}</td>
+        </tr>
+      `)}
+    </tbody>
+  </table>
+`
+
+// Downloads table for the Data tab.
+renderDownloadsTable = () => html`
+  <table class="bnr-download-table">
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Description</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Current CSV</td>
+        <td>Current CVD burden metric dataset in CSV format.</td>
+        <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv" download>Download CSV</a></td>
+      </tr>
+      <tr>
+        <td>Current Stata dataset</td>
+        <td>Current CVD burden metric dataset in Stata DTA format.</td>
+        <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.dta" download>Download DTA</a></td>
+      </tr>
+      <tr>
+        <td>Metric package</td>
+        <td>ZIP package containing release-stamped outputs and metadata.</td>
+        <td><a href="../../../downloads/files/metrics/cvd/burden/bnr_cvd_burden_cvd_2023_12.zip" download>Download ZIP</a></td>
+      </tr>
+      <tr>
+        <td>Statistical Analysis Plan</td>
+        <td>Standing analytical methods for BNR information hub outputs.</td>
+        <td><a href="../../../operations/data/sap.qmd" target="_blank" rel="noopener">Open SAP</a></td>
+      </tr>
+      <tr>
+        <td>Metric Specification Register</td>
+        <td>Definitions for approved BNR information hub metrics.</td>
+        <td><a href="../../../operations/data/sap-metrics.qmd" target="_blank" rel="noopener">Open metric register</a></td>
+      </tr>
+    </tbody>
+  </table>
+`
+
+// Custom swatch legend.
+// CVD-BURDEN-001 already uses a custom HTML legend. CVD-BURDEN-002 uses this
+// same pathway so that legend text size is not controlled by Observable Plot's
+// automatic legend defaults.
+renderSwatchLegend = (items, colourMap, labelFunction = displayLabel) => html`
+  <div class="bnr-chart-legend">
+    ${items.map(item => html`
+      <span class="bnr-chart-legend-item">
+        <span class="bnr-legend-swatch" style=${`background-color: ${colourMap[item]};`}></span>
+        ${labelFunction(item)}
+      </span>
+    `)}
+  </div>
+`
+```
+
+# Filters {.sidebar}
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// SIDEBAR: METRIC SELECTOR
+// -----------------------------------------------------------------------------
+
+viewof selected_metric = Inputs.select(
+  uniqueSorted(burden, "metric_id"),
+  {
+    label: "Metric",
+    value: "CVD-BURDEN-001"
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// SIDEBAR: EVENT TYPE SELECTOR
+//
+// Currently applies to both burden metrics.
+// -----------------------------------------------------------------------------
+
+viewof selected_event_type = Inputs.select(
+  uniqueSorted(burden, "event_type"),
+  {
+    label: "Event type",
+    value: "all_cvd"
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// SIDEBAR: TIME VIEW SELECTOR
+//
+// Used only for CVD-BURDEN-001.
+// For CVD-BURDEN-002, the selector is shown disabled because that metric is
+// currently annual distribution only.
+// -----------------------------------------------------------------------------
+
+viewof selected_count_view = {
+  if (selected_metric === "CVD-BURDEN-001") {
+    return Inputs.select(
+      ["monthly", "annual"],
+      {
+        label: "Time view",
+        value: "monthly"
+      }
+    );
+  }
+
+  const wrapper = html`
+    <div class="bnr-disabled-control">
+      <label>Time view</label>
+      <select disabled>
+        <option>Annual only</option>
+      </select>
+      <div class="bnr-disabled-note">Not used for distribution metrics.</div>
+    </div>
+  `;
+
+  wrapper.value = "annual";
+  return wrapper;
+}
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// YEAR RANGE SETUP
+//
+// The available years respond to the selected metric and event type.
+// -----------------------------------------------------------------------------
+
+sidebar_base = burden.filter(d =>
+  d.metric_id === selected_metric &&
+  d.event_type === selected_event_type
+)
+
+years = uniqueNumericSorted(sidebar_base, "period_year")
+min_year = Math.min(...years)
+max_year = Math.max(...years)
+```
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// SIDEBAR: START YEAR SLIDER
+// -----------------------------------------------------------------------------
+
+viewof selected_start_year = Inputs.range(
+  [min_year, max_year],
+  {
+    label: "Start year",
+    step: 1,
+    value: min_year
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// END YEAR LOGIC
+//
+// The end-year slider starts at the selected start year. This prevents the
+// end year from being set earlier than the start year.
+// -----------------------------------------------------------------------------
+
+end_year_min = selected_start_year
+end_year_max = max_year
+end_year_default = max_year
+```
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// SIDEBAR: END YEAR SLIDER
+// -----------------------------------------------------------------------------
+
+viewof selected_end_year = Inputs.range(
+  [end_year_min, end_year_max],
+  {
+    label: "End year",
+    step: 1,
+    value: end_year_default
+  }
+)
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// SHARED REACTIVE VALUES
+//
+// These values are used in several dashboard sections.
+// -----------------------------------------------------------------------------
+
+range_start = Math.min(selected_start_year, selected_end_year)
+range_end = Math.max(selected_start_year, selected_end_year)
+
+count_statistic = selected_count_view === "monthly"
+  ? "monthly_count"
+  : "annual_count"
+
+comparator_statistic = selected_count_view === "monthly"
+  ? "monthly_same_month_previous_5yr_mean"
+  : "annual_previous_5yr_mean"
+
+description = metricDescription(selected_metric, selected_count_view)
+
+metric2_years_in_range = burden
+  .filter(d =>
+    d.metric_id === "CVD-BURDEN-002" &&
+    d.event_type === selected_event_type &&
+    d.period_year >= range_start &&
+    d.period_year <= range_end
+  )
+  .map(d => d.period_year)
+
+latest_year_in_range = metric2_years_in_range.length > 0
+  ? Math.max(...metric2_years_in_range)
+  : range_end
+```
+
+# Metric view
+
+## Dashboard
+
+```{ojs}
+//| echo: false
+
+// -----------------------------------------------------------------------------
+// MAIN METRIC VIEW
+//
+// This is now deliberately bespoke by metric. That is easier for users than a
+// generic chart explorer, and it lets each metric explain itself clearly.
+// -----------------------------------------------------------------------------
+
+{
+  if (selected_metric === "CVD-BURDEN-001") {
+
+    // -------------------------------------------------------------------------
+    // CVD-BURDEN-001: DATA PREPARATION
+    //
+    // observedRows:
+    //   official count rows: monthly_count or annual_count
+    //
+    // comparatorRows:
+    //   previous 5-year mean rows calculated upstream by Stata
+    // -------------------------------------------------------------------------
+
+    const observedRows = burden.filter(d =>
+      d.metric_id === "CVD-BURDEN-001" &&
+      d.statistic === count_statistic &&
+      d.event_type === selected_event_type &&
+      d.age_group === "all" &&
+      ["all", "female", "male"].includes(d.sex) &&
+      d.period_year >= range_start &&
+      d.period_year <= range_end &&
+      d.status_flag !== "insufficient_history"
+    );
+
+    const comparatorRows = burden.filter(d =>
+      d.metric_id === "CVD-BURDEN-001" &&
+      d.statistic === comparator_statistic &&
+      d.event_type === selected_event_type &&
+      d.age_group === "all" &&
+      ["all", "female", "male"].includes(d.sex) &&
+      d.period_year >= range_start &&
+      d.period_year <= range_end &&
+      d.status_flag === "final" &&
+      d.comparison_n >= 5
+    );
+
+    // Latest headline values by sex.
+    const latestAll = latestValue(observedRows.filter(d => d.sex === "all"));
+    const latestFemale = latestValue(observedRows.filter(d => d.sex === "female"));
+    const latestMale = latestValue(observedRows.filter(d => d.sex === "male"));
+
+    // Matching comparator values for the same latest period.
+    const compAll = lookupComparator(comparatorRows, latestAll, "all");
+    const compFemale = lookupComparator(comparatorRows, latestFemale, "female");
+    const compMale = lookupComparator(comparatorRows, latestMale, "male");
+
+    // Observed chart line. The chart uses the all-sex, all-age series.
+    const observedAll = observedRows
+      .filter(d => d.sex === "all" && hasValue(d))
+      .map(d => ({
+        ...d,
+        chart_x: selected_count_view === "monthly" ? periodDate(d) : d.period_year
+      }))
+      .sort(periodSort);
+
+    // Comparator chart line. Only valid 5-year comparator rows are plotted.
+    const comparatorAll = comparatorRows
+      .filter(d => d.sex === "all" && hasValue(d) && d.value > 0)
+      .map(d => ({
+        ...d,
+        chart_x: selected_count_view === "monthly" ? periodDate(d) : d.period_year
+      }))
+      .sort(periodSort);
+
+    // -------------------------------------------------------------------------
+    // CVD-BURDEN-001: RENDER
+    // -------------------------------------------------------------------------
+
+    return html`
+      <div>
+        ${renderInterpretation(description)}
+
+        <hr>
+
+        <div class="bnr-card-grid">
+          ${renderHeadlineCard("Latest: all", latestAll)}
+          ${renderHeadlineCard("Latest: women", latestFemale)}
+          ${renderHeadlineCard("Latest: men", latestMale)}
+        </div>
+
+        <div class="bnr-card-grid">
+          ${renderHeadlineCard("Previous 5-year average: all", compAll, formatMean, false)}
+          ${renderHeadlineCard("Previous 5-year average: women", compFemale, formatMean, false)}
+          ${renderHeadlineCard("Previous 5-year average: men", compMale, formatMean, false)}
+        </div>
+
+        <div class="bnr-chart-title">
+          Trend for ${displayLabel(selected_event_type)}, both sexes, all ages
+        </div>
+
+        <p class="bnr-trend-note">
+          Showing ${range_start} to ${range_end}.
+        </p>
+
+        <div class="bnr-chart-legend">
+          <span class="bnr-chart-legend-item">
+            <span class="bnr-legend-line" style="border-color: #045174;"></span>
+            Observed
+          </span>
+          <span class="bnr-chart-legend-item">
+            <span class="bnr-legend-line" style="border-color: rgba(232, 122, 0, 0.55); border-top-width: 4px;"></span>
+            Previous 5-year average
+          </span>
+        </div>
+
+        ${Plot.plot({
+          height: 470,
+          marginLeft: 80,
+          marginBottom: 62,
+          style: {
+            fontSize: "15px",
+            fontFamily: "inherit"
+          },
+          x: selected_count_view === "monthly"
+            ? {
+                label: "Month",
+                type: "time",
+                ticks: 8,
+                tickFormat: "%Y"
+              }
+            : {
+                label: "Year",
+                ticks: Math.min(10, years.length),
+                tickFormat: d => String(d).replace(",", "")
+              },
+          y: {
+            label: "Count",
+            grid: true
+          },
+          marks: [
+            Plot.lineY(observedAll, {
+              x: "chart_x",
+              y: "value",
+              stroke: "#045174",
+              strokeWidth: 2
+            }),
+            Plot.dot(observedAll, {
+              x: "chart_x",
+              y: "value",
+              stroke: "#045174",
+              fill: "#045174",
+              r: 3.5,
+              title: d => `Observed\n${periodPretty(d)}\n${displayLabel(d.event_type)}, ${sexLabel(d.sex)}\n${formatValue(d.value, d.unit)}\nStatus: ${d.status_flag}`
+            }),
+            Plot.lineY(comparatorAll, {
+              x: "chart_x",
+              y: "value",
+              stroke: "rgba(232, 122, 0, 0.55)",
+              strokeWidth: 4
+            }),
+            Plot.ruleY([0])
+          ]
+        })}
+
+        ${renderMoreMetricsNote()}
+      </div>
+    `;
+  }
+
+  if (selected_metric === "CVD-BURDEN-002") {
+
+    // -------------------------------------------------------------------------
+    // CVD-BURDEN-002: AGE DISTRIBUTION DATA
+    //
+    // The age chart is a 100% stacked horizontal bar chart by year.
+    // Each stacked segment is an age group.
+    // -------------------------------------------------------------------------
+
+    const ageRows = burden
+      .filter(d =>
+        d.metric_id === "CVD-BURDEN-002" &&
+        d.statistic === "age_group_distribution" &&
+        d.event_type === selected_event_type &&
+        d.sex === "all" &&
+        d.age_group !== "all" &&
+        d.period_year >= range_start &&
+        d.period_year <= range_end &&
+        hasValue(d)
+      )
+      .sort((a, b) =>
+        (a.period_year - b.period_year) ||
+        ((a.age_group_order ?? 0) - (b.age_group_order ?? 0))
+      );
+
+    const ageYears = Array.from(new Set(ageRows.map(d => d.period_year))).sort((a, b) => a - b);
+    const ageYearDomain = ageYears.map(d => String(d));
+
+    // Fixed colour mapping keeps the chart and its custom legend in sync.
+    const ageColourPalette = [
+      "#e8f1f2",
+      "#c7dfe5",
+      "#9ac8d3",
+      "#68aabc",
+      "#2f7f9c",
+      "#045174",
+      "#001F3D"
+    ];
+
+    const ageColourDomain = Array.from(new Set(ageRows.map(d => d.age_group)));
+    const ageColourMap = Object.fromEntries(
+      ageColourDomain.map((value, index) => [
+        value,
+        ageColourPalette[index % ageColourPalette.length]
+      ])
+    );
+
+    // Convert percent rows into stacked bar segment start/end positions.
+    const ageStackRows = [];
+    for (const yy of ageYears) {
+      const rowsForYear = ageRows
+        .filter(d => d.period_year === yy)
+        .sort((a, b) => (a.age_group_order ?? 0) - (b.age_group_order ?? 0));
+
+      let running = 0;
+      for (const row of rowsForYear) {
+        const x1 = running;
+        const x2 = running + row.value;
+        ageStackRows.push({
+          ...row,
+          x1,
+          x2,
+          year_label: String(row.period_year)
+        });
+        running = x2;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // CVD-BURDEN-002: SEX DISTRIBUTION DATA
+    //
+    // The sex chart is also a 100% stacked horizontal bar chart by year.
+    // -------------------------------------------------------------------------
+
+    const sexRows = burden
+      .filter(d =>
+        d.metric_id === "CVD-BURDEN-002" &&
+        d.statistic === "sex_distribution" &&
+        d.event_type === selected_event_type &&
+        ["female", "male"].includes(d.sex) &&
+        d.period_year >= range_start &&
+        d.period_year <= range_end &&
+        hasValue(d)
+      )
+      .sort(periodSort);
+
+    const sexYears = Array.from(new Set(sexRows.map(d => d.period_year))).sort((a, b) => a - b);
+    const sexYearDomain = sexYears.map(d => String(d));
+
+    const sexColourDomain = ["female", "male"].filter(value =>
+      sexRows.some(d => d.sex === value)
+    );
+
+    const sexColourMap = {
+      female: "#D89C60",
+      male: "#045174"
+    };
+
+    // Convert female/male percent rows into stacked bar segment start/end positions.
+    const sexStackRows = [];
+    for (const yy of sexYears) {
+      const rowsForYear = sexRows
+        .filter(d => d.period_year === yy)
+        .sort((a, b) => {
+          const order = {female: 1, male: 2};
+          return (order[a.sex] ?? 99) - (order[b.sex] ?? 99);
+        });
+
+      let running = 0;
+      for (const row of rowsForYear) {
+        const x1 = running;
+        const x2 = running + row.value;
+        sexStackRows.push({
+          ...row,
+          x1,
+          x2,
+          year_label: String(row.period_year)
+        });
+        running = x2;
+      }
+    }
+
+    // -------------------------------------------------------------------------
+    // CVD-BURDEN-002: RENDER
+    // -------------------------------------------------------------------------
+
+    return html`
+      <div>
+        ${renderInterpretation(description)}
+
+        <hr>
+
+        <div class="bnr-two-chart-grid">
+          <div>
+            <div class="bnr-chart-title">
+              Age distribution, ${range_start} to ${range_end}
+            </div>
+
+            ${renderSwatchLegend(ageColourDomain, ageColourMap)}
+
+            ${Plot.plot({
+              height: 410,
+              marginLeft: 80,
+              marginBottom: 60,
+              style: {
+                fontSize: "15px",
+                fontFamily: "inherit"
+              },
+              color: {
+                domain: ageColourDomain,
+                range: ageColourDomain.map(value => ageColourMap[value]),
+                legend: false
+              },
+              x: {
+                label: "Percent of events",
+                domain: [0, 100],
+                grid: true
+              },
+              y: {
+                label: "Year",
+                domain: ageYearDomain
+              },
+              marks: [
+                Plot.barX(ageStackRows, {
+                  y: "year_label",
+                  x1: "x1",
+                  x2: "x2",
+                  fill: "age_group",
+                  title: d => `${d.period_year}\n${displayLabel(d.age_group)}\n${formatValue(d.value, d.unit)}\n${d.numerator} of ${d.denominator} events`
+                }),
+                Plot.ruleX([0])
+              ]
+            })}
+          </div>
+
+          <div>
+            <div class="bnr-chart-title">
+              Sex distribution, ${range_start} to ${range_end}
+            </div>
+
+            ${renderSwatchLegend(sexColourDomain, sexColourMap, sexLabel)}
+
+            ${Plot.plot({
+              height: 390,
+              marginLeft: 80,
+              marginBottom: 60,
+              style: {
+                fontSize: "15px",
+                fontFamily: "inherit"
+              },
+              color: {
+                domain: sexColourDomain,
+                range: sexColourDomain.map(value => sexColourMap[value]),
+                legend: false
+              },
+              x: {
+                label: "Percent of events",
+                domain: [0, 100],
+                grid: true
+              },
+              y: {
+                label: "Year",
+                domain: sexYearDomain
+              },
+              marks: [
+                Plot.barX(sexStackRows, {
+                  y: "year_label",
+                  x1: "x1",
+                  x2: "x2",
+                  fill: "sex",
+                  title: d => `${d.period_year}\n${sexLabel(d.sex)}\n${formatValue(d.value, d.unit)}\n${d.numerator} of ${d.denominator} events`
+                }),
+                Plot.ruleX([0])
+              ]
+            })}
+          </div>
+        </div>
+
+        ${renderMoreMetricsNote()}
+      </div>
+    `;
+  }
+
+  return html`<p>No dashboard layout has been defined for this metric.</p>`;
+}
+```
+
+# Data
+
+## Metadata and downloads {.no-fill .bnr-compact-card}
+
+```{ojs}
+//| echo: false
+//| output: false
+
+// -----------------------------------------------------------------------------
+// DATA TAB ROWS
+//
+// These rows feed both the metadata table and the raw-data table.
+// -----------------------------------------------------------------------------
+
+metric1_data_rows = burden
+  .filter(d =>
+    selected_metric === "CVD-BURDEN-001" &&
+    d.metric_id === "CVD-BURDEN-001" &&
+    [count_statistic, comparator_statistic].includes(d.statistic) &&
+    d.event_type === selected_event_type &&
+    d.age_group === "all" &&
+    ["all", "female", "male"].includes(d.sex) &&
+    d.period_year >= range_start &&
+    d.period_year <= range_end
+  )
+  .sort((a, b) =>
+    (a.period_year - b.period_year) ||
+    ((a.period_month ?? 0) - (b.period_month ?? 0)) ||
+    (a.statistic ?? "").localeCompare(b.statistic ?? "") ||
+    (a.sex ?? "").localeCompare(b.sex ?? "")
+  )
+
+metric2_data_rows = burden
+  .filter(d =>
+    selected_metric === "CVD-BURDEN-002" &&
+    d.metric_id === "CVD-BURDEN-002" &&
+    ["age_group_distribution", "sex_distribution"].includes(d.statistic) &&
+    d.event_type === selected_event_type &&
+    d.period_year >= range_start &&
+    d.period_year <= range_end
+  )
+  .sort((a, b) =>
+    (a.period_year - b.period_year) ||
+    (a.statistic ?? "").localeCompare(b.statistic ?? "") ||
+    ((a.age_group_order ?? 0) - (b.age_group_order ?? 0)) ||
+    (a.sex ?? "").localeCompare(b.sex ?? "")
+  )
+
+table_rows_all = selected_metric === "CVD-BURDEN-001"
+  ? metric1_data_rows
+  : metric2_data_rows
+
+data_title = selected_metric === "CVD-BURDEN-001"
+  ? `CVD event counts and comparators: ${displayLabel(selected_event_type)}, ${selected_count_view}`
+  : `CVD event distributions: ${displayLabel(selected_event_type)}`
+
+metadata_rows = [
+  {item: "Dashboard source", value: "CVD burden metric product"},
+  {item: "Input file", value: "cvd_burden_metrics_current.csv"},
+  {item: "Release", value: burden.length > 0 ? burden[0].release_id : "—"},
+  {item: "Selected metric", value: selected_metric},
+  {item: "Selected event type", value: selected_event_type},
+  {item: "Time view", value: selected_count_view},
+  {item: "Selected years", value: `${range_start} to ${range_end}`},
+  {item: "Rows selected", value: table_rows_all.length.toLocaleString()},
+  {item: "Metric calculation", value: "Calculated upstream in Stata"},
+  {item: "Dashboard role", value: "Filters and visualises approved aggregate metric rows"}
+]
+```
+
+```{ojs}
+//| echo: false
+
+html`
+  <div class="bnr-data-package">
+    <h3>Metadata</h3>
+    ${renderMetadataTable(metadata_rows)}
+
+    <h3 class="bnr-downloads-title">Downloads</h3>
+    ${renderDownloadsTable()}
+  </div>
+`
+```
+
+## Dataset {.no-fill .bnr-dataset-card}
+
+```{ojs}
+//| echo: false
+
+renderMetricTable(table_rows_all, data_title)
+```

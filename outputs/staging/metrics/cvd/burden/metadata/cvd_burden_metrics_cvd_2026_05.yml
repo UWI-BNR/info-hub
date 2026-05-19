@@ -1,0 +1,200 @@
+schema: bnr_dataset_metadata_v1
+dataset_id: cvd_burden_metrics_cvd_2026_05
+
+files:
+  dta: datasets/cvd_burden_metrics_cvd_2026_05.dta
+  csv: datasets/cvd_burden_metrics_cvd_2026_05.csv
+  yml: metadata/cvd_burden_metrics_cvd_2026_05.yml
+
+metadata:
+  title: |-
+    BNR CVD burden metrics
+  release_id: |-
+    cvd_2026_05
+  registry: |-
+    BNR-CVD
+  geography: |-
+    Barbados
+  domain: |-
+    cvd
+  metric_family: |-
+    burden
+  metric_ids: |-
+    CVD-BURDEN-001; CVD-BURDEN-002
+  source_dataset: |-
+    C:/yoshimi-hot/output/analyse-bnr/info-hub-private/work/bnrcvd_count_2023_v1.dta
+  source_metadata: |-
+    bnrcvd_count_2023_v1.yml
+  unit_of_analysis: |-
+    Event
+  content: |-
+    Long-format aggregate CVD burden metric output
+  restrictions: |-
+    Hospital-registered CVD events; DCO-only records excluded; 2009 excluded by design
+  age_dimension: |-
+    Derived 10-year age groups from agey: under_45, 45_54, 55_64, 65_74, 75_84, 85_plus
+  time_dimension: |-
+    Annual counts by age group; monthly counts not age-stratified
+  confidence_intervals: |-
+    Not calculated for this burden metric product
+  caveat: |-
+    Draft metrics product created from current count input dataset
+  software: |-
+    Stata
+  created: |-
+    17 May 2026 17:15:23
+
+variables:
+  - name: metric_id
+    type: str20
+    format: %20s
+    label: |-
+      Metric identifier
+    value_label: 
+    categories: |-
+      
+
+  - name: release_id
+    type: str20
+    format: %20s
+    label: |-
+      Data release identifier
+    value_label: 
+    categories: |-
+      
+
+  - name: period_type
+    type: str12
+    format: %12s
+    label: |-
+      Period type
+    value_label: 
+    categories: |-
+      
+
+  - name: period
+    type: str20
+    format: %20s
+    label: |-
+      Reporting period
+    value_label: 
+    categories: |-
+      
+
+  - name: period_year
+    type: float
+    format: %9.0g
+    label: |-
+      Reporting year
+    value_label: 
+    categories: |-
+      
+
+  - name: period_month
+    type: float
+    format: %8.0g
+    label: |-
+      Reporting month
+    value_label: 
+    categories: |-
+      
+
+  - name: event_type
+    type: str7
+    format: %9s
+    label: |-
+      Event type
+    value_label: 
+    categories: |-
+      
+
+  - name: sex
+    type: str20
+    format: %20s
+    label: |-
+      Sex
+    value_label: 
+    categories: |-
+      
+
+  - name: age_group
+    type: str20
+    format: %20s
+    label: |-
+      Age group
+    value_label: 
+    categories: |-
+      
+
+  - name: age_group_order
+    type: byte
+    format: %8.0g
+    label: |-
+      Age group order
+    value_label: 
+    categories: |-
+      
+
+  - name: source_status
+    type: str30
+    format: %30s
+    label: |-
+      Source status
+    value_label: 
+    categories: |-
+      
+
+  - name: statistic
+    type: str25
+    format: %25s
+    label: |-
+      Statistic
+    value_label: 
+    categories: |-
+      
+
+  - name: value
+    type: double
+    format: %8.0g
+    label: |-
+      Metric value
+    value_label: 
+    categories: |-
+      
+
+  - name: unit
+    type: str15
+    format: %15s
+    label: |-
+      Metric unit
+    value_label: 
+    categories: |-
+      
+
+  - name: numerator
+    type: double
+    format: %10.0g
+    label: |-
+      Numerator
+    value_label: 
+    categories: |-
+      
+
+  - name: denominator
+    type: double
+    format: %10.0g
+    label: |-
+      Denominator
+    value_label: 
+    categories: |-
+      
+
+  - name: status_flag
+    type: str25
+    format: %25s
+    label: |-
+      Status flag
+    value_label: 
+    categories: |-
+      
+
