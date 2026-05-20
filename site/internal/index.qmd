@@ -1,0 +1,19 @@
+---
+title: "Internal materials"
+description: "Unlisted internal-facing materials for demonstrations and handover."
+search: false
+toc: false
+include-in-header:
+  text: |
+    <meta name="robots" content="noindex, nofollow">
+---
+
+This page lists unlisted internal-facing materials for demonstration, training, and handover.
+
+These pages are not linked from the public navigation, but they are not password protected. Anyone with the URL may be able to view them.
+
+## Available materials
+
+| Material | Purpose | Link |
+|---|---|---|
+| BNR Hub short tour | Short reveal.js presentation introducing the BNR Hub, its design philosophy, outputs, dashboard, and folder structure. | [Open slides](bnr-info-hub-tour.html){target="_blank" rel="noopener"} |

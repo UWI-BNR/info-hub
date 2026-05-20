@@ -1,6 +1,6 @@
 ---
-title: "CVD Surveillance Metrics"
-subtitle: "Live updates"
+title: "CVD Surveillance Indicators"
+subtitle: " "
 format:
   dashboard:
     orientation: rows
@@ -291,6 +291,52 @@ execute:
   border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 0.2rem;
   flex: 0 0 auto;
+  background-color: #6c757d;
+}
+
+.bnr-card-grid.bnr-two-card-grid {
+  grid-template-columns: repeat(2, minmax(150px, 1fr));
+}
+
+.bnr-swatch-under-50,
+.bnr-swatch-under-45 {
+  background-color: #e8f1f2 !important;
+}
+
+.bnr-swatch-50-59,
+.bnr-swatch-45-54 {
+  background-color: #c7dfe5 !important;
+}
+
+.bnr-swatch-60-69,
+.bnr-swatch-55-64 {
+  background-color: #9ac8d3 !important;
+}
+
+.bnr-swatch-70-79,
+.bnr-swatch-65-74 {
+  background-color: #68aabc !important;
+}
+
+.bnr-swatch-80-plus,
+.bnr-swatch-75-84 {
+  background-color: #2f7f9c !important;
+}
+
+.bnr-swatch-85-plus {
+  background-color: #045174 !important;
+}
+
+.bnr-swatch-unknown {
+  background-color: #ced4da !important;
+}
+
+.bnr-swatch-female {
+  background-color: #D89C60 !important;
+}
+
+.bnr-swatch-male {
+  background-color: #045174 !important;
 }
 
 
@@ -500,6 +546,70 @@ execute:
 }
 
 
+
+/* ------------------------------------------------------------
+   DATA TAB MANUAL CARD STACK
+
+   The Data tab uses two inner display cards inside one dashboard output area.
+   This avoids Quarto's equal-height dashboard row behaviour, which can create
+   a large blank gap between short metadata content and the dataset table.
+------------------------------------------------------------ */
+
+.quarto-dashboard .card:has(.bnr-data-page-stack),
+.quarto-dashboard .bslib-card:has(.bnr-data-page-stack) {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.quarto-dashboard .card:has(.bnr-data-page-stack) .card-body,
+.quarto-dashboard .bslib-card:has(.bnr-data-page-stack) .card-body {
+  padding: 0 !important;
+  display: block !important;
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+.quarto-dashboard .card:has(.bnr-data-page-stack) .html-fill-container,
+.quarto-dashboard .card:has(.bnr-data-page-stack) .html-fill-item,
+.quarto-dashboard .bslib-card:has(.bnr-data-page-stack) .html-fill-container,
+.quarto-dashboard .bslib-card:has(.bnr-data-page-stack) .html-fill-item {
+  height: auto !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.bnr-data-page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 0;
+}
+
+.bnr-data-display-card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.35rem;
+  background: #fff;
+  padding: 0.65rem 0.75rem;
+  min-height: 0;
+}
+
+.bnr-data-display-card h3 {
+  font-size: 1rem;
+  margin: 0 0 0.35rem 0;
+}
+
+.bnr-data-display-card .bnr-downloads-title {
+  margin-top: 0.75rem !important;
+  padding-top: 0.85rem !important;
+  border-top: 0 !important;
+}
+
+
 /* ------------------------------------------------------------
    MOBILE BEHAVIOUR
 ------------------------------------------------------------ */
@@ -532,358 +642,12 @@ burden = FileAttachment("../../../downloads/files/metrics/cvd/burden/cvd_burden_
   .csv({typed: true})
 ```
 
-```{ojs}
-//| echo: false
-//| output: false
-
-// -----------------------------------------------------------------------------
-// GENERAL HELPER FUNCTIONS
-//
-// These helpers keep later code readable. They are intentionally plain rather
-// than clever, so future maintainers can follow the dashboard logic.
-// -----------------------------------------------------------------------------
-
-// Return unique non-empty values from a column, sorted alphabetically.
-uniqueSorted = (data, column) =>
-  Array.from(
-    new Set(
-      data
-        .map(d => d[column])
-        .filter(d => d !== null && d !== undefined && d !== "")
-    )
-  ).sort()
-
-// Return unique numeric values from a column, sorted numerically.
-uniqueNumericSorted = (data, column) =>
-  Array.from(
-    new Set(
-      data
-        .map(d => d[column])
-        .filter(d => d !== null && d !== undefined && !isNaN(d))
-    )
-  ).sort((a, b) => a - b)
-
-// Format a metric value using its unit.
-formatValue = (x, unit) => {
-  if (x === null || x === undefined || isNaN(x)) return "—";
-  if (unit === "percent") return `${x.toFixed(1)}%`;
-  if (unit === "count") return Math.round(x).toLocaleString();
-  return x.toLocaleString();
-}
-
-// Format comparator means, keeping one decimal place for counts.
-formatMean = (x, unit) => {
-  if (x === null || x === undefined || isNaN(x)) return "—";
-  if (unit === "count") return x.toFixed(1);
-  if (unit === "percent") return `${x.toFixed(1)}%`;
-  return x.toFixed(1);
-}
-
-// Convert machine-readable values into more readable labels.
-displayLabel = (x) => {
-  if (x === null || x === undefined || x === "") return "—";
-  return String(x).replaceAll("_", " ");
-}
-
-// Public-facing label for sex values.
-sexLabel = (x) => {
-  if (x === "all") return "All";
-  if (x === "female") return "Women";
-  if (x === "male") return "Men";
-  return displayLabel(x);
-}
-
-// Return the latest row in a filtered dataset.
-// Latest is defined by period_year and then period_month.
-latestValue = (data) => {
-  if (data.length === 0) return null;
-
-  const sorted = [...data].sort((a, b) =>
-    (a.period_year - b.period_year) ||
-    ((a.period_month ?? 0) - (b.period_month ?? 0))
-  );
-
-  return sorted[sorted.length - 1];
-}
-
-// Convert a metric row into a JavaScript Date for plotting.
-// Monthly rows are placed at the first day of the month.
-// Annual rows are placed at the first day of the year.
-periodDate = (d) => {
-  if (d.period_start instanceof Date) return d.period_start;
-
-  if (d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
-    return new Date(d.period_year, d.period_month - 1, 1);
-  }
-
-  return new Date(d.period_year, 0, 1);
-}
-
-// Sort rows chronologically.
-periodSort = (a, b) =>
-  (a.period_year - b.period_year) ||
-  ((a.period_month ?? 0) - (b.period_month ?? 0))
-
-// Safe conversion for table cells.
-safeCell = (x) => {
-  if (x === null || x === undefined || Number.isNaN(x)) return "";
-  return String(x);
-}
-
-// Check whether a row has a usable numeric value.
-hasValue = (d) =>
-  d !== null &&
-  d !== undefined &&
-  d.value !== null &&
-  d.value !== undefined &&
-  !isNaN(d.value)
-
-// Pretty display for period labels.
-// Monthly periods appear as "Dec 2023" rather than "2023_m12".
-periodPretty = (d) => {
-  if (!d) return "No value available";
-
-  if (d.period_type === "monthly" && d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
-    const dt = new Date(d.period_year, d.period_month - 1, 1);
-    return dt.toLocaleString("en-GB", {month: "short", year: "numeric"});
-  }
-
-  return String(d.period_year);
-}
-
-// Find the comparator row matching an observed row and sex.
-// Used for the headline cards in CVD-BURDEN-001.
-lookupComparator = (rows, observedRow, sex) => {
-  if (!observedRow) return null;
-
-  return rows.find(d =>
-    d.sex === sex &&
-    d.period === observedRow.period &&
-    d.event_type === observedRow.event_type &&
-    d.age_group === observedRow.age_group
-  ) ?? null;
-}
-```
-
-```{ojs}
-//| echo: false
-//| output: false
-
-// -----------------------------------------------------------------------------
-// METRIC INTERPRETATION TEXT
-//
-// These descriptions are currently embedded in the dashboard. Later, these
-// could be read from the metric YAML or the metric specification register.
-// -----------------------------------------------------------------------------
-
-metricDescription = (metric_id, count_view = "monthly") => {
-  if (metric_id === "CVD-BURDEN-001") {
-    if (count_view === "monthly") {
-      return {
-        title: "Hospital-registered CVD event count",
-        what: "This view shows the number of hospital-registered CVD events recorded each month.",
-        numerator: "Hospital-registered CVD events in the selected month.",
-        denominator: "Not applicable. This is a count, not a percentage or rate.",
-        interpretation: "Use this view to monitor short-term changes in hospital-registered CVD event burden. Monthly counts are not age-stratified in this dashboard. The comparator is the average for the same calendar month over the previous five years."
-      };
-    }
-
-    return {
-      title: "Hospital-registered CVD event count",
-      what: "This view shows the number of hospital-registered CVD events recorded each year.",
-      numerator: "Hospital-registered CVD events in the selected year.",
-      denominator: "Not applicable. This is a count, not a percentage or rate.",
-      interpretation: "Use this view to compare annual registered CVD event burden over time. The comparator is the average of the previous five calendar years."
-    };
-  }
-
-  if (metric_id === "CVD-BURDEN-002") {
-    return {
-      title: "Distribution of hospital-registered CVD events",
-      what: "This view shows how registered CVD events are distributed by age group and sex.",
-      numerator: "Events in the selected category, such as an age group or sex group.",
-      denominator: "All eligible events in the relevant parent group for the selected event type and year.",
-      interpretation: "These percentages describe the composition of registered CVD events. They are not population risks, incidence rates, or measures of disease probability."
-    };
-  }
-
-  return {
-    title: "Selected metric",
-    what: "This dashboard shows approved aggregate BNR metric outputs.",
-    numerator: "See the metric specification register.",
-    denominator: "See the metric specification register.",
-    interpretation: "Use this dashboard to explore approved aggregate metric rows."
-  };
-}
-```
-
-```{ojs}
-//| echo: false
-//| output: false
-
-// -----------------------------------------------------------------------------
-// SMALL RENDERING HELPERS
-//
-// These functions return HTML fragments. Keeping them here avoids repeating
-// the same table / card / note code throughout the dashboard.
-// -----------------------------------------------------------------------------
-
-// Interpretation panel at the top of the metric view.
-// Keep this deliberately short: title, what this shows, interpretation.
-renderInterpretation = (description) => html`
-  <div class="bnr-interpretation">
-    <div class="bnr-interpretation-title">${description.title}</div>
-    <div class="bnr-interpretation-grid">
-      <div class="bnr-interpretation-label">What this shows</div>
-      <div class="bnr-interpretation-value">${description.what}</div>
-
-      <div class="bnr-interpretation-label">Interpretation</div>
-      <div class="bnr-interpretation-value">${description.interpretation}</div>
-    </div>
-  </div>
-`
-
-// Headline number card.
-renderHeadlineCard = (label, row, valueFormatter = formatValue, showPeriod = true) => html`
-  <div class="bnr-headline-card">
-    <div class="bnr-headline-label">${label}</div>
-    <div class="bnr-headline-value">${row ? valueFormatter(row.value, row.unit) : "—"}</div>
-    ${showPeriod
-      ? html`<div class="bnr-headline-note">${row ? periodPretty(row) : "No value available"}</div>`
-      : html`<div class="bnr-headline-note">&nbsp;</div>`}
-  </div>
-`
-
-// Custom data table. This avoids the default row limits of Inputs.table.
-renderMetricTable = (rows, title) => html`
-  <div class="bnr-data-title">${title}</div>
-  <div class="bnr-data-summary">
-    <strong>Rows displayed:</strong> ${rows.length.toLocaleString()}
-  </div>
-  <div class="bnr-data-scroll">
-    <table class="bnr-data-table">
-      <thead>
-        <tr>
-          <th>Period</th>
-          <th>Metric ID</th>
-          <th>Statistic</th>
-          <th>Event type</th>
-          <th>Sex</th>
-          <th>Age group</th>
-          <th>Value</th>
-          <th>Unit</th>
-          <th>Numerator</th>
-          <th>Denominator</th>
-          <th>Comparator N</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows.map(d => html`
-          <tr>
-            <td>${safeCell(d.period)}</td>
-            <td>${safeCell(d.metric_id)}</td>
-            <td>${safeCell(d.statistic)}</td>
-            <td>${safeCell(d.event_type)}</td>
-            <td>${safeCell(d.sex)}</td>
-            <td>${safeCell(d.age_group)}</td>
-            <td>${safeCell(d.value)}</td>
-            <td>${safeCell(d.unit)}</td>
-            <td>${safeCell(d.numerator)}</td>
-            <td>${safeCell(d.denominator)}</td>
-            <td>${safeCell(d.comparison_n)}</td>
-            <td>${safeCell(d.status_flag)}</td>
-          </tr>
-        `)}
-      </tbody>
-    </table>
-  </div>
-`
-
-// Short note placed under each metric view.
-renderMoreMetricsNote = () => html`
-  <div class="bnr-more-metrics">
-    For a full range of monthly metrics, you can view the metrics briefing
-    <a href="#">here</a>, and download the associated datasets
-    <a href="#">here</a>.
-  </div>
-`
-
-// Compact metadata table for the Data tab.
-renderMetadataTable = (rows) => html`
-  <table class="bnr-metadata-table">
-    <thead>
-      <tr>
-        <th>Field</th>
-        <th>Value</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${rows.map(d => html`
-        <tr>
-          <td>${d.item}</td>
-          <td>${d.value}</td>
-        </tr>
-      `)}
-    </tbody>
-  </table>
-`
-
-// Downloads table for the Data tab.
-renderDownloadsTable = () => html`
-  <table class="bnr-download-table">
-    <thead>
-      <tr>
-        <th>Resource</th>
-        <th>Description</th>
-        <th>Link</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Current CSV</td>
-        <td>Current CVD burden metric dataset in CSV format.</td>
-        <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv" download>Download CSV</a></td>
-      </tr>
-      <tr>
-        <td>Current Stata dataset</td>
-        <td>Current CVD burden metric dataset in Stata DTA format.</td>
-        <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.dta" download>Download DTA</a></td>
-      </tr>
-      <tr>
-        <td>Metric package</td>
-        <td>ZIP package containing release-stamped outputs and metadata.</td>
-        <td><a href="../../../downloads/files/metrics/cvd/burden/bnr_cvd_burden_cvd_2023_12.zip" download>Download ZIP</a></td>
-      </tr>
-      <tr>
-        <td>Statistical Analysis Plan</td>
-        <td>Standing analytical methods for BNR information hub outputs.</td>
-        <td><a href="../../../operations/data/sap.qmd" target="_blank" rel="noopener">Open SAP</a></td>
-      </tr>
-      <tr>
-        <td>Metric Specification Register</td>
-        <td>Definitions for approved BNR information hub metrics.</td>
-        <td><a href="../../../operations/data/sap-metrics.qmd" target="_blank" rel="noopener">Open metric register</a></td>
-      </tr>
-    </tbody>
-  </table>
-`
-
-// Custom swatch legend.
-// CVD-BURDEN-001 already uses a custom HTML legend. CVD-BURDEN-002 uses this
-// same pathway so that legend text size is not controlled by Observable Plot's
-// automatic legend defaults.
-renderSwatchLegend = (items, colourMap, labelFunction = displayLabel) => html`
-  <div class="bnr-chart-legend">
-    ${items.map(item => html`
-      <span class="bnr-chart-legend-item">
-        <span class="bnr-legend-swatch" style=${`background-color: ${colourMap[item]};`}></span>
-        ${labelFunction(item)}
-      </span>
-    `)}
-  </div>
-`
-```
+<!--
+Global Observable helper chunks have intentionally been avoided below.
+Some Quarto dashboard layouts can evaluate sidebar and tab content before
+helper chunks are available. Small local helpers are therefore kept inside the
+OJS cells that use them.
+-->
 
 # Filters {.sidebar}
 
@@ -895,7 +659,13 @@ renderSwatchLegend = (items, colourMap, labelFunction = displayLabel) => html`
 // -----------------------------------------------------------------------------
 
 viewof selected_metric = Inputs.select(
-  uniqueSorted(burden, "metric_id"),
+  Array.from(
+    new Set(
+      burden
+        .map(d => d.metric_id)
+        .filter(d => d !== null && d !== undefined && d !== "")
+    )
+  ).sort(),
   {
     label: "Metric",
     value: "CVD-BURDEN-001"
@@ -913,7 +683,13 @@ viewof selected_metric = Inputs.select(
 // -----------------------------------------------------------------------------
 
 viewof selected_event_type = Inputs.select(
-  uniqueSorted(burden, "event_type"),
+  Array.from(
+    new Set(
+      burden
+        .map(d => d.event_type)
+        .filter(d => d !== null && d !== undefined && d !== "")
+    )
+  ).sort(),
   {
     label: "Event type",
     value: "all_cvd"
@@ -973,7 +749,13 @@ sidebar_base = burden.filter(d =>
   d.event_type === selected_event_type
 )
 
-years = uniqueNumericSorted(sidebar_base, "period_year")
+years = Array.from(
+  new Set(
+    sidebar_base
+      .map(d => d.period_year)
+      .filter(d => d !== null && d !== undefined && !isNaN(d))
+  )
+).sort((a, b) => a - b)
 min_year = Math.min(...years)
 max_year = Math.max(...years)
 ```
@@ -1049,7 +831,41 @@ comparator_statistic = selected_count_view === "monthly"
   ? "monthly_same_month_previous_5yr_mean"
   : "annual_previous_5yr_mean"
 
-description = metricDescription(selected_metric, selected_count_view)
+description = {
+  const metricDescriptionLocal = (metric_id, count_view = "monthly") => {
+    if (metric_id === "CVD-BURDEN-001") {
+      if (count_view === "monthly") {
+        return {
+          title: "Hospital-registered CVD event count",
+          what: "This view shows the number of hospital-registered CVD events recorded each month.",
+          interpretation: "Use this view to monitor short-term changes in hospital-registered CVD event burden. Monthly counts are not age-stratified in this dashboard. The comparator is the average for the same calendar month over the previous five years."
+        };
+      }
+
+      return {
+        title: "Hospital-registered CVD event count",
+        what: "This view shows the number of hospital-registered CVD events recorded each year.",
+        interpretation: "Use this view to compare annual registered CVD event burden over time. The comparator is the average of the previous five calendar years."
+      };
+    }
+
+    if (metric_id === "CVD-BURDEN-002") {
+      return {
+        title: "Distribution of hospital-registered CVD events",
+        what: "This view shows how registered CVD events are distributed by age group and sex.",
+        interpretation: "These percentages describe the composition of registered CVD events. They are not population risks, incidence rates, or measures of disease probability."
+      };
+    }
+
+    return {
+      title: "Selected metric",
+      what: "This dashboard shows approved aggregate BNR metric outputs.",
+      interpretation: "Use this dashboard to explore approved aggregate metric rows."
+    };
+  };
+
+  return metricDescriptionLocal(selected_metric, selected_count_view);
+}
 
 metric2_years_in_range = burden
   .filter(d =>
@@ -1080,6 +896,265 @@ latest_year_in_range = metric2_years_in_range.length > 0
 // -----------------------------------------------------------------------------
 
 {
+  // ---------------------------------------------------------------------------
+  // LOCAL HELPERS
+  //
+  // These helpers are kept inside this OJS output cell so the dashboard does not
+  // depend on cross-cell helper evaluation order. This avoids runtime errors such
+  // as "latestValue is not defined" during Quarto dashboard rendering.
+  // ---------------------------------------------------------------------------
+
+  const ageGroupLabels = ({
+    under_50: "Under 50",
+    "50_59": "50–59",
+    "60_69": "60–69",
+    "70_79": "70–79",
+    "80_plus": "80 plus",
+    under_45: "Under 45",
+    "45_54": "45–54",
+    "55_64": "55–64",
+    "65_74": "65–74",
+    "75_84": "75–84",
+    "85_plus": "85 plus",
+    unknown: "Unknown",
+    all: "All"
+  });
+
+  const displayLabel = (x) => {
+    if (x === null || x === undefined || x === "") return "—";
+    const key = String(x);
+    if (ageGroupLabels[key]) return ageGroupLabels[key];
+    return key.replaceAll("_", " ");
+  };
+
+  const ageGroupLabel = (x) => {
+    if (x === null || x === undefined || x === "") return "—";
+    const key = String(x);
+    return ageGroupLabels[key] ?? displayLabel(key);
+  };
+
+  const sexLabel = (x) => {
+    if (x === "all") return "All";
+    if (x === "female") return "Women";
+    if (x === "male") return "Men";
+    return displayLabel(x);
+  };
+
+  const formatValue = (x, unit) => {
+    if (x === null || x === undefined || isNaN(x)) return "—";
+    if (unit === "percent") return `${x.toFixed(1)}%`;
+    if (unit === "count") return Math.round(x).toLocaleString();
+    return x.toLocaleString();
+  };
+
+  const formatMean = (x, unit) => {
+    if (x === null || x === undefined || isNaN(x)) return "—";
+    if (unit === "count") return x.toFixed(1);
+    if (unit === "percent") return `${x.toFixed(1)}%`;
+    return x.toFixed(1);
+  };
+
+  const latestValue = (data) => {
+    if (data.length === 0) return null;
+
+    const sorted = [...data].sort((a, b) =>
+      (a.period_year - b.period_year) ||
+      ((a.period_month ?? 0) - (b.period_month ?? 0))
+    );
+
+    return sorted[sorted.length - 1];
+  };
+
+  const periodDate = (d) => {
+    if (d.period_start instanceof Date) return d.period_start;
+
+    if (d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
+      return new Date(d.period_year, d.period_month - 1, 1);
+    }
+
+    return new Date(d.period_year, 0, 1);
+  };
+
+  const periodSort = (a, b) =>
+    (a.period_year - b.period_year) ||
+    ((a.period_month ?? 0) - (b.period_month ?? 0));
+
+  const hasValue = (d) =>
+    d !== null &&
+    d !== undefined &&
+    d.value !== null &&
+    d.value !== undefined &&
+    !isNaN(d.value);
+
+  const periodPretty = (d) => {
+    if (!d) return "No value available";
+
+    if (d.period_type === "monthly" && d.period_month !== null && d.period_month !== undefined && !isNaN(d.period_month)) {
+      const dt = new Date(d.period_year, d.period_month - 1, 1);
+      return dt.toLocaleString("en-GB", {month: "short", year: "numeric"});
+    }
+
+    return String(d.period_year);
+  };
+
+  const lookupComparator = (rows, observedRow, sex) => {
+    if (!observedRow) return null;
+
+    return rows.find(d =>
+      d.sex === sex &&
+      d.period === observedRow.period &&
+      d.event_type === observedRow.event_type &&
+      d.age_group === observedRow.age_group
+    ) ?? null;
+  };
+
+  const swatchClass = (x) => {
+    if (x === null || x === undefined || x === "") return "bnr-swatch-missing";
+
+    const clean = String(x)
+      .toLowerCase()
+      .replaceAll("_", "-")
+      .replace(/[^a-z0-9-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+    return `bnr-swatch-${clean}`;
+  };
+
+  const renderInterpretation = (description) => html`
+    <div class="bnr-interpretation">
+      <div class="bnr-interpretation-title">${description.title}</div>
+      <div class="bnr-interpretation-grid">
+        <div class="bnr-interpretation-label">What this shows</div>
+        <div class="bnr-interpretation-value">${description.what}</div>
+
+        <div class="bnr-interpretation-label">Interpretation</div>
+        <div class="bnr-interpretation-value">${description.interpretation}</div>
+      </div>
+    </div>
+  `;
+
+  const renderHeadlineCard = (label, row, valueFormatter = formatValue, showPeriod = true) => html`
+    <div class="bnr-headline-card">
+      <div class="bnr-headline-label">${label}</div>
+      <div class="bnr-headline-value">${row ? valueFormatter(row.value, row.unit) : "—"}</div>
+      ${showPeriod
+        ? html`<div class="bnr-headline-note">${row ? periodPretty(row) : "No value available"}</div>`
+        : html`<div class="bnr-headline-note">&nbsp;</div>`}
+    </div>
+  `;
+
+  const renderMoreMetricsNote = () => html`
+    <div class="bnr-more-metrics">
+      For a full range of monthly metrics, you can view the metrics briefing
+      <a href="#">here</a>, and download the associated datasets
+      <a href="#">here</a>.
+    </div>
+  `;
+
+  const renderSwatchLegend = (items, colourMap, labelFunction = displayLabel) => {
+    const legend = document.createElement("div");
+    legend.className = "bnr-chart-legend";
+
+    for (const item of items) {
+      const legendItem = document.createElement("span");
+      legendItem.className = "bnr-chart-legend-item";
+
+      const swatch = document.createElement("span");
+      swatch.className = "bnr-legend-swatch";
+      swatch.style.backgroundColor = colourMap[item] ?? "#ced4da";
+      swatch.style.borderColor = "rgba(0, 0, 0, 0.25)";
+
+      const label = document.createTextNode(labelFunction(item));
+
+      legendItem.appendChild(swatch);
+      legendItem.appendChild(label);
+      legend.appendChild(legendItem);
+    }
+
+    return legend;
+  };
+
+  // Return unique x-axis values in chronological / numeric order.
+  // This prevents Observable Plot from inventing intermediate labels such as 2010.5.
+  const uniqueSortedAxisValues = (values) => {
+    const seen = new Map();
+
+    for (const value of values) {
+      if (value === null || value === undefined) continue;
+
+      const key = value instanceof Date ? value.getTime() : value;
+      if (!seen.has(key)) seen.set(key, value);
+    }
+
+    return Array.from(seen.values()).sort((a, b) => a - b);
+  };
+
+  // Select a readable number of tick labels from the actual plotted data points.
+  // The first and last data points are always retained.
+  const pickEvenlySpacedTicks = (values, maxTicks = 8) => {
+    if (values.length <= maxTicks) return values;
+    if (maxTicks <= 1) return [values[0]];
+
+    const selected = [];
+    const last = values.length - 1;
+    const used = new Set();
+
+    for (let i = 0; i < maxTicks; i++) {
+      const index = Math.round(i * last / (maxTicks - 1));
+      const value = values[index];
+      const key = value instanceof Date ? value.getTime() : value;
+
+      if (!used.has(key)) {
+        selected.push(value);
+        used.add(key);
+      }
+    }
+
+    return selected;
+  };
+
+  // Two-line month label for compact monthly axes.
+  const formatYearMonthTick = (d) => {
+    const date = d instanceof Date ? d : new Date(d);
+    const yyyy = date.getFullYear();
+    const mmm = date.toLocaleString("en-GB", {month: "short"});
+    return `${yyyy}\n${mmm}`;
+  };
+
+  const metricDescriptionLocal = (metric_id, count_view = "monthly") => {
+    if (metric_id === "CVD-BURDEN-001") {
+      if (count_view === "monthly") {
+        return {
+          title: "Hospital-registered CVD event count",
+          what: "This view shows the number of hospital-registered CVD events recorded each month.",
+          interpretation: "Use this view to monitor short-term changes in hospital-registered CVD event burden. Monthly counts are not age-stratified in this dashboard. The comparator is the average for the same calendar month over the previous five years."
+        };
+      }
+
+      return {
+        title: "Hospital-registered CVD event count",
+        what: "This view shows the number of hospital-registered CVD events recorded each year.",
+        interpretation: "Use this view to compare annual registered CVD event burden over time. The comparator is the average of the previous five calendar years."
+      };
+    }
+
+    if (metric_id === "CVD-BURDEN-002") {
+      return {
+        title: "Distribution of hospital-registered CVD events",
+        what: "This view shows how registered CVD events are distributed by age group and sex.",
+        interpretation: "These percentages describe the composition of registered CVD events. They are not population risks, incidence rates, or measures of disease probability."
+      };
+    }
+
+    return {
+      title: "Selected metric",
+      what: "This dashboard shows approved aggregate BNR metric outputs.",
+      interpretation: "Use this dashboard to explore approved aggregate metric rows."
+    };
+  };
+
+  const description = metricDescriptionLocal(selected_metric, selected_count_view);
+
   if (selected_metric === "CVD-BURDEN-001") {
 
     // -------------------------------------------------------------------------
@@ -1143,6 +1218,14 @@ latest_year_in_range = metric2_years_in_range.length > 0
       }))
       .sort(periodSort);
 
+    // X-axis ticks are explicitly selected from the plotted data points.
+    // Annual view: label every plotted year, with no generated decimal years.
+    // Monthly view: label a small, even set of plotted months using two-line labels.
+    const plottedXValues = uniqueSortedAxisValues(observedAll.map(d => d.chart_x));
+    const xTickValues = selected_count_view === "monthly"
+      ? pickEvenlySpacedTicks(plottedXValues, 8)
+      : plottedXValues;
+
     // -------------------------------------------------------------------------
     // CVD-BURDEN-001: RENDER
     // -------------------------------------------------------------------------
@@ -1187,7 +1270,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
         ${Plot.plot({
           height: 470,
           marginLeft: 80,
-          marginBottom: 62,
+          marginBottom: selected_count_view === "monthly" ? 76 : 62,
           style: {
             fontSize: "15px",
             fontFamily: "inherit"
@@ -1196,13 +1279,13 @@ latest_year_in_range = metric2_years_in_range.length > 0
             ? {
                 label: "Month",
                 type: "time",
-                ticks: 8,
-                tickFormat: "%Y"
+                ticks: xTickValues,
+                tickFormat: formatYearMonthTick
               }
             : {
                 label: "Year",
-                ticks: Math.min(10, years.length),
-                tickFormat: d => String(d).replace(",", "")
+                ticks: xTickValues,
+                tickFormat: d => String(Math.trunc(d))
               },
           y: {
             label: "Count",
@@ -1244,7 +1327,9 @@ latest_year_in_range = metric2_years_in_range.length > 0
     // CVD-BURDEN-002: AGE DISTRIBUTION DATA
     //
     // The age chart is a 100% stacked horizontal bar chart by year.
-    // Each stacked segment is an age group.
+    // Each stacked segment is an age group. The Stata metric job now supplies
+    // the dashboard-facing bands:
+    //   under_50, 50_59, 60_69, 70_79, 80_plus, unknown
     // -------------------------------------------------------------------------
 
     const ageRows = burden
@@ -1267,21 +1352,38 @@ latest_year_in_range = metric2_years_in_range.length > 0
     const ageYearDomain = ageYears.map(d => String(d));
 
     // Fixed colour mapping keeps the chart and its custom legend in sync.
-    const ageColourPalette = [
+    // Legacy bands are retained in the map so the dashboard remains readable
+    // before the revised Stata metric job has been re-run.
+    const ageColourLookup = {
+      under_50: "#e8f1f2",
+      "50_59": "#c7dfe5",
+      "60_69": "#9ac8d3",
+      "70_79": "#68aabc",
+      "80_plus": "#2f7f9c",
+      unknown: "#ced4da",
+      under_45: "#e8f1f2",
+      "45_54": "#c7dfe5",
+      "55_64": "#9ac8d3",
+      "65_74": "#68aabc",
+      "75_84": "#2f7f9c",
+      "85_plus": "#045174"
+    };
+
+    const fallbackAgePalette = [
       "#e8f1f2",
       "#c7dfe5",
       "#9ac8d3",
       "#68aabc",
       "#2f7f9c",
       "#045174",
-      "#001F3D"
+      "#ced4da"
     ];
 
     const ageColourDomain = Array.from(new Set(ageRows.map(d => d.age_group)));
     const ageColourMap = Object.fromEntries(
       ageColourDomain.map((value, index) => [
         value,
-        ageColourPalette[index % ageColourPalette.length]
+        ageColourLookup[value] ?? fallbackAgePalette[index % fallbackAgePalette.length]
       ])
     );
 
@@ -1305,6 +1407,43 @@ latest_year_in_range = metric2_years_in_range.length > 0
         running = x2;
       }
     }
+
+    // Latest-year age headline cards. Unknown age is not included in either
+    // under-70 or 70-plus headline percentage.
+    const latestAgeYear = ageYears.length > 0
+      ? Math.max(...ageYears)
+      : null;
+
+    const latestAgeRows = latestAgeYear === null
+      ? []
+      : ageRows.filter(d => d.period_year === latestAgeYear);
+
+    const aggregateLatestAge = (groups) => {
+      const rows = latestAgeRows.filter(d => groups.includes(d.age_group));
+
+      if (rows.length === 0) return null;
+
+      const numerator = rows.reduce((sum, d) => sum + (+d.numerator || 0), 0);
+      const denominator = rows.find(d => d.denominator !== null && d.denominator !== undefined && !isNaN(d.denominator))?.denominator ?? null;
+
+      const value = denominator
+        ? (numerator / denominator) * 100
+        : rows.reduce((sum, d) => sum + (+d.value || 0), 0);
+
+      return {
+        ...rows[0],
+        value,
+        unit: "percent",
+        numerator,
+        denominator,
+        period_year: latestAgeYear,
+        period_type: "annual",
+        period: String(latestAgeYear)
+      };
+    };
+
+    const latestUnder70 = aggregateLatestAge(["under_50", "50_59", "60_69"]);
+    const latest70Plus = aggregateLatestAge(["70_79", "80_plus"]);
 
     // -------------------------------------------------------------------------
     // CVD-BURDEN-002: SEX DISTRIBUTION DATA
@@ -1360,6 +1499,17 @@ latest_year_in_range = metric2_years_in_range.length > 0
       }
     }
 
+    const latestSexYear = sexYears.length > 0
+      ? Math.max(...sexYears)
+      : null;
+
+    const latestSexRows = latestSexYear === null
+      ? []
+      : sexRows.filter(d => d.period_year === latestSexYear);
+
+    const latestFemale = latestSexRows.find(d => d.sex === "female") ?? null;
+    const latestMale = latestSexRows.find(d => d.sex === "male") ?? null;
+
     // -------------------------------------------------------------------------
     // CVD-BURDEN-002: RENDER
     // -------------------------------------------------------------------------
@@ -1376,7 +1526,12 @@ latest_year_in_range = metric2_years_in_range.length > 0
               Age distribution, ${range_start} to ${range_end}
             </div>
 
-            ${renderSwatchLegend(ageColourDomain, ageColourMap)}
+            <div class="bnr-card-grid bnr-two-card-grid">
+              ${renderHeadlineCard("Percent aged under 70", latestUnder70)}
+              ${renderHeadlineCard("Percent aged 70 plus", latest70Plus)}
+            </div>
+
+            ${renderSwatchLegend(ageColourDomain, ageColourMap, ageGroupLabel)}
 
             ${Plot.plot({
               height: 410,
@@ -1406,7 +1561,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
                   x1: "x1",
                   x2: "x2",
                   fill: "age_group",
-                  title: d => `${d.period_year}\n${displayLabel(d.age_group)}\n${formatValue(d.value, d.unit)}\n${d.numerator} of ${d.denominator} events`
+                  title: d => `${d.period_year}\n${ageGroupLabel(d.age_group)}\n${formatValue(d.value, d.unit)}\n${d.numerator} of ${d.denominator} events`
                 }),
                 Plot.ruleX([0])
               ]
@@ -1416,6 +1571,11 @@ latest_year_in_range = metric2_years_in_range.length > 0
           <div>
             <div class="bnr-chart-title">
               Sex distribution, ${range_start} to ${range_end}
+            </div>
+
+            <div class="bnr-card-grid bnr-two-card-grid">
+              ${renderHeadlineCard("Percent women", latestFemale)}
+              ${renderHeadlineCard("Percent men", latestMale)}
             </div>
 
             ${renderSwatchLegend(sexColourDomain, sexColourMap, sexLabel)}
@@ -1467,8 +1627,6 @@ latest_year_in_range = metric2_years_in_range.length > 0
 
 # Data
 
-## Metadata and downloads {.no-fill .bnr-compact-card}
-
 ```{ojs}
 //| echo: false
 //| output: false
@@ -1517,9 +1675,16 @@ table_rows_all = selected_metric === "CVD-BURDEN-001"
   ? metric1_data_rows
   : metric2_data_rows
 
-data_title = selected_metric === "CVD-BURDEN-001"
-  ? `CVD event counts and comparators: ${displayLabel(selected_event_type)}, ${selected_count_view}`
-  : `CVD event distributions: ${displayLabel(selected_event_type)}`
+data_title = {
+  const displayLabelLocal = (x) => {
+    if (x === null || x === undefined || x === "") return "—";
+    return String(x).replaceAll("_", " ");
+  };
+
+  return selected_metric === "CVD-BURDEN-001"
+    ? `CVD event counts and comparators: ${displayLabelLocal(selected_event_type)}, ${selected_count_view}`
+    : `CVD event distributions: ${displayLabelLocal(selected_event_type)}`;
+}
 
 metadata_rows = [
   {item: "Dashboard source", value: "CVD burden metric product"},
@@ -1538,21 +1703,132 @@ metadata_rows = [
 ```{ojs}
 //| echo: false
 
-html`
-  <div class="bnr-data-package">
-    <h3>Metadata</h3>
-    ${renderMetadataTable(metadata_rows)}
+{
+  // Local renderers are defined inside this cell to avoid cross-cell OJS helper
+  // ordering problems in Quarto dashboard output.
 
-    <h3 class="bnr-downloads-title">Downloads</h3>
-    ${renderDownloadsTable()}
-  </div>
-`
-```
+  const safeCell = (x) => {
+    if (x === null || x === undefined || Number.isNaN(x)) return "";
+    return String(x);
+  };
 
-## Dataset {.no-fill .bnr-dataset-card}
+  const renderMetadataTableLocal = (rows) => html`
+    <table class="bnr-metadata-table">
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(d => html`
+          <tr>
+            <td>${d.item}</td>
+            <td>${d.value}</td>
+          </tr>
+        `)}
+      </tbody>
+    </table>
+  `;
 
-```{ojs}
-//| echo: false
+  const renderDownloadsTableLocal = () => html`
+    <table class="bnr-download-table">
+      <thead>
+        <tr>
+          <th>Resource</th>
+          <th>Description</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Current CSV</td>
+          <td>Current CVD burden metric dataset in CSV format.</td>
+          <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv" download>Download CSV</a></td>
+        </tr>
+        <tr>
+          <td>Current Stata dataset</td>
+          <td>Current CVD burden metric dataset in Stata DTA format.</td>
+          <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.dta" download>Download DTA</a></td>
+        </tr>
+        <tr>
+          <td>Metric package</td>
+          <td>ZIP package containing release-stamped outputs and metadata.</td>
+          <td><a href="../../../downloads/files/metrics/cvd/burden/bnr_cvd_burden_cvd_2023_12.zip" download>Download ZIP</a></td>
+        </tr>
+        <tr>
+          <td>Statistical Analysis Plan</td>
+          <td>Standing analytical methods for BNR information hub outputs.</td>
+          <td><a href="../../../operations/data/sap.qmd" target="_blank" rel="noopener">Open SAP</a></td>
+        </tr>
+        <tr>
+          <td>Metric Specification Register</td>
+          <td>Definitions for approved BNR information hub metrics.</td>
+          <td><a href="../../../operations/data/sap-metrics.qmd" target="_blank" rel="noopener">Open metric register</a></td>
+        </tr>
+      </tbody>
+    </table>
+  `;
 
-renderMetricTable(table_rows_all, data_title)
+  const renderMetricTableLocal = (rows, title) => html`
+    <div class="bnr-data-title">${title}</div>
+    <div class="bnr-data-summary">
+      <strong>Rows displayed:</strong> ${rows.length.toLocaleString()}
+    </div>
+    <div class="bnr-data-scroll">
+      <table class="bnr-data-table">
+        <thead>
+          <tr>
+            <th>Period</th>
+            <th>Metric ID</th>
+            <th>Statistic</th>
+            <th>Event type</th>
+            <th>Sex</th>
+            <th>Age group</th>
+            <th>Value</th>
+            <th>Unit</th>
+            <th>Numerator</th>
+            <th>Denominator</th>
+            <th>Comparator N</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(d => html`
+            <tr>
+              <td>${safeCell(d.period)}</td>
+              <td>${safeCell(d.metric_id)}</td>
+              <td>${safeCell(d.statistic)}</td>
+              <td>${safeCell(d.event_type)}</td>
+              <td>${safeCell(d.sex)}</td>
+              <td>${safeCell(d.age_group)}</td>
+              <td>${safeCell(d.value)}</td>
+              <td>${safeCell(d.unit)}</td>
+              <td>${safeCell(d.numerator)}</td>
+              <td>${safeCell(d.denominator)}</td>
+              <td>${safeCell(d.comparison_n)}</td>
+              <td>${safeCell(d.status_flag)}</td>
+            </tr>
+          `)}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  return html`
+    <div class="bnr-data-page-stack">
+      <section class="bnr-data-display-card bnr-data-package">
+        <h3>Metadata</h3>
+        ${renderMetadataTableLocal(metadata_rows)}
+
+        <h3 class="bnr-downloads-title">Downloads</h3>
+        ${renderDownloadsTableLocal()}
+      </section>
+
+      <section class="bnr-data-display-card bnr-dataset-package">
+        ${renderMetricTableLocal(table_rows_all, data_title)}
+      </section>
+    </div>
+  `;
+}
 ```

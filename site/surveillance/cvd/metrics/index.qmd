@@ -1,6 +1,6 @@
 ---
-title: "CVD Surveillance Metrics"
-subtitle: "Live updates"
+title: "CVD Surveillance Indicators"
+subtitle: "     "
 format:
   dashboard:
     orientation: rows
@@ -359,7 +359,7 @@ execute:
 
 
 /* ------------------------------------------------------------
-   METRIC 2 CHART GRID
+   INDICATOR 2 CHART GRID
 ------------------------------------------------------------ */
 
 .bnr-two-chart-grid {
@@ -370,7 +370,7 @@ execute:
 
 
 /* ------------------------------------------------------------
-   BOTTOM NOTE ON METRIC VIEW
+   BOTTOM NOTE ON INDICATOR VIEW
 ------------------------------------------------------------ */
 
 .bnr-more-metrics {
@@ -633,9 +633,9 @@ execute:
 // -----------------------------------------------------------------------------
 // LOAD DASHBOARD DATA
 //
-// This dashboard reads the current public metric CSV. The CSV is created
+// This dashboard reads the current public indicator CSV. The CSV is created
 // upstream by Stata and mirrored into the website downloads folder.
-// The dashboard does not calculate official BNR metrics from raw data.
+// The dashboard does not calculate official BNR indicators from raw data.
 // -----------------------------------------------------------------------------
 
 burden = FileAttachment("../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv")
@@ -655,7 +655,7 @@ OJS cells that use them.
 //| echo: false
 
 // -----------------------------------------------------------------------------
-// SIDEBAR: METRIC SELECTOR
+// SIDEBAR: INDICATOR SELECTOR
 // -----------------------------------------------------------------------------
 
 viewof selected_metric = Inputs.select(
@@ -667,7 +667,7 @@ viewof selected_metric = Inputs.select(
     )
   ).sort(),
   {
-    label: "Metric",
+    label: "Indicator",
     value: "CVD-BURDEN-001"
   }
 )
@@ -679,7 +679,7 @@ viewof selected_metric = Inputs.select(
 // -----------------------------------------------------------------------------
 // SIDEBAR: EVENT TYPE SELECTOR
 //
-// Currently applies to both burden metrics.
+// Currently applies to both burden indicators.
 // -----------------------------------------------------------------------------
 
 viewof selected_event_type = Inputs.select(
@@ -704,7 +704,7 @@ viewof selected_event_type = Inputs.select(
 // SIDEBAR: TIME VIEW SELECTOR
 //
 // Used only for CVD-BURDEN-001.
-// For CVD-BURDEN-002, the selector is shown disabled because that metric is
+// For CVD-BURDEN-002, the selector is shown disabled because that indicator is
 // currently annual distribution only.
 // -----------------------------------------------------------------------------
 
@@ -725,7 +725,7 @@ viewof selected_count_view = {
       <select disabled>
         <option>Annual only</option>
       </select>
-      <div class="bnr-disabled-note">Not used for distribution metrics.</div>
+      <div class="bnr-disabled-note">Not used for distribution indicators.</div>
     </div>
   `;
 
@@ -741,7 +741,7 @@ viewof selected_count_view = {
 // -----------------------------------------------------------------------------
 // YEAR RANGE SETUP
 //
-// The available years respond to the selected metric and event type.
+// The available years respond to the selected indicator and event type.
 // -----------------------------------------------------------------------------
 
 sidebar_base = burden.filter(d =>
@@ -858,9 +858,9 @@ description = {
     }
 
     return {
-      title: "Selected metric",
-      what: "This dashboard shows approved aggregate BNR metric outputs.",
-      interpretation: "Use this dashboard to explore approved aggregate metric rows."
+      title: "Selected indicator",
+      what: "This dashboard shows approved aggregate BNR indicator outputs.",
+      interpretation: "Use this dashboard to explore approved aggregate indicator rows."
     };
   };
 
@@ -881,7 +881,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
   : range_end
 ```
 
-# Metric view
+# Indicator
 
 ## Dashboard
 
@@ -889,10 +889,10 @@ latest_year_in_range = metric2_years_in_range.length > 0
 //| echo: false
 
 // -----------------------------------------------------------------------------
-// MAIN METRIC VIEW
+// MAIN INDICATOR VIEW
 //
-// This is now deliberately bespoke by metric. That is easier for users than a
-// generic chart explorer, and it lets each metric explain itself clearly.
+// This is now deliberately bespoke by indicator. That is easier for users than a
+// generic chart explorer, and it lets each indicator explain itself clearly.
 // -----------------------------------------------------------------------------
 
 {
@@ -1045,7 +1045,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
 
   const renderMoreMetricsNote = () => html`
     <div class="bnr-more-metrics">
-      For a full range of monthly metrics, you can view the metrics briefing
+      For a full range of monthly indicators, you can view the indicators briefing
       <a href="#">here</a>, and download the associated datasets
       <a href="#">here</a>.
     </div>
@@ -1074,6 +1074,53 @@ latest_year_in_range = metric2_years_in_range.length > 0
     return legend;
   };
 
+  // Return unique x-axis values in chronological / numeric order.
+  // This prevents Observable Plot from inventing intermediate labels such as 2010.5.
+  const uniqueSortedAxisValues = (values) => {
+    const seen = new Map();
+
+    for (const value of values) {
+      if (value === null || value === undefined) continue;
+
+      const key = value instanceof Date ? value.getTime() : value;
+      if (!seen.has(key)) seen.set(key, value);
+    }
+
+    return Array.from(seen.values()).sort((a, b) => a - b);
+  };
+
+  // Select a readable number of tick labels from the actual plotted data points.
+  // The first and last data points are always retained.
+  const pickEvenlySpacedTicks = (values, maxTicks = 8) => {
+    if (values.length <= maxTicks) return values;
+    if (maxTicks <= 1) return [values[0]];
+
+    const selected = [];
+    const last = values.length - 1;
+    const used = new Set();
+
+    for (let i = 0; i < maxTicks; i++) {
+      const index = Math.round(i * last / (maxTicks - 1));
+      const value = values[index];
+      const key = value instanceof Date ? value.getTime() : value;
+
+      if (!used.has(key)) {
+        selected.push(value);
+        used.add(key);
+      }
+    }
+
+    return selected;
+  };
+
+  // Two-line month label for compact monthly axes.
+  const formatYearMonthTick = (d) => {
+    const date = d instanceof Date ? d : new Date(d);
+    const yyyy = date.getFullYear();
+    const mmm = date.toLocaleString("en-GB", {month: "short"});
+    return `${yyyy}\n${mmm}`;
+  };
+
   const metricDescriptionLocal = (metric_id, count_view = "monthly") => {
     if (metric_id === "CVD-BURDEN-001") {
       if (count_view === "monthly") {
@@ -1100,9 +1147,9 @@ latest_year_in_range = metric2_years_in_range.length > 0
     }
 
     return {
-      title: "Selected metric",
-      what: "This dashboard shows approved aggregate BNR metric outputs.",
-      interpretation: "Use this dashboard to explore approved aggregate metric rows."
+      title: "Selected indicator",
+      what: "This dashboard shows approved aggregate BNR indicator outputs.",
+      interpretation: "Use this dashboard to explore approved aggregate indicator rows."
     };
   };
 
@@ -1171,6 +1218,14 @@ latest_year_in_range = metric2_years_in_range.length > 0
       }))
       .sort(periodSort);
 
+    // X-axis ticks are explicitly selected from the plotted data points.
+    // Annual view: label every plotted year, with no generated decimal years.
+    // Monthly view: label a small, even set of plotted months using two-line labels.
+    const plottedXValues = uniqueSortedAxisValues(observedAll.map(d => d.chart_x));
+    const xTickValues = selected_count_view === "monthly"
+      ? pickEvenlySpacedTicks(plottedXValues, 8)
+      : plottedXValues;
+
     // -------------------------------------------------------------------------
     // CVD-BURDEN-001: RENDER
     // -------------------------------------------------------------------------
@@ -1215,7 +1270,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
         ${Plot.plot({
           height: 470,
           marginLeft: 80,
-          marginBottom: 62,
+          marginBottom: selected_count_view === "monthly" ? 76 : 62,
           style: {
             fontSize: "15px",
             fontFamily: "inherit"
@@ -1224,13 +1279,13 @@ latest_year_in_range = metric2_years_in_range.length > 0
             ? {
                 label: "Month",
                 type: "time",
-                ticks: 8,
-                tickFormat: "%Y"
+                ticks: xTickValues,
+                tickFormat: formatYearMonthTick
               }
             : {
                 label: "Year",
-                ticks: Math.min(10, years.length),
-                tickFormat: d => String(d).replace(",", "")
+                ticks: xTickValues,
+                tickFormat: d => String(Math.trunc(d))
               },
           y: {
             label: "Count",
@@ -1272,7 +1327,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
     // CVD-BURDEN-002: AGE DISTRIBUTION DATA
     //
     // The age chart is a 100% stacked horizontal bar chart by year.
-    // Each stacked segment is an age group. The Stata metric job now supplies
+    // Each stacked segment is an age group. The Stata indicator job now supplies
     // the dashboard-facing bands:
     //   under_50, 50_59, 60_69, 70_79, 80_plus, unknown
     // -------------------------------------------------------------------------
@@ -1298,7 +1353,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
 
     // Fixed colour mapping keeps the chart and its custom legend in sync.
     // Legacy bands are retained in the map so the dashboard remains readable
-    // before the revised Stata metric job has been re-run.
+    // before the revised Stata indicator job has been re-run.
     const ageColourLookup = {
       under_50: "#e8f1f2",
       "50_59": "#c7dfe5",
@@ -1566,7 +1621,7 @@ latest_year_in_range = metric2_years_in_range.length > 0
     `;
   }
 
-  return html`<p>No dashboard layout has been defined for this metric.</p>`;
+  return html`<p>No dashboard layout has been defined for this indicator.</p>`;
 }
 ```
 
@@ -1632,16 +1687,16 @@ data_title = {
 }
 
 metadata_rows = [
-  {item: "Dashboard source", value: "CVD burden metric product"},
+  {item: "Dashboard source", value: "CVD burden indicator product"},
   {item: "Input file", value: "cvd_burden_metrics_current.csv"},
   {item: "Release", value: burden.length > 0 ? burden[0].release_id : "—"},
-  {item: "Selected metric", value: selected_metric},
+  {item: "Selected indicator", value: selected_metric},
   {item: "Selected event type", value: selected_event_type},
   {item: "Time view", value: selected_count_view},
   {item: "Selected years", value: `${range_start} to ${range_end}`},
   {item: "Rows selected", value: table_rows_all.length.toLocaleString()},
-  {item: "Metric calculation", value: "Calculated upstream in Stata"},
-  {item: "Dashboard role", value: "Filters and visualises approved aggregate metric rows"}
+  {item: "Indicator calculation", value: "Calculated upstream in Stata"},
+  {item: "Dashboard role", value: "Filters and visualises approved aggregate indicator rows"}
 ]
 ```
 
@@ -1688,16 +1743,16 @@ metadata_rows = [
       <tbody>
         <tr>
           <td>Current CSV</td>
-          <td>Current CVD burden metric dataset in CSV format.</td>
+          <td>Current CVD burden indicator dataset in CSV format.</td>
           <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv" download>Download CSV</a></td>
         </tr>
         <tr>
           <td>Current Stata dataset</td>
-          <td>Current CVD burden metric dataset in Stata DTA format.</td>
+          <td>Current CVD burden indicator dataset in Stata DTA format.</td>
           <td><a href="../../../downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.dta" download>Download DTA</a></td>
         </tr>
         <tr>
-          <td>Metric package</td>
+          <td>Indicator package</td>
           <td>ZIP package containing release-stamped outputs and metadata.</td>
           <td><a href="../../../downloads/files/metrics/cvd/burden/bnr_cvd_burden_cvd_2023_12.zip" download>Download ZIP</a></td>
         </tr>
@@ -1707,9 +1762,9 @@ metadata_rows = [
           <td><a href="../../../operations/data/sap.qmd" target="_blank" rel="noopener">Open SAP</a></td>
         </tr>
         <tr>
-          <td>Metric Specification Register</td>
-          <td>Definitions for approved BNR information hub metrics.</td>
-          <td><a href="../../../operations/data/sap-metrics.qmd" target="_blank" rel="noopener">Open metric register</a></td>
+          <td>Indicator Specification Register</td>
+          <td>Definitions for approved BNR information hub indicators.</td>
+          <td><a href="../../../operations/data/sap-metrics.qmd" target="_blank" rel="noopener">Open indicator register</a></td>
         </tr>
       </tbody>
     </table>
@@ -1725,7 +1780,7 @@ metadata_rows = [
         <thead>
           <tr>
             <th>Period</th>
-            <th>Metric ID</th>
+            <th>Indicator ID</th>
             <th>Statistic</th>
             <th>Event type</th>
             <th>Sex</th>
