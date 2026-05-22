@@ -1,8 +1,9 @@
 ---
-title: "BNR Hub"
-subtitle: "From static documentation to reproducible surveillance reporting"
+title: "BNR Info-Hub"
+subtitle: "From static reports to reproducible online surveillance"
 author: "Barbados National Registry"
-date: today
+date: "2026-05-22"
+date-format: "DD MMM YYYY"
 search: false
 format:
   revealjs:
@@ -149,9 +150,9 @@ execute:
   message: false
 ---
 
-## BNR Hub
+## BNR Info Hub
 
-### From static documentation to reproducible surveillance reporting
+### From static reports to reproducible online surveillance
 
 ::: {.blue-box}
 A short internal tour of the new Quarto-based information hub.
@@ -176,26 +177,26 @@ What the new site does, why it is structured this way, and how the main folders 
 
 ::: {.column width="50%"}
 
-### Quarto gives more headroom
+### Quarto allows us much more functionality
 
-- Websites, reports, dashboards, slides, and PDFs
-- Stronger support for data-led publishing
-- Better fit for surveillance reporting
 - One publication framework for several output types
+- Web pages, slides, and PDFs from a single output
+- Dashboards for 'real-time' reporting
+- So, stronger support for data-led publishing
 
 :::
 :::
 
 ::: {.sand-box}
-This change is a move toward a reproducible reporting framework.
+This change moves us towards a reproducible reporting framework.
 :::
 
-## The information-hub philosophy
+## The info-hub philosophy
 
 ::: {.columns}
 ::: {.column width="42%"}
 
-### The basic contract
+### The basic idea
 
 1. **Stata computes**
 2. **Outputs are written**
@@ -226,10 +227,10 @@ Static public website
 :::
 
 ::: {.sand-box}
-The key rule is separation: analytics belongs in the compute layer; presentation belongs in the publish layer.
+The key rule is separation: analytics in the compute layer; presentation in the publish layer.
 :::
 
-## Home page and public entry points
+## Home page / public entry points
 
 ::: {.columns}
 ::: {.column width="62%"}
@@ -247,11 +248,11 @@ The key rule is separation: analytics belongs in the compute layer; presentation
 - Routes users to CVD, hypertension, and diabetes
 - Points users toward methods, data sources, and quality checks
 
-::: {.sand-box .small} 
-Landing page designed to help users find public surveillance outputs easily.
+:::
 :::
 
-:::
+::: {.sand-box} 
+Landing page designed to help users find public surveillance outputs easily.
 :::
 
 ## Latest outputs and downloads
@@ -271,7 +272,7 @@ Landing page designed to help users find public surveillance outputs easily.
 :::
 
 ::: {.sand-box}
-The site separates **discovery** from **download**. Users can browse latest outputs as cards, then download approved public packages from the downloads table.
+The site separates **discovery** from **download**. Users can browse and search latest outputs, and can download approved public data packages from a downloads section.
 :::
 
 ## Briefing pages
@@ -293,11 +294,11 @@ The site separates **discovery** from **download**. Users can browse latest outp
 - ZIP package for approved public data files
 - Figures, datasets, metadata, workbook, and README
 
-::: {.sand-box .small}
-Each briefing is a public interpretation of a defined analytical output package.
+:::
 :::
 
-:::
+::: {.sand-box}
+Each briefing is an official BNR interpretation of a defined data output package.
 :::
 
 ## Dashboard structure
@@ -313,19 +314,19 @@ Each briefing is a public interpretation of a defined analytical output package.
 
 ### What the dashboard adds
 
-- Always uses the latest data release
+- 'Real-time' - always uses the latest monthly data release
 - Defined Indicators (See Methods)
 - Indicator selector
 - Event type selector
-- Date range controls
-- Headline cards for latest values
-- Chart for observed values and comparator
-
-::: {.sand-box .small}
-The dashboard is static and public-facing. It does not call live databases or expose confidential data.
-:::
+- Date range control
+- Headline cards for key values
+- Always includes a visual
 
 :::
+:::
+
+::: {.sand-box}
+The dashboard *does not* call live databases or expose confidential data.
 :::
 
 ## Repository structure: the big picture {auto-animate="true"}
@@ -434,7 +435,7 @@ info-hub/
 
 ### `scripts/`
 
-Where the work is done.
+Where we do our analyses.
 
 ```text
 scripts/stata/
@@ -456,7 +457,7 @@ scripts/stata/
 
 ### `outputs/`
 
-Where machine-generated products land.
+Where Stata-generated datasets land.
 
 ```text
 outputs/
@@ -471,7 +472,7 @@ outputs/
 
 - `staging/` supports checking
 - `public/` holds approved outputs
-- Generated outputs are not manually edited
+- Generated outputs are never manually edited
 
 :::
 :::
@@ -483,7 +484,7 @@ outputs/
 
 ### `site/`
 
-Where Quarto publishes.
+Where we publish outputs using Quarto.
 
 ```text
 site/
@@ -506,7 +507,7 @@ site/
 
 ### `site/downloads/`
 
-Where public files are exposed.
+Where datasets for public release are exposed.
 
 ```text
 site/downloads/
@@ -525,7 +526,15 @@ site/downloads/
 :::
 
 ::: {.sand-box}
-All analytics performed locally before upload. The website then describes and exposes approved products. 
+All analytics performed locally before upload. The website then publishes approved data and outputs. 
+:::
+
+## Website editing / Internal reviews
+
+![](images/screenshot6-editing.png){.screenshot fig-alt="website editing" width="100%"}
+
+::: {.sand-box}
+During development, or for any new output, team can review before publication. 
 :::
 
 ## What this gives BNR
@@ -536,10 +545,10 @@ All analytics performed locally before upload. The website then describes and ex
 ### For public users
 
 - Clear surveillance entry points
-- Narrative briefings
+- Official BNR narrative briefings
+- Indicator `real-time' dashboards without interpretation 
 - Downloadable data packages
-- Methods and interpretation pages
-- Simple dashboards for live-style monitoring
+- Methods pages (public, Ops Manual, Technical)
 
 :::
 
@@ -551,11 +560,11 @@ All analytics performed locally before upload. The website then describes and ex
 - Standard output folders
 - Metadata and release discipline
 - Static web deployment
-- A structure that can grow to hypertension and diabetes
+- A structure that can grow to hypertension, diabetes, cancer
 
 :::
 :::
 
 ::: {.sand-box}
-The long-term aim is not a clever website. It is a maintainable surveillance system that a small team can run, check, explain, and hand over.
+The long-term aim is a surveillance reporting system that a small team can run, maintain, and explain.
 :::
