@@ -2,7 +2,7 @@ schema: bnr_metric_package_v1
 domain: cvd
 metric_family: burden
 release_id: cvd_2023_12
-release_date: 19 May 2026
+release_date: 17 Jul 2026
 
 title: |-
   BNR cvd burden metric package
@@ -21,7 +21,7 @@ datasets:
     yml: metadata/cvd_burden_metrics_current.yml
 
 build:
-  build_date: 19 May 2026
-  build_time: 11:54:51
+  build_date: 17 Jul 2026
+  build_time: 12:50:38
   stata_version: 19.5
   analyst: ianha

@@ -1,0 +1,37 @@
+---
+title: "Stata code inventory"
+format: html
+toc: false
+---
+
+This page lists the Stata DO and ADO files currently retained in `scripts/stata/` as at 17 July 2026. It describes each active or transitional file's present responsibility; detailed run instructions belong in `site/operations/` and `site/technical/`.
+
+| Area | Relative path | Filename | Responsibility |
+|:-----|:------------------------|:--------------------------------------|:----------------------------------------------------------------------------------------------------------------|
+| ADO utility | `ado/` | [`bnr_workbook.ado`](ado/bnr_workbook.ado) | Creates an Excel workbook from a Stata dataset. It writes the data, dataset metadata derived from structured Stata notes, and variable metadata derived from formats, labels, value labels, and observed labelled categories to separate worksheets. |
+| ADO utility | `ado/` | [`bnr_yml.ado`](ado/bnr_yml.ado) | Creates a standard BNR dataset-metadata YAML file from a Stata dataset, including file references, structured dataset notes, and variable-level types, formats, labels, and observed labelled categories. |
+| Deprecated ADO | `ado/` | [`bnryaml.ado`](ado/bnryaml.ado) | **Deprecated; awaiting relocation from this folder.** |
+| Annual | `annual/` | [`build_cvd_annual_tabulations.do`](annual/build_cvd_annual_tabulations.do) | Builds 2023 annual CVD tabulations, including comparisons by event type, year, sex, and age group, and exports tables, a workbook, and metadata. **Transitional:** it still writes directly to the annual site-download pathway rather than the standard staging/approval/public pathway. |
+| Briefing | `briefings/cvd_case_fatality_2023/` | [`cvd_case_fatality_2023.do`](briefings/cvd_case_fatality_2023/cvd_case_fatality_2023.do) | Analyst-owned build for the 2023 CVD case-fatality briefing. Creates released datasets and figures in staging, writes release-control metadata, and calls the shared briefing publisher. |
+| Briefing | `briefings/cvd_cases_2023/` | [`cvd_cases_2023.do`](briefings/cvd_cases_2023/cvd_cases_2023.do) | Analyst-owned build for the 2023 CVD case-count briefing. Produces weekly and age-group datasets and figures in staging, then calls the shared briefing publisher. |
+| Briefing | `briefings/cvd_incidence_2023/` | [`cvd_incidence_2023.do`](briefings/cvd_incidence_2023/cvd_incidence_2023.do) | Analyst-owned build for the 2023 CVD incidence briefing. Produces annual incidence and rate-ratio datasets and figures in staging, then calls the shared briefing publisher. |
+| Briefing | `briefings/cvd_los_2023_v1/` | [`bnrcvd_los_2023.do`](briefings/cvd_los_2023_v1/bnrcvd_los_2023.do) | Analyst-owned build for the 2023 CVD length-of-stay briefing. Produces length-of-stay and bed-demand datasets and figures in staging, then calls the shared briefing publisher. |
+| Common | `common/` | [`bnr_publish_briefing.do`](common/bnr_publish_briefing.do) | Shared packaging and publication mechanics for briefing and supporting-output packages: creates metadata and download files, an optional workbook and ZIP, copies the package to `outputs/public/`, and refreshes the site mirror. **Interim:** it currently combines actions that the planned approval-and-promotion command will separate. |
+| Common | `common/` | [`bnr_publish_metric.do`](common/bnr_publish_metric.do) | Shared packaging and publication mechanics for metric packages: creates metadata and download files, ZIPs and copies the release/current datasets to `outputs/public/`, and refreshes the site mirror. **Interim:** it currently combines actions that the planned approval-and-promotion command will separate. |
+| Common | `common/` | [`bnrcvd_globals.do`](common/bnrcvd_globals.do) | Defines shared run metadata, compatibility aliases, and CVD display constants. It does not define machine-specific project paths. |
+| Common | `common/` | [`bnrcvd_prep_2023_v1.do`](common/bnrcvd_prep_2023_v1.do) | Central preparation step for the 2023 reporting cycle. Converts the frozen cumulative 2009–2023 CVD dataset into the full and simplified analysis-ready datasets used by downstream briefings, metrics, and tabulations. |
+| Common | `common/` | [`mirror_public_to_site.do`](common/mirror_public_to_site.do) | Copies an already approved public briefing or supporting-output package into `site/downloads/files/briefings/`. It performs no analysis and does not promote staging content. |
+| Configuration | `config/` | [`bnr_paths_TEMPLATE.do`](config/bnr_paths_TEMPLATE.do) | Version-controlled workstation template. Users copy it to the untracked `bnr_paths_LOCAL.do` and set the repository and private-data root paths. |
+| Metric | `metrics/cvd/` | [`metric_cvd_burden.do`](metrics/cvd/metric_cvd_burden.do) | Builds reusable long-format CVD burden metric datasets, currently covering hospital-registered event counts and event distributions; writes release-stamped and `current` files to staging and calls the metric publisher. |
+| Refit diagnostic | `refit/` | [`bnrcvd-2023-forensics1.do`](refit/bnrcvd-2023-forensics1.do) | Compares candidate historical stroke datasets to help identify the appropriate cumulative source, reporting record and variable counts and selected missingness checks. **Legacy-dependent:** it contains hard-coded historical workstation paths and is not part of the routine output pipeline. |
+| Refit evidence | `refit/` | [`bnrcvd_2023_forensics2.do`](refit/bnrcvd_2023_forensics2.do) | Builds the supporting process-audit figure showing duplication in the historical CVD dataset file structure, stages the artefact and release-control metadata, and calls the shared briefing publisher. |
+
+## Excluded from this inventory
+
+- filenames containing `copy`;
+- files under `docs/holding-bay/stata-legacy/`; and
+- `refit/bnrcvd-2023-forensics2_original.do`, which is superseded by `refit/bnrcvd_2023_forensics2.do`.
+
+The `.sthlp` help files in `ado/` are documentation rather than executable Stata code and are therefore not listed as separate code entries.
+
+These exclusions should eventually be removed from the repository or retained only in an explicitly labelled archive.

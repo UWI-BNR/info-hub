@@ -3,7 +3,7 @@ BNR cvd burden metric package
 Domain: cvd
 Metric family: burden
 Release ID: cvd_2023_12
-Release date: 19 May 2026
+Release date: 17 Jul 2026
 
 Contents:
 - cvd_burden_metrics_cvd_2023_12.dta: release-stamped Stata metric dataset
