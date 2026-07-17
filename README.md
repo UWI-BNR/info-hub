@@ -28,18 +28,18 @@ The core rules are:
 
 ## Repository structure
 
-| Path | Purpose |
-|---|---|
-| `scripts/stata/` | Stata preparation, analysis, metric, briefing, and publication code |
-| `scripts/python/` | Lightweight support utilities only |
-| `scripts/powershell/` | Local Windows helper scripts |
-| `outputs/staging/` | Review packages awaiting approval |
-| `outputs/public/` | Authoritative approved public packages |
-| `site/` | Quarto source, operational guidance, technical guidance, and website mirror |
-| `docs/` | Project, setup, development, and handover material not published on the site |
-| `assets/` | Shared source assets |
-| `setup-checks/` | Lightweight local setup checks |
-| `.github/` | GitHub configuration and deployment workflows |
+| Path                  | Purpose                                                      |
+| --------------------- | ------------------------------------------------------------ |
+| `scripts/stata/`      | Stata preparation, analysis, metric, briefing, and publication code |
+| `scripts/python/`     | Lightweight support utilities only                           |
+| `scripts/powershell/` | Local Windows helper scripts                                 |
+| `outputs/staging/`    | Review packages awaiting approval                            |
+| `outputs/public/`     | Authoritative approved public packages                       |
+| `site/`               | Quarto source, operational guidance, technical guidance, and website mirror |
+| `docs/`               | Project, setup, development, and handover material not published on the site |
+| `assets/`             | Shared source assets                                         |
+| `setup-checks/`       | Lightweight local setup checks                               |
+| `.github/`            | GitHub configuration and deployment workflows                |
 
 The website copy under `site/downloads/files/` is a disposable mirror of `outputs/public/`; it may be rebuilt and is not the authoritative release.
 
