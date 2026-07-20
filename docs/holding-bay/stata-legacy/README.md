@@ -4,7 +4,7 @@ This folder stores Stata files that may remain useful but are not part of the ac
 
 Files in this folder are not loaded by the standard Stata path setup.
 
-Active Stata workflow files belong under:
+Active Stata workflow files belong under:   
 
 - `scripts/stata/config/`
 - `scripts/stata/common/`
