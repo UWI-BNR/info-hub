@@ -1,0 +1,53 @@
+*! BNR CVD Step 3: Create deidentified metric-input datasets
+*! Thin interface to scripts/stata/monthly/bnr_cvd_create_metric_inputs.do
+
+VERSION 19.0
+POSITION . . 430 325
+
+DIALOG main, label("BNR Step 3: Create metric-input datasets")
+BEGIN
+  TEXTBOX tx_intro  15 15 400 35, label("Select the completed Step 2 release, then tick each private dataset you authorise for creation.")
+  GROUPBOX gb_period 15 62 400 62, label("Step 2 release")
+  TEXT tx_year      30 88 100 ., label("Release year:")
+  SPINNER ed_year   140 85 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month     245 88 95 ., label("Release month:")
+  SPINNER ed_month  340 85 55 ., default(1) min(1) max(12) nomemory error("Release month")
+  GROUPBOX gb_sets  15 140 400 132, label("Authorise datasets to create")
+  CHECKBOX ck_count 30 162 370 ., default(1) nomemory label("Counts and incidence dataset")
+  CHECKBOX ck_cf    30 184 370 ., default(1) nomemory label("Case-fatality dataset")
+  CHECKBOX ck_los   30 206 370 ., default(1) nomemory label("Length-of-stay dataset")
+  CHECKBOX ck_perf  30 228 370 ., default(1) nomemory label("Care-performance dataset")
+  CHECKBOX ck_all   30 250 370 ., default(1) nomemory label("All-variables dataset")
+  CHECKBOX ck_replace 20 286 390 ., default(0) nomemory label("Authorise replacement of selected datasets")
+END
+
+OK ok1, label("Create")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_cvd_create_metric_inputs")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/monthly/bnr_cvd_create_metric_inputs.do "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  if main.ck_count {
+    put " count"
+  }
+  if main.ck_cf {
+    put " case_fatality"
+  }
+  if main.ck_los {
+    put " length_of_stay"
+  }
+  if main.ck_perf {
+    put " performance"
+  }
+  if main.ck_all {
+    put " all_variables"
+  }
+  if main.ck_replace {
+    put " replace"
+  }
+END

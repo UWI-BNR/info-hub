@@ -20,18 +20,18 @@ version 19
 
 * ---- Root folders ------------------------------------------------------------
 
-global BNR_REPO     "C:/path/to/info-hub"
-global BNR_PRIVATE  "C:/path/to/info-hub-private"
+global BNR_REPO     "C:/yoshimi-hot/output/analyse-bnr/info-hub"
+global BNR_PRIVATE  "C:/yoshimi-hot/output/analyse-bnr/info-hub-private"
 
 * ---- Main project folders ----------------------------------------------------
 
 global BNR_SCRIPTS  "$BNR_REPO/scripts"
 global BNR_STATA    "$BNR_REPO/scripts/stata"
 global BNR_ADO      "$BNR_REPO/scripts/stata/ado"
-global BNR_DIALOGS  "$BNR_REPO/scripts/stata/dialogs"
 
 global BNR_OUTPUTS  "$BNR_REPO/outputs"
 global BNR_PUBLIC   "$BNR_REPO/outputs/public"
+global BNR_STAGING   "$BNR_REPO/outputs/staging"
 global BNR_WORK     "$BNR_REPO/outputs/work"
 
 * ---- Private local folders ---------------------------------------------------
@@ -40,7 +40,6 @@ global BNR_DATA_RAW      "$BNR_PRIVATE/data/raw"
 global BNR_DATA_FROZEN   "$BNR_PRIVATE/data/frozen"
 global BNR_DATA_DERIVED  "$BNR_PRIVATE/data/derived"
 
-global BNR_STAGING       "$BNR_PRIVATE/outputs/staging"
 global BNR_PRIVATE_WORK  "$BNR_PRIVATE/work"
 global BNR_PRIVATE_LOGS  "$BNR_PRIVATE/logs/private"
 
@@ -57,10 +56,8 @@ global BNR_BRIEF_DATA   "$BNR_BRIEF_CVD_CASES_2023/data"
 cd "$BNR_REPO"
 
 adopath ++ "$BNR_ADO"
-adopath ++ "$BNR_DIALOGS"
 
 display as text "BNR paths loaded:"
 display as result "  Repo:      $BNR_REPO"
 display as result "  Private:   $BNR_PRIVATE"
-display as result "  Staging:   $BNR_STAGING"
 display as result "  Briefing:  $BNR_BRIEF_CVD_CASES_2023"

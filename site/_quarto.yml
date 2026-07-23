@@ -182,13 +182,13 @@ website:
 
         - section: "REDCap"
           contents:
-            # - text: "Data entry"
-            #   href: operations/redcap/entering-registry-data.qmd
+            # - text: "Freeze"
+            #   href: operations/post-redcap/dataset-freeze.qmd
 
         - section: "Post-REDCap"
           contents:
-            # - text: "Freeze"
-            #   href: operations/post-redcap/dataset-freeze.qmd
+            - text: "Monthly CVD Workflow"
+              href: operations/post-redcap/monthly/bnr-monthly-cvd-run-guide.qmd
 
         - section: "Data Methods"
           contents:

@@ -122,6 +122,7 @@ site/_site/
 !/outputs/build/.gitkeep
 
 # Local working outputs
+/outputs/staging/
 /outputs/work/
 /outputs/private/
 /outputs/tmp/
