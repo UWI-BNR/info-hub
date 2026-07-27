@@ -1,0 +1,40 @@
+*! BNR CVD Step 1 monthly REDCap extract dialog
+*! version 1.1.0, 27 July 2026
+*! Thin interface to scripts/stata/monthly/bnr_step1_cvd_redcap_extract.do
+
+VERSION 19.0
+POSITION . . 440 285
+
+DIALOG main, label("BNR CVD - Monthly REDCap extract")
+BEGIN
+    TEXTBOX intro 15 15 410 40, label("Creates a private cumulative REDCap snapshot from 1 January 2024 through the end of the selected month.")
+
+    GROUPBOX period 15 65 410 90, label("Extract period")
+    TEXT year_label 30 90 105 ., label("Release year:")
+    SPINNER year 145 87 90 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+
+    TEXT month_label 30 122 105 ., label("Release month:")
+    SPINNER month 145 119 90 ., default(1) min(1) max(12) nomemory error("Release month")
+    TEXT month_note 245 122 150 ., label("1 = Jan; 12 = Dec")
+
+    CHECKBOX replace 25 170 390 ., default(0) nomemory label("Replace an existing extract for this month")
+
+    TEXTBOX output_note 25 205 390 38, label("Outputs: private CSV, Stata dataset, YAML receipt and log. Any dataset already open remains unchanged.")
+END
+
+OK ok1, label("Run extract")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step1_cvd_redcap_extract")
+RESET reset1
+
+PROGRAM command
+BEGIN
+    put "do $BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do "
+    put main.year
+    put " "
+    put main.month
+    if main.replace {
+        put " replace"
+    }
+END
+

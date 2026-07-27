@@ -1,0 +1,58 @@
+*! BNR CVD Step 3: Create deidentified metric-input datasets
+*! version 2.1.0, 27 July 2026
+*! Thin interface to scripts/stata/monthly/bnr_step3_metric_inputs.do
+
+VERSION 19.0
+POSITION . . 450 345
+
+DIALOG main, label("BNR CVD - Step 3: metric-input datasets")
+BEGIN
+    TEXTBOX intro 15 15 420 38, label("Select the completed Step 2 release and the private deidentified datasets to create.")
+
+    GROUPBOX period 15 62 420 72, label("Selected cumulative release")
+    TEXT year_label 30 88 105 ., label("Release year:")
+    SPINNER year 145 85 90 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+    TEXT month_label 250 88 105 ., label("Release month:")
+    SPINNER month 355 85 60 ., default(1) min(1) max(12) nomemory error("Release month")
+
+    GROUPBOX sets 15 145 420 120, label("Datasets to create")
+    CHECKBOX count 30 168 385 ., default(1) nomemory label("Counts and incidence")
+    CHECKBOX casefatal 30 188 385 ., default(1) nomemory label("Case fatality")
+    CHECKBOX los 30 208 385 ., default(1) nomemory label("Length of stay")
+    CHECKBOX performance 30 228 385 ., default(1) nomemory label("Care performance")
+    CHECKBOX allvars 30 248 385 ., default(1) nomemory label("All approved variables")
+
+    CHECKBOX replace 20 285 410 ., default(0) nomemory label("Replace selected existing datasets")
+END
+
+OK ok1, label("Run Step 3")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step3_metric_inputs")
+RESET reset1
+
+PROGRAM command
+BEGIN
+    require main.year
+    require main.month
+    put "do $BNR_STATA/monthly/bnr_step3_metric_inputs.do "
+    put main.year " "
+    put main.month
+    if main.count {
+        put " count"
+    }
+    if main.casefatal {
+        put " case_fatality"
+    }
+    if main.los {
+        put " length_of_stay"
+    }
+    if main.performance {
+        put " performance"
+    }
+    if main.allvars {
+        put " all_variables"
+    }
+    if main.replace {
+        put " replace"
+    }
+END

@@ -69,13 +69,13 @@ Before every run:
 The recommended command for March 2024 is:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2024 3
+do "$BNR_STATA/monthly/bnr_cvd_redcap_extract.do" 2024 3
 ```
 
 You can instead open the dialog:
 
 ```stata
-db bnr_step1_cvd_redcap_extract
+db bnr_cvd_redcap_extract
 ```
 
 Choose the year and final month, then run the extract. The dialog runs the same controller as the command line.
@@ -83,7 +83,7 @@ Choose the year and final month, then run the extract. The dialog runs the same 
 Leave **Replace an existing extract** unticked in normal work. If the selected release already exists, Step 1 stops to protect the retained source. Use `replace` only for a deliberate, authorised rebuild:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2024 3 replace
+do "$BNR_STATA/monthly/bnr_cvd_redcap_extract.do" 2024 3 replace
 ```
 
 Never use `replace` simply to get past an error you do not understand.
@@ -180,7 +180,7 @@ This is a lossless joining step. It does not de-identify the data, calculate a m
 For March 2024:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2024 3
+do "$BNR_STATA/monthly/bnr_cvd_prepare_confidential.do" 2024 3
 ```
 
 Or use:
@@ -192,7 +192,7 @@ User > BNR > Monthly data workflow > Step 2: Build confidential cumulative datas
 You can also open the dialog directly:
 
 ```stata
-db bnr_step2_cvd_confidential
+db bnr_cvd_prepare_confidential
 ```
 
 Choose the same release used in Step 1, then select **Build confidential dataset**.
@@ -315,7 +315,7 @@ User > BNR > Monthly data workflow > Step 3: Create metric-input datasets
 Or open the dialog directly:
 
 ```stata
-db bnr_step3_metric_inputs
+db bnr_cvd_create_metric_inputs
 ```
 
 Enter the release year and month. Tick every dataset you authorise, leave **Authorise replacement of selected datasets** unticked in normal work, then select **Create**.
@@ -325,21 +325,21 @@ The command-line option names are `count`, `case_fatality`, `length_of_stay`, `p
 To create all five for March 2024:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_create_metric_inputs.do" ///
     2024 3 count case_fatality length_of_stay performance all_variables
 ```
 
 To create only the broad de-identified dataset:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_create_metric_inputs.do" ///
     2024 3 all_variables
 ```
 
 The optional final word `replace` authorises replacement only of the selected outputs:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_create_metric_inputs.do" ///
     2024 3 count all_variables replace
 ```
 
@@ -454,7 +454,7 @@ Only the **burden** family is currently enabled. It calculates `CVD-BURDEN-001` 
 Open the dialog:
 
 ```stata
-db bnr_step4_metrics
+db bnr_cvd_metric_controller
 ```
 
 Select the release and the enabled **Burden** family, then run the calculation.
@@ -462,13 +462,13 @@ Select the release and the enabled **Burden** family, then run the calculation.
 The equivalent command for March 2024 is:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 3 burden
+do "$BNR_STATA/monthly/bnr_cvd_metric_controller.do" 2024 3 burden
 ```
 
 Use the final word `replace` only for a deliberate, authorised rebuild:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step4_metrics.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_metric_controller.do" ///
     2024 3 burden replace
 ```
 
@@ -513,7 +513,7 @@ $BNR_STAGING/metrics/cvd/burden/cvd_2024_03/
 The private log is:
 
 ```text
-$BNR_PRIVATE_LOGS/bnr_step4_metrics_202403.log
+$BNR_PRIVATE_LOGS/bnr_cvd_metric_controller_202403.log
 ```
 
 The release-stamped and `current` datasets should be identical at this stage. All files remain private.
@@ -592,7 +592,7 @@ Step 5 does not promote files to authoritative public output, copy them to the w
 Open the dialog:
 
 ```stata
-db bnr_step5_review
+db bnr_cvd_review_controller
 ```
 
 Choose the release, **Burden**, and **Prepare review package**.
@@ -600,14 +600,14 @@ Choose the release, **Burden**, and **Prepare review package**.
 The equivalent command for March 2024 is:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_review_controller.do" ///
     2024 3 burden prepare
 ```
 
 Use `prepare replace` only when deliberately rebuilding the review package. It invalidates an earlier approval and removes the earlier `public_ready` package:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_review_controller.do" ///
     2024 3 burden prepare replace
 ```
 
@@ -641,9 +641,9 @@ After a satisfactory review, use the dialog's **Approve reviewed package** actio
 The equivalent command is:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" ///
+do "$BNR_STATA/monthly/bnr_cvd_review_controller.do" ///
     2024 3 burden approve ///
-    "Full name" "BNR Developer"
+    "Full name" "BNR Statistician"
 ```
 
 Approval should be performed only by the person named in the command.
@@ -688,26 +688,28 @@ The supporting CSV and DTA files are necessary audit and safety controls. Staff 
 #### Additional files created only by Approve
 
 ```text
-public_ready/
-    datasets/
-        cvd_burden_metrics_cvd_2024_01.dta
-        cvd_burden_metrics_cvd_2024_01.csv
-        cvd_burden_metrics_current.dta
-        cvd_burden_metrics_current.csv
-    metadata/
-        cvd_burden_metrics_cvd_2024_01.yml
-        cvd_burden_metrics_current.yml
-        metric_package.yml
-    disclosure_qa.csv
+review/
     public_manifest.csv
     approval.yml
+
+public_ready/
+    datasets/
+        release.dta
+        release.csv
+        current.dta
+        current.csv
+    metadata/
+        release.yml
+        current.yml
+        package.yml
+    disclosure_qa.csv
 ```
 
 | Output | Why it is needed |
 |---|---|
 | `public_ready/` | Complete disclosure-controlled package that Step 6 may promote |
-| `public_ready/public_manifest.csv` | File list, sizes and checksums tying approval to the exact `public_ready` files |
-| `public_ready/approval.yml` | Small approval record containing status, approver, role, date and package identity |
+| `review/public_manifest.csv` | File list, sizes and checksums tying approval to the exact `public_ready` files |
+| `review/approval.yml` | Small approval record containing status, approver, role, date and package identity |
 | `public_ready/disclosure_qa.csv` | Disclosure QA carried with the public-ready package |
 
 The approve log is:
@@ -716,9 +718,7 @@ The approve log is:
 $BNR_PRIVATE_LOGS/bnr_cvd_review_approve_202403.log
 ```
 
-The release-stamped files retain the monthly release identity in their filenames. The stable `current` files are intended for dashboards and other consumers that always need the latest approved version. Step 6 promotes these files without renaming them.
-
-`public_manifest.csv` inventories only the promotable payload files. Its `payload_root` value is `.` and every `relative_path` is interpreted from the enclosing `public_ready/` folder. `approval.yml` records the manifest checksum, so Step 6 can refuse promotion if either the manifest or any listed payload file has changed.
+The release identity is stored in the parent folder and metadata, so the short filenames inside `public_ready` are deliberate.
 
 ### Check before moving on
 
@@ -742,7 +742,7 @@ Only then is the package ready for Step 6.
 
 ### If the step stops
 
-A failed action ends with **STEP 5: OPERATIONAL RUN SUMMARY** and a status of **Did not complete**. Read the reason and private log path shown in the final block.
+A failed action ends with **STEP 5 DID NOT COMPLETE**. Read the reason and private log path shown in the final block.
 
 Common causes include an incomplete Step 4 package, failed QA, existing review files without `replace`, missing approver details or a file that changed after review. Correct the underlying issue and rerun the appropriate action. Never edit the candidate, fingerprints, manifest or approval record by hand.
 

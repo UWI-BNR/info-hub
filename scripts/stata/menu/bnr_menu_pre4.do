@@ -30,7 +30,7 @@ window menu append item "Monthly data workflow" ///
 
 window menu append item "Monthly data workflow" ///
     "Step 5: Review and approve staging package" ///
-    "db bnr_step5_review"
+    "db bnr_cvd_review_controller"
 
 window menu refresh
 

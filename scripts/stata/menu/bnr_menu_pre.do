@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.2.5, 27 July 2026
+*! version 1.2.1, 23 July 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -14,23 +14,23 @@ window menu append submenu "BNR" "Monthly data workflow"
 
 window menu append item "Monthly data workflow" ///
     "Step 1: Extract monthly REDCap data" ///
-    "db bnr_step1_cvd_redcap_extract"
+    "db bnr_cvd_redcap_extract"
 
 window menu append item "Monthly data workflow" ///
     "Step 2: Build confidential cumulative dataset" ///
-    "db bnr_step2_cvd_confidential"
+    "db bnr_cvd_prepare_confidential"
 
 window menu append item "Monthly data workflow" ///
     "Step 3: Create deidentified metric-input datasets" ///
-    "db bnr_step3_metric_inputs"
+    "db bnr_cvd_create_metric_inputs"
 
 window menu append item "Monthly data workflow" ///
     "Step 4: Calculate metrics and create private staging package" ///
-    "db bnr_step4_metrics"
+    "db bnr_cvd_metric_controller"
 
 window menu append item "Monthly data workflow" ///
     "Step 5: Review and approve staging package" ///
-    "db bnr_step5_review"
+    "db bnr_cvd_review_controller"
 
 window menu refresh
 
