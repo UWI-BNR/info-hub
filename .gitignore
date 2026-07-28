@@ -106,6 +106,8 @@ site/_site/
 # and document the decision.
 
 # Legacy / general generated output folders
+outputs/staging/metrics/*
+
 /outputs/tables/*
 !/outputs/tables/.gitkeep
 
