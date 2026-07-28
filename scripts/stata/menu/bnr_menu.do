@@ -13,23 +13,23 @@ window menu append submenu "stUser" "BNR"
 window menu append submenu "BNR" "Monthly data workflow"
 
 window menu append item "Monthly data workflow" ///
-    "Step 1: Extract monthly REDCap data" ///
+    "Step 1: Extract REDCap data" ///
     "db bnr_step1_cvd_redcap_extract"
 
 window menu append item "Monthly data workflow" ///
-    "Step 2: Build confidential cumulative dataset" ///
+    "Step 2: Build cumulative dataset" ///
     "db bnr_step2_cvd_confidential"
 
 window menu append item "Monthly data workflow" ///
-    "Step 3: Create deidentified metric-input datasets" ///
+    "Step 3: Build deidentified datasets" ///
     "db bnr_step3_metric_inputs"
 
 window menu append item "Monthly data workflow" ///
-    "Step 4: Calculate metrics and create private staging package" ///
+    "Step 4: Calculate metrics for dashboards" ///
     "db bnr_step4_metrics"
 
 window menu append item "Monthly data workflow" ///
-    "Step 5: Review and approve staging package" ///
+    "Step 5: Review and approve package for release" ///
     "db bnr_step5_review"
 
 window menu refresh
