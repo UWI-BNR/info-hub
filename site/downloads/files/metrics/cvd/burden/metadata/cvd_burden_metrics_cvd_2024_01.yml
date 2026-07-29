@@ -1,5 +1,5 @@
 schema: bnr_public_metric_dataset_v1
-dataset_type: current
+dataset_type: release
 package_status: public_ready
 package_id: cvd_burden_cvd_2024_01
 release_id: cvd_2024_01

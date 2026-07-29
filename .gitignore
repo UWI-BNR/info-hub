@@ -100,10 +100,8 @@ site/_site/
 # Generated outputs are ignored by default.
 # Approved public output bundles are allowed under outputs/public/.
 #
-# Stata .dta files remain ignored by default even under outputs/public/.
-# If a de-identified public Stata dataset is ever formally approved,
-# add it deliberately with git add -f, or create a narrower exception
-# and document the decision.
+# Stata .dta files remain ignored by default. The two narrow exceptions below
+# allow only approved CVD metric downloads created by Step 6.
 
 # Legacy / general generated output folders
 /outputs/tables/*
@@ -145,6 +143,11 @@ site/_site/
 *.ster
 *.smcl
 *.log
+
+# Step 6-approved, disclosure-controlled public Stata metric datasets.
+# Keep these exceptions below the general *.dta rule so Git can see them.
+!/outputs/public/metrics/cvd/burden/*.dta
+!/site/downloads/files/metrics/cvd/burden/*.dta
 
 
 # =========================================================

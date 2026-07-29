@@ -1,0 +1,13 @@
+check,result,detail
+Rows retained,PASS,All aggregate rows remain present in the disclosure-controlled candidate
+Release identity,PASS,Every row matches the requested release
+Suppression status contract,PASS,Only the four documented public statuses are present
+Primary suppression applied,PASS,Every Step 4 primary row was classified primary before private flags were removed
+Linked suppression applied,PASS,Every Step 4 linked-risk row was suppressed
+Suppressed numeric fields blank,PASS,"No suppressed row retains value, numerator or denominator"
+Suppressed display values,PASS,Every suppressed row displays an asterisk
+Unsuppressed display values,PASS,No unsuppressed row is labelled as suppressed
+Complementary panel suppression,PASS,No complete additive panel linked to a primary risk remains partly exposed
+Temporal differencing protection,PASS,Incomplete disease-specific quarter/year outputs cannot reveal withheld monthly counts
+Private review fields removed,PASS,Internal Step 4 suppression fields are absent from the review candidate
+Individual identifiers absent,PASS,No named individual identifier is present
