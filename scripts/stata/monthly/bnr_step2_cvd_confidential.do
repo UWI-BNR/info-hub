@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step2_cvd_confidential.do
-VERSION:     1.2.0 (27 July 2026)
+VERSION:     1.2.1 (30 July 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Step 2 - build the confidential cumulative CVD dataset
 
@@ -29,7 +29,7 @@ INPUTS
 
     Selected cumulative Step 1 source:
         $BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/
-            bnr_cvd_redcap_raw_YYYYMM.dta
+            bnr_cvd_step1_YYYYMM.dta
 
 OUTPUTS
     $BNR_DATA_DERIVED/cvd/yYYYY/mMM/
@@ -163,7 +163,7 @@ local analyst "`c(username)'"
 local historical_file ///
     "$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta"
 local release_file ///
-    "$BNR_DATA_RAW/redcap/cvd/y`year4'/m`month2'/bnr_cvd_redcap_raw_`period'.dta"
+    "$BNR_DATA_RAW/redcap/cvd/y`year4'/m`month2'/bnr_cvd_step1_`period'.dta"
 
 * Output names remain stable because they are data-product names, not DO-file names.
 local output_root  "$BNR_DATA_DERIVED/cvd"
@@ -189,21 +189,30 @@ log using "`output_log'", text replace name(step2)
 quietly {
 
 noisily display as text "BNR CVD STEP 2: CONFIDENTIAL CUMULATIVE DATASET"
-noisily display as result "  Script version:   1.2.0"
+noisily display as result "  Script version:   1.2.1"
 noisily display as result "  Selected release: `year4'-`month2'"
 noisily display as result "  Historical input: `historical_file'"
 noisily display as result "  Post-2023 input:  `release_file'"
 noisily display as result "  Private output:   `output_dta'"
 
-* Stop immediately if either approved input is absent.
-foreach required_file in "`historical_file'" "`release_file'" {
-    capture confirm file "`required_file'"
+* Stop immediately if the frozen historical source is absent.
+* This file is common to every Step 2 run.
+capture confirm file "`historical_file'"
+if _rc {
+    _bnr_step2_fail 601 "`year4'-`month2'" `"`output_log'"' ///
+        `"Required historical input not found: `historical_file'"'
+    exit _rc
+}
 
-    if _rc {
-        _bnr_step2_fail 601 "`year4'-`month2'" `"`output_log'"' ///
-            `"Required input not found: `required_file'"'
-        exit _rc
-    }
+* Stop immediately if the matching Step 1 dataset is absent.
+* Step 1 and Step 2 deliberately share one filename contract:
+*     bnr_cvd_step1_YYYYMM.dta
+* The year and month must match the release selected for this Step 2 run.
+capture confirm file "`release_file'"
+if _rc {
+    _bnr_step2_fail 601 "`year4'-`month2'" `"`output_log'"' ///
+        `"Required Step 1 dataset not found: `release_file'. Run Step 1 for the same year and month before running Step 2."'
+    exit _rc
 }
 
 * -----------------------------------------------------------------------------
@@ -687,7 +696,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 2: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             Completed successfully"
-noisily display as text   "  Script version:         1.2.0"
+noisily display as text   "  Script version:         1.2.1"
 noisily display as text   "  Selected release:       `year4'-`month2'"
 noisily display as text   "  Historical records:     `n_historical_display'"
 noisily display as text   "  Post-2023 records:      `n_post_display'"

@@ -201,3 +201,6 @@ desktop.ini
 /.luarc.json
 /.quarto/
 **/*.quarto_ipynb
+
+# Generated repository review reports
+repo-review/

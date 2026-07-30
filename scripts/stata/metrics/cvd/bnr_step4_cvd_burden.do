@@ -1,7 +1,7 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_step4_cvd_burden.do
- VERSION:     2.0.0 (27 July 2026)
+ VERSION:     2.2.0 (30 July 2026)
  PROJECT:     BNR Refit Phase 2
  PURPOSE:     Calculate CVD-BURDEN-001 and CVD-BURDEN-002
 
@@ -62,7 +62,7 @@ use `"`source_dataset'"', clear
 * VALIDATE REQUIRED VARIABLES
 * ==============================================================================
 
-local required_vars "eid dco etype doe yoe moe sex"
+local required_vars "eid dco etype doe yoe moe sex age70"
 
 foreach v of local required_vars {
     capture confirm variable `v'
@@ -99,6 +99,26 @@ if r(N) {
 quietly count if !inlist(dco, 0, 1) | missing(dco)
 if r(N) {
     display as error "The Step 3 count input contains an invalid dco value."
+    exit 459
+}
+
+
+* ------------------------------------------------------------------------------
+* EDIT BLOCK:
+* Validate the under-70 / 70-plus age grouping
+* ------------------------------------------------------------------------------
+* Step 3 codes age70 as:
+*   0 = under 70 years
+*   1 = 70 years and older
+*
+* Missing age70 values are allowed in the Step 3 input. They continue to
+* contribute to all existing all-age metrics, but they are excluded from the
+* new age-specific annual rows because their age group is unknown.
+
+quietly count if !inlist(age70, 0, 1, .)
+if r(N) {
+    display as error "The Step 3 count input contains an unrecognised age70 value."
+    display as error "Expected values are 0, 1 or missing."
     exit 459
 }
 
@@ -269,6 +289,55 @@ save `annual_counts', replace
 
 
 * ==============================================================================
+* CVD-BURDEN-001: ANNUAL ALL-CVD EVENT COUNTS BY AGE GROUP
+* ==============================================================================
+* This is a deliberately separate calculation block. The existing annual
+* event-type and sex expansion above remains unchanged.
+*
+* The new age rows are restricted to:
+*   - all CVD only;
+*   - both sexes combined;
+*   - annual counts only;
+*   - under 70 years and 70 years and older.
+*
+* age70 is not combined with event type or sex. Missing age70 values are
+* excluded from these age-specific rows only; they remain in all-age outputs.
+
+use `base', clear
+
+keep if inlist(age70, 0, 1)
+
+gen str20 age_group = ""
+replace age_group = "under_70"    if age70 == 0
+replace age_group = "age_70_plus" if age70 == 1
+
+collapse (sum) value = event, by(yoe age_group)
+
+rename yoe period_year
+
+gen str20 metric_id     = "CVD-BURDEN-001"
+gen str20 release_id    = "`release_id'"
+gen str12 period_type   = "annual"
+gen int   period_month  = .
+gen str10 period_start  = string(period_year, "%04.0f") + "-01-01"
+gen str20 period        = string(period_year, "%04.0f")
+
+gen str30 metric_event_type = "all_cvd"
+gen str20 metric_sex        = "all"
+
+gen str45 statistic     = "annual_count"
+gen str15 unit          = "count"
+gen double numerator    = value
+gen double denominator  = .
+gen int comparison_n    = .
+
+gen str25 status_flag   = "final"
+
+tempfile annual_age_counts
+save `annual_age_counts', replace
+
+
+* ==============================================================================
 * CVD-BURDEN-001: ANNUAL PREVIOUS 5-YEAR MEAN
 * ==============================================================================
 * For each annual count row, calculate the mean of the same stratum over the
@@ -338,6 +407,80 @@ foreach yy of local annual_years {
         else {
             append using `annual_previous_5yr'
             save `annual_previous_5yr', replace
+        }
+    }
+}
+
+
+* ==============================================================================
+* CVD-BURDEN-001: ANNUAL PREVIOUS 5-YEAR MEAN BY AGE GROUP
+* ==============================================================================
+* Apply the same comparator rule used for the existing annual rows:
+* the mean of the same age group in the previous five calendar years.
+*
+* Early years remain in the output but are flagged as insufficient_history
+* until five previous years are available.
+
+use `annual_age_counts', clear
+
+keep period_year age_group value
+
+fillin period_year age_group
+
+replace value = 0 if missing(value)
+gen byte __primary_component = ///
+    inrange(value, 1, `primary_suppression_threshold' - 1)
+drop _fillin
+
+tempfile annual_age_for_comparison
+save `annual_age_for_comparison', replace
+
+levelsof period_year, local(annual_age_years)
+
+tempfile annual_age_previous_5yr
+local annual_age_first 1
+
+foreach yy of local annual_age_years {
+
+    use `annual_age_for_comparison', clear
+
+    keep if inrange(period_year, `yy' - 5, `yy' - 1)
+
+    if _N > 0 {
+
+        collapse ///
+            (mean) value = value ///
+            (sum)  numerator = value ///
+            (sum)  related_primary_cells = __primary_component ///
+            (count) comparison_n = value, ///
+            by(age_group)
+
+        gen int period_year    = `yy'
+        gen int period_month   = .
+        gen str10 period_start = string(period_year, "%04.0f") + "-01-01"
+        gen str20 period       = string(period_year, "%04.0f")
+
+        gen str20 metric_id    = "CVD-BURDEN-001"
+        gen str20 release_id   = "`release_id'"
+        gen str12 period_type  = "annual"
+        gen str30 metric_event_type = "all_cvd"
+        gen str20 metric_sex        = "all"
+        gen str45 statistic    = "annual_previous_5yr_mean"
+        gen str15 unit         = "count"
+        gen double denominator = .
+
+        gen str25 status_flag  = "final"
+        replace status_flag    = "insufficient_history" if comparison_n < 5
+        replace value          = . if comparison_n < 5
+        replace numerator      = . if comparison_n < 5
+
+        if `annual_age_first' {
+            save `annual_age_previous_5yr', replace
+            local annual_age_first 0
+        }
+        else {
+            append using `annual_age_previous_5yr'
+            save `annual_age_previous_5yr', replace
         }
     }
 }
@@ -717,18 +860,71 @@ save `dist_sex', replace
 
 
 * ==============================================================================
+* CVD-BURDEN-002: AGE DISTRIBUTION
+* ==============================================================================
+* Annual distribution by the under-70 / 70-plus age grouping.
+*
+* This is deliberately restricted to:
+*   - all CVD events;
+*   - both sexes combined; and
+*   - annual reporting periods.
+*
+* Records with missing age70 are excluded from both the numerator and the
+* denominator. The two age-group percentages therefore describe the
+* distribution among events with a known age group and should sum to 100%.
+
+use `base', clear
+
+keep if inlist(age70, 0, 1)
+
+gen str20 age_group = ""
+replace age_group = "under_70"    if age70 == 0
+replace age_group = "age_70_plus" if age70 == 1
+
+collapse (sum) numerator = event, by(yoe age_group)
+
+bysort yoe: egen denominator = total(numerator)
+
+gen double value = (numerator / denominator) * 100
+
+rename yoe period_year
+
+gen str20 metric_id          = "CVD-BURDEN-002"
+gen str20 release_id         = "`release_id'"
+gen str12 period_type        = "annual"
+gen int   period_month       = .
+gen str10 period_start       = string(period_year, "%04.0f") + "-01-01"
+gen str20 period             = string(period_year, "%04.0f")
+
+gen str30 metric_event_type = "all_cvd"
+gen str20 metric_sex        = "all"
+
+gen str45 statistic          = "age_distribution"
+gen str15 unit               = "percent"
+gen int comparison_n         = .
+
+gen str25 status_flag        = "final"
+
+tempfile dist_age
+save `dist_age', replace
+
+
+* ==============================================================================
 * COMBINE METRIC OUTPUTS
 * ==============================================================================
 
 use `annual_counts', clear
 
 append using `annual_previous_5yr'
+append using `annual_age_counts'
+append using `annual_age_previous_5yr'
 append using `monthly_counts'
 append using `monthly_same_month_previous_5yr'
 append using `quarterly_counts'
 append using `quarterly_5yr_compare'
 append using `dist_event_type'
 append using `dist_sex'
+append using `dist_age'
 
 
 * ==============================================================================
@@ -737,6 +933,12 @@ append using `dist_sex'
 
 rename metric_event_type event_type
 rename metric_sex        sex
+
+* All pre-existing metric rows are explicitly identified as all-age rows.
+* Only the two new annual all-CVD age strata carry a specific age group.
+capture confirm variable age_group
+if _rc gen str20 age_group = "all"
+replace age_group = "all" if missing(age_group) | age_group == ""
 
 gen str30 source_status = "`source_status'"
 
@@ -769,7 +971,7 @@ gen byte primary_suppression_threshold = `primary_suppression_threshold'
 gen byte primary_suppression = 0
 replace primary_suppression = 1 ///
     if inlist(statistic, "annual_count", "monthly_count", "quarterly_count", ///
-        "event_type_distribution", "sex_distribution") & ///
+        "event_type_distribution", "sex_distribution", "age_distribution") & ///
        (inrange(numerator, 1, `primary_suppression_threshold' - 1) | ///
         inrange(denominator, 1, `primary_suppression_threshold' - 1))
 
@@ -800,7 +1002,7 @@ replace suppression_reason = "derived_from_primary_suppression" ///
 order ///
     metric_id release_id period_type period period_start ///
     period_year period_month period_quarter period_complete ///
-    event_type sex source_status ///
+    event_type sex age_group source_status ///
     statistic value unit numerator denominator comparison_n status_flag ///
     sdc_policy primary_suppression_threshold primary_suppression ///
     related_primary_cells related_suppression_review suppression_review ///
@@ -808,7 +1010,7 @@ order ///
 
 sort ///
     metric_id period_type period_year period_month ///
-    event_type sex statistic
+    event_type sex age_group statistic
 
 label data "BNR CVD burden metrics"
 
@@ -823,6 +1025,7 @@ label var period_quarter   "Calendar quarter number"
 label var period_complete  "Whether the reporting period is complete"
 label var event_type       "Event type"
 label var sex              "Sex"
+label var age_group        "Age group"
 label var source_status    "Source status"
 label var statistic        "Statistic"
 label var value            "Metric value"
@@ -858,9 +1061,9 @@ notes _dta: source_metadata: `source_metadata'
 notes _dta: unit_of_analysis: Aggregate metric row
 notes _dta: content: Long-format aggregate CVD burden metric output
 notes _dta: restrictions: Hospital-registered CVD events; DCO-only records excluded; 2009 excluded by design
-notes _dta: age_dimension: No age stratification is produced
-notes _dta: time_dimension: Monthly all-CVD counts by sex; quarterly and annual counts by event type and sex
-notes _dta: distribution_dimension: Annual event-type and sex distributions only; no age distribution is produced
+notes _dta: age_dimension: Annual all-CVD counts, annual previous-five-year means and annual age distributions are provided for under_70 and age_70_plus; age is not combined with sex or individual event type
+notes _dta: time_dimension: Monthly all-CVD counts by sex; quarterly counts by event type and sex; annual counts by event type and sex plus separate all-CVD age-group rows
+notes _dta: distribution_dimension: Annual event-type, sex and known-age distributions are produced; age distribution is all-CVD and both-sexes only
 notes _dta: comparator_annual: annual_previous_5yr_mean is the mean of the same stratum in the previous five calendar years
 notes _dta: comparator_monthly: monthly_same_month_previous_5yr_mean is the mean of the same calendar month and stratum in the previous five years
 notes _dta: comparator_quarterly: quarterly_same_quarter_previous_5yr_mean is the mean of the same calendar quarter and stratum in the previous five years
@@ -884,7 +1087,7 @@ notes _dta: created: `c(current_date)' `c(current_time)'
 
 local required_output_variables metric_id release_id period_type period ///
     period_start period_year period_month period_quarter period_complete ///
-    event_type sex source_status statistic value unit numerator denominator ///
+    event_type sex age_group source_status statistic value unit numerator denominator ///
     comparison_n status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells related_suppression_review ///
     suppression_review suppression_reason
@@ -899,7 +1102,7 @@ if !_rc {
     exit 459
 }
 
-isid metric_id period_type period_year period_month event_type sex statistic, missok
+isid metric_id period_type period_year period_month event_type sex age_group statistic, missok
 assert inlist(metric_id, "CVD-BURDEN-001", "CVD-BURDEN-002")
 assert release_id == "`release_id'"
 assert inlist(period_type, "annual", "monthly", "quarterly")
@@ -908,6 +1111,28 @@ assert !missing(period_complete)
 assert primary_suppression_threshold == 6
 assert sdc_policy == "bnr_sdc_v1"
 assert suppression_review == (primary_suppression | related_suppression_review)
+assert inlist(age_group, "all", "under_70", "age_70_plus")
+
+* Protect the agreed boundary for age stratification. Any age-specific row must
+* be annual, all-CVD and both-sexes. CVD-BURDEN-001 contributes the observed
+* annual count and its previous-five-year mean; CVD-BURDEN-002 contributes the
+* annual age distribution only.
+quietly count if age_group != "all" & ///
+    (period_type != "annual" | event_type != "all_cvd" | sex != "all" | ///
+     !((metric_id == "CVD-BURDEN-001" & ///
+        inlist(statistic, "annual_count", "annual_previous_5yr_mean")) | ///
+       (metric_id == "CVD-BURDEN-002" & statistic == "age_distribution")))
+assert r(N) == 0
+
+* Each annual age distribution must use the known-age denominator. Where both
+* age groups are present, their percentages should sum to 100% apart from tiny
+* floating-point differences.
+preserve
+    keep if statistic == "age_distribution"
+    bysort period_year: egen double __age_percent_total = total(value)
+    quietly count if abs(__age_percent_total - 100) > 1e-8
+    assert r(N) == 0
+restore
 
 quietly count if unit == "percent" & denominator > 0 & ///
     abs(value - (100 * numerator / denominator)) > 1e-8
@@ -928,13 +1153,15 @@ quietly count if primary_suppression
 local primary_suppression_rows = r(N)
 quietly count if related_suppression_review
 local related_suppression_rows = r(N)
+quietly count if age_group != "all"
+local age_specific_rows = r(N)
 
 save `"`output_dta'"', replace
 
 * A small, plain QA dataset is easier to review than a long catalogue of checks
 * that duplicate assertions already visible above.
 clear
-set obs 10
+set obs 11
 generate str44 check = ""
 generate str8 result = "PASS"
 generate str120 detail = ""
@@ -957,8 +1184,10 @@ replace check = "Period completeness" in 8
 replace detail = "Every row has a complete or incomplete period flag" in 8
 replace check = "Suppression worklist" in 9
 replace detail = "`primary_suppression_rows' primary and `related_suppression_rows' linked review rows" in 9
-replace check = "Metric rows created" in 10
-replace detail = "`metric_rows' rows: `metric_001_rows' CVD-BURDEN-001 and `metric_002_rows' CVD-BURDEN-002" in 10
+replace check = "Age-stratification boundary" in 10
+replace detail = "`age_specific_rows' annual all-CVD age-stratified rows; no age-by-sex or age-by-event rows" in 10
+replace check = "Metric rows created" in 11
+replace detail = "`metric_rows' rows: `metric_001_rows' CVD-BURDEN-001 and `metric_002_rows' CVD-BURDEN-002" in 11
 
 label data "BNR CVD burden metric QA checks"
 save `"`qa_dta'"', replace

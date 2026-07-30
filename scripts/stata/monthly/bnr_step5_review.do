@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step5_review.do
-VERSION:     2.2.0 (27 July 2026)
+VERSION:     2.5.1 (30 July 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Step 5 - prepare, review and record approval
 
@@ -74,7 +74,7 @@ program define _bnr_step5_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 5: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         2.2.0"
+    noisily display as error "  Script version:         2.5.1"
     noisily display as error "  Selected release:       `release_id'"
     noisily display as error "  Action:                 `action'"
     noisily display as error `"  Reason:                 `reason'"'
@@ -243,6 +243,21 @@ local period "`year4'`month2'"
 local release_id "cvd_`year4'_`month2'"
 local package_id "cvd_burden_`release_id'"
 
+* Identify the immediately preceding monthly release. Step 5 confirms that
+* this release has an approved public_ready dataset, then reads the unblanked
+* comparison count from its private Step 4 metric dataset. January still points
+* to December of the preceding year, although annual January rows correctly
+* treat the current value as the start-of-period increment.
+local previous_month_num = `month_num' - 1
+local previous_year_num = `year_num'
+if `previous_month_num' == 0 {
+    local previous_month_num = 12
+    local previous_year_num = `year_num' - 1
+}
+local previous_year4 : display %04.0f `previous_year_num'
+local previous_month2 : display %02.0f `previous_month_num'
+local previous_release_id "cvd_`previous_year4'_`previous_month2'"
+
 * ---------------------------------------------------------------------------
 * FILE MAP
 *
@@ -259,6 +274,19 @@ local private_dta ///
 local step4_qa ///
     "`package_dir'/review/cvd_burden_qa_`release_id'.csv"
 local step4_meta "`package_dir'/metadata/metric_package.yml"
+
+* Temporal disclosure checks require two previous-release files:
+*   1. the public_ready dataset, used only as evidence that the release was
+*      approved; and
+*   2. the private Step 4 dataset, used internally to obtain the unblanked count.
+* Missing files are handled conservatively by the helper and do not stop the
+* whole review run.
+local previous_package_dir ///
+    "$BNR_STAGING/metrics/cvd/burden/`previous_release_id'"
+local previous_public_dta ///
+    "`previous_package_dir'/public_ready/datasets/cvd_burden_metrics_`previous_release_id'.dta"
+local previous_private_dta ///
+    "`previous_package_dir'/datasets/cvd_burden_metrics_`previous_release_id'.dta"
 
 local review_dir "`package_dir'/review"
 local review_candidate "`review_dir'/step5_candidate.dta"
@@ -283,7 +311,6 @@ local public_release_yml ///
 local public_current_yml ///
     "`ready_meta'/cvd_burden_metrics_current.yml"
 local public_package_yml "`ready_meta'/metric_package.yml"
-local disclosure_qa "`ready_dir'/disclosure_qa.csv"
 local manifest "`ready_dir'/public_manifest.csv"
 local approval "`ready_dir'/approval.yml"
 local output_log ///
@@ -299,7 +326,7 @@ log using `"`output_log'"', text replace name(step5)
 quietly {
 
 noisily display as text "BNR CVD STEP 5: HUMAN REVIEW AND APPROVAL"
-noisily display as result "  Script version:   2.2.0"
+noisily display as result "  Script version:   2.5.1"
 noisily display as result "  Selected release: `year4'-`month2'"
 noisily display as result "  Metric family:    burden"
 noisily display as result "  Action:           `action'"
@@ -361,8 +388,7 @@ if "`action'" == "prepare" {
             `"`public_current_csv'"' ///
             `"`public_release_yml'"' ///
             `"`public_current_yml'"' ///
-            `"`public_package_yml'"' ///
-            `"`disclosure_qa'"' {
+            `"`public_package_yml'"' {
         capture confirm file `"`output_file'"'
         if !_rc & !`replace_existing' {
             _bnr_step5_fail 602 "`action'" "`release_id'" ///
@@ -389,7 +415,6 @@ if "`action'" == "prepare" {
         capture erase `"`public_release_yml'"'
         capture erase `"`public_current_yml'"'
         capture erase `"`public_package_yml'"'
-        capture erase `"`disclosure_qa'"'
 
         * rmdir succeeds only when the folder is empty. capture is intentional:
         * an absent folder is not an error during a deliberate rebuild.
@@ -434,7 +459,8 @@ if "`action'" == "prepare" {
     tempfile step5_qa
     capture quietly do "$BNR_STATA/common/bnr_step5_suppress.do" ///
         `"`private_dta'"' `"`review_candidate'"' `"`step5_qa'"' ///
-        "`release_id'"
+        "`release_id'" `"`previous_public_dta'"' ///
+        `"`previous_private_dta'"' "`previous_release_id'"
     if _rc {
         local suppression_rc = _rc
         _bnr_step5_fail `suppression_rc' "`action'" "`release_id'" ///
@@ -450,10 +476,16 @@ if "`action'" == "prepare" {
     local primary_rows = r(N)
     quietly count if suppression_status == "secondary"
     local secondary_rows = r(N)
+    quietly count if suppression_status == "temporal"
+    local temporal_rows = r(N)
     quietly count if suppression_status == "derived"
     local derived_rows = r(N)
     quietly count if suppression_status != "none"
     local suppressed_rows = r(N)
+    quietly count if age_group != "all"
+    local age_rows = r(N)
+    quietly count if age_group != "all" & suppression_status != "none"
+    local age_suppressed_rows = r(N)
 
     use `"`step5_qa'"', clear
     export delimited using `"`review_disclosure_qa'"', replace
@@ -496,7 +528,7 @@ if "`action'" == "prepare" {
     * -----------------------------------------------------------------------
 
     clear
-    set obs 12
+    set obs 14
     generate str32 review_item = ""
     generate str244 detail = ""
     replace review_item = "Review status" in 1
@@ -525,9 +557,13 @@ if "`action'" == "prepare" {
     replace review_item = "Public-ready timing" in 11
     replace detail = ///
         "The public_ready folder will be created only by a successful approval action." in 11
-    replace review_item = "If not approved" in 12
+    replace review_item = "Age-stratified rows" in 12
+    replace detail = "`age_rows'" in 12
+    replace review_item = "Age rows suppressed" in 13
+    replace detail = "`age_suppressed_rows'" in 13
+    replace review_item = "If not approved" in 14
     replace detail = ///
-        "Do not edit generated files. Correct the appropriate earlier source or code and rerun." in 12
+        "Do not edit generated files. Correct the appropriate earlier source or code and rerun." in 14
     export excel using `"`review_workbook'"', ///
         sheet("Review") firstrow(variables) replace
 
@@ -551,7 +587,7 @@ if "`action'" == "prepare" {
 
     use `"`private_dta'"', clear
     keep metric_id release_id period_type period period_complete event_type ///
-        sex statistic value unit numerator denominator comparison_n status_flag
+        sex age_group statistic value unit numerator denominator comparison_n status_flag
     export excel using `"`review_workbook'"', ///
         sheet("Private results") firstrow(variables) sheetmodify
 
@@ -561,21 +597,29 @@ if "`action'" == "prepare" {
     rename numerator private_numerator
     rename denominator private_denominator
     keep review_row metric_id release_id period_type period period_complete ///
-        event_type sex statistic private_value unit private_numerator ///
+        event_type sex age_group statistic private_value unit private_numerator ///
         private_denominator comparison_n
     tempfile private_review
     save `"`private_review'"', replace
 
     use `"`review_candidate'"', clear
     generate long review_row = _n
-    keep review_row suppression_status suppression_note
+    keep review_row step4_primary_flag step4_related_flag ///
+        previous_release_id previous_release_found previous_value ///
+        temporal_increment temporal_check step5_temporal_flag ///
+        step5_complementary_flag step5_derived_flag suppression_status ///
+        disclosure_note suppression_note
     merge 1:1 review_row using `"`private_review'"', nogen
     keep if suppression_status != "none"
     quietly count
     if r(N) {
         order metric_id release_id period_type period period_complete ///
-            event_type sex statistic private_value unit private_numerator ///
-            private_denominator comparison_n suppression_status suppression_note
+            event_type sex age_group statistic private_value unit private_numerator ///
+            private_denominator comparison_n step4_primary_flag ///
+            step4_related_flag previous_release_id previous_release_found ///
+            previous_value temporal_increment temporal_check ///
+            step5_temporal_flag step5_complementary_flag ///
+            step5_derived_flag suppression_status disclosure_note
         drop review_row
         export excel using `"`review_workbook'"', ///
             sheet("Suppression") firstrow(variables) sheetmodify
@@ -589,6 +633,25 @@ if "`action'" == "prepare" {
         export excel using `"`review_workbook'"', ///
             sheet("Suppression") firstrow(variables) sheetmodify
     }
+
+    * DISCLOSURE AUDIT
+    * This private sheet shows the individual rule flags behind every final
+    * decision, including rows where no disclosure restriction was identified.
+    use `"`review_candidate'"', clear
+    keep metric_id release_id period_type period period_complete event_type ///
+        sex age_group statistic step4_primary_flag step4_related_flag ///
+        previous_release_id previous_release_found previous_value ///
+        temporal_increment temporal_check step5_temporal_flag ///
+        step5_complementary_flag step5_derived_flag suppression_status ///
+        disclosure_note
+    order metric_id release_id period_type period period_complete event_type ///
+        sex age_group statistic step4_primary_flag step4_related_flag ///
+        previous_release_id previous_release_found previous_value ///
+        temporal_increment temporal_check step5_temporal_flag ///
+        step5_complementary_flag step5_derived_flag suppression_status ///
+        disclosure_note
+    export excel using `"`review_workbook'"', ///
+        sheet("Disclosure audit") firstrow(variables) sheetmodify
 
     use `"`review_candidate'"', clear
     export excel using `"`review_workbook'"', ///
@@ -663,7 +726,6 @@ if "`action'" == "approve" {
             `"`public_release_yml'"' ///
             `"`public_current_yml'"' ///
             `"`public_package_yml'"' ///
-            `"`disclosure_qa'"' ///
             `"`manifest'"' {
         capture confirm file `"`output_file'"'
         if !_rc {
@@ -702,6 +764,37 @@ if "`action'" == "approve" {
             "The reviewed candidate has the wrong release_id."
         exit _rc
     }
+    capture confirm variable age_group
+    if _rc {
+        _bnr_step5_fail 111 "`action'" "`release_id'" ///
+            `"`output_log'"' ///
+            "The reviewed candidate does not contain age_group."
+        exit _rc
+    }
+    quietly count if !inlist(age_group, "all", "under_70", "age_70_plus")
+    if r(N) {
+        _bnr_step5_fail 459 "`action'" "`release_id'" ///
+            `"`output_log'"' ///
+            "The reviewed candidate contains an unexpected age_group value."
+        exit _rc
+    }
+    quietly count if age_group != "all" & ///
+        !(period_type == "annual" & event_type == "all_cvd" & sex == "all" & ///
+          inlist(statistic, "annual_count", "annual_previous_5yr_mean", ///
+            "age_distribution"))
+    if r(N) {
+        _bnr_step5_fail 459 "`action'" "`release_id'" ///
+            `"`output_log'"' ///
+            "The reviewed candidate contains an age-specific row outside the approved scope."
+        exit _rc
+    }
+    quietly count if missing(disclosure_note) | strtrim(disclosure_note) == ""
+    if r(N) {
+        _bnr_step5_fail 459 "`action'" "`release_id'" ///
+            `"`output_log'"' ///
+            "The reviewed candidate contains a blank disclosure_note."
+        exit _rc
+    }
     quietly count if suppression_status != "none" & ///
         (!missing(value) | !missing(numerator) | !missing(denominator))
     if r(N) {
@@ -717,6 +810,8 @@ if "`action'" == "approve" {
     local primary_rows = r(N)
     quietly count if suppression_status == "secondary"
     local secondary_rows = r(N)
+    quietly count if suppression_status == "temporal"
+    local temporal_rows = r(N)
     quietly count if suppression_status == "derived"
     local derived_rows = r(N)
     quietly count if suppression_status != "none"
@@ -881,14 +976,28 @@ if "`action'" == "approve" {
         file write `dataset_meta' "suppressed_rows: `suppressed_rows'" _n
         file write `dataset_meta' "primary_rows: `primary_rows'" _n
         file write `dataset_meta' "secondary_rows: `secondary_rows'" _n
+        file write `dataset_meta' "temporal_rows: `temporal_rows'" _n
         file write `dataset_meta' "derived_rows: `derived_rows'" _n
         file write `dataset_meta' "suppression_status_values:" _n
         file write `dataset_meta' "  - none" _n
         file write `dataset_meta' "  - primary" _n
         file write `dataset_meta' "  - secondary" _n
+        file write `dataset_meta' "  - temporal" _n
         file write `dataset_meta' "  - derived" _n
         file write `dataset_meta' "suppressed_value: missing" _n
         file write `dataset_meta' "suppressed_display_value: asterisk" _n
+        file write `dataset_meta' "disclosure_note_field: disclosure_note" _n
+        file write `dataset_meta' "disclosure_note_complete: true" _n
+        file write `dataset_meta' "age_dimension: age_group" _n
+        file write `dataset_meta' "age_group_values:" _n
+        file write `dataset_meta' "  - all" _n
+        file write `dataset_meta' "  - under_70" _n
+        file write `dataset_meta' "  - age_70_plus" _n
+        file write `dataset_meta' "age_specific_scope:" _n
+        file write `dataset_meta' "  - annual_count" _n
+        file write `dataset_meta' "  - annual_previous_5yr_mean" _n
+        file write `dataset_meta' "  - age_distribution" _n
+        file write `dataset_meta' "age_specific_event_scope: all_cvd" _n
         file write `dataset_meta' "approved: true" _n
         file close `dataset_meta'
     }
@@ -906,6 +1015,8 @@ if "`action'" == "approve" {
     file write `package_meta' "review_standard: bnr_metric_review_v1" _n
     file write `package_meta' "disclosure_policy: bnr_sdc_v1" _n
     file write `package_meta' "dashboard_suppression_field: suppression_status" _n
+    file write `package_meta' "dashboard_disclosure_note_field: disclosure_note" _n
+    file write `package_meta' "age_dimension: age_group" _n
     file write `package_meta' "approved: true" _n
     file write `package_meta' "publication_boundary: pending_step_6" _n
     file close `package_meta'
@@ -914,7 +1025,7 @@ if "`action'" == "approve" {
     capture mkdir "`ready_data'"
     capture mkdir "`ready_meta'"
 
-    * Copy the eight approved files explicitly. This deliberately avoids
+    * Copy the seven approved files explicitly. This deliberately avoids
     * nested macro indirection: the longer form is easier to audit and hand over.
     local copy_rc 0
     local failed_target ""
@@ -973,13 +1084,6 @@ if "`action'" == "approve" {
         }
     }
 
-    if !`copy_rc' {
-        capture copy `"`review_disclosure_qa'"' `"`disclosure_qa'"', replace
-        if _rc {
-            local copy_rc = _rc
-            local failed_target `"`disclosure_qa'"'
-        }
-    }
 
     if `copy_rc' {
         foreach cleanup_name of local ready_outputs {
@@ -1003,8 +1107,7 @@ if "`action'" == "approve" {
         datasets/cvd_burden_metrics_current.csv ///
         metadata/cvd_burden_metrics_`release_id'.yml ///
         metadata/cvd_burden_metrics_current.yml ///
-        metadata/metric_package.yml ///
-        disclosure_qa.csv
+        metadata/metric_package.yml
 
     tempfile manifest_dta
     tempname manifest_handle
@@ -1099,7 +1202,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 5: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             `summary_status'"
-noisily display as text   "  Script version:         2.2.0"
+noisily display as text   "  Script version:         2.5.1"
 noisily display as text   "  Selected release:       `release_id'"
 noisily display as text   "  Metric family:          burden"
 

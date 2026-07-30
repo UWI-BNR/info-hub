@@ -1,0 +1,146 @@
+---
+title: "Validation of BNR CVD Suppression Rules"
+subtitle: "Review of 24 monthly releases, 2024–2025"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    link-external-newwindow: true
+---
+
+## Purpose
+
+This report records the practical validation of the BNR CVD disclosure-control rules using two complete years of monthly outputs.
+
+The review covered **24 consecutive releases**, from January 2024 to December 2025. Each Step 5 candidate dataset was checked against its private Step 4 source and, where relevant, the preceding monthly release.
+
+The companion guide, *BNR Suppression and Statistical Disclosure Control*, explains the rules in plain language.
+
+## Validation approach
+
+For each monthly release, the review checked:
+
+- every suppressed row;
+- the private pre-suppression value;
+- the primary small-count rule;
+- the previous month’s equivalent value;
+- whether the previous value had been public;
+- any release-to-release increment;
+- complementary suppression within event-by-sex panels;
+- suppression of dependent percentages;
+- whether unrelated age and total rows remained available.
+
+The review focused on whether each suppression was necessary and whether any unsafe value remained reconstructable from published margins or percentages.
+
+## Results
+
+| Year | Releases reviewed | Suppressed rows | Main disclosure situations observed |
+|---|---:|---:|---|
+| 2024 | 12 | 24 | Primary small cells, quarter starts, temporal differencing, recovery after suppression |
+| 2025 | 12 | 8 | Isolated temporal differencing and recovery in the next release |
+| **Total** | **24** | **32** | Two complete annual release cycles |
+
+## 2024 month-by-month summary
+
+| Release | Suppressed rows | Main reason | Assessment |
+|---|---:|---|---|
+| January | 12 | Female AMI count of 5 in annual and Q1 panels | Correct |
+| February | 0 | Previous female AMI value was not public, so no public differencing risk | Correct |
+| March | 0 | Relevant increments exceeded 5 | Correct |
+| April | 12 | Annual female AMI increase of 3 and Q2 female AMI count of 3 | Correct |
+| May | 0 | No small counts or increments | Correct |
+| June | 0 | No small counts or increments | Correct |
+| July | 0 | Q3 began with all event-by-sex counts above 5 | Correct |
+| August | 0 | No small counts or increments | Correct |
+| September | 0 | No small counts or increments | Correct |
+| October | 0 | Q4 began with all event-by-sex counts above 5 | Correct |
+| November | 0 | No small counts or increments | Correct |
+| December | 0 | Complete annual and Q4 periods with no small cells | Correct |
+
+### Key 2024 tests
+
+In January, the female AMI count was 5. The value was suppressed in both the annual and Q1 panels. The complete four-cell AMI/stroke by sex panel was then suppressed to prevent reconstruction from published margins.
+
+In February, the female AMI cumulative count increased from 5 to 10. The previous value had not been public, so the public could not calculate the increment. February was correctly released without suppression.
+
+In April, the annual female AMI count increased from a public March value of 18 to 21. The difference of 3 required temporal suppression. April also began Q2 with a female AMI count of 3, requiring primary suppression in the quarterly panel.
+
+## 2025 month-by-month summary
+
+| Release | Suppressed rows | Main reason | Assessment |
+|---|---:|---|---|
+| January | 0 | All annual and Q1 counts exceeded 5 | Correct |
+| February | 0 | Relevant increments exceeded 5 | Correct |
+| March | 8 | Female AMI annual increase of 4 | Correct |
+| April | 0 | March value was not public; Q2 counts exceeded 5 | Correct |
+| May | 0 | No small counts or increments | Correct |
+| June | 0 | No small counts or increments | Correct |
+| July | 0 | Q3 began with all event-by-sex counts above 5 | Correct |
+| August | 0 | No small counts or increments | Correct |
+| September | 0 | No small counts or increments | Correct |
+| October | 0 | Q4 began with all event-by-sex counts above 5 | Correct |
+| November | 0 | No small counts or increments | Correct |
+| December | 0 | Complete annual and Q4 periods with no small cells | Correct |
+
+### Key 2025 test
+
+In March, the public female AMI annual count rose from 26 in February to 30 in March. The increase of 4 required temporal suppression.
+
+The four annual AMI/stroke by sex cells were suppressed, together with the four dependent annual sex-distribution percentages.
+
+In April, no suppression was carried forward because the equivalent March values were not public. This confirmed that the process protects small changes without creating an indefinite chain of hidden results.
+
+## Rules demonstrated by the tests
+
+The two-year review demonstrated that the workflow can correctly handle:
+
+- primary suppression of counts from 1 to 5;
+- protection of percentages based on suppressed counts;
+- complementary suppression of reconstructable event-by-sex cells;
+- differencing between consecutive monthly releases;
+- quarter starts and quarter completions;
+- completed annual periods;
+- release after a previously suppressed month;
+- age-specific annual outputs that are unrelated to the protected panel;
+- months where no disclosure restriction is required.
+
+## Overall conclusion
+
+No erroneous suppressions or missed suppressions were identified in the final 2024 and 2025 test outputs under the agreed BNR policy.
+
+The final rule set was found to be:
+
+- **protective**, because small and reconstructable values were withheld;
+- **proportionate**, because unrelated totals, age outputs and safe periods remained public;
+- **consistent**, because the same logic was applied across 24 releases;
+- **auditable**, because every row contains a disclosure status and plain-language note;
+- **operationally manageable**, because automated checks are followed by human review and approval.
+
+::: {.callout-note}
+## Validation statement
+
+The disclosure-control workflow was validated against 24 monthly CVD releases covering two complete calendar years. Testing included primary small-cell suppression, release-to-release differencing risk, complementary suppression, derived percentage protection, quarter transitions and completed annual outputs. All final suppression decisions were reviewed and found to be consistent with the agreed disclosure-control policy.
+:::
+
+## Limits of this validation
+
+This review provides strong evidence for the observed CVD release structure, but it is not a proof against every possible future data pattern.
+
+Future review should pay particular attention to:
+
+- negative cumulative changes caused by data corrections;
+- more than one independently small cell in the same panel;
+- structural changes to the metric dataset;
+- new stratifications or new metric families;
+- changes to the BNR disclosure threshold or risk policy.
+
+Material changes to the output structure or disclosure rules should trigger renewed validation.
+
+## Technical basis
+
+The BNR rules draw on the principles in the *Handbook on Statistical Disclosure Control for Outputs*, Version 2.0. The Handbook emphasises thresholds, secondary disclosure, differencing across outputs, protection of percentages based on small counts, and the value of clear audit processes.
+
+BNR has adopted a local primary threshold of fewer than 6 events. This differs from the threshold of 10 used in the Handbook’s examples and reflects the BNR’s agreed output policy and context.
+
+[Open the Handbook on Statistical Disclosure Control for Outputs](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf)

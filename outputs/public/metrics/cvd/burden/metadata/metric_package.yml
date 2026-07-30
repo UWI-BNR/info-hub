@@ -1,12 +1,14 @@
 schema: bnr_public_metric_package_v1
-package_id: cvd_burden_cvd_2024_01
+package_id: cvd_burden_cvd_2024_02
 package_status: public_ready
-release_id: cvd_2024_01
+release_id: cvd_2024_02
 domain: cvd
 metric_family: burden
-created: 2026-07-27
+created: 2026-07-30
 review_standard: bnr_metric_review_v1
 disclosure_policy: bnr_sdc_v1
 dashboard_suppression_field: suppression_status
+dashboard_disclosure_note_field: disclosure_note
+age_dimension: age_group
 approved: true
 publication_boundary: pending_step_6

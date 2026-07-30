@@ -10,22 +10,22 @@ The first implemented family is `burden`, covering `CVD-BURDEN-001` and `CVD-BUR
 
 | Component | Responsibility |
 |---|---|
-| `monthly/bnr_cvd_metric_controller.do` | Release selection, metric-family authorisation, replacement authorisation, private paths, logging, orchestration and final summary |
-| `metrics/cvd/metric_cvd_burden.do` | Burden definitions, exclusions, dimensions, calculations, suppression classification and metric-specific QA |
-| `common/bnr_stage_metric.do` | Standard exact datasets, metadata, QA, suppression worklist and readme packaging under private staging |
+| `monthly/bnr_step4_metrics.do` | Release selection, metric-family authorisation, replacement authorisation, private paths, logging, orchestration and final summary |
+| `metrics/cvd/bnr_step4_cvd_burden.do` | Burden definitions, exclusions, dimensions, calculations, suppression classification and metric-specific QA |
+| `common/bnr_step4_stage_metric.do` | Standard exact datasets, metadata, QA, suppression worklist and readme packaging under private staging |
 
 The staging helper contains no metric-specific analytical decision. The burden calculator creates no staging, public or website file directly.
 
 ## Command contract
 
 ```stata
-do "$BNR_STATA/monthly/bnr_cvd_metric_controller.do" year month metric_family [metric_family ...] [replace]
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" year month metric_family [replace]
 ```
 
 Currently implemented:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_cvd_metric_controller.do" 2024 3 burden
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 3 burden
 ```
 
 `replace` is optional, must be final, and authorises replacement only within the selected release-specific private staging package.
@@ -40,7 +40,7 @@ $BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/
     bnr_cvd_input_count_YYYYMM_v01.yml
 ```
 
-Required variables are `eid`, `dco`, `etype`, `doe`, `yoe`, `moe`, `sex` and `agey`. The event identifier must be unique. Event types, DCO status and event-date structure must be valid, and no event may fall after the selected month-end.
+Required variables are `eid`, `dco`, `etype`, `doe`, `yoe`, `moe`, `sex` and `age70`. The event identifier must be unique. Event types, DCO status, age groups and event-date structure must be valid, and no event may fall after the selected month-end.
 
 Resident eligibility is guaranteed by Step 1. An upstream safeguard also ensures that a person cannot contribute more than one event within a given month. A monthly event frequency therefore equals the monthly number of contributing people.
 
@@ -48,9 +48,11 @@ Resident eligibility is guaranteed by Step 1. An upstream safeguard also ensures
 
 - DCO-only events are excluded.
 - 2009 is excluded.
-- `CVD-BURDEN-001` retains its established annual and monthly count dimensions.
-- `CVD-BURDEN-002` retains its established event-type, sex and age distributions.
-- Annual and same-calendar-month five-year comparator means are calculated in Stata.
+- `CVD-BURDEN-001` retains its annual event-type/sex counts, its all-CVD monthly counts by sex, and its quarterly event-type/sex counts.
+- In addition, it contains exactly two annual age rows: All CVD / all sex / `under_70`, and All CVD / all sex / `70_plus`.
+- No AMI-by-age, stroke-by-age, sex-by-age, monthly-age or quarterly-age rows are produced.
+- `CVD-BURDEN-002` retains its annual event-type and sex distributions. It does not create an age distribution.
+- Annual, same-calendar-month and same-calendar-quarter five-year comparator means are calculated in Stata.
 - `status_flag` records analytical status only, such as `final` or `insufficient_history`.
 
 ## Statistical disclosure-control policy
@@ -67,6 +69,12 @@ BNR's operational policy `bnr_sdc_v1` is:
 
 The rule applies to the frequency supporting a result, not merely to the displayed number. Consequently, a percentage is flagged when its numerator or denominator is from 1 to 5. Comparator rows derived from one or more primary-suppression cells are separately flagged for linked review.
 
+### Annual All-CVD age safeguard
+
+`age70` is a private Step 3 input: `0` is under 70, `1` is 70 or older, and missing remains missing. No public missing-age row is created.
+
+When a year has 1–5 missing-age records, the all-age count minus the two published age counts would reconstruct that small value. Step 4 therefore flags the complete two-row annual age panel, and any five-year comparator that includes an affected year, for Step 5 derived suppression. Step 5 retains the affected rows but publishes `*`, while the all-age annual count remains available.
+
 Step 4 does **not** blank or replace values. Exact results are needed for an informed human review and remain inside private staging. It records:
 
 - `sdc_policy`;
@@ -76,6 +84,8 @@ Step 4 does **not** blank or replace values. Exact results are needed for an inf
 - `related_suppression_review`;
 - `suppression_review`; and
 - `suppression_reason`.
+
+The private field `age_distribution_withheld` is present in the Step 4 staging package so reviewers can understand the safeguard. It must not appear in a Step 5 public candidate or approved public output.
 
 Complementary, or secondary, suppression is a Step 5 task because it requires consideration of totals, subtotals, related tables, charts, tooltips, downloads and earlier releases together. A cell of 6 or more may therefore still need suppression if it would reveal a primary-suppressed value by subtraction or differencing.
 
@@ -118,6 +128,8 @@ The run must stop if:
 - an individual identifier is found in the aggregate data;
 - count, percentage or distribution reconciliation fails;
 - annual and monthly all-CVD totals differ;
+- an age group outside `all`, `under_70` or `70_plus` enters the metric output;
+- an age-specific row is anything other than an annual All-CVD, all-sex count or its comparator;
 - the policy is not `bnr_sdc_v1` with a minimum publishable frequency of 6;
 - any frequency from 1 to 5 is misclassified;
 - a comparator linked to a primary-suppression cell is not flagged; or
@@ -130,7 +142,7 @@ Step 5 must create and approve a separate disclosure-controlled `public_ready` c
 1. every primary-suppression row has its exact `value`, `numerator`, `denominator` and other revealing fields removed as applicable;
 2. percentages, comparators and other derivatives do not reveal a suppressed frequency;
 3. complementary suppression prevents reconstruction from totals and sibling cells;
-4. monthly, annual and comparator series do not permit differencing of suppressed results;
+4. monthly, quarterly, annual and comparator series do not permit differencing of suppressed results;
 5. datasets, tables, charts, labels, tooltips and downloads all use the same disclosure-controlled values;
 6. no hidden raw-value field survives in the public-ready package;
 7. any decision to publish at a broader time resolution is consistent and documented, rather than applied only to an inconvenient month; and

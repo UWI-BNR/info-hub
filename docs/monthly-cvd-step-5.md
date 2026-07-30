@@ -16,9 +16,9 @@ Step 5 does **not** publish, promote, mirror, render or deploy anything.
 
 | Component | Responsibility |
 |---|---|
-| `monthly/bnr_cvd_review_controller.do` | Release selection, prepare/approve actions, Step 4 acceptance, reviewer workbook, manifest and approval record |
-| `common/bnr_apply_suppression.do` | Public suppression fields, removal of confidential numeric values and disclosure QA |
-| `dialogs/bnr_cvd_review_controller.dlg` | Thin Stata interface to the controller |
+| `monthly/bnr_step5_review.do` | Release selection, prepare/approve actions, Step 4 acceptance, reviewer workbook, manifest and approval record |
+| `common/bnr_step5_suppress.do` | Public suppression fields, removal of confidential numeric values and disclosure QA |
+| `dialogs/bnr_step5_review.dlg` | Thin Stata interface to the controller |
 
 ## Folder structure
 
@@ -53,7 +53,7 @@ The release identity is stored in the parent folder, datasets and metadata. Repe
 ## Action 1: prepare the review package
 
 ```stata
-do "$BNR_STATA/monthly/bnr_cvd_review_controller.do" ///
+do "$BNR_STATA/monthly/bnr_step5_review.do" ///
     2024 2 burden prepare
 ```
 
@@ -102,6 +102,10 @@ Completed quarters and years remain eligible for publication.
 
 If a complete additive panel contains a primary or linked-risk cell, Step 5 conservatively suppresses the complete panel. This is intentionally simpler and safer for handover than fragile cell-by-cell secondary-suppression choices. If this rule removes an unacceptable amount of useful output, BNR should revise the reporting specification rather than manually unsuppress a generated cell.
 
+### Annual All-CVD age safeguard
+
+Step 4 supplies two annual All-CVD, all-sex age rows: `under_70` and `70_plus`. A missing-age category is never public. When the private missing-age count is 1–5, Step 5 suppresses the two age rows—and any linked five-year comparator—with a public `*`. These are normally `derived` suppressions; a row that is itself 1–5 remains a `primary` suppression. This prevents reconstruction from the all-age total. The public candidate retains `age_group` and `age_group_order` for dashboards, but removes the private withholding flag.
+
 ## Action 2: complete the human review
 
 Open:
@@ -128,7 +132,7 @@ The approver confirms one combined decision covering:
 - interpretation and period completeness;
 - completeness and publication readiness.
 
-The authorised approval roles are `BNR Lead`, `BNR Analyst` and `BNR Statistician`.
+The authorised approval roles are `BNR Lead`, `BNR Analyst` and `BNR Developer`.
 
 If review fails, do not edit generated files. Identify whether the issue belongs to source data, unexpected source structure, metric specification or code. Correct the authoritative source or version-controlled code, rerun from the relevant earlier step, and prepare a new Step 5 package.
 
@@ -137,9 +141,9 @@ If review fails, do not edit generated files. Identify whether the issue belongs
 After completing the review:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_cvd_review_controller.do" ///
+do "$BNR_STATA/monthly/bnr_step5_review.do" ///
     2024 2 burden approve ///
-    "Full name" "BNR Statistician"
+    "Full name" "BNR Developer"
 ```
 
 The approver name is mandatory. The Stata dialog provides the three authorised roles as a drop-down list so the role cannot be mistyped.
@@ -168,7 +172,7 @@ Step 6 must refuse promotion unless:
 
 - `approval.yml` exists and says `approved`;
 - the package, release and metric family match;
-- the approver role is BNR Lead, BNR Analyst or BNR Statistician;
+- the approver role is BNR Lead, BNR Analyst or BNR Developer;
 - disclosure QA still passes;
 - the manifest size and checksum match the approval;
 - every public-ready file matches its manifested size and checksum; and

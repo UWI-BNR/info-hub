@@ -5,17 +5,31 @@ package_id: cvd_burden_cvd_2024_01
 release_id: cvd_2024_01
 domain: cvd
 metric_family: burden
-rows: 2349
+rows: 2437
 sdc_policy: bnr_sdc_v1
-suppressed_rows: 26
+suppressed_rows: 12
 primary_rows: 3
 secondary_rows: 6
-derived_rows: 17
+temporal_rows: 0
+derived_rows: 3
 suppression_status_values:
   - none
   - primary
   - secondary
+  - temporal
   - derived
 suppressed_value: missing
 suppressed_display_value: asterisk
+disclosure_note_field: disclosure_note
+disclosure_note_complete: true
+age_dimension: age_group
+age_group_values:
+  - all
+  - under_70
+  - age_70_plus
+age_specific_scope:
+  - annual_count
+  - annual_previous_5yr_mean
+  - age_distribution
+age_specific_event_scope: all_cvd
 approved: true

@@ -1,7 +1,7 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_step4_metrics.do
- VERSION:     2.1.0 (27 July 2026)
+ VERSION:     2.2.1 (30 July 2026)
  PROJECT:     BNR Refit Phase 2
  PURPOSE:     Calculate the CVD burden metrics and create a private staging package
 
@@ -36,7 +36,7 @@ program define _bnr_step4_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 4: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         2.1.0"
+    noisily display as error "  Script version:         2.2.1"
     noisily display as error "  Selected release:       `selected_release'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -142,7 +142,7 @@ log using `"`private_log'"', text replace name(step4)
 quietly {
 
 noisily display as text "BNR CVD STEP 4: METRIC CALCULATION AND STAGING"
-noisily display as result "  Script version:       2.1.0"
+noisily display as result "  Script version:       2.2.1"
 noisily display as result "  Selected release:     `selected_release'"
 noisily display as result "  Metric family:        burden"
 noisily display as result "  Replace authorised:    " cond(`replace_existing', "yes", "no")
@@ -237,6 +237,8 @@ count if related_suppression_review == 1
 local related_review_rows = r(N)
 count if suppression_review == 1
 local suppression_worklist = r(N)
+count if age_group != "all"
+local age_specific_rows = r(N)
 
 local metric_rows_display : display %12.0fc `metric_rows'
 local burden_001_display : display %12.0fc `burden_001_rows'
@@ -244,17 +246,19 @@ local burden_002_display : display %12.0fc `burden_002_rows'
 local primary_display : display %12.0fc `primary_suppressions'
 local related_display : display %12.0fc `related_review_rows'
 local worklist_display : display %12.0fc `suppression_worklist'
+local age_specific_display : display %12.0fc `age_specific_rows'
 
 noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 4: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             Completed successfully"
-noisily display as text   "  Script version:         2.1.0"
+noisily display as text   "  Script version:         2.2.1"
 noisily display as text   "  Selected release:       `selected_release'"
 noisily display as text   "  Metric family:          burden"
 noisily display as text   "  Metric rows:            `metric_rows_display'"
 noisily display as text   "  CVD-BURDEN-001 rows:    `burden_001_display'"
 noisily display as text   "  CVD-BURDEN-002 rows:    `burden_002_display'"
+noisily display as text   "  Age-stratified rows:      `age_specific_display'"
 noisily display as text   "  Primary suppressions:   `primary_display'"
 noisily display as text   "  Related review rows:    `related_display'"
 noisily display as text   "  Suppression worklist:   `worklist_display'"

@@ -1,13 +1,13 @@
 /*******************************************************************************
-DO-FILE:     bnr_step4_stage_metric.do
-VERSION:     2.0.0 (27 July 2026)
+DO-FILE:     bnr_stage_metric.do
+VERSION:     1.4.0 (30 July 2026)
 PROJECT:     BNR Refit Phase 2
 PURPOSE:     Create a standard staging-only metric review package
 
 DESIGN:      This helper owns packaging mechanics only. It does not calculate,
              approve, promote, publish or mirror metrics to the website.
 
-USAGE:       Called by bnr_step4_metrics.do.
+USAGE:       Called by bnr_cvd_metric_controller.do.
 
 ARGUMENTS:   calculation_dta qa_dta domain family release_id source_dta
              source_yml package_dir replace_mode metric_ids
@@ -15,8 +15,6 @@ ARGUMENTS:   calculation_dta qa_dta domain family release_id source_dta
 
 version 19
 set more off
-
-local today_iso : display %tdCCYY-NN-DD daily("`c(current_date)'", "DMY")
 
 args calculation_dta qa_dta domain metric_family release_id ///
     source_dataset source_metadata package_dir replace_mode metric_ids
@@ -26,7 +24,7 @@ if `"`calculation_dta'"' == "" | `"`qa_dta'"' == "" | ///
         `"`release_id'"' == "" | `"`source_dataset'"' == "" | ///
         `"`source_metadata'"' == "" | `"`package_dir'"' == "" | ///
         `"`replace_mode'"' == "" | `"`metric_ids'"' == "" {
-    display as error "bnr_step4_stage_metric.do received an incomplete staging contract."
+    display as error "bnr_stage_metric.do received an incomplete staging contract."
     exit 198
 }
 
@@ -81,8 +79,21 @@ local suppression_xlsx ///
     "`review_dir'/`domain'_`metric_family'_suppression_review_`release_id'.xlsx"
 local readme "`package_dir'/readme.txt"
 
-* The controller has already checked whether the package folder may be replaced.
-* This helper therefore writes each named artefact directly and explicitly.
+* Keep output macro names, rather than paths, in this loop.  This avoids
+* re-tokenising a compound-quoted list of full paths.
+local output_names release_dta release_csv current_dta current_csv ///
+    release_yml current_yml package_yml qa_csv suppression_csv suppression_xlsx readme
+
+foreach output_name of local output_names {
+    local output_file `"``output_name''"'
+    capture confirm file `"`output_file'"'
+    if !_rc & "`replace_mode'" == "0" {
+        display as error "Selected staging output already exists:"
+        display as error `"  `output_file'"'
+        display as error "Rerun only with explicit replace authorisation."
+        exit 602
+    }
+}
 
 capture mkdir "`package_dir'"
 capture mkdir "`datasets_dir'"
@@ -93,7 +104,7 @@ use `"`calculation_dta'"', clear
 
 local required_variables metric_id release_id period_type period period_start ///
     period_year period_month period_quarter period_complete ///
-    event_type sex ///
+    event_type sex age_group ///
     source_status statistic value unit numerator denominator comparison_n ///
     status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells related_suppression_review ///
@@ -150,15 +161,15 @@ else {
 preserve
     keep if suppression_review == 1
     keep release_id metric_id period_type period period_complete ///
-        statistic event_type sex value unit numerator denominator comparison_n ///
+        statistic event_type sex age_group value unit numerator denominator comparison_n ///
         primary_suppression related_primary_cells ///
         related_suppression_review suppression_reason
     order release_id metric_id period_type period period_complete ///
-        statistic event_type sex value unit numerator denominator comparison_n ///
+        statistic event_type sex age_group value unit numerator denominator comparison_n ///
         primary_suppression related_primary_cells ///
         related_suppression_review suppression_reason
     sort primary_suppression related_suppression_review metric_id ///
-        period_type period event_type sex statistic
+        period_type period event_type sex age_group statistic
     export delimited using `"`suppression_csv'"', replace
     if `suppression_review_rows' > 0 {
         export excel using `"`suppression_xlsx'"', ///
@@ -189,6 +200,7 @@ post `dictionary_handle' ("period") ("string") ("Human-readable reporting period
 post `dictionary_handle' ("period_complete") ("0 or 1") ("Whether the reporting period is complete; current quarter/year can be 0 at a monthly extract.") ("Label period-to-date")
 post `dictionary_handle' ("event_type") ("string") ("CVD event grouping, for example AMI or stroke.") ("Check disclosure context")
 post `dictionary_handle' ("sex") ("string") ("Sex stratum represented by the row.") ("Check subtraction risk")
+post `dictionary_handle' ("age_group") ("string") ("Age stratum represented by the row: all, under_70 or age_70_plus.") ("Check disclosure context")
 post `dictionary_handle' ("statistic") ("string") ("Statistic or output row type.") ("Interpret result")
 post `dictionary_handle' ("value") ("numeric") ("Exact calculated result retained only in private staging.") ("Do not publish directly")
 post `dictionary_handle' ("unit") ("string") ("Unit of the calculated value.") ("Interpret result")
@@ -221,7 +233,7 @@ foreach dataset_id in `release_dataset' `current_dataset' {
         file write `dataset_yml' "  - `metric_id'" _n
     }
     file write `dataset_yml' "release_id: `release_id'" _n
-    file write `dataset_yml' "created: `today_iso'" _n
+    file write `dataset_yml' "created: $todayiso" _n
     file write `dataset_yml' `"created_by: "`c(username)'""' _n
     file write `dataset_yml' `"source_dataset: "`source_dataset'""' _n
     file write `dataset_yml' `"source_metadata: "`source_metadata'""' _n
@@ -252,7 +264,7 @@ foreach metric_id of local metric_ids {
     file write `package_meta' "  - `metric_id'" _n
 }
 file write `package_meta' "release_id: `release_id'" _n
-file write `package_meta' "created: `today_iso'" _n
+file write `package_meta' "created: $todayiso" _n
 file write `package_meta' `"created_by: "`c(username)'""' _n
 file write `package_meta' "human_review_required: true" _n
 file write `package_meta' "approved: false" _n
@@ -279,18 +291,23 @@ file write `package_meta' "  suppression_csv: review/`domain'_`metric_family'_su
 file write `package_meta' "  suppression_workbook: review/`domain'_`metric_family'_suppression_review_`release_id'.xlsx" _n
 file write `package_meta' "build:" _n
 file write `package_meta' "  stata_version: `c(version)'" _n
-file write `package_meta' "  controller: bnr_step4_metrics.do" _n
-file write `package_meta' "  calculator: bnr_step4_cvd_burden.do" _n
+file write `package_meta' "  controller: bnr_cvd_metric_controller.do" _n
+file write `package_meta' "  calculator: metric_cvd_`metric_family'.do" _n
 file close `package_meta'
 
 use `"`qa_dta'"', clear
-export delimited using `"`qa_csv'"', replace
+if "`replace_mode'" == "1" {
+    export delimited using `"`qa_csv'"', replace
+}
+else {
+    export delimited using `"`qa_csv'"'
+}
 
 tempname package_readme
 file open `package_readme' using `"`readme'"', write text replace
 file write `package_readme' "BNR CVD `metric_family' metric staging package" _n
 file write `package_readme' "Release: `release_id'" _n
-file write `package_readme' "Created: `today_iso' by `c(username)'" _n _n
+file write `package_readme' "Created: $todayiso by `c(username)'" _n _n
 file write `package_readme' "This package is for human review. It is not approved or public." _n
 file write `package_readme' "The release-stamped and current datasets contain the same candidate values." _n
 file write `package_readme' "Exact frequencies from 1 to 5 remain visible because this is private staging." _n
@@ -302,7 +319,16 @@ file write `package_readme' "Step 5 must apply primary and complementary suppres
 file write `package_readme' "Do not manually edit generated files; correct the source or code and rerun." _n
 file close `package_readme'
 
-* Final comparison: the release-stamped and current datasets must match.
+foreach output_name of local output_names {
+    local output_file `"``output_name''"'
+    capture confirm file `"`output_file'"'
+    if _rc {
+        display as error "Required staging artefact was not created:"
+        display as error `"  `output_file'"'
+        exit 603
+    }
+}
+
 use `"`release_dta'"', clear
 capture quietly datasignature, nonames
 local release_signature `"`r(datasignature)'"'

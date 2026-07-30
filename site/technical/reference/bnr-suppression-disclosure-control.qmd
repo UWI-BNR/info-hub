@@ -1,0 +1,219 @@
+---
+title: "BNR Suppression and Statistical Disclosure Control"
+subtitle: "Plain-language guide for public CVD outputs"
+format:
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: false
+    link-external-newwindow: true
+---
+
+## Purpose
+
+The Barbados National Registry (BNR) publishes summary statistics derived from confidential health records. These statistics must be useful, but they must not reveal information about an individual patient.
+
+**Statistical Disclosure Control (SDC)** is the process used to check and protect statistical outputs before they are released.
+
+This guide explains the rules used for the monthly CVD metric releases. It should be read alongside the separate validation report covering the 2024 and 2025 test releases.
+
+::: {.callout-note collapse="true"}
+## Technical basis
+
+The BNR approach is based on the principles in the *Handbook on Statistical Disclosure Control for Outputs*, Version 2.0, produced by the Safe Data Access Professionals Working Group.
+
+The Handbook explains that:
+
+- small counts can create identification or attribution risks;
+- percentages can be disclosive when they are based on small counts;
+- apparently safe tables must not be assessed in isolation;
+- two or more published results may be combined to reveal a protected value;
+- disclosure decisions should combine clear rules with contextual review.
+
+The Handbook uses a threshold of 10 in its examples, while noting that organisations choose thresholds according to their data, context and risk appetite. BNR has adopted a **primary suppression threshold of fewer than 6 events** for these CVD outputs.
+
+Reference: [Handbook on Statistical Disclosure Control for Outputs, Version 2.0](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf)
+:::
+
+## What is being protected?
+
+The public outputs contain summary rows such as:
+
+- numbers of CVD, AMI and stroke events;
+- annual and quarterly counts;
+- percentages by event type, sex or age group;
+- five-year comparison values.
+
+The confidential patient-level records are never published through this process.
+
+A statistical output may still create a disclosure risk when it contains a very small count, or when several published values can be combined to calculate a small count. The suppression process therefore checks both individual rows and relationships between rows.
+
+## Core BNR rules
+
+### 1. Primary suppression
+
+A count from **1 to 5** is suppressed.
+
+A count of zero may be published because it states that no event was recorded. Counts of 6 or more normally pass the primary small-number rule, although other disclosure checks may still apply.
+
+When a value is suppressed:
+
+- the row remains in the dataset;
+- its numeric result is blank;
+- the disclosure status and reason remain visible.
+
+Keeping the row preserves the structure of the public dataset without releasing the protected value.
+
+### 2. Percentages follow their underlying counts
+
+A percentage is published only when the counts needed to calculate it are safe.
+
+For example, a sex percentage is suppressed if its numerator is suppressed. The complementary percentage may also need suppression because the two percentages add to 100% and could reveal each other.
+
+This rule applies to:
+
+- event-type distributions;
+- sex distributions;
+- age distributions.
+
+### 3. Complementary suppression
+
+Suppressing only one cell in a table may be ineffective.
+
+Suppose an AMI female count is suppressed, but the AMI total and AMI male count remain public. The protected value could be calculated as:
+
+\[
+\text{AMI female} = \text{AMI total} - \text{AMI male}
+\]
+
+The same value may also be reconstructed using all-CVD female and stroke female counts.
+
+For the BNR event-by-sex table, if any AMI or stroke female/male cell requires primary or temporal protection, Step 5 suppresses the complete four-cell interior panel:
+
+| Event type | Female | Male |
+|---|---:|---:|
+| AMI | suppressed | suppressed |
+| Stroke | suppressed | suppressed |
+
+The following margins may remain public when safe:
+
+- AMI and stroke totals for both sexes;
+- all-CVD female and male totals;
+- the all-CVD overall total.
+
+This leaves insufficient information to recover the protected interior value exactly.
+
+### 4. Protection against differencing between releases
+
+Monthly releases contain cumulative annual and quarterly counts. Even when a cumulative count is greater than 5, comparing two releases may reveal a small number of new events.
+
+For example:
+
+\[
+21 - 18 = 3
+\]
+
+If the March count of 18 was public, publishing an April count of 21 would reveal that three events were added.
+
+Step 5 therefore compares an incomplete cumulative count with the equivalent value from the previous monthly release.
+
+Temporal suppression is applied when:
+
+- the previous equivalent value was public; and
+- the increase is between 1 and 5.
+
+Temporal suppression is not carried forward when the previous value was itself suppressed, because the public cannot calculate the difference.
+
+At the start of a year or quarter, the current cumulative count is also the first-period increment and is checked directly against the primary threshold.
+
+::: {.callout-important}
+## Negative changes
+
+A negative cumulative change may indicate data correction, record removal or a mismatch between releases. It is not treated as an ordinary monthly increment. It must be flagged for human review.
+:::
+
+### 5. Age-specific outputs
+
+Age-specific outputs use two groups:
+
+- under 70 years;
+- 70 years and older.
+
+They are produced only for annual all-CVD outputs:
+
+- annual counts;
+- previous five-year mean counts;
+- age distribution percentages.
+
+They are not combined with sex or individual event type. This deliberately limits detail and reduces the risk of creating very small cross-classified cells.
+
+### 6. Human review remains mandatory
+
+Automation supports the reviewer; it does not replace them.
+
+Step 5 creates:
+
+- a disclosure-controlled candidate dataset;
+- a private review workbook;
+- an audit table showing each suppression flag;
+- a plain-language disclosure note for every row.
+
+An authorised reviewer checks the results before approval. Promotion to public output remains a separate action.
+
+## Disclosure statuses and notes
+
+Each public row has a disclosure status and a plain-language note.
+
+Typical statuses are:
+
+| Status | Meaning |
+|---|---|
+| `none` | No disclosure restriction was identified |
+| `primary` | A count was between 1 and 5 |
+| `secondary` | A safe-looking value was suppressed to protect another cell |
+| `temporal` | A small change could be inferred by comparing releases |
+| `derived` | A percentage or other derived value depends on protected counts |
+
+Rows without a problem state:
+
+> No disclosure restriction identified.
+
+Rows with a problem explain the relevant reason, such as:
+
+> Suppressed: underlying count is between 1 and 5.
+
+or:
+
+> Suppressed: increase since the previous public release is between 1 and 5.
+
+## What the process does not do
+
+The suppression process does not:
+
+- change the confidential source data;
+- alter the underlying analytical result;
+- delete protected rows;
+- manually edit generated outputs;
+- make publication automatic.
+
+If a result or suppression decision is wrong, the code or source data must be corrected and the release rerun.
+
+## Operational summary
+
+```text
+Confidential records
+    -> Step 4 metric calculation
+    -> private staging package
+    -> Step 5 disclosure checks
+    -> private human review
+    -> approval
+    -> public-ready package
+    -> publication
+```
+
+This separation ensures that calculation, disclosure checking, approval and publication remain distinct and auditable.
+
+## Further reading
+
+Safe Data Access Professionals Working Group. *Handbook on Statistical Disclosure Control for Outputs*. Version 2.0, July 2024.  
+[Open the handbook](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf)

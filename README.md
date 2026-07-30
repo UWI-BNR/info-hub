@@ -45,7 +45,7 @@ The website copy under `site/downloads/files/` is a disposable mirror of `output
 
 ## Stata workflow
 
-The active Stata DO files and their responsibilities are documented in [`scripts/stata/README.md`](scripts/stata/README.md).
+The active Stata DO files and their responsibilities are documented in [`scripts/stata/README.qmd`](scripts/stata/README.qmd).
 
 Machine-specific paths are kept outside version control. To configure a workstation:
 

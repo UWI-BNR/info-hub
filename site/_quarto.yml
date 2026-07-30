@@ -107,6 +107,11 @@ website:
         # - text: "CVD home"
         #   href: surveillance/cvd/listing.qmd
 
+        - section: "Current indicators"
+          contents:
+            - text: "CVD burden"
+              href: surveillance/cvd/metrics/burden/
+ 
         - section: "Briefings"
           contents:
             - text: "CVD cases, 2023"

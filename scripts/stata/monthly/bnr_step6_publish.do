@@ -1,10 +1,10 @@
 *===============================================================================
 * DO-FILE:     bnr_step6_publish.do
-* VERSION:     1.0.3 (29 July 2026)
+* VERSION:     1.0.4 (30 July 2026)
 * PROJECT:     BNR Refit Phase 2
 * WORKFLOW:    Step 6 - publish an approved metric package
 *
-* PURPOSE:     Promote the exact eight files approved by Step 5:
+* PURPOSE:     Promote the exact seven files approved by Step 5:
 *              1. from the private public_ready folder;
 *              2. to the authoritative outputs/public folder;
 *              3. into one release ZIP; and
@@ -56,7 +56,7 @@ program define _bnr_step6_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 6: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         1.0.3"
+    noisily display as error "  Script version:         1.0.4"
     noisily display as error "  Selected release:       `selected_release'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -217,8 +217,6 @@ local source_current_yml ///
     "`ready_folder'/metadata/cvd_burden_metrics_current.yml"
 local source_package_yml ///
     "`ready_folder'/metadata/metric_package.yml"
-local source_disclosure_qa ///
-    "`ready_folder'/disclosure_qa.csv"
 
 * Authoritative public files.
 local public_release_dta ///
@@ -235,8 +233,6 @@ local public_current_yml ///
     "`public_metadata'/cvd_burden_metrics_current.yml"
 local public_package_yml ///
     "`public_metadata'/metric_package.yml"
-local public_disclosure_qa ///
-    "`public_folder'/disclosure_qa.csv"
 local zip_name "bnr_cvd_burden_`release_id'.zip"
 local public_zip "`public_folder'/`zip_name'"
 
@@ -255,8 +251,6 @@ local website_current_yml ///
     "`website_metadata'/cvd_burden_metrics_current.yml"
 local website_package_yml ///
     "`website_metadata'/metric_package.yml"
-local website_disclosure_qa ///
-    "`website_folder'/disclosure_qa.csv"
 local website_zip "`website_folder'/`zip_name'"
 
 * Create only the private log folder at this point. Public directories are not
@@ -272,7 +266,7 @@ log using `"`private_log'"', text replace name(step6)
 quietly {
 
 noisily display as text "BNR CVD STEP 6: PUBLISH APPROVED OUTPUTS"
-noisily display as result "  Script version:       1.0.3"
+noisily display as result "  Script version:       1.0.4"
 noisily display as result "  Selected release:     `selected_release'"
 noisily display as result "  Metric family:        burden"
 noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
@@ -429,7 +423,7 @@ if `actual_manifest_size' != `approved_manifest_size' | ///
 }
 
 *===============================================================================
-* 6. REQUIRE THE EXACT EIGHT-FILE MANIFEST CONTRACT
+* 6. REQUIRE THE EXACT SEVEN-FILE MANIFEST CONTRACT
 *===============================================================================
 
 * The manifest has only control fields. Import every field as a string, then
@@ -469,9 +463,9 @@ if _rc {
 }
 
 quietly count
-if r(N) != 8 {
+if r(N) != 7 {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The public manifest must contain exactly eight approved payload files."
+        "The public manifest must contain exactly seven approved payload files."
 }
 
 capture quietly isid relative_path
@@ -486,7 +480,7 @@ if r(N) != 0 {
         "Every manifest payload_root value must be a single period."
 }
 
-* Check each approved relative path explicitly. Eight rows plus eight successful
+* Check each approved relative path explicitly. Seven rows plus seven successful
 * checks also prove that there are no unrecognised or missing payload rows.
 quietly count if relative_path == ///
     "datasets/cvd_burden_metrics_`release_id'.dta" & file_type == "dta"
@@ -537,12 +531,6 @@ if r(N) != 1 {
         "The package metadata file is absent from the approved manifest."
 }
 
-quietly count if relative_path == ///
-    "disclosure_qa.csv" & file_type == "csv"
-if r(N) != 1 {
-    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The disclosure QA file is absent from the approved manifest."
-}
 
 * Retain the expected fingerprints under plain, descriptive local names.
 quietly summarize file_size if relative_path == ///
@@ -594,17 +582,11 @@ quietly summarize checksum if relative_path == ///
     "metadata/metric_package.yml", meanonly
 local package_yml_checksum = r(mean)
 
-quietly summarize file_size if relative_path == ///
-    "disclosure_qa.csv", meanonly
-local disclosure_qa_size = r(mean)
-quietly summarize checksum if relative_path == ///
-    "disclosure_qa.csv", meanonly
-local disclosure_qa_checksum = r(mean)
 
 clear
 
 *===============================================================================
-* 7. VERIFY ALL EIGHT PRIVATE SOURCE FILES BEFORE COPYING ANYTHING
+* 7. VERIFY ALL SEVEN PRIVATE SOURCE FILES BEFORE COPYING ANYTHING
 *===============================================================================
 
 quietly _bnr_step6_verify_file `"`source_release_dta'"' ///
@@ -663,13 +645,6 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
-quietly _bnr_step6_verify_file `"`source_disclosure_qa'"' ///
-    "`disclosure_qa_size'" "`disclosure_qa_checksum'"
-if !r(ok) {
-    local verify_reason `"`r(reason)'"'
-    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        `"`verify_reason'"'
-}
 
 *===============================================================================
 * 8. PROTECT AN ALREADY-PUBLISHED RELEASE
@@ -759,11 +734,11 @@ if "`website_folder_exists'" != "1" | "`website_metadata_exists'" != "1" {
 }
 
 *===============================================================================
-* 10. COPY THE EIGHT APPROVED FILES TO AUTHORITATIVE PUBLIC OUTPUT
+* 10. COPY THE SEVEN APPROVED FILES TO AUTHORITATIVE PUBLIC OUTPUT
 *===============================================================================
 
 * These statements are deliberately explicit. There is no dynamic filename
-* construction or recursive folder copy: only the eight manifested files cross
+* construction or recursive folder copy: only the seven manifested files cross
 * the private-to-public boundary.
 capture quietly copy `"`source_release_dta'"' `"`public_release_dta'"', replace
 if _rc {
@@ -814,13 +789,6 @@ if _rc {
         `"Could not refresh authoritative package metadata: `public_package_yml'"'
 }
 
-capture quietly copy `"`source_disclosure_qa'"' ///
-    `"`public_disclosure_qa'"', replace
-if _rc {
-    local copy_rc = _rc
-    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
-        `"Could not refresh authoritative disclosure QA: `public_disclosure_qa'"'
-}
 
 *===============================================================================
 * 11. VERIFY THE AUTHORITATIVE PUBLIC COPY
@@ -882,13 +850,6 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
-quietly _bnr_step6_verify_file `"`public_disclosure_qa'"' ///
-    "`disclosure_qa_size'" "`disclosure_qa_checksum'"
-if !r(ok) {
-    local verify_reason `"`r(reason)'"'
-    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        `"`verify_reason'"'
-}
 
 *===============================================================================
 * 12. CREATE ONE RELEASE ZIP FROM THE VERIFIED PUBLIC COPY
@@ -900,7 +861,6 @@ if !r(ok) {
 *   cvd_burden_metrics_....dta
 *   cvd_burden_metrics_....csv
 *   metadata/....
-*   disclosure_qa.csv
 local original_folder `"`c(pwd)'"'
 
 capture quietly cd `"`public_folder'"'
@@ -917,8 +877,7 @@ capture quietly zipfile ///
     "cvd_burden_metrics_current.csv" ///
     "metadata/cvd_burden_metrics_`release_id'.yml" ///
     "metadata/cvd_burden_metrics_current.yml" ///
-    "metadata/metric_package.yml" ///
-    "disclosure_qa.csv", ///
+    "metadata/metric_package.yml", ///
     saving(`"`public_zip'"', replace)
 local zip_rc = _rc
 
@@ -938,9 +897,9 @@ if `restore_folder_rc' {
         `"`private_log'"' ///
         `"The original working folder could not be restored: `original_folder'"'
 }
-if `zip_files' != 8 {
+if `zip_files' != 7 {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The release ZIP did not contain all eight approved payload files."
+        "The release ZIP did not contain all seven approved payload files."
 }
 
 capture confirm file `"`public_zip'"'
@@ -1017,13 +976,6 @@ if _rc {
         `"Could not refresh website package metadata: `website_package_yml'"'
 }
 
-capture quietly copy `"`public_disclosure_qa'"' ///
-    `"`website_disclosure_qa'"', replace
-if _rc {
-    local copy_rc = _rc
-    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
-        `"Could not refresh website disclosure QA: `website_disclosure_qa'"'
-}
 
 capture quietly copy `"`public_zip'"' `"`website_zip'"', replace
 if _rc {
@@ -1092,13 +1044,6 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
-quietly _bnr_step6_verify_file `"`website_disclosure_qa'"' ///
-    "`disclosure_qa_size'" "`disclosure_qa_checksum'"
-if !r(ok) {
-    local verify_reason `"`r(reason)'"'
-    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        `"`verify_reason'"'
-}
 
 quietly _bnr_step6_verify_file `"`website_zip'"' ///
     "`public_zip_size'" "`public_zip_checksum'"
@@ -1116,10 +1061,10 @@ noisily display as text ""
 noisily display as text "============================================================================="
 noisily display as text "STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as result "  Run status:             PUBLISHED"
-noisily display as result "  Script version:         1.0.3"
+noisily display as result "  Script version:         1.0.4"
 noisily display as result "  Selected release:       `selected_release'"
 noisily display as result "  Metric family:          burden"
-noisily display as result "  Approved payload files: 8"
+noisily display as result "  Approved payload files: 7"
 noisily display as result "  Release ZIP:            `zip_name'"
 noisily display as result `"  Authoritative public:   `public_folder'"'
 noisily display as result `"  Website mirror:         `website_folder'"'
