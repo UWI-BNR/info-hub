@@ -4,7 +4,7 @@ citeproc: false
 csl: apa
 format:
   typst:
-    output-file: bnr_cvd_cases_2023_v1.pdf
+    output-file: bnr_cvd_cases_2023_v2.pdf
     toc: false
     number-sections: false
     papersize: us-letter
@@ -90,33 +90,34 @@ format:
 #v(8pt)
 ```
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/why-this-matters.qmd >}}
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v2/why-this-matters.qmd >}}
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/what-we-did.qmd >}}
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v2/what-we-did.qmd >}}
 
 ## Key messages
 
 - In 2023, BNR recorded 312 strokes in women and 312 strokes in men.
 - BNR recorded 105 heart attacks in women and 141 heart attacks in men.
-- Stroke cases remained above the recent five-year average through much of the year.
+- Separate stroke and heart attack cumulative departures are shown for 2022 and 2023 against their respective recent five-year monthly patterns.
 - A substantial share of cardiovascular events occurred before age 70.
 
 ```{=typst}
 #v(6pt)
 #block(width: 100%)[
   #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
-    #text(fill: rgb("#8B6FB4"))[Stroke]
+    Cumulative difference in
+    #text(fill: rgb("#8B6FB4"))[stroke]
     and
     #text(fill: rgb("#A4161A"))[heart attack]
-    cases in 2023 compared with the five-year average
+    cases, 2022–2023
   ]
 ]
 #v(3pt)
 ```
 
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){width=100% fig-alt="Cumulative CVD cases in 2023 compared with the 2018–2022 average."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v2/figures/cvd_cases_monthly.png){width=100% fig-alt="Separate cumulative differences for stroke and heart attack cases in 2022 and 2023, each compared with the 2018–2022 event-specific calendar-month average."}
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/main-interpretation.qmd >}}
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v2/main-interpretation.qmd >}}
 
 ```{=typst}
 #pagebreak()
@@ -136,9 +137,9 @@ format:
 #v(3pt)
 ```
 
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){width=100% fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v2/figures/cvd_cases_age_group.png){width=100% fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
 
-{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v1/premature-disease.qmd >}}
+{{< include ../../../../_shared/snippets/briefings/cvd/cvd_cases_2023_v2/premature-disease.qmd >}}
 
 ## Outputs
 
