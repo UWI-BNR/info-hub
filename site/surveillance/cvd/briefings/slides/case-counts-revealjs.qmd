@@ -1,7 +1,7 @@
 ---
 format:
   revealjs:
-    output-file: bnr_cvd_cases_2023_v1_slides.html
+    output-file: bnr_cvd_cases_2023_v2_slides.html
     theme: simple
     width: 1600
     height: 900
@@ -249,7 +249,7 @@ Group Contacts • Christina Howitt (BNR lead) • Ian Hambleton (analytics) •
 :::
 
 ::: {.insight-box}
-Stroke cases remained above the recent five-year average through much of the year, while heart attacks remained below average for much of the year.
+The monthly chart combines stroke and heart attack cases, avoiding publication of the former weekly series while retaining a clear view of change over time.
 :::
 
 ## Why this matters
@@ -269,22 +269,22 @@ Case counts are the foundation for later surveillance outputs: trends, rates, in
 We reviewed all hospital-registered strokes and heart attacks for 2023 and compared them with the previous five years.
 
 - We examined who was affected: men and women, under 70 and 70 or older.
-- We tracked how cases built up week by week.
-- We compared 2023 counts with the five-year average to identify when numbers were above or below expected levels.
+- We compared the cumulative monthly departure of stroke and heart attack cases during 2022 and 2023.
+- We used the 2018–2022 average for each event type and calendar month as a recent comparator.
 
-## <span class="stroke">Stroke</span> and <span class="heart">heart attack</span> cases in 2023 compared with the five-year average
+## Cumulative difference in <span class="stroke">stroke</span> and <span class="heart">heart attack</span> cases, 2022–2023
 
 ::: {.columns}
 ::: {.column width="68%"}
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_weekly.png){fig-alt="Cumulative CVD cases in 2023 compared with the 2018 to 2022 average."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v2/figures/cvd_cases_monthly.png){fig-alt="Separate cumulative differences for stroke and heart attack cases in 2022 and 2023, each compared with the 2018 to 2022 event-specific calendar-month average."}
 :::
 
 ::: {.column width="32%"}
 ### Main pattern
 
-- Strokes stayed consistently above the five-year average.
-- By year end, stroke counts were about 60 cases higher than expected.
-- Heart attacks remained below average for much of 2023.
+- The two 24-month series show the accumulated monthly departure from their event-specific expected patterns without exposing weekly counts.
+- Each comparator uses the average for the same event type and calendar months during 2018–2022.
+- Monthly movements should be interpreted as surveillance signals, not incidence rates.
 
 ::: {.figure-note}
 Figure source: BNR hospital-registered stroke and heart attack cases.
@@ -317,7 +317,7 @@ Simple counts act as an early warning for changes in both care-seeking behaviour
 
 ::: {.columns}
 ::: {.column width="68%"}
-![](../../../../downloads/files/briefings/cvd_cases_2023_v1/figures/cvd_cases_age_group.png){fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
+![](../../../../downloads/files/briefings/cvd_cases_2023_v2/figures/cvd_cases_age_group.png){fig-alt="Age distribution of hospital-registered stroke and heart attack cases."}
 :::
 
 ::: {.column width="32%"}
