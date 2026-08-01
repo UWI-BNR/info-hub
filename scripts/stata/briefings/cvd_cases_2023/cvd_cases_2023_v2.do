@@ -743,7 +743,8 @@ preserve
     keep if cases > 0 & cases < 6
     gen str40 public_file = "`output1'.csv"
     decode etype, gen(event_type)
-    tostring period_month, gen(period_label) format(%tmMon_CCYY) force
+    /// tostring period_month, gen(period_label) format(%tmMon_CCYY) force
+    gen str9 period_label = string(period_month, "%tmMon_CCYY")
     gen str80 output_section = "Monthly " + event_type + " cases"
     gen str80 row_reference = event_type + ", " + period_label
     gen str30 measure = "cases"
