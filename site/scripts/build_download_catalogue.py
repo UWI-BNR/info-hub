@@ -1,4 +1,5 @@
-from pathlib import Path
+from datetime import date
+from pathlib import Path, PurePosixPath
 import re
 import sys
 
@@ -7,18 +8,20 @@ import sys
 # BNR download catalogue builder
 #
 # Purpose:
-#   Combine briefing-level downloads.yml manifests into one site-wide
+#   Combine approved briefing and metric download records into one site-wide
 #   downloads/downloads.yml file for the Quarto downloads listing page.
 #
 # Scope:
 #   Publication-layer indexing only.
-#   This script does not compute, transform, or validate surveillance results.
+#   This script does not compute, transform, approve, or validate surveillance
+#   results. It checks only the catalogue metadata and referenced ZIP files.
 #
 # Dependency policy:
 #   Standard-library Python only. No PyYAML dependency.
 #
-# Expected input:
+# Expected inputs:
 #   site/downloads/files/briefings/{briefing_id}/downloads.yml
+#   site/downloads/files/metrics/**/catalogue/{release_id}.yml
 #
 # Output:
 #   site/downloads/downloads.yml
@@ -28,9 +31,11 @@ import sys
 #   terminal working directory.
 #
 # Public catalogue rule:
-#   The central downloads page lists ZIP packages only.
-#   Briefing-level manifests may still contain README, XLSX, CSV, DTA, YML,
-#   PNG, HTML, PDF, and other records for release inventory purposes.
+#   The central downloads page lists approved ZIP packages only.
+#
+# Failure-safety rule:
+#   Every input and every selected ZIP is validated before the central file is
+#   written. If validation fails, the existing downloads.yml is left unchanged.
 #
 # Preview-safety rule:
 #   The output file is written only when its content has changed. This prevents
@@ -42,8 +47,21 @@ import sys
 SCRIPT_PATH = Path(__file__).resolve()
 SITE_ROOT = SCRIPT_PATH.parent.parent
 
-BRIEFINGS_DIR = SITE_ROOT / "downloads" / "files" / "briefings"
-OUTPUT_FILE = SITE_ROOT / "downloads" / "downloads.yml"
+DOWNLOADS_ROOT = SITE_ROOT / "downloads"
+BRIEFINGS_DIR = DOWNLOADS_ROOT / "files" / "briefings"
+METRICS_DIR = DOWNLOADS_ROOT / "files" / "metrics"
+OUTPUT_FILE = DOWNLOADS_ROOT / "downloads.yml"
+
+SUPPORTED_PACKAGE_TYPES = {
+    "briefing": "Briefing",
+    "metric": "Metric dataset",
+}
+
+SUPPORTED_SCHEMA = "bnr_download_manifest_v1"
+
+
+class CatalogueError(Exception):
+    """Controlled catalogue validation error."""
 
 
 def write_text_if_changed(path, content):
@@ -130,26 +148,32 @@ def collect_block(lines, start_index, indent):
 
 def parse_download_manifest(path):
     """
-    Parse one briefing-level downloads.yml file.
+    Parse one BNR download record.
 
     This is deliberately a small parser for the restricted manifest structure
-    written by the BNR Stata briefing jobs. It is not intended to be a general
-    YAML parser.
+    written by the BNR publication jobs. It is not a general YAML parser.
+    Unsupported or incomplete structures fail later through required-field
+    validation rather than being accepted silently.
     """
     lines = path.read_text(encoding="utf-8-sig").splitlines()
+
+    if any("\t" in line for line in lines):
+        raise CatalogueError("Tab indentation is not permitted in catalogue YAML.")
 
     manifest = {}
     downloads = []
     index = 0
+    downloads_section_found = False
 
     while index < len(lines):
         line = lines[index].rstrip("\n")
 
-        if line.strip() == "":
+        if line.strip() == "" or line.lstrip().startswith("#"):
             index += 1
             continue
 
         if line.startswith("downloads:"):
+            downloads_section_found = True
             index += 1
             break
 
@@ -169,12 +193,15 @@ def parse_download_manifest(path):
 
         index += 1
 
+    if not downloads_section_found:
+        raise CatalogueError("Required downloads: section was not found.")
+
     current_download = None
 
     while index < len(lines):
         line = lines[index].rstrip("\n")
 
-        if line.strip() == "":
+        if line.strip() == "" or line.lstrip().startswith("#"):
             index += 1
             continue
 
@@ -183,7 +210,6 @@ def parse_download_manifest(path):
                 downloads.append(current_download)
 
             current_download = {}
-
             first_item_text = line[4:].strip()
 
             if first_item_text:
@@ -197,7 +223,6 @@ def parse_download_manifest(path):
 
         if current_download is not None and line.startswith("    "):
             item_line = line[4:]
-
             block_match = re.match(r"^([A-Za-z0-9_-]+):\s*\|-\s*$", item_line)
 
             if block_match:
@@ -218,6 +243,112 @@ def parse_download_manifest(path):
 
     manifest["downloads"] = downloads
     return manifest
+
+
+def required_text(record, field, source_path):
+    """Return one required, non-empty text field."""
+    value = str(record.get(field, "")).strip()
+
+    if not value:
+        raise CatalogueError(f"Missing required field '{field}' in {source_path}")
+
+    return value
+
+
+def package_type_from_manifest(manifest, source_path):
+    """Read and normalise the briefing or metric package type."""
+    raw_value = manifest.get("package_type", manifest.get("output_type", ""))
+    package_type = str(raw_value).strip().lower()
+
+    if not package_type:
+        raise CatalogueError(
+            f"Missing required field 'package_type' or 'output_type' in {source_path}"
+        )
+
+    if package_type not in SUPPORTED_PACKAGE_TYPES:
+        raise CatalogueError(
+            f"Unsupported package type '{raw_value}' in {source_path}. "
+            "Expected briefing or metric."
+        )
+
+    return package_type
+
+
+def package_id_from_manifest(manifest, package_type, source_path):
+    """Read the existing briefing ID or the metric package ID."""
+    if package_type == "briefing":
+        value = manifest.get("briefing_id", manifest.get("package_id", ""))
+        expected_field = "briefing_id"
+    else:
+        value = manifest.get("package_id", "")
+        expected_field = "package_id"
+
+    package_id = str(value).strip()
+
+    if not package_id:
+        raise CatalogueError(
+            f"Missing required field '{expected_field}' in {source_path}"
+        )
+
+    return package_id
+
+
+def validated_iso_date(value, source_path):
+    """Validate and return an ISO calendar date in YYYY-MM-DD form."""
+    date_text = str(value).strip()
+
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", date_text):
+        raise CatalogueError(
+            f"Invalid release_date '{date_text}' in {source_path}. "
+            "Expected YYYY-MM-DD."
+        )
+
+    try:
+        date.fromisoformat(date_text)
+    except ValueError as error:
+        raise CatalogueError(
+            f"Invalid release_date '{date_text}' in {source_path}: {error}"
+        ) from error
+
+    return date_text
+
+
+def validated_href(value, source_path):
+    """Validate one internal ZIP href and return it unchanged."""
+    href = str(value).strip()
+
+    if not href:
+        raise CatalogueError(f"Missing required field 'href' in {source_path}")
+
+    if "://" in href or href.startswith("//"):
+        raise CatalogueError(f"External href is not permitted in {source_path}: {href}")
+
+    if not href.startswith("files/"):
+        raise CatalogueError(
+            f"Catalogue href must begin with 'files/' in {source_path}: {href}"
+        )
+
+    if "\\" in href:
+        raise CatalogueError(
+            f"Catalogue href must use forward slashes in {source_path}: {href}"
+        )
+
+    href_path = PurePosixPath(href)
+
+    if href_path.is_absolute() or ".." in href_path.parts:
+        raise CatalogueError(f"Unsafe catalogue href in {source_path}: {href}")
+
+    if href_path.suffix.lower() != ".zip":
+        raise CatalogueError(f"ZIP catalogue href does not end in .zip: {href}")
+
+    actual_path = DOWNLOADS_ROOT.joinpath(*href_path.parts)
+
+    if not actual_path.is_file():
+        raise CatalogueError(
+            f"Referenced ZIP does not exist for {source_path}: {actual_path}"
+        )
+
+    return href, actual_path
 
 
 def format_size(size_bytes):
@@ -271,6 +402,148 @@ def sort_order_value(value):
         return 9999
 
 
+def discover_source_records():
+    """Return briefing and metric catalogue-record paths."""
+    source_paths = []
+
+    if BRIEFINGS_DIR.exists():
+        briefing_paths = sorted(BRIEFINGS_DIR.glob("*/downloads.yml"))
+        source_paths.extend(briefing_paths)
+        print(f"Briefing records found: {len(briefing_paths)}")
+    else:
+        print("WARNING: Briefings catalogue folder was not found.")
+
+    if METRICS_DIR.exists():
+        metric_paths = sorted(METRICS_DIR.glob("**/catalogue/*.yml"))
+        source_paths.extend(metric_paths)
+        print(f"Metric records found:   {len(metric_paths)}")
+    else:
+        print("WARNING: Metrics catalogue folder was not found.")
+
+    return source_paths
+
+
+def rows_from_manifest(manifest, source_path):
+    """Validate one source record and return its public ZIP catalogue rows."""
+    schema = required_text(manifest, "schema", source_path)
+
+    if schema != SUPPORTED_SCHEMA:
+        raise CatalogueError(
+            f"Unsupported schema '{schema}' in {source_path}. "
+            f"Expected {SUPPORTED_SCHEMA}."
+        )
+
+    download_items = manifest.get("downloads", [])
+
+    if not isinstance(download_items, list):
+        raise CatalogueError(
+            f"The downloads section is not a list in {source_path}"
+        )
+
+    # A package-level manifest may deliberately contribute nothing to the
+    # central downloads catalogue. This is used, for example, by supporting
+    # public artefacts that are copied to the site but are not offered as a
+    # downloadable ZIP package.
+    #
+    # Determine whether the manifest has an eligible ZIP before validating
+    # briefing- or metric-specific fields. An unsupported package type is
+    # therefore harmless when it requests no catalogue listing, but it still
+    # fails closed if it attempts to list a ZIP.
+    listed_zip_items = []
+
+    for item_number, item in enumerate(download_items, start=1):
+        if not isinstance(item, dict):
+            raise CatalogueError(
+                f"Download item {item_number} is not a record in {source_path}"
+            )
+
+        include_in_listing = item.get("include_in_listing", True)
+        item_format = str(item.get("format", "")).strip().upper()
+
+        if include_in_listing is not False and item_format == "ZIP":
+            listed_zip_items.append((item_number, item))
+
+    if not listed_zip_items:
+        return []
+
+    package_type = package_type_from_manifest(manifest, source_path)
+    output_type = SUPPORTED_PACKAGE_TYPES[package_type]
+    output_id = package_id_from_manifest(manifest, package_type, source_path)
+    output_title = required_text(manifest, "title", source_path)
+    surveillance_area = required_text(manifest, "surveillance_area", source_path)
+    domain = required_text(manifest, "domain", source_path)
+    period = required_text(manifest, "period", source_path)
+    updated = validated_iso_date(
+        required_text(manifest, "release_date", source_path), source_path
+    )
+
+    if package_type == "metric":
+        required_text(manifest, "release_id", source_path)
+        required_text(manifest, "metric_family", source_path)
+
+    rows = []
+
+    for item_number, item in listed_zip_items:
+        item_format = "ZIP"
+        item_source = f"{source_path} (download item {item_number})"
+        title = required_text(item, "title", item_source)
+        description = required_text(item, "description", item_source)
+        href, actual_path = validated_href(item.get("href", ""), item_source)
+        file_name = str(item.get("file", "")).strip() or PurePosixPath(href).name
+        size_bytes = actual_path.stat().st_size
+
+        rows.append(
+            {
+                "title": title,
+                "output_type": output_type,
+                "output_title": output_title,
+                "output_id": output_id,
+                "surveillance_area": surveillance_area,
+                "domain": domain,
+                "period": period,
+                "artefact_type": item.get("artefact_type", "ZIP package"),
+                "format": item_format,
+                "description": description,
+                "href": href,
+                "path": href,
+                "file": file_name,
+                "updated": updated,
+                "size": format_size(size_bytes),
+                "size_bytes": size_bytes,
+                "sort_order": sort_order_value(item.get("sort_order", 9999)),
+            }
+        )
+
+    return rows
+
+
+def validate_unique_rows(rows):
+    """Stop if two listed records share an output ID or ZIP path."""
+    output_ids = {}
+    zip_paths = {}
+
+    for row in rows:
+        output_id = row["output_id"]
+        zip_path = row["path"]
+
+        if output_id in output_ids:
+            raise CatalogueError(
+                f"Duplicate output_id '{output_id}' for:\n"
+                f"  {output_ids[output_id]}\n"
+                f"  {zip_path}"
+            )
+
+        if zip_path in zip_paths:
+            raise CatalogueError(
+                f"Duplicate ZIP path '{zip_path}' for:\n"
+                f"  {zip_paths[zip_path]}\n"
+                f"  {output_id}"
+            )
+
+        output_ids[output_id] = zip_path
+        zip_paths[zip_path] = output_id
+
+
 def write_catalogue(rows):
     """
     Write the flattened site-wide downloads catalogue.
@@ -284,8 +557,9 @@ def write_catalogue(rows):
 
     fields = [
         "title",
-        "briefing_title",
-        "briefing_id",
+        "output_type",
+        "output_title",
+        "output_id",
         "surveillance_area",
         "domain",
         "period",
@@ -320,114 +594,43 @@ def build_catalogue():
     print("BNR download catalogue builder")
     print(f"Site root:        {SITE_ROOT}")
     print(f"Briefings folder: {BRIEFINGS_DIR}")
+    print(f"Metrics folder:   {METRICS_DIR}")
     print(f"Output file:      {OUTPUT_FILE}")
+    print("")
 
-    if not BRIEFINGS_DIR.exists():
-        print("")
-        print("WARNING: Briefings folder was not found.")
-        print("Writing empty downloads.yml.")
-        was_written = write_catalogue([])
-        print("Catalogue status: written" if was_written else "Catalogue status: unchanged")
-        return 0
-
-    manifest_paths = sorted(BRIEFINGS_DIR.glob("*/downloads.yml"))
-
-    print(f"Manifests found:  {len(manifest_paths)}")
-
-    if not manifest_paths:
-        print("")
-        print("WARNING: No briefing-level downloads.yml files were found.")
-        print("Writing empty downloads.yml.")
-        was_written = write_catalogue([])
-        print("Catalogue status: written" if was_written else "Catalogue status: unchanged")
-        return 0
-
+    source_paths = discover_source_records()
     rows = []
 
-    for manifest_path in manifest_paths:
-        try:
-            manifest = parse_download_manifest(manifest_path)
-        except Exception as error:
-            print(f"ERROR: Could not parse {manifest_path}", file=sys.stderr)
-            print(str(error), file=sys.stderr)
-            return 1
+    try:
+        for source_path in source_paths:
+            try:
+                manifest = parse_download_manifest(source_path)
+            except CatalogueError:
+                raise
+            except Exception as error:
+                raise CatalogueError(
+                    f"Could not parse {source_path}: {error}"
+                ) from error
 
-        briefing_id = manifest.get("briefing_id", manifest_path.parent.name)
-        briefing_title = manifest.get("title", briefing_id)
-        surveillance_area = manifest.get("surveillance_area", "")
-        domain = manifest.get("domain", "")
-        period = str(manifest.get("period", ""))
-        updated = str(manifest.get("release_date", ""))
+            source_rows = rows_from_manifest(manifest, source_path)
+            rows.extend(source_rows)
+            print(f"  {source_path.relative_to(DOWNLOADS_ROOT)}: {len(source_rows)} ZIP row(s)")
 
-        download_items = manifest.get("downloads", [])
-
-        print(
-            f"  {manifest_path.parent.name}: "
-            f"{len(download_items)} download item(s)"
-        )
-
-        for item in download_items:
-            include_in_listing = item.get("include_in_listing", True)
-
-            if include_in_listing is False:
-                continue
-
-            item_format = str(item.get("format", "")).strip().upper()
-
-            # The central downloads catalogue lists ZIP packages only.
-            # Other manifest items remain useful as briefing-level release
-            # inventory records, but are not displayed on the public catalogue.
-            if item_format != "ZIP":
-                continue
-
-            href = str(item.get("href", "")).strip()
-            file_path = str(item.get("file", "")).strip()
-            title = str(item.get("title", "")).strip()
-
-            # Skip incomplete download records.
-            # An empty href can render as a link to the current page.
-            if not href or not title:
-                print(
-                    f"    skipped incomplete item in {manifest_path.parent.name}: "
-                    f"title='{title}', href='{href}'"
-                )
-                continue
-
-            actual_path = SITE_ROOT / "downloads" / Path(href)
-
-            size_bytes = 0
-            size = ""
-
-            if actual_path.exists():
-                size_bytes = actual_path.stat().st_size
-                size = format_size(size_bytes)
-
-            rows.append(
-                {
-                    "title": title,
-                    "briefing_title": briefing_title,
-                    "briefing_id": briefing_id,
-                    "surveillance_area": surveillance_area,
-                    "domain": domain,
-                    "period": period,
-                    "artefact_type": item.get("artefact_type", ""),
-                    "format": item_format,
-                    "description": item.get("description", ""),
-                    "href": href,
-                    "path": href,
-                    "file": file_path,
-                    "updated": updated,
-                    "size": size,
-                    "size_bytes": size_bytes,
-                    "sort_order": item.get("sort_order", 9999),
-                }
-            )
+        validate_unique_rows(rows)
+    except CatalogueError as error:
+        print("", file=sys.stderr)
+        print("CATALOGUE BUILD STOPPED", file=sys.stderr)
+        print(str(error), file=sys.stderr)
+        print("", file=sys.stderr)
+        print(f"Existing catalogue retained: {OUTPUT_FILE}", file=sys.stderr)
+        return 1
 
     rows.sort(
         key=lambda row: (
             row.get("updated", ""),
             row.get("surveillance_area", ""),
-            row.get("briefing_id", ""),
+            row.get("output_type", ""),
+            row.get("output_id", ""),
             sort_order_value(row.get("sort_order", 9999)),
             row.get("title", ""),
         )

@@ -12,13 +12,15 @@ listing:
     sort: "updated desc"
     sort-ui:
       - updated
-      - briefing_title
+      - output_title
+      - output_type
     filter-ui: true
     page-size: 25
     field-display-names:
       surveillance_area: "Area"
       period: "Period"
-      briefing_title: "Output"
+      output_type: "Type"
+      output_title: "Output"
       description: "Contents"
       updated: "Updated"
     field-types:
@@ -34,11 +36,11 @@ format:
     link-external-newwindow: false
 ---
 
-This page provides public download packages from approved Barbados National Registry surveillance outputs. 
+This page provides public download packages from approved Barbados National Registry surveillance outputs.
 
-> Each `ZIP` package contains the approved public files for one output. Depending on the briefing, this may include datasets, figures, metadata, an Excel workbook, and a README file. To download individual files, and to download the briefing **PDF** or **Slide-deck**, jump to the relevant briefings page. 
+> Each row represents one approved, versioned `ZIP` package. Briefing packages may contain datasets, figures, metadata, an Excel workbook, and a README file. Metric packages contain approved release-stamped and current datasets with accompanying metadata. Package contents vary by output.
 
-Use the search box to filter by topic, year, surveillance area, or output title.
+Use the search box to filter by output type, topic, period, surveillance area, or output title.
 
 ## Reuse and citation
 
@@ -48,4 +50,3 @@ Please cite the Barbados National Registry when reusing these outputs. Suggested
 
 ::: {#bnr-downloads}
 :::
-

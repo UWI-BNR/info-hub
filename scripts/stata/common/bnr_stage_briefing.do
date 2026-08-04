@@ -5,7 +5,7 @@
  PURPOSE:     Complete a private BNR briefing staging package
 
  AUTHOR:      Ian R Hambleton
- VERSION:     v1.3
+ VERSION:     v1.1
 
  USAGE:
    Called at the end of an analyst-owned briefing/output DO file:
@@ -55,6 +55,15 @@
    It should not derive surveillance measures or alter released data.
    It only completes and checks artefacts already written to staging/.
    It never copies files to public or to the website.
+
+ BRIEFING KIND:
+   Briefing packages may declare either:
+
+       briefing_kind: routine
+       briefing_kind: ad_hoc
+
+   Existing briefing controls that omit this field default to routine. The
+   field is carried into briefing.yml and downloads.yml for audit clarity.
 * =====================================================================
 */
 
@@ -66,16 +75,8 @@
 args briefing_id
 
 if "`briefing_id'" == "" {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STAGING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: no briefing_id was supplied." _n ///
-        as text "  Staging package completed: No" _n ///
-        as text "  Usage: do bnr_stage_briefing.do {briefing_id}" _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "No briefing_id supplied."
+    display as error "Usage: do bnr_stage_briefing.do {briefing_id}"
     exit 198
 }
 
@@ -93,16 +94,8 @@ if "`briefing_id'" == "" {
 foreach required_global in BNR_STAGING BNR_STATA {
 
     if "$`required_global'" == "" {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "BNR BRIEFING STAGING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: required global `required_global' is not defined." _n ///
-            as text "  Staging package completed: No" _n ///
-            as text "  Next: run bnr_paths_LOCAL.do, then retry Step 1." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "Required global `required_global' is not defined."
+        display as error "Run bnr_paths_LOCAL.do before calling bnr_stage_briefing.do."
         exit 198
     }
 }
@@ -131,34 +124,17 @@ local control_file "`stagingmetadata'/release_control.yml"
 quietly mata: st_local("staging_exists", strofreal(direxists("`stagingbriefing'")))
 
 if "`staging_exists'" != "1" {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STAGING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: staging briefing folder not found." _n ///
-        as result "  Expected: `stagingbriefing'" _n ///
-        as text "  Staging package completed: No" _n ///
-        as text "  Next: run the analyst-owned briefing DO file first." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "Staging briefing folder not found:"
+    display as error "  `stagingbriefing'"
+    display as error "Run the analyst-owned briefing DO file first."
     exit 601
 }
 
 capture confirm file "`control_file'"
 if _rc {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STAGING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: release control file not found." _n ///
-        as result "  Expected: `control_file'" _n ///
-        as text "  Staging package completed: No" _n ///
-        as text "  Next: the briefing DO file must create" _n ///
-        as text "        metadata/release_control.yml before staging." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "Release control file not found:"
+    display as error "  `control_file'"
+    display as error "The analyst-owned DO file must write metadata/release_control.yml before calling this helper."
     exit 601
 }
 
@@ -342,6 +318,12 @@ if "`create_workbook'" == "" local create_workbook 0
 if "`create_zip'"      == "" local create_zip 0
 if "`list_zip'"        == "" local list_zip 0
 
+* briefing_kind distinguishes the operating route, not the public product.
+* Existing briefing DO files do not need to change: they default to routine.
+if "`briefing_kind'" == "" & "`output_type'" == "briefing" {
+    local briefing_kind "routine"
+}
+
 if "`workbook_file'" == "" {
     local workbook_file "bnr_`briefing_id'.xlsx"
 }
@@ -379,18 +361,9 @@ foreach required_local in ///
     title {
 
     if "``required_local''" == "" {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "BNR BRIEFING STAGING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: required release-control field is missing." _n ///
-            as result "  Field: `required_local'" _n ///
-            as result "  File:  `control_file'" _n ///
-            as text "  Staging package completed: No" _n ///
-            as text "  Next: correct release_control.yml and rerun Step 1." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "Required release-control field is missing: `required_local'"
+        display as error "Check:"
+        display as error "  `control_file'"
         exit 198
     }
 }
@@ -398,34 +371,23 @@ foreach required_local in ///
 foreach flag in create_workbook create_zip list_zip {
 
     if !inlist("``flag''", "0", "1") {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "BNR BRIEFING STAGING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: invalid release-control flag." _n ///
-            as result "  `flag' = ``flag''; expected 0 or 1." _n ///
-            as text "  Staging package completed: No" _n ///
-            as text "  Next: correct release_control.yml and rerun Step 1." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "Invalid release-control flag: `flag' = ``flag''"
+        display as error "Expected 0 or 1."
         exit 198
     }
 }
 
 if "`list_zip'" == "1" & "`create_zip'" != "1" {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STAGING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: inconsistent release-control settings." _n ///
-        as result "  list_zip is 1 but create_zip is not 1." _n ///
-        as text "  A ZIP cannot be listed unless it is created." _n ///
-        as text "  Staging package completed: No" _n ///
-        as text "  Next: correct release_control.yml and rerun Step 1." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "Inconsistent release-control settings."
+    display as error "list_zip is 1 but create_zip is not 1."
+    display as error "A ZIP cannot be listed unless it is created."
+    exit 198
+}
+
+if "`output_type'" == "briefing" & ///
+        !inlist("`briefing_kind'", "routine", "ad_hoc") {
+    display as error "Invalid release-control field: briefing_kind = `briefing_kind'"
+    display as error "A briefing must use routine or ad_hoc."
     exit 198
 }
 
@@ -467,17 +429,9 @@ if "`released_datasets'" != "" {
         capture confirm file "`stagingdatasets'/`dataset_id'.dta"
 
         if _rc {
-            qui {
-                noi display as error _n ///
-                "------------------------------------------------------------" _n ///
-                "BNR BRIEFING STAGING STOPPED" _n ///
-                "------------------------------------------------------------" _n ///
-                as text "  Reason: declared released dataset not found." _n ///
-                as result "  Expected: `stagingdatasets'/`dataset_id'.dta" _n ///
-                as text "  Staging package completed: No" _n ///
-                as text "  Next: check released_datasets in release_control.yml." _n ///
-                as error "------------------------------------------------------------" _n
-            }
+            display as error "Declared released dataset not found:"
+            display as error "  `stagingdatasets'/`dataset_id'.dta"
+            display as error "Check released_datasets in release_control.yml."
             exit 601
         }
 
@@ -508,17 +462,9 @@ if "`released_figures'" != "" {
         capture confirm file "`stagingfigures'/`figure_id'.png"
 
         if _rc {
-            qui {
-                noi display as error _n ///
-                "------------------------------------------------------------" _n ///
-                "BNR BRIEFING STAGING STOPPED" _n ///
-                "------------------------------------------------------------" _n ///
-                as text "  Reason: declared released figure not found." _n ///
-                as result "  Expected: `stagingfigures'/`figure_id'.png" _n ///
-                as text "  Staging package completed: No" _n ///
-                as text "  Next: check released_figures in release_control.yml." _n ///
-                as error "------------------------------------------------------------" _n
-            }
+            display as error "Declared released figure not found:"
+            display as error "  `stagingfigures'/`figure_id'.png"
+            display as error "Check released_figures in release_control.yml."
             exit 601
         }
     }
@@ -553,6 +499,9 @@ file write `briefingyml' "schema: bnr_briefing_metadata_v1" _n
 file write `briefingyml' "briefing_id: `briefing_id'" _n
 file write `briefingyml' "briefing_name: `briefing_name'" _n
 file write `briefingyml' "output_type: `output_type'" _n
+if "`briefing_kind'" != "" {
+    file write `briefingyml' "briefing_kind: `briefing_kind'" _n
+}
 file write `briefingyml' "domain: `domain'" _n
 file write `briefingyml' "surveillance_area: `surveillance_area'" _n
 file write `briefingyml' "registry: `registry'" _n
@@ -774,18 +723,73 @@ if "`create_workbook'" == "1" {
     }
 
     if `workbook_sheet_count' == 0 {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "BNR BRIEFING STAGING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: create_workbook is 1, but no workbook" _n ///
-            as text "          sheets or released datasets were found." _n ///
-            as text "  Staging package completed: No" _n ///
-            as text "  Next: check release_control.yml and rerun Step 1." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "create_workbook is 1 but no workbook sheets or released datasets were found."
+        display as error "Check release_control.yml."
         exit 198
+    }
+
+    * --------------------------------------------------------------------------
+    * Validate Excel sheet names before asking bnr_workbook to write them.
+    * --------------------------------------------------------------------------
+    * Excel limits sheet names to 31 characters and rejects several characters.
+    * Checking here replaces Stata's opaque r(9901) with an actionable message.
+
+    local data_sheet_count : word count `workbook_data_sheets'
+    local meta_sheet_count : word count `workbook_meta_sheets'
+    local vars_sheet_count : word count `workbook_vars_sheets'
+
+    if `data_sheet_count' != `workbook_sheet_count' | ///
+            `meta_sheet_count' != `workbook_sheet_count' | ///
+            `vars_sheet_count' != `workbook_sheet_count' {
+        display as error "Workbook sheet settings are incomplete."
+        display as error "Each dataset needs data_sheet, metadata_sheet and variable_sheet."
+        display as error "Check workbook_sheets in:"
+        display as error "  `control_file'"
+        exit 198
+    }
+
+    local checked_sheet_names ""
+
+    forvalues i = 1/`workbook_sheet_count' {
+
+        local data_sheet : word `i' of `workbook_data_sheets'
+        local meta_sheet : word `i' of `workbook_meta_sheets'
+        local vars_sheet : word `i' of `workbook_vars_sheets'
+
+        foreach sheet_name in `data_sheet' `meta_sheet' `vars_sheet' {
+
+            if strlen(`"`sheet_name'"') > 31 {
+                display as error "Workbook sheet name is longer than 31 characters:"
+                display as error "  `sheet_name'"
+                display as error "Set a shorter name in workbook_sheets in:"
+                display as error "  `control_file'"
+                exit 198
+            }
+
+            if strpos(`"`sheet_name'"', ":") | ///
+                    strpos(`"`sheet_name'"', "/") | ///
+                    strpos(`"`sheet_name'"', char(92)) | ///
+                    strpos(`"`sheet_name'"', "?") | ///
+                    strpos(`"`sheet_name'"', "*") | ///
+                    strpos(`"`sheet_name'"', "[") | ///
+                    strpos(`"`sheet_name'"', "]") {
+                display as error "Workbook sheet name contains a character Excel does not allow:"
+                display as error "  `sheet_name'"
+                display as error "Use letters, numbers and underscores in workbook_sheets."
+                exit 198
+            }
+
+            local prior_position : list posof "`sheet_name'" in checked_sheet_names
+
+            if `prior_position' > 0 {
+                display as error "Workbook sheet name is repeated:"
+                display as error "  `sheet_name'"
+                display as error "Every workbook sheet must have a unique name."
+                exit 198
+            }
+
+            local checked_sheet_names "`checked_sheet_names' `sheet_name'"
+        }
     }
 
     * --------------------------------------------------------------------------
@@ -860,17 +864,9 @@ if "`create_workbook'" == "1" {
         capture confirm file "`stagingdatasets'/`dataset_id'.dta"
 
         if _rc {
-            qui {
-                noi display as error _n ///
-                "------------------------------------------------------------" _n ///
-                "BNR BRIEFING STAGING STOPPED" _n ///
-                "------------------------------------------------------------" _n ///
-                as text "  Reason: workbook dataset not found." _n ///
-                as result "  Expected: `stagingdatasets'/`dataset_id'.dta" _n ///
-                as text "  Staging package completed: No" _n ///
-                as text "  Next: check workbook_sheets in release_control.yml." _n ///
-                as error "------------------------------------------------------------" _n
-            }
+            display as error "Workbook dataset not found:"
+            display as error "  `stagingdatasets'/`dataset_id'.dta"
+            display as error "Check workbook_sheets in release_control.yml."
             exit 601
         }
 
@@ -916,6 +912,9 @@ file write `downloads_yml' "schema: bnr_download_manifest_v1" _n
 file write `downloads_yml' "briefing_id: `briefing_id'" _n
 file write `downloads_yml' "briefing_name: `briefing_name'" _n
 file write `downloads_yml' "output_type: `output_type'" _n
+if "`briefing_kind'" != "" {
+    file write `downloads_yml' "briefing_kind: `briefing_kind'" _n
+}
 file write `downloads_yml' "domain: `domain'" _n
 file write `downloads_yml' "surveillance_area: `surveillance_area'" _n
 file write `downloads_yml' "period: `period'" _n
@@ -975,18 +974,8 @@ display as result "  `stagingbriefing'/downloads.yml"
 
 capture confirm file "`stagingreview'/disclosure_flags.csv"
 if _rc {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STAGING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: disclosure flags file not found." _n ///
-        as result "  Expected: `stagingreview'/disclosure_flags.csv" _n ///
-        as text "  Staging package completed: No" _n ///
-        as text "  Next: create the briefing disclosure worklist" _n ///
-        as text "        before calling the staging helper." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "Disclosure flags file not found:"
+    display as error "  `stagingreview'/disclosure_flags.csv"
     exit 601
 }
 
@@ -1019,10 +1008,10 @@ file write `review' "" _n
 file write `review' "review_status: INCOMPLETE" _n
 file write `review' "" _n
 file write `review' "INSTRUCTIONS" _n
-file write `review' "1. Review disclosure_flags.csv and every staged dataset, figure, workbook and metadata file." _n
-file write `review' "2. Do not edit the NO values manually. Briefing Step 2 will capture each human confirmation." _n
-file write `review' "3. Step 2 will write the completed, dated review record only after every required check is confirmed." _n
-file write `review' "4. Briefing Step 3 will publish only a package with a valid approval record." _n
+file write `review' "1. Review disclosure_flags.csv and every public dataset, figure, narrative, PDF and slide." _n
+file write `review' "2. Replace each required NO with YES after completing that check." _n
+file write `review' "3. Record the action taken for automated flags and add sufficient comments." _n
+file write `review' "4. Change review_status to APPROVE FOR PUBLICATION only when the complete briefing is safe." _n
 
 file close `review'
 
@@ -1041,6 +1030,6 @@ display as text _n ///
     as result "  Briefing ID:       `briefing_id'" _n ///
     as result "  Staging folder:    `stagingbriefing'" _n ///
     as text   "  Publication status: NOT APPROVED / NOT PUBLISHED" _n ///
-    as text   "  Next: review the staged artefacts, then run" _n ///
-    as text   "        Briefing Step 2 to record approval." _n ///
+    as text   "  Next: review all artefacts and complete" _n ///
+    as text   "        review/disclosure_review.txt" _n ///
     as text "------------------------------------------------------------" _n

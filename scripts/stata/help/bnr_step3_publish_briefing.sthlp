@@ -32,10 +32,21 @@ the disposable mirror below {bf:site/downloads/files/briefings}.
 Private approval, disclosure and release-control files remain in staging and
 are never copied to either public destination.
 
+{title:Ad-hoc briefings}
+
+{p 4 4 2}
+Select {bf:Ad-hoc briefing} and enter the exact package ID approved in Step 2.
+The routine release-year, release-month and version fields are ignored for
+this selection. Step 3 requires the approval receipt to identify the same
+package and to record {bf:briefing_kind: ad_hoc}.
+
 {title:Command-line example}
 
 {p 8 8 2}
 do "$BNR_STATA/briefings/bnr_step3_publish_briefing.do" "CVD incidence rates" 2024 1 1 publish
+
+{p 8 8 2}
+do "$BNR_STATA/briefings/bnr_step3_publish_briefing.do" "Ad-hoc briefing" 2024 1 1 publish "cvd_external_request_2023_v1"
 
 {title:After Step 3}
 

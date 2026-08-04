@@ -5,6 +5,7 @@
     <tr>
       <th scope="col">Area</th>
       <th scope="col">Period</th>
+      <th scope="col">Type</th>
       <th scope="col">Output</th>
       <th scope="col">Contents</th>
       <th scope="col">Updated</th>
@@ -18,7 +19,7 @@
         item &&
         String(item.path || "").trim() !== "" &&
         String(item.title || "").trim() !== "" &&
-        String(item.briefing_id || "").trim() !== "" &&
+        String(item.output_id || "").trim() !== "" &&
         String(item.format || "").trim().toUpperCase() === "ZIP"
       );
     %>
@@ -33,8 +34,12 @@
           <%- item.period %>
         </td>
 
-        <td class="listing-briefing_title">
-          <%- item.briefing_title %>
+        <td class="listing-output_type">
+          <%- item.output_type %>
+        </td>
+
+        <td class="listing-output_title">
+          <%- item.output_title %>
         </td>
 
         <td class="listing-description">
@@ -50,6 +55,10 @@
 
           <span class="visually-hidden listing-format">
             <%- item.format %>
+          </span>
+
+          <span class="visually-hidden listing-output_id">
+            <%- item.output_id %>
           </span>
         </td>
 

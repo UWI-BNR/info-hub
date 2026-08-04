@@ -1,0 +1,27 @@
+schema: bnr_download_manifest_v1
+package_type: metric
+package_id: cvd_burden_cvd_2024_02
+release_id: cvd_2024_02
+surveillance_area: CVD
+domain: cvd
+metric_family: burden
+period: 2024-02
+release_date: 2026-08-01
+
+title: |-
+  CVD burden metrics
+
+description: |-
+  Approved CVD burden metric datasets and metadata for 2024-02.
+
+downloads:
+  - id: cvd_burden_cvd_2024_02_zip
+    title: Full public output package
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_cvd_burden_cvd_2024_02.zip
+    href: files/metrics/cvd/burden/bnr_cvd_burden_cvd_2024_02.zip
+    description: |-
+      Release-stamped and current CVD burden datasets with metadata.
+    include_in_listing: true
+    sort_order: 20

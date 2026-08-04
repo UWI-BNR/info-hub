@@ -1,9 +1,9 @@
 *! BNR Briefing Step 3: Publish an approved briefing package
-*! version 1.0.0, 4 August 2026
+*! version 1.1.1, 4 August 2026
 *! Thin interface to scripts/stata/briefings/bnr_step3_publish_briefing.do
 
 VERSION 19.0
-POSITION . . 520 430
+POSITION . . 520 470
 
 LIST briefing_types
 BEGIN
@@ -11,31 +11,62 @@ CVD incidence rates
 CVD case-fatality
 CVD length of stay
 CVD mortality rates
+Ad-hoc briefing
+END
+
+* One interface action for each briefing type, in the same order as the list.
+* Routine types must never accept an ad-hoc package ID.
+LIST briefing_type_actions
+BEGIN
+script select_routine_briefing
+script select_routine_briefing
+script select_routine_briefing
+script select_routine_briefing
+script select_ad_hoc_briefing
 END
 
 DIALOG main, label("BNR Briefing Step 3: Publish approved package")
 BEGIN
   TEXTBOX tx_intro 15 15 490 58, label("Publish the exact package approved in Briefing Step 2. The approval receipt, manifest and every staged file fingerprint are checked before copying begins.")
 
-  GROUPBOX gb_briefing 15 85 490 58, label("Approved briefing")
+  GROUPBOX gb_briefing 15 85 490 96, label("Approved briefing")
   TEXT tx_briefing 30 110 120 ., label("Briefing type:")
-  COMBOBOX cb_briefing 155 107 330 ., dropdownlist contents(briefing_types) nomemory
+  COMBOBOX cb_briefing 155 107 330 ., dropdownlist contents(briefing_types) nomemory onselchangelist(briefing_type_actions)
+  TEXT tx_package 30 146 120 ., label("Ad-hoc package ID:")
+  EDIT ed_package 155 143 330 ., nomemory error("Ad-hoc package ID")
 
-  GROUPBOX gb_input 15 155 490 96, label("Dataset release and briefing version")
-  TEXT tx_year 30 182 105 ., label("Release year:")
-  SPINNER ed_year 140 179 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
-  TEXT tx_month 245 182 115 ., label("Release month:")
-  SPINNER ed_month 365 179 60 ., default(1) min(1) max(12) nomemory error("Release month")
-  TEXT tx_version 30 218 120 ., label("Briefing version:")
-  SPINNER ed_version 155 215 70 ., default(1) min(1) max(99) nomemory error("Briefing version")
+  GROUPBOX gb_input 15 193 490 96, label("Routine briefing selection")
+  TEXT tx_year 30 220 105 ., label("Release year:")
+  SPINNER ed_year 140 217 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 245 220 115 ., label("Release month:")
+  SPINNER ed_month 365 217 60 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXT tx_version 30 256 120 ., label("Briefing version:")
+  SPINNER ed_version 155 253 70 ., default(1) min(1) max(99) nomemory error("Briefing version")
 
-  GROUPBOX gb_confirm 15 265 490 70, label("Publication confirmation")
-  CHECKBOX ck_publish 30 292 455 ., default(0) nomemory label("Publish this exact approved briefing package")
+  GROUPBOX gb_confirm 15 303 490 70, label("Publication confirmation")
+  CHECKBOX ck_publish 30 330 455 ., default(0) nomemory label("Publish this exact approved briefing package")
 
-  TEXTBOX tx_boundary 20 350 480 35, label("Only manifested files cross the boundary. Quarto rendering, Git and GitHub remain separate actions.")
+  TEXTBOX tx_boundary 20 388 480 35, label("For ad-hoc work, enter the exact approved package ID. Only manifested files cross the boundary.")
 END
 
-OK ok1, label("Publish")
+
+* Selecting a routine type clears and locks the field.  This prevents a stale
+* ad-hoc ID from appearing relevant to a routine briefing.
+SCRIPT select_routine_briefing
+BEGIN
+  main.ed_package.setvalue ""
+  main.ed_package.disable
+END
+
+
+* An exact approved package ID is required only for an ad-hoc briefing.
+SCRIPT select_ad_hoc_briefing
+BEGIN
+  main.ed_package.enable
+  main.ed_package.setfocus
+END
+
+OK ok1, label("Publish approved package")
 CANCEL cancel1, label("Cancel")
 HELP help1, view("help bnr_step3_publish_briefing")
 RESET reset1
@@ -54,4 +85,9 @@ BEGIN
   if main.ck_publish {
     put " publish"
   }
+  if !main.ck_publish {
+    put " not_confirmed"
+  }
+  put " "
+  put /smartquote main.ed_package
 END

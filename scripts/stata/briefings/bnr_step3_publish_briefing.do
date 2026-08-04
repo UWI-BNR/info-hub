@@ -3,7 +3,7 @@
  DO-FILE:     bnr_step3_publish_briefing.do
  PROJECT:     BNR info-hub
  WORKFLOW:    Briefing Step 3 - publish an approved briefing package
- VERSION:     1.0.0
+ VERSION:     1.1.0
 
  PURPOSE:
    Publish exactly the briefing products approved in Briefing Step 2.
@@ -31,6 +31,10 @@
  COMMAND-LINE EXAMPLE:
    do "$BNR_STATA/briefings/bnr_step3_publish_briefing.do" ///
        "CVD incidence rates" 2024 1 1 publish
+
+ AD-HOC COMMAND-LINE EXAMPLE:
+   do "$BNR_STATA/briefings/bnr_step3_publish_briefing.do" ///
+       "Ad-hoc briefing" 2024 1 1 publish "cvd_external_request_2023_v1"
 * ============================================================================
 */
 
@@ -42,7 +46,8 @@ set more off
 * 1. READ AND VALIDATE THE DIALOG OR COMMAND-LINE INPUTS
 * ==============================================================================
 
-args briefing_type release_year release_month briefing_version publish_confirmed
+args briefing_type release_year release_month briefing_version ///
+    publish_confirmed ad_hoc_briefing_id
 
 if `"`briefing_type'"' == "" | "`release_year'" == "" | ///
         "`release_month'" == "" | "`briefing_version'" == "" {
@@ -85,8 +90,23 @@ local target_year = `release_year' - 1
 if inlist(`"`selected_type'"', "cvd incidence rates", "incidence") {
     local briefing_id "cvd_incidence_`target_year'_v`briefing_version'"
 }
+else if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") {
+    local briefing_id = strtrim(`"`ad_hoc_briefing_id'"')
+
+    if `"`briefing_id'"' == "" {
+        display as error "Briefing Step 3 stopped: an ad-hoc package ID is required."
+        exit 198
+    }
+
+    if strlen(`"`briefing_id'"') > 80 | ///
+            !regexm(`"`briefing_id'"', "^[a-z][a-z0-9_]*_v[1-9][0-9]*$") {
+        display as error "Briefing Step 3 stopped: invalid ad-hoc package ID."
+        display as error "Use lowercase letters, numbers and underscores, ending _v1, _v2, etc."
+        exit 198
+    }
+}
 else {
-    display as error "Briefing Step 3 currently supports CVD incidence rates only."
+    display as error "Briefing Step 3 does not yet support this routine briefing type."
     display as error "No files were published."
     exit 198
 }
@@ -165,8 +185,10 @@ local actual_manifest_checksum = r(checksum)
 local approval_schema_ok 0
 local approval_status_ok 0
 local approval_type_ok 0
+local approval_output_ok 0
 local approval_package_ok 0
 local approval_role_ok 0
+local approval_kind_ok 0
 local approval_review_ok 0
 local approval_disclosure_ok 0
 local approval_manifest_ok 0
@@ -194,8 +216,14 @@ while r(eof) == 0 {
     if `"`approval_line'"' == "package_type: briefing" {
         local approval_type_ok 1
     }
+    if `"`approval_line'"' == "output_type: briefing" {
+        local approval_output_ok 1
+    }
     if `"`approval_line'"' == "package_id: `briefing_id'" {
         local approval_package_ok 1
+    }
+    if `"`approval_line'"' == "briefing_kind: ad_hoc" {
+        local approval_kind_ok 1
     }
     if inlist(`"`approval_line'"', ///
             "approved_role: BNR Lead", ///
@@ -263,8 +291,19 @@ if !`approval_type_ok' {
     exit 459
 }
 
+if !`approval_output_ok' {
+    display as error "Briefing Step 3 stopped: approved output_type is not briefing."
+    exit 459
+}
+
 if !`approval_package_ok' {
     display as error "Briefing Step 3 stopped: approval package ID does not match."
+    exit 459
+}
+
+if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") & ///
+        !`approval_kind_ok' {
+    display as error "Briefing Step 3 stopped: approval is not for an ad-hoc briefing."
     exit 459
 }
 

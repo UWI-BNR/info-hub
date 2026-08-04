@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.0.0 28jul2026}{...}
+{* *! version 1.1.0 04aug2026}{...}
 {title:BNR Step 6: Publish approved outputs}
 
 {pstd}
@@ -37,7 +37,19 @@ An identical disposable website copy is written below:
 
 {pstd}
 Both CSV and de-identified Stata DTA datasets are published. Step 6 also
-creates one release ZIP containing the eight approved payload files.
+creates one release ZIP containing the seven approved payload files.
+
+{pstd}
+After verifying the ZIP, Step 6 creates one release-specific catalogue record
+below both the authoritative public package and the disposable website mirror:
+
+{phang2}
+{cmd:catalogue/cvd_YYYY_MM.yml}
+
+{pstd}
+The record registers the ZIP for the central Downloads catalogue. It is
+publication metadata generated from the approved package; it is not an
+additional analytical payload.
 
 {title:Replace}
 
@@ -50,7 +62,19 @@ every successful publication.
 {title:Boundary}
 
 {pstd}
-Step 6 does not calculate, suppress, edit, approve, render, commit or deploy.
-It promotes only the eight files named by the Step 5 public manifest.
+Step 6 does not calculate, suppress, edit, approve, rebuild the central
+Downloads catalogue, render, commit or deploy. It promotes only the seven
+files named by the Step 5 public manifest.
 {cmd:approval.yml} and {cmd:public_manifest.csv} remain private controls.
 
+{title:Next action}
+
+{pstd}
+After Step 6 succeeds, run:
+
+{phang2}
+{cmd:python site/scripts/build_download_catalogue.py}
+
+{pstd}
+Then inspect the Downloads page before the normal commit, render and deployment
+process.

@@ -13,6 +13,22 @@ Review every staged dataset, figure, workbook, metadata file and automated
 disclosure flag. Disclosure control for occasional briefings is an analyst-led
 human judgement; Step 2 documents that the review occurred.
 
+{title:Ad-hoc briefings}
+
+{p 4 4 2}
+For an analyst-created or externally requested briefing, select
+{bf:Ad-hoc briefing} and enter the exact package ID already created below
+{bf:$BNR_STAGING/briefings}. The package ID must use lowercase letters,
+numbers and underscores and end in a version suffix such as {bf:_v1}.
+The routine release-year, release-month and version fields are ignored for
+this selection.
+
+{p 4 4 2}
+The staged release control must declare {bf:output_type: briefing},
+{bf:briefing_kind: ad_hoc}, {bf:create_zip: 1}, and {bf:list_zip: 1}.
+Step 2 does not run the ad-hoc analysis; the analyst-owned DO file must already
+have created and completed the private staging package.
+
 {title:Approver roles}
 
 {p 4 4 2}
@@ -37,6 +53,9 @@ by Step 3.
 
 {p 8 8 2}
 do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" "CVD incidence rates" 2024 1 1 "Full name" "BNR Analyst" source results disclosure labels complete
+
+{p 8 8 2}
+do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" "Ad-hoc briefing" 2024 1 1 "Full name" "BNR Analyst" source results disclosure labels complete "cvd_external_request_2023_v1"
 
 {title:Correction rule}
 

@@ -1,19 +1,21 @@
 *===============================================================================
 * DO-FILE:     bnr_step6_publish.do
-* VERSION:     1.0.4 (30 July 2026)
+* VERSION:     1.1.0 (4 August 2026)
 * PROJECT:     BNR Refit Phase 2
 * WORKFLOW:    Step 6 - publish an approved metric package
 *
 * PURPOSE:     Promote the exact seven files approved by Step 5:
-*              1. from the private public_ready folder;
-*              2. to the authoritative outputs/public folder;
-*              3. into one release ZIP; and
-*              4. to the website-download mirror.
+*              1. read them from the private public_ready folder;
+*              2. copy them to the authoritative outputs/public folder;
+*              3. create one release ZIP;
+*              4. refresh the website-download mirror; and
+*              5. register the verified ZIP for the Downloads catalogue.
 *
 * WORKFLOW BOUNDARY:
 *              Step 6 copies and verifies approved files. It does not calculate
 *              metrics, apply suppression, change metadata, approve results,
-*              render Quarto or deploy the website.
+*              build the central Downloads catalogue, render Quarto or deploy
+*              the website.
 *
 * PUBLIC FOLDER COMPATIBILITY:
 *              Step 5 groups datasets under public_ready/datasets/. The existing
@@ -56,7 +58,7 @@ program define _bnr_step6_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 6: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         1.0.4"
+    noisily display as error "  Script version:         1.1.0"
     noisily display as error "  Selected release:       `selected_release'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -192,11 +194,13 @@ local manifest_file "`ready_folder'/public_manifest.csv"
 * the family root to preserve the existing dashboard and download paths.
 local public_folder "$BNR_PUBLIC/metrics/cvd/burden"
 local public_metadata "`public_folder'/metadata"
+local public_catalogue "`public_folder'/catalogue"
 
 * Disposable website mirror. This has the same layout as outputs/public.
 local website_folder ///
     "$BNR_REPO/site/downloads/files/metrics/cvd/burden"
 local website_metadata "`website_folder'/metadata"
+local website_catalogue "`website_folder'/catalogue"
 
 * Private operational log.
 local private_log ///
@@ -235,6 +239,8 @@ local public_package_yml ///
     "`public_metadata'/metric_package.yml"
 local zip_name "bnr_cvd_burden_`release_id'.zip"
 local public_zip "`public_folder'/`zip_name'"
+local catalogue_name "`release_id'.yml"
+local public_catalogue_record "`public_catalogue'/`catalogue_name'"
 
 * Website mirror files.
 local website_release_dta ///
@@ -252,6 +258,7 @@ local website_current_yml ///
 local website_package_yml ///
     "`website_metadata'/metric_package.yml"
 local website_zip "`website_folder'/`zip_name'"
+local website_catalogue_record "`website_catalogue'/`catalogue_name'"
 
 * Create only the private log folder at this point. Public directories are not
 * created until approval and manifest checks have passed.
@@ -266,7 +273,7 @@ log using `"`private_log'"', text replace name(step6)
 quietly {
 
 noisily display as text "BNR CVD STEP 6: PUBLISH APPROVED OUTPUTS"
-noisily display as result "  Script version:       1.0.4"
+noisily display as result "  Script version:       1.1.0"
 noisily display as result "  Selected release:     `selected_release'"
 noisily display as result "  Metric family:        burden"
 noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
@@ -319,6 +326,7 @@ local approval_manifest_name_ok 0
 local approval_payload_root_ok 0
 local approval_scope_ok 0
 local approval_promotion_ok 0
+local approved_date ""
 local approved_manifest_size .
 local approved_manifest_checksum .
 
@@ -369,6 +377,10 @@ while r(eof) == 0 {
     if `"`approval_line'"' == "promotion_status: pending_step_6" {
         local approval_promotion_ok 1
     }
+    if strpos(`"`approval_line'"', "approved_date:") == 1 {
+        local approved_date = ///
+            strtrim(substr(`"`approval_line'"', 15, .))
+    }
 
     * The generated YAML right-aligns these two numbers. Extracting everything
     * after the colon makes the check independent of harmless spacing.
@@ -410,6 +422,10 @@ if !`approval_manifest_name_ok' | !`approval_payload_root_ok' | ///
         !`approval_scope_ok' | !`approval_promotion_ok' {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
         "approval.yml does not authorise this Step 6 manifest promotion."
+}
+if missing(daily("`approved_date'", "YMD")) {
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        "approval.yml does not contain a valid approved_date in YYYY-MM-DD form."
 }
 if missing(`approved_manifest_size') | ///
         missing(`approved_manifest_checksum') {
@@ -674,6 +690,11 @@ if !`replace_existing' {
         _bnr_step6_fail 602 "`selected_release'" `"`private_log'"' ///
             `"Release ZIP already exists. Rerun with replace only after checking: `public_zip'"'
     }
+    capture confirm file `"`public_catalogue_record'"'
+    if !_rc {
+        _bnr_step6_fail 602 "`selected_release'" `"`private_log'"' ///
+            `"Catalogue record already exists. Rerun with replace only after checking: `public_catalogue_record'"'
+    }
 
     capture confirm file `"`website_release_dta'"'
     if !_rc {
@@ -695,6 +716,11 @@ if !`replace_existing' {
         _bnr_step6_fail 602 "`selected_release'" `"`private_log'"' ///
             `"Website release ZIP already exists. Rerun with replace only after checking: `website_zip'"'
     }
+    capture confirm file `"`website_catalogue_record'"'
+    if !_rc {
+        _bnr_step6_fail 602 "`selected_release'" `"`private_log'"' ///
+            `"Website catalogue record already exists. Rerun with replace only after checking: `website_catalogue_record'"'
+    }
 }
 
 *===============================================================================
@@ -707,6 +733,7 @@ capture mkdir "$BNR_PUBLIC/metrics"
 capture mkdir "$BNR_PUBLIC/metrics/cvd"
 capture mkdir "$BNR_PUBLIC/metrics/cvd/burden"
 capture mkdir "$BNR_PUBLIC/metrics/cvd/burden/metadata"
+capture mkdir "$BNR_PUBLIC/metrics/cvd/burden/catalogue"
 
 capture mkdir "$BNR_REPO/site/downloads"
 capture mkdir "$BNR_REPO/site/downloads/files"
@@ -714,21 +741,30 @@ capture mkdir "$BNR_REPO/site/downloads/files/metrics"
 capture mkdir "$BNR_REPO/site/downloads/files/metrics/cvd"
 capture mkdir "$BNR_REPO/site/downloads/files/metrics/cvd/burden"
 capture mkdir "$BNR_REPO/site/downloads/files/metrics/cvd/burden/metadata"
+capture mkdir "$BNR_REPO/site/downloads/files/metrics/cvd/burden/catalogue"
 
 quietly mata: st_local("public_folder_exists", ///
     strofreal(direxists("`public_folder'")))
 quietly mata: st_local("public_metadata_exists", ///
     strofreal(direxists("`public_metadata'")))
+quietly mata: st_local("public_catalogue_exists", ///
+    strofreal(direxists("`public_catalogue'")))
 quietly mata: st_local("website_folder_exists", ///
     strofreal(direxists("`website_folder'")))
 quietly mata: st_local("website_metadata_exists", ///
     strofreal(direxists("`website_metadata'")))
+quietly mata: st_local("website_catalogue_exists", ///
+    strofreal(direxists("`website_catalogue'")))
 
-if "`public_folder_exists'" != "1" | "`public_metadata_exists'" != "1" {
+if "`public_folder_exists'" != "1" | ///
+        "`public_metadata_exists'" != "1" | ///
+        "`public_catalogue_exists'" != "1" {
     _bnr_step6_fail 603 "`selected_release'" `"`private_log'"' ///
         `"The authoritative public folder tree could not be created: `public_folder'"'
 }
-if "`website_folder_exists'" != "1" | "`website_metadata_exists'" != "1" {
+if "`website_folder_exists'" != "1" | ///
+        "`website_metadata_exists'" != "1" | ///
+        "`website_catalogue_exists'" != "1" {
     _bnr_step6_fail 603 "`selected_release'" `"`private_log'"' ///
         `"The website-download folder tree could not be created: `website_folder'"'
 }
@@ -913,7 +949,67 @@ local public_zip_size = r(filelen)
 local public_zip_checksum = r(checksum)
 
 *===============================================================================
-* 13. REFRESH THE WEBSITE MIRROR FROM AUTHORITATIVE PUBLIC OUTPUT
+* 13. CREATE THE AUTHORITATIVE DOWNLOAD-CATALOGUE RECORD
+*===============================================================================
+
+* This small record is publication metadata, not an eighth analytical payload.
+* It is created only after the approved seven-file ZIP has been built and
+* verified. The central Python builder later reads this record; Step 6 does not
+* run Python, edit downloads.yml, render Quarto or deploy the website.
+tempname catalogue_handle
+capture file open `catalogue_handle' using `"`public_catalogue_record'"', ///
+    write replace text
+if _rc {
+    local catalogue_rc = _rc
+    _bnr_step6_fail `catalogue_rc' "`selected_release'" ///
+        `"`private_log'"' ///
+        `"Could not create the metric catalogue record: `public_catalogue_record'"'
+}
+
+file write `catalogue_handle' "schema: bnr_download_manifest_v1" _n
+file write `catalogue_handle' "package_type: metric" _n
+file write `catalogue_handle' "package_id: `package_id'" _n
+file write `catalogue_handle' "release_id: `release_id'" _n
+file write `catalogue_handle' "surveillance_area: CVD" _n
+file write `catalogue_handle' "domain: cvd" _n
+file write `catalogue_handle' "metric_family: burden" _n
+file write `catalogue_handle' "period: `selected_release'" _n
+file write `catalogue_handle' "release_date: `approved_date'" _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "title: |-" _n
+file write `catalogue_handle' "  CVD burden metrics" _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "description: |-" _n
+file write `catalogue_handle' ///
+    "  Approved CVD burden metric datasets and metadata for `selected_release'." _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "downloads:" _n
+file write `catalogue_handle' "  - id: `package_id'_zip" _n
+file write `catalogue_handle' "    title: Full public output package" _n
+file write `catalogue_handle' "    artefact_type: ZIP package" _n
+file write `catalogue_handle' "    format: ZIP" _n
+file write `catalogue_handle' "    file: `zip_name'" _n
+file write `catalogue_handle' ///
+    "    href: files/metrics/cvd/burden/`zip_name'" _n
+file write `catalogue_handle' "    description: |-" _n
+file write `catalogue_handle' ///
+    "      Release-stamped and current CVD burden datasets with metadata." _n
+file write `catalogue_handle' "    include_in_listing: true" _n
+file write `catalogue_handle' "    sort_order: 20" _n
+file close `catalogue_handle'
+
+capture confirm file `"`public_catalogue_record'"'
+if _rc {
+    _bnr_step6_fail 603 "`selected_release'" `"`private_log'"' ///
+        `"The expected metric catalogue record was not found: `public_catalogue_record'"'
+}
+
+quietly checksum `"`public_catalogue_record'"'
+local catalogue_size = r(filelen)
+local catalogue_checksum = r(checksum)
+
+*===============================================================================
+* 14. REFRESH THE WEBSITE MIRROR FROM AUTHORITATIVE PUBLIC OUTPUT
 *===============================================================================
 
 * The website copy comes from outputs/public, not independently from the
@@ -984,8 +1080,16 @@ if _rc {
         `"Could not copy the release ZIP to the website: `website_zip'"'
 }
 
+capture quietly copy `"`public_catalogue_record'"' ///
+    `"`website_catalogue_record'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not copy the metric catalogue record to the website: `website_catalogue_record'"'
+}
+
 *===============================================================================
-* 14. VERIFY THE WEBSITE MIRROR
+* 15. VERIFY THE WEBSITE MIRROR
 *===============================================================================
 
 quietly _bnr_step6_verify_file `"`website_release_dta'"' ///
@@ -1053,25 +1157,34 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
+quietly _bnr_step6_verify_file `"`website_catalogue_record'"' ///
+    "`catalogue_size'" "`catalogue_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
 *===============================================================================
-* 15. REPORT SUCCESS
+* 16. REPORT SUCCESS
 *===============================================================================
 
 noisily display as text ""
 noisily display as text "============================================================================="
 noisily display as text "STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as result "  Run status:             PUBLISHED"
-noisily display as result "  Script version:         1.0.4"
+noisily display as result "  Script version:         1.1.0"
 noisily display as result "  Selected release:       `selected_release'"
 noisily display as result "  Metric family:          burden"
 noisily display as result "  Approved payload files: 7"
 noisily display as result "  Release ZIP:            `zip_name'"
+noisily display as result "  Catalogue record:       catalogue/`catalogue_name'"
 noisily display as result `"  Authoritative public:   `public_folder'"'
 noisily display as result `"  Website mirror:         `website_folder'"'
 noisily display as result "  Verification:           PASSED"
 noisily display as result `"  Private log:            `private_log'"'
-noisily display as text  "  Next action:            Commit approved public files, render and deploy"
-noisily display as text  "                          the Info-Hub using the normal Git/Quarto process."
+noisily display as text  "  Next action:            Run build_download_catalogue.py, inspect the"
+noisily display as text  "                          Downloads page, then commit, render and deploy."
 noisily display as text "============================================================================="
 
 }

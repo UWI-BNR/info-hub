@@ -3,7 +3,7 @@
  DO-FILE:     bnr_step2_approve_briefing.do
  PROJECT:     BNR info-hub
  WORKFLOW:    Briefing Step 2 - review and approve a staged briefing package
- VERSION:     1.0.0
+ VERSION:     1.1.0
 
  PURPOSE:
    Record the completed human review of one briefing package created by
@@ -28,6 +28,12 @@
    do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" ///
        "CVD incidence rates" 2024 1 1 ///
        "Full name" "BNR Analyst" source results disclosure labels complete
+
+ AD-HOC COMMAND-LINE EXAMPLE:
+   do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" ///
+       "Ad-hoc briefing" 2024 1 1 ///
+       "Full name" "BNR Analyst" source results disclosure labels complete ///
+       "cvd_external_request_2023_v1"
 * ============================================================================
 */
 
@@ -41,7 +47,7 @@ set more off
 
 args briefing_type release_year release_month briefing_version ///
     approver_name approver_role confirmation1 confirmation2 ///
-    confirmation3 confirmation4 confirmation5
+    confirmation3 confirmation4 confirmation5 ad_hoc_briefing_id
 
 if `"`briefing_type'"' == "" | "`release_year'" == "" | ///
         "`release_month'" == "" | "`briefing_version'" == "" {
@@ -159,6 +165,10 @@ if `briefing_version' < 1 {
 * ==============================================================================
 * CVD incidence currently analyses complete calendar years through the end of
 * the year before the selected Step 3 data release.
+*
+* Ad-hoc analyses are intentionally not dispatched by this controller. The
+* analyst runs the analyst-owned DO file directly, and supplies the exact
+* package ID created in staging. The package itself is checked below.
 
 local selected_type = lower(strtrim(`"`briefing_type'"'))
 local target_year = `release_year' - 1
@@ -166,8 +176,23 @@ local target_year = `release_year' - 1
 if inlist(`"`selected_type'"', "cvd incidence rates", "incidence") {
     local briefing_id "cvd_incidence_`target_year'_v`briefing_version'"
 }
+else if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") {
+    local briefing_id = strtrim(`"`ad_hoc_briefing_id'"')
+
+    if `"`briefing_id'"' == "" {
+        display as error "Briefing Step 2 stopped: an ad-hoc package ID is required."
+        exit 198
+    }
+
+    if strlen(`"`briefing_id'"') > 80 | ///
+            !regexm(`"`briefing_id'"', "^[a-z][a-z0-9_]*_v[1-9][0-9]*$") {
+        display as error "Briefing Step 2 stopped: invalid ad-hoc package ID."
+        display as error "Use lowercase letters, numbers and underscores, ending _v1, _v2, etc."
+        exit 198
+    }
+}
 else {
-    display as error "Briefing Step 2 currently supports CVD incidence rates only."
+    display as error "Briefing Step 2 does not yet support this routine briefing type."
     display as error "No approval record was created."
     exit 198
 }
@@ -289,10 +314,12 @@ local output_type ""
 local source_dataset_id ""
 local source_dataset_release ""
 local source_coverage_end ""
+local briefing_kind ""
 local released_datasets ""
 local released_figures ""
 local create_workbook ""
 local create_zip ""
+local list_zip ""
 local workbook_file ""
 
 tempname control_handle
@@ -317,6 +344,9 @@ while r(eof) == 0 {
     if strpos(`"`control_line'"', "source_coverage_end:") == 1 {
         local source_coverage_end = strtrim(substr(`"`control_line'"', 21, .))
     }
+    if strpos(`"`control_line'"', "briefing_kind:") == 1 {
+        local briefing_kind = strtrim(substr(`"`control_line'"', 16, .))
+    }
     if strpos(`"`control_line'"', "released_datasets:") == 1 {
         local released_datasets = strtrim(substr(`"`control_line'"', 19, .))
     }
@@ -328,6 +358,9 @@ while r(eof) == 0 {
     }
     if strpos(`"`control_line'"', "create_zip:") == 1 {
         local create_zip = strtrim(substr(`"`control_line'"', 12, .))
+    }
+    if strpos(`"`control_line'"', "list_zip:") == 1 {
+        local list_zip = strtrim(substr(`"`control_line'"', 10, .))
     }
     if strpos(`"`control_line'"', "workbook_file:") == 1 {
         local workbook_file = strtrim(substr(`"`control_line'"', 15, .))
@@ -350,8 +383,14 @@ if `"`control_briefing_id'"' != "`briefing_id'" {
     exit 459
 }
 
-if `"`output_type'"' == "" {
-    display as error "Briefing Step 2 stopped: output_type is missing."
+if `"`output_type'"' != "briefing" {
+    display as error "Briefing Step 2 stopped: output_type must be briefing."
+    exit 459
+}
+
+if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") & ///
+        `"`briefing_kind'"' != "ad_hoc" {
+    display as error "Briefing Step 2 stopped: briefing_kind must be ad_hoc."
     exit 459
 }
 
@@ -369,6 +408,16 @@ if !inlist("`create_workbook'", "0", "1") {
 
 if !inlist("`create_zip'", "0", "1") {
     display as error "Briefing Step 2 stopped: create_zip must be 0 or 1."
+    exit 459
+}
+
+if !inlist("`list_zip'", "0", "1") {
+    display as error "Briefing Step 2 stopped: list_zip must be 0 or 1."
+    exit 459
+}
+
+if "`create_zip'" != "1" | "`list_zip'" != "1" {
+    display as error "Briefing Step 2 stopped: public briefings require create_zip and list_zip set to 1."
     exit 459
 }
 
@@ -544,6 +593,9 @@ file write `approval_handle' "status: approved" _n
 file write `approval_handle' "package_type: briefing" _n
 file write `approval_handle' "package_id: `briefing_id'" _n
 file write `approval_handle' "output_type: `output_type'" _n
+if `"`briefing_kind'"' != "" {
+    file write `approval_handle' "briefing_kind: `briefing_kind'" _n
+}
 file write `approval_handle' "source_dataset_id: `source_dataset_id'" _n
 file write `approval_handle' "source_dataset_release: `source_dataset_release'" _n
 file write `approval_handle' "source_coverage_end: `source_coverage_end'" _n
