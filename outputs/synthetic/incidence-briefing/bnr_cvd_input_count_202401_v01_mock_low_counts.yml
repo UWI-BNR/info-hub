@@ -1,0 +1,25 @@
+dataset_id: bnr_cvd_input_count_202401_v01_mock_low_counts
+status: synthetic_test_data
+created: 2026-08-04
+release: 2024-01
+coverage_start: 2010
+coverage_end: 2023-12-31
+unit_of_analysis: one_synthetic_cvd_event
+records_total: 919
+expected_positive_numerator_flags_below_6: 18
+direct_identifiers_present: false
+synthetic: true
+publication_authorised: false
+warning: TEST DATA ONLY - NOT REAL BNR EVENTS
+variables:
+  - eid
+  - dco
+  - dco_alt
+  - etype
+  - doe
+  - yoe
+  - moe
+  - sex
+  - agey
+  - age5
+  - age70

@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.4.1, 3 August 2026
+*! version 1.4.2, 4 August 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -42,6 +42,15 @@ window menu append item "Briefing workflow" ///
     "Step 1: Build review package" ///
     "db bnr_step1_build_briefing"
 
+window menu append item "Briefing workflow" ///
+    "Step 2: Review and approve briefing" ///
+    "db bnr_step2_approve_briefing"
+
+window menu append item "Briefing workflow" ///
+    "Step 3: Publish approved briefing" ///
+    "db bnr_step3_publish_briefing"
+
 window menu refresh
 
 display as text "BNR menu loaded: User > BNR"
+

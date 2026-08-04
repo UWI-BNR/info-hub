@@ -1,0 +1,97 @@
+*! BNR Briefing Step 2: Review and approve a staged package
+*! version 1.0.1, 4 August 2026
+*! Thin interface to scripts/stata/briefings/bnr_step2_approve_briefing.do
+
+VERSION 19.0
+POSITION . . 540 680
+
+LIST briefing_types
+BEGIN
+CVD incidence rates
+CVD case-fatality
+CVD length of stay
+CVD mortality rates
+END
+
+LIST approver_roles
+BEGIN
+BNR Lead
+BNR Analyst
+BNR Developer
+END
+
+DIALOG main, label("BNR Briefing Step 2: Review and approve")
+BEGIN
+  TEXTBOX tx_intro 15 15 510 45, label("Record the completed human review of a private Step 1 package. This action creates an approval receipt and manifest; it does not publish files.")
+
+  GROUPBOX gb_briefing 15 72 510 58, label("Staged briefing")
+  TEXT tx_briefing 30 97 120 ., label("Briefing type:")
+  COMBOBOX cb_briefing 155 94 350 ., dropdownlist contents(briefing_types) nomemory
+
+  GROUPBOX gb_input 15 142 510 96, label("Dataset release and briefing version")
+  TEXT tx_year 30 169 105 ., label("Release year:")
+  SPINNER ed_year 140 166 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 245 169 115 ., label("Release month:")
+  SPINNER ed_month 365 166 60 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXT tx_version 30 205 120 ., label("Briefing version:")
+  SPINNER ed_version 155 202 70 ., default(1) min(1) max(99) nomemory error("Briefing version")
+
+  GROUPBOX gb_approver 15 250 510 88, label("Approver")
+  TEXT tx_name 30 276 115 ., label("Full name:")
+  EDIT ed_name 155 273 350 ., nomemory error("Approver name")
+  TEXT tx_role 30 307 115 ., label("Role:")
+  COMBOBOX cb_role 155 304 350 ., dropdownlist contents(approver_roles) nomemory
+
+  GROUPBOX gb_checks 15 350 510 190, label("Required review confirmations")
+  CHECKBOX ck_source 30 375 475 ., default(0) nomemory label("Correct source dataset, release and reporting period checked") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_results 30 405 475 ., default(0) nomemory label("Analysis, results, datasets, workbook and figures checked") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_disclosure 30 435 475 ., default(0) nomemory label("Manual disclosure review completed, including automated flags") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_labels 30 465 475 ., default(0) nomemory label("Titles, labels, metadata, notes and limitations checked") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_complete 30 495 475 ., default(0) nomemory label("Package is complete and ready for publication") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+
+  TEXTBOX tx_boundary 20 555 500 38, label("All five boxes are required. Corrections after approval require a new briefing version.")
+
+  BUTTON bt_approve 405 610 120 28, label("Approve") onpush(program approve_package)
+END
+
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step2_approve_briefing")
+RESET reset1
+
+
+* Check the five boxes whenever one of them is selected.
+* The Approve button is enabled only when every box is selected.
+PROGRAM check_approval_boxes
+BEGIN
+  if main.ck_source & main.ck_results & main.ck_disclosure & main.ck_labels & main.ck_complete {
+    call main.bt_approve.enable
+  }
+  if !(main.ck_source & main.ck_results & main.ck_disclosure & main.ck_labels & main.ck_complete) {
+    call main.bt_approve.disable
+  }
+END
+
+
+* Run the ordinary Step 2 controller when the enabled button is pressed.
+* The controller repeats all five checks and remains the final safeguard.
+PROGRAM approve_package
+BEGIN
+  require main.cb_briefing
+  require main.ed_name
+  require main.cb_role
+  put "do $BNR_STATA/briefings/bnr_step2_approve_briefing.do "
+  put /smartquote main.cb_briefing
+  put " "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  put " "
+  put main.ed_version
+  put " "
+  put /smartquote main.ed_name
+  put " "
+  put /smartquote main.cb_role
+  put " source results disclosure labels complete"
+  stata
+  close
+END
