@@ -10,7 +10,7 @@ period: 2023
 target_year: 2023
 baseline_start: 2010
 baseline_end: 2022
-release_date: 2026-05-15
+release_date: 2026-08-03
 analysis_script: scripts/stata/briefings/cvd_incidence_2023/cvd_incidence_2023.do
 
 title: |-

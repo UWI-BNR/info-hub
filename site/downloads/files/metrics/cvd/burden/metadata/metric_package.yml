@@ -4,7 +4,7 @@ package_status: public_ready
 release_id: cvd_2024_02
 domain: cvd
 metric_family: burden
-created: 2026-07-30
+created: 2026-08-01
 review_standard: bnr_metric_review_v1
 disclosure_policy: bnr_sdc_v1
 dashboard_suppression_field: suppression_status

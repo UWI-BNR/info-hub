@@ -7,7 +7,7 @@ Surveillance area: CVD
 Registry: BNR-CVD
 Geography: Barbados
 Period: 2023
-Release date: 2026-05-15
+Release date: 2026-08-03
 
 Description:
 Public aggregate output package for the BNR CVD incidence briefing.
