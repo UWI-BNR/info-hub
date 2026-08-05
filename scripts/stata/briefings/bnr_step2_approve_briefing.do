@@ -176,6 +176,9 @@ local target_year = `release_year' - 1
 if inlist(`"`selected_type'"', "cvd incidence rates", "incidence") {
     local briefing_id "cvd_incidence_`target_year'_v`briefing_version'"
 }
+else if inlist(`"`selected_type'"', "cvd case-fatality", "case_fatality") {
+    local briefing_id "cvd_case_fatality_`target_year'_v`briefing_version'"
+}
 else if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") {
     local briefing_id = strtrim(`"`ad_hoc_briefing_id'"')
 

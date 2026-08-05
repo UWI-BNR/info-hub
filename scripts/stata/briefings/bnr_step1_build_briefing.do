@@ -42,17 +42,9 @@ if inlist("`selected'", "cvd incidence rates", "incidence") {
 }
 
 if inlist("`selected'", "cvd case-fatality", "case_fatality") {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STEP 1 STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Briefing: CVD case-fatality" _n ///
-        as text "  Reason: this briefing has not yet been migrated." _n ///
-        as text "  Files created: No" _n ///
-        as error "------------------------------------------------------------" _n
-    }
-    exit 198
+    do "$BNR_STATA/briefings/cvd_case_fatality/cvd_case_fatality.do" ///
+        `release_year' `release_month' `briefing_version' `replace_option'
+    exit
 }
 
 if inlist("`selected'", "cvd length of stay", "length_of_stay") {
