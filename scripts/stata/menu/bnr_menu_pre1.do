@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.5.0, 5 August 2026
+*! version 1.4.2, 4 August 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -52,10 +52,6 @@ window menu append item "Produce briefing" ///
 
 window menu append submenu "BNR" "Produce tables"
 
-window menu append item "Produce tables" ///
-    "Step 1: Build private table package" ///
-    "db bnr_step1_cvd_tables"
-
 window menu append submenu "BNR" "BNR utilities"
 
 window menu append submenu "BNR utilities" "Create metadata for dta"
@@ -67,3 +63,4 @@ window menu append submenu "BNR utilities" "Check latest data release"
 window menu refresh
 
 display as text "BNR menu loaded: User > BNR"
+

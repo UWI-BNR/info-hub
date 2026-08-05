@@ -1,0 +1,44 @@
+*! BNR Tables Step 1: Build private CVD table package
+*! version 1.0.0, 5 August 2026
+*! Thin interface to scripts/stata/tables/bnr_step1_cvd_tables.do
+
+VERSION 19.0
+POSITION . . 520 395
+
+DIALOG main, label("BNR Tables Step 1: Build private table package")
+BEGIN
+  TEXTBOX tx_intro 15 15 490 52, label("Calculate the seven CVD table datasets and create a private, unsuppressed staging package for review. This action does not suppress, approve, or publish tables.")
+
+  GROUPBOX gb_release 15 82 490 104, label("Completed Step 3 release")
+  TEXT tx_year 30 110 105 ., label("Release year:")
+  SPINNER ed_year 140 107 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 255 110 110 ., label("Release month:")
+  SPINNER ed_month 375 107 65 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXT tx_version 30 148 135 ., label("Input version:")
+  SPINNER ed_version 170 145 70 ., default(1) min(1) max(99) nomemory error("Input version")
+  TEXTBOX tx_release_note 255 140 230 34, label("Use the version number shown in the Step 3 all_variables filename.")
+
+  GROUPBOX gb_output 15 201 490 95, label("Private staging output")
+  TEXTBOX tx_output_note 30 226 455 31, label("The current year is retained as year-to-date. Completed-period rules are applied automatically to incidence and case-fatality.")
+  CHECKBOX ck_replace 30 267 455 ., default(0) nomemory label("Authorise replacement of this existing private staging package")
+
+  TEXTBOX tx_boundary 20 312 480 35, label("Exact values remain private. Table Step 2 must complete disclosure review and approval before any publication action.")
+END
+
+OK ok1, label("Build Step 1 package")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step1_cvd_tables")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/tables/bnr_step1_cvd_tables.do "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  put " "
+  put main.ed_version
+  if main.ck_replace {
+    put " replace"
+  }
+END
