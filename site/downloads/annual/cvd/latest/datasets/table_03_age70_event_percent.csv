@@ -1,0 +1,17 @@
+period,period_group,period_start_year,period_end_year,months_covered,etype,event_group,sex,sex_group,age70,age_group,percentage,display_percent,suppression_status,coverage_end
+Current year to date,Current year to date,2024,2024,1,Stroke,Stroke,Female,Female,Under 70 years,Under 70,53.84615384615385,53.8,none,2024-01-31
+Current year to date,Current year to date,2024,2024,1,Stroke,Stroke,Female,Female,70 years and older,70 and over,46.15384615384615,46.2,none,2024-01-31
+Current year to date,Current year to date,2024,2024,1,Stroke,Stroke,Male,Male,Under 70 years,Under 70,57.14285714285714,57.1,none,2024-01-31
+Current year to date,Current year to date,2024,2024,1,Stroke,Stroke,Male,Male,70 years and older,70 and over,42.85714285714285,42.9,none,2024-01-31
+Current year to date,Current year to date,2024,2024,1,AMI,AMI,Female,Female,Under 70 years,Under 70,,Suppressed,primary,2024-01-31
+Current year to date,Current year to date,2024,2024,1,AMI,AMI,Female,Female,70 years and older,70 and over,,Suppressed,primary,2024-01-31
+Current year to date,Current year to date,2024,2024,1,AMI,AMI,Male,Male,Under 70 years,Under 70,,Suppressed,secondary,2024-01-31
+Current year to date,Current year to date,2024,2024,1,AMI,AMI,Male,Male,70 years and older,70 and over,,Suppressed,primary,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,Stroke,Stroke,Female,Female,Under 70 years,Under 70,30.43478260869566,30.4,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,Stroke,Stroke,Female,Female,70 years and older,70 and over,69.56521739130434,69.6,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,Stroke,Stroke,Male,Male,Under 70 years,Under 70,46.36871508379888,46.4,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,Stroke,Stroke,Male,Male,70 years and older,70 and over,53.63128491620112,53.6,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,AMI,AMI,Female,Female,Under 70 years,Under 70,25.83333333333334,25.8,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,AMI,AMI,Female,Female,70 years and older,70 and over,74.16666666666667,74.2,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,AMI,AMI,Male,Male,Under 70 years,Under 70,49.62962962962963,49.6,none,2024-01-31
+Preceding five-year comparison,Preceding five-year comparison,2019,2023,1,AMI,AMI,Male,Male,70 years and older,70 and over,50.37037037037037,50.4,none,2024-01-31

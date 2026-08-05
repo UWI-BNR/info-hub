@@ -1,0 +1,541 @@
+year,month,etype,event_group,event_count,display_count,suppression_status,cell_available,period_status,coverage_end
+2010,1,Stroke,Stroke,51,51,none,1,complete,2024-01-31
+2010,1,AMI,AMI,36,36,none,1,complete,2024-01-31
+2010,1,All CVD,All CVD,87,87,none,1,complete,2024-01-31
+2010,2,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2010,2,AMI,AMI,21,21,none,1,complete,2024-01-31
+2010,2,All CVD,All CVD,76,76,none,1,complete,2024-01-31
+2010,3,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2010,3,AMI,AMI,26,26,none,1,complete,2024-01-31
+2010,3,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2010,4,Stroke,Stroke,31,31,none,1,complete,2024-01-31
+2010,4,AMI,AMI,30,30,none,1,complete,2024-01-31
+2010,4,All CVD,All CVD,61,61,none,1,complete,2024-01-31
+2010,5,Stroke,Stroke,57,57,none,1,complete,2024-01-31
+2010,5,AMI,AMI,22,22,none,1,complete,2024-01-31
+2010,5,All CVD,All CVD,79,79,none,1,complete,2024-01-31
+2010,6,Stroke,Stroke,42,42,none,1,complete,2024-01-31
+2010,6,AMI,AMI,23,23,none,1,complete,2024-01-31
+2010,6,All CVD,All CVD,65,65,none,1,complete,2024-01-31
+2010,7,Stroke,Stroke,43,43,none,1,complete,2024-01-31
+2010,7,AMI,AMI,27,27,none,1,complete,2024-01-31
+2010,7,All CVD,All CVD,70,70,none,1,complete,2024-01-31
+2010,8,Stroke,Stroke,52,52,none,1,complete,2024-01-31
+2010,8,AMI,AMI,25,25,none,1,complete,2024-01-31
+2010,8,All CVD,All CVD,77,77,none,1,complete,2024-01-31
+2010,9,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2010,9,AMI,AMI,35,35,none,1,complete,2024-01-31
+2010,9,All CVD,All CVD,82,82,none,1,complete,2024-01-31
+2010,10,Stroke,Stroke,44,44,none,1,complete,2024-01-31
+2010,10,AMI,AMI,27,27,none,1,complete,2024-01-31
+2010,10,All CVD,All CVD,71,71,none,1,complete,2024-01-31
+2010,11,Stroke,Stroke,44,44,none,1,complete,2024-01-31
+2010,11,AMI,AMI,41,41,none,1,complete,2024-01-31
+2010,11,All CVD,All CVD,85,85,none,1,complete,2024-01-31
+2010,12,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2010,12,AMI,AMI,31,31,none,1,complete,2024-01-31
+2010,12,All CVD,All CVD,91,91,none,1,complete,2024-01-31
+2011,1,Stroke,Stroke,43,43,none,1,complete,2024-01-31
+2011,1,AMI,AMI,25,25,none,1,complete,2024-01-31
+2011,1,All CVD,All CVD,68,68,none,1,complete,2024-01-31
+2011,2,Stroke,Stroke,40,40,none,1,complete,2024-01-31
+2011,2,AMI,AMI,14,14,none,1,complete,2024-01-31
+2011,2,All CVD,All CVD,54,54,none,1,complete,2024-01-31
+2011,3,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2011,3,AMI,AMI,24,24,none,1,complete,2024-01-31
+2011,3,All CVD,All CVD,77,77,none,1,complete,2024-01-31
+2011,4,Stroke,Stroke,57,57,none,1,complete,2024-01-31
+2011,4,AMI,AMI,24,24,none,1,complete,2024-01-31
+2011,4,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2011,5,Stroke,Stroke,46,46,none,1,complete,2024-01-31
+2011,5,AMI,AMI,36,36,none,1,complete,2024-01-31
+2011,5,All CVD,All CVD,82,82,none,1,complete,2024-01-31
+2011,6,Stroke,Stroke,33,33,none,1,complete,2024-01-31
+2011,6,AMI,AMI,21,21,none,1,complete,2024-01-31
+2011,6,All CVD,All CVD,54,54,none,1,complete,2024-01-31
+2011,7,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2011,7,AMI,AMI,29,29,none,1,complete,2024-01-31
+2011,7,All CVD,All CVD,76,76,none,1,complete,2024-01-31
+2011,8,Stroke,Stroke,44,44,none,1,complete,2024-01-31
+2011,8,AMI,AMI,29,29,none,1,complete,2024-01-31
+2011,8,All CVD,All CVD,73,73,none,1,complete,2024-01-31
+2011,9,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2011,9,AMI,AMI,18,18,none,1,complete,2024-01-31
+2011,9,All CVD,All CVD,71,71,none,1,complete,2024-01-31
+2011,10,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2011,10,AMI,AMI,26,26,none,1,complete,2024-01-31
+2011,10,All CVD,All CVD,82,82,none,1,complete,2024-01-31
+2011,11,Stroke,Stroke,44,44,none,1,complete,2024-01-31
+2011,11,AMI,AMI,22,22,none,1,complete,2024-01-31
+2011,11,All CVD,All CVD,66,66,none,1,complete,2024-01-31
+2011,12,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2011,12,AMI,AMI,26,26,none,1,complete,2024-01-31
+2011,12,All CVD,All CVD,73,73,none,1,complete,2024-01-31
+2012,1,Stroke,Stroke,52,52,none,1,complete,2024-01-31
+2012,1,AMI,AMI,37,37,none,1,complete,2024-01-31
+2012,1,All CVD,All CVD,89,89,none,1,complete,2024-01-31
+2012,2,Stroke,Stroke,42,42,none,1,complete,2024-01-31
+2012,2,AMI,AMI,31,31,none,1,complete,2024-01-31
+2012,2,All CVD,All CVD,73,73,none,1,complete,2024-01-31
+2012,3,Stroke,Stroke,46,46,none,1,complete,2024-01-31
+2012,3,AMI,AMI,32,32,none,1,complete,2024-01-31
+2012,3,All CVD,All CVD,78,78,none,1,complete,2024-01-31
+2012,4,Stroke,Stroke,49,49,none,1,complete,2024-01-31
+2012,4,AMI,AMI,37,37,none,1,complete,2024-01-31
+2012,4,All CVD,All CVD,86,86,none,1,complete,2024-01-31
+2012,5,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2012,5,AMI,AMI,39,39,none,1,complete,2024-01-31
+2012,5,All CVD,All CVD,97,97,none,1,complete,2024-01-31
+2012,6,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2012,6,AMI,AMI,21,21,none,1,complete,2024-01-31
+2012,6,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2012,7,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2012,7,AMI,AMI,29,29,none,1,complete,2024-01-31
+2012,7,All CVD,All CVD,76,76,none,1,complete,2024-01-31
+2012,8,Stroke,Stroke,62,62,none,1,complete,2024-01-31
+2012,8,AMI,AMI,38,38,none,1,complete,2024-01-31
+2012,8,All CVD,All CVD,100,100,none,1,complete,2024-01-31
+2012,9,Stroke,Stroke,42,42,none,1,complete,2024-01-31
+2012,9,AMI,AMI,36,36,none,1,complete,2024-01-31
+2012,9,All CVD,All CVD,78,78,none,1,complete,2024-01-31
+2012,10,Stroke,Stroke,48,48,none,1,complete,2024-01-31
+2012,10,AMI,AMI,30,30,none,1,complete,2024-01-31
+2012,10,All CVD,All CVD,78,78,none,1,complete,2024-01-31
+2012,11,Stroke,Stroke,31,31,none,1,complete,2024-01-31
+2012,11,AMI,AMI,31,31,none,1,complete,2024-01-31
+2012,11,All CVD,All CVD,62,62,none,1,complete,2024-01-31
+2012,12,Stroke,Stroke,41,41,none,1,complete,2024-01-31
+2012,12,AMI,AMI,43,43,none,1,complete,2024-01-31
+2012,12,All CVD,All CVD,84,84,none,1,complete,2024-01-31
+2013,1,Stroke,Stroke,73,73,none,1,complete,2024-01-31
+2013,1,AMI,AMI,36,36,none,1,complete,2024-01-31
+2013,1,All CVD,All CVD,109,109,none,1,complete,2024-01-31
+2013,2,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2013,2,AMI,AMI,34,34,none,1,complete,2024-01-31
+2013,2,All CVD,All CVD,89,89,none,1,complete,2024-01-31
+2013,3,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2013,3,AMI,AMI,32,32,none,1,complete,2024-01-31
+2013,3,All CVD,All CVD,90,90,none,1,complete,2024-01-31
+2013,4,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2013,4,AMI,AMI,26,26,none,1,complete,2024-01-31
+2013,4,All CVD,All CVD,76,76,none,1,complete,2024-01-31
+2013,5,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2013,5,AMI,AMI,30,30,none,1,complete,2024-01-31
+2013,5,All CVD,All CVD,77,77,none,1,complete,2024-01-31
+2013,6,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2013,6,AMI,AMI,24,24,none,1,complete,2024-01-31
+2013,6,All CVD,All CVD,79,79,none,1,complete,2024-01-31
+2013,7,Stroke,Stroke,72,72,none,1,complete,2024-01-31
+2013,7,AMI,AMI,33,33,none,1,complete,2024-01-31
+2013,7,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2013,8,Stroke,Stroke,54,54,none,1,complete,2024-01-31
+2013,8,AMI,AMI,32,32,none,1,complete,2024-01-31
+2013,8,All CVD,All CVD,86,86,none,1,complete,2024-01-31
+2013,9,Stroke,Stroke,51,51,none,1,complete,2024-01-31
+2013,9,AMI,AMI,18,18,none,1,complete,2024-01-31
+2013,9,All CVD,All CVD,69,69,none,1,complete,2024-01-31
+2013,10,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2013,10,AMI,AMI,33,33,none,1,complete,2024-01-31
+2013,10,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2013,11,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2013,11,AMI,AMI,28,28,none,1,complete,2024-01-31
+2013,11,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2013,12,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2013,12,AMI,AMI,26,26,none,1,complete,2024-01-31
+2013,12,All CVD,All CVD,92,92,none,1,complete,2024-01-31
+2014,1,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2014,1,AMI,AMI,38,38,none,1,complete,2024-01-31
+2014,1,All CVD,All CVD,85,85,none,1,complete,2024-01-31
+2014,2,Stroke,Stroke,36,36,none,1,complete,2024-01-31
+2014,2,AMI,AMI,27,27,none,1,complete,2024-01-31
+2014,2,All CVD,All CVD,63,63,none,1,complete,2024-01-31
+2014,3,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2014,3,AMI,AMI,39,39,none,1,complete,2024-01-31
+2014,3,All CVD,All CVD,86,86,none,1,complete,2024-01-31
+2014,4,Stroke,Stroke,54,54,none,1,complete,2024-01-31
+2014,4,AMI,AMI,26,26,none,1,complete,2024-01-31
+2014,4,All CVD,All CVD,80,80,none,1,complete,2024-01-31
+2014,5,Stroke,Stroke,37,37,none,1,complete,2024-01-31
+2014,5,AMI,AMI,33,33,none,1,complete,2024-01-31
+2014,5,All CVD,All CVD,70,70,none,1,complete,2024-01-31
+2014,6,Stroke,Stroke,44,44,none,1,complete,2024-01-31
+2014,6,AMI,AMI,23,23,none,1,complete,2024-01-31
+2014,6,All CVD,All CVD,67,67,none,1,complete,2024-01-31
+2014,7,Stroke,Stroke,45,45,none,1,complete,2024-01-31
+2014,7,AMI,AMI,36,36,none,1,complete,2024-01-31
+2014,7,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2014,8,Stroke,Stroke,48,48,none,1,complete,2024-01-31
+2014,8,AMI,AMI,36,36,none,1,complete,2024-01-31
+2014,8,All CVD,All CVD,84,84,none,1,complete,2024-01-31
+2014,9,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2014,9,AMI,AMI,35,35,none,1,complete,2024-01-31
+2014,9,All CVD,All CVD,91,91,none,1,complete,2024-01-31
+2014,10,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2014,10,AMI,AMI,38,38,none,1,complete,2024-01-31
+2014,10,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2014,11,Stroke,Stroke,41,41,none,1,complete,2024-01-31
+2014,11,AMI,AMI,34,34,none,1,complete,2024-01-31
+2014,11,All CVD,All CVD,75,75,none,1,complete,2024-01-31
+2014,12,Stroke,Stroke,61,61,none,1,complete,2024-01-31
+2014,12,AMI,AMI,45,45,none,1,complete,2024-01-31
+2014,12,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2015,1,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2015,1,AMI,AMI,41,41,none,1,complete,2024-01-31
+2015,1,All CVD,All CVD,107,107,none,1,complete,2024-01-31
+2015,2,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2015,2,AMI,AMI,33,33,none,1,complete,2024-01-31
+2015,2,All CVD,All CVD,98,98,none,1,complete,2024-01-31
+2015,3,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2015,3,AMI,AMI,35,35,none,1,complete,2024-01-31
+2015,3,All CVD,All CVD,88,88,none,1,complete,2024-01-31
+2015,4,Stroke,Stroke,42,42,none,1,complete,2024-01-31
+2015,4,AMI,AMI,26,26,none,1,complete,2024-01-31
+2015,4,All CVD,All CVD,68,68,none,1,complete,2024-01-31
+2015,5,Stroke,Stroke,39,39,none,1,complete,2024-01-31
+2015,5,AMI,AMI,17,17,none,1,complete,2024-01-31
+2015,5,All CVD,All CVD,56,56,none,1,complete,2024-01-31
+2015,6,Stroke,Stroke,33,33,none,1,complete,2024-01-31
+2015,6,AMI,AMI,16,16,none,1,complete,2024-01-31
+2015,6,All CVD,All CVD,49,49,none,1,complete,2024-01-31
+2015,7,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2015,7,AMI,AMI,18,18,none,1,complete,2024-01-31
+2015,7,All CVD,All CVD,65,65,none,1,complete,2024-01-31
+2015,8,Stroke,Stroke,35,35,none,1,complete,2024-01-31
+2015,8,AMI,AMI,19,19,none,1,complete,2024-01-31
+2015,8,All CVD,All CVD,54,54,none,1,complete,2024-01-31
+2015,9,Stroke,Stroke,39,39,none,1,complete,2024-01-31
+2015,9,AMI,AMI,20,20,none,1,complete,2024-01-31
+2015,9,All CVD,All CVD,59,59,none,1,complete,2024-01-31
+2015,10,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2015,10,AMI,AMI,38,38,none,1,complete,2024-01-31
+2015,10,All CVD,All CVD,88,88,none,1,complete,2024-01-31
+2015,11,Stroke,Stroke,70,70,none,1,complete,2024-01-31
+2015,11,AMI,AMI,34,34,none,1,complete,2024-01-31
+2015,11,All CVD,All CVD,104,104,none,1,complete,2024-01-31
+2015,12,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2015,12,AMI,AMI,29,29,none,1,complete,2024-01-31
+2015,12,All CVD,All CVD,76,76,none,1,complete,2024-01-31
+2016,1,Stroke,Stroke,81,81,none,1,complete,2024-01-31
+2016,1,AMI,AMI,37,37,none,1,complete,2024-01-31
+2016,1,All CVD,All CVD,118,118,none,1,complete,2024-01-31
+2016,2,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2016,2,AMI,AMI,27,27,none,1,complete,2024-01-31
+2016,2,All CVD,All CVD,83,83,none,1,complete,2024-01-31
+2016,3,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2016,3,AMI,AMI,27,27,none,1,complete,2024-01-31
+2016,3,All CVD,All CVD,86,86,none,1,complete,2024-01-31
+2016,4,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2016,4,AMI,AMI,39,39,none,1,complete,2024-01-31
+2016,4,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2016,5,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2016,5,AMI,AMI,45,45,none,1,complete,2024-01-31
+2016,5,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2016,6,Stroke,Stroke,45,45,none,1,complete,2024-01-31
+2016,6,AMI,AMI,36,36,none,1,complete,2024-01-31
+2016,6,All CVD,All CVD,81,81,none,1,complete,2024-01-31
+2016,7,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2016,7,AMI,AMI,36,36,none,1,complete,2024-01-31
+2016,7,All CVD,All CVD,92,92,none,1,complete,2024-01-31
+2016,8,Stroke,Stroke,67,67,none,1,complete,2024-01-31
+2016,8,AMI,AMI,44,44,none,1,complete,2024-01-31
+2016,8,All CVD,All CVD,111,111,none,1,complete,2024-01-31
+2016,9,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2016,9,AMI,AMI,30,30,none,1,complete,2024-01-31
+2016,9,All CVD,All CVD,98,98,none,1,complete,2024-01-31
+2016,10,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2016,10,AMI,AMI,40,40,none,1,complete,2024-01-31
+2016,10,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2016,11,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2016,11,AMI,AMI,35,35,none,1,complete,2024-01-31
+2016,11,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2016,12,Stroke,Stroke,61,61,none,1,complete,2024-01-31
+2016,12,AMI,AMI,43,43,none,1,complete,2024-01-31
+2016,12,All CVD,All CVD,104,104,none,1,complete,2024-01-31
+2017,1,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2017,1,AMI,AMI,47,47,none,1,complete,2024-01-31
+2017,1,All CVD,All CVD,107,107,none,1,complete,2024-01-31
+2017,2,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2017,2,AMI,AMI,33,33,none,1,complete,2024-01-31
+2017,2,All CVD,All CVD,89,89,none,1,complete,2024-01-31
+2017,3,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2017,3,AMI,AMI,34,34,none,1,complete,2024-01-31
+2017,3,All CVD,All CVD,100,100,none,1,complete,2024-01-31
+2017,4,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2017,4,AMI,AMI,34,34,none,1,complete,2024-01-31
+2017,4,All CVD,All CVD,87,87,none,1,complete,2024-01-31
+2017,5,Stroke,Stroke,46,46,none,1,complete,2024-01-31
+2017,5,AMI,AMI,47,47,none,1,complete,2024-01-31
+2017,5,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2017,6,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2017,6,AMI,AMI,32,32,none,1,complete,2024-01-31
+2017,6,All CVD,All CVD,97,97,none,1,complete,2024-01-31
+2017,7,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2017,7,AMI,AMI,39,39,none,1,complete,2024-01-31
+2017,7,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2017,8,Stroke,Stroke,46,46,none,1,complete,2024-01-31
+2017,8,AMI,AMI,41,41,none,1,complete,2024-01-31
+2017,8,All CVD,All CVD,87,87,none,1,complete,2024-01-31
+2017,9,Stroke,Stroke,48,48,none,1,complete,2024-01-31
+2017,9,AMI,AMI,34,34,none,1,complete,2024-01-31
+2017,9,All CVD,All CVD,82,82,none,1,complete,2024-01-31
+2017,10,Stroke,Stroke,45,45,none,1,complete,2024-01-31
+2017,10,AMI,AMI,47,47,none,1,complete,2024-01-31
+2017,10,All CVD,All CVD,92,92,none,1,complete,2024-01-31
+2017,11,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2017,11,AMI,AMI,40,40,none,1,complete,2024-01-31
+2017,11,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2017,12,Stroke,Stroke,54,54,none,1,complete,2024-01-31
+2017,12,AMI,AMI,39,39,none,1,complete,2024-01-31
+2017,12,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2018,1,Stroke,Stroke,69,69,none,1,complete,2024-01-31
+2018,1,AMI,AMI,36,36,none,1,complete,2024-01-31
+2018,1,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2018,2,Stroke,Stroke,67,67,none,1,complete,2024-01-31
+2018,2,AMI,AMI,44,44,none,1,complete,2024-01-31
+2018,2,All CVD,All CVD,111,111,none,1,complete,2024-01-31
+2018,3,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2018,3,AMI,AMI,48,48,none,1,complete,2024-01-31
+2018,3,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2018,4,Stroke,Stroke,63,63,none,1,complete,2024-01-31
+2018,4,AMI,AMI,52,52,none,1,complete,2024-01-31
+2018,4,All CVD,All CVD,115,115,none,1,complete,2024-01-31
+2018,5,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2018,5,AMI,AMI,42,42,none,1,complete,2024-01-31
+2018,5,All CVD,All CVD,101,101,none,1,complete,2024-01-31
+2018,6,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2018,6,AMI,AMI,43,43,none,1,complete,2024-01-31
+2018,6,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2018,7,Stroke,Stroke,47,47,none,1,complete,2024-01-31
+2018,7,AMI,AMI,41,41,none,1,complete,2024-01-31
+2018,7,All CVD,All CVD,88,88,none,1,complete,2024-01-31
+2018,8,Stroke,Stroke,57,57,none,1,complete,2024-01-31
+2018,8,AMI,AMI,30,30,none,1,complete,2024-01-31
+2018,8,All CVD,All CVD,87,87,none,1,complete,2024-01-31
+2018,9,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2018,9,AMI,AMI,24,24,none,1,complete,2024-01-31
+2018,9,All CVD,All CVD,83,83,none,1,complete,2024-01-31
+2018,10,Stroke,Stroke,40,40,none,1,complete,2024-01-31
+2018,10,AMI,AMI,50,50,none,1,complete,2024-01-31
+2018,10,All CVD,All CVD,90,90,none,1,complete,2024-01-31
+2018,11,Stroke,Stroke,54,54,none,1,complete,2024-01-31
+2018,11,AMI,AMI,52,52,none,1,complete,2024-01-31
+2018,11,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2018,12,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2018,12,AMI,AMI,21,21,none,1,complete,2024-01-31
+2018,12,All CVD,All CVD,80,80,none,1,complete,2024-01-31
+2019,1,Stroke,Stroke,85,85,none,1,complete,2024-01-31
+2019,1,AMI,AMI,58,58,none,1,complete,2024-01-31
+2019,1,All CVD,All CVD,143,143,none,1,complete,2024-01-31
+2019,2,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2019,2,AMI,AMI,41,41,none,1,complete,2024-01-31
+2019,2,All CVD,All CVD,109,109,none,1,complete,2024-01-31
+2019,3,Stroke,Stroke,75,75,none,1,complete,2024-01-31
+2019,3,AMI,AMI,39,39,none,1,complete,2024-01-31
+2019,3,All CVD,All CVD,114,114,none,1,complete,2024-01-31
+2019,4,Stroke,Stroke,61,61,none,1,complete,2024-01-31
+2019,4,AMI,AMI,44,44,none,1,complete,2024-01-31
+2019,4,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2019,5,Stroke,Stroke,70,70,none,1,complete,2024-01-31
+2019,5,AMI,AMI,55,55,none,1,complete,2024-01-31
+2019,5,All CVD,All CVD,125,125,none,1,complete,2024-01-31
+2019,6,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2019,6,AMI,AMI,40,40,none,1,complete,2024-01-31
+2019,6,All CVD,All CVD,108,108,none,1,complete,2024-01-31
+2019,7,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2019,7,AMI,AMI,42,42,none,1,complete,2024-01-31
+2019,7,All CVD,All CVD,92,92,none,1,complete,2024-01-31
+2019,8,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2019,8,AMI,AMI,34,34,none,1,complete,2024-01-31
+2019,8,All CVD,All CVD,102,102,none,1,complete,2024-01-31
+2019,9,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2019,9,AMI,AMI,66,66,none,1,complete,2024-01-31
+2019,9,All CVD,All CVD,126,126,none,1,complete,2024-01-31
+2019,10,Stroke,Stroke,54,54,none,1,complete,2024-01-31
+2019,10,AMI,AMI,36,36,none,1,complete,2024-01-31
+2019,10,All CVD,All CVD,90,90,none,1,complete,2024-01-31
+2019,11,Stroke,Stroke,51,51,none,1,complete,2024-01-31
+2019,11,AMI,AMI,42,42,none,1,complete,2024-01-31
+2019,11,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2019,12,Stroke,Stroke,48,48,none,1,complete,2024-01-31
+2019,12,AMI,AMI,50,50,none,1,complete,2024-01-31
+2019,12,All CVD,All CVD,98,98,none,1,complete,2024-01-31
+2020,1,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2020,1,AMI,AMI,50,50,none,1,complete,2024-01-31
+2020,1,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2020,2,Stroke,Stroke,72,72,none,1,complete,2024-01-31
+2020,2,AMI,AMI,67,67,none,1,complete,2024-01-31
+2020,2,All CVD,All CVD,139,139,none,1,complete,2024-01-31
+2020,3,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2020,3,AMI,AMI,45,45,none,1,complete,2024-01-31
+2020,3,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2020,4,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2020,4,AMI,AMI,47,47,none,1,complete,2024-01-31
+2020,4,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2020,5,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2020,5,AMI,AMI,46,46,none,1,complete,2024-01-31
+2020,5,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2020,6,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2020,6,AMI,AMI,43,43,none,1,complete,2024-01-31
+2020,6,All CVD,All CVD,93,93,none,1,complete,2024-01-31
+2020,7,Stroke,Stroke,56,56,none,1,complete,2024-01-31
+2020,7,AMI,AMI,53,53,none,1,complete,2024-01-31
+2020,7,All CVD,All CVD,109,109,none,1,complete,2024-01-31
+2020,8,Stroke,Stroke,70,70,none,1,complete,2024-01-31
+2020,8,AMI,AMI,38,38,none,1,complete,2024-01-31
+2020,8,All CVD,All CVD,108,108,none,1,complete,2024-01-31
+2020,9,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2020,9,AMI,AMI,40,40,none,1,complete,2024-01-31
+2020,9,All CVD,All CVD,100,100,none,1,complete,2024-01-31
+2020,10,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2020,10,AMI,AMI,38,38,none,1,complete,2024-01-31
+2020,10,All CVD,All CVD,88,88,none,1,complete,2024-01-31
+2020,11,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2020,11,AMI,AMI,40,40,none,1,complete,2024-01-31
+2020,11,All CVD,All CVD,95,95,none,1,complete,2024-01-31
+2020,12,Stroke,Stroke,62,62,none,1,complete,2024-01-31
+2020,12,AMI,AMI,40,40,none,1,complete,2024-01-31
+2020,12,All CVD,All CVD,102,102,none,1,complete,2024-01-31
+2021,1,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2021,1,AMI,AMI,43,43,none,1,complete,2024-01-31
+2021,1,All CVD,All CVD,101,101,none,1,complete,2024-01-31
+2021,2,Stroke,Stroke,60,60,none,1,complete,2024-01-31
+2021,2,AMI,AMI,37,37,none,1,complete,2024-01-31
+2021,2,All CVD,All CVD,97,97,none,1,complete,2024-01-31
+2021,3,Stroke,Stroke,50,50,none,1,complete,2024-01-31
+2021,3,AMI,AMI,29,29,none,1,complete,2024-01-31
+2021,3,All CVD,All CVD,79,79,none,1,complete,2024-01-31
+2021,4,Stroke,Stroke,37,37,none,1,complete,2024-01-31
+2021,4,AMI,AMI,37,37,none,1,complete,2024-01-31
+2021,4,All CVD,All CVD,74,74,none,1,complete,2024-01-31
+2021,5,Stroke,Stroke,67,67,none,1,complete,2024-01-31
+2021,5,AMI,AMI,33,33,none,1,complete,2024-01-31
+2021,5,All CVD,All CVD,100,100,none,1,complete,2024-01-31
+2021,6,Stroke,Stroke,40,40,none,1,complete,2024-01-31
+2021,6,AMI,AMI,22,22,none,1,complete,2024-01-31
+2021,6,All CVD,All CVD,62,62,none,1,complete,2024-01-31
+2021,7,Stroke,Stroke,77,77,none,1,complete,2024-01-31
+2021,7,AMI,AMI,55,55,none,1,complete,2024-01-31
+2021,7,All CVD,All CVD,132,132,none,1,complete,2024-01-31
+2021,8,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2021,8,AMI,AMI,46,46,none,1,complete,2024-01-31
+2021,8,All CVD,All CVD,114,114,none,1,complete,2024-01-31
+2021,9,Stroke,Stroke,62,62,none,1,complete,2024-01-31
+2021,9,AMI,AMI,54,54,none,1,complete,2024-01-31
+2021,9,All CVD,All CVD,116,116,none,1,complete,2024-01-31
+2021,10,Stroke,Stroke,59,59,none,1,complete,2024-01-31
+2021,10,AMI,AMI,44,44,none,1,complete,2024-01-31
+2021,10,All CVD,All CVD,103,103,none,1,complete,2024-01-31
+2021,11,Stroke,Stroke,58,58,none,1,complete,2024-01-31
+2021,11,AMI,AMI,39,39,none,1,complete,2024-01-31
+2021,11,All CVD,All CVD,97,97,none,1,complete,2024-01-31
+2021,12,Stroke,Stroke,55,55,none,1,complete,2024-01-31
+2021,12,AMI,AMI,28,28,none,1,complete,2024-01-31
+2021,12,All CVD,All CVD,83,83,none,1,complete,2024-01-31
+2022,1,Stroke,Stroke,78,78,none,1,complete,2024-01-31
+2022,1,AMI,AMI,48,48,none,1,complete,2024-01-31
+2022,1,All CVD,All CVD,126,126,none,1,complete,2024-01-31
+2022,2,Stroke,Stroke,81,81,none,1,complete,2024-01-31
+2022,2,AMI,AMI,61,61,none,1,complete,2024-01-31
+2022,2,All CVD,All CVD,142,142,none,1,complete,2024-01-31
+2022,3,Stroke,Stroke,53,53,none,1,complete,2024-01-31
+2022,3,AMI,AMI,53,53,none,1,complete,2024-01-31
+2022,3,All CVD,All CVD,106,106,none,1,complete,2024-01-31
+2022,4,Stroke,Stroke,57,57,none,1,complete,2024-01-31
+2022,4,AMI,AMI,56,56,none,1,complete,2024-01-31
+2022,4,All CVD,All CVD,113,113,none,1,complete,2024-01-31
+2022,5,Stroke,Stroke,48,48,none,1,complete,2024-01-31
+2022,5,AMI,AMI,42,42,none,1,complete,2024-01-31
+2022,5,All CVD,All CVD,90,90,none,1,complete,2024-01-31
+2022,6,Stroke,Stroke,64,64,none,1,complete,2024-01-31
+2022,6,AMI,AMI,43,43,none,1,complete,2024-01-31
+2022,6,All CVD,All CVD,107,107,none,1,complete,2024-01-31
+2022,7,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2022,7,AMI,AMI,47,47,none,1,complete,2024-01-31
+2022,7,All CVD,All CVD,112,112,none,1,complete,2024-01-31
+2022,8,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2022,8,AMI,AMI,51,51,none,1,complete,2024-01-31
+2022,8,All CVD,All CVD,117,117,none,1,complete,2024-01-31
+2022,9,Stroke,Stroke,62,62,none,1,complete,2024-01-31
+2022,9,AMI,AMI,41,41,none,1,complete,2024-01-31
+2022,9,All CVD,All CVD,103,103,none,1,complete,2024-01-31
+2022,10,Stroke,Stroke,78,78,none,1,complete,2024-01-31
+2022,10,AMI,AMI,44,44,none,1,complete,2024-01-31
+2022,10,All CVD,All CVD,122,122,none,1,complete,2024-01-31
+2022,11,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2022,11,AMI,AMI,46,46,none,1,complete,2024-01-31
+2022,11,All CVD,All CVD,111,111,none,1,complete,2024-01-31
+2022,12,Stroke,Stroke,51,51,none,1,complete,2024-01-31
+2022,12,AMI,AMI,38,38,none,1,complete,2024-01-31
+2022,12,All CVD,All CVD,89,89,none,1,complete,2024-01-31
+2023,1,Stroke,Stroke,86,86,none,1,complete,2024-01-31
+2023,1,AMI,AMI,56,56,none,1,complete,2024-01-31
+2023,1,All CVD,All CVD,142,142,none,1,complete,2024-01-31
+2023,2,Stroke,Stroke,71,71,none,1,complete,2024-01-31
+2023,2,AMI,AMI,34,34,none,1,complete,2024-01-31
+2023,2,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2023,3,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2023,3,AMI,AMI,49,49,none,1,complete,2024-01-31
+2023,3,All CVD,All CVD,114,114,none,1,complete,2024-01-31
+2023,4,Stroke,Stroke,67,67,none,1,complete,2024-01-31
+2023,4,AMI,AMI,52,52,none,1,complete,2024-01-31
+2023,4,All CVD,All CVD,119,119,none,1,complete,2024-01-31
+2023,5,Stroke,Stroke,80,80,none,1,complete,2024-01-31
+2023,5,AMI,AMI,45,45,none,1,complete,2024-01-31
+2023,5,All CVD,All CVD,125,125,none,1,complete,2024-01-31
+2023,6,Stroke,Stroke,71,71,none,1,complete,2024-01-31
+2023,6,AMI,AMI,39,39,none,1,complete,2024-01-31
+2023,6,All CVD,All CVD,110,110,none,1,complete,2024-01-31
+2023,7,Stroke,Stroke,68,68,none,1,complete,2024-01-31
+2023,7,AMI,AMI,42,42,none,1,complete,2024-01-31
+2023,7,All CVD,All CVD,110,110,none,1,complete,2024-01-31
+2023,8,Stroke,Stroke,66,66,none,1,complete,2024-01-31
+2023,8,AMI,AMI,47,47,none,1,complete,2024-01-31
+2023,8,All CVD,All CVD,113,113,none,1,complete,2024-01-31
+2023,9,Stroke,Stroke,64,64,none,1,complete,2024-01-31
+2023,9,AMI,AMI,46,46,none,1,complete,2024-01-31
+2023,9,All CVD,All CVD,110,110,none,1,complete,2024-01-31
+2023,10,Stroke,Stroke,43,43,none,1,complete,2024-01-31
+2023,10,AMI,AMI,56,56,none,1,complete,2024-01-31
+2023,10,All CVD,All CVD,99,99,none,1,complete,2024-01-31
+2023,11,Stroke,Stroke,57,57,none,1,complete,2024-01-31
+2023,11,AMI,AMI,48,48,none,1,complete,2024-01-31
+2023,11,All CVD,All CVD,105,105,none,1,complete,2024-01-31
+2023,12,Stroke,Stroke,65,65,none,1,complete,2024-01-31
+2023,12,AMI,AMI,50,50,none,1,complete,2024-01-31
+2023,12,All CVD,All CVD,115,115,none,1,complete,2024-01-31
+2024,1,Stroke,Stroke,49,49,none,1,current_month,2024-01-31
+2024,1,AMI,AMI,16,16,none,1,current_month,2024-01-31
+2024,1,All CVD,All CVD,65,65,none,1,current_month,2024-01-31
+2024,2,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,2,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,2,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,3,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,3,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,3,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,4,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,4,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,4,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,5,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,5,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,5,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,6,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,6,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,6,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,7,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,7,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,7,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,8,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,8,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,8,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,9,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,9,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,9,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,10,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,10,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,10,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,11,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,11,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,11,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31
+2024,12,Stroke,Stroke,,Not available,none,0,not_yet_observed,2024-01-31
+2024,12,AMI,AMI,,Not available,none,0,not_yet_observed,2024-01-31
+2024,12,All CVD,All CVD,,Not available,none,0,not_yet_observed,2024-01-31

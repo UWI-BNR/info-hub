@@ -1,0 +1,9 @@
+package_id: cvd_tables_2024_01
+product_type: cvd_annual_tabulations
+status: public_ready_unapproved
+coverage_end: 2024-01-31
+disclosure_threshold: 6
+suppression_symbol: '—'
+workbook: workbook/workbook_cvd_annual_tabulations.xlsx
+approval_required: true
+publication_performed: false

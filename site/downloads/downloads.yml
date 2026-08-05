@@ -104,3 +104,20 @@
   size: "413.5 KB"
   size_bytes: 423399
   sort_order: 10
+- title: "Complete public tabulations package"
+  output_type: "Tabulations"
+  output_title: "CVD annual tabulations"
+  output_id: "cvd_annual_tabulations"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "Data through January 2024"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: "Suppressed CVD tabulations with public datasets, workbook, metadata and readme."
+  href: "annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip"
+  path: "annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip"
+  file: "bnr_cvd_annual_tabulations_latest.zip"
+  updated: "2026-08-05"
+  size: "79.4 KB"
+  size_bytes: 81330
+  sort_order: 30

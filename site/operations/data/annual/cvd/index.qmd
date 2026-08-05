@@ -15,8 +15,8 @@ Reference tables from the Barbados National Registry CVD surveillance.
 Download the complete workbook, or the public package containing the workbook, suppressed datasets and metadata.
 
 ::: {.bnr-utility-links}
-[Tabulations workbook](../../../downloads/annual/cvd/latest/workbook/workbook_cvd_annual_tabulations.xlsx){.btn .btn-outline-primary target="_blank" rel="noopener"}
-[Complete data package (ZIP)](../../../downloads/annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Tabulations workbook](../../../../downloads/annual/cvd/latest/workbook/workbook_cvd_annual_tabulations.xlsx){.btn .btn-outline-primary target="_blank" rel="noopener"}
+[Complete data package (ZIP)](../../../../downloads/annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip){.btn .btn-outline-primary target="_blank" rel="noopener"}
 :::
 
 :::
@@ -27,7 +27,7 @@ Annual counts are shown by event type and sex. The current incomplete year is cl
 
 ::: {.table-responsive}
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_01_event_counts.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_01_event_counts.md >}}
 
 :::
 
@@ -35,7 +35,7 @@ Annual counts are shown by event type and sex. The current incomplete year is cl
 
 Monthly counts are shown by event type. Select a year tab; future months in the current year are shown as not available.
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_monthly_counts_tabs.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_02_monthly_counts_tabs.md >}}
 
 ## Table 3. Events among younger and older adults
 
@@ -43,7 +43,7 @@ Percentages show the distribution of events among people aged under 70 and those
 
 ::: {.table-responsive}
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_03_age70_percent.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_03_age70_percent.md >}}
 
 :::
 
@@ -51,7 +51,7 @@ Percentages show the distribution of events among people aged under 70 and those
 
 Crude and age-adjusted incidence rates are shown per 100,000 population. Select a completed year tab.
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_04_incidence_rates_tabs.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_04_incidence_rates_tabs.md >}}
 
 ## Table 5. Incidence rate ratios
 
@@ -59,7 +59,7 @@ Incidence rate ratios compare each two-year period with the 2010–2011 referenc
 
 ::: {.table-responsive}
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rate_ratios.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_05_incidence_rate_ratios.md >}}
 
 :::
 
@@ -69,7 +69,7 @@ Percentages describe confirmed in-hospital deaths among non-DCO hospital events.
 
 ::: {.table-responsive}
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_06_case_fatality.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_06_case_fatality.md >}}
 
 :::
 
@@ -77,4 +77,5 @@ Percentages describe confirmed in-hospital deaths among non-DCO hospital events.
 
 Median length of stay and the lower and upper quartiles are shown by event type and sex. Select a year tab; the current incomplete year is labelled YTD.
 
-{{< include ../../../downloads/annual/cvd/latest/tables/table_cvd_annual_07_length_of_stay_tabs.md >}}
+{{< include ../../../../downloads/annual/cvd/latest/tables/table_cvd_annual_07_length_of_stay_tabs.md >}}
+

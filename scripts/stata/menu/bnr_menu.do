@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.5.0, 5 August 2026
+*! version 1.8.0, 5 August 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -55,6 +55,18 @@ window menu append submenu "BNR" "Produce tables"
 window menu append item "Produce tables" ///
     "Step 1: Build private table package" ///
     "db bnr_step1_cvd_tables"
+
+window menu append item "Produce tables" ///
+    "Step 2A: Prepare suppressed tables" ///
+    "db bnr_step2a_cvd_tables"
+
+window menu append item "Produce tables" ///
+    "Step 2B: Approve reviewed tables" ///
+    "db bnr_step2b_cvd_tables_approve"
+
+window menu append item "Produce tables" ///
+    "Step 3: Publish approved tables" ///
+    "db bnr_step3_cvd_tables_publish"
 
 window menu append submenu "BNR" "BNR utilities"
 

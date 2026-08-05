@@ -1,0 +1,105 @@
+---
+title: "Tables workflow — Step 2A"
+subtitle: "Suppress and prepare CVD tables for review"
+format: html
+---
+
+## Purpose
+
+Table Step 2A applies disclosure control to the seven unsuppressed datasets created by Step 1. It creates the exact workbook, website tables and public-safe datasets proposed for release, together with a private suppression review.
+
+::: {.callout-warning collapse="false"}
+Everything remains in private staging. Step 2A does not approve or publish the package. The folder is called `public_ready` because its contents are the proposed public products—not because they are already public.
+:::
+
+## Before you start
+
+Confirm that:
+
+- Table Step 1 completed successfully for the intended year and month;
+- `review/qa_summary.txt` has been checked;
+- unexpected analytical or data-quality issues have been resolved by correcting the source or code and rerunning Step 1; and
+- no Step 2A workbook is open in Excel.
+
+## Run Step 2A
+
+1. In Stata, open **User > BNR > Produce tables > Step 2A: Prepare suppressed tables**.
+2. Enter the Step 1 package year and month.
+3. Leave **Authorise replacement** unticked for the first run.
+4. Select **Prepare Step 2A review package**.
+5. Confirm that the operational summary says `COMPLETED - PUBLIC-READY, UNAPPROVED`.
+
+The equivalent command is:
+
+```stata
+do "$BNR_STATA/tables/bnr_step2a_cvd_tables.do" 2024 1
+```
+
+## What Step 2A creates
+
+```text
+cvd_tables_YYYY_MM/
+├── datasets/                     Step 1 exact, unsuppressed datasets
+├── metadata/                     Step 1 metadata
+├── review/
+│   ├── qa_summary.txt
+│   ├── suppression_summary.txt
+│   ├── suppression_worklist.csv
+│   └── suppression_review.xlsx   PRIVATE: contains exact values
+└── public_ready/                  PRIVATE AND UNAPPROVED
+    ├── datasets/                  7 suppressed DTA/CSV pairs
+    ├── workbook/                  proposed downloadable workbook
+    ├── tables/                    7 generated Markdown fragments
+    ├── metadata/                  public package and disclosure metadata
+    ├── public_manifest.csv
+    └── readme.txt
+```
+
+## Disclosure rules
+
+The primary rule suppresses a value supported by fewer than 6 observations. Complementary suppression is then applied where a total, paired percentage or sensitivity result could reveal that value.
+
+| Table | Rule |
+|---|---|
+| 1. Annual counts | Suppress a small event/sex count and every containing event, sex and overall total. |
+| 2. Monthly counts | Suppress a small Stroke or AMI count and its All-CVD total. |
+| 3. Age percentages | Hide both complementary percentages if either age-group numerator is small. |
+| 4. Incidence | Hide the rate row for a small numerator; also protect small DCO increments and affected both-sex totals. |
+| 5. Rate ratios | Hide the ratio and confidence limits if either comparison count is small. |
+| 6. Case fatality | Hide the percentage if confirmed deaths or complementary survivors are small. |
+| 7. Length of stay | Hide the median and quartiles together if fewer than 6 stays contribute. |
+
+Public products show `—` for a suppressed value. Exact supporting counts remain only in the private review files.
+
+## Review the results
+
+1. Read `suppression_summary.txt`.
+2. Open `suppression_review.xlsx` and review every worklist row.
+3. Confirm that each primary suppression is justified.
+4. Confirm that each complementary suppression prevents recovery by subtraction or differencing.
+5. Open every sheet of the proposed publication workbook.
+6. Inspect all seven public-safe DTA/CSV pairs and confirm that private supporting counts are absent.
+7. Preview all generated Markdown fragments through the private site-review route.
+8. Confirm that YTD labels are correct and that future months are shown as unavailable rather than zero.
+
+::: {.callout-note collapse="true"}
+## Rebuilding the same package
+
+Use replacement only after confirming the selected year and month:
+
+```stata
+do "$BNR_STATA/tables/bnr_step2a_cvd_tables.do" 2024 1 replace
+```
+
+Replacement invalidates and removes any earlier approval. The rebuilt products must undergo the complete review and approval process again.
+:::
+
+## Next action
+
+When every review check is satisfactory, proceed to Table Step 2B. Step 2B will collect the five formal confirmations and approver identity, using one of these roles:
+
+- BNR Lead
+- BNR Analyst
+- BNR Developer
+
+The **Approve** button will remain unavailable until all five confirmations are selected. Approval will create `approval.yml`; it will not publish anything.

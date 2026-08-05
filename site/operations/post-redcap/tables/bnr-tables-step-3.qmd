@@ -1,0 +1,124 @@
+---
+title: "Tables workflow — Step 3"
+subtitle: "Publish approved CVD tables"
+format: html
+---
+
+## Purpose
+
+Table Step 3 promotes the exact suppressed products approved in Step 2B. It creates the authoritative public release, refreshes the stable `latest` package, creates the public ZIP, refreshes the Quarto website mirror and writes the manifest used by the site-wide Downloads catalogue.
+
+::: {.callout-warning collapse="false"}
+Step 3 is publication, not analysis. It must never recalculate, suppress, reformat or manually correct an approved table.
+:::
+
+## Before you start
+
+For the selected year and month:
+
+1. Complete Table Steps 1 and 2A.
+2. Complete the full Step 2 review.
+3. Run Step 2B and confirm that its summary says `COMPLETED - APPROVED, NOT PUBLISHED`.
+4. Close the publication workbook and any existing ZIP that may be open.
+
+## Run Step 3
+
+1. In Stata, open **User > BNR > Produce tables > Step 3: Publish approved tables**.
+2. Enter the approved package year and month.
+3. Leave replacement unticked for a first publication.
+4. Select **Publish approved tables**.
+5. Confirm that the operational summary says `COMPLETED - PUBLISHED`.
+
+::: {.callout-note collapse="true"}
+## Command-line use
+
+```stata
+do "$BNR_STATA/tables/bnr_step3_cvd_tables_publish.do" 2024 1
+```
+
+To deliberately rebuild the public copy from the same approved source:
+
+```stata
+do "$BNR_STATA/tables/bnr_step3_cvd_tables_publish.do" 2024 1 replace
+```
+:::
+
+## What Step 3 validates
+
+Before copying any product, Step 3 confirms:
+
+- `package.yml` identifies the selected package, product and coverage;
+- `approval.yml` records valid approval by a BNR Lead, BNR Analyst or BNR Developer;
+- all five Step 2B confirmations are present;
+- `public_manifest.csv` contains the expected 26 safe, unique paths; and
+- every approved manifest product exists.
+
+The status `public_ready_unapproved` in `package.yml` is expected: it records the package state when Step 2A created it. The later `approval.yml` is the authority for approval.
+
+## Public outputs
+
+```text
+outputs/public/tables/cvd/
+├── releases/
+│   └── cvd_tables_YYYY_MM/       authoritative release
+└── latest/                       authoritative stable copy
+
+site/downloads/annual/cvd/
+└── latest/                       disposable website mirror
+    ├── bnr_cvd_annual_tabulations_latest.zip
+    └── downloads.yml             catalogue record
+```
+
+The authoritative release contains:
+
+- the 26 approved manifest products, with the release workbook's `Read me` status label updated to `PUBLISHED — APPROVED FOR PUBLIC RELEASE`;
+- the unchanged Step 2B `approval.yml`;
+- `public_manifest.csv`;
+- a Step 3 `publication.yml`; and
+- the release-stamped public ZIP.
+
+The website mirror contains only the public-facing manifest products, the stable ZIP and `downloads.yml`. It does not expose the named approval or publication receipts.
+
+`downloads.yml` uses the common `bnr_download_manifest_v1` schema. It identifies the product as a `tabulation` and points to the stable ZIP beneath `site/downloads/annual/`. It is publication metadata, not an analytical output.
+
+The status-label update is a publication annotation only. Step 3 does not alter a table value, suppression decision, formula, Markdown fragment or approval receipt.
+
+## Public ZIP
+
+The ZIP contains:
+
+- seven suppressed DTA datasets;
+- seven suppressed CSV datasets;
+- the publication workbook;
+- public package, catalogue and disclosure metadata; and
+- the public readme.
+
+Website Markdown fragments and governance receipts are excluded because they are not end-user download products.
+
+## Replacement and recovery
+
+Release-stamped packages are protected by default. Use replacement only to recover or deliberately rebuild the public copy from the same approved private source.
+
+Step 3 assembles each output in a specifically named temporary build folder and validates it before replacing the stable `latest` folder. If a run stops, keep the log and resolve the reported problem; do not manually assemble or correct the public package.
+
+## Final website check
+
+Step 3 does not render or deploy Quarto. The existing Quarto pre-render command runs `site/scripts/build_download_catalogue.py`, which discovers the tables manifest and rebuilds `site/downloads/downloads.yml`. No Downloads entry is maintained by hand.
+
+After Step 3 completes:
+
+1. preview the CVD annual tabulations page;
+2. confirm the pre-render summary reports one tabulation record and one additional ZIP row;
+3. open the Downloads page and test the CVD annual tabulations ZIP;
+4. open the workbook and ZIP from the tabulations page;
+5. inspect every table, year tab, suppression mark and YTD label;
+6. confirm that neither page contains private review material; and
+7. commit and deploy using the established GitHub process.
+
+For the first tables publication, the catalogue summary should increase from six to seven rows:
+
+```text
+Tabulation records found: 1
+annual\cvd\latest\downloads.yml: 1 ZIP row(s)
+Download rows found:        7
+```

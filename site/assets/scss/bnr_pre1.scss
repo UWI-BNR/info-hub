@@ -411,8 +411,8 @@ body.bnr-briefing-page .quarto-document-content h3 {
    BNR tabulations
    Minimal CSS for Quarto-readable Markdown tables.
 
-   Standalone tables are wrapped in Bootstrap's built-in .table-responsive
-   class in the QMD. Tables inside generated year tabs are handled below.
+   Tables are wrapped in Bootstrap's built-in .table-responsive
+   class in the QMD, so no custom table-width rules are needed.
    ------------------------------------------------------------ */
 
 /* Prevent wide tables from forcing the Quarto content column
@@ -448,10 +448,4 @@ body.bnr-briefing-page .quarto-document-content h3 {
 
 .bnr-year-tabs > .tab-content {
   margin-top: 1rem;
-}
-
-/* Generated year-tab fragments contain their own tables. Allow each tab
-   panel to scroll horizontally on small screens without widening the page. */
-.bnr-year-tabs > .tab-content > .tab-pane {
-  overflow-x: auto;
 }

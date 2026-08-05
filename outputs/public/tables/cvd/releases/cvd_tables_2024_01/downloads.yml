@@ -1,0 +1,18 @@
+schema: bnr_download_manifest_v1
+package_type: tabulation
+package_id: cvd_annual_tabulations
+release_id: cvd_tables_2024_01
+title: CVD annual tabulations
+surveillance_area: CVD
+domain: cvd
+period: Data through January 2024
+release_date: 2026-08-05
+downloads:
+  - title: Complete public tabulations package
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_cvd_annual_tabulations_latest.zip
+    href: annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip
+    description: Suppressed CVD tabulations with public datasets, workbook, metadata and readme.
+    include_in_listing: true
+    sort_order: 30

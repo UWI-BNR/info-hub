@@ -8,8 +8,8 @@ import sys
 # BNR download catalogue builder
 #
 # Purpose:
-#   Combine approved briefing and metric download records into one site-wide
-#   downloads/downloads.yml file for the Quarto downloads listing page.
+#   Combine approved briefing, metric and tabulation download records into one
+#   site-wide downloads/downloads.yml file for the Quarto downloads page.
 #
 # Scope:
 #   Publication-layer indexing only.
@@ -22,6 +22,7 @@ import sys
 # Expected inputs:
 #   site/downloads/files/briefings/{briefing_id}/downloads.yml
 #   site/downloads/files/metrics/**/catalogue/{release_id}.yml
+#   site/downloads/annual/**/latest/downloads.yml
 #
 # Output:
 #   site/downloads/downloads.yml
@@ -50,14 +51,17 @@ SITE_ROOT = SCRIPT_PATH.parent.parent
 DOWNLOADS_ROOT = SITE_ROOT / "downloads"
 BRIEFINGS_DIR = DOWNLOADS_ROOT / "files" / "briefings"
 METRICS_DIR = DOWNLOADS_ROOT / "files" / "metrics"
+TABULATIONS_DIR = DOWNLOADS_ROOT / "annual"
 OUTPUT_FILE = DOWNLOADS_ROOT / "downloads.yml"
 
 SUPPORTED_PACKAGE_TYPES = {
     "briefing": "Briefing",
     "metric": "Metric dataset",
+    "tabulation": "Tabulations",
 }
 
 SUPPORTED_SCHEMA = "bnr_download_manifest_v1"
+ALLOWED_HREF_PREFIXES = ("files/", "annual/")
 
 
 class CatalogueError(Exception):
@@ -256,7 +260,7 @@ def required_text(record, field, source_path):
 
 
 def package_type_from_manifest(manifest, source_path):
-    """Read and normalise the briefing or metric package type."""
+    """Read and normalise the supported public package type."""
     raw_value = manifest.get("package_type", manifest.get("output_type", ""))
     package_type = str(raw_value).strip().lower()
 
@@ -268,14 +272,14 @@ def package_type_from_manifest(manifest, source_path):
     if package_type not in SUPPORTED_PACKAGE_TYPES:
         raise CatalogueError(
             f"Unsupported package type '{raw_value}' in {source_path}. "
-            "Expected briefing or metric."
+            "Expected briefing, metric or tabulation."
         )
 
     return package_type
 
 
 def package_id_from_manifest(manifest, package_type, source_path):
-    """Read the existing briefing ID or the metric package ID."""
+    """Read the stable public output ID."""
     if package_type == "briefing":
         value = manifest.get("briefing_id", manifest.get("package_id", ""))
         expected_field = "briefing_id"
@@ -323,9 +327,13 @@ def validated_href(value, source_path):
     if "://" in href or href.startswith("//"):
         raise CatalogueError(f"External href is not permitted in {source_path}: {href}")
 
-    if not href.startswith("files/"):
+    if not href.startswith(ALLOWED_HREF_PREFIXES):
+        allowed_prefixes = " or ".join(
+            f"'{prefix}'" for prefix in ALLOWED_HREF_PREFIXES
+        )
         raise CatalogueError(
-            f"Catalogue href must begin with 'files/' in {source_path}: {href}"
+            f"Catalogue href must begin with {allowed_prefixes} "
+            f"in {source_path}: {href}"
         )
 
     if "\\" in href:
@@ -403,7 +411,7 @@ def sort_order_value(value):
 
 
 def discover_source_records():
-    """Return briefing and metric catalogue-record paths."""
+    """Return every supported package-level catalogue manifest."""
     source_paths = []
 
     if BRIEFINGS_DIR.exists():
@@ -419,6 +427,15 @@ def discover_source_records():
         print(f"Metric records found:   {len(metric_paths)}")
     else:
         print("WARNING: Metrics catalogue folder was not found.")
+
+    if TABULATIONS_DIR.exists():
+        tabulation_paths = sorted(
+            TABULATIONS_DIR.glob("**/latest/downloads.yml")
+        )
+        source_paths.extend(tabulation_paths)
+        print(f"Tabulation records found: {len(tabulation_paths)}")
+    else:
+        print("WARNING: Tabulations catalogue folder was not found.")
 
     return source_paths
 
@@ -595,6 +612,7 @@ def build_catalogue():
     print(f"Site root:        {SITE_ROOT}")
     print(f"Briefings folder: {BRIEFINGS_DIR}")
     print(f"Metrics folder:   {METRICS_DIR}")
+    print(f"Tabulations folder: {TABULATIONS_DIR}")
     print(f"Output file:      {OUTPUT_FILE}")
     print("")
 

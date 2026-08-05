@@ -1,0 +1,80 @@
+*! BNR Tables Step 2B: Approve reviewed CVD tables
+*! version 1.0.0, 5 August 2026
+*! Thin interface to scripts/stata/tables/bnr_step2b_cvd_tables_approve.do
+
+VERSION 19.0
+POSITION . . 560 675
+
+LIST approver_roles
+BEGIN
+BNR Lead
+BNR Analyst
+BNR Developer
+END
+
+DIALOG main, label("BNR Tables Step 2B: Review and approve")
+BEGIN
+  TEXTBOX tx_intro 15 15 530 48, label("Record approval only after reviewing the complete Step 2A suppression package. This action creates approval.yml; it does not change or publish any table product.")
+
+  GROUPBOX gb_package 15 75 530 82, label("Reviewed Table Step 2A package")
+  TEXT tx_year 30 103 105 ., label("Release year:")
+  SPINNER ed_year 140 100 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 275 103 110 ., label("Release month:")
+  SPINNER ed_month 395 100 65 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXTBOX tx_package_note 30 130 490 22, label("Step 2B locates cvd_tables_YYYY_MM/public_ready automatically.")
+
+  GROUPBOX gb_approver 15 170 530 88, label("Approver")
+  TEXT tx_name 30 196 115 ., label("Full name:")
+  EDIT ed_name 155 193 365 ., nomemory error("Approver full name")
+  TEXT tx_role 30 227 115 ., label("Role:")
+  COMBOBOX cb_role 155 224 365 ., dropdownlist contents(approver_roles) nomemory
+
+  GROUPBOX gb_checks 15 272 530 205, label("Required approval confirmations")
+  CHECKBOX ck_release 30 298 495 ., default(0) nomemory label("The intended dataset release and reporting period were used") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_results 30 330 495 ., default(0) nomemory label("Results and permanent YTD presentation are plausible and correct") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_disclosure 30 362 495 ., default(0) nomemory label("Every suppression flag and disclosure-control decision was reviewed") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_workbook 30 394 495 ., default(0) nomemory label("The publication workbook and all public-ready products were inspected") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_ready 30 426 495 ., default(0) nomemory label("The complete package is ready for publication") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+
+  TEXTBOX tx_boundary 22 493 516 48, label("All five boxes are required. Corrections require Step 2A to be rerun with replacement, followed by a complete new review and approval.")
+
+  BUTTON bt_approve 415 566 125 30, label("Approve") onpush(program approve_package)
+END
+
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step2b_cvd_tables_approve")
+RESET reset1
+
+
+* Check all five boxes whenever one is selected. Any box switched off disables
+* the Approve button immediately. The first display also leaves it disabled.
+PROGRAM check_approval_boxes
+BEGIN
+  if main.ck_release & main.ck_results & main.ck_disclosure & main.ck_workbook & main.ck_ready {
+    call main.bt_approve.enable
+  }
+  if !(main.ck_release & main.ck_results & main.ck_disclosure & main.ck_workbook & main.ck_ready) {
+    call main.bt_approve.disable
+  }
+END
+
+
+* Run the ordinary Step 2B DO file when the enabled button is pressed. The DO
+* file repeats every validation and is the final safeguard for approval.
+PROGRAM approve_package
+BEGIN
+  require main.ed_name
+  require main.cb_role
+  put "do $BNR_STATA/tables/bnr_step2b_cvd_tables_approve.do "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  put " "
+  put /smartquote main.ed_name
+  put " "
+  put /smartquote main.cb_role
+  put " release results disclosure workbook ready"
+  stata
+  close
+END
+

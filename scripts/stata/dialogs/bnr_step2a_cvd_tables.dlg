@@ -1,0 +1,40 @@
+*! BNR Tables Step 2A: Prepare suppressed tables for review
+*! version 1.0.0, 5 August 2026
+*! Thin interface to scripts/stata/tables/bnr_step2a_cvd_tables.do
+
+VERSION 19.0
+POSITION . . 540 395
+
+DIALOG main, label("BNR Tables Step 2A: Prepare suppressed tables")
+BEGIN
+  TEXTBOX tx_intro 15 15 510 57, label("Apply disclosure control to a completed Table Step 1 package. Create the private suppression review, the exact public workbook, website tables, and public-ready datasets. This action does not approve or publish anything.")
+
+  GROUPBOX gb_release 15 87 510 88, label("Completed Table Step 1 package")
+  TEXT tx_year 30 116 105 ., label("Release year:")
+  SPINNER ed_year 140 113 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 270 116 110 ., label("Release month:")
+  SPINNER ed_month 390 113 65 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXTBOX tx_release_note 30 145 470 23, label("Step 2A locates cvd_tables_YYYY_MM automatically in private staging.")
+
+  GROUPBOX gb_output 15 190 510 105, label("Private review and public-ready outputs")
+  TEXTBOX tx_output_note 30 214 475 43, label("The review workbook contains exact private values. public_ready contains suppressed products proposed for release, but remains private and unapproved.")
+  CHECKBOX ck_replace 30 269 475 ., default(0) nomemory label("Authorise replacement of existing Step 2A outputs and invalidate any earlier approval")
+
+  TEXTBOX tx_boundary 20 312 500 39, label("After the run, inspect the private worklist and every public-ready file. Step 2B is the separate approval action; Step 3 is the separate publication action.")
+END
+
+OK ok1, label("Prepare Step 2A review package")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step2a_cvd_tables")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/tables/bnr_step2a_cvd_tables.do "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  if main.ck_replace {
+    put " replace"
+  }
+END

@@ -1,0 +1,8 @@
+table_id,title,dataset,markdown
+table_01,Annual event counts,datasets/table_01_annual_event_counts.csv,tables/table_cvd_annual_01_event_counts.md
+table_02,Monthly event counts,datasets/table_02_monthly_event_counts.csv,tables/table_cvd_annual_02_monthly_counts_tabs.md
+table_03,Broad age-group percentages,datasets/table_03_age70_event_percent.csv,tables/table_cvd_annual_03_age70_percent.md
+table_04,Annual incidence rates,datasets/table_04_incidence_rates.csv,tables/table_cvd_annual_04_incidence_rates_tabs.md
+table_05,Incidence rate ratios,datasets/table_05_incidence_rate_ratios.csv,tables/table_cvd_annual_05_incidence_rate_ratios.md
+table_06,Confirmed in-hospital case fatality,datasets/table_06_case_fatality.csv,tables/table_cvd_annual_06_case_fatality.md
+table_07,In-hospital length of stay,datasets/table_07_length_of_stay.csv,tables/table_cvd_annual_07_length_of_stay_tabs.md

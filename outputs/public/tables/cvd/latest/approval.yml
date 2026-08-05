@@ -1,0 +1,19 @@
+schema: bnr_tables_approval_v1
+status: approved
+package_id: cvd_tables_2024_01
+product_type: cvd_annual_tabulations
+coverage_end: 2024-01-31
+approved_by: "Ian Hambleton"
+approved_role: BNR Developer
+approved_date: 2026-08-05
+approved_time: "13:28:10"
+workflow_step: 2b
+confirmations:
+  intended_release_and_period: true
+  results_and_ytd_presentation: true
+  disclosure_review: true
+  publication_workbook_and_public_files: true
+  publication_ready: true
+manifest: public_manifest.csv
+manifest_required_files: 26
+publication_performed: false

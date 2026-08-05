@@ -1,0 +1,9 @@
+policy: BNR small-number disclosure control
+primary_rule: suppress values supported by fewer than 6 observations
+complementary_suppression: true
+suppression_symbol: '—'
+private_review_items: 9
+primary_suppressions: 5
+complementary_suppressions: 4
+supporting_counts_removed_from_public_files: true
+status: requires_human_review

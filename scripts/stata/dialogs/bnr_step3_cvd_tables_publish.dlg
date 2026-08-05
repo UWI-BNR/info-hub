@@ -1,0 +1,41 @@
+*! BNR Tables Step 3: Publish approved CVD tables
+*! version 1.0.0, 5 August 2026
+*! Thin interface to scripts/stata/tables/bnr_step3_cvd_tables_publish.do
+
+VERSION 19.0
+POSITION . . 540 360
+
+DIALOG main, label("BNR Tables Step 3: Publish approved tables")
+BEGIN
+  TEXTBOX tx_intro 15 15 510 57, label("Promote an approved Step 2 package to the authoritative public archive, refresh latest, create the public ZIP, and refresh the Quarto website mirror. This action does not recalculate any table.")
+
+  GROUPBOX gb_release 15 88 510 90, label("Approved Table Step 2 package")
+  TEXT tx_year 30 117 105 ., label("Release year:")
+  SPINNER ed_year 140 114 80 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 270 117 110 ., label("Release month:")
+  SPINNER ed_month 390 114 65 ., default(1) min(1) max(12) nomemory error("Release month")
+  TEXTBOX tx_release_note 30 146 470 23, label("Step 3 requires the matching public_ready/approval.yml receipt.")
+
+  GROUPBOX gb_replace 15 194 510 80, label("Existing public release")
+  CHECKBOX ck_replace 30 220 475 ., default(0) nomemory label("Authorise replacement of this same release-stamped public package")
+  TEXTBOX tx_replace_note 30 247 470 20, label("Leave unticked for a first publication. Replacement is a deliberate recovery action.")
+
+  TEXTBOX tx_boundary 20 292 500 38, label("Step 3 copies approved products unchanged. It does not render or deploy Quarto; preview and Git deployment remain separate actions.")
+END
+
+OK ok1, label("Publish approved tables")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_step3_cvd_tables_publish")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/tables/bnr_step3_cvd_tables_publish.do "
+  put main.ed_year
+  put " "
+  put main.ed_month
+  if main.ck_replace {
+    put " replace"
+  }
+END
+
