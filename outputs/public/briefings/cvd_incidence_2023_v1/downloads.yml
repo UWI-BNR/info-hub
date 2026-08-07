@@ -1,11 +1,12 @@
 schema: bnr_download_manifest_v1
 briefing_id: cvd_incidence_2023_v1
-briefing_name: cvd_incidence_2023
+briefing_name: cvd_incidence_2023_v1
 output_type: briefing
+briefing_kind: routine
 domain: cvd
 surveillance_area: CVD
 period: 2023
-release_date: 2026-08-03
+release_date: 2026-08-07
 
 title: |-
   Barbados CVD incidence rates, 2010-2023

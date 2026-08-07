@@ -12,7 +12,7 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-05-05
+    2026-08-07
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
@@ -38,14 +38,14 @@ metadata:
   rights: |-
     CC BY 4.0 Attribution
   source: |-
-    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+    bnr_cvd_input_count_202401_v01
   contact: |-
     Barbados National Registry
 
 variables:
   - name: etype
-    type: float
-    format: %9.0g
+    type: byte
+    format: %8.0g
     label: |-
       CVD event type (stroke=1, AMI=2)
     value_label: etype_
@@ -63,7 +63,7 @@ variables:
 
   - name: year
     type: float
-    format: %9.0g
+    format: %8.0g
     label: |-
       CVD event year (yyyy)
     value_label: 

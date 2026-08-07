@@ -45,7 +45,7 @@
    type is recorded in output_type.
 
  OUTPUT BUNDLE:
-  STAGING: outputs/staging/briefings/cvd_incidence_2023_v1/
+  STAGING: outputs/staging/briefings/cvd_incidence_{target_year}_v{version}/
 
   Created directly by this DO file:
 
@@ -73,14 +73,14 @@
     briefing.yml
 
   workbook/
-    bnr_cvd_incidence_2023_v1.xlsx
+    bnr_cvd_incidence_{target_year}_v{version}.xlsx
 
   review/
     disclosure_flags.csv
     disclosure_review.txt
 
   PUBLICATION PRODUCT (created only after approval):
-    bnr_cvd_incidence_2023_v1.zip
+    bnr_cvd_incidence_{target_year}_v{version}.zip
     Stored inside the public briefing folder.
 * =====================================================================
 */
@@ -128,9 +128,9 @@ do "`localpath'/scripts/stata/common/bnrcvd_globals.do"
 * complete calendar years through the end of the previous year. For example,
 * any 2024 monthly release produces analysis through 31 December 2023.
 *
-* During the equivalence pilot the established analysis remains fixed to the
-* 2023 briefing. The general filename and argument contract mean that the same
-* operational route can later be extended without renaming this source file.
+* The original equivalence pilot was fixed to the 2023 briefing. That check
+* passed. The same analyst-owned file now supports later complete calendar
+* years without needing to be renamed for each annual update.
 
 args release_year release_month briefing_version replace_option
 
@@ -183,18 +183,20 @@ if !inrange(`release_month', 1, 12) {
 
 local target_year = `release_year' - 1
 
-if `target_year' != 2023 {
+* The validated 2023 briefing is the earliest package supported by this
+* workflow-owned file. Later releases are allowed and are handled below using
+* target_year throughout the analysis, figure text and metadata.
+if `target_year' < 2023 {
     qui {
         noi display as error _n ///
         "------------------------------------------------------------" _n ///
         "CVD INCIDENCE BRIEFING STOPPED" _n ///
         "------------------------------------------------------------" _n ///
-        as text "  Reason: the equivalence pilot currently supports" _n ///
-        as text "          2024 dataset releases only." _n ///
-        as result "  A 2024 release analyses through 31 December 2023." _n ///
+        as text "  Reason: the selected release would produce a briefing" _n ///
+        as text "          for a year earlier than 2023." _n ///
+        as result "  Earliest supported dataset release: 2024." _n ///
         as text "  Files created: No" _n ///
-        as text "  Next: complete the Step 3 equivalence check before" _n ///
-        as text "        extending the reporting period." _n ///
+        as text "  Next: choose the required 2024 or later release." _n ///
         as error "------------------------------------------------------------" _n
     }
     exit 198
@@ -239,6 +241,15 @@ if "`replace_option'" != "" & lower("`replace_option'") != "replace" {
 local baseline_start    2010
 local baseline_end      2022
 
+* Annual results begin in 2010. The second figure groups calendar years into
+* fixed two-year periods anchored at 2010-2011. When target_year is the first
+* year of a new pair (for example 2024), the final displayed period contains
+* that one complete calendar year and is labelled "2024". The pair becomes
+* "2024-2025" when the following year's data are available.
+local analysis_start_year 2010
+local number_periods = floor((`target_year' - `analysis_start_year') / 2) + 1
+local number_comparison_periods = `number_periods' - 1
+
 * The Step 3 count library is intentionally the shared counts-and-incidence
 * input. It contains the deidentified event, date, age, sex and DCO fields used
 * by the established incidence calculations below.
@@ -258,7 +269,7 @@ local briefing_id       "cvd_incidence_`target_year'_v`briefing_version'"
 local briefing_name     "`briefing_id'"
 local output_type       "briefing"
 
-local briefing_title    "Barbados CVD incidence rates, 2010-2023"
+local briefing_title    "Barbados CVD incidence rates, 2010-`target_year'"
 local briefing_short    "Incidence in Barbados"
 local briefing_page     "surveillance/cvd/briefings/case-incidence.qmd"
 
@@ -282,6 +293,9 @@ local rights_note ///
 
 local contact_note ///
     "Barbados National Registry."
+
+* Used both in the public dataset notes and in the release-control contract.
+local release_date = string(daily("`c(current_date)'", "DMY"), "%tdCCYY-NN-DD")
 
 
 * ----------------------------------------------------------------------------
@@ -473,6 +487,26 @@ foreach required_variable in eid dco etype doe yoe moe agey age5 sex {
     }
 }
 
+* The selected release must contain the complete target calendar year. This
+* protects the package name, titles and metadata from describing a year which
+* is not actually represented in the source dataset.
+quietly count if yoe == `target_year'
+if r(N) == 0 {
+    qui {
+        noi display as error _n ///
+        "------------------------------------------------------------" _n ///
+        "CVD INCIDENCE BRIEFING STOPPED" _n ///
+        "------------------------------------------------------------" _n ///
+        as text "  Reason: the Step 3 input contains no records for" _n ///
+        as result "          target year `target_year'." _n ///
+        as text "  Public files created: No" _n ///
+        as text "  Next: check the selected dataset release and its" _n ///
+        as text "        declared coverage before rerunning Step 1." _n ///
+        as error "------------------------------------------------------------" _n
+    }
+    exit 2000
+}
+
 
 
 
@@ -572,8 +606,33 @@ foreach required_variable in eid dco etype doe yoe moe agey age5 sex {
     recode age18 (18 19 20 21 = 18) 
     collapse (sum) bpop , by(iso3 year sex age18) 
     order year sex age bpop, after(iso3)
-    * Manual examination of barbados populations as verification 
-    drop if year>=2024
+    * Retain population denominators only through the briefing target year.
+    * The former pilot used "drop if year>=2024", which fixed the analysis to
+    * 2023. This target-year rule allows later complete years while continuing
+    * to exclude population years beyond the briefing's declared coverage.
+    keep if year <= `target_year'
+
+    * Stop clearly if the local UN-WPP file has not yet been extended far
+    * enough for the requested briefing. Never calculate a rate with a missing
+    * denominator or silently substitute a population from another year.
+    quietly count if year == `target_year'
+    if r(N) == 0 {
+        qui {
+            noi display as error _n ///
+            "------------------------------------------------------------" _n ///
+            "CVD INCIDENCE BRIEFING STOPPED" _n ///
+            "------------------------------------------------------------" _n ///
+            as text "  Reason: Barbados population data are not available" _n ///
+            as result "          for target year `target_year'." _n ///
+            as text "  Public files created: No" _n ///
+            as text "  Next: update the approved UN-WPP Barbados population" _n ///
+            as text "        dataset, then rerun Briefing Step 1." _n ///
+            as error "------------------------------------------------------------" _n
+        }
+        exit 601
+    }
+
+    * Manual examination of Barbados populations as verification.
     table (year) (sex) , statistic(sum bpop)
     tempfile brb_pop
     save `brb_pop', replace
@@ -594,7 +653,10 @@ forval x = 1(-1)0 {
         use "`input_file'", clear 
         drop if dco == `x'
         ** ------------------------------------------
-        drop if yoe==2009 
+        * Use complete calendar years only. A monthly release may already
+        * contain records from the following year, which do not belong in this
+        * annual briefing.
+        keep if inrange(yoe, `analysis_start_year', `target_year')
         rename age5 age18 
         rename yoe year
         drop moe agey 
@@ -626,7 +688,9 @@ forval x = 1(-1)0 {
         ** (i) BNR CASE DATA and UN-WPP BARBADOS POPULATION
         ** ------------------------------------------
         use "`input_file'", clear 
-        drop if yoe==2009 
+        * Apply the same complete-year boundary to the sensitivity dataset
+        * which includes DCO events.
+        keep if inrange(yoe, `analysis_start_year', `target_year')
         rename age5 age18 
         rename yoe year
         drop moe agey 
@@ -742,6 +806,15 @@ save "${data}/bnrcvd-incidence.dta", replace
 ** ---------------------------------------------
 ** (7) ANALYTICS 1 - EVENT to DCO GAP OVER TIME
 ** ---------------------------------------------
+* Keep the established graphic proportions. These x-coordinates move only the
+* latest-year divider and the right-hand values as target_year advances. For
+* target_year 2023, they reproduce the original coordinates exactly.
+local latest_year_line_x = `target_year' + 0.4
+local latest_year_heading_x = `target_year' + 2.75
+local latest_year_label_x = `target_year' + 2.51
+local latest_year_value_x = `target_year' + 5
+local figure1_x_max = `target_year' + 5
+
 preserve
     keep rateadj etype sex year dco
     replace rateadj = rateadj - 120 if etype==2
@@ -753,11 +826,11 @@ preserve
         forval y = 1(1)2 {
             tempvar ta1_`y' tb1_`y' da1_`y' db1_`y'
 
-            gen `ta1_`y'' = rateadj0 if etype==1 & sex==`y' & year==2023
+            gen `ta1_`y'' = rateadj0 if etype==1 & sex==`y' & year==`target_year'
             egen `tb1_`y'' = min(`ta1_`y'')
             global lo1_`y' : display  %5.0f `tb1_`y''    
 
-            gen `da1_`y'' = rateadj1 if etype==1 & sex==`y' & year==2023
+            gen `da1_`y'' = rateadj1 if etype==1 & sex==`y' & year==`target_year'
             egen `db1_`y'' = min(`da1_`y'')
             global hi1_`y' : display  %5.0f `db1_`y'' 
             drop `ta1_`y'' `tb1_`y'' `da1_`y'' `db1_`y''       
@@ -765,11 +838,11 @@ preserve
         forval y = 1(1)2 {
             tempvar ta2_`y' tb2_`y' da2_`y' db2_`y'
 
-            gen `ta2_`y'' = rateadj0 + 120 if etype==2 & sex==`y' & year==2023
+            gen `ta2_`y'' = rateadj0 + 120 if etype==2 & sex==`y' & year==`target_year'
             egen `tb2_`y'' = min(`ta2_`y'')
             global lo2_`y' : display  %5.0f `tb2_`y''    
 
-            gen `da2_`y'' = rateadj1 + 120 if etype==2 & sex==`y' & year==2023
+            gen `da2_`y'' = rateadj1 + 120 if etype==2 & sex==`y' & year==`target_year'
             egen `db2_`y'' = min(`da2_`y'')
             global hi2_`y' : display  %4.0f `db2_`y''  
             drop `ta2_`y'' `tb2_`y'' `da2_`y'' `db2_`y'' 
@@ -779,22 +852,22 @@ preserve
             gr twoway 
                 /// Graph Furniture 
                 /// Two Vertical Lines
-                (scatteri 200 2023.4 70 2023.4 , recast(line) lw(0.4) lc("${str_f70}%75") lp("l"))
-                (scatteri 55 2023.4 -100 2023.4 , recast(line) lw(0.4) lc("${ami_f70}%75") lp("l"))
+                (scatteri 200 `latest_year_line_x' 70 `latest_year_line_x' , recast(line) lw(0.4) lc("${str_f70}%75") lp("l"))
+                (scatteri 55 `latest_year_line_x' -100 `latest_year_line_x' , recast(line) lw(0.4) lc("${ami_f70}%75") lp("l"))
                 /// X-Axis
                 (scatteri 62 2010.7 62 2014.4 , recast(line) lw(0.2) lc("gs8") lp("l"))
                 (scatteri 62 2015.7 62 2019.4 , recast(line) lw(0.2) lc("gs8") lp("l"))
-                (scatteri 62 2020.7 62 2023 , recast(line) lw(0.2) lc("gs8") lp("l"))
+                (scatteri 62 2020.7 62 `target_year' , recast(line) lw(0.2) lc("gs8") lp("l"))
 
 
 
                 /// Graph Data Grids 
-                (function y=200, range(2010 2023) lp("-") lc("${str_f70}%50") lw(0.2))
-                (function y=150, range(2010 2023) lp("-") lc("${str_f70}%50") lw(0.2))
-                (function y=100, range(2010 2023) lp("-") lc("${str_f70}%50") lw(0.2))
-                (function y=0,   range(2010 2023) lp("-") lc("${ami_f70}%50") lw(0.2))
-                (function y=-50, range(2010 2023) lp("-") lc("${ami_f70}%50") lw(0.2))
-                (function y=-100,range(2010 2023) lp("-") lc("${ami_f70}%50") lw(0.2))
+                (function y=200, range(2010 `target_year') lp("-") lc("${str_f70}%50") lw(0.2))
+                (function y=150, range(2010 `target_year') lp("-") lc("${str_f70}%50") lw(0.2))
+                (function y=100, range(2010 `target_year') lp("-") lc("${str_f70}%50") lw(0.2))
+                (function y=0,   range(2010 `target_year') lp("-") lc("${ami_f70}%50") lw(0.2))
+                (function y=-50, range(2010 `target_year') lp("-") lc("${ami_f70}%50") lw(0.2))
+                (function y=-100,range(2010 `target_year') lp("-") lc("${ami_f70}%50") lw(0.2))
                 /// Stroke among Men, no DCO (lower line) and DCO (upper line) 
                 (rarea rateadj0 rateadj1 year   if year>=2010 & sex==2 & etype==1, lw(none) color("${str_m70}%75"))
                 (line rateadj0 year             if year>=2010 & sex==2 & etype==1 , lw(0.3) lc("${str_m}"))
@@ -819,7 +892,7 @@ preserve
 
                     xlab(none, 
                     valuelabel labc(gs0) labs(2.5) notick nogrid angle(45) format(%9.0f))
-                    xscale(noline lw(vthin) range(2010(1)2028)) 
+                    xscale(noline lw(vthin) range(2010(1)`figure1_x_max'))
                     xtitle(" ", size(3) color(gs0) margin(l=1 r=1 t=1 b=1)) 
                     
                     ylab(none,
@@ -828,25 +901,25 @@ preserve
                     ytitle(" ", color(gs8) size(4.5) margin(l=1 r=1 t=1 b=1)) 
 
                     /// Graphic Text
-                    text(62 2025.75 `"{fontface "Montserrat Light": 2023 Rates}"' ,  place(c) size(5) color(gs8))
+                    text(62 `latest_year_heading_x' `"{fontface "Montserrat Light": `target_year' Rates}"' ,  place(c) size(5) color(gs8))
                     /// X-Axis text
                     text(62 2010 `"{fontface "Montserrat Light": 2010}"' ,  place(c) size(5) color(gs8))
                     text(62 2015 `"{fontface "Montserrat Light": 2015}"' ,  place(c) size(5) color(gs8))
                     text(62 2020 `"{fontface "Montserrat Light": 2020}"' ,  place(c) size(5) color(gs8))
 
                     /// Title 
-                    text(-130 2009 "Heart Attacks Claim More Lives Before Hospital Care: Age-Adjusted Rates in Barbados, 2010–2023",  place(e) size(4) color(gs4))
+                    text(-130 2009 "Heart Attacks Claim More Lives Before Hospital Care: Age-Adjusted Rates in Barbados, 2010–`target_year'",  place(e) size(4) color(gs4))
 
                     /// (Right hand side) Hospital Rates by Sex and Event type 
-                    text(180 2025.51 "Men"               ,  place(w) size(5) color("${str_m}%75"))
-                    text(180 2028 "${lo1_2} ${endash}${hi1_2}" ,  place(w) size(5) color("${str_m}%75"))
-                    text(130 2025.51 "Women"             ,  place(w) size(5) color("${str_f}"))
-                    text(130 2028 "${lo1_1} ${endash}${hi1_1}" ,  place(w) size(5) color("${str_f}"))
+                    text(180 `latest_year_label_x' "Men"               ,  place(w) size(5) color("${str_m}%75"))
+                    text(180 `latest_year_value_x' "${lo1_2} ${endash}${hi1_2}" ,  place(w) size(5) color("${str_m}%75"))
+                    text(130 `latest_year_label_x' "Women"             ,  place(w) size(5) color("${str_f}"))
+                    text(130 `latest_year_value_x' "${lo1_1} ${endash}${hi1_1}" ,  place(w) size(5) color("${str_f}"))
 
-                    text(0 2025.51 "Men"               ,  place(w) size(5) color("${ami_m}%75"))
-                    text(0 2028 "${lo2_2} ${endash}${hi2_2}" ,  place(w) size(5) color("${ami_m}%75"))
-                    text(-50 2025.51 "Women"             ,  place(w) size(5) color("${ami_f}%75"))
-                    text(-50 2028 "${lo2_1} ${endash}${hi2_1}" ,  place(w) size(5) color("${ami_f}%75"))
+                    text(0 `latest_year_label_x' "Men"               ,  place(w) size(5) color("${ami_m}%75"))
+                    text(0 `latest_year_value_x' "${lo2_2} ${endash}${hi2_2}" ,  place(w) size(5) color("${ami_m}%75"))
+                    text(-50 `latest_year_label_x' "Women"             ,  place(w) size(5) color("${ami_f}%75"))
+                    text(-50 `latest_year_value_x' "${lo2_1} ${endash}${hi2_1}" ,  place(w) size(5) color("${ami_f}%75"))
 
                     legend(off)
 
@@ -856,16 +929,16 @@ preserve
         graph export "`stagingfigures'/`output1'.png", replace width(3000)
 
     ** Statistics to accompany figure 1
-    * (A) Difference between Lo and Hi in 2023
+    * (A) Difference between Lo and Hi in the latest complete year
     replace rateadj0 = rateadj0 + 120 if etype==2
     replace rateadj1 = rateadj1 + 120 if etype==2
     gen diff = rateadj1 - rateadj0 
-    * Put the 2023 differences into globals
+    * Put the latest complete-year differences into globals
 
     forval x = 1(1)2 {
         forval y = 1(1)2 {
             tempvar t1 t2 t3 t4
-            gen `t1' = diff if etype==`x' & sex==`y' & year==2023
+            gen `t1' = diff if etype==`x' & sex==`y' & year==`target_year'
             egen `t2' = min(`t1')
             global d_`x'`y' : display  %5.0f `t2'    
             dis "${d_`x'`y'}"
@@ -874,18 +947,18 @@ preserve
 
     ** DTA DATASET EXPORT
     notes drop _all
-    label data "BNR-CVD Registry: age-group case-count data for 2023 CVD briefing"
-    notes _dta: title: BNR-CVD annual incidence (Aggregated) (2010-2023)
+    label data "BNR-CVD Registry: age-group case-count data for `target_year' CVD briefing"
+    notes _dta: title: BNR-CVD annual incidence (Aggregated) (2010-`target_year')
     notes _dta: version: v`briefing_version'
-    notes _dta: created: 2026-05-05
+    notes _dta: created: `release_date'
     notes _dta: creator: Ian Hambleton, Analyst
     notes _dta: registry: BNR-CVD
     notes _dta: content: Annual incidence rates 
     notes _dta: tier: Public aggregate output
-    notes _dta: temporal: 2010-2023
+    notes _dta: temporal: 2010-`target_year'
     notes _dta: spatial: Barbados
     notes _dta: unit_of_analysis: Event type by sex and period
-    notes _dta: description: Annual age-standardized incidence (2010-2023), for hospital events and DCO events. We looked at all heart attack and stroke events that were treated in hospital or recorded as the main cause of death.
+    notes _dta: description: Annual age-standardized incidence (2010-`target_year'), for hospital events and DCO events. We looked at all heart attack and stroke events that were treated in hospital or recorded as the main cause of death.
     notes _dta: limitations: Based on hospital CVD event and DCO events only
     notes _dta: language: en
     notes _dta: software: StataNow 19
@@ -917,15 +990,34 @@ gen etype_reverse = etype
 recode etype_reverse (1=2) (2=1) 
 label define etype_reverse_ 1 "AMI" 2 "Stroke" 
 label values etype_reverse etype_reverse_ 
-gen year2 = .
-replace year2 = 1 if year==2010 | year==2011
-replace year2 = 2 if year==2012 | year==2013
-replace year2 = 3 if year==2014 | year==2015
-replace year2 = 4 if year==2016 | year==2017
-replace year2 = 5 if year==2018 | year==2019
-replace year2 = 6 if year==2020 | year==2021
-replace year2 = 7 if year==2022 | year==2023
-label define year2_ 1 "2010-2011" 2 "2012-2013" 3 "2014-2015" 4 "2016-2017" 5 "2018-2019" 6 "2020-2021" 7 "2022-2023"
+* Create fixed two-year periods beginning with 2010-2011. This arithmetic
+* replaces seven hard-coded recodes but retains exactly the same values for
+* the validated 2023 briefing. An even target year forms a final one-year
+* period until its paired year becomes available.
+gen year2 = floor((year - `analysis_start_year') / 2) + 1 ///
+    if inrange(year, `analysis_start_year', `target_year')
+
+* Build readable value labels for every period present. The loop is written
+* out step by step so future analysts can see how a single-year final period
+* becomes a two-year label in the following annual release.
+forvalues period_number = 1/`number_periods' {
+    local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
+    local period_end = min(`period_start' + 1, `target_year')
+
+    if `period_start' == `period_end' {
+        local period_label "`period_start'"
+    }
+    else {
+        local period_label "`period_start'-`period_end'"
+    }
+
+    if `period_number' == 1 {
+        label define year2_ `period_number' "`period_label'", replace
+    }
+    else {
+        label define year2_ `period_number' "`period_label'", add
+    }
+}
 label values year2 year2_ 
 noi {
     distrate event bpop using "`who_std'" , stand(age18) popstand(rpop) by(etype_reverse) mult(100000) format(%8.2f) saving(`bnri_etype')
@@ -948,22 +1040,83 @@ append using `bnri_year', gen(yearmerge)
 ** Create final indicator to y-axis 
 drop if srr==1 & lb_srr==. & ub_srr==.
 drop if sex==3 
-gen yaxis = _n 
-decode year2, gen(yearlabel)
-replace yearlabel = "Stroke (vs. AMI)" if _n==1 
-replace yearlabel = "CVD in Men" if _n==2 
-labmask yaxis, values(yearlabel)
-drop yearlabel
+gen yaxis = _n
 order yaxis srr lb_srr ub_srr 
 keep yaxis srr lb_srr ub_srr 
 save `bnr_incidence2', replace
 
-replace yaxis = yaxis+2 if yaxis>=9 & yaxis<=14 
-replace yaxis = yaxis+1 if yaxis>=3 & yaxis<=8 
-label define yaxis_ 1 "Stroke (vs. AMI)" 2 "CVD in Men (vs. Women)"      ///
-            4 "Stroke<br>2012-2013 (vs. 2010-11)" 5 "Stroke<br>2014-2015" 6 "Stroke<br>2016-2017" 7 "Stroke<br>2018-2019" 8 "Stroke<br>2020-2021" 9 "Stroke<br>2022-2023"     ///
-            11 "AMI<br>2012-2013" 12 "AMI<br>2014-2015" 13 "AMI<br>2016-2017" 14 "AMI<br>2018-2019" 15 "AMI<br>2020-2021" 16 "AMI<br>2022-2023"
+* Reserve one heading row before each event-type group, exactly as in the
+* established figure. The positions expand by one row whenever a new
+* two-year period begins.
+local stroke_first_y = 4
+local stroke_last_y = 3 + `number_comparison_periods'
+local ami_heading_y = `stroke_last_y' + 1
+local ami_first_y = `ami_heading_y' + 1
+local ami_last_y = `ami_first_y' + `number_comparison_periods' - 1
+
+local raw_ami_first_y = 3 + `number_comparison_periods'
+local raw_ami_last_y = 2 + (2 * `number_comparison_periods')
+
+replace yaxis = yaxis + 2 if inrange(yaxis, `raw_ami_first_y', `raw_ami_last_y')
+replace yaxis = yaxis + 1 if inrange(yaxis, 3, 2 + `number_comparison_periods')
+
+label define yaxis_ 1 "Stroke (vs. AMI)" ///
+                    2 "CVD in Men (vs. Women)", replace
+
+forvalues period_number = 2/`number_periods' {
+    local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
+    local period_end = min(`period_start' + 1, `target_year')
+
+    if `period_start' == `period_end' {
+        local period_label "`period_start'"
+    }
+    else {
+        local period_label "`period_start'-`period_end'"
+    }
+
+    local stroke_y = `period_number' + 2
+    local ami_y = `period_number' + `number_periods' + 2
+
+    if `period_number' == 2 {
+        label define yaxis_ `stroke_y' ///
+            "Stroke<br>`period_label' (vs. 2010-11)", add
+    }
+    else {
+        label define yaxis_ `stroke_y' ///
+            "Stroke<br>`period_label'", add
+    }
+
+    label define yaxis_ `ami_y' "AMI<br>`period_label'", add
+}
 label values yaxis yaxis_ 
+
+* Prepare the repeated period labels used as graph text. Keeping this as an
+* explicit loop avoids redesigning the graph while allowing one extra row per
+* event type when a new period appears.
+local figure2_period_text ""
+forvalues period_number = 2/`number_periods' {
+    local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
+    local period_end = min(`period_start' + 1, `target_year')
+
+    if `period_start' == `period_end' {
+        local period_label "`period_start'"
+    }
+    else {
+        local period_label "`period_start'-`period_end'"
+    }
+
+    local stroke_y = `period_number' + 2
+    local ami_y = `period_number' + `number_periods' + 2
+
+    local figure2_period_text `"`figure2_period_text' text(`stroke_y' 0.8 "`period_label'", place(w) size(2.5) color("${str_m}%75")) text(`ami_y' 0.8 "`period_label'", place(w) size(2.5) color("${ami_m}%75"))"'
+}
+
+local figure2_axis_y = `ami_last_y' + 1
+local figure2_title_y = `ami_last_y' + 2.5
+local figure2_height = 14 + (`number_periods' - 7)
+local stroke_line_end = `stroke_last_y' + 0.5
+local ami_line_start = `ami_heading_y' + 0.5
+local ami_line_end = `ami_last_y' + 0.5
 
 ** Save dataset for use in:
 ** bnrcvd-2023-tabulations.do
@@ -990,14 +1143,14 @@ format srr lb_srr ub_srr %5.3f
             gr twoway 
                 /// Graph Furniture 
                 /// X-Axis
-                (scatteri 17 0.79 17 0.94 , recast(line) lw(0.2) lc("gs8") lp("l"))
-                (scatteri 17 1.06 17 1.44 , recast(line) lw(0.2) lc("gs8") lp("l"))
-                (scatteri 17 1.56 17 1.94 , recast(line) lw(0.2) lc("gs8") lp("l"))
-                (scatteri 17 2.06 17 2.4 , recast(line) lw(0.2) lc("gs8") lp("l"))
+                (scatteri `figure2_axis_y' 0.79 `figure2_axis_y' 0.94 , recast(line) lw(0.2) lc("gs8") lp("l"))
+                (scatteri `figure2_axis_y' 1.06 `figure2_axis_y' 1.44 , recast(line) lw(0.2) lc("gs8") lp("l"))
+                (scatteri `figure2_axis_y' 1.56 `figure2_axis_y' 1.94 , recast(line) lw(0.2) lc("gs8") lp("l"))
+                (scatteri `figure2_axis_y' 2.06 `figure2_axis_y' 2.4 , recast(line) lw(0.2) lc("gs8") lp("l"))
                 /// Equality line (rate ratio = 1)
                 (scatteri 0.75 1 2 1 , recast(line) lw(0.2) lc("gs0") lp("-"))
-                (scatteri 3.5 1 9.5 1 , recast(line) lw(0.2) lc("${str_m70}%75") lp("-"))
-                (scatteri 10.5 1 16.5 1 , recast(line) lw(0.2) lc("${ami_m70}%75") lp("-"))
+                (scatteri 3.5 1 `stroke_line_end' 1 , recast(line) lw(0.2) lc("${str_m70}%75") lp("-"))
+                (scatteri `ami_line_start' 1 `ami_line_end' 1 , recast(line) lw(0.2) lc("${ami_m70}%75") lp("-"))
 
                 /// The Data (lines and points) 
                 (rspike lb_srr ub_srr yaxis if yaxis==1 , horizontal lw(0.55) color("gs0"))
@@ -1006,19 +1159,19 @@ format srr lb_srr ub_srr %5.3f
                 (rspike lb_srr ub_srr yaxis if yaxis==2 , horizontal lw(0.55) color("gs0"))
                 (sc yaxis srr               if yaxis==2, msize(1.5) mc("gs16"))
                 (sc yaxis srr               if yaxis==2, msize(1) mc("gs0"))
-                (rspike lb_srr ub_srr yaxis if yaxis>=3 & yaxis<=9 , horizontal lw(0.55) color("${str_m70}"))
-                (sc yaxis srr               if yaxis>=3 & yaxis<=9, msize(1.5) mc("gs16"))
-                (sc yaxis srr               if yaxis>=3 & yaxis<=9, msize(1) mc("${str_m70}"))
-                (rspike lb_srr ub_srr yaxis if yaxis>=11 & yaxis<=16 , horizontal lw(0.55) color("${ami_m70}"))
-                (sc yaxis srr               if yaxis>=11 & yaxis<=16, msize(1.5) mc("gs16"))
-                (sc yaxis srr               if yaxis>=11 & yaxis<=16, msize(1) mc("${ami_m}"))
+                (rspike lb_srr ub_srr yaxis if inrange(yaxis, `stroke_first_y', `stroke_last_y') , horizontal lw(0.55) color("${str_m70}"))
+                (sc yaxis srr               if inrange(yaxis, `stroke_first_y', `stroke_last_y'), msize(1.5) mc("gs16"))
+                (sc yaxis srr               if inrange(yaxis, `stroke_first_y', `stroke_last_y'), msize(1) mc("${str_m70}"))
+                (rspike lb_srr ub_srr yaxis if inrange(yaxis, `ami_first_y', `ami_last_y') , horizontal lw(0.55) color("${ami_m70}"))
+                (sc yaxis srr               if inrange(yaxis, `ami_first_y', `ami_last_y'), msize(1.5) mc("gs16"))
+                (sc yaxis srr               if inrange(yaxis, `ami_first_y', `ami_last_y'), msize(1) mc("${ami_m}"))
 
 
 
                 ,
                     plotregion(c(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 		
                     graphregion(color(gs16) ic(gs16) ilw(thin) lw(thin) margin(l=2 r=2 b=0 t=0)) 
-                    ysize(14) xsize(14)
+                    ysize(`figure2_height') xsize(14)
 
                     xlab(none, 
                     labc(gs0) labs(2.5) notick nogrid angle(45) format(%9.0f))
@@ -1027,36 +1180,25 @@ format srr lb_srr ub_srr %5.3f
                     
                     ylab(none,
                     valuelabel labc(gs0) labs(3) tlc(gs8) notick nogrid angle(0) format(%9.0f))
-                    yscale(reverse noline noextend range(0(1)18.5)) 
+                    yscale(reverse noline noextend range(0(1)`figure2_title_y'))
                     ytitle(" ", color(gs8) size(4.5) margin(l=1 r=1 t=1 b=1)) 
 
                     /// Title 
-                    text(18.5 1 "Strokes outpace Heart Attacks: Incidence Rate Ratios, 2010–2023",  place(c) size(2.5) color(gs4))
+                    text(`figure2_title_y' 1 "Strokes outpace Heart Attacks: Incidence Rate Ratios, 2010–`target_year'",  place(c) size(2.5) color(gs4))
 
                     // X-axis legend
-                    text(17 0.75 "0.75",  place(c) size(2) color(gs4))
-                    text(17 1 "One",  place(c) size(2) color(gs4))
-                    text(17 1.5 "1.5",  place(c) size(2) color(gs4))
-                    text(17 2 "2",  place(c) size(2) color(gs4))
-                    text(17 2.5 "2.5",  place(c) size(2) color(gs4))
+                    text(`figure2_axis_y' 0.75 "0.75",  place(c) size(2) color(gs4))
+                    text(`figure2_axis_y' 1 "One",  place(c) size(2) color(gs4))
+                    text(`figure2_axis_y' 1.5 "1.5",  place(c) size(2) color(gs4))
+                    text(`figure2_axis_y' 2 "2",  place(c) size(2) color(gs4))
+                    text(`figure2_axis_y' 2.5 "2.5",  place(c) size(2) color(gs4))
 
                     /// (Right hand side) Hospital Rates by Sex and Event type 
                     text(1  0.8 "Stroke (vs. AMI)"                ,  place(w) size(2.5) color("gs0"))
                     text(2  0.8 "CVD in Men (vs. Women)"          ,  place(w) size(2.5) color("gs0"))
                     text(3  0.8 "Strokes (vs. 2010-2011)"          ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(4  0.8 "2012-2013"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(5  0.8 "2014-2015"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(6  0.8 "2016-2017"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(7  0.8 "2018-2019"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(8  0.8 "2020-2021"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(9  0.8 "2022-2023"                       ,  place(w) size(2.5) color("${str_m}%75"))
-                    text(10 0.8 "Heart Attacks (vs. 2010-2011)"   ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(11 0.8 "2012-2013"                       ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(12 0.8 "2014-2015"                       ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(13 0.8 "2016-2017"                       ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(14 0.8 "2018-2019"                       ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(15 0.8 "2020-2021"                       ,  place(w) size(2.5) color("${ami_m}%75"))
-                    text(16 0.8 "2022-2023"                       ,  place(w) size(2.5) color("${ami_m}%75"))
+                    text(`ami_heading_y' 0.8 "Heart Attacks (vs. 2010-2011)"   ,  place(w) size(2.5) color("${ami_m}%75"))
+                    `figure2_period_text'
 
                     legend(off)
                     name(incidence_figure2, replace)
@@ -1066,18 +1208,18 @@ format srr lb_srr ub_srr %5.3f
 
     ** DTA DATASET EXPORT
     notes drop _all
-    label data "BNR-CVD Registry: age-group case-count data for 2023 CVD briefing"
-    notes _dta: title: BNR-CVD incidence rate ratios (Aggregated, 2012-2023)
+    label data "BNR-CVD Registry: age-group case-count data for `target_year' CVD briefing"
+    notes _dta: title: BNR-CVD incidence rate ratios (Aggregated, 2012-`target_year')
     notes _dta: version: v`briefing_version'
-    notes _dta: created: 2026-05-05
+    notes _dta: created: `release_date'
     notes _dta: creator: Ian Hambleton, Analyst
     notes _dta: registry: BNR-CVD
     notes _dta: content: Annual incidence rate ratios (Men vs Women) 
     notes _dta: tier: Public aggregate output
-    notes _dta: temporal: 2010-2023
+    notes _dta: temporal: 2010-`target_year'
     notes _dta: spatial: Barbados
     notes _dta: unit_of_analysis: Event type by sex and period
-    notes _dta: description: Incidence rate ratios (2010-2023) by event type, sex, year. Hospital events only. 
+    notes _dta: description: Incidence rate ratios (2010-`target_year') by event type, sex, period. Hospital events only.
     notes _dta: limitations: Based on hospital CVD event only
     notes _dta: language: en
     notes _dta: software: StataNow 19
@@ -1194,7 +1336,6 @@ restore
 *   the calling DO file. Writing a small control file makes the handover between
 *   the analysis layer and release layer explicit and auditable.
 
-local release_date = string(daily("`c(current_date)'", "DMY"), "%tdCCYY-NN-DD")
 local analysis_script "scripts/stata/briefings/cvd_incidence/cvd_incidence.do"
 local control_file "`stagingmetadata'/release_control.yml"
 

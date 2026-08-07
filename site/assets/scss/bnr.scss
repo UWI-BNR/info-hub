@@ -271,6 +271,27 @@ $secondary: #001f3d;
 }
 
 /*
+   The two action cards at the top of the news/index page.
+
+   Quarto renders each card as a block.  This wrapper places the cards in
+   equal-width columns on larger screens, with a small airgap between them.
+   The media query below restores a single column on narrow screens so the
+   cards remain readable on phones.
+*/
+
+.bnr-top-action-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.bnr-top-action-cards > .bnr-utility-card {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/*
    Utility link button row.
 
    Kept because this worked well visually.
@@ -323,6 +344,10 @@ $secondary: #001f3d;
   .bnr-home-section {
     margin: 2.5rem auto;
     padding: 0 1rem;
+  }
+
+  .bnr-top-action-cards {
+    grid-template-columns: 1fr;
   }
 }
 

@@ -406,8 +406,8 @@ viewof selected_age_group = {
           ${headline("Latest: stroke", latestEvent.find(d => d.event_type === "stroke"))}
         </div>
         <div class="bnr-chart-legend">
-          <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style="background:#D46A6A"></span>Heart attack</span>
-          <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style="background:#8B6FB4"></span>Stroke</span>
+          <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style="background:#D89C60"></span>Heart attack</span>
+          <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style="background:#045174"></span>Stroke</span>
         </div>
         ${Plot.plot({
           height: 330,
@@ -416,7 +416,7 @@ viewof selected_age_group = {
           style: {fontSize: "15px", fontFamily: "inherit"},
           x: {label: "Percent of events", domain: [0, 100], grid: true},
           y: {label: "Year", domain: Array.from(new Set(eventStack.map(d => d.year_label)))},
-          color: {domain: ["ami", "stroke"], range: ["#D46A6A", "#8B6FB4"], legend: false},
+          color: {domain: ["ami", "stroke"], range: ["#D89C60", "#045174"], legend: false},
           marks: [
             Plot.barX(eventStack, {
               y: "year_label",

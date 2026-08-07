@@ -1,11 +1,12 @@
 schema: bnr_download_manifest_v1
 briefing_id: cvd_los_2023_v1
-briefing_name: cvd_los_2023
+briefing_name: cvd_los_2023_v1
 output_type: briefing
+briefing_kind: routine
 domain: cvd
 surveillance_area: CVD
 period: 2023
-release_date: 2026-05-15
+release_date: 2026-08-07
 
 title: |-
   Barbados CVD length of stay, 2010-2023

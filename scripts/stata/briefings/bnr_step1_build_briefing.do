@@ -4,7 +4,7 @@
  PROJECT:     BNR info-hub
  PURPOSE:     Send one briefing build request to the correct analyst DO file
 
- VERSION:     v1.3
+ VERSION:     v1.4
 
  This is deliberately a very small dispatcher. It contains no analytical
  decisions and creates no outputs itself. Each briefing retains its own
@@ -48,17 +48,9 @@ if inlist("`selected'", "cvd case-fatality", "case_fatality") {
 }
 
 if inlist("`selected'", "cvd length of stay", "length_of_stay") {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "BNR BRIEFING STEP 1 STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Briefing: CVD length of stay" _n ///
-        as text "  Reason: this briefing has not yet been migrated." _n ///
-        as text "  Files created: No" _n ///
-        as error "------------------------------------------------------------" _n
-    }
-    exit 198
+    do "$BNR_STATA/briefings/cvd_length_of_stay/cvd_length_of_stay.do" ///
+        `release_year' `release_month' `briefing_version' `replace_option'
+    exit
 }
 
 if inlist("`selected'", "cvd mortality rates", "mortality") {

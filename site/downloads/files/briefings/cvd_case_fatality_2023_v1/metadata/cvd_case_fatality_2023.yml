@@ -12,7 +12,7 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-05-06
+    2026-08-07
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
@@ -38,25 +38,25 @@ metadata:
   rights: |-
     CC BY 4.0 Attribution
   source: |-
-    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+    bnr_cvd_input_case_fatality_202401_v01
   contact: |-
     Barbados National Registry
 
 variables:
   - name: etype
     type: float
-    format: %9.0g
+    format: %8.0g
     label: |-
-      CVD Event Type (AMI=2, Stroke=1)
+      CVD event type
     value_label: etype_
     categories: |-
       1=Stroke; 2=AMI; 
 
   - name: sex
-    type: float
+    type: byte
     format: %8.0g
     label: |-
-      Patient sex (1=female, 2=male)
+      Sex at birth
     value_label: sex_
     categories: |-
       1=Female; 2=Male; 
@@ -65,10 +65,10 @@ variables:
     type: float
     format: %9.0g
     label: |-
-      Two year intervals between 2010 and 2023
+      Two-year intervals between 2010 and 2023
     value_label: year2_
     categories: |-
-      1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 8=2010-2011; 9=2012-2013; 10=2014-2015; 11=2016-2017; 12=2018-2019; 13=2020-2021; 
+      1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 8=2012-2013; 9=2014-2015; 10=2016-2017; 11=2018-2019; 12=2020-2021; 13=2022-2023; 
 
   - name: event
     type: double

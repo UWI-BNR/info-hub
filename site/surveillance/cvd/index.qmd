@@ -35,17 +35,36 @@ format:
 
 The Barbados National Registry monitors major cardiovascular events, including stroke and heart attack, to support public health planning, service improvement, and population health surveillance.
 
+
+::: {.bnr-top-action-cards}
+
 ::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
 
 ### Live surveillance
 
-Explore the current monthly BNR CVD metrics dashboard, including hospital-registered CVD burden counts and stratified views.
+Explore the latest BNR CVD dashboard, updated weekly.
 
 ::: {.bnr-utility-links}
-[Live CVD surveillance](./metrics/index.qmd){.btn .btn-outline-primary}
+[Live CVD surveillance](./metrics/burden/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::
+
+::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
+
+### Latest tabulations
+
+Explore the latest CVD summary statistics.
+
+::: {.bnr-utility-links}
+[Latest CVD tables](./tabulations/index.qmd){.btn .btn-outline-primary}
+:::
+
+:::
+
+:::
+
+<br>
 
 ## Latest CVD outputs
 

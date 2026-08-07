@@ -3,7 +3,7 @@
  DO-FILE:     bnr_step2_approve_briefing.do
  PROJECT:     BNR info-hub
  WORKFLOW:    Briefing Step 2 - review and approve a staged briefing package
- VERSION:     1.1.0
+ VERSION:     1.2.0
 
  PURPOSE:
    Record the completed human review of one briefing package created by
@@ -163,8 +163,8 @@ if `briefing_version' < 1 {
 * ==============================================================================
 * 5. CONVERT THE BRIEFING SELECTION INTO THE PACKAGE ID
 * ==============================================================================
-* CVD incidence currently analyses complete calendar years through the end of
-* the year before the selected Step 3 data release.
+* Routine CVD briefings analyse complete calendar years through the end of the
+* year before the selected Step 3 data release.
 *
 * Ad-hoc analyses are intentionally not dispatched by this controller. The
 * analyst runs the analyst-owned DO file directly, and supplies the exact
@@ -178,6 +178,9 @@ if inlist(`"`selected_type'"', "cvd incidence rates", "incidence") {
 }
 else if inlist(`"`selected_type'"', "cvd case-fatality", "case_fatality") {
     local briefing_id "cvd_case_fatality_`target_year'_v`briefing_version'"
+}
+else if inlist(`"`selected_type'"', "cvd length of stay", "length_of_stay") {
+    local briefing_id "cvd_los_`target_year'_v`briefing_version'"
 }
 else if inlist(`"`selected_type'"', "ad-hoc briefing", "ad hoc briefing", "ad_hoc") {
     local briefing_id = strtrim(`"`ad_hoc_briefing_id'"')

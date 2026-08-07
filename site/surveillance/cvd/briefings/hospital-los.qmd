@@ -22,6 +22,28 @@ format:
 page-layout: full
 ---
 
+<!--
+MAINTENANCE NOTE — updating this HTML page to a later approved briefing release
+
+The current HTML page uses the approved 2023 v1 package:
+  cvd_los_2023_v1
+
+When a later product is published, update the package ID consistently in:
+  1. the shared-snippet include paths near the top of this file;
+  2. every figure path and full-size figure link;
+  3. the workbook link and filename; and
+  4. the ZIP package link and filename.
+
+Use the website mirror under:
+  ../../../downloads/files/briefings/{package_id}/
+
+Do not link this HTML page to private staging or to the authoritative
+outputs/public location. Update the visible year, headline values, narrative,
+and citation separately when the new analytical release requires it. The PDF
+and reveal.js links are maintained in their separate pages and should be
+updated in that later workflow.
+-->
+
 ::: {.bnr-utility-card .bnr-briefing-action-card .my-3}
 
 ### View other formats
@@ -201,6 +223,12 @@ In 2022-2023, the typical hospital stay after stroke was longer than after AMI. 
 
 
 ## Download the outputs
+
+<!--
+PACKAGE-LINK CHECK: the workbook and ZIP below must belong to the same package
+ID as the figures and snippet includes above. A version update is incomplete
+if any one of those links still points to the previous package.
+-->
 
 The briefing outputs are available in four formats.
 

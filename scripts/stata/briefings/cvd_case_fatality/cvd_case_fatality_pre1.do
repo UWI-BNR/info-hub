@@ -2,14 +2,14 @@
 * =====================================================================
  DO-FILE:     cvd_case_fatality.do
  PROJECT:     BNR info-hub
- PURPOSE:     Create the annual CVD case-fatality briefing outputs
+ PURPOSE:     Create the staged 2023 CVD case-fatality briefing outputs
 
  AUTHOR:      Ian R Hambleton
  VERSION:     v2.0
 
  NOTES:
-   This DO file is the analyst-owned build file for the annual CVD
-   case-fatality briefing. The filename is deliberately not tied to one year.
+   This DO file is the analyst-owned build file for the 2023 CVD
+   case-fatality briefing.
 
    The design principle is:
 
@@ -45,16 +45,16 @@
    type is recorded in output_type.
 
  OUTPUT BUNDLE:
-  STAGING: outputs/staging/briefings/cvd_case_fatality_{target_year}_v{version}/
+  STAGING: outputs/staging/briefings/cvd_case_fatality_2023_v2/
 
   Created directly by this DO file:
 
   datasets/
-    cvd_case_fatality_{target_year}.dta
-    cvd_case_fatality_{target_year}.csv
+    cvd_case_fatality_2023.dta
+    cvd_case_fatality_2023.csv
 
   figures/
-    cvd_case_fatality_{target_year}.png
+    cvd_case_fatality_2023.png
     cvd_case_fatality_age_group.png
 
   metadata/
@@ -66,18 +66,18 @@
   downloads.yml
 
   metadata/
-    cvd_case_fatality_{target_year}.yml
+    cvd_case_fatality_2023.yml
     briefing.yml
 
   workbook/
-    bnr_cvd_case_fatality_{target_year}_v{version}.xlsx
+    bnr_cvd_case_fatality_2023_v2.xlsx
 
   review/
     disclosure_flags.csv
     disclosure_review.txt
 
   PUBLICATION PRODUCT (created only after approval):
-    bnr_cvd_case_fatality_{target_year}_v{version}.zip
+    bnr_cvd_case_fatality_2023_v2.zip
     Stored inside the public briefing folder.
 * =====================================================================
 */
@@ -121,93 +121,44 @@ do "`localpath'/scripts/stata/common/bnrcvd_globals.do"
 *   do cvd_case_fatality.do release_year release_month ///
 *       briefing_version [replace]
 *
-* The briefing analyses complete calendar years through the end of the year
-* before the selected Step 3 release. For example, a January 2025 release
-* produces analysis through 31 December 2024.
+* This pilot analyses complete calendar years through the end of the year
+* before the selected Step 3 release. A January 2024 release therefore
+* produces the established 2010-2023 briefing.
 
 args release_year release_month briefing_version replace_option
 
 if "`release_year'" == "" | "`release_month'" == "" | ///
    "`briefing_version'" == "" {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: required briefing inputs were not supplied." _n ///
-        as text "  Files created: No" _n ///
-        as text "  Usage: do cvd_case_fatality.do release_year" _n ///
-        as text "         release_month briefing_version [replace]" _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: required Step 1 inputs were not supplied."
+    display as error "Usage: do cvd_case_fatality.do release_year release_month briefing_version [replace]"
     exit 198
 }
 
 foreach numeric_input in release_year release_month briefing_version {
     capture confirm integer number ``numeric_input''
     if _rc {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: `numeric_input' must be an integer." _n ///
-            as text "  Files created: No" _n ///
-            as text "  Next: correct the Briefing Step 1 inputs." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "CVD CASE-FATALITY BRIEFING STOPPED: `numeric_input' must be an integer."
         exit 198
     }
 }
 
 if !inrange(`release_month', 1, 12) {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: release_month must be between 1 and 12." _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: correct the Briefing Step 1 inputs." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: release_month must be between 1 and 12."
     exit 198
 }
 
 local target_year = `release_year' - 1
 
-* The validated 2023 briefing is the earliest package supported by this
-* workflow-owned file. Later releases are allowed and are handled below using
-* target_year throughout the analysis, figure text and metadata.
-if `target_year' < 2023 {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: the selected release would produce a briefing" _n ///
-        as text "          for a year earlier than 2023." _n ///
-        as result "  Earliest supported dataset release: 2024." _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: choose the required 2024 or later release." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+if `target_year' != 2023 {
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: this equivalence pilot supports 2024 dataset releases only."
+    display as error "A 2024 release analyses through 31 December 2023."
     exit 198
 }
 
 local replace_staging 0
 if lower("`replace_option'") == "replace" local replace_staging 1
 if "`replace_option'" != "" & lower("`replace_option'") != "replace" {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: the final optional argument must be replace." _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: correct the Briefing Step 1 inputs." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: the optional final argument must be replace."
     exit 198
 }
 
@@ -234,14 +185,6 @@ if "`replace_option'" != "" & lower("`replace_option'") != "replace" {
 local baseline_start    2018
 local baseline_end      2022
 
-* Case-fatality results use fixed two-year periods anchored at 2010-2011.
-* When target_year is the first year of a new pair (for example 2024), the
-* final displayed period contains that one complete calendar year and is
-* labelled "2024". The pair becomes "2024-2025" when the following year's
-* data are available.
-local analysis_start_year 2010
-local number_periods = floor((`target_year' - `analysis_start_year') / 2) + 1
-
 * The case-fatality library contains the deidentified clinical fields required
 * for the established fatality derivation: discharge status and dates of event,
 * discharge and death. It is deliberately not the count or incidence library.
@@ -261,7 +204,7 @@ local briefing_id       "cvd_case_fatality_`target_year'_v`briefing_version'"
 local briefing_name     "`briefing_id'"
 local output_type       "briefing"
 
-local briefing_title    "CVD case-fatality in Barbados, 2012-`target_year'"
+local briefing_title    "CVD case-fatality in Barbados, 2012-2023"
 local briefing_short    "Case-fatality in Barbados"
 local briefing_page     "surveillance/cvd/briefings/case-fatality.qmd"
 
@@ -304,11 +247,11 @@ local release_date = string(daily("`c(current_date)'", "DMY"), "%tdCCYY-NN-DD")
 * Each released figure should be saved as:
 *   figures/{output}.png
 
-local output1           "cvd_case_fatality_`target_year'"
+local output1           "cvd_case_fatality_2023"
 local output2           "cvd_case_fatality_age_group"
 
-local released_datasets "`output1'"
-local released_figures  "`output1' `output2'"
+local released_datasets "cvd_case_fatality_2023"
+local released_figures  "cvd_case_fatality_2023 cvd_case_fatality_age_group"
 
 
 * ----------------------------------------------------------------------------
@@ -332,8 +275,8 @@ local list_zip          1
 
 local workbook_file     "bnr_`briefing_id'.xlsx"
 
-local workbook_dataset1 "`output1'"
-local workbook_data1    "`output1'"
+local workbook_dataset1 "cvd_case_fatality_2023"
+local workbook_data1    "cvd_case_fatality_2023"
 local workbook_meta1    "meta_case_fatality"
 local workbook_vars1    "vars_case_fatality"
 
@@ -383,18 +326,9 @@ local staging_exists = !_rc
 capture cd "`prior_working_directory'"
 
 if `staging_exists' & `replace_staging' == 0 {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: the staging package already exists." _n ///
-        as result "  Folder: `stagingbriefing'" _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: use a new briefing version, or explicitly" _n ///
-        as text "        authorise replacement of unapproved staging." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: staging package already exists."
+    display as error "  `stagingbriefing'"
+    display as error "Use a new version, or explicitly add replace for unapproved staging."
     exit 602
 }
 
@@ -427,34 +361,15 @@ display as text _n ///
 
 capture confirm file "`input_file'"
 if _rc {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: Step 3 case-fatality input not found." _n ///
-        as result "  Expected: `input_file'" _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: check the selected dataset release and run" _n ///
-        as text "        monthly workflow Step 3 if required." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: Step 3 case-fatality input not found."
+    display as error "  Expected: `input_file'"
     exit 601
 }
 
 capture confirm file "`input_yml'"
 if _rc {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: Step 3 input metadata not found." _n ///
-        as result "  Expected: `input_yml'" _n ///
-        as text "  Files created: No" _n ///
-        as text "  Next: check that the selected Step 3 release is complete." _n ///
-        as error "------------------------------------------------------------" _n
-    }
+    display as error "CVD CASE-FATALITY BRIEFING STOPPED: Step 3 input metadata not found."
+    display as error "  Expected: `input_yml'"
     exit 601
 }
 
@@ -462,17 +377,8 @@ use "`input_file'", clear
 foreach required_variable in eid dco etype doe yoe moe dodi sadi dod sex agey {
     capture confirm variable `required_variable'
     if _rc {
-        qui {
-            noi display as error _n ///
-            "------------------------------------------------------------" _n ///
-            "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-            "------------------------------------------------------------" _n ///
-            as text "  Reason: required variable is missing from Step 3 input." _n ///
-            as result "  Variable: `required_variable'" _n ///
-            as text "  Files created: No" _n ///
-            as text "  Next: do not continue; check the Step 3 dataset contract." _n ///
-            as error "------------------------------------------------------------" _n
-        }
+        display as error "CVD CASE-FATALITY BRIEFING STOPPED: required Step 3 variable is missing."
+        display as error "  Variable: `required_variable'"
         exit 111
     }
 }
@@ -505,24 +411,7 @@ foreach required_variable in eid dco etype doe yoe moe dodi sadi dod sex agey {
 ** LOOK AT HOSPIPTAL EVENTS FOR NOW - drop DCOs 
 * Restrict the versioned input to this briefing's declared coverage.
 * Later records may be present in the Step 3 source.
-quietly count if yoe == `target_year'
-if r(N) == 0 {
-    qui {
-        noi display as error _n ///
-        "------------------------------------------------------------" _n ///
-        "CVD CASE-FATALITY BRIEFING STOPPED" _n ///
-        "------------------------------------------------------------" _n ///
-        as text "  Reason: the Step 3 input contains no records for" _n ///
-        as result "          target year `target_year'." _n ///
-        as text "  Public files created: No" _n ///
-        as text "  Next: check the selected dataset release and its" _n ///
-        as text "        declared coverage before rerunning Step 1." _n ///
-        as error "------------------------------------------------------------" _n
-    }
-    exit 2000
-}
-
-keep if inrange(yoe, `analysis_start_year', `target_year')
+keep if inrange(yoe, 2010, `target_year')
 
 * Hospital-ascertained events only: exclude death-certificate-only cases.
 drop if dco == 1
@@ -591,11 +480,15 @@ preserve
     sort yoe etype sex 
     order yoe etype sex 
 
-    ** Two-year intervals anchored at 2010-2011.
-    ** For the validated 2023 briefing this reproduces the original values
-    ** 1 to 7 exactly. A 2024 target adds period 8 containing 2024 alone.
-    gen year2 = floor((yoe - `analysis_start_year') / 2) + 1 ///
-        if inrange(yoe, `analysis_start_year', `target_year')
+    ** 2-year intervals 
+    gen year2 = .
+    replace year2 = 1 if yoe==2010 | yoe==2011
+    replace year2 = 2 if yoe==2012 | yoe==2013
+    replace year2 = 3 if yoe==2014 | yoe==2015
+    replace year2 = 4 if yoe==2016 | yoe==2017
+    replace year2 = 5 if yoe==2018 | yoe==2019
+    replace year2 = 6 if yoe==2020 | yoe==2021
+    replace year2 = 7 if yoe==2022 | yoe==2023
 
     gen case = cf3 + cf4 
 
@@ -722,9 +615,15 @@ restore
     tabulate cf, gen(cf) 
     gen event = 1 
 
-    ** Use the same fixed periods as the models above.
-    gen year2 = floor((yoe - `analysis_start_year') / 2) + 1 ///
-        if inrange(yoe, `analysis_start_year', `target_year')
+    ** 2-year intervals 
+    gen year2 = .
+    replace year2 = 1 if yoe==2010 | yoe==2011
+    replace year2 = 2 if yoe==2012 | yoe==2013
+    replace year2 = 3 if yoe==2014 | yoe==2015
+    replace year2 = 4 if yoe==2016 | yoe==2017
+    replace year2 = 5 if yoe==2018 | yoe==2019
+    replace year2 = 6 if yoe==2020 | yoe==2021
+    replace year2 = 7 if yoe==2022 | yoe==2023
 
     sort yoe etype sex 
     order yoe etype sex 
@@ -737,29 +636,11 @@ restore
     drop _merge
     format %4.1f ccase pcase 
     format %9.3f est* adj*
-    * Create labels for every period present. If target_year is even, the final
-    * label is a single year; the following annual release completes the pair.
-    forvalues period_number = 1/`number_periods' {
-        local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
-        local period_end = min(`period_start' + 1, `target_year')
-
-        if `period_start' == `period_end' {
-            local period_label "`period_start'"
-        }
-        else {
-            local period_label "`period_start'-`period_end'"
-        }
-
-        if `period_number' == 1 {
-            label define year2_ `period_number' "`period_label'", replace
-        }
-        else {
-            label define year2_ `period_number' "`period_label'", add
-        }
-    }
+    label define year2_ 1 "2010-2011" 2 "2012-2013" 3 "2014-2015" /// 
+                        4 "2016-2017" 5 "2018-2019" 6 "2020-2021" 7 "2022-2023"
     label values year2 year2_ 
     label var event "Number of events"
-    label var year2 "Two-year intervals between 2010 and `target_year'"
+    label var year2 "Two year intervals between 2010 and 2023"
     label var ccase "Confirmed hospital deaths (percentage)"
     label var pcase "Confirmed + Probable hospital deaths (percentage)"
     label var cf1 "Case-fatality, Confirmed Alive at discharge"
@@ -779,28 +660,12 @@ restore
 
 ** Recoding x-axis for visual clarity (graph separation)
 * x-axis shift
-* The shift keeps the stroke and AMI series in their established side-by-side
-* layout. With seven periods (the 2023 briefing), shift remains exactly 6.
-local shift = `number_periods' - 1
+local shift = 6
 replace year2 = year2 + `shift' if etype==2 
-
-* Add labels for the shifted AMI plotting positions. The first AMI position
-* deliberately meets the last stroke position, as in the established graph;
-* later AMI positions receive their corresponding period label.
-forvalues period_number = 2/`number_periods' {
-    local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
-    local period_end = min(`period_start' + 1, `target_year')
-
-    if `period_start' == `period_end' {
-        local period_label "`period_start'"
-    }
-    else {
-        local period_label "`period_start'-`period_end'"
-    }
-
-    local shifted_position = `period_number' + `shift'
-    label define year2_ `shifted_position' "`period_label'", add
-}
+label define year2_ 1 "2010-2011" 2 "2012-2013" 3 "2014-2015" /// 
+                    4 "2016-2017" 5 "2018-2019" 6 "2020-2021" 7 "2022-2023" ///
+                    8 "2010-2011" 9 "2012-2013" 10 "2014-2015" /// 
+                    11 "2016-2017" 12 "2018-2019" 13 "2020-2021" 14 "2022-2023", modify
 label values year2 year2_ 
 
 * Line width / dot size
@@ -811,50 +676,19 @@ local lw2 = 0.5
 * Strokes 
 local start1 = 1
 local prob1 = 4
-local dots1 = `number_periods' - 1
+local dots1 = 6
 * Heart Attacks 
 local start2 = 1 + `shift'
 local prob2 = 4 + `shift'
-local dots2 = (`number_periods' - 2) + `shift'
+local dots2 = 5 + `shift'
 
 local year "year2"
 
 ** Legend location - square (y, x)
 local legend_circle1 17.5 1.5
 local legend_circle3 17.5 2.6
-local legend_circle2_x = `shift' + 2
-local legend_circle4_x = `shift' + 3.1
-local legend_text2_x = `legend_circle2_x' + 0.1
-local legend_text4_x = `legend_circle4_x' + 0.1
-local legend_circle2 37.5 `legend_circle2_x'
-local legend_circle4 37.5 `legend_circle4_x'
-
-* Graph limits and the final x-axis segment advance with the number of periods.
-* Their 2023 values remain 13.2 and 7, exactly matching the established graph.
-local graph_x_max = (2 * `number_periods') - 0.8
-local final_axis_segment_end = min(7.5, `number_periods')
-
-* Add later alternate period labels only when they exist. The original three
-* labels (2012-13, 2016-17 and 2020-21) remain written explicitly in the graph
-* code below so their formatting is untouched.
-local later_axis_text ""
-if `number_periods' >= 8 {
-    forvalues period_number = 8(2)`number_periods' {
-        local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
-        local period_end = min(`period_start' + 1, `target_year')
-
-        if `period_start' == `period_end' {
-            local short_period_label "`period_start'"
-        }
-        else {
-            local short_start = substr("`period_start'", 3, 2)
-            local short_end = substr("`period_end'", 3, 2)
-            local short_period_label "`short_start'-`short_end'"
-        }
-
-        local later_axis_text `"`later_axis_text' text(42 `period_number' "`short_period_label'", place(c) size(6) color(gs6))"'
-    }
-}
+local legend_circle2 37.5 8
+local legend_circle4 37.5 9.1
 
         #delimit ;
             gr twoway 
@@ -863,7 +697,7 @@ if `number_periods' >= 8 {
                 (scatteri 42 1 42 1.5 , recast(line) lw(0.2) lc("gs6") lp("l"))
                 (scatteri 42 2.5 42 3.5 , recast(line) lw(0.2) lc("gs6") lp("l"))
                 (scatteri 42 4.5 42 5.5 , recast(line) lw(0.2) lc("gs6") lp("l"))
-                (scatteri 42 6.5 42 `final_axis_segment_end' , recast(line) lw(0.2) lc("gs6") lp("l"))
+                (scatteri 42 6.5 42 7 , recast(line) lw(0.2) lc("gs6") lp("l"))
 
                 ///  X-Axis
                 (scatteri `legend_circle1' , msize(4) lw(none) mc("${str_m}")  )
@@ -903,7 +737,7 @@ if `number_periods' >= 8 {
 
                     xlab(none, 
                     valuelabel labc(gs0) labs(2.5) notick nogrid angle(45) format(%9.0f))
-                    xscale(noline lw(vthin) range(0.8(0.2)`graph_x_max') )
+                    xscale(noline lw(vthin) range(0.8(0.2)13.2) ) 
                     xtitle(" ", size(3) color(gs0) margin(l=1 r=1 t=1 b=1)) 
                     
                     ylab(10(10)40,
@@ -915,17 +749,16 @@ if `number_periods' >= 8 {
                     text(42 2 `"{fontface "Montserrat Light": 2012-13}"' ,  place(c) size(6) color(gs6))
                     text(42 4 `"{fontface "Montserrat Light": 2016-17}"' ,  place(c) size(6) color(gs6))
                     text(42 6 `"{fontface "Montserrat Light": 2020-21}"' ,  place(c) size(6) color(gs6))
-                    `later_axis_text'
 
                     /// Legend text 
                     text(17.5 1.6 `"{fontface "Montserrat Light": Men}"' ,  place(e) size(6) color(gs6))
                     text(17.5 2.7 `"{fontface "Montserrat Light": Women}"' ,  place(e) size(6) color(gs6))
-                    text(37.5 `legend_text2_x' `"{fontface "Montserrat Light": Men}"' ,  place(e) size(6) color(gs6))
-                    text(37.5 `legend_text4_x' `"{fontface "Montserrat Light": Women}"' ,  place(e) size(6) color(gs6))
+                    text(37.5 8.1 `"{fontface "Montserrat Light": Men}"' ,  place(e) size(6) color(gs6))
+                    text(37.5 9.2 `"{fontface "Montserrat Light": Women}"' ,  place(e) size(6) color(gs6))
 
 
                     /// Title 
-                    text(4 `shift' "Case-Fatality in Barbados, 2010–`target_year'",  place(c) size(6) color(gs4))
+                    text(4 6 "Case-Fatality in Barbados, 2010–2023",  place(c) size(6) color(gs4))
 
                     legend(off)
 
@@ -938,17 +771,17 @@ if `number_periods' >= 8 {
     ** DTA DATASET EXPORT
     notes drop _all
     label data "BNR-CVD Registry: annual case-fatality in Barbados, `target_year'"
-    notes _dta: title: BNR-CVD annual case-fatality (Aggregated) (2012-`target_year')
+    notes _dta: title: BNR-CVD annual case-fatality (Aggregated) (2012-2023)
     notes _dta: version: v`briefing_version'
     notes _dta: created: `release_date'
     notes _dta: creator: Ian Hambleton, Analyst
     notes _dta: registry: BNR-CVD
     notes _dta: content: Annual case-fatality rates 
     notes _dta: tier: Public aggregate output
-    notes _dta: temporal: 2012-`target_year'
+    notes _dta: temporal: 2012-2023
     notes _dta: spatial: Barbados
     notes _dta: unit_of_analysis: Event type by sex and period
-    notes _dta: description: Annual age-standardized case-fatality (2012-`target_year'), for hospital events.
+    notes _dta: description: Annual age-standardized case-fatality (2012-2023), for hospital events.
     notes _dta: limitations: Based on hospital CVD events
     notes _dta: language: en
     notes _dta: software: StataNow 19

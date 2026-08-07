@@ -12,7 +12,7 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-05-05
+    2026-08-07
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
@@ -28,7 +28,7 @@ metadata:
   unit_of_analysis: |-
     Event type by sex and period
   description: |-
-    Incidence rate ratios (2010-2023) by event type, sex, year. Hospital events only.
+    Incidence rate ratios (2010-2023) by event type, sex, period. Hospital events only.
   limitations: |-
     Based on hospital CVD event only
   language: |-
@@ -38,7 +38,7 @@ metadata:
   rights: |-
     CC BY 4.0 Attribution
   source: |-
-    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+    bnr_cvd_input_count_202401_v01
   contact: |-
     Barbados National Registry
 

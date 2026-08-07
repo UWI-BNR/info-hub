@@ -12,7 +12,7 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-05-06
+    2026-08-07
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
@@ -38,7 +38,7 @@ metadata:
   rights: |-
     CC BY 4.0 Attribution
   source: |-
-    Barbados National Registry approved cardiovascular registry extract (Jan 2010-Dec 2023)
+    bnr_cvd_input_length_of_stay_202401_v01; complete calendar years 2010-2023
   contact: |-
     Barbados National Registry
 
@@ -47,23 +47,23 @@ variables:
     type: float
     format: %9.0g
     label: |-
-      unique summary measure indicator
+      Unique summary measure indicator
     value_label: 
     categories: |-
       
 
   - name: sex
-    type: float
+    type: byte
     format: %8.0g
     label: |-
-      female=1, male=2, both=3
+      Female=1, male=2, both=3
     value_label: sex_
     categories: |-
       1=Female; 2=Male; 3=Both; 
 
   - name: etype
-    type: float
-    format: %9.0g
+    type: byte
+    format: %8.0g
     label: |-
       CVD event type (stroke=1, AMI=2)
     value_label: etype_
@@ -71,10 +71,10 @@ variables:
       1=Stroke; 2=AMI; 3=Both; 
 
   - name: year2
-    type: float
+    type: int
     format: %9.0g
     label: |-
-      CVD event year (yyyy)
+      CVD event year (2-year intervals)
     value_label: year2_
     categories: |-
       0=All years; 1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 

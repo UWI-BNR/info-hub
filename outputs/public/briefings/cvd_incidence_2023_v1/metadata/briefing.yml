@@ -1,13 +1,17 @@
 schema: bnr_briefing_metadata_v1
 briefing_id: cvd_incidence_2023_v1
-briefing_name: cvd_incidence_2023
+briefing_name: cvd_incidence_2023_v1
 output_type: briefing
+briefing_kind: routine
 domain: cvd
 surveillance_area: CVD
 registry: BNR-CVD
 geography: Barbados
 period: 2023
-release_date: 2026-08-03
+release_date: 2026-08-07
+source_dataset_id: bnr_cvd_input_count_202401_v01
+source_dataset_release: 2024-01
+source_coverage_end: 2024-01-31
 
 title: |-
   Barbados CVD incidence rates, 2010-2023
@@ -49,8 +53,8 @@ figures:
     file: figures/cvd_incidence_rate_ratios.png
 
 build:
-  build_date:  3 Aug 2026
-  build_time: 09:35:38
-  stata_version: 19.5
+  build_date:  7 Aug 2026
+  build_time: 09:34:42
+  stata_version: 19
   analyst: ianha
-  analysis_script: scripts/stata/briefings/cvd_incidence_2023/cvd_incidence_2023.do
+  analysis_script: scripts/stata/briefings/cvd_incidence/cvd_incidence.do

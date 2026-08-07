@@ -1,5 +1,6 @@
 ---
 title: "CVD annual tabulations"
+date-format: DD MMM YYYY
 format:
   html:
     page-layout: article
