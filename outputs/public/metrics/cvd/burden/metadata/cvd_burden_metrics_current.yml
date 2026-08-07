@@ -1,17 +1,17 @@
 schema: bnr_public_metric_dataset_v1
 dataset_type: current
 package_status: public_ready
-package_id: cvd_burden_cvd_2024_02
-release_id: cvd_2024_02
+package_id: cvd_burden_cvd_2024_01
+release_id: cvd_2024_01
 domain: cvd
 metric_family: burden
-rows: 2443
+rows: 2437
 sdc_policy: bnr_sdc_v1
-suppressed_rows: 0
-primary_rows: 0
-secondary_rows: 0
+suppressed_rows: 12
+primary_rows: 3
+secondary_rows: 6
 temporal_rows: 0
-derived_rows: 0
+derived_rows: 3
 suppression_status_values:
   - none
   - primary

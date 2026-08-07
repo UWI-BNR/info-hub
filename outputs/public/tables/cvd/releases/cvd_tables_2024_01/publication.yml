@@ -5,8 +5,8 @@ product_type: cvd_annual_tabulations
 coverage_end: 2024-01-31
 approved_by: Ian Hambleton
 approved_role: BNR Developer
-published_date: 2026-08-05
-published_time: "17:11:29"
+published_date: 2026-08-07
+published_time: "13:23:31"
 published_by_system_user: "ianha"
 workflow_step: 3
 manifest: public_manifest.csv

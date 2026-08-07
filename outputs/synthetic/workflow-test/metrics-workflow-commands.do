@@ -1,4 +1,4 @@
-﻿
+
 ** 2024
 ** Month 1
 do $BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do 2024 1 replace
@@ -8,6 +8,8 @@ do $BNR_STATA/monthly/bnr_step4_metrics.do 2024 1 burden replace
 do $BNR_STATA/monthly/bnr_step5_review.do 2024 1 burden prepare replace
 do $BNR_STATA/monthly/bnr_step5_review.do 2024 1 burden approve "Ian Hambleton" "BNR Developer"
 do $BNR_STATA/monthly/bnr_step6_publish.do 2024 1 burden replace
+
+/*
 
 ** Month 2
 do $BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do 2024 2 replace

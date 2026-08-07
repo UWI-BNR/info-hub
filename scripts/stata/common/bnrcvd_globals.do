@@ -46,22 +46,21 @@ global tables    "$BNR_BRIEF_TABLES"
 *-------------------------------
 * RGB triplets avoid a dependency on user-written colour utilities.
 
-AMI
-ami_m: #A4161A
-ami_m70: #D46A6A
-ami_f: #EF5350
-ami_f70: #F7A6A3
-Stroke
-str_m: #472D75
-str_m70: #8B6FB4
-str_f: #9C89B8
-str_f70: #C9B6E4
-
-highlight: #FFBA08
-baseline: #8D99AE
-background: #FAFAFA
-text: #2E2E2E
-darkframe: #1D3557
+* AMI
+* ami_m: #A4161A
+* ami_m70: #D46A6A
+* ami_f: #EF5350
+* ami_f70: #F7A6A3
+* Stroke
+* str_m: #472D75
+* str_m70: #8B6FB4
+* str_f: #9C89B8
+* str_f70: #C9B6E4
+* highlight: #FFBA08
+* baseline: #8D99AE
+* background: #FAFAFA
+* text: #2E2E2E
+* darkframe: #1D3557
 
 * AMI
 global ami_m   "164 22 26"

@@ -6,7 +6,7 @@ surveillance_area: CVD
 domain: cvd
 metric_family: burden
 period: 2024-01
-release_date: 2026-08-01
+release_date: 2026-08-07
 
 title: |-
   CVD burden metrics

@@ -1,37 +1,96 @@
 ---
 title: "Stata code inventory"
 format: html
-toc: false
+toc: true
 ---
 
-This page lists the Stata DO and ADO files currently retained in `scripts/stata/` as at 17 July 2026. It describes each active or transitional file's present responsibility; detailed run instructions belong in `site/operations/` and `site/technical/`.
+This page lists the Stata DO and ADO files retained in `scripts/stata/` as at 7 August 2026. It separates routine operational code from validation evidence and legacy code awaiting controlled retirement. Detailed run instructions belong in `site/operations/` and `site/technical/`.
 
-| Area | Relative path | Filename | Responsibility |
-|:-----|:------------------------|:--------------------------------------|:----------------------------------------------------------------------------------------------------------------|
-| ADO utility | `ado/` | [`bnr_workbook.ado`](ado/bnr_workbook.ado) | Creates an Excel workbook from a Stata dataset. It writes the data, dataset metadata derived from structured Stata notes, and variable metadata derived from formats, labels, value labels, and observed labelled categories to separate worksheets. |
-| ADO utility | `ado/` | [`bnr_yml.ado`](ado/bnr_yml.ado) | Creates a standard BNR dataset-metadata YAML file from a Stata dataset, including file references, structured dataset notes, and variable-level types, formats, labels, and observed labelled categories. |
-| Deprecated ADO | `ado/` | [`bnryaml.ado`](ado/bnryaml.ado) | **Deprecated; awaiting relocation from this folder.** |
-| Annual | `annual/` | [`build_cvd_annual_tabulations.do`](annual/build_cvd_annual_tabulations.do) | Builds 2023 annual CVD tabulations, including comparisons by event type, year, sex, and age group, and exports tables, a workbook, and metadata. **Transitional:** it still writes directly to the annual site-download pathway rather than the standard staging/approval/public pathway. |
-| Briefing | `briefings/cvd_case_fatality_2023/` | [`cvd_case_fatality_2023.do`](briefings/cvd_case_fatality_2023/cvd_case_fatality_2023.do) | Analyst-owned build for the 2023 CVD case-fatality briefing. Creates released datasets and figures in staging, writes release-control metadata, and calls the shared briefing publisher. |
-| Briefing | `briefings/cvd_cases_2023/` | [`cvd_cases_2023.do`](briefings/cvd_cases_2023/cvd_cases_2023.do) | Analyst-owned build for the 2023 CVD case-count briefing. Produces weekly and age-group datasets and figures in staging, then calls the shared briefing publisher. |
-| Briefing | `briefings/cvd_incidence_2023/` | [`cvd_incidence_2023.do`](briefings/cvd_incidence_2023/cvd_incidence_2023.do) | Analyst-owned build for the 2023 CVD incidence briefing. Produces annual incidence and rate-ratio datasets and figures in staging, then calls the shared briefing publisher. |
-| Briefing | `briefings/cvd_los_2023_v1/` | [`bnrcvd_los_2023.do`](briefings/cvd_los_2023_v1/bnrcvd_los_2023.do) | Analyst-owned build for the 2023 CVD length-of-stay briefing. Produces length-of-stay and bed-demand datasets and figures in staging, then calls the shared briefing publisher. |
-| Common | `common/` | [`bnr_publish_briefing.do`](common/bnr_publish_briefing.do) | Shared packaging and publication mechanics for briefing and supporting-output packages: creates metadata and download files, an optional workbook and ZIP, copies the package to `outputs/public/`, and refreshes the site mirror. **Interim:** it currently combines actions that the planned approval-and-promotion command will separate. |
-| Common | `common/` | [`bnr_publish_metric.do`](common/bnr_publish_metric.do) | Shared packaging and publication mechanics for metric packages: creates metadata and download files, ZIPs and copies the release/current datasets to `outputs/public/`, and refreshes the site mirror. **Interim:** it currently combines actions that the planned approval-and-promotion command will separate. |
-| Common | `common/` | [`bnrcvd_globals.do`](common/bnrcvd_globals.do) | Defines shared run metadata, compatibility aliases, and CVD display constants. It does not define machine-specific project paths. |
-| Common | `common/` | [`bnrcvd_prep_2023_v1.do`](common/bnrcvd_prep_2023_v1.do) | Central preparation step for the 2023 reporting cycle. Converts the frozen cumulative 2009–2023 CVD dataset into the full and simplified analysis-ready datasets used by downstream briefings, metrics, and tabulations. |
-| Common | `common/` | [`mirror_public_to_site.do`](common/mirror_public_to_site.do) | Copies an already approved public briefing or supporting-output package into `site/downloads/files/briefings/`. It performs no analysis and does not promote staging content. |
-| Configuration | `config/` | [`bnr_paths_TEMPLATE.do`](config/bnr_paths_TEMPLATE.do) | Version-controlled workstation template. Users copy it to the untracked `bnr_paths_LOCAL.do` and set the repository and private-data root paths. |
-| Metric | `metrics/cvd/` | [`metric_cvd_burden.do`](metrics/cvd/metric_cvd_burden.do) | Builds reusable long-format CVD burden metric datasets, currently covering hospital-registered event counts and event distributions; writes release-stamped and `current` files to staging and calls the metric publisher. |
-| Refit diagnostic | `refit/` | [`bnrcvd-2023-forensics1.do`](refit/bnrcvd-2023-forensics1.do) | Compares candidate historical stroke datasets to help identify the appropriate cumulative source, reporting record and variable counts and selected missingness checks. **Legacy-dependent:** it contains hard-coded historical workstation paths and is not part of the routine output pipeline. |
-| Refit evidence | `refit/` | [`bnrcvd_2023_forensics2.do`](refit/bnrcvd_2023_forensics2.do) | Builds the supporting process-audit figure showing duplication in the historical CVD dataset file structure, stages the artefact and release-control metadata, and calls the shared briefing publisher. |
+The **Stata dependencies** column lists other DO or ADO files required by the file. It does not list input datasets, manifests, dialog files, help files, or standard Stata commands. A dependency marked *indirect* is called through another listed helper.
 
-## Excluded from this inventory
+## Active operational code
 
-- filenames containing `copy`;
-- files under `docs/holding-bay/stata-legacy/`; and
-- `refit/bnrcvd-2023-forensics2_original.do`, which is superseded by `refit/bnrcvd_2023_forensics2.do`.
+These files form the current Metrics, Briefings and Tables workflows. They should remain in the live code tree.
 
-The `.sthlp` help files in `ado/` are documentation rather than executable Stata code and are therefore not listed as separate code entries.
+| Area | File | Responsibility | Stata dependencies |
+|:-----|:-----|:---------------|:-------------------|
+| ADO utility | [`ado/bnr_workbook.ado`](ado/bnr_workbook.ado) | Creates an Excel workbook from a Stata dataset, with separate data, dataset-metadata and variable-metadata worksheets. | None. |
+| ADO utility | [`ado/bnr_yml.ado`](ado/bnr_yml.ado) | Creates standard BNR dataset-metadata YAML from Stata dataset notes, labels, formats, types and observed labelled categories. | None. |
+| Briefing Step 1 | [`briefings/bnr_step1_build_briefing.do`](briefings/bnr_step1_build_briefing.do) | Dispatches a briefing build request to the selected analyst-owned analysis file. It makes no analytical decisions and creates no outputs itself. | `cvd_incidence.do`; `cvd_case_fatality.do`; `cvd_length_of_stay.do`. |
+| Briefing Step 2 | [`briefings/bnr_step2_approve_briefing.do`](briefings/bnr_step2_approve_briefing.do) | Validates a staged briefing package, records the reviewer decision and creates the approval receipt and public manifest. It does not publish files. | `config/bnr_paths_LOCAL.do`. |
+| Briefing Step 3 | [`briefings/bnr_step3_publish_briefing.do`](briefings/bnr_step3_publish_briefing.do) | Validates the approval receipt and public manifest, promotes approved briefing files to `outputs/public/briefings/`, and refreshes the site download mirror. | `config/bnr_paths_LOCAL.do`. |
+| Briefing analysis | [`briefings/cvd_case_fatality/cvd_case_fatality.do`](briefings/cvd_case_fatality/cvd_case_fatality.do) | Calculates annual CVD case-fatality outputs from the approved Step 3 metric-input dataset and creates a complete private staging package for review. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnr_stage_briefing.do`; indirectly `bnr_yml.ado` and `bnr_workbook.ado`. |
+| Briefing analysis | [`briefings/cvd_incidence/cvd_incidence.do`](briefings/cvd_incidence/cvd_incidence.do) | Calculates annual CVD incidence and rate-ratio outputs from the approved Step 3 metric-input dataset and creates a complete private staging package for review. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnr_stage_briefing.do`; indirectly `bnr_yml.ado` and `bnr_workbook.ado`. |
+| Briefing analysis | [`briefings/cvd_length_of_stay/cvd_length_of_stay.do`](briefings/cvd_length_of_stay/cvd_length_of_stay.do) | Calculates annual CVD length-of-stay and bed-demand outputs from the approved Step 3 metric-input dataset and creates a complete private staging package for review. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnr_stage_briefing.do`; indirectly `bnr_yml.ado` and `bnr_workbook.ado`. |
+| Common briefing helper | [`common/bnr_stage_briefing.do`](common/bnr_stage_briefing.do) | Applies the common briefing packaging contract at the end of an analyst build: validates staged outputs, writes metadata and review material, builds the workbook and ZIP, and leaves the package in private staging. It does not approve or publish. | `ado/bnr_yml.ado`; `ado/bnr_workbook.ado`. |
+| Common metric helper | [`common/bnr_step4_stage_metric.do`](common/bnr_step4_stage_metric.do) | Validates and packages unsuppressed metric outputs and their QA material in private Step 4 staging. | None. |
+| Common metric helper | [`common/bnr_step5_suppress.do`](common/bnr_step5_suppress.do) | Applies the metrics disclosure-control rules and creates the public-ready candidate and suppression-review material used by Metrics Step 5. | None. |
+| Common configuration | [`common/bnrcvd_globals.do`](common/bnrcvd_globals.do) | Defines shared run metadata, compatibility aliases and CVD display constants. It does not define machine-specific project paths. | None. |
+| Local configuration | `config/bnr_paths_LOCAL.do` | Defines the machine-specific public repository, private repository, staging, log, token and ADO paths used by local Stata runs. This file remains untracked. | None. Created from `bnr_paths_TEMPLATE.do`. |
+| Configuration template | [`config/bnr_paths_TEMPLATE.do`](config/bnr_paths_TEMPLATE.do) | Version-controlled template used to create `bnr_paths_LOCAL.do` on a workstation. | None. |
+| Menu | [`menu/bnr_menu.do`](menu/bnr_menu.do) | Adds the current Metrics, Briefings and Tables dialog entry points to Stata's **User** menu. | No DO/ADO dependency; opens the matching files under `dialogs/`. |
+| Metrics Step 1 | [`monthly/bnr_step1_cvd_redcap_extract.do`](monthly/bnr_step1_cvd_redcap_extract.do) | Extracts the selected cumulative CVD REDCap release and writes the private raw CSV, Stata dataset, extraction manifest and log. | `config/bnr_paths_LOCAL.do`. |
+| Metrics Step 2 | [`monthly/bnr_step2_cvd_confidential.do`](monthly/bnr_step2_cvd_confidential.do) | Joins the selected REDCap release to the invariant historical data, reconciles the sources, and writes the confidential cumulative CVD dataset and QA outputs. | `config/bnr_paths_LOCAL.do`. |
+| Metrics Step 3 | [`monthly/bnr_step3_metric_inputs.do`](monthly/bnr_step3_metric_inputs.do) | Creates authorised, deidentified input datasets for counts, incidence, case-fatality, length-of-stay and the combined all-variables product. | `config/bnr_paths_LOCAL.do`. |
+| Metrics Step 4 | [`monthly/bnr_step4_metrics.do`](monthly/bnr_step4_metrics.do) | Controls calculation of the selected metric family and creation of its private unsuppressed staging package. | `config/bnr_paths_LOCAL.do`; `metrics/cvd/bnr_step4_cvd_burden.do`; `common/bnr_step4_stage_metric.do`. |
+| Metric analysis | [`metrics/cvd/bnr_step4_cvd_burden.do`](metrics/cvd/bnr_step4_cvd_burden.do) | Calculates the current CVD burden metrics, including registered event counts and event distributions, and returns the standard long-format dataset and QA results to the Step 4 controller. | None; receives its run contract from `monthly/bnr_step4_metrics.do`. |
+| Metrics Step 5 | [`monthly/bnr_step5_review.do`](monthly/bnr_step5_review.do) | Runs the deliberately separate prepare and approve actions: creates a suppressed public-ready candidate for human review, then records approval and writes the public manifest. | `config/bnr_paths_LOCAL.do`; `common/bnr_step5_suppress.do`. |
+| Metrics Step 6 | [`monthly/bnr_step6_publish.do`](monthly/bnr_step6_publish.do) | Checks the approval receipt and manifest, promotes approved metric files to the public output tree, and refreshes the website mirror. | `config/bnr_paths_LOCAL.do`. |
+| Tables Step 1 | [`tables/bnr_step1_cvd_tables.do`](tables/bnr_step1_cvd_tables.do) | Calculates the private unsuppressed CVD tabulation datasets and workbook from the approved all-variables Step 3 input. | `config/bnr_paths_LOCAL.do`. |
+| Tables Step 2A | [`tables/bnr_step2a_cvd_tables.do`](tables/bnr_step2a_cvd_tables.do) | Applies primary and secondary suppression, creates public-ready table files, and writes the disclosure-review material. | `config/bnr_paths_LOCAL.do`. |
+| Tables Step 2B | [`tables/bnr_step2b_cvd_tables_approve.do`](tables/bnr_step2b_cvd_tables_approve.do) | Validates the reviewed table package and records approval without publishing it. | `config/bnr_paths_LOCAL.do`. |
+| Tables Step 3 | [`tables/bnr_step3_cvd_tables_publish.do`](tables/bnr_step3_cvd_tables_publish.do) | Validates the approved table package and manifest, promotes the 26 required files, refreshes the site mirror, and creates the stable download ZIP. | `config/bnr_paths_LOCAL.do`. |
 
-These exclusions should eventually be removed from the repository or retained only in an explicitly labelled archive.
+## Validation, migration and non-routine support
+
+These files are not part of routine monthly operations. They are retained as technical evidence or controlled examples.
+
+| Area | File | Responsibility | Stata dependencies |
+|:-----|:-----|:---------------|:-------------------|
+| Ad-hoc briefing test | [`briefings/ad-hoc/cvd_ad_hoc_workflow_test_2026_v1.do`](briefings/ad-hoc/cvd_ad_hoc_workflow_test_2026_v1.do) | Exercises the ad-hoc branch of the current briefing staging contract. | `config/bnr_paths_LOCAL.do`; `common/bnr_stage_briefing.do`; indirectly `bnr_yml.ado` and `bnr_workbook.ado`. |
+| Case-fatality validation | [`briefings/cvd_case_fatality/cvd_case_fatality_equivalence_check.do`](briefings/cvd_case_fatality/cvd_case_fatality_equivalence_check.do) | One-time comparison used to verify that the migrated case-fatality analysis reproduces the accepted historical results. | None; compares retained data products. |
+| Incidence validation | [`briefings/cvd_incidence/cvd_incidence_equivalence_check.do`](briefings/cvd_incidence/cvd_incidence_equivalence_check.do) | One-time comparison used to verify that the migrated incidence analysis reproduces the accepted historical results. | None; compares retained data products. |
+| Case-count migration | [`briefings/cvd_cases_2023/cvd_cases_2023_v2.do`](briefings/cvd_cases_2023/cvd_cases_2023_v2.do) | Frozen migration pilot showing how the former case-count briefing used a Step 3 input and the current briefing staging helper. Case counts are no longer an operational briefing product. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnr_stage_briefing.do`; indirectly `bnr_yml.ado` and `bnr_workbook.ado`. |
+| Case-count validation | [`briefings/cvd_cases_2023/cvd_cases_2023_v2_equivalence_check.do`](briefings/cvd_cases_2023/cvd_cases_2023_v2_equivalence_check.do) | One-time equivalence test supporting the case-count v2 migration pilot. | None; compares retained historical and migrated products. |
+| Tables validation | [`tables/bnr_step1_cvd_tables_regression.do`](tables/bnr_step1_cvd_tables_regression.do) | One-time regression comparison between the accepted source workbook and the Tables Step 1 outputs. | None; consumes retained comparison products. |
+
+## Superseded code awaiting controlled retirement
+
+These files have current replacements and are not part of routine operations. They should be moved only in the agreed reversible cleanup batches, together with their matching dialog and help files where applicable.
+
+| Area | File | Responsibility | Stata dependencies |
+|:-----|:-----|:---------------|:-------------------|
+| Legacy metric helper | [`common/bnr_apply_suppression.do`](common/bnr_apply_suppression.do) | Applies the earlier metrics suppression contract used only by the superseded review controller. | None; called only by `monthly/bnr_cvd_review_controller.do`. |
+| Legacy briefing controller | [`common/bnr_approve_publish_briefing.do`](common/bnr_approve_publish_briefing.do) | Implements the superseded combined briefing approval-and-publication action. | `config/bnr_paths_LOCAL.do`. |
+| Legacy metric publisher | [`common/bnr_publish_metric.do`](common/bnr_publish_metric.do) | Implements the superseded combined metric packaging, publication and mirroring pathway. | `ado/bnr_yml.ado`. |
+| Legacy metric helper | [`common/bnr_stage_metric.do`](common/bnr_stage_metric.do) | Packages metric outputs under the earlier Step 4 staging contract. | None; called only by `monthly/bnr_cvd_metric_controller.do`. |
+| Superseded briefing analysis | [`briefings/cvd_case_fatality/cvd_case_fatality_pre1.do`](briefings/cvd_case_fatality/cvd_case_fatality_pre1.do) | Pre-migration case-fatality analysis retained temporarily for comparison with the current analyst file. | Legacy preparation/publication pathway; superseded by `cvd_case_fatality.do`. |
+| Legacy Metrics Step 1 | [`monthly/bnr_cvd_redcap_extract_pre.do`](monthly/bnr_cvd_redcap_extract_pre.do) | Earlier REDCap extraction controller. | `config/bnr_paths_LOCAL.do`; superseded by `bnr_step1_cvd_redcap_extract.do`. |
+| Legacy Metrics Step 2 | [`monthly/bnr_cvd_prepare_confidential.do`](monthly/bnr_cvd_prepare_confidential.do) | Earlier confidential cumulative-dataset controller. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; superseded by `bnr_step2_cvd_confidential.do`. |
+| Legacy Metrics Step 3 | [`monthly/bnr_cvd_create_metric_inputs.do`](monthly/bnr_cvd_create_metric_inputs.do) | Earlier deidentified metric-input controller. | `config/bnr_paths_LOCAL.do`; superseded by `bnr_step3_metric_inputs.do`. |
+| Legacy Metrics Step 4 | [`monthly/bnr_cvd_metric_controller.do`](monthly/bnr_cvd_metric_controller.do) | Earlier metric-family controller and staging entry point. | `config/bnr_paths_LOCAL.do`; metric analysis file; `common/bnr_stage_metric.do`; superseded by `bnr_step4_metrics.do`. |
+| Legacy Metrics Step 5 | [`monthly/bnr_cvd_review_controller.do`](monthly/bnr_cvd_review_controller.do) | Earlier combined suppression, review and approval controller. | `config/bnr_paths_LOCAL.do`; `common/bnr_apply_suppression.do`; superseded by `bnr_step5_review.do`. |
+
+## Coupled historical or archive decisions
+
+These files are not current operations, but they form linked historical units or support an earlier published product. They should be archived or retained together, not removed individually.
+
+| Area | File | Responsibility | Stata dependencies |
+|:-----|:-----|:---------------|:-------------------|
+| Historical annual tables | [`annual/build_cvd_annual_tabulations.do`](annual/build_cvd_annual_tabulations.do) | Builds the former 2023 annual CVD tabulation package. The current Tables Steps 1–3 supersede it. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnrcvd_prep_2023_v1.do`; `ado/bnr_yml.ado`. |
+| Historical case counts | [`briefings/cvd_cases_2023/cvd_cases_2023.do`](briefings/cvd_cases_2023/cvd_cases_2023.do) | Builds the original weekly and age-group case-count briefing. Case counts are now covered by dashboards. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnrcvd_prep_2023_v1.do`; `common/bnr_publish_briefing.do`. |
+| Historical preparation | [`common/bnrcvd_prep_2023_v1.do`](common/bnrcvd_prep_2023_v1.do) | Converts the frozen cumulative 2009–2023 CVD source into the historical analysis datasets used by the old annual tables and v1 case-count workflows. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `ado/bnr_yml.ado`. |
+| Historical publisher | [`common/bnr_publish_briefing.do`](common/bnr_publish_briefing.do) | Performs the earlier combined briefing packaging, publication and site-mirroring process. | `ado/bnr_yml.ado`; `ado/bnr_workbook.ado`; `common/mirror_public_to_site.do`. |
+| Historical mirror helper | [`common/mirror_public_to_site.do`](common/mirror_public_to_site.do) | Copies an already public package into the former briefing download mirror. | `config/bnr_paths_LOCAL.do`; called only through `common/bnr_publish_briefing.do`. |
+| Refit diagnostic | [`refit/bnrcvd-2023-forensics1.do`](refit/bnrcvd-2023-forensics1.do) | Compares candidate historical stroke datasets to identify the appropriate cumulative source. It contains hard-coded historical workstation paths. | None. |
+| Refit evidence | [`refit/bnrcvd_2023_forensics2.do`](refit/bnrcvd_2023_forensics2.do) | Builds and publishes the historical process-audit figure showing duplication in the CVD dataset file structure. | `config/bnr_paths_LOCAL.do`; `common/bnrcvd_globals.do`; `common/bnr_publish_briefing.do`; indirectly the two ADO utilities and mirror helper. |
+
+## Files not listed separately
+
+- `.dlg` files provide Stata dialog interfaces; they do not perform analysis.
+- `.sthlp` files provide Stata help and are not executable code.
+- `config/bnr_paths_LOCAL.do` is listed for operational clarity but should remain untracked.
+- Files already under `docs/holding-bay/stata-legacy/` are outside the live `scripts/stata/` inventory.
+- Filenames containing `copy` and `refit/bnrcvd-2023-forensics2_original.do` are excluded because they are superseded copies rather than maintained code.
+
+Movement or deletion of non-operational files should follow the controlled cleanup register and be followed by current workflow checks and a full Quarto render.
