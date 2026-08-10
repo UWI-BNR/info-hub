@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Update an existing briefing"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to revise an existing briefing without accidentally overwriting an approved release.
 
 ::: {.callout-note}
 ## Status

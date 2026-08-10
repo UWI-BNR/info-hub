@@ -8,9 +8,22 @@ toc-depth: 2
 number-sections: false
 ---
 
-The Technical Manual explains how to maintain the BNR info-hub publication infrastructure.
+The Technical Manual is a practical guide to operating and maintaining the BNR analytics and publishing environment after data collection in REDCap.
 
-It covers local setup, static briefing workflows, approved output bundles, Quarto rendering, PDF briefings, release catalogue updates, GitHub Pages deployment, and troubleshooting.
+Use it as a **dip-in, dip-out guide**: choose the task you need, follow the steps, and check the expected result.
 
-For registry operating procedures, use the BNR Operations Manual.
+## Main workflows
 
+The reporting environment has three operational workflows:
+
+1. **Dashboard metrics** â€” prepares the common analytical inputs and produces routine dashboard metrics.
+2. **Tabulations** â€” uses the deidentified analytical inputs to produce approved public tabulations.
+3. **Briefings** â€” uses the deidentified analytical inputs to produce occasional analytical briefings.
+
+A mortality workflow will be added when that pathway has been implemented.
+
+## Other guidance
+
+The manual also contains short guides for review and disclosure control, approval and publication, website operation, maintenance, troubleshooting, and quick reference.
+
+For BNR operating procedures before and within REDCap, use the **BNR Operations Manual**.

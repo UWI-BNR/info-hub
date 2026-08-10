@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Run the briefings workflow"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to create, review, approve and publish an occasional BNR briefing.
 
 ::: {.callout-note}
 ## Status

@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Apply and review disclosure control"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+Practical guidance on BNR disclosure control and release-wide disclosure review.
 
 ::: {.callout-note}
 ## Status

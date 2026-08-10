@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Create deidentified analytical inputs"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to run Dashboard Step 3 and check the deidentified analytical input datasets.
 
 ::: {.callout-note}
 ## Status

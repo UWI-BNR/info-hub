@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Run the tabulations workflow"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to produce, review, approve and publish BNR tabulations.
 
 ::: {.callout-note}
 ## Status

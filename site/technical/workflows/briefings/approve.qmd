@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Approve a briefing"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to approve a briefing after analytical and disclosure review.
 
 ::: {.callout-note}
 ## Status

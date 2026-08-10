@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Understand files, releases and versions"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+A practical guide to the main folders, release identifiers and authoritative copies.
 
 ::: {.callout-note}
 ## Status

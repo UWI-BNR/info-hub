@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Fix common problems"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+Short fixes for common Stata, publication, Quarto and Git problems.
 
 ::: {.callout-note}
 ## Status

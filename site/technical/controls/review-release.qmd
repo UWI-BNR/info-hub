@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Review an analytical release"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+A short checklist for reviewing an analytical package before approval.
 
 ::: {.callout-note}
 ## Status

@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Run the mortality workflow"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+This pathway will be documented when the mortality workflow has been implemented.
 
 ::: {.callout-note}
 ## Status

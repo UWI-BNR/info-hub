@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Prepare the confidential dataset"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to run Dashboard Step 2 and check the confidential cumulative dataset.
 
 ::: {.callout-note}
 ## Status

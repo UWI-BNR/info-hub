@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Prepare a briefing for review"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to create and inspect the briefing review package.
 
 ::: {.callout-note}
 ## Status

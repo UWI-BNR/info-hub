@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Set up a workstation"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to configure a workstation to run the BNR analytics and publishing environment.
 
 ::: {.callout-note}
 ## Status

@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Update website content"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to make routine changes to pages, navigation, listings and downloads.
 
 ::: {.callout-note}
 ## Status

@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Approve and publish a release"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How the common approval and publication controls operate across BNR products.
 
 ::: {.callout-note}
 ## Status

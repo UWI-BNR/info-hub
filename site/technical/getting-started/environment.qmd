@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "The BNR analytics and publishing environment"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+A concise overview of the post-REDCap system, its main components, roles and workflow boundaries.
 
 ::: {.callout-note}
 ## Status

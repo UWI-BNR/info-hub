@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Run the dashboard metrics workflow"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to run the primary BNR reporting workflow, from REDCap extract through to approved dashboard metrics.
 
 ::: {.callout-note}
 ## Status

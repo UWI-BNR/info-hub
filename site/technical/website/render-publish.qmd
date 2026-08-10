@@ -1,12 +1,12 @@
 ﻿---
-title: "System reference"
+title: "Render and publish the website"
 title-block-style: none
 toc: true
 toc-depth: 2
 number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+How to preview, render and publish the BNR Info-Hub.
 
 ::: {.callout-note}
 ## Status

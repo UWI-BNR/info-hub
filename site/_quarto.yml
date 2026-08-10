@@ -1,4 +1,4 @@
-project:
+﻿project:
   type: website
   resources:
     - assets/images/**
@@ -56,7 +56,7 @@ website:
 
   page-footer:
     border: true
-    left: "© 2026, The UWI"
+    left: "Â© 2026, The UWI"
     center:
       - text: "Data Downloads"
         href: downloads/index.qmd
@@ -68,7 +68,7 @@ website:
       - icon: github
         href: https://github.com/UWI-BNR/info-hub
         aria-label: GitHub repository
-      - text: "Analytics: Stata · Python<br>Publishing: Quarto · Bootstrap/Flatly"
+      - text: "Analytics: Stata Â· Python<br>Publishing: Quarto Â· Bootstrap/Flatly"
 
   navbar:
     background: primary 
@@ -256,73 +256,96 @@ website:
         - text: "Future Pages"
           href: operations/future-pages.qmd
 
-
     - id: technical
-      title: "Technical"
+      title: "Technical Manual"
       style: "docked"
       search: true
       collapse-level: 1
       contents:
         - text: "Home"
           href: technical/index.qmd
-        - text: "Future Pages"
-          href: technical/future-pages.qmd
 
-        - section: "How-to"
+        - section: "Getting started"
           contents:
-      #      - text: "Local setup"
-      #        href: technical/how-to/set-up-local-development.qmd
-      #      - text: "Start editing"
-      #        href: technical/how-to/start-an-editing-session.qmd
-      #      - text: "Check Git"
-      #        href: technical/how-to/check-git-status-before-commit.qmd
-      #      - text: "Run briefing"
-      #        href: technical/how-to/run-static-briefing.qmd
-      #      - text: "Add briefing"
-      #        href: technical/how-to/add-new-static-briefing.qmd
-      #      - text: "Copy bundle"
-      #        href: technical/how-to/copy-output-bundle.qmd
-      #      - text: "Public ZIP"
-      #        href: technical/how-to/create-public-zip-bundle.qmd
-      #      - text: "Render PDF"
-      #        href: technical/how-to/render-pdf-briefing.qmd
-      #      - text: "Render site"
-      #        href: technical/how-to/render-site.qmd
-      #      - text: "Publish site"
-      #        href: technical/how-to/publish-site.qmd
+            - text: "1. Analytics environment"
+              href: technical/getting-started/environment.qmd
+            - text: "2. Set up a workstation"
+              href: technical/getting-started/workstation-setup.qmd
 
-        - section: "Reference"
+        - section: "Analytical workflows"
           contents:
-      #      - text: "Repository"
-      #        href: technical/reference/repository-structure.qmd
-      #      - text: "Compute"
-      #        href: technical/reference/compute-layer-stata.qmd
-      #      - text: "Output contract"
-      #        href: technical/reference/output-contract.qmd
-      #      - text: "Naming"
-      #        href: technical/reference/naming-rules.qmd
-      #      - text: "Quarto layer"
-      #        href: technical/reference/quarto-publication-layer.qmd
-      #      - text: "PDF route"
-      #        href: technical/reference/pdf-briefing-route.qmd
-      #      - text: "GitHub Pages"
-      #        href: technical/reference/github-pages-deployment.qmd
-      #      - text: "Data boundary"
-      #        href: technical/reference/confidential-data-boundary.qmd
+            - section: "3. Dashboard metrics"
+              href: technical/workflows/dashboards/index.qmd
+              contents:
+                - text: "Extract a REDCap release"
+                  href: technical/workflows/dashboards/extract-redcap.qmd
+                - text: "Prepare the confidential dataset"
+                  href: technical/workflows/dashboards/prepare-confidential.qmd
+                - text: "Create analytical inputs"
+                  href: technical/workflows/dashboards/create-analysis-inputs.qmd
+                - text: "Generate dashboard metrics"
+                  href: technical/workflows/dashboards/generate-metrics.qmd
+                - text: "Approve dashboard metrics"
+                  href: technical/workflows/dashboards/approve-metrics.qmd
+                - text: "Publish dashboard metrics"
+                  href: technical/workflows/dashboards/publish-metrics.qmd
 
-        - section: "Fixes"
+            - section: "4. Tabulations"
+              href: technical/workflows/tabulations/index.qmd
+              contents:
+                - text: "Generate tabulations"
+                  href: technical/workflows/tabulations/generate.qmd
+                - text: "Apply disclosure control"
+                  href: technical/workflows/tabulations/disclosure-control.qmd
+                - text: "Approve tabulations"
+                  href: technical/workflows/tabulations/approve.qmd
+                - text: "Publish tabulations"
+                  href: technical/workflows/tabulations/publish.qmd
+
+            - section: "5. Briefings"
+              href: technical/workflows/briefings/index.qmd
+              contents:
+                - text: "Create a briefing"
+                  href: technical/workflows/briefings/create.qmd
+                - text: "Prepare a briefing for review"
+                  href: technical/workflows/briefings/review.qmd
+                - text: "Approve a briefing"
+                  href: technical/workflows/briefings/approve.qmd
+                - text: "Publish a briefing"
+                  href: technical/workflows/briefings/publish.qmd
+                - text: "Update an existing briefing"
+                  href: technical/workflows/briefings/update-existing.qmd
+
+            - text: "6. Mortality workflow"
+              href: technical/workflows/mortality/index.qmd
+
+        - section: "Review and publication controls"
           contents:
-      #      - text: "Quarto"
-      #        href: technical/troubleshooting/quarto-render-errors.qmd
-      #      - text: "PDF"
-      #        href: technical/troubleshooting/pdf-render-errors.qmd
-      #      - text: "Missing files"
-      #        href: technical/troubleshooting/missing-output-files.qmd
-      #      - text: "Broken links"
-      #        href: technical/troubleshooting/broken-download-links.qmd
-      #      - text: "Stata paths"
-      #        href: technical/troubleshooting/stata-path-errors.qmd
-      #      - text: "Git cleanup"
-      #        href: technical/troubleshooting/git-status-cleanup.qm1
+            - text: "7. Review an analytical release"
+              href: technical/controls/review-release.qmd
+            - text: "8. Disclosure control"
+              href: technical/controls/disclosure-control.qmd
+            - text: "9. Approve and publish a release"
+              href: technical/controls/approve-publish.qmd
 
-# file touch1
+        - section: "Operate the Info-Hub"
+          contents:
+            - text: "10. Render and publish the website"
+              href: technical/website/render-publish.qmd
+            - text: "11. Update website content"
+              href: technical/website/update-content.qmd
+
+        - section: "Maintain and recover"
+          contents:
+            - text: "12. Make a safe code change"
+              href: technical/maintenance/safe-code-change.qmd
+            - text: "13. Files, releases and versions"
+              href: technical/maintenance/files-releases-versions.qmd
+            - text: "14. Fix common problems"
+              href: technical/maintenance/troubleshooting.qmd
+
+        - section: "Quick reference"
+          contents:
+            - text: "15. System reference"
+              href: technical/reference/index.qmd
+
