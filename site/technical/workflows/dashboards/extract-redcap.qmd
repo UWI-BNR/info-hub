@@ -1,15 +1,68 @@
 ﻿---
 title: "Extract a REDCap release"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly release."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to run Dashboard Step 1 and check the REDCap extract.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Extracts CVD records from REDCap from 1 January 2024 to the end of the selected month, checks the returned structure and saves the private source snapshot.
+
+## Inputs
+
+| Input | What it is |
+|---|---|
+| Release year and month | The completed monthly release to extract. |
+| REDCap CVD project | Source patient-level CVD records. |
+| `$BNR_REDCAP_TOKEN_FILE` | Local text file containing the REDCap API token. |
+
+The token file location is defined in `scripts/stata/config/bnr_paths_LOCAL.do`.
+
+## Run Step 1
+
+1. **Open Step 1.** In Stata, choose User > BNR > Update dashboard > Step 1: Extract REDCap data.
+2. **Select the release.** Enter the release year and release month.
+3. **Choose replacement behaviour.** For a first run, leave Replace an existing extract unticked.
+4. **Run the extract.** Select Run extract.
+5. **Check the run summary.** Confirm that `STEP 1: OPERATIONAL RUN SUMMARY` shows `Completed successfully` and the expected release period and record count.
+6. **Inspect the output.**
+   - Open `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`.
+   - Confirm that all three release files exist.
+   - Open the YAML receipt and confirm the release dates and record count.
+   - Open or inspect the Stata dataset and confirm that it contains records and the expected event-date coverage.
+
+## Outputs
+
+| File | Private location | Purpose |
+|---|---|---|
+| `bnr_cvd_step1_YYYYMM.csv` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Complete private REDCap source snapshot in CSV format. Retained as the raw extracted source. |
+| `bnr_cvd_step1_YYYYMM.dta` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Stata copy of the same private source snapshot, used by Step 2. |
+| `bnr_cvd_step1_YYYYMM_manifest.yml` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Extraction receipt recording the release period, row and field counts, source information and file fingerprint. |
+| Step 1 log | `$BNR_PRIVATE_LOGS/` | Operational record of the run, including the completion or failure message. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for how the private data and log locations fit into the wider environment.
+
+To see a configured local path in Stata:
+
+```stata
+display "$BNR_DATA_RAW"
+```
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2024 1
+```
+
+Add `replace` only when deliberately replacing an existing release.
+
+## If Step 1 does not complete
+
+Read the **Reason** and **Log** lines in the operational summary.
+
+Check the selected month, network access and REDCap token-file location. If the release already exists, confirm that replacement is genuinely intended before rerunning with `replace`.
+
+Do not use an extract from an incomplete run.

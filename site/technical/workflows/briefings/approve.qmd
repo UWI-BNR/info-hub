@@ -1,15 +1,218 @@
 ﻿---
-title: "Approve a briefing"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+title: "Review and approve a briefing"
+description: "Briefing Step 2: complete the human analytical and disclosure review, then record approval of the exact briefing package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to approve a briefing after analytical and disclosure review.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+This page covers the complete **Briefing Step 2 human review and approval stage**.
+
+The analyst first reviews the private package created in Step 1. Only when that review is satisfactory should the Step 2 approval dialog be completed.
+
+Step 2 then validates the staged package and writes:
+
+- `review/public_manifest.csv`;
+- a completed `review/disclosure_review.txt`; and
+- `review/approval.yml`.
+
+It does not alter the analytical datasets, figures or metadata, and it does not publish anything.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Staged briefing package | `$BNR_STAGING/briefings/{briefing_id}/` | Exact analytical package to review and approve. |
+| `review/disclosure_flags.csv` | Package `review/` folder | Automated prompts for the human disclosure review. |
+| `metadata/release_control.yml` | Package `metadata/` folder | Defines the source, reporting period and declared release artefacts. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of private briefing staging.
+
+## Run Briefing Step 2
+
+1. **Identify the staged package.** Open `$BNR_STAGING/briefings/{briefing_id}/` and confirm you are reviewing the intended package.
+2. **Complete the human review.** Work through the detailed review below before opening the approval dialog.
+
+::: {.callout-note collapse="true"}
+## Detailed Step 2 human review
+
+### 1. Confirm the source and reporting period
+
+Open:
+
+- `metadata/release_control.yml`
+- `metadata/briefing.yml`
+
+Check:
+
+- `briefing_id` is the package you intended to review;
+- the source dataset ID and release are correct;
+- the source coverage end date is correct;
+- the target year or reporting period is correct; and
+- the declared datasets, figures and workbook match the intended briefing.
+
+For a routine briefing, the target year is the year before the selected Step 3 data release.
+
+For an ad-hoc briefing, pay particular attention to the declared source and reporting period because these are not inferred from the routine dispatcher.
+
+### 2. Review the analytical datasets
+
+Open the `.dta` and `.csv` files under `datasets/`.
+
+Check:
+
+- values are plausible for the reporting period;
+- periods and analytical groups are complete;
+- totals and derived measures behave as expected;
+- there are no unexplained jumps, missing periods or duplicated categories; and
+- the DTA and CSV versions represent the same released results.
+
+Review the substantive measure, not merely whether the files open successfully.
+
+### 3. Review the workbook
+
+Open the workbook under `workbook/`.
+
+Check:
+
+- all expected data sheets are present;
+- values agree with the released datasets;
+- variable labels and metadata sheets are understandable;
+- number formats are appropriate; and
+- no private identifiers or unintended fields are present.
+
+### 4. Review every figure
+
+Open every PNG under `figures/`.
+
+Check:
+
+- the title and reporting period are correct;
+- plotted values are consistent with the released datasets;
+- labels, axes, legends and annotations are readable;
+- no obsolete year or narrative label remains from an earlier briefing;
+- the graphic does not reveal a small value that should be protected; and
+- the figure still makes analytical sense when viewed without the Stata code.
+
+### 5. Review the disclosure flags
+
+Open:
+
+`review/disclosure_flags.csv`
+
+For every flag:
+
+- identify which released dataset or figure it affects;
+- decide whether the public output directly reveals the small value;
+- consider whether totals, ratios, labels or another output could allow the value to be inferred;
+- consider differencing against an earlier public release; and
+- consider relevant external information.
+
+A flag is a **review prompt**, not an automatic instruction to suppress one value.
+
+The reviewer remains responsible for the whole release, including outputs that were not automatically flagged.
+
+See [Disclosure control](../../controls/disclosure-control.qmd) for the common BNR disclosure-control standard.
+
+### 6. Review metadata, labels and limitations
+
+Check:
+
+- `metadata/briefing.yml`;
+- each dataset YAML file;
+- `readme.txt`; and
+- `downloads.yml`.
+
+Confirm titles, descriptions, periods, source information, limitations, rights and download labels are correct.
+
+### 7. Check package completeness
+
+Confirm every dataset, figure, metadata file and requested workbook declared in `release_control.yml` exists.
+
+The narrative public QMD is **not** part of this analytical package. It is maintained separately in the Quarto publishing layer.
+
+### Review decision
+
+If anything is wrong, stop here.
+
+Do not manually patch generated datasets, figures or metadata. Correct the source or analyst-owned DO file, rebuild the unapproved package and repeat the review.
+
+If every check is satisfactory, continue with the Step 2 approval dialog.
 :::
+
+3. **Open Briefing Step 2.** In Stata, choose User > BNR > Produce briefing > Step 2: Review and approve.
+4. **Select the package.**
+   - For a routine briefing, choose the briefing type and enter the same release year, month and briefing version used in Step 1.
+   - For an ad-hoc briefing, select `Ad-hoc briefing` and enter the exact staging package ID.
+5. **Identify the approver.** Enter the full name and select BNR Lead, BNR Analyst or BNR Developer.
+6. **Confirm the completed review.** Tick all five boxes only after confirming:
+   - source dataset, release and reporting period;
+   - analysis, results, datasets, workbook and figures;
+   - manual disclosure review including automated flags;
+   - titles, labels, metadata, notes and limitations; and
+   - package completeness and publication readiness.
+7. **Approve.** Select Approve.
+8. **Check the run summary.** Confirm `Run status: APPROVED`, the correct package, approver and approved payload count.
+9. **Inspect the Step 2 control files.**
+   - Open `review/disclosure_review.txt`; confirm the package/source details, reviewer details and `review_status: APPROVE FOR PUBLICATION`.
+   - Open `review/public_manifest.csv`; confirm it lists only the intended public payload files.
+   - Open `review/approval.yml`; check the approval receipt as described below.
+
+## Review `approval.yml`
+
+The approval receipt binds the human decision to the exact payload that Briefing Step 3 may publish.
+
+Confirm:
+
+- `schema: bnr_briefing_approval_v1`;
+- `status: approved`;
+- `package_type: briefing`;
+- `package_id` is correct;
+- the source dataset ID, release and coverage are correct;
+- `approved_by`, `approved_role` and `approved_date` are correct;
+- `review_standard: bnr_briefing_review_v1`;
+- `disclosure_check: passed`;
+- `public_manifest: public_manifest.csv`;
+- the manifest size, checksum and approved file count are populated;
+- all five confirmation fields are `yes`; and
+- `promotion_status: pending_step_3`.
+
+If any field is wrong, do not edit the receipt manually. An approved package is immutable; use a new briefing version for a correction.
+
+## Outputs
+
+| Output | Private location | Purpose |
+|---|---|---|
+| `public_manifest.csv` | `$BNR_STAGING/briefings/{briefing_id}/review/` | Fingerprints the exact public files covered by approval. |
+| `disclosure_review.txt` | Same `review/` folder | Durable human disclosure-review record. |
+| `approval.yml` | Same `review/` folder | Machine-readable approval receipt required by Step 3. |
+
+## Command-line equivalent
+
+Routine briefing:
+
+```stata
+do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" ///
+    "CVD incidence rates" 2024 1 1 ///
+    "Full name" "BNR Analyst" ///
+    source results disclosure labels complete
+```
+
+Ad-hoc briefing:
+
+```stata
+do "$BNR_STATA/briefings/bnr_step2_approve_briefing.do" ///
+    "Ad-hoc briefing" 2024 1 1 ///
+    "Full name" "BNR Analyst" ///
+    source results disclosure labels complete ///
+    "exact_ad_hoc_package_id_v1"
+```
+
+## If Briefing Step 2 does not complete
+
+Do not bypass the failed check.
+
+Confirm the Step 1 or ad-hoc staging package is complete, the human review was actually completed, and the package has not already been approved.

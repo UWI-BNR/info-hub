@@ -1,15 +1,245 @@
 ﻿---
 title: "Approve and publish a release"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "How BNR records approval, ties it to exact files and then moves only approved files into the public environment."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How the common approval and publication controls operate across BNR products.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+BNR treats **review**, **approval**, **publication** and **website deployment** as separate actions.
+
+This gives each release a clear history and prevents a successful calculation from automatically becoming public.
+
+The common pathway is:
+
+```text
+private staging
+    -> human review
+    -> approval + list of approved files
+    -> controlled publication
+    -> authoritative public copy
+    -> website mirror
+    -> Quarto render
+    -> Git / GitHub deployment
+```
+
+The Stata step numbers differ between dashboards, tabulations and briefings, but the basic controls are the same.
+
+## Four stages that should not be confused
+
+| Stage | Meaning |
+|---|---|
+| **Reviewed** | A person has checked the exact release package. |
+| **Approved** | An authorised reviewer has formally accepted that package. This does not mean that it has been copied to the public area. |
+| **Published analytically** | The controlled Stata publication step has moved the approved public files into the authoritative public area and refreshed the website copy. |
+| **Deployed** | Quarto and Git/GitHub have made the updated website available publicly. |
+
+An `approval.yml` file therefore means **approved**, not "already published on the website".
+
+## Who may approve
+
+The current workflows recognise three roles:
+
+- `BNR Lead`
+- `BNR Analyst`
+- `BNR Developer`
+
+These are the roles accepted by the technical workflow. The BNR team lead retains responsibility for deciding who is authorised to approve dissemination.
+
+Where local governance allows it, the same authorised person may perform more than one stage. The stages remain separate even when the person is the same.
+
+## What is `approval.yml`?
+
+`approval.yml` is the small machine-readable receipt created when approval is recorded.
+
+It normally records:
+
+| Information | Why it is recorded |
+|---|---|
+| Package or release identity | Shows exactly what was approved. |
+| Approver name and role | Shows who made the decision. |
+| Approval date | Shows when approval was recorded. |
+| Review and disclosure status | Confirms that the required checks were completed. |
+| Manifest name | Identifies the list of public files covered by the approval. |
+| File count or manifest fingerprint, where used | Helps detect changes after approval. |
+| Next workflow state | Shows that publication is still pending. |
+
+The approval receipt is intentionally small. The detailed evidence remains in the review workbook, worklist or other review files.
+
+After approval, the analyst should open `approval.yml` and check that it describes the package they intended to approve.
+
+## What is the public manifest?
+
+The **public manifest** is the list of files that the publication step is allowed to copy.
+
+It answers a simple question:
+
+> Which exact files did the reviewer approve for public release?
+
+Depending on the workflow, the manifest also records file size and a **checksum**. A checksum is a numeric fingerprint of a file. If the file changes, its checksum normally changes too.
+
+This allows the publication step to detect when an approved file or manifest has been altered after review.
+
+The current workflows use manifests slightly differently:
+
+| Workflow | Manifest control |
+|---|---|
+| **Dashboard metrics** | `public_manifest.csv` identifies seven approved files. Step 5 records a fingerprint of the manifest, and Step 6 checks the manifest and approved files before publication. |
+| **Tabulations** | `public_manifest.csv` identifies 26 required public products. Step 2B checks the list and confirms that every required file exists before writing approval. Step 3 checks the list again before copying the files. |
+| **Briefings** | `review/public_manifest.csv` lists the approved briefing files with file size and checksum. Step 2 records the manifest fingerprint and approved file count in `approval.yml`, and Step 3 verifies them before publication. |
+
+The publication step should not copy an extra file simply because it happens to be sitting nearby.
+
+## Approval should not change the results
+
+Approval is a control step, not another analysis step.
+
+For example:
+
+- Dashboard Step 5 checks the reviewed candidate before creating the approved `public_ready` package and approval files.
+- Table Step 2B creates `approval.yml` but does not rebuild the reviewed Step 2A tables.
+- Briefing Step 2 creates the manifest, completed disclosure-review record and `approval.yml` but does not rerun the analysis or change the figures.
+
+If a result needs changing, return to the analytical workflow and create a new review package.
+
+## Do not change an approved package by hand
+
+Once a package is approved, treat its approved files as fixed.
+
+If something needs correcting:
+
+| Workflow | What to do |
+|---|---|
+| **Dashboard metrics** | Return to the required earlier step and repeat the review/approval cycle. `prepare replace` removes the earlier Step 5 approval state. |
+| **Tabulations** | Rebuild Step 2A with explicit replacement, then review and approve again. |
+| **Briefings** | Create a new briefing version. Do not overwrite the approved version. |
+
+Do not edit `approval.yml`, `public_manifest.csv` or an approved data file to make a failed publication check pass. That would remove the very protection these files are meant to provide.
+
+## What the publication step does
+
+The controlled Stata publication step has a narrow job:
+
+1. find the selected approved package;
+2. check `approval.yml`;
+3. check the public manifest;
+4. confirm that the required approved files are still present and unchanged where fingerprints are used;
+5. copy only the approved public files;
+6. create any required ZIP, catalogue or publication records; and
+7. refresh the website copy.
+
+It should not recalculate results, make a new disclosure decision or approve an unreviewed file.
+
+## Where the published files go
+
+### Dashboard metrics
+
+Dashboard Step 6 promotes the approved metric files to:
+
+`$BNR_PUBLIC/metrics/cvd/burden/`
+
+It also refreshes:
+
+`$BNR_REPO/site/downloads/files/metrics/cvd/burden/`
+
+The dashboard approval and manifest remain private control files.
+
+To remind yourself where these locations sit on the current workstation, ask Stata to show the configured roots:
+
+```stata
+display "$BNR_PUBLIC"
+display "$BNR_REPO"
+```
+
+`$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/burden/` to reach the dashboard website mirror.
+
+The machine-specific roots are defined in `scripts/stata/config/bnr_paths_LOCAL.do`. See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the full location model.
+
+### Tabulations
+
+Table Step 3 creates:
+
+- a release-stamped authoritative package;
+- an authoritative `latest` copy;
+- release and stable ZIP files;
+- `downloads.yml`;
+- a publication receipt; and
+- the website copy under `site/downloads/annual/cvd/latest/`.
+
+The retained public release also keeps its approval/publication records for audit.
+
+### Briefings
+
+Briefing Step 3 copies only the approved briefing files to:
+
+`$BNR_PUBLIC/briefings/{briefing_id}/`
+
+and then refreshes:
+
+`$BNR_REPO/site/downloads/files/briefings/{briefing_id}/`
+
+Private `review/` files are not copied into the website package.
+
+## Authoritative public copy and website copy
+
+The retained approved analytical release is stored under:
+
+`$BNR_PUBLIC`
+
+This is the **authoritative public copy**.
+
+Files under `site/downloads/...` are the copies used by the Quarto website. They can be rebuilt from the authoritative public output.
+
+This distinction is useful during recovery:
+
+- if the website copy is damaged, recreate it from the controlled public output;
+- do not use private staging as an informal replacement source; and
+- do not treat the website copy as the master analytical archive.
+
+See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the full folder model.
+
+## Publication is not website deployment
+
+A successful Stata publication step does not mean that the updated website is already live.
+
+After analytical publication:
+
+1. inspect the authoritative public files and website copy;
+2. update any separate Quarto narrative page where required;
+3. render the site locally;
+4. inspect the rendered pages;
+5. check the Git changes;
+6. commit and push the intended changes; and
+7. confirm the website deployment.
+
+See [Render and publish the website](../website/render-publish.qmd).
+
+## If publication fails
+
+A publication step may fail after some file operations have already happened.
+
+Do not assume that nothing changed.
+
+Inspect the workflow-specific locations, including:
+
+- the authoritative release folder;
+- any `latest` or stable copy;
+- the website copy;
+- ZIP, catalogue or publication records; and
+- the private publication log.
+
+Fix the cause and rerun the controlled publication step.
+
+Do not repair a partial release by manually copying individual files unless a documented recovery procedure specifically tells you to do so.
+
+## Product-specific instructions
+
+Use this chapter for the common principles, then follow the exact steps in:
+
+- [Dashboard Step 5: Review and approve](../workflows/dashboards/approve-metrics.qmd) and [Step 6: Publish](../workflows/dashboards/publish-metrics.qmd)
+- [Tabulations Step 2B: Approve](../workflows/tabulations/approve.qmd) and [Step 3: Publish](../workflows/tabulations/publish.qmd)
+- [Briefing Step 2: Review and approve](../workflows/briefings/approve.qmd) and [Step 3: Publish](../workflows/briefings/publish.qmd)
+

@@ -1,15 +1,799 @@
 ﻿---
 title: "Set up a workstation"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Configure a Windows workstation to run the BNR Stata workflows and maintain the Quarto Info-Hub."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to configure a workstation to run the BNR analytics and publishing environment.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+Use this chapter when setting up a new BNR analytics workstation or moving the environment to a replacement machine.
+
+**Stata is assumed to be installed and licensed.** Do not assume that Git, Python, Quarto, VS Code or the supporting tools are already present.
+
+The repositories and workflow code already exist. A workstation setup therefore has four broad jobs:
+
+1. install the supporting software;
+2. obtain the public and authorised private project files;
+3. configure the machine-specific paths and Stata startup; and
+4. prove that the complete environment works before using it for a live release.
+
+The detailed instructions are kept inside the stage callouts below so that the overall setup pathway remains easy to scan.
+
+## Setup stages
+
+| Stage | Task | Successful result |
+|---|---|---|
+| **1** | Install the supporting software | Git, Python, Quarto and VS Code are available. |
+| **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
+| **3** | Provision the private workspace | The authorised `info-hub-private` data and reference structure is available. |
+| **4** | Configure local paths and REDCap access | The public root, private root and token-file location resolve correctly. |
+| **5** | Create the Python environment | The project Python packages and PyCap are available. |
+| **6** | Configure Stata startup with `profile.do` | Paths, Python, dialogs and the BNR menu load automatically when Stata starts. |
+| **7** | Check the Quarto project | Quarto extensions are present and the site renders and previews locally. |
+| **8** | Record and verify the workstation setup | Git, private inputs, Stata and Quarto have all been inspected. |
+
+Complete the stages in order on a new machine.
+
+::: {.callout-note collapse="true"}
+## Stage 1: Install the supporting software
+
+Stata is assumed to be installed and licensed. Install the remaining tools only if they are missing.
+
+The links below point to **official landing or Marketplace pages**, rather than version-specific installer files. This makes the manual less likely to become stale when a new software version is released.
+
+### 1. Install VS Code
+
+VS Code is the standard editor used for the BNR repository.
+
+Check first:
+
+```powershell
+code --version
+```
+
+If it is missing, use the [official VS Code Windows installation page](https://code.visualstudio.com/docs/setup/windows).
+
+Alternatively, if WinGet is available:
+
+```powershell
+winget install --id Microsoft.VisualStudioCode -e --source winget
+```
+
+After installation, close and reopen PowerShell and check:
+
+```powershell
+code --version
+```
+
+### 2. Install Git
+
+Check:
+
+```powershell
+git --version
+```
+
+If Git is missing, use the [official Git for Windows installation page](https://git-scm.com/install/windows).
+
+Or install with WinGet:
+
+```powershell
+winget install --id Git.Git -e --source winget
+```
+
+Close and reopen PowerShell, then confirm:
+
+```powershell
+git --version
+```
+
+VS Code already includes a useful Source Control interface for Git. No additional Git client is required for routine BNR work.
+
+### 3. Install Python 3.13
+
+The current BNR workstation baseline is Python 3.13.
+
+Check:
+
+```powershell
+python --version
+py --version
+```
+
+If Python 3.13 is missing, use the [official Python downloads for Windows](https://www.python.org/downloads/windows/).
+
+Or install the 3.13 series with WinGet:
+
+```powershell
+winget install --id Python.Python.3.13 -e --source winget
+```
+
+After installation:
+
+```powershell
+python --version
+python -m pip --version
+where.exe python
+```
+
+Record the installed Python path. Stage 5 creates the project virtual environment used by BNR.
+
+### 4. Install Quarto
+
+Check:
+
+```powershell
+quarto --version
+quarto check
+```
+
+If Quarto is missing, use the [official Quarto installation page](https://quarto.org/docs/get-started/).
+
+Or install with WinGet:
+
+```powershell
+winget install --id Posit.Quarto -e --source winget
+```
+
+After installation, close and reopen PowerShell and run:
+
+```powershell
+quarto --version
+quarto check
+where.exe quarto
+```
+
+### 5. Install TinyTeX
+
+TinyTeX is required when Quarto needs to render PDF outputs.
+
+Check:
+
+```powershell
+quarto list tools
+```
+
+If TinyTeX is not installed:
+
+```powershell
+quarto install tinytex
+```
+
+See the [Quarto tool-installation documentation](https://quarto.org/docs/cli/install.html) if installation needs troubleshooting.
+
+### 6. Install the standard VS Code extensions
+
+Install the following small set.
+
+| Extension | Why it is useful |
+|---|---|
+| [Quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto) | QMD editing, preview and Quarto authoring support. |
+| [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) | Python environment and code support. |
+| [Stata Enhanced](https://marketplace.visualstudio.com/items?itemName=kylebarron.stata-enhanced) | Stata syntax colouring, macros, comments and other language-aware highlighting. |
+| [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv) | Makes CSV manifests, QA files and review worklists much easier to inspect by visually separating columns. |
+| [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Workflow YAML validation and completion, plus access to workflow runs and logs from VS Code. |
+| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Validation, formatting and completion for the many `.yml` metadata and approval files used by BNR. |
+
+Install them from PowerShell:
+
+```powershell
+code --install-extension quarto.quarto
+code --install-extension ms-python.python
+code --install-extension kylebarron.stata-enhanced
+code --install-extension mechatroner.rainbow-csv
+code --install-extension GitHub.vscode-github-actions
+code --install-extension redhat.vscode-yaml
+```
+
+Check:
+
+```powershell
+code --list-extensions
+```
+
+These are editor aids, not analytical runtime dependencies. A workstation can still run the Stata workflows if an editor extension is temporarily unavailable.
+
+### 7. Browser
+
+Any modern browser can be used for local Quarto review.
+
+The existing BNR edit-session launcher prefers Firefox when it is installed, but Firefox is not required for workstation acceptance.
+
+### Final Stage 1 check
+
+Run:
+
+```powershell
+git --version
+python --version
+quarto --version
+code --version
+```
+
+Do not continue until each required command returns normally.
 :::
+
+::: {.callout-note collapse="true"}
+## Stage 2: Clone and check the public repository
+
+### 1. Choose a local parent folder
+
+Use a stable working location with enough space for the repository and its generated public products.
+
+Move to that parent folder in PowerShell.
+
+For example:
+
+```powershell
+cd C:\your\chosen\parent
+```
+
+### 2. Clone `info-hub`
+
+```powershell
+git clone https://github.com/UWI-BNR/info-hub.git
+cd info-hub
+```
+
+Check:
+
+```powershell
+git status
+git remote -v
+```
+
+The remote should point to the UWI-BNR `info-hub` repository.
+
+### 3. Configure Git identity
+
+A user who will commit changes should check:
+
+```powershell
+git config user.name
+git config user.email
+```
+
+If either is blank, configure it using the user's normal Git identity.
+
+### 4. Create local setup notes
+
+At the repository root:
+
+```powershell
+New-Item local-setup-notes.md
+code local-setup-notes.md
+```
+
+`local-setup-notes.md` is machine-specific and should remain outside version control.
+
+A short template is provided in Stage 8.
+
+### Final Stage 2 check
+
+Confirm:
+
+- the repository opens normally in VS Code;
+- `git status` recognises the repository;
+- the expected remote is present; and
+- `local-setup-notes.md` is not staged for Git.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 3: Provision the private companion workspace
+
+The public repository is not enough to run the BNR analytical workflows.
+
+The workstation also needs an authorised private companion root, later assigned to:
+
+`$BNR_PRIVATE`
+
+The private root contains or receives:
+
+```text
+data/
+  raw/
+  frozen/
+  derived/
+
+outputs/
+  staging/
+
+logs/
+  private/
+
+work/
+```
+
+Provision or restore this workspace using the organisation's approved secure-storage process.
+
+Do **not** copy private registry data from an informal or unapproved source simply to make the workstation run.
+
+### Required retained inputs
+
+Check that the authorised private workspace includes the current retained inputs needed by the workflows, including where applicable:
+
+- the frozen historical CVD dataset under `$BNR_DATA_FROZEN`;
+- Barbados population reference data under `$BNR_PRIVATE_WORK`;
+- the WHO standard-population reference under `$BNR_PRIVATE_WORK`; and
+- any other controlled reference files required by the current analytical code.
+
+The exact machine path is configured in Stage 4.
+
+See [The BNR analytics and publishing environment](environment.qmd) for the purpose of each private location.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 4: Configure local paths and REDCap access
+
+The public repository contains a path template:
+
+`scripts/stata/config/bnr_paths_TEMPLATE.do`
+
+Copy it:
+
+```powershell
+Copy-Item `
+  scripts/stata/config/bnr_paths_TEMPLATE.do `
+  scripts/stata/config/bnr_paths_LOCAL.do
+```
+
+Open the local copy:
+
+```powershell
+code scripts/stata/config/bnr_paths_LOCAL.do
+```
+
+### 1. Set the two roots
+
+Edit:
+
+```stata
+global BNR_REPO    "C:/your/path/info-hub"
+global BNR_PRIVATE "C:/your/secure/path/info-hub-private"
+```
+
+The remaining standard globals are derived from these roots, including:
+
+- `$BNR_STATA`
+- `$BNR_DATA_RAW`
+- `$BNR_DATA_FROZEN`
+- `$BNR_DATA_DERIVED`
+- `$BNR_STAGING`
+- `$BNR_PRIVATE_WORK`
+- `$BNR_PRIVATE_LOGS`
+- `$BNR_PUBLIC`
+
+### 2. Configure the REDCap token file
+
+Dashboard Step 1 also requires:
+
+```stata
+global BNR_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_redcap_token.txt"
+```
+
+The token text file must:
+
+- be stored outside the public repository;
+- contain only the API token on one line; and
+- be accessible only to authorised users.
+
+Do not put the token itself in `bnr_paths_LOCAL.do`, another DO file, a log, Git or this manual.
+
+### 3. Test the configuration
+
+In Stata:
+
+```stata
+do "scripts/stata/config/bnr_paths_LOCAL.do"
+```
+
+Then:
+
+```stata
+display "$BNR_REPO"
+display "$BNR_PRIVATE"
+display "$BNR_DATA_RAW"
+display "$BNR_DATA_DERIVED"
+display "$BNR_STAGING"
+display "$BNR_PUBLIC"
+```
+
+Check the token file exists without displaying its contents:
+
+```stata
+confirm file "$BNR_REDCAP_TOKEN_FILE"
+```
+
+### Important
+
+`bnr_paths_LOCAL.do` is workstation-specific. It must **not** be committed to Git.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 5: Create the Python environment
+
+The repository uses a local Python virtual environment called:
+
+`venv-info-hub`
+
+Using a project environment keeps BNR support packages separate from unrelated Python work.
+
+### 1. Create the environment
+
+From the repository root:
+
+```powershell
+python -m venv venv-info-hub
+```
+
+Confirm it exists:
+
+```powershell
+dir venv-info-hub
+```
+
+### 2. Activate it
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+```
+
+The prompt should begin with:
+
+```text
+(venv-info-hub)
+```
+
+If PowerShell blocks activation, use the smallest practical policy change for the current user:
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Then activate the environment again.
+
+### 3. Install the project packages
+
+With the virtual environment active:
+
+```powershell
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+The current REDCap extraction also requires **PyCap**, imported as `redcap`.
+
+Install it into the same environment:
+
+```powershell
+python -m pip install PyCap
+```
+
+### 4. Check the environment
+
+```powershell
+python -c "import pandas, numpy, yaml; from redcap import Project; print('BNR Python check passed')"
+```
+
+Then:
+
+```powershell
+where.exe python
+```
+
+The first Python path should point inside:
+
+`venv-info-hub\Scripts\python.exe`
+
+### 5. Record the environment
+
+Record the Python version and environment path in `local-setup-notes.md`.
+
+`requirements-freeze.txt` is useful for troubleshooting exact versions. Routine installation should continue to use the shorter `requirements.txt`.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 6: Configure Stata startup with `profile.do`
+
+Stata is assumed to be installed. The workstation still needs the BNR project configuration to load automatically at startup.
+
+The current BNR `profile.do` performs four jobs:
+
+1. adds the BNR ado and dialog directories;
+2. loads `bnr_paths_LOCAL.do`;
+3. builds the **User > BNR** menu; and
+4. tells Stata which Python executable to use.
+
+### 1. Find the personal Stata directory
+
+In Stata:
+
+```stata
+sysdir
+```
+
+Identify the `PERSONAL` directory.
+
+Place or edit:
+
+`profile.do`
+
+in that personal directory so Stata runs it automatically at startup.
+
+### 2. Use the BNR profile pattern
+
+The current workstation profile follows this pattern:
+
+```stata
+* BNR INFO-HUB ADO AND DIALOG DIRECTORIES
+capture adopath + "C:/your/path/info-hub/scripts/stata/ado"
+capture noisily adopath + "C:/your/path/info-hub/scripts/stata/dialogs"
+
+* Load BNR workstation configuration
+do "C:/your/path/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
+
+* Build the BNR menu
+do "$BNR_STATA/menu/bnr_menu.do"
+
+* Python
+python set exec ///
+    "C:/your/path/info-hub/venv-info-hub/Scripts/python.exe", permanently
+noisily python query
+```
+
+The machine-specific parts are the repository path and Python executable.
+
+This is based on the active BNR workstation `profile.do`; do not copy another user's absolute paths unchanged.
+
+### 3. Restart Stata
+
+Close and reopen Stata.
+
+Confirm the startup sequence completes without an error.
+
+Check:
+
+```stata
+python query
+```
+
+The Python executable should be the one configured in `profile.do`.
+
+### 4. Check Python from inside Stata
+
+```stata
+python:
+from redcap import Project
+print("BNR Python / PyCap check passed")
+end
+```
+
+### 5. Check the menu
+
+Confirm:
+
+**User > BNR**
+
+is visible and contains:
+
+- **Update dashboard**
+- **Produce briefing**
+- **Produce tables**
+
+The menu should now load automatically whenever Stata starts.
+
+### Why `profile.do` matters
+
+Routine analysts should not need to remember a sequence of setup commands before running a workflow.
+
+Loading paths, dialogs, the BNR menu and Python at Stata startup makes the workstation state predictable and reduces reliance on hard-coded fallback paths inside individual DO files.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 7: Check the Quarto project
+
+### 1. Check the committed Quarto extension
+
+The site currently includes the Font Awesome extension inside the repository:
+
+`site/_extensions/quarto-ext/fontawesome/`
+
+After cloning, check that the folder exists:
+
+```powershell
+dir site\_extensions\quarto-ext\fontawesome
+```
+
+A normal workstation should **not** need to reinstall this extension because it is part of the committed site source.
+
+### 2. Activate the Python environment
+
+From the repository root:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+```
+
+The site has a Python pre-render step, so use the project environment when rendering locally.
+
+### 3. Render the site
+
+```powershell
+cd site
+quarto check
+quarto render
+```
+
+A successful render creates or refreshes:
+
+`site/_site/`
+
+### 4. Test preview
+
+```powershell
+quarto preview --host 127.0.0.1 --port 4200
+```
+
+Open the local site in a browser.
+
+Inspect several pages, including:
+
+- the Technical Manual;
+- a dashboard;
+- the tabulations page; and
+- a briefing page.
+
+Confirm the navigation, tables, Mermaid diagrams and downloads render normally.
+
+Stop preview with:
+
+```text
+Ctrl + C
+```
+
+### Optional edit-session launcher
+
+The repository contains:
+
+`start-info-hub-edit.bat`
+
+It opens VS Code and starts a local Quarto preview.
+
+The current launcher contains a machine-specific repository path. It is therefore a convenience, **not a requirement for workstation acceptance**.
+
+If the path does not match the new machine, use the manual commands above rather than creating an unexplained tracked Git change merely to make the launcher work.
+:::
+
+::: {.callout-note collapse="true"}
+## Stage 8: Record and verify the workstation setup
+
+Finish with a human inspection of the complete environment.
+
+### 1. Public repository
+
+From the repository root:
+
+```powershell
+git status
+```
+
+Confirm:
+
+- Git recognises the repository;
+- the intended branch is checked out;
+- `bnr_paths_LOCAL.do` is not staged;
+- `venv-info-hub/` is not staged;
+- `local-setup-notes.md` is not staged; and
+- there are no unexplained changes.
+
+### 2. Private workspace
+
+In Stata:
+
+```stata
+display "$BNR_PRIVATE"
+display "$BNR_DATA_FROZEN"
+display "$BNR_DATA_DERIVED"
+display "$BNR_STAGING"
+display "$BNR_PRIVATE_WORK"
+display "$BNR_PRIVATE_LOGS"
+```
+
+Go to the folders and confirm the required retained private/reference files actually exist.
+
+### 3. REDCap configuration
+
+Run:
+
+```stata
+confirm file "$BNR_REDCAP_TOKEN_FILE"
+```
+
+Do not print the token.
+
+A live REDCap extract is not required merely to prove that the workstation has been configured.
+
+### 4. Stata startup
+
+Restart Stata one final time.
+
+Confirm:
+
+- `profile.do` runs without error;
+- `python query` points to the intended Python;
+- PyCap imports successfully; and
+- **User > BNR** is available without manually loading any setup file.
+
+### 5. Quarto
+
+With `venv-info-hub` active:
+
+```powershell
+cd site
+quarto render
+```
+
+Open the rendered Technical Manual and confirm the site behaves normally.
+
+### 6. Record the setup
+
+Maintain a short local file:
+
+`local-setup-notes.md`
+
+For example:
+
+```markdown
+# Local setup notes
+
+Machine:
+User:
+Setup date:
+
+Public repo path:
+Private root path:
+REDCap token-file location:
+
+Stata version:
+Python version:
+Python environment:
+Python executable used by Stata:
+Quarto version:
+Git version:
+VS Code version:
+TinyTeX check:
+
+BNR menu startup check:
+Quarto render check:
+Private reference-data check:
+
+Setup issues / local decisions:
+```
+
+Record the token **file location**, never the token itself.
+:::
+
+## Moving to another workstation
+
+Treat a replacement machine as a new setup rather than copying random configuration fragments from the old one.
+
+Portable:
+
+- the Git repository;
+- committed Quarto extensions; and
+- approved project source files.
+
+Machine-specific:
+
+- `bnr_paths_LOCAL.do`;
+- `profile.do`;
+- `venv-info-hub/`;
+- the REDCap token file;
+- `local-setup-notes.md`; and
+- the authorised private workspace.
+
+Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live analytical release.
+

@@ -1,0 +1,17 @@
+﻿# Shared metadata for all Technical Manual pages
+lang: en-GB
+author: "Ian Hambleton"
+title-block-style: plain
+published-title: "Created"
+date-format: "D MMMM YYYY"
+toc: true
+toc-title: "On this page"
+toc-depth: 2
+number-sections: false
+page-navigation: true
+search: true
+
+format:
+  html:
+    body-classes: "bnr-technical-manual"
+

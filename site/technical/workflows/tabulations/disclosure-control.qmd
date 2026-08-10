@@ -1,15 +1,193 @@
 ﻿---
-title: "Apply disclosure control to tabulations"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+title: "Apply disclosure control and review tabulations"
+description: "Table Step 2A: suppress small numbers, create the exact proposed public products and complete the human review."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to create and review the disclosure-controlled tabulation package.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+Applies the BNR small-number disclosure rules to the seven Step 1 tables and creates the **exact products proposed for publication**. These products remain private and unapproved until Step 2B.
+
+The primary rule suppresses values supported by fewer than 6 observations. Complementary suppression is added where totals, paired percentages or related results could reveal a protected value.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Seven unsuppressed Step 1 datasets | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/datasets/` | Exact private values to which disclosure control is applied. |
+| Step 1 metadata | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/metadata/` | Package identity and table catalogue. |
+| Step 1 QA summary | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/review/qa_summary.txt` | Data-quality review from the calculation step. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the distinction between private staging, `public_ready`, authoritative public output and the website mirror.
+
+## Run Table Step 2A
+
+1. **Open Table Step 2A.** In Stata, choose User > BNR > Produce tables > Step 2A: Prepare suppressed tables.
+2. **Select the release.** Enter the same release year and month used in Step 1.
+3. **Choose replacement behaviour.** Leave replacement unticked for a first review package. Replacing Step 2A outputs invalidates any earlier approval.
+4. **Prepare the package.** Select Prepare Step 2A review package.
+5. **Check the run summary.** Confirm `COMPLETED - PUBLIC-READY, UNAPPROVED` and note the number of primary, complementary and total review items.
+6. **Complete the human review.** Use the review sequence below before running Step 2B.
+
+::: {.callout-note collapse="true"}
+## Detailed tabulations review
+
+Start with:
+
+`$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/review/suppression_review.xlsx`
+
+Then review the proposed public products under:
+
+`$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/public_ready/`
+
+### 1. Review the Step 1 QA
+
+Open:
+
+`review/qa_summary.txt`
+
+Check the reported counts for missing age groups, negative or unusually long stays, and deaths dated before the event. These are review flags, not automatically corrected records.
+
+If a flag suggests a source-data problem that could materially affect the tables, stop and investigate before approval.
+
+### 2. Review the suppression Summary sheet
+
+In `suppression_review.xlsx`, open **Summary**.
+
+Check:
+
+- all seven tables are listed;
+- the numbers of primary and complementary suppressions are plausible; and
+- the total worklist count agrees with the Step 2A run summary.
+
+An unexpected surge or absence of suppression should be investigated rather than accepted because the code completed.
+
+### 3. Review the Worklist sheet
+
+The **Worklist** contains the private exact value and supporting count for each affected row or cell.
+
+For each item, check:
+
+- the `table_id` and `cell_key` identify the expected table cell;
+- `support_count` supports the disclosure decision;
+- `suppression_status` is appropriate;
+- `suppression_reason` matches the stated table rule; and
+- complementary suppression is sufficient to prevent recovery of a primary-suppressed value.
+
+The same information is available as:
+
+`review/suppression_worklist.csv`
+
+### 4. Review the Disclosure rules sheet
+
+Use the **Disclosure rules** sheet as the table-specific rule reference.
+
+Check that the implemented rule makes sense for the affected output. The seven tables do not all suppress in the same way. For example:
+
+- count tables protect small component counts and related totals;
+- paired age percentages are hidden together where required;
+- incidence rates and ratios are protected using their supporting event counts;
+- case fatality considers deaths and complementary survivors; and
+- median and quartile length-of-stay values are hidden together when support is below 6.
+
+For the general BNR disclosure-control standard, see [Disclosure control](../../controls/disclosure-control.qmd).
+
+### 5. Review the public workbook
+
+Open:
+
+`public_ready/workbook/workbook_cvd_annual_tabulations.xlsx`
+
+This is the workbook proposed for publication.
+
+Check every table sheet:
+
+- values and reporting periods are plausible;
+- current-year results are clearly marked YTD where relevant;
+- completed-period rules are correct for incidence and case fatality;
+- protected cells show the suppression marker rather than an exact value; and
+- supporting private counts are absent.
+
+The workbook is public-safe in intent, but the reviewer is still responsible for confirming that it is safe.
+
+### 6. Review the public datasets
+
+Open a selection of the `.dta` and `.csv` files under:
+
+`public_ready/datasets/`
+
+Check that:
+
+- suppressed numeric values are missing in the public datasets;
+- public display fields show suppression rather than the private value;
+- unrestricted values agree with the reviewed Step 1 results; and
+- private supporting counts used to make suppression decisions have been removed where required.
+
+### 7. Review the website Markdown
+
+Inspect all seven files under:
+
+`public_ready/tables/`
+
+These are the exact generated Markdown fragments proposed for the public tabulations page.
+
+Check:
+
+- titles and column headings;
+- year and YTD labels;
+- displayed suppression markers;
+- table notes and definitions; and
+- consistency with the public workbook and datasets.
+
+### 8. Review metadata and the manifest
+
+Open:
+
+- `public_ready/metadata/package.yml`
+- `public_ready/metadata/disclosure_control.yml`
+- `public_ready/metadata/table_catalogue.csv`
+- `public_ready/public_manifest.csv`
+- `public_ready/readme.txt`
+
+Confirm the package ID and coverage date, disclosure threshold and suppression counts.
+
+`public_manifest.csv` should contain **26 required public products**. It defines exactly what Step 3 is allowed to promote.
+
+### Decision
+
+If all checks are satisfactory, proceed to Table Step 2B.
+
+If anything is wrong, do not manually edit generated products. Correct the appropriate source data or Stata code, rerun the necessary earlier step, and repeat the review.
 :::
+
+## Outputs
+
+| Output | Private location | Purpose |
+|---|---|---|
+| `suppression_review.xlsx` | `.../review/` | Main private human review workbook containing exact values and supporting counts. |
+| `suppression_worklist.csv` | `.../review/` | Machine-readable list of every suppression review item. |
+| `suppression_summary.txt` | `.../review/` | Plain summary of primary and complementary suppression counts. |
+| Seven suppressed `.dta/.csv` pairs | `.../public_ready/datasets/` | Public-safe table datasets proposed for release. |
+| `workbook_cvd_annual_tabulations.xlsx` | `.../public_ready/workbook/` | Exact workbook proposed for public download. |
+| Seven Markdown fragments | `.../public_ready/tables/` | Exact table fragments proposed for the Quarto tabulations page. |
+| Package and disclosure metadata | `.../public_ready/metadata/` | Public package description, table catalogue and disclosure-control record. |
+| `public_manifest.csv` | `.../public_ready/` | Defines the 26 products eligible for later publication. |
+| `readme.txt` | `.../public_ready/` | Explains the package status and review requirement. |
+| Step 2A log | `$BNR_PRIVATE_LOGS/` | Operational run record. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/tables/bnr_step2a_cvd_tables.do" 2024 1
+```
+
+Add `replace` only when deliberately rebuilding Step 2A and invalidating any earlier approval.
+
+## If Table Step 2A does not complete
+
+Read the Stata error and private log. Confirm the complete Step 1 package exists.
+
+If `public_ready` already exists, review the existing package before deciding whether a rebuild is required.

@@ -1,15 +1,251 @@
 ﻿---
 title: "Apply and review disclosure control"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "BNR small-number disclosure-control rules and practical human review across dashboards, tables and briefings."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-Practical guidance on BNR disclosure control and release-wide disclosure review.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+**Statistical Disclosure Control (SDC)** is the process of reducing the risk that a published statistical result reveals confidential information about an individual.
+
+BNR uses a simple set of routine rules in code, followed by human review of the complete proposed release.
+
+The rules protect obvious small numbers, but the human review remains important because information can sometimes be worked out by combining several apparently safe results.
+
+## Guiding reference
+
+The main external reference for the BNR approach is:
+
+> Griffiths E, Greci C, Kotrotsios Y, Parker S, Scott J, Welpton R, Wolters A, Woods C. **Handbook on Statistical Disclosure Control for Outputs.** Version 2.0. Safe Data Access Professionals Working Group; July 2024. [Open the handbook](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf){target="_blank"}.
+
+The Handbook provides practical, risk-based guidance for checking statistical outputs. It repeatedly stresses that related outputs should be considered together because a value hidden in one place may be revealed somewhere else.
+
+The Handbook is a **guiding reference**, not the BNR policy itself. BNR has adopted its own operational rule for routine surveillance outputs.
+
+## What `bnr_sdc_v1` means
+
+This is the **disclosure-control standard created for adoption across BNR publications**.
+
+`bnr_sdc_v1` means **BNR Statistical Disclosure Control policy, version 1**. It is the short policy name stored in BNR code and metadata so that each release records which disclosure-control rules were used.
+
+For the current CVD workflows, `bnr_sdc_v1` means:
+
+1. exact supporting frequencies from **1 to 5** require primary suppression before publication;
+2. a true zero is not automatically primary-suppressed;
+3. additional values are suppressed where necessary to prevent a protected number being calculated from totals or related results;
+4. previous releases are considered where differencing could reveal a small change;
+5. calculated values such as percentages are protected where they would reveal a suppressed count; and
+6. the **whole proposed release is reviewed by a person before approval**.
+
+The policy name may appear in Stata outputs and YAML metadata as:
+
+```text
+sdc_policy: bnr_sdc_v1
+```
+
+## The basic BNR rule
+
+For BNR CVD public reporting:
+
+| Supporting frequency | BNR treatment |
+|---:|---|
+| `0` | Not automatically suppressed just because it is zero. It still needs to be considered as part of the whole-release review. |
+| `1-5` | Must be suppressed before publication. |
+| `6+` | Not automatically suppressed, but may still need protection if another small value could be worked out from it. |
+
+The rule applies to the **number of observations behind a result**, not simply to the number displayed on the page.
+
+For example, a displayed percentage of `50%` may look harmless. If it represents 2 of 4 people, however, the supporting counts are small and need protection.
+
+The threshold of 6 is **BNR's operational rule**. The Handbook does not present 6 as a universal safe threshold.
+
+## The suppression terms used by BNR
+
+The dashboard workflow records five possible statuses.
+
+| Status | Plain-English meaning |
+|---|---|
+| **None** | The automated rules did not identify a disclosure restriction. Human review is still required. |
+| **Primary** | The result is directly based on a count from 1 to 5. |
+| **Secondary** | Another related result is hidden so that a protected value cannot be calculated from the remaining values. This is also called complementary suppression. |
+| **Temporal** | A cumulative result is hidden because comparison with an earlier public release could reveal a small change. |
+| **Derived** | A percentage, distribution or other calculated result is hidden because it depends on a protected count. |
+
+For dashboard metrics, a suppressed row remains in the dataset, but its exact `value`, `numerator` and `denominator` are removed. `display_value` shows `*`.
+
+Other BNR products may use different public wording or symbols. The important rule is that the protected number must not remain visible somewhere else in the release.
+
+## Primary suppression
+
+Primary suppression protects a directly small count.
+
+For example:
+
+```text
+Male AMI events = 4
+```
+
+Under `bnr_sdc_v1`, the exact value `4` must not be published.
+
+A true zero is not automatically treated in the same way. However, zeros still need to be reviewed in context because, in some tables, a zero can reveal useful information about a group.
+
+## Secondary or complementary suppression
+
+Hiding one small value is often not enough.
+
+Suppose a table shows:
+
+```text
+Female AMI:   suppressed
+Male AMI:     12
+AMI total:    16
+```
+
+Anyone can calculate:
+
+```text
+16 - 12 = 4
+```
+
+The protected value has therefore still been disclosed.
+
+One or more additional values must be hidden. This is **secondary** or **complementary** suppression.
+
+The exact rule depends on the structure of the output. Dashboard metrics and tabulations therefore use different, clearly documented rules rather than one enormous generic suppression routine attempting to understand every table humanity might create.
+
+## Temporal differencing
+
+Regular surveillance releases create another risk.
+
+A cumulative count may be safe on its own but reveal a small increase when compared with the previous release.
+
+For example:
+
+```text
+Previous public cumulative count: 24
+Current cumulative count:         27
+Difference:                         3
+```
+
+Publishing `27` reveals that the cumulative period increased by three.
+
+The dashboard pathway therefore checks selected incomplete annual and quarterly disease-specific counts against the previous approved release. An increase from 1 to 5 is protected.
+
+Negative changes and cases where the comparison cannot be completed safely are also held back for review.
+
+If the previous value was already suppressed, a member of the public cannot subtract it from the new value. The system therefore avoids carrying suppression forward forever without reason.
+
+## Derived values
+
+Protection must follow the information, not just the original count.
+
+A percentage, distribution, rate or total may reveal a protected count.
+
+For example, if one count in a two-category distribution is protected, publishing the other percentage may reveal the protected percentage because the pair adds to 100%.
+
+Dashboard metrics and tabulations therefore protect related calculated values where required.
+
+## Review the whole release
+
+The Handbook recommends considering related outputs together, and BNR follows that principle.
+
+Review:
+
+- public datasets;
+- tables and totals;
+- workbooks;
+- figures;
+- chart labels and tooltips;
+- percentages and rates;
+- downloads;
+- previous releases; and
+- relevant public information.
+
+A value removed from a CSV but printed as `n=3` on a chart is still disclosed.
+
+A value hidden this month but recoverable by subtracting last month's published total is also still disclosed.
+
+## How the three current workflows differ
+
+The same policy is applied in different ways because the outputs are different.
+
+| Workflow | How disclosure control works |
+|---|---|
+| **Dashboard metrics** | The workflow automatically identifies several known risks and creates a disclosure-controlled candidate. The reviewer sees the private values, the reasons for suppression and the proposed public result before approval. |
+| **Tabulations** | Step 2A applies rules designed for each table, creates the suppressed public files, and produces a private worklist showing the affected cells for human review. |
+| **Briefings** | Step 1 creates `disclosure_flags.csv` to draw attention to possible small-number issues. The analyst then reviews the datasets, figures and full release. If an output is unsafe, the analyst changes the briefing analysis or presentation code and rebuilds it before approval. |
+
+The workflows do not need identical suppression code. They do need to produce safe public outputs under the same BNR policy.
+
+::: {.callout-note collapse="true"}
+## Worked examples
+
+### Direct small count
+
+An AMI count is `4`.
+
+This requires primary suppression under `bnr_sdc_v1`.
+
+### Small value recoverable from a total
+
+A component is hidden, but the other component and the total are public.
+
+If subtraction reveals the hidden value, an additional result must be suppressed.
+
+### Small change revealed over time
+
+A cumulative stroke count changes from `41` to `43`.
+
+The change is `2`, so publishing both values reveals a protected increment.
+
+### Percentage reveals a protected count
+
+One count in a two-category distribution is protected.
+
+Publishing the related percentage may reveal information about that protected count. The calculated result therefore also needs review and, where necessary, suppression.
+
+### Briefing figure reveals `n=3`
+
+The briefing dataset avoids printing a small count, but a chart labels a point `n=3`.
+
+The release is not safe. The figure must be changed and the briefing package rebuilt before approval.
 :::
+
+## What automation can and cannot do
+
+Automated rules are useful for:
+
+- known small-number thresholds;
+- known table relationships;
+- checking that protected numeric fields have been removed;
+- known differencing risks;
+- checking expected files; and
+- checking that a proposed release follows its defined structure.
+
+Human review is still needed for:
+
+- combinations of results across different outputs;
+- unusual or bespoke tables and figures;
+- outside information that may change the disclosure risk;
+- whether a result is identifying in its particular context; and
+- whether suppression has become unnecessarily heavy.
+
+The software helps the reviewer. It does not make the release decision.
+
+## If the disclosure review fails
+
+Do not type suppression symbols manually into the final QMD, CSV, workbook or figure.
+
+Instead:
+
+1. identify which output needs different protection;
+2. change the relevant source rule or analyst-owned code;
+3. rebuild the package;
+4. repeat the disclosure review; and
+5. approve only the rebuilt package.
+
+A substantive change to `bnr_sdc_v1` itself is a methodological and governance change. It should be agreed and documented before the code is changed.
+

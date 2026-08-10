@@ -1,0 +1,53 @@
+﻿---
+title: "Run the briefings workflow"
+description: "Create, review, approve and publish routine and ad-hoc BNR analytical briefing packages."
+date: 2026-08-10
+date-modified: 2026-08-10
+---
+
+---
+
+## What this workflow does
+
+Routine briefings start from the deidentified analytical datasets created by [Dashboard Step 3](../dashboards/create-analysis-inputs.qmd).
+
+They do **not** repeat the confidential-data preparation. Each briefing has one analyst-owned DO file that performs its analysis and creates a private staging package. The package then passes through one human review-and-approval step and one publication step.
+
+`Dashboard Step 3 input -> Briefing Step 1 analysis and staging -> Step 2 review and approval -> Step 3 publication`
+
+See [Analytical workflows](../overview.qmd) for the shared preparation pathway.
+
+## Standard routine briefings
+
+The routine Briefing Step 1 dialog currently covers:
+
+| Briefing | Step 3 input | Package ID pattern |
+|---|---|---|
+| **CVD incidence rates** | `count` | `cvd_incidence_TARGETYEAR_vV` |
+| **CVD case-fatality** | `case_fatality` | `cvd_case_fatality_TARGETYEAR_vV` |
+| **CVD length of stay** | `length_of_stay` | `cvd_los_TARGETYEAR_vV` |
+
+CVD mortality appears in the dialog but has **not yet been migrated** to this workflow.
+
+For routine briefings, `TARGETYEAR = release year - 1`.
+
+## Ad-hoc briefing option
+
+Ad-hoc briefings are for analytical products that do not belong to one of the standard routine briefing scripts.
+
+They use a different entry point:
+
+1. The analyst creates and runs an **analyst-owned ad-hoc DO file directly**. It must create the standard private briefing staging package and declare its source and release metadata.
+2. In **Briefing Step 2**, select `Ad-hoc briefing` and enter the exact staging package ID.
+3. Complete the same detailed human review and approval controls used for routine briefings.
+4. In **Briefing Step 3**, again select `Ad-hoc briefing` and enter the exact approved package ID.
+
+The ad-hoc option changes how the analysis is initiated. It does **not** bypass the standard review, approval, manifest or controlled-publication requirements.
+
+## Run the workflow
+
+1. **[Step 1: Create a routine briefing package](create.qmd).** Run one of the standard analyst-owned briefing analyses and create its private review package.
+2. **[Step 2: Review and approve a briefing](approve.qmd).** Complete the human analytical and disclosure review, then record approval of the exact package.
+3. **[Step 3: Publish a briefing](publish.qmd).** Promote the exact approved analytical package.
+
+Updating the narrative Quarto briefing page is a separate publishing task covered under **Update website content**.

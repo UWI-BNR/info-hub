@@ -1,0 +1,25 @@
+﻿---
+title: "Run the tabulations workflow"
+description: "Run the CVD tabulations workflow from the shared Step 3 analytical input through disclosure review, approval and publication."
+date: 2026-08-10
+date-modified: 2026-08-10
+---
+
+---
+
+## What this workflow does
+
+The tabulations workflow starts from the deidentified `all_variables` dataset created by [Dashboard Step 3](../dashboards/create-analysis-inputs.qmd).
+
+It does **not** repeat the REDCap extraction or confidential-data preparation. Instead it takes the shared Step 3 analytical input and creates the routine CVD table package.
+
+`Dashboard Step 3 all_variables input -> unsuppressed tables -> disclosure-controlled review package -> approval -> publication`
+
+See [Analytical workflows](../overview.qmd) for how this pathway relates to dashboards and briefings.
+
+## Run the workflow
+
+1. **[Step 1: Generate tabulations](generate.qmd).** Calculate the seven private unsuppressed table datasets.
+2. **[Step 2A: Apply disclosure control and review](disclosure-control.qmd).** Create the suppressed public-ready products and complete the human review.
+3. **[Step 2B: Approve tabulations](approve.qmd).** Record approval of the exact reviewed package.
+4. **[Step 3: Publish tabulations](publish.qmd).** Promote the approved package to authoritative public output and the website mirror.

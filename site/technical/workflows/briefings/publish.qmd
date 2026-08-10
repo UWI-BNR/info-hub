@@ -1,15 +1,64 @@
 ﻿---
 title: "Publish a briefing"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Briefing Step 3: validate and publish the exact analytical package approved in Briefing Step 2."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to publish an approved briefing and verify its supporting outputs.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Validates `approval.yml`, `public_manifest.csv` and every approved file fingerprint before publication.
+
+Only manifested files cross the publication boundary. Private review files remain in staging.
+
+Updating the narrative public page is a separate Quarto task. See [Update an existing briefing](../../website/update-briefing.qmd).
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Approved staging package | `$BNR_STAGING/briefings/{briefing_id}/` | Source of the approved analytical payload. |
+| `review/approval.yml` | Package `review/` folder | Evidence of the completed authorised review. |
+| `review/public_manifest.csv` | Package `review/` folder | Defines and fingerprints the exact approved payload. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the authoritative public and website-mirror locations.
+
+## Run Briefing Step 3
+
+1. **Open Briefing Step 3.** In Stata, choose User > BNR > Produce briefing > Step 3: Publish approved briefing.
+2. **Select the briefing.** Choose the same briefing type used in Steps 1 and 2.
+3. **Select the approved package.** Enter the release year, release month and briefing version.
+4. **Confirm publication.** Tick Publish this exact approved briefing package.
+5. **Publish.** Select Publish approved package.
+6. **Check the run summary.** Confirm `Run status: PUBLISHED`, the correct package ID, approved file count and `Verification: PASSED`.
+7. **Inspect the published package.**
+   - Open `$BNR_PUBLIC/briefings/{briefing_id}/`; confirm the manifested datasets, figures, metadata, workbook and package files are present.
+   - Open `$BNR_REPO/site/downloads/files/briefings/{briefing_id}/`; confirm the website mirror matches the authoritative public package.
+   - Open the release ZIP and spot-check its datasets, figures, metadata and workbook.
+   - Confirm the website mirror contains no private `review/` files.
+   - Open a sample dataset and figure from the website mirror to confirm they are usable.
+   - Confirm the analytical package is published before changing the narrative Quarto briefing page.
+
+## Outputs
+
+| Output | Location | Purpose |
+|---|---|---|
+| Authoritative briefing package | `$BNR_PUBLIC/briefings/{briefing_id}/` | Verified public analytical package. |
+| Release ZIP | Authoritative package | ZIP containing only the approved manifested payload. |
+| Website mirror | `$BNR_REPO/site/downloads/files/briefings/{briefing_id}/` | Disposable package used by the Quarto site. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/briefings/bnr_step3_publish_briefing.do" ///
+    "CVD incidence rates" 2024 1 1 publish
+```
+
+## If Briefing Step 3 does not complete
+
+Read the Stata error and inspect both public destinations before rerunning.
+
+Do not copy individual files manually to repair a partial publication. Resolve the cause and rerun the controlled Step 3 pathway.
+

@@ -1,15 +1,80 @@
 ﻿---
 title: "Generate tabulations"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Table Step 1: calculate the seven private unsuppressed CVD table datasets and create the staging package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to create the private unsuppressed tabulation package.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Starts from the deidentified `all_variables` dataset created by [Dashboard Step 3](../dashboards/create-analysis-inputs.qmd), calculates the seven routine CVD table datasets and creates a **private unsuppressed staging package**.
+
+This step does not return to the confidential cumulative dataset. No disclosure control or publication occurs here.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Step 3 `all_variables` dataset | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/bnr_cvd_input_all_variables_YYYYMM_vVV.dta` | Deidentified event-level source for the table calculations. |
+| Matching YAML receipt | Same `metric_inputs` folder | Confirms the source release and approved variable set. |
+| Barbados population reference | `$BNR_PRIVATE_WORK/brb_pop.dta` | Population denominators used for incidence calculations. |
+| WHO standard population | `$BNR_PRIVATE_WORK/who_std.dta` | Standard population used for age adjustment. |
+| `distrate` | Installed Stata command | Required by the incidence calculations. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of the private derived-data and staging locations.
+
+## Run Table Step 1
+
+1. **Open Table Step 1.** In Stata, choose User > BNR > Produce tables > Step 1: Build private table package.
+2. **Select the release.** Enter the release year and release month.
+3. **Select the input version.** Enter the version number shown in the Step 3 `all_variables` filename. Routine releases normally use version 1.
+4. **Choose replacement behaviour.** Leave replacement unticked for a first run.
+5. **Build the package.** Select Build Step 1 package.
+6. **Check the run summary.** Confirm `COMPLETED - PRIVATE UNSUPPRESSED STAGING`, the intended release, coverage date and `7 DTA files and 7 CSV files`.
+7. **Inspect the staging package.**
+   - Open `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/`.
+   - Confirm the `datasets`, `metadata` and `review` folders are present.
+   - Confirm all seven `.dta` and seven `.csv` table datasets exist.
+   - Open `metadata/package.yml` and `metadata/input_manifest.csv`; check the package ID, coverage date and source files.
+   - Open `review/qa_summary.txt`; review all listed data-quality flags.
+   - Open a selection of the table datasets and confirm the periods and values are plausible.
+   - Confirm current-year outputs are clearly represented as year-to-date where applicable.
+   - Remember that these files are **unsuppressed** and must remain private.
+
+## Outputs
+
+All outputs are under:
+
+`$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/`
+
+| Output | Purpose |
+|---|---|
+| `table_01_annual_event_counts.dta/.csv` | Annual CVD event counts. |
+| `table_02_monthly_event_counts.dta/.csv` | Monthly CVD event counts. |
+| `table_03_age70_event_percent.dta/.csv` | Event distribution for under 70 and 70 years or older. |
+| `table_04_incidence_rates.dta/.csv` | Annual crude and age-adjusted incidence rates. |
+| `table_05_incidence_rate_ratios.dta/.csv` | Incidence rate-ratio results. |
+| `table_06_case_fatality.dta/.csv` | In-hospital case-fatality results. |
+| `table_07_length_of_stay.dta/.csv` | Median and quartile hospital length-of-stay results. |
+| `metadata/package.yml` | Package identity, release and workflow status. |
+| `metadata/input_manifest.csv` | Records the analytical and reference inputs used. |
+| `metadata/table_catalogue.csv` | Defines the seven table products and their display order. |
+| `review/qa_summary.txt` | Structural and data-quality review flags from Step 1. |
+| `readme.txt` | Plain-language description of the private staging package. |
+| Step 1 log | Operational run record under `$BNR_PRIVATE_LOGS/`. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/tables/bnr_step1_cvd_tables.do" 2024 1 1
+```
+
+Add `replace` only for a deliberate rebuild of an existing private staging package.
+
+## If Table Step 1 does not complete
+
+Read the final Stata error message and private log.
+
+Check first that the Step 3 `all_variables` dataset and YAML receipt exist, both reference datasets are present, and `distrate` is installed. If a staging package already exists, inspect it before authorising replacement.

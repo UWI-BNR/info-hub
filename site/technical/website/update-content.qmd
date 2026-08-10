@@ -1,15 +1,24 @@
 ﻿---
 title: "Update website content"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Maintain public Quarto pages, briefings, listings, navigation and downloads after analytical publication."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to make routine changes to pages, navigation, listings and downloads.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter covers
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+This chapter covers **publish-layer maintenance** after an analytical package has already passed its Stata review, approval and publication controls.
+
+Typical tasks include:
+
+- updating a narrative briefing page to use a newly published analytical package;
+- maintaining ordinary Quarto content pages;
+- updating navigation and listings;
+- checking Downloads integration; and
+- confirming that public pages point only to the website mirror or other approved public resources.
+
+Analytical values should not be recalculated or manually corrected in Quarto. If an analytical product is wrong, return to the relevant Stata workflow.
+
+Use [Update an existing briefing](update-briefing.qmd) for the package-specific briefing update process.

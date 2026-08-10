@@ -1,15 +1,191 @@
 ﻿---
 title: "Review an analytical release"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Common human checks for BNR dashboard, tabulation and briefing packages before approval."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-A short checklist for reviewing an analytical package before approval.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Every BNR public release must be checked by a person before it is approved.
+
+The workflows already carry out many routine checks automatically. These automated checks are usually described as **QA (quality assurance)**. They can confirm things such as expected files, valid structures, matching totals and known disclosure-control rules.
+
+The human reviewer has a different job: **look at the actual release and decide whether it is right, safe and ready to publish**.
+
+A successful Stata run therefore means that the code completed its checks. It does **not** mean that the release has been approved.
+
+The workflow chapters tell you which files to open. This chapter explains what the reviewer should be looking for.
+
+## The four review questions
+
+A complete review answers four questions.
+
+| Question | What you are deciding |
+|---|---|
+| **Is this the right release?** | The source data, reporting period, package ID and version are the ones you intended to use. |
+| **Do the results look credible?** | The results are complete, internally consistent and reasonable when compared with related periods and previous releases. |
+| **Is the release safe to make public?** | Small numbers and other disclosure risks have been considered across all public outputs. |
+| **Is everything ready for publication?** | Public files, figures, labels, metadata, notes and limitations are complete and understandable. |
+
+Do not record approval until all four questions have been answered satisfactorily.
+
+## First check that you have the right release
+
+Before looking at the results, confirm the identity of the package.
+
+Check the available metadata for:
+
+- package or release ID;
+- source dataset;
+- source release;
+- coverage end date or reporting period;
+- metric, table or briefing type; and
+- version number, where one is used.
+
+If these details are wrong, stop. Do not repair generated metadata by hand.
+
+## Check the automated QA
+
+Review the automated checks before deciding whether the results are acceptable.
+
+The main files differ by workflow:
+
+| Workflow | Main QA and review material |
+|---|---|
+| **Dashboard metrics** | Step 4 QA and Step 5 disclosure QA, brought together in `step5_review.xlsx`. |
+| **Tabulations** | Step 1 `qa_summary.txt`, followed by the Step 2A suppression review workbook and worklist. |
+| **Briefings** | Package checks plus `review/disclosure_flags.csv`. These flags are prompts for human review, not automatic suppression decisions. |
+
+For each set of checks:
+
+1. confirm that the checks actually ran;
+2. confirm that the reported results are acceptable;
+3. read the accompanying detail, not just the word `PASS`; and
+4. investigate anything unexpected.
+
+Automated checks can show that two totals reconcile. They cannot decide whether an unexpected change in CVD events is believable.
+
+## Look at the results themselves
+
+Open the datasets, tables, workbook or figures that form the proposed release.
+
+Ask:
+
+- Are all expected periods and categories present?
+- Do totals agree with their components?
+- Are there unexplained missing periods or duplicated groups?
+- Are values broadly consistent with neighbouring periods and previous releases?
+- Are denominators and supporting counts sensible?
+- Are current-year or incomplete-period results labelled correctly?
+- Do figures agree with the underlying datasets?
+- Does the output still make sense when viewed without the Stata code beside it?
+
+A surprising result is not automatically wrong. It does need an explanation before publication.
+
+If the explanation is a genuine change in the data, keep the result and make sure any public explanation is adequate. If the explanation is a data or code problem, correct that problem and rebuild the release.
+
+## Check disclosure risk
+
+Disclosure control is not simply a search for cells containing the numbers 1 to 5.
+
+Review the proposed public outputs together, including:
+
+- totals and subtotals;
+- related tables;
+- percentages, rates and other calculated measures;
+- figures and chart labels;
+- downloadable datasets and workbooks;
+- previous public releases; and
+- relevant information that is already publicly known.
+
+See [Disclosure control](disclosure-control.qmd) for the BNR rules and the differences between dashboard, tabulation and briefing review.
+
+## Check the proposed public files
+
+Where the workflow creates the exact files proposed for publication, inspect those files directly.
+
+Check that:
+
+- protected values have really been removed;
+- public display fields use the intended suppression marker or wording;
+- unrestricted values agree with the reviewed private results;
+- identifiers and private review fields are absent;
+- a table or figure does not reveal a value that was removed from the dataset;
+- the metadata describe the correct release; and
+- a public user could understand the product without needing the private review files.
+
+The key question is: **is this complete proposed public release safe and understandable?**
+
+## Check labels, notes and metadata
+
+Correct numbers can still mislead if their labels are wrong.
+
+Check, where relevant:
+
+- titles and subtitles;
+- reporting dates and period labels;
+- YTD or incomplete-period labels;
+- event and subgroup labels;
+- units;
+- source descriptions;
+- limitations and caveats;
+- download names; and
+- figure titles, axes, legends and annotations.
+
+For briefings, the narrative Quarto page is updated separately. At this stage, check that the approved analytical files and figures provide a sound basis for that later page update.
+
+## Check that the package is complete
+
+A **package** is simply the group of files that belongs to one release.
+
+Before approval, confirm that all required files exist. Depending on the workflow, these may include:
+
+- datasets;
+- figures;
+- workbooks;
+- generated table fragments;
+- metadata;
+- QA files;
+- disclosure-review files; and
+- the public manifest.
+
+Use the relevant workflow chapter as the checklist. Do not fill a gap by copying a file from another release.
+
+## Decide: approve or rebuild
+
+There are two useful outcomes.
+
+**Approve** when the exact package has passed the results review, disclosure review and publication-readiness checks.
+
+**Rebuild** when something needs to change.
+
+If a rebuild is needed:
+
+1. identify the earliest data or code step that needs correction;
+2. make the correction there;
+3. rerun the controlled workflow;
+4. create a new review package; and
+5. repeat the human review.
+
+Do **not** correct a generated CSV, DTA, workbook, figure or YAML file by hand. Manual changes break the link between the source data, the code, the review and the files that are eventually approved.
+
+The restart rule differs slightly by workflow:
+
+| Workflow | If a reviewed package needs changing |
+|---|---|
+| **Dashboard metrics** | Return to the appropriate earlier step. `prepare replace` rebuilds Step 5 review material and removes the earlier approval state. |
+| **Tabulations** | Rebuild Step 2A with explicit replacement when the proposed public files need to change, then review and approve again. |
+| **Briefings** | Once a briefing has been approved, make corrections using a new briefing version. |
+
+## Workflow-specific review instructions
+
+Use this chapter alongside the detailed instructions for the product being released:
+
+- [Dashboard Step 5: Review and approve](../workflows/dashboards/approve-metrics.qmd)
+- [Tabulations Step 2A: Disclosure control and review](../workflows/tabulations/disclosure-control.qmd)
+- [Briefing Step 2: Review and approve](../workflows/briefings/approve.qmd)
+
+The workflow page tells you **which files to open**. This chapter explains **what the human review is meant to achieve**.

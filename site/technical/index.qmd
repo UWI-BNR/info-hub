@@ -1,29 +1,46 @@
 ﻿---
 title: "Technical Manual"
-pagetitle: "BNR Technical Manual"
-title-block-style: none
-toc: true
-toc-title: "On this page"
-toc-depth: 2
-number-sections: false
+description: "Step-by-step guidance for operating and maintaining the BNR post-REDCap analytics and publishing environment."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-The Technical Manual is a practical guide to operating and maintaining the BNR analytics and publishing environment after data collection in REDCap.
+---
 
-Use it as a **dip-in, dip-out guide**: choose the task you need, follow the steps, and check the expected result.
+## What this manual covers
 
-## Main workflows
+The Technical Manual is the practical how-to guide for the BNR analytics and publishing environment **after data have been collected in REDCap**.
 
-The reporting environment has three operational workflows:
+Use it to run analytical workflows, review and approve outputs, publish controlled releases, maintain the Info-Hub website, make safe code changes and diagnose common problems.
 
-1. **Dashboard metrics** â€” prepares the common analytical inputs and produces routine dashboard metrics.
-2. **Tabulations** â€” uses the deidentified analytical inputs to produce approved public tabulations.
-3. **Briefings** â€” uses the deidentified analytical inputs to produce occasional analytical briefings.
+It is designed for **dip-in, dip-out use**. Find the task you need, follow the steps and complete the human checks before moving on.
 
-A mortality workflow will be added when that pathway has been implemented.
+## The three BNR manuals
 
-## Other guidance
+| Manual | Main purpose |
+|---|---|
+| **Technical Manual** | Operate and maintain the post-REDCap analytics, release and publishing environment. |
+| **[Operations Manual](../operations/index.qmd)** | Registry operating procedures before and within REDCap, including data collection, governance and routine registry operation. |
+| **[Public Methods Manual](../methods/index.qmd)** | Plain-language explanation of the methods used to produce and interpret BNR public statistics. |
 
-The manual also contains short guides for review and disclosure control, approval and publication, website operation, maintenance, troubleshooting, and quick reference.
+The manuals overlap only where a handover between operational stages needs to be clear.
 
-For BNR operating procedures before and within REDCap, use the **BNR Operations Manual**.
+## Chapters
+
+| Chapter | What it covers |
+|---|---|
+| **1. Analytics environment** | How Stata, private storage, public outputs, Quarto and GitHub fit together. |
+| **2. Set up a workstation** | Software, repositories, local paths and system checks. |
+| **3. Dashboard metrics** | Monthly REDCap extraction, shared analytical preparation, dashboard metrics, approval and publication. |
+| **4. Tabulations** | Routine CVD tables, disclosure control, review, approval and publication. |
+| **5. Briefings** | Routine and ad-hoc analytical briefing packages, including review, approval and publication. |
+| **6. Mortality workflow** | Reserved for the mortality pathway when implementation is complete. |
+| **7. Review an analytical release** | Common checks before any analytical release is approved. |
+| **8. Disclosure control** | BNR small-number rules and human disclosure review. |
+| **9. Approve and publish a release** | Common approval and promotion principles. |
+| **10. Render and publish the website** | Local Quarto rendering, checking and deployment. |
+| **11. Update website content** | Maintaining pages, briefings, listings, navigation and downloads. |
+| **12. Make a safe code change** | Branch, edit, test, review and merge changes safely. |
+| **13. Files, releases and versions** | Important locations, package identities and version conventions. |
+| **14. Fix common problems** | Short symptom, cause and fix recipes. |
+| **15. System reference** | Workflow, command, folder, file and terminology quick reference. |

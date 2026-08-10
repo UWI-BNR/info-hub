@@ -1,15 +1,71 @@
 ﻿---
 title: "Create deidentified analytical inputs"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Step 3: create the private deidentified datasets used by dashboards, tabulations and briefings."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to run Dashboard Step 3 and check the deidentified analytical input datasets.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Removes direct identifiers using approved positive variable lists and creates purpose-specific analytical datasets. These outputs are deidentified but remain private.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Step 2 confidential dataset | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/bnr_cvd_confidential_YYYYMM_v01.dta` | Source event-level dataset. |
+| Step 2 YAML receipt | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/bnr_cvd_confidential_YYYYMM_v01.yml` | Confirms the source release and provenance. |
+
+## Run Step 3
+
+1. **Open Step 3.** In Stata, choose User > BNR > Update dashboard > Step 3: Build deidentified datasets.
+2. **Select the release.** Enter the release year and release month.
+3. **Select datasets.** For a routine full refresh, leave Counts and incidence, Case fatality, Length of stay, Care performance, and All approved variables selected.
+4. **Choose replacement behaviour.** For a first run, leave Replace selected existing datasets unticked.
+5. **Run Step 3.** Select Run Step 3.
+6. **Check the run summary.** Confirm the summary shows `Completed successfully`, the expected record count and the datasets you intended to create.
+7. **Inspect the output.**
+   - Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`.
+   - Confirm that every selected dataset has both a `.dta` file and matching `.yml` receipt.
+   - Open the receipts and check the source release, record count and variable list.
+   - Confirm that direct identifiers are absent from the generated analytical datasets.
+
+## Outputs
+
+All selected datasets are written to:
+
+`$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`
+
+| Output | Purpose |
+|---|---|
+| `bnr_cvd_input_count_YYYYMM_v01.dta` + `.yml` | Counts and incidence input. The current dashboard burden workflow uses this dataset. |
+| `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` + `.yml` | Input for case-fatality analyses and briefings. |
+| `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` + `.yml` | Input for hospital length-of-stay analyses and briefings. |
+| `bnr_cvd_input_performance_YYYYMM_v01.dta` + `.yml` | Input for care-performance measures. |
+| `bnr_cvd_input_all_variables_YYYYMM_v01.dta` + `.yml` | Union of all approved deidentified analytical fields, used where a broader input is required. |
+| Step 3 log | Operational record stored under `$BNR_PRIVATE_LOGS/`. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for how the private derived-data area relates to later staging and publication locations.
+
+To see the local derived-data root:
+
+```stata
+display "$BNR_DATA_DERIVED"
+```
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
+    2024 1 count case_fatality length_of_stay performance all_variables
+```
+
+Add `replace` as the final word only for a deliberate rebuild.
+
+## If Step 3 does not complete
+
+Read the **Reason** and **Log** lines in the operational summary.
+
+First check that the Step 2 dataset and YAML receipt exist for the selected release. If an output already exists, use replacement only after confirming that a rebuild is intended.

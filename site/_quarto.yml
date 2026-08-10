@@ -274,50 +274,54 @@ website:
 
         - section: "Analytical workflows"
           contents:
+            - text: "Overview"
+              href: technical/workflows/overview.qmd
+
             - section: "3. Dashboard metrics"
-              href: technical/workflows/dashboards/index.qmd
               contents:
-                - text: "Extract a REDCap release"
+                - text: "Overview"
+                  href: technical/workflows/dashboards/overview.qmd
+                - text: "Step 1: Extract a REDCap release"
                   href: technical/workflows/dashboards/extract-redcap.qmd
-                - text: "Prepare the confidential dataset"
+                - text: "Step 2: Prepare confidential dataset"
                   href: technical/workflows/dashboards/prepare-confidential.qmd
-                - text: "Create analytical inputs"
+                - text: "Step 3: Create analytical inputs"
                   href: technical/workflows/dashboards/create-analysis-inputs.qmd
-                - text: "Generate dashboard metrics"
+                - text: "Step 4: Generate dashboard metrics"
                   href: technical/workflows/dashboards/generate-metrics.qmd
-                - text: "Approve dashboard metrics"
+                - text: "Step 5: Review and approve"
                   href: technical/workflows/dashboards/approve-metrics.qmd
-                - text: "Publish dashboard metrics"
+                - text: "Step 6: Publish dashboard metrics"
                   href: technical/workflows/dashboards/publish-metrics.qmd
 
             - section: "4. Tabulations"
-              href: technical/workflows/tabulations/index.qmd
               contents:
-                - text: "Generate tabulations"
+                - text: "Overview"
+                  href: technical/workflows/tabulations/overview.qmd
+                - text: "Step 1: Generate tabulations"
                   href: technical/workflows/tabulations/generate.qmd
-                - text: "Apply disclosure control"
+                - text: "Step 2A: Disclosure control and review"
                   href: technical/workflows/tabulations/disclosure-control.qmd
-                - text: "Approve tabulations"
+                - text: "Step 2B: Approve tabulations"
                   href: technical/workflows/tabulations/approve.qmd
-                - text: "Publish tabulations"
+                - text: "Step 3: Publish tabulations"
                   href: technical/workflows/tabulations/publish.qmd
 
             - section: "5. Briefings"
-              href: technical/workflows/briefings/index.qmd
               contents:
-                - text: "Create a briefing"
+                - text: "Overview"
+                  href: technical/workflows/briefings/overview.qmd
+                - text: "Step 1: Create a routine briefing"
                   href: technical/workflows/briefings/create.qmd
-                - text: "Prepare a briefing for review"
-                  href: technical/workflows/briefings/review.qmd
-                - text: "Approve a briefing"
+                - text: "Step 2: Review and approve"
                   href: technical/workflows/briefings/approve.qmd
-                - text: "Publish a briefing"
+                - text: "Step 3: Publish a briefing"
                   href: technical/workflows/briefings/publish.qmd
-                - text: "Update an existing briefing"
-                  href: technical/workflows/briefings/update-existing.qmd
 
-            - text: "6. Mortality workflow"
-              href: technical/workflows/mortality/index.qmd
+            - section: "6. Mortality workflow"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/mortality/overview.qmd
 
         - section: "Review and publication controls"
           contents:
@@ -330,10 +334,14 @@ website:
 
         - section: "Operate the Info-Hub"
           contents:
-            - text: "10. Render and publish the website"
+            - text: "10. Render and publish website"
               href: technical/website/render-publish.qmd
-            - text: "11. Update website content"
-              href: technical/website/update-content.qmd
+            - section: "11. Update website content"
+              contents:
+                - text: "Overview"
+                  href: technical/website/update-content.qmd
+                - text: "Update an existing briefing"
+                  href: technical/website/update-briefing.qmd
 
         - section: "Maintain and recover"
           contents:

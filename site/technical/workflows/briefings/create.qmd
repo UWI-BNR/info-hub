@@ -1,15 +1,83 @@
 ﻿---
-title: "Create a briefing"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+title: "Create a routine briefing package"
+description: "Briefing Step 1: run a standard CVD briefing analysis from a shared Step 3 input and create the private staging package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to create briefing data and figures from an approved analytical input release.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Starts from one of the purpose-specific deidentified datasets created by [Dashboard Step 3](../dashboards/create-analysis-inputs.qmd), runs the selected analyst-owned briefing DO file and creates its private analytical review package.
+
+Briefing Step 1 does not approve, publish or render anything. Routine briefings use Step 3 dataset version `01` automatically and analyse complete calendar years through the end of the year before the selected monthly release.
+
+**Ad-hoc briefings do not use this Step 1 dialog.** They are run directly from an analyst-owned DO file and join the controlled workflow at Briefing Step 2.
+
+## Inputs
+
+| Briefing | Step 3 input | Package ID pattern |
+|---|---|---|
+| CVD incidence rates | `$BNR_DATA_DERIVED/.../bnr_cvd_input_count_YYYYMM_v01.dta` | `cvd_incidence_TARGETYEAR_vV` |
+| CVD case-fatality | `$BNR_DATA_DERIVED/.../bnr_cvd_input_case_fatality_YYYYMM_v01.dta` | `cvd_case_fatality_TARGETYEAR_vV` |
+| CVD length of stay | `$BNR_DATA_DERIVED/.../bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` | `cvd_los_TARGETYEAR_vV` |
+
+For routine briefings, `TARGETYEAR = release year - 1`.
+
+Incidence also uses the controlled population and WHO standard-population reference datasets from the private work area.
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the private derived-data and briefing-staging locations.
+
+## Run Briefing Step 1
+
+1. **Open Briefing Step 1.** In Stata, choose User > BNR > Produce briefing > Step 1: Build review package.
+2. **Select the briefing.** Choose CVD incidence rates, CVD case-fatality or CVD length of stay.
+3. **Select the dataset release.** Enter the release year and month.
+4. **Select the briefing version.** Use version 1 for a new routine release unless a different version is deliberately required.
+5. **Choose replacement behaviour.** Leave replacement unticked for a first build.
+6. **Run the analysis.** Select Run analysis.
+7. **Inspect the staging package.**
+   - Open `$BNR_STAGING/briefings/{briefing_id}/`.
+   - Confirm `datasets`, `figures`, `metadata`, `workbook` and `review` folders are present.
+   - Open `metadata/release_control.yml` and `metadata/briefing.yml`; check the package ID, source dataset, source release, target year and declared outputs.
+   - Confirm all declared `.dta`, `.csv` and `.png` files exist.
+   - Open the workbook and confirm the expected data sheets are present.
+   - Open `review/disclosure_flags.csv`; note any automated small-number flags for the Step 2 human review.
+   - Confirm `readme.txt` and `downloads.yml` exist.
+   - Do not treat a complete folder as approval. The package remains private until Steps 2 and 3.
+
+## Outputs
+
+The exact contents depend on briefing type, but every routine package is under:
+
+`$BNR_STAGING/briefings/{briefing_id}/`
+
+| Area | Purpose |
+|---|---|
+| `datasets/` | Released aggregate `.dta` and `.csv` analytical datasets. |
+| `figures/` | PNG figures created by the analyst-owned briefing DO file. |
+| `metadata/release_control.yml` | Contract between the analyst-owned analysis and the common staging helper. |
+| `metadata/briefing.yml` | Package-level public metadata. |
+| `metadata/{dataset}.yml` | Dataset-level metadata derived from Stata labels and notes. |
+| `workbook/` | Human-friendly workbook when requested by the briefing definition. |
+| `review/disclosure_flags.csv` | Automated disclosure-review prompts. These are not automatic approval or suppression decisions. |
+| `review/disclosure_review.txt` | Incomplete human-review record completed during Step 2. |
+| `readme.txt` | Package description and usage information. |
+| `downloads.yml` | Download-catalogue information staged with the package. |
+| Private log | Stored under `$BNR_PRIVATE_LOGS/`. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/briefings/bnr_step1_build_briefing.do" ///
+    "CVD incidence rates" 2024 1 1
+```
+
+Replace the briefing type as required. Add `replace` only when deliberately rebuilding an **unapproved** staging package.
+
+## If Briefing Step 1 does not complete
+
+Check the final Stata message and private log.
+
+Confirm the required Step 3 input exists for the selected release and that the chosen briefing has been migrated. CVD mortality is not yet available through this dispatcher.

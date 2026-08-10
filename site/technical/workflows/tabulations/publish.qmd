@@ -1,15 +1,70 @@
 ﻿---
 title: "Publish tabulations"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Table Step 3: validate and promote the exact approved CVD tabulations package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to promote approved tabulations and verify the public release.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Validates `approval.yml`, the manifest and all 26 approved products before publication.
+
+It creates an authoritative release-stamped package, refreshes the authoritative `latest` package, creates the public ZIP and Downloads catalogue record, and refreshes the disposable Quarto website mirror.
+
+Step 3 does not recalculate or resuppress tables and does not render Quarto.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Approved Step 2A products | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/public_ready/` | Exact package approved in Step 2B. |
+| `public_manifest.csv` | `public_ready/` | Defines the 26 products permitted to cross the publication boundary. |
+| `approval.yml` | `public_ready/` | Evidence that the package was approved after human review. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the authoritative public area and disposable website-mirror model.
+
+## Run Table Step 3
+
+1. **Open Table Step 3.** In Stata, choose User > BNR > Produce tables > Step 3: Publish approved tables.
+2. **Select the approved release.** Enter the release year and month.
+3. **Choose replacement behaviour.** Leave replacement unticked for a first publication. Replacement is a deliberate recovery action.
+4. **Publish.** Select Publish approved tables.
+5. **Check the run summary.** Confirm `COMPLETED - PUBLISHED`, `Manifest files: 26 promoted`, the expected public release/latest/site paths, and the published workbook status.
+6. **Inspect the published outputs.**
+   - Open `$BNR_PUBLIC/tables/cvd/releases/cvd_tables_YYYY_MM/`; confirm the release-stamped package exists and contains the expected public products.
+   - Open `$BNR_PUBLIC/tables/cvd/latest/`; confirm it represents the same release and contains the stable ZIP.
+   - Open `$BNR_REPO/site/downloads/annual/cvd/latest/`; confirm the website mirror contains the 26 public-facing products, stable ZIP and `downloads.yml`.
+   - Open the public workbook and confirm its Read me status says `PUBLISHED - APPROVED FOR PUBLIC RELEASE`.
+   - Open the ZIP and spot-check its workbook, datasets and metadata.
+   - Confirm the website mirror does **not** contain private review files or approval/publication control receipts.
+   - Confirm the tabulations page and Downloads page still require a separate Quarto render before deployment.
+
+## Outputs
+
+| Output | Location | Purpose |
+|---|---|---|
+| Release-stamped public package | `$BNR_PUBLIC/tables/cvd/releases/cvd_tables_YYYY_MM/` | Authoritative retained copy of this approved release. |
+| Authoritative latest package | `$BNR_PUBLIC/tables/cvd/latest/` | Stable current copy used for latest downloads. |
+| Release and stable ZIP files | Authoritative public package | Downloadable approved table package. |
+| `downloads.yml` | Public package and website mirror | Registers the tabulations ZIP with the manifest-driven Downloads catalogue. |
+| Website mirror | `$BNR_REPO/site/downloads/annual/cvd/latest/` | Disposable copy consumed by Quarto. |
+| Publication controls | Authoritative release | Records publication and approval provenance; not copied to the website mirror. |
+| Step 3 log | `$BNR_PRIVATE_LOGS/` | Operational publication record. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/tables/bnr_step3_cvd_tables_publish.do" 2024 1
+```
+
+Add `replace` only for deliberate republication after inspecting the existing release.
+
+## If Table Step 3 does not complete
+
+Read the Stata error and private log.
+
+Because publication builds and replaces several folder trees, inspect the release, latest and website-mirror locations before rerunning. Do not repair generated tables by hand.
+
+After successful publication, follow [Render and publish the website](../../website/render-publish.qmd).

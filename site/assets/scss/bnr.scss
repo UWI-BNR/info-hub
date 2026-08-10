@@ -480,3 +480,75 @@ body.bnr-briefing-page .quarto-document-content h3 {
 .bnr-year-tabs > .tab-content > .tab-pane {
   overflow-x: auto;
 }
+
+/* =========================================================================
+   TECHNICAL MANUAL
+   Compact title metadata and operator-focused page layout.
+   Scoped to pages carrying body class bnr-technical-manual.
+   ========================================================================= */
+
+.bnr-technical-manual .quarto-title-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.5rem;
+  row-gap: 0.1rem;
+  margin-top: 0.35rem;
+  margin-bottom: 1.35rem;
+  color: #6c757d;
+  font-size: 0.82rem;
+}
+
+.bnr-technical-manual .quarto-title-meta > div:first-child {
+  grid-column: 1 / -1;
+  margin-bottom: 0.05rem;
+}
+
+.bnr-technical-manual .quarto-title-meta > div:nth-child(2) {
+  text-align: left;
+}
+
+.bnr-technical-manual .quarto-title-meta > div:nth-child(3) {
+  text-align: right;
+}
+
+.bnr-technical-manual .quarto-title-meta > div:first-child .quarto-title-meta-heading {
+  display: none;
+}
+
+.bnr-technical-manual .quarto-title-meta-heading,
+.bnr-technical-manual .quarto-title-meta-contents {
+  display: inline;
+  color: #6c757d;
+  font-size: 0.82rem;
+  line-height: 1.25;
+}
+
+.bnr-technical-manual .quarto-title-meta-heading {
+  margin-right: 0.3rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.bnr-technical-manual .quarto-title-meta-contents p {
+  display: inline;
+  margin: 0;
+}
+
+.bnr-technical-manual .quarto-title .description {
+  margin-bottom: 0.35rem;
+}
+
+@media (max-width: 576px) {
+  .bnr-technical-manual .quarto-title-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .bnr-technical-manual .quarto-title-meta > div:first-child,
+  .bnr-technical-manual .quarto-title-meta > div:nth-child(2),
+  .bnr-technical-manual .quarto-title-meta > div:nth-child(3) {
+    grid-column: 1;
+    text-align: left;
+  }
+}
+

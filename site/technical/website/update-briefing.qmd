@@ -1,0 +1,78 @@
+﻿---
+title: "Update an existing briefing"
+description: "Update a Quarto briefing page after its new analytical package has been reviewed, approved and published."
+date: 2026-08-10
+date-modified: 2026-08-10
+---
+
+---
+
+## What this step does
+
+Updates an existing narrative Quarto briefing so that it uses a newly published analytical package.
+
+This is a **publish-layer task**, not part of the briefing analytical workflow. Start only after Briefing Step 3 has completed successfully and the approved package is present in the website mirror.
+
+The current CVD pages are:
+
+| Briefing | Quarto page |
+|---|---|
+| Incidence | `site/surveillance/cvd/briefings/case-incidence.qmd` |
+| Case fatality | `site/surveillance/cvd/briefings/case-fatality.qmd` |
+| Length of stay | `site/surveillance/cvd/briefings/hospital-los.qmd` |
+
+Each page contains a maintenance note near the top describing the package-specific references that must move together.
+
+See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for why the Quarto page should use the **website mirror**, not private staging or the authoritative `$BNR_PUBLIC` package directly.
+
+## Update the page
+
+1. **Confirm the published package.**
+   - Confirm the new `{briefing_id}` exists under `$BNR_REPO/site/downloads/files/briefings/`.
+   - Open its figures, workbook and ZIP before changing the page.
+
+2. **Open the relevant briefing QMD.**
+   - Read the maintenance note near the top of the file.
+   - Identify the current package ID used by the page.
+
+3. **Prepare the package-specific narrative snippets.**
+   - Narrative snippets are stored under `site/_shared/snippets/briefings/cvd/{briefing_id}/`.
+   - Create or update the snippet set required by that briefing page.
+   - Check every narrative statement against the newly approved analytical results.
+   - Do not carry headline numbers or interpretation forward without checking them.
+
+4. **Update package references consistently.**
+   - Change shared-snippet include paths to the new package ID.
+   - Change every figure path and full-size figure link.
+   - Change the workbook link and filename.
+   - Change the ZIP link and filename.
+   - Keep web-facing analytical links under `site/downloads/files/briefings/{briefing_id}/`.
+
+5. **Update visible content.**
+   - Change title, subtitle, year/category and date where required.
+   - Recheck headline values.
+   - Update narrative interpretation and limitations where the new results require it.
+   - Update the citation and any visible reporting-period text.
+
+6. **Check other formats.**
+   - The current HTML pages link separately to PDF and reveal.js versions.
+   - Confirm those links point to the intended version before publication.
+   - Updating or rebuilding those separate formats is not performed by Briefing Step 3.
+
+7. **Render and review the page.**
+   - Render the site locally.
+   - Open the briefing page and follow every figure, workbook, ZIP, PDF and slide link.
+   - Check that no link still points to the previous package unintentionally.
+   - Review the rendered narrative against the approved datasets and figures.
+
+8. **Check site listings.**
+   - Confirm the briefing appears correctly where the site lists Latest Data and briefings.
+   - Confirm the public ZIP appears correctly on Downloads.
+
+## Important boundary
+
+Quarto presents approved analytical products. It does not own the analytical calculations.
+
+Do not link the page directly to `$BNR_STAGING` or manually alter a generated analytical product to make the page look right.
+
+If an analytical result is wrong, correct it through the appropriate Stata workflow and publish a new approved package.

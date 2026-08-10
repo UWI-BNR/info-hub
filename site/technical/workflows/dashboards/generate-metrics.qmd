@@ -1,15 +1,73 @@
 ﻿---
 title: "Generate dashboard metrics"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Step 4: calculate the CVD burden metrics and create the private staging package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to generate a dashboard metric package for review.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Calculates the current CVD burden metric family from the Step 3 count dataset and creates the private staging package used for review and approval.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Step 3 count dataset | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/bnr_cvd_input_count_YYYYMM_v01.dta` | Event-level input for burden metric calculation. |
+| Step 3 count YAML receipt | Same `metric_inputs` folder | Confirms source release and provenance. |
+
+## Run Step 4
+
+1. **Open Step 4.** In Stata, choose User > BNR > Update dashboard > Step 4: Calculate metrics for dashboards.
+2. **Select the release.** Enter the release year and release month.
+3. **Select the metric family.** Leave Burden selected. Other families are currently disabled.
+4. **Choose replacement behaviour.** For a first run, leave Authorise replacement unticked.
+5. **Run Step 4.** Select Run Step 4.
+6. **Check the run summary.** Confirm the operational summary shows a successful run and lists the staging package, QA review file and suppression workbook.
+7. **Inspect the staging package.**
+   - Open `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/`.
+   - Confirm that the `datasets`, `metadata` and `review` folders exist.
+   - Confirm that the files listed in the run summary are present.
+   - Open the QA CSV and confirm that the package is ready to proceed to Step 5.
+   - Do not perform the Step 5 human disclosure review here.
+
+## Outputs
+
+The staging package is created under:
+
+`$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/`
+
+| Output | Purpose |
+|---|---|
+| Release-stamped metric `.dta` and `.csv` files | Private calculated metric results for this release. |
+| `cvd_burden_metrics_current.dta` and `.csv` | Stable-name copies used later by the publication pathway. |
+| `metadata/metric_package.yml` | Package-level metadata and provenance. |
+| QA review CSV | Machine-readable checks on the calculated package. |
+| Suppression review workbook | Private worklist highlighting rows that require disclosure review. |
+| Step 4 log | Operational record stored under `$BNR_PRIVATE_LOGS/`. |
+
+Do not edit generated staging files manually.
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the distinction between private staging, authoritative public outputs and the website mirror.
+
+To see the local staging root:
+
+```stata
+display "$BNR_STAGING"
+```
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 1 burden
+```
+
+Add `replace` only for a deliberate rebuild of the staging package.
+
+## If Step 4 does not complete
+
+Read the **Reason** and **Log** lines in the operational summary.
+
+First confirm that the matching Step 3 count dataset and YAML receipt exist. If a staging package already exists, inspect it before authorising replacement.

@@ -1,15 +1,61 @@
 ﻿---
 title: "Prepare the confidential dataset"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Step 2: combine the selected REDCap release with the frozen historical CVD dataset."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to run Dashboard Step 2 and check the confidential cumulative dataset.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Appends the selected post-2023 REDCap release to the frozen 2009-2023 CVD dataset, harmonises the two data eras and creates the shared analytical variables.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Frozen historical CVD dataset | `$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Fixed 2009-2023 historical source. |
+| Step 1 Stata dataset | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/bnr_cvd_step1_YYYYMM.dta` | Selected cumulative post-2023 REDCap release. |
+
+Step 1 must have completed successfully for the same release year and month.
+
+## Run Step 2
+
+1. **Open Step 2.** In Stata, choose User > BNR > Update dashboard > Step 2: Build cumulative dataset.
+2. **Select the release.** Enter the same release year and release month used in Step 1.
+3. **Build the dataset.** Select Build dataset.
+4. **Check the run summary.** Confirm the run completed successfully, the historical and post-2023 record counts are plausible, the date range is correct, and the displayed DCO limitation is expected.
+5. **Inspect the output.**
+   - Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`.
+   - Confirm that the dataset and YAML receipt exist.
+   - Open the YAML receipt and check the selected release, source files and record counts.
+   - Open the Stata dataset and confirm that the total record count and event-date range agree with the run summary.
+
+## Outputs
+
+| File | Private location | Purpose |
+|---|---|---|
+| `bnr_cvd_confidential_YYYYMM_v01.dta` | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/` | Confidential cumulative event-level dataset used as the source for Step 3. |
+| `bnr_cvd_confidential_YYYYMM_v01.yml` | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/` | Receipt recording release identity, source files, record counts, QA information and the core data signature. |
+| Step 2 log | `$BNR_PRIVATE_LOGS/` | Operational record of the Step 2 run. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of the frozen, raw and derived private-data locations.
+
+To see the local derived-data root:
+
+```stata
+display "$BNR_DATA_DERIVED"
+```
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2024 1
+```
+
+## If Step 2 does not complete
+
+Read the **Reason** and **Log** lines in the operational summary.
+
+First check that the frozen historical file exists and that Step 1 was completed for the same year and month. Correct the reported problem and rerun Step 2. Do not use output from an incomplete run.

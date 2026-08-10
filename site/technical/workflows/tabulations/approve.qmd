@@ -1,15 +1,74 @@
 ﻿---
 title: "Approve tabulations"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Table Step 2B: record the completed human review of the exact suppressed tabulations package."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to approve a tabulation package after review.
+---
 
-::: {.callout-note}
-## Status
+## What this step does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+Records formal approval of the Step 2A package after the human review. Step 2B validates the required review files and all 26 manifest products, then creates one approval receipt.
+
+It does not recalculate, suppress, change or publish any table.
+
+## Inputs
+
+| Input | Private location | Purpose |
+|---|---|---|
+| Step 2A review materials | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/review/` | Evidence used during the human review. |
+| Step 2A `public_ready` package | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/public_ready/` | Exact suppressed products being approved. |
+| `public_manifest.csv` | `public_ready/` | Defines the 26 products covered by approval. |
+
+See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of `public_ready` in the release architecture.
+
+## Run Table Step 2B
+
+1. **Open Table Step 2B.** In Stata, choose User > BNR > Produce tables > Step 2B: Approve reviewed tables.
+2. **Select the reviewed release.** Enter the release year and month.
+3. **Identify the approver.** Enter the full name and select BNR Lead, BNR Analyst or BNR Developer.
+4. **Confirm the review.** Tick all five confirmations only after checking:
+   - the intended release and reporting period;
+   - results and YTD presentation;
+   - every suppression and disclosure decision;
+   - the publication workbook and public-ready products; and
+   - overall publication readiness.
+5. **Approve.** Select Approve.
+6. **Check the run summary.** Confirm `COMPLETED - APPROVED, NOT PUBLISHED`, the approver details and `Required files: 26 checked`.
+7. **Review the approval receipt.**
+   - Open `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/public_ready/approval.yml`.
+   - Confirm `status: approved`.
+   - Confirm `package_id`, `product_type` and `coverage_end`.
+   - Confirm `approved_by`, `approved_role`, `approved_date` and `approved_time`.
+   - Confirm all five review confirmations are `true`.
+   - Confirm `manifest: public_manifest.csv`.
+   - Confirm `manifest_required_files: 26`.
+   - Confirm `publication_performed: false`.
+
+The approval receipt is the durable record that an authorised reviewer accepted the exact Step 2A package and its manifest. Step 3 requires it before publication.
+
+If the receipt is missing or wrong, do not edit it manually. A correction to the package requires Step 2A to be rebuilt and the full review repeated.
+
+## Outputs
+
+| Output | Private location | Purpose |
+|---|---|---|
+| `approval.yml` | `$BNR_STAGING/tables/cvd/cvd_tables_YYYY_MM/public_ready/` | Records who approved the package, the review confirmations and the manifest covered by approval. |
+| Step 2B log | `$BNR_PRIVATE_LOGS/` | Operational approval record. |
+
+No table product is changed by Step 2B.
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/tables/bnr_step2b_cvd_tables_approve.do" ///
+    2024 1 "Full name" "BNR Analyst" ///
+    release results disclosure workbook ready
+```
+
+## If Table Step 2B does not complete
+
+Do not bypass the failed safeguard.
+
+Check that the Step 2A review package is complete, all five confirmations are genuinely satisfied, and the selected package has not already been approved.
