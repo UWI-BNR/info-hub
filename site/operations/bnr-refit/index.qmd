@@ -1,1 +1,35 @@
-﻿
+---
+title: "BNR Refit Audit"
+subtitle: "Why the current operating model was introduced"
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+**Status:** Audit and institutional-history appendix.
+**Owner:** BNR Lead.
+
+## Purpose
+
+This appendix preserves the evidence and reasoning behind the BNR refit. It is not the day-to-day run guide: current operating requirements are stated in the core Operations Manual and detailed commands are in the Technical Manual.
+
+## Why the refit was needed
+
+The refit reviewed the legacy CVD data and reporting environment, rebuilt a reproducible historical dataset, and introduced a controlled path from REDCap extraction to approved public products. The work prioritised readable Stata analytics, clear data boundaries, explicit review and approval, and a static public Info-Hub suitable for handover.
+
+## Current operating principles arising from the refit
+
+- Stata computes and Quarto publishes.
+- Confidential computation, approval, public promotion and website deployment are separate.
+- An identified cumulative REDCap release anchors each analytical cycle.
+- Generated products are corrected through source data or code and rerun.
+- Disclosure control combines automated suppression with human whole-output review.
+- Approved public packages are authoritative; website copies are replaceable mirrors.
+- The operating model should remain simple enough for a small Stata-skilled team.
+
+## Historical documents
+
+- [Refit audit summary](audit-summary.qmd)
+- [Full refit audit](audit-full.qmd)
+- [CVD dataset rebuild](cvd-data-rebuild.qmd)
+
+These documents describe the position and decisions at particular stages of the refit. Where historical wording differs from the current Operations, Technical or Methods Manual, the current manuals govern routine work.

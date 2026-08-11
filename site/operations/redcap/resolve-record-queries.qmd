@@ -1,0 +1,42 @@
+---
+title: "Resolve record queries"
+description: "BNR team draft for resolving duplicates, missing information and uncertain event records."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft — additions invited"}
+This page is deliberately incomplete. BNR staff should add the normal query route, decision authority and examples before approving the procedure.
+:::
+
+## Purpose
+
+Describe how BNR identifies, investigates, resolves and records queries affecting a REDCap event record.
+
+## Procedure to complete
+
+1. Identify the query and the affected record or possible duplicate pair.
+2. Classify the issue: missing information, conflicting information, possible duplicate, eligibility or clinical classification.
+3. Check the agreed source information and record the evidence consulted.
+4. Refer clinical or scope decisions to the authorised role.
+5. Correct the authoritative REDCap record; never correct an analytical extract.
+6. Record the decision, date and responsible role.
+7. Confirm whether the record can proceed to approval or must remain open.
+
+## BNR details to add
+
+- how queries are created and assigned;
+- expected response times;
+- the duplicate-resolution rule;
+- who resolves clinical and eligibility questions;
+- which unresolved issues prevent record approval or a monthly data release; and
+- how accepted limitations are documented.
+
+## Related pages
+
+- [Create and complete a new record](create-complete-record.qmd)
+- [Approve a data record](approve-data-record.qmd)
+- [Authorise a data release](../release/data-release.qmd)
+

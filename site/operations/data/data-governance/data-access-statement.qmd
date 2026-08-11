@@ -2,13 +2,13 @@
 title: "BNR Data Access Statement"
 subtitle: "BNR Operations Manual | Data Access Statement"
 description: "BNR Operations Manual | Data Access Statement"
-date: last-modified
+date: 2026-08-11
+date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 
 # Keep the title available for navigation/search metadata,
 # but prevent Quarto from rendering the visible HTML title block.
-title-block-style: none
 
 # Optional page classification.
 # Useful later for listings, search, release notes, or internal review.

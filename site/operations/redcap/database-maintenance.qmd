@@ -1,0 +1,43 @@
+---
+title: "REDCap database maintenance"
+description: "BNR team draft for controlled maintenance of the live registry database."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft — additions invited"}
+This page is deliberately incomplete. BNR staff should document the locally approved maintenance and change-control arrangements.
+:::
+
+## Purpose
+
+Describe the routine checks and controlled changes needed to keep the REDCap registry usable, consistent and ready for analysis.
+
+## Procedure to complete
+
+1. Review open records, incomplete forms, queries and duplicate warnings at the agreed interval.
+2. Review user access and remove or amend access when responsibilities change.
+3. Record proposed structural changes before changing fields, forms, branching logic or validation rules.
+4. Assess how a proposed change affects existing data, exports and analytical code.
+5. Obtain the required approval and test the change away from the live production data where possible.
+6. Communicate approved changes to registry and analytical staff.
+7. Retain the change record and verify the live database after implementation.
+
+## BNR details to add
+
+- maintenance frequency and owner;
+- access-review procedure;
+- backup and recovery responsibilities;
+- development and testing arrangements;
+- REDCap change-approval route;
+- change log location; and
+- notification required before the next data release.
+
+## Related pages
+
+- [Resolve record queries](resolve-record-queries.qmd)
+- [Approve a data record](approve-data-record.qmd)
+- [Records and handover](../operating-model/records-handover.qmd)
+

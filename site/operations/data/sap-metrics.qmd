@@ -2,6 +2,7 @@
 title: "BNR Metric Specification Register"
 subtitle: "Standing definitions for approved information hub metrics"
 date: "2026-05-15"
+date-modified: 2026-08-11
 version: "Draft v0.1"
 format:
   html:
@@ -51,7 +52,7 @@ For example, stroke counts and AMI counts are both stratifications of the hospit
 
 ### CVD-BURDEN-001: Hospital-registered CVD event count
 
-**Definition.**  
+**Definition.**
 The number of eligible hospital-registered CVD events recorded by the BNR in a reporting period.
 
 **Equation.**
@@ -81,7 +82,7 @@ where \(I_i = 1\) when record \(i\) is an eligible CVD event, and \(I_i = 0\) ot
 
 ### CVD-BURDEN-002: CVD event distribution
 
-**Definition.**  
+**Definition.**
 The percentage distribution of CVD events across event type, sex, age group or another standard dimension.
 
 **Equation.**
@@ -111,9 +112,9 @@ where \(x_c\) is the number of events in the selected category, and \(N_p\) is t
 
 ## CVD rate metrics
 
-### CVD-RATE-001: Hospital-registered CVD event rate
+### CVD-RATE-001: Hospital-based CVD event rate
 
-**Definition.**  
+**Definition.**
 The crude and directly age-adjusted rates of eligible hospital-registered CVD events relative to the resident population.
 
 **Equations.**
@@ -137,10 +138,10 @@ where \(r_a\) is the age-specific event rate in age group \(a\), and \(w_a\) is 
 | Field | Specification |
 |---|---|
 | Metric ID | CVD-RATE-001 |
-| Metric name | Hospital-registered CVD event rate |
+| Metric name | Hospital-based CVD event rate |
 | Status | Draft |
 | Priority | Core |
-| Plain-language description | The crude event rate shows the number of hospital-registered CVD events relative to the resident population. The age-adjusted event rate applies standard age weights so that rates can be compared more fairly across groups or years with different age structures. |
+| Plain-language description | The crude event rate shows the number of recognised hospital CVD events relative to the resident population. The age-adjusted event rate applies standard age weights so that rates can be compared more fairly across groups or years with different age structures. |
 | Metric type | Rate / age-adjusted rate |
 | Numerator | Eligible hospital-registered CVD events in the reporting period; for age-adjusted rates, eligible events by age group |
 | Denominator | Resident population for the same period and stratum; for age-adjusted rates, resident population by age group |
@@ -149,13 +150,37 @@ where \(r_a\) is the age-specific event rate in age group \(a\), and \(w_a\) is 
 | Stratifications | Required: period, event type, rate type. Optional: sex, age group for crude age-specific rates, source status. |
 | Uncertainty / suppression | 95% confidence interval using Poisson or exact Poisson method for crude rates, and the approved direct standardisation method for age-adjusted rates. Suppress or flag low-count or unstable strata according to disclosure rules. |
 | Responsible code | `metric_cvd_rate.do` |
-| Notes | Stroke and AMI rates are stratifications of this metric. Age adjustment will always use the UN World Population Prospects age distributions from the latest WPP release. The WPP release and standard age weights must be recorded in metadata. |
+| Notes | This is the primary event-rate series. The Queen Elizabeth Hospital is Barbados's only tertiary hospital, so the measure is expected to provide a useful indication of serious CVD burden and especially of trends over time, while hospital referral, access, diagnostic and ascertainment practices remain reasonably stable. It is not described as complete national ascertainment. Stroke and AMI rates are stratifications. Age adjustment uses the UN World Population Prospects denominator release and the approved standard population recorded in metadata. |
+
+### CVD-RATE-002: Estimated national CVD event rate
+
+**Definition.**
+The crude and directly age-adjusted rates of eligible hospital-registered CVD events plus identified death-certificate-only events relative to the resident population.
+
+The equations and standardisation method are the same as CVD-RATE-001, but the numerator uses the broader event source.
+
+| Field | Specification |
+|---|---|
+| Metric ID | CVD-RATE-002 |
+| Metric name | Estimated national CVD event rate |
+| Status | Draft |
+| Priority | Required supplementary measure |
+| Plain-language description | An estimate of the national event rate formed by adding identified death-certificate-only events to the recognised hospital-event series. |
+| Metric type | Rate / age-adjusted rate |
+| Numerator | Eligible hospital-registered CVD events plus identified DCO events in the reporting period |
+| Denominator | Resident population for the same period and stratum; for age-adjusted rates, resident population by age group |
+| Unit of analysis | Event and population |
+| Population and exclusions | Barbados residents; exclude non-residents, duplicates and records outside the reporting period. |
+| Stratifications | Required: period, event type, rate type. Optional: sex and source status. |
+| Uncertainty / suppression | Same statistical interval and disclosure rules as CVD-RATE-001. Interpretation must also acknowledge uncertainty from incomplete DCO ascertainment. |
+| Responsible code | `briefings/cvd_incidence/cvd_incidence.do` |
+| Notes | Required as a supplementary national estimate. It has broader case coverage than CVD-RATE-001 but is not assumed to be inherently more accurate because DCO ascertainment is imperfect. |
 
 ## CVD outcome metrics
 
 ### CVD-OUTCOME-001: In-hospital case fatality
 
-**Definition.**  
+**Definition.**
 The percentage of eligible hospital-registered CVD events where the patient died before discharge.
 
 **Equation.**
@@ -187,7 +212,7 @@ where \(d\) is the number of in-hospital deaths after eligible CVD events, and \
 
 ### CVD-HOSP-001: Length of stay after hospital-registered CVD event
 
-**Definition.**  
+**Definition.**
 The number of days spent in hospital after a registered CVD event.
 
 **Equation.**
@@ -209,15 +234,15 @@ where \(i\) is an eligible hospital admission linked to a CVD event.
 | Numerator | Not applicable |
 | Denominator | Eligible admissions with valid admission and discharge dates |
 | Unit of analysis | Hospital admission linked to CVD event |
-| Population and exclusions | Hospital-registered CVD events with valid admission and discharge dates; exclude DCO-only records, missing dates and implausible date sequences. |
+| Population and exclusions | Completed hospital-registered CVD events with valid admission and hospital-end dates; exclude DCO-only records, missing required dates and end dates before admission. Include same-day stays as zero completed days and completed stays ending in death. Flag unusually long stays for source verification; retain them when confirmed. |
 | Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
 | Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
 | Responsible code | `metric_cvd_hosp.do` |
-| Notes | Median and interquartile range are preferred for public interpretation. |
+| Notes | Median and interquartile range are preferred for public interpretation. An unusually long but verified stay is not excluded solely because it is extreme. |
 
 ### CVD-HOSP-002: CVD hospital bed-days
 
-**Definition.**  
+**Definition.**
 The total number of hospital bed-days used by people admitted with registered CVD events.
 
 **Equation.**
@@ -249,7 +274,7 @@ where \(n\) is the number of eligible admissions.
 
 ### CVD-DQ-001: Completeness of key CVD variables
 
-**Definition.**  
+**Definition.**
 The percentage of eligible records with complete values for key variables needed for analysis.
 
 **Equation.**
@@ -279,7 +304,7 @@ where \(c\) is the number of records with a non-missing value for the selected v
 
 ### CVD-DQ-002: Timeliness of abstraction
 
-**Definition.**   
+**Definition.**
 The time between event, discharge or source availability and completion of abstraction.
 
 **Equation.**
@@ -311,4 +336,5 @@ where \(i\) is an eligible record with valid abstraction timing fields.
 
 | Version | Date | Summary | Author |
 |---|---|---|---|
-| Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR information hub |
+| Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR Information Hub | BNR refit team |
+| Draft v0.2 | 2026-08-11 | Clarified event-rate sources, case-fatality denominator and length-of-stay validity rules | Ian Hambleton / BNR refit |

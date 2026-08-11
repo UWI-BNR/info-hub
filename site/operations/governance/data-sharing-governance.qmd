@@ -1,0 +1,32 @@
+---
+title: "Data sharing & governance"
+description: "How BNR receives, assesses, approves, documents and monitors requests to use registry data."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+## Purpose
+
+This chapter brings together the complete BNR data-sharing pathway, from a first enquiry to approval, agreement, release, dissemination and closure.
+
+## Start with the request
+
+Use [Handle a data request](data-access-requests.qmd) as the operational route. It identifies the information to collect, the decision points, the agreement required and the evidence to retain.
+
+## Guidance and procedures
+
+- [Data sharing guide](../data/data-governance/sharing-guide.qmd)
+- [Data sharing procedure](../data/data-governance/sharing-sop.qmd)
+- [Dataset release procedure](../data/data-governance/dataset-release.qmd)
+- [Dataset dissemination procedure](../data/data-governance/dataset-dissemination.qmd)
+
+## Governance documents
+
+- [Data access statement](../data/data-governance/data-access-statement.qmd)
+- [Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
+- [Data Trust framework](../data/data-governance/dtrust.qmd)
+
+These pages describe the public rules and responsibilities. Credentials, confidential applications, applicant details and actual transferred datasets remain in authorised private systems.
+

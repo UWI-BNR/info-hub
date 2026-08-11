@@ -1,0 +1,60 @@
+---
+title: "Maintain operational records and hand over"
+subtitle: "Keep the registry reproducible when staff or systems change"
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+**Status:** Operational framework.
+**Owner:** BNR Lead and BNR Developer.
+
+## Purpose
+
+Maintain enough evidence and current guidance for another authorised operator to understand, reproduce and safely continue routine work.
+
+## Records to maintain
+
+| Record | Authoritative location |
+|---|---|
+| Registry records and corrections | REDCap and its audit trail |
+| Protected extracts, logs, staging and review files | private BNR workspace |
+| Approved public packages | `outputs/public/` |
+| Website mirror and documentation | public Info-Hub repository |
+| Code and documentation history | Git repository |
+| Credentials, private locations and recovery contacts | private local configuration sheet |
+| Material post-handover changes | concise change history |
+
+## Routine maintenance
+
+- keep role assignments and the private configuration sheet current;
+- test that an authorised second operator can locate and run each routine pathway;
+- keep Technical Manual commands aligned with current files and dialogs;
+- remove obsolete navigation rather than leaving empty public pages;
+- review dependencies before upgrading Stata, Quarto, Python or extensions;
+- retain approved packages separately from disposable website mirrors; and
+- use Git history for ordinary development changes.
+
+## Handover checklist
+
+The outgoing and incoming operators should jointly confirm:
+
+- access has been granted through normal institutional routes;
+- local paths and credentials are held by the correct roles;
+- the latest complete release and any work in progress are identified;
+- all unresolved queries, failed runs and pending approvals are listed;
+- a routine workflow can be run in a safe test or current cycle;
+- backup and recovery responsibilities are understood;
+- repository branch and Git status are understood; and
+- private access is removed when no longer required.
+
+## Change control after formal handover
+
+Record changes that materially affect a metric definition, approval or publication pathway, public output structure, disclosure control, required dependency or staff responsibility. Routine edits need only clear Git history.
+
+## Annual or role-change review
+
+Review this manual, the Technical Manual, role assignments, private configuration sheet, dependencies, access rights and recovery arrangements at least annually and whenever a key operator leaves or a core system changes.
+
+::: {.callout-warning title="BNR confirmation required"}
+Confirm retention periods, backup owner, recovery-test frequency, formal handover approver and the location of the private configuration sheet. Do not publish live access details.
+:::

@@ -1,0 +1,56 @@
+---
+title: "Roles and decision rights"
+subtitle: "Who performs, checks, approves and publishes BNR work"
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+**Status:** Operational framework; role names require BNR confirmation.
+**Owner:** BNR Lead.
+
+## Purpose
+
+This page separates responsibility for preparing work from authority to approve and release it. One person may hold more than one role where BNR staffing requires this, but each decision must still be completed deliberately and recorded.
+
+## Core roles
+
+| Role | Main responsibility | May stop the process when |
+|---|---|---|
+| **BNR Lead** | Owns registry operations, priorities and final governance | case definitions, reporting period or authority are unclear |
+| **BNR Analyst** | Runs analytical workflows and assesses statistical plausibility | data, code, logs or results do not pass review |
+| **BNR Developer** | Maintains the analytical and publishing environment | a technical failure threatens reproducibility or confidentiality |
+| **Abstractor / registry officer** | Identifies potential cases, reviews sources and maintains REDCap records | source evidence is incomplete, inconsistent or ambiguous |
+| **Clinical reviewer** | Resolves clinical classification questions requiring clinical judgement | the available evidence cannot support a defensible decision |
+| **Approver** | Gives combined analytical, disclosure and publication approval | any required check or file is incomplete |
+| **Publisher** | Promotes only an approved package and updates the Info-Hub | approval is absent, invalid or does not match the package |
+
+The approver may be the BNR Lead, BNR Analyst or BNR Developer, according to BNR authority. The analyst, approver and publisher may be the same authorised person, but calculation, approval and publication remain separate actions.
+
+## Decision rights
+
+- Clinical classification is resolved by the role authorised by BNR clinical governance.
+- Corrections to source records are made in REDCap by authorised registry staff.
+- Statistical methods are changed only through the agreed methods-change process.
+- Public release requires a recorded approval covering analytical correctness, disclosure control, interpretation and publication readiness.
+- No operator may bypass a failed check by manually editing a generated output.
+- Dissemination of non-public record-level data follows the [data-access request process](../governance/data-access-requests.qmd).
+
+## Separation of actions
+
+1. **Prepare:** create or update the source record or analytical package.
+2. **Review:** inspect completeness, plausibility, logs and disclosure risk.
+3. **Approve:** record an explicit decision against the identified package.
+4. **Publish:** promote that approved package and no other.
+
+::: {.callout-warning title="BNR confirmation required"}
+Confirm the current job titles mapped to each role, who may act as clinical reviewer, and which roles may approve public releases and data-access requests. Record role titles, not private contact details, in this manual.
+:::
+
+## Evidence retained
+
+- query and correction records;
+- data-release authorisation and extraction receipts;
+- private analytical logs and review outputs;
+- the release `approval.yml` and public manifest;
+- Git history for published website changes; and
+- data-access decisions and agreements where applicable.

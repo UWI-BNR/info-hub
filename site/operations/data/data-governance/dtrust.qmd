@@ -2,13 +2,13 @@
 title: "Data Trust Framework"
 subtitle: "_For fair, transparent, and responsible use of BNR data_"
 description: "BNR Operations Manual | Data Trust Framework"
-date: last-modified
+date: 2026-08-11
+date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 
 # Keep the title available for navigation/search metadata,
 # but prevent Quarto from rendering the visible HTML title block.
-title-block-style: none
 
 categories:
   - bnr

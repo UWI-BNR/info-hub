@@ -1,14 +1,14 @@
 ---
-title: "Dataset dissemination SOP"
+title: "Dataset dissemination procedure"
 subtitle: "BNR Operations Manual | Dataset dissemination"
 description: "BNR Operations Manual | Dataset dissemination"
-date: last-modified
+date: 2026-08-11
+date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 
 # Keep the title available for navigation/search metadata,
 # but prevent Quarto from rendering the visible HTML title block.
-title-block-style: none
 
 # Optional page classification.
 # Useful later for listings, search, release notes, or internal review.
@@ -60,7 +60,7 @@ comments:
     theme: clean
 ---
 
-**Document Type:** Standard Operating Procedure (SOP)  
+**Document type:** Operational procedure  
 **Document Version:** v1.0  
 **Effective Date:** [Insert Date]  
 **Author:** BNR Data Governance Committee  
@@ -69,12 +69,12 @@ comments:
 
 ## 1. Purpose
 
-This SOP outlines the policies and procedures governing dissemination of datasets produced by the BNR. It defines the types of datasets eligible for dissemination, the required approvals and safeguards, and how these align with national legislation including the Barbados Data Protection Act (2019). It also establishes principles for public access, academic use, and internal control.
+This procedure governs dissemination of datasets produced by the BNR. It defines the datasets eligible for dissemination, required approvals and safeguards, and how these align with national legislation including the Barbados Data Protection Act (2019). It also establishes principles for public access, academic use and internal control.
 
 
 ## 2. Scope
 
-This SOP applies to all stakeholders involved in the sharing, access, and reuse of BNR data. It applies to all data types derived from CVD registry operations including acute myocardial infarction and stroke datasets.
+This procedure applies to all stakeholders involved in sharing, accessing and reusing BNR data. It covers data derived from CVD registry operations, including acute myocardial infarction and stroke datasets.
 
 
 ## 3. Definitions
@@ -231,5 +231,5 @@ For dataset access requests or questions, contact:
 
 ## 11. Review Cycle
 
-- SOP reviewed every 12 months or sooner if legislation or BNR policy changes.
+- Procedure reviewed every 12 months or sooner if legislation or BNR policy changes.
 - Revisions must be approved by the BNR Professional Advisory Board.

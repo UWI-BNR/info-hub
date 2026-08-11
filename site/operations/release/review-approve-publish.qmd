@@ -1,0 +1,87 @@
+---
+title: "Review, approve and publish"
+subtitle: "The controlled route from private Stata staging to the public Info-Hub"
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+**Status:** Implemented common procedure.  
+**Owner:** Authorised reviewer, approver and publisher.
+
+## Purpose
+
+Ensure that every analytical release is credible, non-disclosive, correctly labelled and bound to an explicit approval before it appears on the Info-Hub.
+
+## Step 1: Review the private package
+
+Open the review workbook or equivalent review material created by the relevant Stata workflow. Confirm that:
+
+- the intended product, release year and month were used;
+- logs report successful completion and expected files exist;
+- results are plausible, internally consistent and produced by the approved method;
+- missingness, exclusions, warnings and unexpected changes are understood;
+- labels, notes, interpretations and limitations are accurate;
+- primary and secondary suppression have been applied where required;
+- the complete set of tables, figures and datasets has been checked for residual disclosure risk; and
+- no patient data, private paths, logs or review files are proposed for publication.
+
+Use the product-specific Operations page for the correct Stata step and the [Technical Manual review guide](../../technical/controls/review-release.qmd) for detailed checks.
+
+## Step 2: Correct before approval
+
+If any check fails, stop. Correct the authoritative REDCap record, analytical code or configuration and rerun from the earliest affected step. Never repair a generated dataset, table or figure by hand.
+
+## Step 3: Record approval in Stata
+
+Use the approval action belonging to the workflow:
+
+| Product | Stata approval action |
+|---|---|
+| Dashboard metrics | **User > BNR > Update dashboard > Step 5: Review and approve package for release** |
+| Tabulations | **User > BNR > Produce tables > Step 2B: Approve reviewed tables** |
+| Briefings | **User > BNR > Produce briefing > Step 2: Review and approve** |
+
+Select the exact reviewed package, identify the authorised approver and complete the confirmations. Check the resulting `approval.yml` and manifest. Approval applies only to that identified payload; a later payload change requires renewed review and approval.
+
+## Step 4: Publish the approved package in Stata
+
+Use the separate publication action for the same product and release:
+
+| Product | Stata publication action |
+|---|---|
+| Dashboard metrics | Dashboard **Step 6: Publish approved outputs** |
+| Tabulations | Table **Step 3: Publish approved tables** |
+| Briefings | Briefing **Step 3: Publish approved briefing** |
+
+Confirm that the Stata summary reports successful publication and verification. Check the authoritative public package, its stable or release-stamped copy where applicable, the ZIP and the website mirror.
+
+## Step 5: Update and render the Info-Hub
+
+1. Start the normal Info-Hub editing session and open the repository in VS Code.
+2. Update a Quarto narrative, listing or link only if the new public package requires it.
+3. Preview the affected pages in Quarto and test figures, tables and downloads.
+4. Run a complete local site render.
+5. Inspect the rendered pages and Downloads catalogue.
+
+Quarto consumes approved public products. It must not recalculate results or point to private staging.
+
+## Step 6: Review Git and deploy
+
+1. In VS Code Source Control, inspect every changed file.
+2. Confirm that the changes are intended and public-safe.
+3. Commit and push the reviewed website change.
+4. Check the GitHub Actions deployment and the live pages.
+
+Follow [Render and publish the website](../../technical/website/render-publish.qmd) for exact VS Code, Quarto, Git and GitHub instructions.
+
+## Stop points
+
+Stop if approval is absent, a package identity differs, a payload changed, replacement was not authorised, confidential material appears in Git status, or the rendered site differs from the approved product.
+
+## Evidence retained
+
+- private review evidence;
+- `approval.yml` and public manifest;
+- authoritative public package and publication log; and
+- Git commit and deployment history for the website presentation.
+

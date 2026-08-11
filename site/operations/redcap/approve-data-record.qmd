@@ -1,0 +1,42 @@
+---
+title: "Approve a data record"
+description: "BNR team draft for confirming that a REDCap event record is ready for analytical use."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft — additions invited"}
+This page is deliberately incomplete. BNR staff should define the approval status, responsible role and release-blocking checks.
+:::
+
+## Purpose
+
+Describe how BNR confirms that an event record is sufficiently complete, internally consistent and authorised for inclusion in a routine data release.
+
+## Procedure to complete
+
+1. Confirm that the record meets the registry inclusion and event-definition rules.
+2. Confirm that required abstraction and REDCap forms are complete.
+3. Review unresolved queries, duplicate status and important missing outcomes.
+4. Confirm that dates and key classifications are internally consistent.
+5. Return the record for correction if a required check fails.
+6. Record the approval status, approver role and date in the agreed location.
+7. Include the approved record in the next eligible data release.
+
+## BNR details to add
+
+- whether approval is record-level, form-level or status-based;
+- the mandatory checks;
+- who may approve;
+- whether the data entrant may also approve;
+- which issues prevent approval; and
+- how an approved record is reopened after correction.
+
+## Related pages
+
+- [Create and complete a new record](create-complete-record.qmd)
+- [Resolve record queries](resolve-record-queries.qmd)
+- [Authorise a data release](../release/data-release.qmd)
+

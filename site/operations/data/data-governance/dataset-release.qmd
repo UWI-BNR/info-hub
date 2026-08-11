@@ -1,14 +1,14 @@
 ---
-title: "Dataset release SOP"
+title: "Dataset release procedure"
 subtitle: "BNR Operations Manual | Continuous Dataset Release and Tiered Access"
 description: "BNR Operations Manual |Continuous Dataset Release and Tiered Access"
-date: last-modified
+date: 2026-08-11
+date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 
 # Keep the title available for navigation/search metadata,
 # but prevent Quarto from rendering the visible HTML title block.
-title-block-style: none
 
 # Optional page classification.
 # Useful later for listings, search, release notes, or internal review.
@@ -62,7 +62,7 @@ comments:
 
 # Continuous Dataset Release and Tiered Access
 
-**Document Type:** Standard Operating Procedure (SOP)  
+**Document type:** Operational procedure  
 **Document Version:** v0.9  
 **Effective Date:** 1-May-2026  
 **Author:** Ian Hambleton  
@@ -77,7 +77,7 @@ To outline the standardized process for:
 
 
 ## 2. Scope
-This SOP applies to all personnel involved in BNR data processing, analysis, and dissemination related to cardiovascular diseases (AMI and stroke).
+This procedure applies to all personnel involved in BNR data processing, analysis and dissemination related to cardiovascular diseases (AMI and stroke).
 
 ## 3. Definitions
 **Full Dataset:** Contains all identifiable and clinical information.  
@@ -164,7 +164,7 @@ Each released dataset will be provided in multiple formats:
 
 
 ## 7. Tiered Dataset Creation
-#### See the [dataset dissemination SOP](./dataset-dissemination.qmd) for details
+#### See the [dataset dissemination procedure](./dataset-dissemination.qmd) for details
 
 **Small Island Privacy Considerations:** Given the BNR's context in Barbados, a small island developing state (SIDS) with a population of ~280,000, the risk of potential re-identification from seemingly benign combinations of data is higher than in larger jurisdictions. Even when direct identifiers are removed, indirect identifiers ("quasi-identifiers") may allow individuals to be re-identified when cross-referenced with external datasets or local knowledge. This consideration is key in our process of de-identification ([section 7.2](#de-identify)), anonymisation ([section 7.3](#anonymize)), and review of identifiability risk ([Section 8](#identifiability)).
 
@@ -221,7 +221,7 @@ Include the following footnote in all outputs:
 
 Before release, aggregated datasets must undergo review for suppression compliance, metadata completeness, and re-identification risk. For open data publication, assign a CC BY 4.0 license, register a DOI, and provide a recommended citation format.  
 
-See the [dataset dissemination SOP](./dataset-dissemination.qmd) for details.
+See the [dataset dissemination procedure](./dataset-dissemination.qmd) for details.
 
 
 ### 7.5 A note on cell suppression
@@ -305,5 +305,5 @@ Each dataset release includes:
   
 
 ## 13. Review and Updates
-- SOP reviewed annually or after major system or policy changes
+- Procedure reviewed annually or after major system or policy changes
 - Changes approved by BNR governance team

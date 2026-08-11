@@ -1,0 +1,47 @@
+---
+title: "Abstract and verify source information"
+description: "BNR team draft for documenting abstraction and verification before REDCap entry."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft"}
+This page is a deliberately light structure for the BNR team to complete. It should describe the real abstraction process, not an idealised process imposed by the manual.
+:::
+
+## Purpose
+
+Briefly explain how source information is reviewed and prepared for registry entry.
+
+## When this applies
+
+State which assessed events and source materials are covered.
+
+## Responsibilities
+
+Identify who abstracts, who checks and who resolves clinical uncertainty.
+
+## What to document
+
+Consider including:
+
+- the abstraction form or REDCap instruments used;
+- the preferred source for each essential field;
+- how missing, conflicting and unclear information is recorded;
+- the minimum checks before entry is considered complete; and
+- whether a second check or sample review is used.
+
+## Stop and escalate
+
+State which uncertainties must be referred rather than inferred by the abstractor.
+
+## Records to retain
+
+State where source references, queries, reviewer decisions and completion status are recorded.
+
+## Related guidance
+
+- [Identify and assess potential cases](identify-assess.qmd)
+- [Create and complete a new record](../redcap/create-complete-record.qmd)

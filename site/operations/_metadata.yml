@@ -1,0 +1,18 @@
+# Shared metadata for all Operations Manual pages
+lang: en-GB
+author: "Ian Hambleton"
+title-block-style: plain
+published-title: "Created"
+date-format: "D MMMM YYYY"
+toc: true
+toc-title: "On this page"
+toc-depth: 2
+number-sections: false
+page-navigation: true
+search: true
+
+format:
+  html:
+    # Reuse the compact title metadata treatment established for the
+    # Technical Manual, while retaining an Operations-specific class.
+    body-classes: "bnr-technical-manual bnr-operations-manual"

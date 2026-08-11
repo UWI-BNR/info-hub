@@ -1,13 +1,165 @@
-﻿---
+---
 title: "Operations Manual"
-pagetitle: "BNR Operations Manual"
+description: "How the Barbados National Registry carries out, governs and records its routine work."
+date: 2026-08-11
+date-modified: 2026-08-11
 ---
 
-This manual describes the routine processes used to operate the BNR system.
+---
 
-It is intended primarily for BNR staff and authorised collaborators. It should be practical, procedural, and suitable for handover.
+::: {#operations-manual-sections}
 
-## Operating model and responsibilities
+## Quick links
 
-Purpose: describe how BNR work is organised, who is responsible for each part of the process, and how routine reporting cycles are managed.
+::: {.grid}
 
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[01-02]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### How the registry works {.card-title}
+
+Roles, decisions and the route from case finding to public statistics.
+
+::: {.mt-auto}
+[Open section](operating-model/routine-cycle.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[03-04]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Before REDCap {.card-title}
+
+Visible BNR-team draft procedures for case finding and abstraction.
+
+::: {.mt-auto}
+[Open section](pre-redcap/identify-assess.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[05-08]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Working in REDCap {.card-title}
+
+Visible BNR-team drafts for creating, resolving, maintaining and approving records.
+
+::: {.mt-auto}
+[Open section](redcap/create-complete-record.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[09-14]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Post-REDCap analytics & publishing {.card-title}
+
+Step-by-step Stata workflows followed by controlled Quarto publication.
+
+::: {.mt-auto}
+[Open section](post-redcap/index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[Analysis]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### BNR analysis framework {.card-title}
+
+The standing analysis plan and metric specifications.
+
+::: {.mt-auto}
+[Open section](data/analysis-framework.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[Governance]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Data sharing & governance {.card-title}
+
+Requests, agreements, release procedures and responsible reuse.
+
+::: {.mt-auto}
+[Open section](governance/data-sharing-governance.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[Appendix]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### BNR Refit Audit {.card-title}
+
+The audit, rebuild and decisions behind the current system.
+
+::: {.mt-auto}
+[Open section](bnr-refit/index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+:::
+:::
+
+<br>
+
+## What this manual covers
+
+The Operations Manual describes **what BNR work must happen, who is responsible, where decisions occur and what evidence is retained**. It covers the whole registry pathway, from identifying a potential event to correcting or maintaining an approved public release.
+
+The manual is public by design. It explains BNR procedures and controls without publishing patient information, credentials, protected extracts or live security details.
+
+## The three BNR manuals
+
+| Manual | Main purpose |
+|---|---|
+| **Operations Manual** | Govern the complete registry process and record operational decisions. |
+| **[Technical Manual](../technical/index.qmd)** | Operate and maintain the post-REDCap analytics and publishing tools. |
+| **[Public Methods Manual](../methods/index.qmd)** | Explain what BNR statistics mean and how they should be interpreted. |
+
+The Operations Manual states the required process. Where a task needs menus, dialogs, commands or file paths, it links to the Technical Manual instead of repeating those instructions.
+
+## Status of this edition
+
+The post-REDCap analytics and publishing pages describe the implemented BNR refit system as step-by-step operational overviews, with links to detailed Technical Manual instructions. Pages covering work before and within REDCap remain visible BNR-team drafts so staff can suggest, complete and approve the local procedures.

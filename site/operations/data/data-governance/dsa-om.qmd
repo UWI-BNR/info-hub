@@ -1,183 +1,60 @@
 ---
 title: "Research Data Sharing Agreement"
-subtitle: "Internal Operations Manual guidance"
-description: "BNR Operations Manual guidance for issuing, reviewing, approving, storing, and auditing the Research Data Sharing Agreement."
-date: last-modified
-date-format: "D MMMM YYYY"
-lang: en-GB
-
-title-block-style: none
-
-categories:
-  - bnr
-  - operations-manual
-  - data
-  - governance
-  - data-sharing
-
-format:
-  html:
-    toc: true
-    toc-title: "On this page"
-    toc-depth: 3
-    toc-location: right
-    toc-expand: 2
-
-    number-sections: false
-    anchor-sections: true
-    smooth-scroll: true
-
-    code-copy: true
-    code-fold: false
-    code-tools: false
-
-    link-external-icon: false
-    link-external-newwindow: false
-
-    page-layout: article
-
-execute:
-  echo: false
-  warning: false
-  message: false
-  error: false
-  freeze: auto
-
-draft: false
-
-comments:
-  hypothesis:
-    theme: clean
+description: "How BNR staff issue, approve, store and audit the Research Data Sharing Agreement."
+date: 2026-08-11
+date-modified: 2026-08-11
 ---
 
-This Operations Manual page explains how BNR staff should use the Research Data Sharing Agreement.
+---
 
-The agreement form itself is maintained as shared content, so the public-facing Methods page and this Operations Manual page remain consistent.
+This is the standing agreement for approved access to restricted, deidentified BNR data. The agreement form appears immediately below; staff processing notes are available in the expandable box.
 
-::: {.callout-warning title="Internal operational guidance"}
-This page includes internal instructions for BNR staff. The shared agreement text below may also appear on the public-facing Methods pages.
+::: {.callout-note collapse="true" title="BNR staff: process this agreement"}
+
+### When to use it
+
+Use the agreement when a researcher or research team requests restricted, deidentified record-level data. It is not normally required for aggregate products already approved and published through the Info-Hub.
+
+### Procedure
+
+1. Record the request and confirm its purpose, lead researcher and institution.
+2. Check whether a public aggregate product can meet the need.
+3. Agree the minimum dataset, disease area, period, format and version.
+4. Confirm the legal, ethical, storage and access requirements.
+5. Complete the agreement with the researcher and obtain the required BNR approval.
+6. Store the signed agreement in the authorised internal location.
+7. Record the approval and exact dataset released in the Data Release Register.
+8. Release data only after every required decision and signature is complete.
+
+### Records to retain
+
+Retain the application, decision, agreement, dataset identity and version, approving role, transfer record, conditions, expiry or destruction requirement, and storage reference. Do not store completed agreements, personal details or correspondence in the public repository or `outputs/`.
+
+### Pre-release check
+
+- [ ] The purpose and minimum necessary dataset are clear.
+- [ ] Ethics and governance requirements have been checked.
+- [ ] Storage and named access arrangements are acceptable.
+- [ ] Disclosure risk has been considered.
+- [ ] Both parties have completed the agreement.
+- [ ] The authorised BNR role has approved the release.
+- [ ] The agreement and release have been recorded internally.
+
 :::
 
-## When to use this agreement
-
-Use this agreement when a researcher or research team requests access to **restricted, de-identified BNR data**.
-
-This agreement is intended for releases that are more detailed than standard public outputs, even where direct identifiers have been removed.
-
-This agreement is not normally required for:
-
-- fully public aggregate tables already approved for publication;
-- figures, summaries, or downloads already published on the BNR Information Hub;
-- internal BNR quality assurance work conducted under existing registry governance;
-- exploratory internal analysis that does not involve release outside the approved BNR team.
-
-## Staff workflow
-
-BNR staff should follow this sequence:
-
-1. Confirm that the request is within the scope of BNR data-sharing policy.
-2. Confirm that the request has a named lead researcher and institution.
-3. Confirm the proposed purpose and public health or academic value of the work.
-4. Check whether ethics approval is required.
-5. Agree the dataset scope, disease area, time period, file format, and release version.
-6. Complete the agreement with the researcher.
-7. Obtain approval from the BNR Technical Lead.
-8. Store the completed agreement in the approved internal location.
-9. Record the release in the data-sharing log.
-10. Release the dataset only after approval and agreement completion.
-
-## Internal completion notes
-
-When preparing the agreement:
-
-- complete the **Data requested** section before release;
-- record the dataset version or release date clearly;
-- ensure the disease area, period covered, and format match the released dataset;
-- list any conditions of approval in the BNR review section;
-- do not release data if the storage or access arrangements are unclear;
-- do not release data before the agreement has been signed by both parties.
-
-## Minimum internal record
-
-For each approved data-sharing request, retain an internal record of:
-
-- researcher name;
-- institution;
-- project title;
-- dataset released;
-- disease area;
-- period covered;
-- dataset version or release date;
-- release format;
-- approval date;
-- approving BNR lead;
-- storage location of the signed agreement;
-- any restrictions or conditions attached to the release.
-
-## Storage and audit trail
-
-Completed agreements should be stored in the approved internal BNR location.
-
-Do not store signed agreements in the public website repository.
-
-Do not store signed agreements in `/outputs/`.
-
-Do not commit signed agreements, completed forms, researcher personal details, or correspondence about individual data requests to GitHub.
-
-A simple internal filename pattern is recommended:
-
-```text
-dsa_researcher-institution_project-short-name_YYYYMMDD.pdf
-```
-
-This filename is for internal storage only. It should not be published.
-
-## Version control of the template
-
-The shared agreement text is maintained in:
-
-```text
-site/_shared/data-sharing-agreement-body.qmd
-```
-
-Any substantive change to the agreement text should be reviewed before publication.
-
-Substantive changes include:
-
-- changes to data-user responsibilities;
-- changes to retention or storage conditions;
-- changes to approval requirements;
-- changes to wording linked to data protection or confidentiality;
-- changes to the diseases, datasets, or release formats covered by the agreement.
-
-Minor wording fixes do not normally require a changelog entry.
-
-## Current agreement template
+## Agreement form
 
 {{< include ../../../_shared/data-sharing-agreement-body.qmd >}}
 
-## Internal pre-release checklist
+## Submit the agreement
 
-Before release, confirm:
+Save the completed page as a PDF, then attach it to an email using the button below. The button opens a pre-addressed draft; it does not send the form or attach the PDF automatically.
 
-- [ ] Request is within the approved BNR data-sharing scope.
-- [ ] Dataset has been de-identified.
-- [ ] Dataset version or release date has been recorded.
-- [ ] Disease area and time period have been recorded.
-- [ ] Disclosure risk has been considered.
-- [ ] Ethics approval has been checked, where applicable.
-- [ ] BNR Technical Lead has approved the release.
-- [ ] Agreement has been signed by both parties.
-- [ ] Completed agreement has been stored internally.
-- [ ] Data-sharing log has been updated.
-- [ ] Researcher has been reminded not to attempt re-identification or onward sharing.
+[Prepare email to BNR](mailto:bnr@uwi.edu?subject=BNR%20Research%20Data%20Sharing%20Agreement){.btn .btn-primary}
 
-## Related internal documentation
+## Related guidance
 
-This page should be read alongside:
-
-- dataset dissemination SOP;
-- disclosure control guidance;
-- data release log procedure;
-- output metadata requirements;
-- BNR governance and roles guidance.
+- [Handle data-access requests](../../governance/data-access-requests.qmd)
+- [Data sharing and re-use procedure](sharing-sop.qmd)
+- [Data Trust Framework](dtrust.qmd)
+- [Technical Manual: disclosure control](../../../technical/controls/disclosure-control.qmd)

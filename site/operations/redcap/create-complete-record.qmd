@@ -1,0 +1,43 @@
+---
+title: "Create and complete a new record"
+description: "BNR team draft for creating one authoritative CVD event record in REDCap."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft — additions invited"}
+This page is deliberately incomplete. BNR staff should add the agreed local procedure, examples and decision points before it is approved as an operational procedure.
+:::
+
+## Purpose
+
+Describe how an authorised member of staff creates, completes and checks one REDCap record for a potential registry event.
+
+## Procedure to complete
+
+1. Confirm that the potential event has been assessed against the registry criteria.
+2. Search REDCap for an existing record before creating a new one.
+3. Create the event record using the agreed event identifier procedure.
+4. Enter the required information from the abstraction source.
+5. Record missing or uncertain information as a query; do not guess.
+6. Complete the required validation and completeness checks.
+7. Save the record with the correct status for further review or approval.
+
+## BNR details to add
+
+- who may create a record;
+- the required forms and fields;
+- the duplicate-search method;
+- identifier and event-number rules;
+- how incomplete or uncertain fields are marked;
+- which checks must pass before the record can leave data entry; and
+- what evidence shows that entry is complete.
+
+## Related pages
+
+- [Abstract source information](../pre-redcap/abstract-verify.qmd)
+- [Resolve record queries](resolve-record-queries.qmd)
+- [Approve a data record](approve-data-record.qmd)
+

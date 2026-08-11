@@ -2,7 +2,8 @@
 title: "Research Data Sharing Agreement"
 subtitle: "_For access to restricted, de-identified data for approved research use_"
 description: "Public-facing BNR Research Data Sharing Agreement for approved access to restricted, de-identified registry data."
-date: last-modified
+date: 2026-08-11
+date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 
@@ -68,6 +69,10 @@ Before submitting the completed agreement, please check that:
 - ethics approval details are included, where applicable;
 - storage and security arrangements are suitable for restricted, de-identified data;
 - the agreement has been signed and dated.
+
+[Prepare email to BNR](mailto:bnr@uwi.edu?subject=BNR%20Research%20Data%20Sharing%20Agreement){.btn .btn-primary}
+
+The button opens a pre-addressed email draft. Attach the completed PDF before sending. No information entered on this page is transmitted automatically.
 
 ## Questions about data access
 

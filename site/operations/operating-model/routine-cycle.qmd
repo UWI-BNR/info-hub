@@ -1,0 +1,53 @@
+---
+title: "From cases to statistics"
+description: "The linked route from case finding through REDCap to approved BNR statistics."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+## Purpose
+
+This page maps the complete registry pathway. Every stage links to the page that explains how that stage is carried out or, for team-owned draft procedures, where BNR staff should add the local detail.
+
+## Before REDCap
+
+| Stage | Main action | Procedure |
+|---|---|---|
+| **Identify and assess** | Find a potential event and decide whether it should proceed | [Identify potential cases](../pre-redcap/identify-assess.qmd) |
+| **Abstract and verify** | Extract the required source information and record uncertainties | [Abstract source information](../pre-redcap/abstract-verify.qmd) |
+
+## Working in REDCap
+
+| Stage | Main action | Procedure |
+|---|---|---|
+| **Create and complete** | Create one authoritative event record and enter the required information | [Create and complete a record](../redcap/create-complete-record.qmd) |
+| **Resolve** | Investigate duplicates, missing information and conflicting evidence | [Resolve record queries](../redcap/resolve-record-queries.qmd) |
+| **Maintain** | Control access, routine checks and structural database changes | [Maintain the REDCap database](../redcap/database-maintenance.qmd) |
+| **Approve the record** | Confirm that the record is ready for analytical use | [Approve a data record](../redcap/approve-data-record.qmd) |
+
+REDCap is the authoritative location for record-level corrections. Generated extracts and analytical files are never corrected by hand.
+
+## Post-REDCap analytics & publishing
+
+| Stage | Main action | Procedure |
+|---|---|---|
+| **Authorise the release** | Confirm the reporting period and extract the cumulative REDCap release through Stata | [Authorise a data release](../release/data-release.qmd) |
+| **Prepare and calculate dashboards** | Run shared preparation Steps 1–3 and dashboard Steps 4–6 | [Dashboard workflow](../post-redcap/dashboard-workflow.qmd) |
+| **Produce tabulations** | Generate, control, approve and publish the routine tables through Stata | [Tabulations workflow](../post-redcap/tabulations-workflow.qmd) |
+| **Produce briefings** | Create, review and publish analytical briefing packages through Stata | [Briefings workflow](../post-redcap/briefings-workflow.qmd) |
+| **Review and publish the site** | Complete human review, approval, Stata promotion and Quarto publication | [Review, approve and publish](../release/review-approve-publish.qmd) |
+| **Correct** | Correct the source or code and rerun the affected pathway | [Correct or replace a release](../release/correct-release.qmd) |
+
+## Rules that apply throughout
+
+- Use one identified reporting period and package identity throughout a workflow.
+- Stata performs data preparation, calculation and controlled analytical publication.
+- Quarto presents approved public products; it does not recalculate them.
+- Confidential data, logs and review material remain outside the public repository.
+- Successful analysis is not approval, and analytical publication is not website deployment.
+- Stop whenever the source, responsibility, result, disclosure status or approval is unclear.
+
+See [Roles and decision rights](roles-decision-rights.qmd) for responsibility at each stage.
+

@@ -1,0 +1,47 @@
+---
+title: "Identify and assess potential cases"
+description: "BNR team draft for documenting case finding and initial assessment before REDCap."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+::: {.callout-warning title="BNR team draft"}
+This page is a deliberately light structure for the BNR team to complete. Replace the prompts with the procedure staff actually use; remove anything that is not useful.
+:::
+
+## Purpose
+
+Briefly explain how BNR identifies a potential cardiovascular event and decides whether it should proceed to abstraction.
+
+## When this applies
+
+List the sources, circumstances and frequency covered by this procedure.
+
+## Responsibilities
+
+Name the operational roles that search sources, assess potential events, resolve uncertainty and sign off completion.
+
+## What to document
+
+Consider including:
+
+- the sources that are checked and how often;
+- the minimum information recorded at first identification;
+- how an existing event is distinguished from a new event;
+- the possible assessment outcomes and standard exclusion reasons; and
+- when clinical or operational advice is required.
+
+## Stop and escalate
+
+Describe the few uncertainties that mean staff must pause rather than create or exclude a record.
+
+## Records to retain
+
+State where the assessment decision and its supporting reference are recorded.
+
+## Related guidance
+
+- [Abstract and verify source information](abstract-verify.qmd)
+- [Statistical Analysis Plan](../data/sap.qmd)

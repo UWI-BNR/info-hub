@@ -1,0 +1,28 @@
+---
+title: "BNR analysis framework"
+description: "The standing statistical rules and metric definitions used for routine BNR reporting."
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+---
+
+## Purpose
+
+This chapter records the agreed analytical rules that sit between the registry data and BNR public statistics. It governs definitions and calculations; the workflow pages explain how analysts run those calculations.
+
+## Documents
+
+- **[Statistical Analysis Plan](sap.qmd):** population, event definitions, measures, comparisons, uncertainty, quality checks and disclosure principles.
+- **[Metric specification register](sap-metrics.qmd):** implementation-ready definitions for each routine indicator.
+
+## Using the framework
+
+1. Confirm that the proposed analysis is covered by the Statistical Analysis Plan.
+2. Use the metric register for the exact operational definition of an established indicator.
+3. Record and approve a methodological change before altering production code.
+4. Update the plan, metric register, analytical code and Public Methods Manual together when the public interpretation changes.
+5. Retain the change through normal Git version history and release evidence.
+
+The analytical code must implement the approved framework. A convenient code result does not override an agreed statistical definition.
+

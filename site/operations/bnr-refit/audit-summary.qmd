@@ -11,12 +11,10 @@ keywords:
   - chronic disease
   - methods
 
-author:
-  - name: "Barbados National Registry"
-    affiliation: "George Alleyne Chronic Disease Research Centre"
+author: "Ian Hambleton"
 
 date: "2026-04-30"
-date-modified: last-modified
+date-modified: 2026-08-11
 
 categories:
   - methods
@@ -37,7 +35,6 @@ format:
     link-external-newwindow: true
 
 # Page behaviour
-title-block-style: none
 page-layout: article
 toc-location: right
 

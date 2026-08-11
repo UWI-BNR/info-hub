@@ -1,0 +1,57 @@
+---
+title: "Handle data-access requests"
+subtitle: "A single route from enquiry to authorised sharing"
+date: 2026-08-11
+date-modified: 2026-08-11
+---
+
+**Status:** Operational gateway to the existing BNR governance documents.
+**Owner:** BNR data-access lead / Data Trust secretariat.
+
+## Purpose
+
+Route every request to the least detailed data that can meet a legitimate purpose, with proportionate review, approval and documentation.
+
+## First response
+
+1. Record the applicant, organisation, purpose, requested variables, population and time period.
+2. Check whether an existing public aggregate dataset already meets the need.
+3. Classify the requested information as aggregate, anonymised, de-identified or identifiable.
+4. Identify the legal, ethical, confidentiality and ownership requirements.
+5. Refer the request to the decision body authorised for that access level.
+
+## Decision principles
+
+- Prefer published aggregate data where sufficient.
+- Share only variables, records and time periods necessary for the approved purpose.
+- Do not describe de-identified record-level data as anonymous without an assessed basis.
+- Apply a Data Sharing Agreement where required.
+- Record conditions on storage, onward sharing, outputs, retention and destruction.
+- Assess proposed public outputs for disclosure before dissemination.
+- Record refusals and reasons as well as approvals.
+
+## Possible outcomes
+
+- direct the applicant to public data;
+- request clarification or a revised minimum dataset;
+- approve with specified safeguards and an agreement;
+- refer for ethics, legal or governance review; or
+- refuse with a recorded reason.
+
+## Evidence retained
+
+Retain the application, assessment, decision, approver, agreement, released dataset version, transfer record, expiry or destruction requirement and any approved outputs in the authorised governance location.
+
+## Standing BNR guidance
+
+- [Data Access Statement](../data/data-governance/data-access-statement.qmd)
+- [Data Sharing Guide](../data/data-governance/sharing-guide.qmd)
+- [Data sharing and re-use procedure](../data/data-governance/sharing-sop.qmd)
+- [Research Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
+- [Data Trust Framework](../data/data-governance/dtrust.qmd)
+- [Dataset release procedure](../data/data-governance/dataset-release.qmd)
+- [Dataset dissemination procedure](../data/data-governance/dataset-dissemination.qmd)
+
+::: {.callout-warning title="BNR confirmation required"}
+Confirm the current request intake route, decision body for each access level, standard response time, agreement signatories and authoritative request register. Publish role-based contact details only.
+:::

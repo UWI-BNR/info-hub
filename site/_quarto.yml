@@ -167,94 +167,100 @@ website:
           href: methods/future-pages.qmd
 
     - id: operations
-      title: "Operations"
+      title: "Operations Manual"
       style: "docked"
       search: true
       collapse-level: 1
       contents:
-        - text: "Home"
+        - text: "Start here"
           href: operations/index.qmd
 
-        - section: "Operating Model & Governance"
+        - section: "How the registry works"
           contents:
-            # - text: "Purpose"
-            #   href: operations/operating-model/purpose-of-manual.qmd
+            - text: "1. Roles and decision rights"
+              href: operations/operating-model/roles-decision-rights.qmd
+            - text: "2. From cases to statistics"
+              href: operations/operating-model/routine-cycle.qmd
+            - text: "Records and handover"
+              href: operations/operating-model/records-handover.qmd
 
-        - section: "Pre-REDCap"
+        - section: "Before REDCap"
           contents:
-            # - text: "Ascertainment"
-            #   href: operations/pre-redcap/case-ascertainment.qmd
+            - text: "3. Identify potential cases"
+              href: operations/pre-redcap/identify-assess.qmd
+            - text: "4. Abstract source information"
+              href: operations/pre-redcap/abstract-verify.qmd
 
-        - section: "REDCap"
+        - section: "Working in REDCap"
           contents:
-            # - text: "Freeze"
-            #   href: operations/post-redcap/dataset-freeze.qmd
+            - text: "5. Create and complete a record"
+              href: operations/redcap/create-complete-record.qmd
+            - text: "6. Resolve record queries"
+              href: operations/redcap/resolve-record-queries.qmd
+            - text: "7. Maintain the REDCap database"
+              href: operations/redcap/database-maintenance.qmd
+            - text: "8. Approve a data record"
+              href: operations/redcap/approve-data-record.qmd
 
-        - section: "Post-REDCap"
+        - section: "Post-REDCap analytics & publishing"
           contents:
-            - text: "Monthly CVD Workflow"
-              href: operations/post-redcap/monthly/bnr-monthly-cvd-run-guide.qmd
+            - text: "Overview"
+              href: operations/post-redcap/index.qmd
+            - text: "9. Authorise a data release"
+              href: operations/release/data-release.qmd
+            - text: "10. Dashboard workflow"
+              href: operations/post-redcap/dashboard-workflow.qmd
+            - text: "11. Tabulations workflow"
+              href: operations/post-redcap/tabulations-workflow.qmd
+            - text: "12. Briefings workflow"
+              href: operations/post-redcap/briefings-workflow.qmd
+            - text: "13. Review, approve and publish"
+              href: operations/release/review-approve-publish.qmd
+            - text: "14. Correct a release"
+              href: operations/release/correct-release.qmd
 
-        - section: "Data Methods"
+        - section: "BNR analysis framework"
           contents:
+            - text: "Overview"
+              href: operations/data/analysis-framework.qmd
             - text: "Statistical Analysis Plan"
               href: operations/data/sap.qmd
-            - text: "Surveillance Metrics"
+            - text: "Metric specification register"
               href: operations/data/sap-metrics.qmd
-            - text: "Data Sharing Guide"
-              href: operations/data/data-governance/sharing-guide.qmd
-            - text: "Data Sharing Process"
-              href: operations/data/data-governance/sharing-sop.qmd
-            - text: "Data Release"
-              href: operations/data/data-governance/dataset-release.qmd
-            - text: "Data Dissemination"
-              href: operations/data/data-governance/dataset-dissemination.qmd
-            - section: "Data Governance"
-              contents:
-                - text: "Data Access Statement"
-                  href: operations/data/data-governance/data-access-statement.qmd
-                - text: "Data Access Agreement"
-                  href: operations/data/data-governance/dsa-om.qmd
-                - text: "Data Trust Framework"
-                  href: operations/data/data-governance/dtrust.qmd
-              # - text: "Requests"
-              #   href: operations/data/data-governance/assessing-data-requests.qmd
-            - section: "Data Releases"
-              contents:
-                # - text: "Review"
-                #   href: operations/data/release-archive/pre-publication-review.qmd
-                - section: "CVD dataset"
-                  contents:
-                    - text: "Overview"
-                      href: operations/data/cvd-dataset/index.qmd
-                    - text: "Data dictionary"
-                      href: operations/data/cvd-dataset/cvd-datadictionary.qmd
-                    - text: "Metadata"
-                      href: operations/data/cvd-dataset/cvd-metadata.qmd
-                    - text: "Data quality"
-                      href: operations/data/cvd-dataset/cvd-dataquality.qmd
-                - section: "Hypertension dataset"
-                  contents:
-                    - text: "XX"
-                      href: operations/data/hypertension-dataset/index.qmd
-                - section: "Diabetes dataset"
-                  contents:
-                    - text: "XX"
-                      href: operations/data/diabetes-dataset/index.qmd
 
-        - section: "The BNR Refit" 
+        - section: "Data sharing & governance"
           contents:
-            - text: "Summary"
+            - text: "Overview"
+              href: operations/governance/data-sharing-governance.qmd
+            - text: "Handle a data request"
+              href: operations/governance/data-access-requests.qmd
+            - text: "Data sharing guide"
+              href: operations/data/data-governance/sharing-guide.qmd
+            - text: "Data sharing procedure"
+              href: operations/data/data-governance/sharing-sop.qmd
+            - text: "Dataset release procedure"
+              href: operations/data/data-governance/dataset-release.qmd
+            - text: "Dataset dissemination procedure"
+              href: operations/data/data-governance/dataset-dissemination.qmd
+            - section: "Governance documents"
+              contents:
+                - text: "Data access statement"
+                  href: operations/data/data-governance/data-access-statement.qmd
+                - text: "Data Sharing Agreement"
+                  href: operations/data/data-governance/dsa-om.qmd
+                - text: "Data Trust framework"
+                  href: operations/data/data-governance/dtrust.qmd
+
+        - section: "BNR Refit Audit"
+          contents:
+            - text: "About the audit"
               href: operations/bnr-refit/index.qmd
-            - text: "Audit Summary"
+            - text: "Audit summary"
               href: operations/bnr-refit/audit-summary.qmd
-            - text: "Audit Full"
+            - text: "Full audit"
               href: operations/bnr-refit/audit-full.qmd
             - text: "CVD dataset rebuild"
               href: operations/bnr-refit/cvd-data-rebuild.qmd  
-
-        - text: "Future Pages"
-          href: operations/future-pages.qmd
 
     - id: technical
       title: "Technical Manual"
@@ -356,4 +362,3 @@ website:
           contents:
             - text: "15. System reference"
               href: technical/reference/index.qmd
-
