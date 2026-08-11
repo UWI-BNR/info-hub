@@ -7,6 +7,125 @@ date-modified: 2026-08-10
 
 ---
 
+::: {#technical-manual-sections}
+
+## Quick links
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[01-02]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Getting started {.card-title}
+
+Environment and workstation setup.
+
+::: {.mt-auto}
+[Open section](getting-started/environment.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[03-06]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Analytical workflows {.card-title}
+
+Dashboards, tables and briefings.
+
+::: {.mt-auto}
+[Open section](workflows/overview.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[07-09]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Review & publication {.card-title}
+
+Review, disclosure control and approval.
+
+::: {.mt-auto}
+[Open section](controls/review-release.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[10-11]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Operate the Info-Hub {.card-title}
+
+Render, publish and update the site.
+
+::: {.mt-auto}
+[Open section](website/render-publish.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[12-14]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Maintain & recover {.card-title}
+
+Change safely and fix problems.
+
+::: {.mt-auto}
+[Open section](maintenance/safe-code-change.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[15]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Quick reference {.card-title}
+
+Files, folders, commands and terms.
+
+::: {.mt-auto}
+[Open section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+:::
+:::
+
+<br>
+
 ## What this manual covers
 
 The Technical Manual is the practical how-to guide for the BNR analytics and publishing environment **after data have been collected in REDCap**.
@@ -44,3 +163,6 @@ The manuals overlap only where a handover between operational stages needs to be
 | **13. Files, releases and versions** | Important locations, package identities and version conventions. |
 | **14. Fix common problems** | Short symptom, cause and fix recipes. |
 | **15. System reference** | Workflow, command, folder, file and terminology quick reference. |
+
+
+

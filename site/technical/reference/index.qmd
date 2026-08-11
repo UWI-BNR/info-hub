@@ -1,15 +1,717 @@
 ﻿---
 title: "System reference"
-title-block-style: none
-toc: true
+description: "Primary technical reference for BNR Info-Hub files, folders, workflows, release controls, naming conventions, Stata globals and Git terminology."
+date: 2026-08-10
+date-modified: 2026-08-10
+toc-title: "Reference sections"
 toc-depth: 2
-number-sections: false
 ---
 
-Quick reference for workflows, commands, files, folders and terminology.
+## How to use this chapter
+
+This is the **primary technical reference** for the BNR Info-Hub.
+
+Use it when you need to identify a file, folder, workflow component, release record, Stata global or technical term. The earlier chapters explain **how to carry out a task**; this chapter explains **what the technical parts are and where they belong**.
+
+The reference focuses on current operational files and the retained technical files that matter for maintenance or recovery. It does not attempt to list every image, generated HTML file or historical copy in the repository.
+
+::: {.callout-tip}
+## Find something quickly
+
+| I need to find... | Go to |
+|---|---|
+| Where a dataset or release is stored | [Folder reference](#folders) |
+| Which workflow creates an output | [Workflow map](#workflow-map) |
+| A Stata DO file and what it does | [Stata operational file reference](#stata-files) |
+| A menu item, dialog or help file | [Stata menu, dialogs and help](#stata-interface) |
+| A Quarto, Python or GitHub file | [Website and publication files](#publication-files) |
+| What `approval.yml` or `public_manifest.csv` means | [Release and control files](#control-files) |
+| What `_v01`, `current` or `latest` means | [Naming and version conventions](#naming) |
+| What `$BNR_STAGING` or another Stata global means | [Common Stata globals](#globals) |
+| Who can approve or publish | [Roles](#roles) |
+| What Git `pull`, `commit` or `push` means | [Git and GitHub reference](#git-reference) |
+| A technical term used elsewhere in the manual | [Glossary](#glossary) |
+
+:::
+
+::: {.callout-note collapse="true"}
+## Reference rule
+
+The live workflow code defines what the software actually does. This chapter is the human-readable reference to that implementation.
+
+If the code and this reference ever disagree, **do not improvise around the difference**. Confirm the intended behaviour, correct the code or documentation as appropriate, and keep the two in step.
+
+For routine instructions, return to the relevant How-To chapter rather than running a file simply because it appears in this inventory.
+:::
+
+## System at a glance
+
+The Info-Hub keeps confidential analysis and public publishing deliberately separate.
 
 ::: {.callout-note}
-## Status
+## Main technical pathway
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+**Private data**  
+REDCap + frozen sources
+
+`->`
+
+**Stata compute and review**  
+confidential preparation -> deidentified analytical inputs -> staging -> human review and approval
+
+`->`
+
+**Controlled public output**  
+authoritative approved package under `$BNR_PUBLIC`
+
+`->`
+
+**Website publication**  
+website mirror -> Quarto -> GitHub Actions -> GitHub Pages
+
+See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the fuller explanation of this boundary.
 :::
+
+## Workflow map {#workflow-map}
+
+Dashboard Steps 1-3 form the common CVD analytical-preparation pathway. The dashboard, tabulation and routine briefing workflows then branch from the approved Step 3 deidentified inputs.
+
+| Workflow | Main steps | Starts from | Finishes with |
+|---|---|---|---|
+| **Dashboard metrics** | Steps 1-6 | REDCap + frozen historical data | Approved metric package + website mirror |
+| **Tabulations** | Steps 1, 2A, 2B, 3 | Step 3 `all_variables` input | Approved table release + stable/latest copies |
+| **Routine briefings** | Steps 1-3 | Relevant Step 3 input | Approved briefing package + website mirror |
+| **Quarto website** | Edit, render, Git review, merge to `main` | Approved website mirrors + QMD source | Public GitHub Pages site |
+
+### Common analytical hand-off
+
+The Step 3 input datasets are the main fork point:
+
+| Step 3 dataset | Main downstream use |
+|---|---|
+| `count` | Dashboard burden/count metrics and incidence briefing |
+| `case_fatality` | Case-fatality briefing |
+| `length_of_stay` | Length-of-stay briefing |
+| `performance` | Reserved for care-performance analyses |
+| `all_variables` | Tabulations and other approved analyses needing the wider deidentified field set |
+
+Step 3 files use the pattern:
+
+```text
+bnr_cvd_input_{dataset}_YYYYMM_v01.dta
+bnr_cvd_input_{dataset}_YYYYMM_v01.yml
+```
+
+They remain **private deidentified event-level data** and are not public downloads.
+
+## Folder reference {#folders}
+
+### Main roots and analytical folders
+
+| Location / global | Purpose | Status |
+|---|---|---|
+| `$BNR_REPO` | Local root of the public `info-hub` Git repository | Public project source |
+| `$BNR_PRIVATE` | Root of the authorised private companion environment | Private |
+| `$BNR_DATA_RAW` | Raw REDCap extracts | Private, generated |
+| `$BNR_DATA_FROZEN` | Frozen historical or retained source inputs | Private, retained |
+| `$BNR_DATA_DERIVED` | Confidential and deidentified analytical datasets | Private, generated |
+| `$BNR_STAGING` | Review packages awaiting approval/publication | Private, generated |
+| `$BNR_PRIVATE_WORK` | Private reference/supporting datasets | Private |
+| `$BNR_PRIVATE_LOGS` | Stata workflow logs | Private, generated |
+| `$BNR_PUBLIC` | Authoritative approved public analytical packages | Public-approved, retained |
+| `$BNR_REPO/site/downloads/` | Website mirrors and download records used by Quarto | Public, rebuildable |
+| `$BNR_REPO/site/_site/` | Fully rendered website | Generated; do not edit or commit |
+
+::: {.callout-tip collapse="true"}
+## Find the actual path on this workstation
+
+In Stata:
+
+```stata
+display "$BNR_REPO"
+display "$BNR_PRIVATE"
+display "$BNR_DATA_DERIVED"
+display "$BNR_STAGING"
+display "$BNR_PUBLIC"
+```
+
+The machine-specific roots are defined in:
+
+`scripts/stata/config/bnr_paths_LOCAL.do`
+
+Do not infer a colleague's local path from examples in the manual.
+:::
+
+### Main public-repository folders
+
+| Folder | Responsibility |
+|---|---|
+| `scripts/stata/monthly/` | Dashboard Steps 1-6 controllers |
+| `scripts/stata/metrics/` | Metric-family analytical code |
+| `scripts/stata/tables/` | Tabulation workflow |
+| `scripts/stata/briefings/` | Briefing controllers and analyst-owned briefing code |
+| `scripts/stata/common/` | Shared Stata packaging/control helpers |
+| `scripts/stata/ado/` | Reusable BNR Stata commands |
+| `scripts/stata/config/` | Version-controlled workstation path template |
+| `scripts/stata/dialogs/` | Stata dialog interfaces |
+| `scripts/stata/help/` | Stata help files |
+| `scripts/stata/menu/` | BNR Stata menu definition |
+| `site/` | Quarto website source |
+| `site/_shared/` | Shared Quarto snippets |
+| `site/assets/` | Public styles, images and other site assets |
+| `site/dashboards/` | Dashboard presentation/application files |
+| `site/surveillance/` | Public surveillance pages, tabulations and briefings |
+| `site/downloads/` | Public website mirrors and Downloads catalogue |
+| `site/technical/` | Technical Manual source |
+| `site/operations/` | Operations Manual source |
+| `.github/workflows/` | GitHub Actions publication workflow |
+
+### Private companion layout
+
+The private companion environment follows this broad structure:
+
+```text
+info-hub-private/
+  data/
+    raw/
+    frozen/
+    derived/
+  outputs/
+    staging/
+  logs/
+    private/
+  work/
+```
+
+The public repository should never become a substitute for this private environment.
+
+## Stata operational file reference {#stata-files}
+
+The tables below list the main current Stata files by responsibility.
+
+Paths are relative to `scripts/stata/`.
+
+::: {.callout-note collapse="true"}
+## Dashboard metrics: current operational files
+
+| File | Responsibility | Main hand-off / dependency |
+|---|---|---|
+| `monthly/bnr_step1_cvd_redcap_extract.do` | Extracts the selected cumulative CVD REDCap release and writes raw CSV/DTA, extraction metadata and log. | REDCap -> `$BNR_DATA_RAW` |
+| `monthly/bnr_step2_cvd_confidential.do` | Combines the selected REDCap release with frozen history, reconciles the sources and writes the confidential cumulative dataset. | Step 1 + frozen history -> `$BNR_DATA_DERIVED` |
+| `monthly/bnr_step3_metric_inputs.do` | Creates authorised deidentified datasets for downstream analytical purposes. | Step 2 -> `metric_inputs/` |
+| `monthly/bnr_step4_metrics.do` | Controls metric calculation for the selected family and creates the private Step 4 package. | Calls the metric analysis file and staging helper |
+| `metrics/cvd/bnr_step4_cvd_burden.do` | Calculates the current CVD burden metrics and QA results in standard long format. | Called by Dashboard Step 4 |
+| `common/bnr_step4_stage_metric.do` | Packages unsuppressed metric results and QA material in private staging. | Called by Dashboard Step 4 |
+| `monthly/bnr_step5_review.do` | Runs the separate **prepare** and **approve** actions for dashboard releases. | Calls `common/bnr_step5_suppress.do` |
+| `common/bnr_step5_suppress.do` | Applies `bnr_sdc_v1` to the implemented dashboard metric structures and creates disclosure-review material. | Called by Dashboard Step 5 |
+| `monthly/bnr_step6_publish.do` | Checks approval/manifest controls, promotes the approved metric payload and refreshes the website mirror. | Step 5 approved package -> `$BNR_PUBLIC` + site mirror |
+
+Current implemented dashboard metric family:
+
+```text
+burden
+```
+
+Dashboard Step 4 staging uses:
+
+```text
+$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/
+```
+
+See [Dashboard metrics](../workflows/dashboards/overview.qmd) for operator instructions.
+:::
+
+::: {.callout-note collapse="true"}
+## Tabulations: current operational files
+
+| File | Responsibility | Main hand-off / dependency |
+|---|---|---|
+| `tables/bnr_step1_cvd_tables.do` | Calculates the seven private unsuppressed analytical table datasets and review metadata. | Step 3 `all_variables` + controlled reference datasets |
+| `tables/bnr_step2a_cvd_tables.do` | Applies primary and complementary suppression, creates public-ready products and produces the private disclosure-review worklist/workbook. | Table Step 1 |
+| `tables/bnr_step2b_cvd_tables_approve.do` | Checks the reviewed package and records approval. It does not recalculate or publish tables. | Table Step 2A |
+| `tables/bnr_step3_cvd_tables_publish.do` | Validates the approval and 26-product manifest, creates retained/stable public packages, ZIPs and the website mirror. | Approved Table Step 2B package |
+
+Table Step 1 creates seven analytical subjects:
+
+1. annual event counts;
+2. monthly event counts;
+3. event percentages by age 70 group;
+4. incidence rates;
+5. incidence rate ratios;
+6. case fatality; and
+7. length of stay.
+
+The private package ID uses:
+
+```text
+cvd_tables_YYYY_MM
+```
+
+See [Tabulations](../workflows/tabulations/overview.qmd) for operator instructions.
+:::
+
+::: {.callout-note collapse="true"}
+## Briefings: current operational files
+
+| File | Responsibility | Main hand-off / dependency |
+|---|---|---|
+| `briefings/bnr_step1_build_briefing.do` | Small dispatcher that sends the Step 1 request to the selected analyst-owned briefing DO file. | Calls one analyst-owned briefing file |
+| `briefings/cvd_incidence/cvd_incidence.do` | Analyst-owned annual CVD incidence and rate-ratio analysis. | Step 3 `count`; calls `common/bnr_stage_briefing.do` |
+| `briefings/cvd_case_fatality/cvd_case_fatality.do` | Analyst-owned annual CVD case-fatality analysis. | Step 3 `case_fatality`; calls staging helper |
+| `briefings/cvd_length_of_stay/cvd_length_of_stay.do` | Analyst-owned annual length-of-stay and bed-demand analysis. | Step 3 `length_of_stay`; calls staging helper |
+| `common/bnr_stage_briefing.do` | Applies the standard briefing packaging contract: validates outputs, writes metadata/review files and builds the workbook. | Called at the end of an analyst briefing build |
+| `briefings/bnr_step2_approve_briefing.do` | Validates the staged package, records completed human review and writes the public manifest/approval receipt. | Briefing Step 1 package |
+| `briefings/bnr_step3_publish_briefing.do` | Validates the approval and manifest, copies only approved payload files to the public area and refreshes the site mirror. | Approved Briefing Step 2 package |
+
+A routine briefing package uses the general pattern:
+
+```text
+$BNR_STAGING/briefings/{briefing_name}_{target_year}_v{version}/
+```
+
+Examples include:
+
+```text
+cvd_incidence_2023_v01
+cvd_case_fatality_2023_v01
+cvd_length_of_stay_2023_v01
+```
+
+The analyst-owned file contains the analytical decisions. The dispatcher and shared staging helper should remain generic.
+
+See [Briefings](../workflows/briefings/overview.qmd) for operator instructions.
+:::
+
+::: {.callout-note collapse="true"}
+## Shared Stata utilities and configuration
+
+| File | Responsibility | Normal editing |
+|---|---|---|
+| `ado/bnr_workbook.ado` | Creates a standard Excel workbook from a Stata dataset, including data and metadata sheets. | Rare |
+| `ado/bnr_yml.ado` | Creates standard dataset-metadata YAML from Stata labels, notes, formats and categories. | Rare |
+| `common/bnrcvd_globals.do` | Defines shared CVD run/display constants and compatibility aliases. | Developer-controlled |
+| `config/bnr_paths_TEMPLATE.do` | Version-controlled template for workstation paths. | Update only when the standard path contract changes |
+| `config/bnr_paths_LOCAL.do` | Machine-specific roots and local credentials locations. Created from the template. | Per workstation; **never commit** |
+| `menu/bnr_menu.do` | Builds **User > BNR** in Stata and links menu items to dialogs. | Developer-controlled |
+
+The ADO files have matching `.sthlp` files under `scripts/stata/ado/`.
+:::
+
+::: {.callout-note collapse="true"}
+## Validation and non-routine Stata files
+
+These files support migration, equivalence checking or controlled testing. They are **not routine monthly workflow steps**.
+
+| File | Purpose |
+|---|---|
+| `briefings/ad-hoc/cvd_ad_hoc_workflow_test_2026_v1.do` | Tests the ad-hoc briefing branch of the current staging contract. |
+| `briefings/cvd_incidence/cvd_incidence_equivalence_check.do` | One-time incidence migration equivalence check. |
+| `briefings/cvd_case_fatality/cvd_case_fatality_equivalence_check.do` | One-time case-fatality migration equivalence check. |
+| `briefings/cvd_cases_2023/cvd_cases_2023_v2.do` | Frozen case-count migration pilot; case counts are no longer a routine briefing product. |
+| `briefings/cvd_cases_2023/cvd_cases_2023_v2_equivalence_check.do` | Equivalence evidence for the case-count migration pilot. |
+| `tables/bnr_step1_cvd_tables_regression.do` | Regression comparison used to validate the new Table Step 1 calculations against accepted historical outputs. |
+
+Do not add these files to the routine Stata menu.
+:::
+
+::: {.callout-warning collapse="true"}
+## Superseded and historical Stata code
+
+The live tree still contains some superseded or historically linked code. It should not be used for routine current releases.
+
+### Superseded code awaiting controlled retirement
+
+| File | Current replacement / reason retained |
+|---|---|
+| `common/bnr_apply_suppression.do` | Earlier metrics suppression helper; replaced by the current Step 5 pathway. |
+| `common/bnr_approve_publish_briefing.do` | Earlier combined briefing approval/publication controller. |
+| `common/bnr_publish_metric.do` | Earlier combined metric publisher. |
+| `common/bnr_stage_metric.do` | Earlier metric staging helper. |
+| `briefings/cvd_case_fatality/cvd_case_fatality_pre1.do` | Pre-migration comparison version. |
+| `monthly/bnr_cvd_redcap_extract_pre.do` | Replaced by `bnr_step1_cvd_redcap_extract.do`. |
+| `monthly/bnr_cvd_prepare_confidential.do` | Replaced by `bnr_step2_cvd_confidential.do`. |
+| `monthly/bnr_cvd_create_metric_inputs.do` | Replaced by `bnr_step3_metric_inputs.do`. |
+| `monthly/bnr_cvd_metric_controller.do` | Replaced by `bnr_step4_metrics.do`. |
+| `monthly/bnr_cvd_review_controller.do` | Replaced by `bnr_step5_review.do`. |
+
+### Coupled historical material
+
+These files form historical units and should be retained/archived together rather than deleted individually:
+
+- `annual/build_cvd_annual_tabulations.do`
+- `briefings/cvd_cases_2023/cvd_cases_2023.do`
+- `common/bnrcvd_prep_2023_v1.do`
+- `common/bnr_publish_briefing.do`
+- `common/mirror_public_to_site.do`
+- `refit/bnrcvd-2023-forensics1.do`
+- `refit/bnrcvd_2023_forensics2.do`
+
+Movement or deletion belongs in a controlled repository-cleanup task, followed by workflow tests and a full Quarto render.
+:::
+
+## Stata menu, dialogs and help {#stata-interface}
+
+### Current Stata menu
+
+`menu/bnr_menu.do` creates:
+
+| Menu | Item |
+|---|---|
+| **User > BNR > Update dashboard** | Step 1: Extract REDCap data |
+| | Step 2: Build cumulative dataset |
+| | Step 3: Build deidentified datasets |
+| | Step 4: Calculate metrics for dashboards |
+| | Step 5: Review and approve package for release |
+| | Step 6: Publish approved outputs |
+| **User > BNR > Produce briefing** | Step 1: Build review package |
+| | Step 2: Review and approve briefing |
+| | Step 3: Publish approved briefing |
+| **User > BNR > Produce tables** | Step 1: Build private table package |
+| | Step 2A: Prepare suppressed tables |
+| | Step 2B: Approve reviewed tables |
+| | Step 3: Publish approved tables |
+
+The menu also contains a **BNR utilities** placeholder for metadata, workbook and release-check tools.
+
+### Dialogs
+
+Current menu dialogs live under:
+
+`scripts/stata/dialogs/`
+
+The current dialog basename normally matches the workflow step, for example:
+
+```text
+bnr_step1_cvd_redcap_extract.dlg
+bnr_step2_cvd_confidential.dlg
+bnr_step3_metric_inputs.dlg
+bnr_step4_metrics.dlg
+bnr_step5_review.dlg
+bnr_step6_publish.dlg
+
+bnr_step1_build_briefing.dlg
+bnr_step2_approve_briefing.dlg
+bnr_step3_publish_briefing.dlg
+
+bnr_step1_cvd_tables.dlg
+bnr_step2a_cvd_tables.dlg
+bnr_step2b_cvd_tables_approve.dlg
+bnr_step3_cvd_tables_publish.dlg
+```
+
+Dialogs are **thin user interfaces**. They collect operator inputs and call the corresponding DO file. Analytical decisions should not be hidden in a dialog.
+
+### Stata help
+
+Stata help files live under:
+
+`scripts/stata/help/`
+
+and use `.sthlp`.
+
+Where current help exists, it can be opened from Stata with:
+
+```stata
+help bnr_step1_cvd_tables
+```
+
+or the equivalent basename.
+
+Some older dialog/help files remain in the tree pending controlled cleanup. The current `User > BNR` menu is the safer guide to which operator interfaces are active.
+
+## Website and publication files {#publication-files}
+
+### Key project files
+
+| File / folder | Responsibility |
+|---|---|
+| `site/_quarto.yml` | Main Quarto website configuration, navigation, rendering rules and pre-render actions. |
+| `site/scripts/build_download_catalogue.py` | Builds the central Downloads catalogue from approved product-level download records. It does not calculate surveillance results. |
+| `start-info-hub-edit.bat` | Convenience launcher for a local editing session: opens VS Code, activates the project environment for preview and starts Quarto preview. |
+| `.github/workflows/publish-site.yml` | GitHub Actions workflow that renders `site/` and deploys `site/_site` to GitHub Pages after `main` changes. |
+| `requirements.txt` | Short Python dependency list used for routine environment/site setup. |
+| `requirements-freeze.txt` | Detailed frozen Python environment record used mainly for troubleshooting/reproduction. |
+| `README.md` | Repository-level introduction. |
+| `DECISIONS.md` | Retained record of important technical/architectural decisions. |
+| `CHANGELOG.md` | Repository change history maintained at project level. |
+| `.gitignore` | Defines files/folders Git must not track, including local/generated material. |
+| `.gitattributes` | Repository file-handling attributes. |
+
+### Key Quarto source locations
+
+| Location | Responsibility |
+|---|---|
+| `site/_shared/` | Reusable snippets included in public pages. |
+| `site/assets/` | Stylesheets, images and other public site assets. |
+| `site/downloads/` | Approved website-mirror downloads and catalogue records. |
+| `site/surveillance/` | Surveillance narrative pages, tabulations and briefings. |
+| `site/dashboards/` | Dashboard presentation files. |
+| `site/technical/` | This Technical Manual. |
+| `site/operations/` | Operations Manual material. |
+| `site/_site/` | Rendered website generated by Quarto. **Never edit manually.** |
+
+::: {.callout-note collapse="true"}
+## Compute versus publish ownership
+
+**Stata owns:**
+
+- analytical calculations;
+- disclosure-control calculations;
+- generated analytical datasets;
+- analytical figures;
+- approval/publication controls;
+- authoritative public analytical packages; and
+- controlled website mirrors of analytical products.
+
+**Quarto owns:**
+
+- narrative presentation;
+- page layout;
+- public navigation;
+- listings;
+- shared narrative snippets; and
+- rendering of the public website.
+
+If an analytical value is wrong, fix the Stata pathway. Do not patch the value in a QMD file.
+:::
+
+## Release and control files {#control-files}
+
+Different workflows use slightly different package structures, but the following files recur.
+
+| File / pattern | Meaning | Usually public? |
+|---|---|---|
+| `package.yml` / `metric_package.yml` / `briefing.yml` | Describes the identity, source and contents of a package. | Depends on workflow/product |
+| `release_control.yml` | Small analyst-written control file used by the briefing staging helper. | Private staging control |
+| `input_manifest.csv` | Records controlled inputs used to create a package. | Usually private |
+| `public_manifest.csv` | Exact list of files authorised to cross the publication boundary. | Usually retained as a control; treatment differs by workflow |
+| `approval.yml` | Machine-readable receipt showing that an authorised reviewer approved the specified package/manifest. | Control record |
+| `publication.yml` | Publication receipt used where the workflow records completed promotion. | Public/audit where implemented |
+| `downloads.yml` | Describes the public downloadable ZIP/package to the site catalogue builder. | Public |
+| `readme.txt` | Human-readable description included with many packages. | Public when part of the approved payload |
+| `disclosure_flags.csv` | Briefing small-number prompts for human review. | Private review file |
+| `disclosure_review.txt` | Records completed briefing disclosure review. | Private control |
+| `step5_review.xlsx` | Dashboard human review workbook combining private results, suppression and QA views. | Private |
+| `step5_disclosure_qa.csv` | Dashboard automated disclosure-control checks. | Private |
+| suppression review workbook/worklist | Tabulation review material showing primary/complementary suppression decisions. | Private |
+| `qa_summary.txt` | Table Step 1 QA summary. | Private review material |
+
+::: {.callout-important}
+## Approval is not publication
+
+`approval.yml` means that the specified package has been approved.
+
+It does **not** mean that the files have been copied to the authoritative public area, rendered by Quarto or deployed to the live website.
+
+See [Approve and publish a release](../controls/approve-publish.qmd).
+:::
+
+## Naming and version conventions {#naming}
+
+### Dates and periods
+
+| Pattern | Example | Meaning |
+|---|---|---|
+| `YYYYMM` | `202401` | Compact year/month used inside many filenames |
+| `YYYY_MM` | `2024_01` | Year/month form used in several package IDs/folders |
+| `yYYYY/mMM` | `y2024/m01` | Nested private derived-data folder structure |
+| `YYYY-MM-DD` | `2024-01-31` | ISO-style date used in metadata/receipts |
+
+### Dataset versions
+
+The standard private analytical dataset version is currently:
+
+```text
+_v01
+```
+
+For example:
+
+```text
+bnr_cvd_confidential_202401_v01.dta
+bnr_cvd_input_count_202401_v01.dta
+bnr_cvd_input_all_variables_202401_v01.dta
+```
+
+A versioned dataset should not be silently overwritten unless the relevant workflow explicitly allows a controlled replacement.
+
+### Briefing versions
+
+Briefings use a package version so a corrected approved briefing can be issued as a new package rather than overwriting an approved version.
+
+General pattern:
+
+```text
+{briefing_name}_{target_year}_v{version}
+```
+
+### `release`, `current` and `latest`
+
+| Term | Meaning in BNR use |
+|---|---|
+| **release / release-stamped** | A specific retained publication associated with one package/release ID. |
+| **current** | A stable metric filename intended to represent the currently published version of that metric product. |
+| **latest** | A stable folder/package copy used particularly by tabulations to point the website and users to the newest approved release. |
+
+Do not assume `current` and `latest` are interchangeable. Follow the convention used by that product family.
+
+### `public_ready`
+
+`public_ready` is an **approved-publication preparation area**, not the live public website.
+
+Its exact role differs slightly by workflow. The approval receipt and manifest determine whether publication is permitted.
+
+## Common Stata globals {#globals}
+
+### Core path globals
+
+| Global | Meaning |
+|---|---|
+| `$BNR_REPO` | Local public repository root |
+| `$BNR_PRIVATE` | Local authorised private companion root |
+| `$BNR_SCRIPTS` | Public repository `scripts/` root |
+| `$BNR_STATA` | `scripts/stata/` root |
+| `$BNR_ADO` | BNR ADO directory |
+| `$BNR_DIALOGS` | BNR Stata dialogs directory |
+| `$BNR_OUTPUTS` | Public repository output root |
+| `$BNR_PUBLIC` | Authoritative approved public analytical output root |
+| `$BNR_WORK` | Public-repository work area where used |
+| `$BNR_DATA_RAW` | Private raw-data root |
+| `$BNR_DATA_FROZEN` | Private frozen-data root |
+| `$BNR_DATA_DERIVED` | Private derived-data root |
+| `$BNR_STAGING` | Private staging root |
+| `$BNR_PRIVATE_WORK` | Private supporting/reference-data root |
+| `$BNR_PRIVATE_LOGS` | Private Stata log root |
+| `$BNR_REDCAP_TOKEN_FILE` | Path to the local text file containing the REDCap API token |
+
+The first two roots are machine-specific. Most other paths are derived from them.
+
+::: {.callout-warning collapse="true"}
+## REDCap token rule
+
+`$BNR_REDCAP_TOKEN_FILE` stores the **location** of the token file.
+
+Do not put the token itself in:
+
+- a committed DO file;
+- `profile.do`;
+- a log;
+- a QMD;
+- Git; or
+- this manual.
+
+The token file should contain only the token on one line and remain in approved secure storage.
+:::
+
+### Older static-briefing globals
+
+The path template also contains historical static-briefing globals such as:
+
+```text
+$BNR_BRIEF_CVD_CASES_2023
+$BNR_BRIEF_TABLES
+$BNR_BRIEF_FIGS
+$BNR_BRIEF_DATA
+```
+
+These support older retained products and should not be treated as the pattern for new routine workflows.
+
+## Roles {#roles}
+
+### Workflow roles
+
+| Role | Technical meaning |
+|---|---|
+| **BNR Lead** | Recognised approval role for the controlled workflows. |
+| **BNR Analyst** | Recognised approval role and normal analytical operator role. |
+| **BNR Developer** | Recognised approval role and technical maintenance role. |
+
+The **BNR team lead retains responsibility for deciding who is authorised to approve dissemination**.
+
+### Actions versus people
+
+The workflow also refers to actions such as:
+
+- analyst;
+- reviewer;
+- approver;
+- publisher; and
+- GitHub contributor.
+
+These do not necessarily represent five different people. One authorised person may carry out more than one action where local governance permits. The workflow still keeps the actions separate so the audit trail remains clear.
+
+## Git and GitHub reference {#git-reference}
+
+The public repository is:
+
+```text
+UWI-BNR/info-hub
+```
+
+It is **public by design** but writable only by contributors whom BNR has explicitly authorised.
+
+### Common terms
+
+| Term | Meaning |
+|---|---|
+| **Repository** | The project files plus their Git history. |
+| **Clone** | The local copy of the repository on a workstation. |
+| **Branch** | A separate working line used to make and review changes safely. |
+| **Commit** | A named checkpoint containing selected changes. |
+| **Pull** | Bring newer remote changes down to the workstation. |
+| **Push** | Send local commits to GitHub. |
+| **Pull request** | A GitHub review page proposing that one branch be merged into another. |
+| **Merge** | Accept the branch changes into the target branch. |
+| **`main`** | BNR publication branch; changes to it trigger the site deployment workflow. |
+| **GitHub Actions** | Automated service that renders and deploys the Quarto site. |
+| **GitHub Pages** | Service hosting the rendered public Info-Hub. |
+
+### VS Code and equivalent Git commands
+
+| Task | VS Code route | Command equivalent |
+|---|---|---|
+| See changed files | Source Control panel | `git status` |
+| Inspect a change | Click changed file | `git diff` |
+| Bring down remote changes | Source Control `...` > **Pull** | `git pull` |
+| Create/switch branch | Click branch name in status bar | `git switch -c branch-name` |
+| Stage a file | Click `+` beside file | `git add file` |
+| Commit | Enter message > **Commit** | `git commit -m "message"` |
+| Push branch | **Push / Publish Branch / Sync Changes** | `git push` |
+
+See [Render and publish the website](../website/render-publish.qmd) for the step-by-step publication process.
+
+## Glossary {#glossary}
+
+| Term | Meaning |
+|---|---|
+| **Analytical input** | A controlled private dataset prepared for a defined downstream calculation. |
+| **Authoritative public output** | The retained approved analytical product under `$BNR_PUBLIC`. |
+| **Briefing** | A versioned analytical package, usually containing datasets, figures and supporting public products for a narrative report. |
+| **Disclosure control / SDC** | Measures used to reduce the risk that published statistical outputs reveal confidential information. |
+| **HITL** | Human-in-the-Loop review: the required human check of analytical correctness, disclosure safety and publication readiness. |
+| **Manifest** | A structured list describing the files belonging to, or authorised for, a package. |
+| **Package** | The group of datasets, metadata, figures, controls and other files belonging to one analytical release. |
+| **Publication** | Controlled movement of approved analytical files across the private/public boundary. |
+| **Public-ready** | Prepared for potential publication but not necessarily yet approved or published; read the workflow state/receipt. |
+| **QA** | Quality assurance checks carried out automatically or manually to confirm expected structure, consistency or behaviour. |
+| **Release** | A defined set of data/products associated with a particular reporting period or package ID. |
+| **Staging** | Private area where generated analytical products wait for review, approval or publication. |
+| **Suppression** | Withholding an exact statistical value to reduce disclosure risk. |
+| **Tabulation** | Structured set of published statistical tables and supporting datasets/workbook. |
+| **Website mirror** | Rebuildable public copy under `site/downloads/` used by Quarto. It is not the authoritative analytical archive. |
+| **YTD** | Year to date: the incomplete part of the current calendar year covered by the selected data release. |
+
+## Related chapters
+
+For operating instructions rather than lookup information:
+
+- [Analytics environment](../getting-started/environment.qmd)
+- [Set up a workstation](../getting-started/workstation-setup.qmd)
+- [Dashboard metrics](../workflows/dashboards/overview.qmd)
+- [Tabulations](../workflows/tabulations/overview.qmd)
+- [Briefings](../workflows/briefings/overview.qmd)
+- [Review an analytical release](../controls/review-release.qmd)
+- [Disclosure control](../controls/disclosure-control.qmd)
+- [Approve and publish a release](../controls/approve-publish.qmd)
+- [Render and publish the website](../website/render-publish.qmd)
+- [Update website content](../website/update-content.qmd)

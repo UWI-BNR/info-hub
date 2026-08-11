@@ -56,7 +56,7 @@ website:
 
   page-footer:
     border: true
-    left: "Â© 2026, The UWI"
+    left: "© 2026, The UWI"
     center:
       - text: "Data Downloads"
         href: downloads/index.qmd
@@ -68,7 +68,7 @@ website:
       - icon: github
         href: https://github.com/UWI-BNR/info-hub
         aria-label: GitHub repository
-      - text: "Analytics: Stata Â· Python<br>Publishing: Quarto Â· Bootstrap/Flatly"
+      - text: "Analytics: Stata · Python<br>Publishing: Quarto · Bootstrap/Flatly"
 
   navbar:
     background: primary 

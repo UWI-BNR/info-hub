@@ -1,15 +1,234 @@
 ﻿---
 title: "Understand files, releases and versions"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "A practical guide to which BNR copies are authoritative, which are rebuildable, and how release IDs, versions and replacement rules fit together."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-A practical guide to the main folders, release identifiers and authoritative copies.
+## What this chapter does
 
-::: {.callout-note}
-## Status
+The BNR workflow creates several copies of related information for good reasons.
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+The practical question is:
+
+> **What stage is this file at, and which copy should I trust?**
+
+This chapter gives the decision rules. For the detailed inventory, use [System reference](../reference/index.qmd).
+
+## The release lifecycle
+
+```text
+source data
+    -> private prepared data
+    -> deidentified analytical input
+    -> private staging
+    -> human review
+    -> approval
+    -> authoritative public package
+    -> website mirror
+    -> rendered website
+```
+
+Each stage has a purpose. Hand-copying files between stages bypasses the controls around that purpose.
+
+## Which copy should I trust?
+
+| State/location | Meaning | Practical rule |
+|---|---|---|
+| Frozen/source data | Controlled input to an analytical cycle | Retain; do not casually alter |
+| `$BNR_DATA_DERIVED` | Reproducible private analytical datasets | Recreate through Stata if needed |
+| `$BNR_STAGING` | Private package awaiting review/approval | Review here; never treat as public |
+| `public_ready` | Proposed/approved payload prepared for publication | Follow its workflow approval state |
+| `$BNR_PUBLIC` | **Authoritative approved public analytical output** | Retained public release |
+| `site/downloads/...` | Website mirror used by Quarto | Rebuildable from controlled public output |
+| `site/_site/` | Rendered website | Disposable; render again |
+| Git repository | Maintained code/QMD/configuration history | Change through branches/commits |
+
+::: {.callout-important}
+## The two key rules
+
+1. **`$BNR_PUBLIC` is the authoritative approved analytical release.**
+2. **`site/downloads/...` is a website mirror, not the analytical master.**
+
+If the mirror is damaged, rebuild it through the controlled publication pathway. Do not rebuild `$BNR_PUBLIC` from the website mirror.
 :::
+
+## A release starts with a defined data freeze
+
+Each automated cycle uses a defined release/freeze.
+
+If source data later change, do not silently alter an old generated output. The corrected source starts a **new analytical cycle**.
+
+Monthly CVD releases are identified by year/month, for example:
+
+```text
+2024-01
+2024-02
+2024-03
+```
+
+Private filenames often use:
+
+```text
+202401
+202402
+202403
+```
+
+## Release IDs and package IDs
+
+A **release ID** identifies the selected data/reporting release.
+
+A **package ID** identifies a generated product package.
+
+Examples:
+
+```text
+cvd_2024_01
+cvd_tables_2024_01
+cvd_incidence_2023_v01
+```
+
+Different product families use different patterns because they represent different products. Do not rename them manually for cosmetic consistency.
+
+## Dataset version `_v01`
+
+Current confidential and deidentified monthly datasets normally use:
+
+```text
+_v01
+```
+
+For example:
+
+```text
+bnr_cvd_confidential_202401_v01.dta
+bnr_cvd_input_count_202401_v01.dta
+bnr_cvd_input_all_variables_202401_v01.dta
+```
+
+A versioned dataset should not be silently overwritten outside the workflow.
+
+## What `replace` means
+
+Interpret `replace` as:
+
+> **Deliberately rebuild this workflow product from its source/code, knowing that later review may need to be repeated.**
+
+It is not a general permission to bypass a safety check.
+
+### Dashboard metrics
+
+If a dashboard package is rebuilt, rerun the required review/approval steps. Step 5 `prepare replace` invalidates the earlier Step 5 review/approval state.
+
+### Tabulations
+
+If Step 2A public-ready products change, Step 2B approval must be completed again.
+
+### Briefings
+
+Once a briefing package is approved, do not overwrite it. Create a **new briefing version**.
+
+::: {.callout-warning}
+## Never use `replace` to defeat a failed control
+
+If approval, manifest or fingerprint checks disagree, investigate why. Do not keep adding replacement options until Stata stops objecting.
+:::
+
+## Briefing versions
+
+General pattern:
+
+```text
+{briefing_name}_{target_year}_v{version}
+```
+
+Example:
+
+```text
+cvd_incidence_2023_v01
+```
+
+If an approved briefing later needs correction, issue a later version rather than altering the approved package.
+
+## `current` and `latest`
+
+These are stable access names, not historical release IDs.
+
+| Term | Main use |
+|---|---|
+| `current` | Stable metric filename for the currently published product |
+| `latest` | Stable package/folder used particularly by tabulations |
+| release-stamped name | Specific retained publication with its own identity |
+
+The controlled publication step refreshes these names. Do not update them by hand.
+
+## Approval belongs to an exact package
+
+`approval.yml` records approval for a particular package and, where implemented, its manifest/fingerprint.
+
+`public_manifest.csv` identifies the files authorised to cross the public boundary.
+
+Do not copy either control file into another release.
+
+If an approved payload changes, the earlier approval may no longer apply.
+
+## What is safe to rebuild?
+
+::: {.callout-note collapse="true"}
+## Rebuildability guide
+
+| Item | Rebuildable? | Rebuild from |
+|---|---|---|
+| `site/_site/` | Yes | Quarto source |
+| Website mirror | Yes | Controlled `$BNR_PUBLIC` publication pathway |
+| Python virtual environment | Yes | Chapter 2 + project dependencies |
+| Step 3 inputs | Yes | Controlled Step 2 + Step 3 code |
+| Staging package | Yes, but review state must be recreated | Earlier workflow stage |
+| Approved `$BNR_PUBLIC` release | Do not casually replace | Exact approved package via publication step |
+| Frozen/source data | Not a routine rebuild | Controlled data-governance process |
+| Approval/manifest controls | Never by hand | Relevant approval workflow |
+
+"Rebuildable" does not mean "safe to delete whenever the folder looks untidy".
+:::
+
+## What belongs in Git?
+
+The public repository can contain maintained code, Quarto source, configuration templates, technical documentation and approved public products designed to be tracked.
+
+It must not contain:
+
+- confidential source data;
+- deidentified individual-level inputs;
+- private staging/review material;
+- REDCap credentials;
+- `bnr_paths_LOCAL.do`;
+- the Python virtual environment; or
+- `site/_site/`.
+
+`.gitignore` is a useful backstop, not a substitute for checking Source Control.
+
+## When a file is missing
+
+Before copying anything, ask:
+
+1. Which workflow should create it?
+2. Which release/package should it belong to?
+3. Is it private staging, authoritative public output or a website mirror?
+4. Is it generated or maintained source?
+5. What is the earliest controlled step that can recreate it?
+
+Then rerun from that point.
+
+## Quick decision table
+
+| Situation | Correct action |
+|---|---|
+| Wrong analytical value shown on a page | Fix/regenerate through Stata, then republish |
+| Wrong narrative wording | Edit QMD, render, review, commit |
+| Website mirror missing | Recreate through controlled publication |
+| `site/_site/` missing | `quarto render` |
+| Unapproved staging wrong | Correct source/code and rebuild |
+| Approved briefing wrong | Create a new briefing version |
+| Approval/manifest mismatch | Stop and investigate |
+| Source corrected after freeze | Start a new analytical cycle |

@@ -217,28 +217,69 @@ Do not continue until each required command returns normally.
 :::
 
 ::: {.callout-note collapse="true"}
-## Stage 2: Clone and check the public repository
+## Stage 2: Join, clone and check the public repository
 
-### 1. Choose a local parent folder
+The BNR `info-hub` repository is **public by design**. Anyone can read or clone it, but only people given suitable BNR repository permissions can push changes into it.
 
-Use a stable working location with enough space for the repository and its generated public products.
+A team member who will maintain the site therefore needs both:
 
-Move to that parent folder in PowerShell.
+- a GitHub account; and
+- BNR write access to `UWI-BNR/info-hub`.
 
-For example:
+### 1. Obtain BNR GitHub access
 
-```powershell
-cd C:\your\chosen\parent
+If the user does not already have a GitHub account, create one at the official GitHub website.
+
+Give the GitHub username to the BNR team lead. The team lead decides who should be authorised to maintain the repository; a BNR GitHub repository or organisation administrator then grants the required access.
+
+For routine maintainers, **Write** access is normally sufficient.
+
+Accept the GitHub invitation if one is sent.
+
+Public users who have not been granted write access can still view, clone, fork and propose changes. They cannot push directly to the BNR repository.
+
+### 2. Sign in to GitHub from VS Code
+
+Open VS Code.
+
+Use the **Accounts** menu and choose **Sign in with GitHub**. Complete the browser sign-in if prompted.
+
+This allows VS Code to authenticate later when the user pushes an authorised branch.
+
+### 3. Clone `info-hub` using VS Code
+
+In VS Code:
+
+1. Open **Source Control**.
+2. Choose **Clone Repository**.
+3. Select **Clone from GitHub** or paste:
+
+```text
+https://github.com/UWI-BNR/info-hub.git
 ```
 
-### 2. Clone `info-hub`
+4. Choose the local parent folder where the repository should be stored.
+5. Open the cloned repository when VS Code offers to do so.
+
+### 4. Check Git identity
+
+Open **Terminal > New Terminal** in VS Code and run:
 
 ```powershell
-git clone https://github.com/UWI-BNR/info-hub.git
-cd info-hub
+git config user.name
+git config user.email
 ```
 
-Check:
+If either is blank, configure it using the user's normal professional Git identity:
+
+```powershell
+git config --global user.name "Full name"
+git config --global user.email "name@example.org"
+```
+
+### 5. Check the repository
+
+In the VS Code terminal:
 
 ```powershell
 git status
@@ -247,38 +288,48 @@ git remote -v
 
 The remote should point to the UWI-BNR `info-hub` repository.
 
-### 3. Configure Git identity
+The branch name is shown in the lower-left VS Code status bar.
 
-A user who will commit changes should check:
-
-```powershell
-git config user.name
-git config user.email
-```
-
-If either is blank, configure it using the user's normal Git identity.
-
-### 4. Create local setup notes
+### 6. Create local setup notes
 
 At the repository root:
 
 ```powershell
 New-Item local-setup-notes.md
-code local-setup-notes.md
 ```
 
 `local-setup-notes.md` is machine-specific and should remain outside version control.
 
 A short template is provided in Stage 8.
 
+### Public repository rule
+
+Because `info-hub` is public, **never commit confidential data, credentials, REDCap tokens, private review files or private staging material**.
+
+Those belong in the private companion environment described in Stage 3.
+
 ### Final Stage 2 check
 
 Confirm:
 
 - the repository opens normally in VS Code;
+- the intended user is signed in to GitHub;
 - `git status` recognises the repository;
-- the expected remote is present; and
+- the remote points to `UWI-BNR/info-hub`; and
 - `local-setup-notes.md` is not staged for Git.
+
+::: {.callout-note collapse="true"}
+## Command-line clone alternative
+
+A user who prefers the terminal can clone the same public repository with:
+
+```powershell
+git clone https://github.com/UWI-BNR/info-hub.git
+cd info-hub
+```
+
+The VS Code route above is the normal BNR team method.
+:::
 :::
 
 ::: {.callout-note collapse="true"}
@@ -654,17 +705,28 @@ Stop preview with:
 Ctrl + C
 ```
 
-### Optional edit-session launcher
+### 5. Test the standard edit-session launcher
 
-The repository contains:
+The repository includes:
 
 `start-info-hub-edit.bat`
 
-It opens VS Code and starts a local Quarto preview.
+This is the normal convenience tool for starting a local Info-Hub editing session.
 
-The current launcher contains a machine-specific repository path. It is therefore a convenience, **not a requirement for workstation acceptance**.
+Double-click the BAT file from the repository root.
 
-If the path does not match the new machine, use the manual commands above rather than creating an unexplained tracked Git change merely to make the launcher work.
+It should:
+
+- open the repository in VS Code;
+- activate `venv-info-hub` for the Quarto preview process;
+- start the preview server on port 4200; and
+- open the local Info-Hub in a browser.
+
+The launcher works out the repository path from its own location, so it should not need machine-specific editing.
+
+Keep the preview Command Prompt open while using the local site. Close it, or press `Ctrl + C`, to stop the preview server.
+
+If the launcher fails, use the manual preview commands above and investigate the message shown by the launcher. Chapter 10 describes normal daily use.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -796,4 +858,5 @@ Machine-specific:
 - the authorised private workspace.
 
 Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live analytical release.
+
 

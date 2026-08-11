@@ -1,15 +1,332 @@
 ﻿---
 title: "Render and publish the website"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+description: "Start a local Info-Hub session, review website changes, commit them safely and publish the Quarto site through GitHub."
+date: 2026-08-10
+date-modified: 2026-08-10
 ---
 
-How to preview, render and publish the BNR Info-Hub.
+---
 
-::: {.callout-note}
-## Status
+## What this chapter does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
+Use this chapter when you are ready to work on the **public Info-Hub website**.
+
+It covers the final publication pathway:
+
+```text
+Edit locally
+    -> preview and render locally
+    -> review the changes
+    -> commit and push a branch
+    -> merge the branch into main
+    -> GitHub Actions renders the site
+    -> GitHub Pages publishes the site
+    -> check the live website
+```
+
+If the change includes new analytical results, complete the appropriate Stata **review, approval and publication** steps first. Quarto should work only with approved public products or their website mirrors.
+
+## Public repository policy
+
+The BNR `info-hub` GitHub repository is **public by design**.
+
+This supports transparent methods, public access to approved outputs and straightforward technical handover.
+
+Public visibility does **not** allow an unauthorised person to change the BNR repository directly. Anyone can read or clone a public repository, and an outside user can make their own fork and propose a pull request. They cannot push changes into `UWI-BNR/info-hub` unless BNR has explicitly granted them suitable repository access.
+
+The practical policy is therefore:
+
+- public code, manuals, Quarto source and approved public products may be committed to `info-hub`;
+- confidential data, credentials, REDCap tokens, private review files and private staging material must never be committed;
+- only authorised BNR contributors should have write access; and
+- routine work should be completed on a branch and merged into `main` only when ready for publication.
+
+`main` is the publication branch. A push or merge to `main` starts the GitHub Pages publication workflow.
+
+## Before you start
+
+Confirm that:
+
+- the workstation has been configured using [Set up a workstation](../getting-started/workstation-setup.qmd);
+- any analytical package needed by the page has already been approved and published by Stata;
+- you know what website content you intend to change; and
+- you are not about to copy a private file into the public repository.
+
+## Step 1: Start a normal Info-Hub editing session
+
+At the root of the local `info-hub` repository, double-click:
+
+`start-info-hub-edit.bat`
+
+The launcher should:
+
+1. check that the repository, Quarto site and Python environment are present;
+2. open the repository in VS Code;
+3. open a Command Prompt running the Quarto preview server; and
+4. open the local Info-Hub in a browser at `http://127.0.0.1:4200/`.
+
+Keep the **BNR info-hub Quarto Preview** command window open while editing. Closing that window stops the local preview server.
+
+The launcher is a convenience only. It does not commit, push or publish anything.
+
+::: {.callout-note collapse="true"}
+## Manual alternative to the launcher
+
+From PowerShell at the repository root:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+cd site
+quarto preview --host 127.0.0.1 --port 4200
+```
+
+Open the repository separately in VS Code:
+
+```powershell
+code ..
+```
+
+Stop the preview server with `Ctrl + C`.
 :::
+
+## Step 2: Make sure your local copy is up to date
+
+Before starting a new change, update your local `main` branch.
+
+In VS Code:
+
+1. Look at the branch name in the lower-left status bar.
+2. If necessary, click the branch name and switch to `main`.
+3. Open **Source Control** using the branch icon on the left-hand activity bar.
+4. Use the `...` menu and choose **Pull**.
+5. Wait for the pull to complete before starting the new branch.
+
+Then create a short working branch:
+
+1. Click the branch name in the lower-left status bar.
+2. Choose **Create new branch**.
+3. Give it a short descriptive name, for example `update-cvd-briefing` or `publish-cvd-2024-02`.
+
+Do not do routine editing directly on `main`.
+
+Chapter 12 gives more detail on branches and safe code changes. For routine website publication, the steps above are enough.
+
+::: {.callout-note collapse="true"}
+## Git and GitHub in plain English
+
+**Repository**  
+The project files and their saved history.
+
+**Local copy / clone**  
+The copy of the repository on your workstation.
+
+**Branch**  
+A separate working line where you can make and check a change without immediately changing `main`.
+
+**Commit**  
+A named checkpoint containing the files you chose to save to Git history.
+
+**Push**  
+Send your local commits to GitHub.
+
+**Pull request**  
+A GitHub page showing the proposed changes before they are merged into `main`.
+
+**Merge**  
+Accept the branch changes into `main`.
+
+**GitHub Actions**  
+The automated job that renders and deploys the Info-Hub after `main` changes.
+
+**GitHub Pages**  
+The service that hosts the finished public website.
+:::
+
+## Step 3: Edit and preview the website
+
+Make the required QMD or website-source changes in VS Code.
+
+Save the file. Quarto preview should normally update the local browser automatically.
+
+Review the changed page while you work. Check:
+
+- headings and text;
+- tables and figures;
+- links;
+- downloads;
+- navigation; and
+- whether the page remains understandable on a normal browser window.
+
+For general content changes, see [Update website content](update-content.qmd).
+
+## Step 4: Run a complete local render
+
+Preview is useful while editing. Before committing, run a complete render.
+
+Open a **new PowerShell terminal** in VS Code from **Terminal > New Terminal**.
+
+From the repository root:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+cd site
+quarto render
+```
+
+The render automatically runs the Downloads catalogue builder before Quarto builds the site.
+
+A successful render creates or refreshes:
+
+`site/_site/`
+
+`site/_site/` is generated output and should not be committed to Git.
+
+## Step 5: Review the rendered result
+
+Before committing, inspect the local site.
+
+At minimum:
+
+- open every page you changed;
+- follow any new or changed links;
+- open new download files;
+- check navigation if `_quarto.yml` changed;
+- check the Downloads page if an analytical package was published; and
+- check that no page points to private staging or another private path.
+
+If something is wrong, fix it locally and render again.
+
+## Step 6: Check exactly what Git will record
+
+Open **Source Control** in VS Code.
+
+The **Changes** list shows files that differ from the last commit.
+
+1. Read the list before staging anything.
+2. Click each important file to see the before/after comparison.
+3. Confirm that every changed file belongs to the task you intended to complete.
+4. Check especially for accidental local configuration, private files or credentials.
+
+Do not commit a file simply because VS Code says it changed.
+
+Typical legitimate website changes include:
+
+- QMD files;
+- approved website-mirror files created by the controlled publication workflow;
+- `downloads.yml` generated from approved download records;
+- site configuration; and
+- approved public images or other assets.
+
+## Step 7: Commit and push using VS Code
+
+In the Source Control panel:
+
+1. Click the `+` beside each intended file, or use **Stage All Changes** when the complete Changes list is correct.
+2. Enter a short commit message describing the change.
+3. Click **Commit**.
+4. Click **Publish Branch**, **Push** or **Sync Changes**, depending on what VS Code shows.
+
+After the push, the branch exists on GitHub. The live website has **not** changed yet because the branch has not been merged into `main`.
+
+::: {.callout-note collapse="true"}
+## Equivalent basic Git commands
+
+The same routine can be performed in a terminal:
+
+```powershell
+git status
+git diff
+git add <files>
+git commit -m "Describe the change"
+git push -u origin <branch-name>
+```
+
+For routine work, the VS Code Source Control panel is the preferred interface for the BNR team.
+:::
+
+## Step 8: Create and merge a pull request on GitHub
+
+Open the [BNR Info-Hub repository](https://github.com/UWI-BNR/info-hub){target="_blank"} in a browser.
+
+1. Open **Pull requests**.
+2. Click **New pull request**.
+3. Set the **base** branch to `main`.
+4. Set the **compare** branch to your working branch.
+5. Check the list of changed files.
+6. Create the pull request with a short description of the change.
+7. Complete any team review required for that change.
+8. When the change is ready, choose **Merge pull request** and confirm the merge.
+
+The merge changes `main`. That starts the automated website publication workflow.
+
+After merging, the working branch can normally be deleted from GitHub.
+
+## Step 9: Check GitHub Actions
+
+The repository contains:
+
+`.github/workflows/publish-site.yml`
+
+After `main` changes, GitHub Actions automatically:
+
+1. checks out the repository;
+2. installs Quarto;
+3. installs Python 3.13;
+4. installs the packages in `requirements.txt`;
+5. renders the Quarto site from `site/`;
+6. uploads `site/_site` as the GitHub Pages website; and
+7. deploys it.
+
+To check the run:
+
+1. Open the repository on GitHub.
+2. Click **Actions**.
+3. Open the newest **Publish Quarto site** run.
+4. Confirm that both **build** and **deploy** completed successfully.
+
+A green completed run means GitHub finished its publication job. Still check the live website yourself.
+
+::: {.callout-warning collapse="true"}
+## If GitHub Actions fails
+
+Open the failed run and click the red **build** or **deploy** job.
+
+Open the failed step and read the final error messages.
+
+Common causes include:
+
+- a file used locally was never committed;
+- a Python dependency is missing from `requirements.txt`;
+- a QMD link or include path is wrong;
+- a generated public file expected by the site is absent; or
+- `_quarto.yml` contains a formatting error.
+
+Fix the underlying source problem on a branch, render locally again, then commit and merge the correction.
+
+Do not edit the generated GitHub Pages output directly.
+:::
+
+## Step 10: Check the live website
+
+After GitHub Actions completes, open the public Info-Hub:
+
+[https://uwi-bnr.github.io/info-hub/](https://uwi-bnr.github.io/info-hub/){target="_blank"}
+
+Check the pages affected by the change.
+
+For an analytical release also check:
+
+- the relevant public dashboard, table or briefing page;
+- the expected download link;
+- the Downloads catalogue entry; and
+- any Latest Data or other listing affected by the release.
+
+Only after this check is the website publication task complete.
+
+## End the editing session
+
+When finished:
+
+1. stop the Quarto preview window with `Ctrl + C` or close the preview Command Prompt;
+2. check VS Code Source Control for any unintended uncommitted changes; and
+3. close the browser and VS Code when no further work is required.
