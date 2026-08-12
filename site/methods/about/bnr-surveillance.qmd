@@ -1,0 +1,45 @@
+---
+title: "About BNR surveillance"
+description: "What the Barbados National Registry monitors and how surveillance statistics should be understood."
+---
+
+The Barbados National Registry (BNR) brings together health information to describe important diseases and outcomes in Barbados. Its statistics support public health planning, service improvement and research.
+
+## Why surveillance matters
+
+Surveillance is the continuing, systematic use of health information to understand patterns over time. It can help answer questions such as:
+
+- Is the recorded burden of disease rising or falling?
+- Are outcomes different between groups?
+- How much hospital care is associated with particular conditions?
+- Where does data collection or clinical follow-up need improvement?
+
+BNR surveillance is not a list of individual patients. Public outputs contain aggregate statistics and are checked to protect confidentiality.
+
+## Current surveillance areas
+
+| Area | Current position in this manual |
+|---|---|
+| **Cardiovascular disease (CVD)** | Definitions are available for event counts, event rates, case fatality and hospital length of stay. |
+| **Hypertension** | Measure page established; detailed specifications are being prepared for implementation. |
+| **Diabetes** | Measure page established; detailed specifications are being prepared for implementation. |
+| **Mortality** | General method page established; BNR publication specifications remain in development. |
+
+Hypertension and diabetes are part of the main BNR measure programme. Their pages are holding pages only until the approved definitions and publications are ready.
+
+## What BNR statistics can show
+
+Registry statistics can describe recorded events, rates, outcomes and patterns. They can support comparisons across periods when definitions and data coverage remain sufficiently consistent.
+
+They do not, by themselves, prove that one factor caused a change. Changes may reflect disease patterns, health-care access, diagnostic practice, recording, completeness or a mixture of these.
+
+::: {.callout-tip title="Start with the measure definition"}
+Before comparing a number, check what was counted, the population or event group used as the denominator, the period covered and whether the method changed.
+:::
+
+## Related pages
+
+- [From health records to published statistics](records-to-statistics.qmd)
+- [Measures overview](../measures/index.qmd)
+- [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+

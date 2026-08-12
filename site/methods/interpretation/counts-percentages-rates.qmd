@@ -1,0 +1,67 @@
+---
+title: "Counts, percentages and rates"
+description: "How to choose and interpret common forms of BNR statistics."
+---
+
+Counts, percentages and rates use numbers differently. Choosing the right one depends on the question being asked.
+
+## Why this matters
+
+The same underlying events can produce several correct statistics, each with a different interpretation.
+
+| Statistic | Main question | Typical denominator |
+|---|---|---|
+| **Count** | How many events or people were recorded? | None |
+| **Percentage** | What share of an eligible group had a characteristic or outcome? | Eligible events or people |
+| **Population rate** | How frequently did events occur relative to a population? | Resident population |
+| **Ratio** | How does one quantity compare with another? | A comparison quantity |
+
+## Counts
+
+A count is a total. It is often the clearest measure of service burden, but comparisons can be misleading when population sizes differ.
+
+For example, 100 events in a population of 100,000 represent a different frequency from 100 events in a population of 300,000.
+
+## Percentages
+
+A percentage expresses a part of a defined whole:
+
+$$
+\text{Percentage} = \frac{\text{number in the selected group}}{\text{eligible total}} \times 100
+$$
+
+Always check the denominator. A case-fatality percentage among hospital events is not a percentage of the whole population.
+
+## Population rates
+
+A rate relates events to the population and a period:
+
+$$
+\text{Rate per }k = \frac{\text{events}}{\text{population}} \times k
+$$
+
+BNR commonly uses \(k=100,000\) for CVD event rates. The multiplier makes small frequencies easier to read; it does not change the underlying comparison.
+
+## Crude and age-adjusted rates
+
+A crude rate uses observed totals. An age-adjusted rate combines age-specific rates using a standard age distribution. This helps compare populations or periods with different age structures.
+
+Age-adjusted rates are comparison tools. They are not the actual number of events and should not be multiplied by the local population to estimate a count.
+
+::: {.callout-tip title="A simple comparison rule"}
+Compare statistics only when the event definition, source coverage, period, denominator and adjustment method are compatible.
+:::
+
+## What to remember
+
+- Counts describe volume.
+- Percentages describe a share of an eligible group.
+- Population rates improve comparisons across differently sized populations.
+- Age adjustment addresses age structure, not every source of bias or uncertainty.
+
+## Related measures
+
+- [Number of CVD events](../measures/cvd-event-counts.qmd)
+- [CVD incidence and event rates](../measures/incidence.qmd)
+- [CVD case fatality](../measures/case-fatality.qmd)
+

@@ -1,0 +1,48 @@
+---
+title: "From health records to published statistics"
+description: "A plain-language overview of the BNR statistical production pathway."
+---
+
+BNR statistics are produced through a controlled sequence. Health information is assessed and prepared before any aggregate result is approved for publication.
+
+## The statistical journey
+
+```{mermaid}
+flowchart TD
+  A["Health records and notifications"] --> B["Eligible events identified"]
+  B --> C["Records checked and prepared"]
+  C --> D["Aggregate statistics calculated"]
+  D --> E["Quality, confidentiality and approval checks"]
+  E --> F["Published BNR outputs"]
+```
+
+## What happens at each stage
+
+| Stage | Public explanation |
+|---|---|
+| **Identify** | Potentially eligible events or records are found from approved sources. |
+| **Classify** | Registry definitions are applied so that comparable events are grouped consistently. |
+| **Prepare** | Duplicates, dates, residence, missing values and logical inconsistencies are checked. |
+| **Calculate** | Stated numerators, denominators and statistical methods are applied. |
+| **Review** | Results, supporting metadata and confidentiality checks are reviewed before approval. |
+| **Publish** | Only approved aggregate products enter the public Info-Hub. |
+
+## Why published values can change
+
+Registry information can mature after an initial release. A late record may arrive, an uncertain outcome may be resolved, or a source error may be corrected. BNR therefore identifies release periods and explains material revisions.
+
+The aim is not to prevent correction. It is to make corrections controlled, documented and understandable.
+
+## What to remember
+
+- Publication is separate from calculation.
+- Public figures are aggregates, not identifiable patient records.
+- Definitions and coverage matter as much as the displayed number.
+- A revised value is not necessarily evidence of an error in the original analysis; it may reflect more complete information.
+
+## Related pages
+
+- [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
+- [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+- [Releases, revisions and comparability](../interpretation/revisions-comparability.qmd)
+

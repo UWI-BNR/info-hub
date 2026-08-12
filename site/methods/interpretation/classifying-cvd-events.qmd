@@ -1,0 +1,53 @@
+---
+title: "How CVD events are classified"
+description: "How BNR applies consistent event, source, residence and period rules."
+---
+
+Consistent classification allows CVD statistics to be compared over time. BNR applies approved rules to decide which records represent eligible heart attack or stroke events and how they enter each measure.
+
+## Why this matters
+
+A hospital episode, a registered CVD event and a unique person are not interchangeable. Classification determines the unit that is counted and prevents the same source information from being counted twice.
+
+## Main classification questions
+
+| Question | Why it matters |
+|---|---|
+| Does the record meet the approved heart attack or stroke criteria? | Determines event eligibility and type |
+| Is the person a Barbados resident under the stated rule? | Defines the population represented |
+| Does the event fall within the reporting period? | Aligns numerator and denominator |
+| Is it already represented by another record? | Prevents duplicate counting |
+| Was it registered through hospital information or death certification only? | Determines which published series includes it |
+| Is required information complete enough for the measure? | Defines the eligible analytical denominator |
+
+## Event types
+
+BNR CVD reporting currently distinguishes:
+
+- **heart attack**, also called acute myocardial infarction (AMI); and
+- **stroke**.
+
+Clinical and source-specific criteria are maintained in the approved registry documentation. Public outputs use these classifications consistently and state when a broader or different source definition applies.
+
+## Events and people
+
+Most routine CVD measures use the **event** as the unit. A person may therefore contribute more than one event if each meets the applicable definition. Publications should not describe an event count as a count of unique people unless a person-level method was explicitly used.
+
+## Hospital and death-certificate-only events
+
+A death-certificate-only (DCO) event is identified from death information without a matching eligible hospital-registered event. DCO events are excluded from hospital-only measures and included only in outputs that explicitly use the broader source.
+
+::: {.callout-warning title="Source coverage changes the meaning"}
+A hospital-only series and a hospital-plus-DCO series should not be joined or compared as though their event coverage were identical.
+:::
+
+## What to remember
+
+The output metadata should identify the event type, source coverage, residence rule, period and exclusions. Those details define the statistic as much as its displayed label.
+
+## Related measures
+
+- [Number of CVD events](../measures/cvd-event-counts.qmd)
+- [CVD incidence and event rates](../measures/incidence.qmd)
+- [Releases, revisions and comparability](revisions-comparability.qmd)
+

@@ -1,0 +1,53 @@
+---
+title: "Data quality and completeness"
+description: "How data quality affects BNR statistics and their interpretation."
+---
+
+BNR checks records and aggregate outputs before publication, but no health-information system is perfect. Public interpretation should account for completeness, timeliness, consistency and classification.
+
+## Why this matters
+
+A precise calculation can still give an incomplete picture if eligible events were missed or important fields were not recorded. Quality information helps readers judge what a statistic can support.
+
+## Main dimensions of quality
+
+| Dimension | Question to ask |
+|---|---|
+| **Coverage** | Are all intended sources, places and periods represented? |
+| **Completeness** | Are the fields needed for the measure present? |
+| **Validity** | Do values and dates satisfy the stated rules? |
+| **Consistency** | Are definitions and coding applied similarly across records and time? |
+| **Timeliness** | Has enough time passed for records and outcomes to be completed? |
+| **Uniqueness** | Have duplicate representations of the same event been resolved? |
+
+## Missing information and denominators
+
+Some measures require more information than others. A case count may need an event type and date, while case fatality also needs a discharge outcome. A record can therefore be eligible for one statistic but not another.
+
+Public percentages should state or make available the eligible denominator. Excluding records with missing information can affect comparability if missingness changes over time or differs between groups.
+
+## Recent periods
+
+Recent data are often less complete because abstraction, verification, discharge outcomes or death registration can take time. BNR may revise a recent period when later information becomes available.
+
+## Quality checks and uncertainty
+
+BNR checks required variables, logical date order, duplicates, unexpected values, output totals and disclosure-control results. Confidence intervals describe sampling or count uncertainty under a statistical model; they do not capture every form of missingness, misclassification or source coverage.
+
+::: {.callout-tip title="Read limitations alongside results"}
+A limitation does not make a statistic unusable. It defines the questions the statistic can answer safely and the comparisons that need caution.
+:::
+
+## What to remember
+
+- Quality is specific to a measure and period.
+- Missing values can change the analytical denominator.
+- Recent figures may mature.
+- Statistical precision and data completeness are different concepts.
+
+## Related measures
+
+- [From health records to published statistics](../about/records-to-statistics.qmd)
+- [Releases, revisions and comparability](revisions-comparability.qmd)
+- [Protecting confidentiality](confidentiality.qmd)
+

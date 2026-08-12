@@ -1,0 +1,54 @@
+---
+title: "Releases, revisions and comparability"
+description: "How to compare BNR statistics across releases and periods."
+---
+
+BNR identifies public releases so that users can tell which data and methods produced a result. Figures may be revised when source information improves or a controlled correction is required.
+
+## Why this matters
+
+A value copied from an earlier briefing may not be identical to a later dashboard value for the same period. The difference may reflect later records, resolved outcomes, source corrections or a defined method change.
+
+## Types of change
+
+| Change | Example | Effect on comparison |
+|---|---|---|
+| **Data maturation** | A late record or completed outcome is added | Recent values may change |
+| **Correction** | A duplicate or invalid date is resolved | A previous value is replaced through a controlled release |
+| **Method revision** | A denominator source or classification rule changes | The series may require a documented break or recalculation |
+| **Presentation change** | Labels or layout improve without changing values | Statistical comparability is unchanged |
+
+## Stable and release-stamped outputs
+
+A stable “current” file is convenient for users who need the latest approved data. A release-stamped file supports reproducibility because it identifies the exact historical release used in an analysis.
+
+For research or formal reporting, retain the release identifier, coverage date, dataset metadata and access date rather than relying only on a copied value.
+
+## Comparing periods
+
+Before interpreting a change, check:
+
+1. the event or measure definition;
+2. source coverage;
+3. population denominator and age standard;
+4. completeness and reporting delay;
+5. stratification and suppression; and
+6. whether the series was revised.
+
+::: {.callout-warning title="A break in method can resemble a change in health"}
+When a data source, definition or coverage rule changes, part of the apparent trend may be methodological. BNR will identify material breaks rather than silently combining incompatible series.
+:::
+
+## What to remember
+
+- Use release-stamped products when reproducibility matters.
+- Revisions should be traceable and explained.
+- Compare compatible definitions and sources.
+- A revised value should replace, not silently coexist with, the superseded current value.
+
+## Related measures
+
+- [Data quality and completeness](data-quality-completeness.qmd)
+- [From health records to published statistics](../about/records-to-statistics.qmd)
+- [Data downloads](../../downloads/index.qmd)
+

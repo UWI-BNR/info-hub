@@ -1,0 +1,64 @@
+---
+title: "Hospital length of stay"
+description: "How BNR summarises hospital stay following a registered CVD event."
+---
+
+Length of stay is the number of completed days between hospital admission and the end of an eligible admission linked to a registered CVD event.
+
+## At a glance
+
+| Element | Description |
+|---|---|
+| **Question answered** | How long did eligible CVD admissions last? |
+| **Calculation** | Hospital end date minus admission date |
+| **Reported as** | Usually median days and interquartile range |
+| **Related measure** | Total bed-days |
+| **Unit** | Hospital admission linked to a CVD event |
+
+## What does this measure tell us?
+
+Length of stay describes hospital use following CVD events. The median describes the middle stay and is usually more representative than the mean when a small number of admissions are unusually long.
+
+## How do we calculate it?
+
+For admission \(i\):
+
+$$
+\text{Length of stay}_i = \text{hospital end date}_i - \text{admission date}_i
+$$
+
+Total bed-days are obtained by adding lengths of stay across eligible admissions. BNR may also report the 25th and 75th percentiles, which enclose the middle half of observed stays.
+
+## What is included and excluded?
+
+The measure includes completed hospital-registered CVD events with valid admission and hospital-end dates. Same-day stays are recorded as zero completed days. Admissions ending in death are included.
+
+Death-certificate-only records, missing required dates and end dates before admission are excluded. Unusually long stays are checked, but a confirmed value is not excluded simply because it is extreme.
+
+## Worked example
+
+For five fictional stays of 1, 2, 3, 5 and 14 days, the median is **3 days**. The 14-day stay affects the mean more strongly than the median.
+
+If all five stays are eligible, total bed-days are:
+
+$$
+1 + 2 + 3 + 5 + 14 = 25\text{ bed-days}
+$$
+
+## How should it be interpreted?
+
+A change in length of stay can reflect clinical need, pathways of care, discharge arrangements, survival, bed availability or recording practice. It should not be interpreted as a direct measure of quality without this context.
+
+## Things to bear in mind
+
+- Median stay and total bed-days answer different questions.
+- A shorter stay is not necessarily a better outcome.
+- Comparisons may be affected by event mix and whether in-hospital deaths are included.
+- Invalid or incomplete dates reduce the eligible denominator.
+
+## Related statistics and outputs
+
+- [CVD case fatality](case-fatality.qmd)
+- [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+- [Hospital length-of-stay briefing](../../surveillance/cvd/briefings/hospital-los.qmd)
+

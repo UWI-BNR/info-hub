@@ -1,4 +1,4 @@
-﻿project:
+project:
   type: website
   resources:
     - assets/images/**
@@ -130,41 +130,61 @@ website:
               href: downloads/index.qmd
 
     - id: methods
-      title: "Methods"
+      title: "Public Methods Manual"
       style: "docked"
       search: true
       collapse-level: 1
       contents:
-        - text: "Home"
+        - text: "Methods home"
           href: methods/index.qmd
-        - section: "About"
+
+        - section: "Start here"
           contents:
-            # - text: "XXX"
-            #   href: methods/about/XXX.qmd
-        - section: "Our Indicators"
+            - text: "About BNR surveillance"
+              href: methods/about/bnr-surveillance.qmd
+            - text: "From records to statistics"
+              href: methods/about/records-to-statistics.qmd
+
+        - section: "Understanding our measures"
           contents:
-            # - text: "XXX"
-            #   href: methods/indicators/XXX.qmd
-        - section: "Our Methods"
+            - text: "Measures overview"
+              href: methods/measures/index.qmd
+            - text: "Number of CVD events"
+              href: methods/measures/cvd-event-counts.qmd
+            - text: "CVD incidence and event rates"
+              href: methods/measures/incidence.qmd
+            - text: "CVD case fatality"
+              href: methods/measures/case-fatality.qmd
+            - text: "Hospital length of stay"
+              href: methods/measures/length-of-stay.qmd
+            - text: "Mortality"
+              href: methods/measures/mortality.qmd
+            - text: "Hypertension"
+              href: methods/measures/hypertension.qmd
+            - text: "Diabetes"
+              href: methods/measures/diabetes.qmd
+
+        - section: "Understanding the methods"
           contents:
-            # - text: "XXX"
-            #   href: methods/indicators/XXX.qmd
-        - section: "Data Sources"
+            - text: "Counts, percentages and rates"
+              href: methods/interpretation/counts-percentages-rates.qmd
+            - text: "How CVD events are classified"
+              href: methods/interpretation/classifying-cvd-events.qmd
+            - text: "Data quality and completeness"
+              href: methods/interpretation/data-quality-completeness.qmd
+            - text: "Protecting confidentiality"
+              href: methods/interpretation/confidentiality.qmd
+            - text: "Releases, revisions and comparability"
+              href: methods/interpretation/revisions-comparability.qmd
+
+        - section: "Reference and data access"
           contents:
-            # - text: "Overview"
-            #   href: methods/data-sources/overview.qmd
-        - section: "Apply to use data"
-          contents:
+            - text: "Glossary"
+              href: methods/reference/glossary.qmd
+            - text: "Research data access"
+              href: methods/responsible-data-use/research-data-access.qmd
             - text: "Data Sharing Agreement"
               href: methods/responsible-data-use/dsa-methods.qmd
-            # - text: "Confidentiality"
-            #   href: methods/responsible-data-use/confidentiality.qmd
-      #  - section: "How to Interpret"
-      #    contents:
-            # - text: "Rates"
-            #   href: methods/interpretation/rates-and-trends.qmd
-        - text: "Future Pages"
-          href: methods/future-pages.qmd
 
     - id: operations
       title: "Operations Manual"

@@ -1,0 +1,31 @@
+---
+title: "Measures overview"
+description: "The measures explained in the BNR Public Methods Manual."
+---
+
+Different measures answer different questions. A count describes volume; a rate relates events to a population; case fatality describes an outcome among events; and length of stay describes hospital use.
+
+## Measures in this manual
+
+| Measure | Question answered | Usually reported as |
+|---|---|---|
+| [Number of CVD events](cvd-event-counts.qmd) | How many eligible hospital-registered events were recorded? | Number of events |
+| [CVD incidence and event rates](incidence.qmd) | How frequently were eligible events recorded relative to the population? | Events per 100,000 population |
+| [CVD case fatality](case-fatality.qmd) | What proportion of eligible hospital events ended in death before discharge? | Percentage |
+| [Hospital length of stay](length-of-stay.qmd) | How long did eligible CVD admissions last? | Median days and interquartile range |
+| [Mortality](mortality.qmd) | How will deaths and death rates be described? | Number of deaths and population rates |
+| [Hypertension](hypertension.qmd) | How will hypertension coverage, care and control be monitored? | Counts, percentages and rates |
+| [Diabetes](diabetes.qmd) | How will diabetes coverage, care and outcomes be monitored? | Counts, percentages and rates |
+
+## Choose the right measure
+
+Use counts for workload or burden, rates for population comparisons, case fatality for short-term hospital outcomes, and length of stay or bed-days for hospital use. No single measure gives a complete account of population health or service performance.
+
+::: {.callout-warning title="Similar labels can hide different definitions"}
+Two statistics called “incidence” or “mortality” may use different sources, denominators or age-adjustment methods. Use the definition accompanying the BNR output before making a comparison.
+:::
+
+## Related pages
+
+- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
+- [Glossary](../reference/glossary.qmd)

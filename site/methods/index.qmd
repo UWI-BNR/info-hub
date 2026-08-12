@@ -1,9 +1,129 @@
-﻿---
-title: "Methods"
-pagetitle: "BNR Methods"
+---
+title: "Public Methods Manual"
+subtitle: "How BNR statistics are defined, calculated and interpreted"
+description: "Plain-language explanations of Barbados National Registry measures and methods."
+toc: false
+page-layout: full
 ---
 
-These pages explain how BNR statistics are produced, what the main indicators mean, and how the figures should be interpreted.
+This manual explains what Barbados National Registry statistics mean, how the main measures are calculated and what readers should bear in mind when using them.
 
-This section is public-facing. It should be technically thorough, but written in plain language.
+::: {.content-visible when-format="html"}
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[START HERE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### About BNR surveillance {.card-title}
+
+What the Registry monitors, why surveillance matters and what these statistics can show.
+
+::: {.mt-auto}
+[Open section](about/bnr-surveillance.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[THE JOURNEY]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### From records to statistics {.card-title}
+
+How health information becomes reviewed, confidentiality-protected public statistics.
+
+::: {.mt-auto}
+[Open section](about/records-to-statistics.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[MEASURES]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### What BNR reports {.card-title}
+
+Definitions and worked examples for CVD, hypertension and diabetes measures.
+
+::: {.mt-auto}
+[Open section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[INTERPRETATION]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Counts, percentages and rates {.card-title}
+
+How different kinds of statistics answer different questions.
+
+::: {.mt-auto}
+[Open section](interpretation/counts-percentages-rates.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[TRUST]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Quality and confidentiality {.card-title}
+
+How data limitations, review and disclosure control affect published figures.
+
+::: {.mt-auto}
+[Open section](interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+[REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Plain-language glossary {.card-title}
+
+Short explanations of the principal terms used in BNR publications.
+
+::: {.mt-auto}
+[Open section](reference/glossary.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+:::
+:::
+:::
+
+:::
+:::
+
+## What this manual covers
+
+Use this manual when you want to understand a published measure, compare statistics or assess an important limitation. Links from individual pages lead to the relevant dashboards, briefings, tabulations and downloads.
+
+| Manual | Main question answered |
+|---|---|
+| **Public Methods Manual** | What does this statistic mean, and how should I interpret it? |
+| **[Operations Manual](../operations/index.qmd)** | What must BNR staff do, who decides and what evidence is retained? |
+| **[Technical Manual](../technical/index.qmd)** | How do staff operate the analytics and publishing environment? |
+
+The public manual does not contain patient information, software instructions, file paths or internal security details.
+
+## Go to the statistics
+
+[Latest BNR publications](../news/index.qmd){.btn .btn-primary}
+[Data downloads](../downloads/index.qmd){.btn .btn-outline-primary}
 

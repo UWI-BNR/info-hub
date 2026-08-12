@@ -1,0 +1,71 @@
+---
+title: "CVD incidence and event rates"
+description: "How BNR relates eligible CVD events to the Barbados population."
+---
+
+CVD event rates describe how frequently eligible heart attack and stroke events are recorded relative to the Barbados population during a stated period.
+
+## At a glance
+
+| Element | Description |
+|---|---|
+| **Question answered** | How frequently were eligible CVD events recorded relative to the population? |
+| **Numerator** | Eligible events in the period |
+| **Denominator** | Resident population for the same period and group |
+| **Reported as** | Events per 100,000 population |
+| **Main forms** | Crude and age-adjusted rates |
+
+## What does this measure tell us?
+
+A rate makes event numbers more comparable when populations differ in size. BNR may report a hospital-based event rate and, where death-certificate-only information is available, a broader estimated national event rate.
+
+| Series | Events included | Main interpretation |
+|---|---|---|
+| **Hospital-based event rate** | Eligible hospital-registered events | Recorded serious CVD events relative to the resident population |
+| **Estimated national event rate** | Hospital events plus identified death-certificate-only events | A broader estimate, subject to the quality and completeness of death-certificate ascertainment |
+
+## How do we calculate it?
+
+The crude rate is:
+
+$$
+\text{Rate per 100,000} = \frac{\text{eligible events}}{\text{resident population}} \times 100,000
+$$
+
+Age-adjusted rates first calculate age-specific rates and then apply a standard set of age weights. This reduces differences caused only by one population or period having an older age structure.
+
+## What is included and excluded?
+
+The numerator uses eligible events among Barbados residents in the stated period. Non-residents, duplicates and out-of-period records are excluded. The output metadata states whether death-certificate-only events are included.
+
+The denominator is the resident population for the same period and, where relevant, the same sex and age group. BNR records the population source and standard population with the published output.
+
+## Worked example
+
+If 140 eligible events occurred in a fictional population of 280,000:
+
+$$
+\frac{140}{280,000} \times 100,000 = 50
+$$
+
+The crude event rate would be **50 per 100,000 population**.
+
+## How should it be interpreted?
+
+Compare like with like: crude with crude, or age-adjusted with age-adjusted using the same standard. Age adjustment improves comparison but does not remove every difference in ascertainment, diagnosis or data quality.
+
+BNR publications have historically used the familiar term *incidence*. Because the numerator counts eligible events, including recurrent events where allowed by the event definition, the accompanying technical label *event rate* is often more precise.
+
+## Things to bear in mind
+
+- Hospital-based and hospital-plus-death-certificate series answer related but different questions.
+- A broader source is not automatically more accurate if linkage or cause-of-death information is incomplete.
+- Rates based on small numbers can vary considerably from year to year.
+- Confidence intervals show statistical uncertainty but not all uncertainty from data coverage or classification.
+
+## Related statistics and outputs
+
+- [Number of CVD events](cvd-event-counts.qmd)
+- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
+- [CVD incidence briefing](../../surveillance/cvd/briefings/case-incidence.qmd)
+

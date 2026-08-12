@@ -1,0 +1,90 @@
+---
+title: "Glossary"
+description: "Plain-language definitions of terms used in BNR publications."
+---
+
+## A–C
+
+**Acute myocardial infarction (AMI)**  
+The clinical term commonly used for a heart attack.
+
+**Age-adjusted rate**  
+A rate calculated using a standard age distribution so that populations or periods with different age structures can be compared more fairly. Also called an age-standardised rate.
+
+**Aggregate data**  
+Information combined into totals, percentages, rates or other summaries rather than presented as individual records.
+
+**Case fatality**  
+The proportion of eligible disease events that end in death within the defined outcome period or setting.
+
+**Confidence interval**  
+A range expressing statistical uncertainty around an estimate under a stated method. It does not capture every source of data-quality uncertainty.
+
+**Crude rate**  
+The observed event count divided by the relevant population, without age adjustment.
+
+## D–I
+
+**Death-certificate-only (DCO) event**  
+An eligible event identified from death information without a matching eligible hospital-registered event.
+
+**Denominator**  
+The population, events or people forming the bottom part of a percentage or rate.
+
+**Disclosure control**  
+Checks and changes used to reduce the risk that published information reveals something about an identifiable person.
+
+**Event**  
+An occurrence meeting the relevant registry definition. One person may contribute more than one event.
+
+**Event rate**  
+The number of eligible events relative to a stated population and period, often expressed per 100,000.
+
+**Incidence**  
+The occurrence of new disease or health events in a population over time. In BNR CVD publications, check whether the displayed measure is specifically an event rate and which sources are included.
+
+**Interquartile range (IQR)**  
+The span from the 25th to the 75th percentile, containing the middle half of observed values.
+
+## L–R
+
+**Length of stay**  
+The number of completed days between hospital admission and the hospital-end date under the stated rules.
+
+**Median**  
+The middle value after observations are placed in order. Half are below it and half above it.
+
+**Mortality rate**  
+Deaths in a population during a stated period divided by the corresponding population.
+
+**Numerator**  
+The events or people counted in the top part of a percentage or rate.
+
+**Percentage**  
+A proportion multiplied by 100.
+
+**Population denominator**  
+The population estimate used to calculate a population rate.
+
+**Release**  
+An approved, identifiable version of a public dataset or output package.
+
+## S–Z
+
+**Secondary suppression**  
+Hiding an additional value so that a directly protected small value cannot be calculated from published totals.
+
+**Stratification**  
+A breakdown of a measure by a characteristic such as period, event type, sex or age group.
+
+**Suppression**  
+Withholding a value from publication to protect confidentiality. A suppressed value is not the same as zero.
+
+**Surveillance**  
+The continuing, systematic use of health information to monitor patterns and support public health action.
+
+## Related pages
+
+- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
+- [Measures overview](../measures/index.qmd)
+

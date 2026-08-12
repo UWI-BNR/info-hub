@@ -1,0 +1,52 @@
+---
+title: "Protecting confidentiality"
+description: "How BNR reduces disclosure risk in public statistics."
+---
+
+BNR publishes aggregate information designed to inform the public without revealing information about identifiable individuals.
+
+## Why this matters
+
+Removing names is not always enough. A very small count combined with a rare characteristic, period or other public knowledge can sometimes allow a person to be recognised or sensitive information to be inferred.
+
+## How public outputs are protected
+
+BNR uses several safeguards:
+
+- public products contain aggregate rather than patient-level information;
+- only approved variables, tables and figures enter the public pathway;
+- positive counts below six are normally suppressed;
+- additional cells may be suppressed where totals could reveal a protected value;
+- overly detailed combinations of characteristics are avoided; and
+- every release receives a disclosure-control review before publication.
+
+Suppressed values are usually displayed using a symbol explained with the table or dataset. A suppressed cell means the value is not published; it does not mean zero.
+
+## Primary and secondary suppression
+
+**Primary suppression** hides a value because it is directly considered too small. **Secondary suppression** hides another value when row or column totals would otherwise allow the primary value to be calculated.
+
+## Worked example
+
+Suppose a table shows 20 events in total and 17 in one category. Publishing both values would reveal that the other category contains 3 events, even if that small cell were blank. A second value or total may therefore also need protection.
+
+## Confidentiality and usefulness
+
+Disclosure control balances privacy with the public value of statistics. BNR may combine periods or categories, publish a rate at a less detailed level, or omit a breakdown when safe publication is not possible.
+
+::: {.callout-important title="Restricted data are not public data"}
+Access to restricted, de-identified research data requires a separate application, approval and Data Sharing Agreement. Public availability of an aggregate table does not imply access to its underlying records.
+:::
+
+## What to remember
+
+- Suppression is a privacy safeguard, not missing analysis.
+- Zero and suppressed are different.
+- Totals and related cells can create indirect disclosure.
+- More detail is not always compatible with safe publication.
+
+## Related measures
+
+- [Research data access](../responsible-data-use/research-data-access.qmd)
+- [Research Data Sharing Agreement](../responsible-data-use/dsa-methods.qmd)
+

@@ -1,0 +1,43 @@
+---
+title: "Diabetes measures"
+description: "Holding page for near-term BNR diabetes measure specifications."
+---
+
+Diabetes is part of the main BNR surveillance programme. This page has been positioned with the other routine measures so that the approved definitions can be added without changing the manual structure.
+
+::: {.callout-note title="Content in preparation"}
+Detailed diabetes measures and publication rules are being prepared for implementation. This page is not an approved metric specification.
+:::
+
+## What BNR intends to monitor
+
+Subject to final approval, the measures are expected to describe areas such as:
+
+- registry or service coverage;
+- recorded diabetes prevalence;
+- completion of key monitoring checks;
+- glycaemic control and other risk factors; and
+- complications or relevant care outcomes.
+
+## What the completed page will specify
+
+| Element | Required detail |
+|---|---|
+| Measure | Plain-language question and stable name |
+| Numerator | People or records meeting the stated condition |
+| Denominator | Clearly defined eligible population |
+| Time rule | Measurement window and reporting period |
+| Clinical rule | Test, diagnosis, treatment or threshold definition |
+| Exclusions | Missing, ineligible or not-applicable records |
+| Interpretation | Intended use and important limitations |
+
+## Publication status
+
+No number should be interpreted as a routine BNR diabetes measure until its definition, source, quality checks and disclosure rules have been approved and added here.
+
+## Related pages
+
+- [Measures overview](index.qmd)
+- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
+- [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+

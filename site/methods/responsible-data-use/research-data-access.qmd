@@ -1,0 +1,50 @@
+---
+title: "Research data access"
+description: "How researchers can request access to restricted, de-identified BNR data."
+---
+
+BNR publishes aggregate data openly where this can be done safely. Some research questions require more detailed, restricted data. Access to those data is considered through a separate application and governance process.
+
+## What can be requested
+
+A request should identify:
+
+- the research purpose and expected public health value;
+- the disease area, population and period required;
+- the minimum variables and detail needed;
+- the proposed analytical outputs;
+- ethics approval, where applicable; and
+- secure storage, access and destruction arrangements.
+
+## How decisions are made
+
+Approval is not automatic. BNR considers the purpose, proportionality, sensitivity, disclosure risk, safeguards, legal and ethical position, and the feasibility of preparing a suitable dataset.
+
+The principle of **data minimisation** applies: an approved dataset should contain no more detail than the project needs.
+
+## Conditions of access
+
+Approved users may be required to:
+
+- sign the BNR Research Data Sharing Agreement;
+- use data only for the approved purpose;
+- restrict access to named team members;
+- store data in the approved environment;
+- submit proposed outputs for disclosure review; and
+- return or securely destroy data at the agreed end point.
+
+::: {.callout-important title="De-identified does not mean public"}
+Detailed records can retain disclosure risk even when direct identifiers are removed. Restricted data must not be shared onward or placed in public repositories.
+:::
+
+## Start an application
+
+[Open the Research Data Sharing Agreement](dsa-methods.qmd){.btn .btn-primary}
+
+The agreement page explains how to complete, save and submit the document. The Info-Hub does not store information entered into the form.
+
+## Related pages
+
+- [Protecting confidentiality](../interpretation/confidentiality.qmd)
+- [Data downloads](../../downloads/index.qmd)
+

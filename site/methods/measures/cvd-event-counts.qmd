@@ -1,0 +1,63 @@
+---
+title: "Number of CVD events"
+description: "How BNR counts eligible hospital-registered cardiovascular events."
+---
+
+The CVD event count is the number of eligible heart attack and stroke events registered from hospital information during a stated period.
+
+## At a glance
+
+| Element | Description |
+|---|---|
+| **Question answered** | How many eligible hospital-registered CVD events were recorded? |
+| **Numerator** | Eligible hospital-registered CVD events |
+| **Denominator** | Not applicable |
+| **Reported as** | A count of events |
+| **Unit** | Event, not necessarily a unique person |
+
+## What does this measure tell us?
+
+Counts describe the recorded volume of serious CVD events and are useful for monitoring burden, workload and patterns over time. Counts may be shown for all CVD events or separately for heart attack and stroke.
+
+## How do we calculate it?
+
+Each eligible event contributes one to the total:
+
+$$
+\text{CVD event count} = \sum_{i=1}^{n} I_i
+$$
+
+In words, BNR adds one for every record that meets the event, residence, source and reporting-period rules.
+
+## What is included and excluded?
+
+The routine hospital-registered count includes eligible events among Barbados residents. Non-residents, duplicate records and events outside the reporting period are excluded. Death-certificate-only events are excluded unless an output explicitly states that they are included.
+
+A person can experience more than one eligible event. For that reason, this is an event count rather than a count of unique people.
+
+## Worked example
+
+Suppose 120 eligible stroke events and 80 eligible heart attack events were registered during a year:
+
+$$
+120 + 80 = 200\text{ CVD events}
+$$
+
+These fictional numbers describe 200 events. They do not necessarily describe 200 different people.
+
+## How should it be interpreted?
+
+A change in counts can reflect a real change in disease burden, but also population size, health-care use, diagnostic practice, timeliness or completeness. Counts should not be interpreted as population incidence unless a suitable population denominator is used.
+
+## Things to bear in mind
+
+- The Queen Elizabeth Hospital is Barbados's only tertiary hospital, so hospital events provide an important view of serious CVD burden.
+- Hospital ascertainment is not automatically the same as complete national ascertainment.
+- Very small counts may be suppressed to protect confidentiality.
+
+## Related statistics and outputs
+
+- [CVD incidence and event rates](incidence.qmd)
+- [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
+- [CVD surveillance outputs](../../surveillance/cvd/index.qmd)
+

@@ -1,0 +1,20 @@
+# Shared metadata for all Public Methods Manual pages
+lang: en-GB
+author: "Barbados National Registry"
+date: 2026-08-12
+title-block-style: plain
+published-title: "Updated"
+date-format: "D MMMM YYYY"
+toc: true
+toc-title: "On this page"
+toc-depth: 2
+number-sections: false
+page-navigation: true
+search: true
+
+format:
+  html:
+    # Reuse the compact manual metadata treatment while retaining a
+    # Methods-specific class for any later refinements.
+    body-classes: "bnr-technical-manual bnr-methods-manual"
+

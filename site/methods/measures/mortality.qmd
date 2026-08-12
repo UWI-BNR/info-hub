@@ -1,0 +1,42 @@
+---
+title: "Mortality"
+description: "How mortality measures will be presented in the BNR Info-Hub."
+---
+
+Mortality statistics describe deaths in a population during a stated period. This page establishes the public explanation that will be completed when the BNR mortality specifications and outputs are approved.
+
+::: {.callout-note title="Publication status"}
+BNR mortality products are in development. No provisional formula or source rule on this holding page should be treated as an approved BNR measure.
+:::
+
+## What mortality measures can tell us
+
+Common measures include:
+
+- the number of deaths;
+- the crude death rate relative to the resident population;
+- age-specific death rates;
+- age-adjusted death rates for comparison; and
+- the distribution of deaths by cause.
+
+## Decisions to record before publication
+
+The completed specification will state:
+
+| Element | To be confirmed |
+|---|---|
+| Population | Residence rules and period covered |
+| Death definition | Registered deaths and any registration-delay rules |
+| Cause | Underlying or contributing cause and the coding system used |
+| Denominator | Population source and release |
+| Adjustment | Age groups, standard population and interval method |
+| Revisions | Treatment of late registrations and cause corrections |
+
+## Mortality is not case fatality
+
+Mortality uses the population as its denominator. [Case fatality](case-fatality.qmd) uses eligible CVD events as its denominator. The two measures therefore answer different questions.
+
+## What to remember
+
+The final page will be completed before BNR mortality figures are described as routine public measures.
+
