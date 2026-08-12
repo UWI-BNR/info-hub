@@ -77,7 +77,7 @@ where \(I_i = 1\) when record \(i\) is an eligible CVD event, and \(I_i = 0\) ot
 | Population and exclusions | Barbados residents with confirmed hospital-registered CVD events; exclude non-residents, duplicates and records outside the reporting period. DCO-only records are excluded unless source status explicitly includes them. |
 | Stratifications | Required: period, event type. Optional: sex, age group, source status. |
 | Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `metric_cvd_burden.do` |
+| Responsible code | `bnr_step4_cvd_burden.do` |
 | Notes | Stroke and AMI are stratifications of this metric, not separate metrics. |
 
 ### CVD-BURDEN-002: CVD event distribution
@@ -107,7 +107,7 @@ where \(x_c\) is the number of events in the selected category, and \(N_p\) is t
 | Population and exclusions | Same event set as CVD-BURDEN-001. |
 | Stratifications | Required: period and selected distribution dimension. Optional: event type, sex, age group, source status. |
 | Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `metric_cvd_burden.do` |
+| Responsible code | `bnr_step4_cvd_burden.do` |
 | Notes | Used for age, sex and event-type composition summaries. |
 
 ## CVD rate metrics

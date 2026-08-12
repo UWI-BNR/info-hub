@@ -20,8 +20,8 @@ The PDF route uses Quarto and Typst. Stata creates the figures and output data. 
 For each static briefing, use two QMD files when needed:
 
 ```text
-case-counts.qmd       -> HTML briefing
-case-counts-pdf.qmd   -> PDF briefing
+case-incidence.qmd           -> HTML briefing
+pdf/case-incidence-pdf.qmd   -> PDF briefing
 ```
 
 This keeps web layout and print layout separate.
@@ -52,7 +52,7 @@ From the `site/` folder:
 
 ```powershell
 cd C:\yoshimi-hot\output\analyse-bnr\info-hub\site
-quarto render surveillance/cvd/briefings/case-counts-pdf.qmd --to typst
+quarto render surveillance/cvd/briefings/pdf/case-incidence-pdf.qmd --to typst
 ```
 
 ## Where the PDF appears
@@ -62,7 +62,7 @@ When rendering inside a Quarto website project, the generated PDF appears under 
 Example:
 
 ```text
-site/_site/surveillance/cvd/briefings/bnr_cvd_cases_2023_v1.pdf
+site/_site/surveillance/cvd/briefings/pdf/bnr_cvd_incidence_2023_v1.pdf
 ```
 
 This is expected.
@@ -76,13 +76,13 @@ The HTML briefing can link to the generated PDF using a relative link.
 Example from:
 
 ```text
-site/surveillance/cvd/briefings/case-counts.qmd
+site/surveillance/cvd/briefings/case-incidence.qmd
 ```
 
 use:
 
 ```markdown
-[Download the PDF briefing](bnr_cvd_cases_2023_v1.pdf)
+[Download the PDF briefing](pdf/bnr_cvd_incidence_2023_v1.pdf)
 ```
 
 After a full site render, this link should resolve inside `_site/`.

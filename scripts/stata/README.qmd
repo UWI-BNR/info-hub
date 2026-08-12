@@ -61,7 +61,6 @@ These files are not part of routine operations and must not be added to the Stat
 
 | Area | File | Responsibility | Dependencies / status |
 |:--|:--|:--|:--|
-| Superseded metric publisher | [`common/bnr_publish_metric.do`](common/bnr_publish_metric.do) | Earlier combined metric packaging and publication route. | No current executable caller; replaced by Dashboard Steps 4-6 |
 | Historical briefing publisher | [`common/bnr_publish_briefing.do`](common/bnr_publish_briefing.do) | Earlier combined briefing packaging, publication and mirroring route retained only for the historical forensics product. | `ado/bnr_yml.ado`; `ado/bnr_workbook.ado`; `common/mirror_public_to_site.do` |
 | Historical mirror helper | [`common/mirror_public_to_site.do`](common/mirror_public_to_site.do) | Copies a historical public briefing package into the former website mirror. | `config/bnr_paths_LOCAL.do`; called by the historical publisher |
 | Refit diagnostic | [`refit/bnrcvd-2023-forensics1.do`](refit/bnrcvd-2023-forensics1.do) | One-time comparison of candidate historical stroke datasets; contains historical workstation paths. | None |

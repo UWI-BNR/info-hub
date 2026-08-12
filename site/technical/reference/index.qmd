@@ -315,13 +315,7 @@ Do not add these files to the routine Stata menu.
 ::: {.callout-warning collapse="true"}
 ## Superseded and historical Stata code
 
-The live tree still contains some superseded or historically linked code. It should not be used for routine current releases.
-
-### Superseded code awaiting controlled retirement
-
-| File | Current replacement / reason retained |
-|---|---|
-| `common/bnr_publish_metric.do` | Earlier combined metric publisher. |
+The live tree still contains historically linked code. It should not be used for routine current releases.
 
 ### Coupled historical material
 

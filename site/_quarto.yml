@@ -114,8 +114,6 @@ website:
  
         - section: "Briefings"
           contents:
-            - text: "CVD cases, 2023"
-              href: surveillance/cvd/briefings/case-counts.qmd
             - text: "CVD incidence, 2023"
               href: surveillance/cvd/briefings/case-incidence.qmd
             - text: "CVD case fatality, 2023"
