@@ -15,7 +15,7 @@ format:
       right: 0.65in
     mainfont: "Noto Sans"
     font-paths:
-      - "../../../../assets/font/noto-sans"
+      - "../../../../assets/fonts/noto-sans"
     fontsize: 10pt
     linkcolor: "#e87a00"
     fig-cap-location: bottom

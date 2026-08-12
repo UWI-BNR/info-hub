@@ -1,13 +1,13 @@
 /*******************************************************************************
-DO-FILE:     bnr_stage_metric.do
-VERSION:     1.4.0 (30 July 2026)
+DO-FILE:     bnr_step4_stage_metric.do
+VERSION:     1.4.1 (12 August 2026)
 PROJECT:     BNR Refit Phase 2
 PURPOSE:     Create a standard staging-only metric review package
 
 DESIGN:      This helper owns packaging mechanics only. It does not calculate,
              approve, promote, publish or mirror metrics to the website.
 
-USAGE:       Called by bnr_cvd_metric_controller.do.
+USAGE:       Called by bnr_step4_metrics.do.
 
 ARGUMENTS:   calculation_dta qa_dta domain family release_id source_dta
              source_yml package_dir replace_mode metric_ids
@@ -24,7 +24,7 @@ if `"`calculation_dta'"' == "" | `"`qa_dta'"' == "" | ///
         `"`release_id'"' == "" | `"`source_dataset'"' == "" | ///
         `"`source_metadata'"' == "" | `"`package_dir'"' == "" | ///
         `"`replace_mode'"' == "" | `"`metric_ids'"' == "" {
-    display as error "bnr_stage_metric.do received an incomplete staging contract."
+    display as error "bnr_step4_stage_metric.do received an incomplete staging contract."
     exit 198
 }
 
@@ -291,8 +291,8 @@ file write `package_meta' "  suppression_csv: review/`domain'_`metric_family'_su
 file write `package_meta' "  suppression_workbook: review/`domain'_`metric_family'_suppression_review_`release_id'.xlsx" _n
 file write `package_meta' "build:" _n
 file write `package_meta' "  stata_version: `c(version)'" _n
-file write `package_meta' "  controller: bnr_cvd_metric_controller.do" _n
-file write `package_meta' "  calculator: metric_cvd_`metric_family'.do" _n
+file write `package_meta' "  controller: bnr_step4_metrics.do" _n
+file write `package_meta' "  calculator: bnr_step4_cvd_`metric_family'.do" _n
 file close `package_meta'
 
 use `"`qa_dta'"', clear

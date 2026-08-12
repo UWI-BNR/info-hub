@@ -11,7 +11,7 @@ Instructions:
   4. Do not commit bnr_paths_LOCAL.do.
 
 Use:
-  Each BNR Stata briefing DO file should begin with:
+  Each BNR Stata workflow DO file should begin with:
 
        do "scripts/stata/config/bnr_paths_LOCAL.do"
 *******************************************************************************/
@@ -44,14 +44,6 @@ global BNR_STAGING       "$BNR_PRIVATE/outputs/staging"
 global BNR_PRIVATE_WORK  "$BNR_PRIVATE/work"
 global BNR_PRIVATE_LOGS  "$BNR_PRIVATE/logs/private"
 
-* ---- Static briefing outputs -------------------------------------------------
-
-global BNR_BRIEF_CVD_CASES_2023 "$BNR_PUBLIC/briefings/cvd_cases_2023_v1"
-
-global BNR_BRIEF_TABLES "$BNR_BRIEF_CVD_CASES_2023/tables"
-global BNR_BRIEF_FIGS   "$BNR_BRIEF_CVD_CASES_2023/figures"
-global BNR_BRIEF_DATA   "$BNR_BRIEF_CVD_CASES_2023/data"
-
 * ---- Stata setup -------------------------------------------------------------
 
 cd "$BNR_REPO"
@@ -63,4 +55,4 @@ display as text "BNR paths loaded:"
 display as result "  Repo:      $BNR_REPO"
 display as result "  Private:   $BNR_PRIVATE"
 display as result "  Staging:   $BNR_STAGING"
-display as result "  Briefing:  $BNR_BRIEF_CVD_CASES_2023"
+display as result "  Public:    $BNR_PUBLIC"

@@ -29,19 +29,6 @@ global stata_v "`c(version)'"
 global project "BNR info-hub"
 
 *-------------------------------
-* Compatibility aliases for first migrated 2023 scripts
-*-------------------------------
-* These keep the first ported scripts readable while moving away from
-* the old resource-analytics folder structure.
-
-global data      "$BNR_DATA_FROZEN"
-global tempdata  "$BNR_PRIVATE_WORK"
-global logs      "$BNR_PRIVATE_LOGS"
-global graphs    "$BNR_BRIEF_FIGS"
-global outputs   "$BNR_BRIEF_CVD_CASES_2023"
-global tables    "$BNR_BRIEF_TABLES"
-
-*-------------------------------
 * BNR report colour palette
 *-------------------------------
 * RGB triplets avoid a dependency on user-written colour utilities.

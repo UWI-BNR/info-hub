@@ -1,70 +1,96 @@
 # BNR info-hub
 
-The **BNR info-hub** is the implementation repository for BNR Refit Phase 2. It brings together the Stata compute workflow, controlled analytical outputs, Quarto publication site, and the documentation needed for operation and handover.
+The **BNR info-hub** is the implementation repository for BNR Refit Phase 2. It combines the Stata analytical workflows, approved public output packages, Quarto website, and the documentation needed to operate and hand over the system.
 
-The aim is a reproducible surveillance system that a small, Stata-skilled team can run, review, approve, and maintain.
+The design is deliberately simple: a small Stata-skilled team should be able to prepare, review, approve, publish and maintain BNR surveillance outputs without a live public database or server-side application.
 
 ## Operating model
 
 ```text
 Private source data
-    -> Stata analysis
-    -> outputs/staging/       review only
-    -> approval               Registry Lead or Registry Statistician
-    -> outputs/public/        authoritative approved package
-    -> site/downloads/files/  disposable website mirror
-    -> Quarto
-    -> GitHub Pages
+    -> Stata preparation and analysis
+    -> private staging and human review
+    -> recorded approval of an exact package
+    -> outputs/public/        authoritative public analytical copy
+    -> site/downloads/        disposable website mirror
+    -> Quarto render
+    -> Git and GitHub Pages deployment
 ```
 
 The core rules are:
 
-- **Stata computes:** cleaning, derivation, metrics, tables, and figures remain in readable Stata code.
-- **Quarto publishes:** the site presents approved outputs and does not replace the analytical workflow.
+- **Stata computes:** cleaning, derivation, metrics, tables and figures remain in readable Stata code.
+- **People review and approve:** a successful calculation never implies approval.
+- **Controlled Stata steps publish:** only the exact approved files are promoted.
+- **Quarto presents:** the website consumes approved public products and does not recalculate them.
 - **GitHub deploys:** the public site is static and contains no confidential data.
-- Compute, approval, publication, and deployment remain separate.
 - Generated outputs are corrected by changing the source data or code and rerunning, never by manual editing.
-- Confidential data remain outside this repository.
+- Confidential data, tokens, logs and private review material remain outside this repository.
+
+## Current analytical products
+
+| Product | Implemented route | Current scope |
+|---|---|---|
+| Dashboard metrics | CVD Steps 1-6 | CVD burden, including registered event counts and distributions |
+| Tabulations | Table Steps 1, 2A, 2B and 3 | Seven disclosure-controlled CVD table families plus workbook and ZIP |
+| Briefings | Briefing Steps 1-3 | CVD incidence, case fatality and hospital length of stay |
+| Mortality | Structure reserved | Workflow and public products still in development |
+| Hypertension and diabetes | First-class site and Methods sections | Analytical workflows and approved measure definitions still in development |
+
+CVD event counts are a dashboard and tabulation product. They are not duplicated as a case-count briefing.
 
 ## Repository structure
 
-| Path                  | Purpose                                                      |
-| --------------------- | ------------------------------------------------------------ |
-| `scripts/stata/`      | Stata preparation, analysis, metric, briefing, and publication code |
-| `scripts/python/`     | Lightweight support utilities only                           |
-| `scripts/powershell/` | Local Windows helper scripts                                 |
-| `outputs/staging/`    | Review packages awaiting approval                            |
-| `outputs/public/`     | Authoritative approved public packages                       |
-| `site/`               | Quarto source, operational guidance, technical guidance, and website mirror |
-| `docs/`               | Project, setup, development, and handover material not published on the site |
-| `assets/`             | Shared source assets                                         |
-| `setup-checks/`       | Lightweight local setup checks                               |
-| `.github/`            | GitHub configuration and deployment workflows                |
+| Path | Purpose |
+|---|---|
+| `scripts/stata/` | Operational Stata workflows, analyst-owned analyses, shared helpers, dialogs and help |
+| `scripts/python/` | Lightweight site and validation utilities |
+| `scripts/powershell/` | Reserved for local Windows helpers |
+| `outputs/public/` | Authoritative approved public analytical packages |
+| `outputs/synthetic/` | Synthetic test fixtures and workflow checks |
+| `site/` | Quarto source, the website mirror of public files, and all three manuals |
+| `docs/` | Concise project guiderails and handover material not published on the site |
+| `.github/` | GitHub configuration and website deployment workflow |
 
-The website copy under `site/downloads/files/` is a disposable mirror of `outputs/public/`; it may be rebuilt and is not the authoritative release.
+Private raw data, derived event-level data, staging packages, logs and REDCap credentials live in the separately controlled private environment configured by `bnr_paths_LOCAL.do`.
 
-## Stata workflow
+The website copies under `site/downloads/` can be rebuilt from `outputs/public/`; they are not the authoritative analytical archive.
 
-The active Stata DO files and their responsibilities are documented in [`scripts/stata/README.qmd`](scripts/stata/README.qmd).
+## Stata entry points
+
+Routine operators use **Stata > User > BNR**:
+
+- **Update dashboard:** Steps 1-6;
+- **Produce briefing:** Steps 1-3; and
+- **Produce tables:** Steps 1, 2A, 2B and 3.
+
+The active DO and ADO files, their responsibilities and dependencies are documented in [`scripts/stata/README.qmd`](scripts/stata/README.qmd).
 
 Machine-specific paths are kept outside version control. To configure a workstation:
 
 1. Copy `scripts/stata/config/bnr_paths_TEMPLATE.do`.
 2. Rename the copy to `bnr_paths_LOCAL.do`.
-3. Edit the two root paths for the local machine.
-4. Do not commit the local file.
-
-Shared release mechanics belong in common helper DO files. Analytical choices remain visible in the analyst-owned metric, briefing, or supporting-output DO file.
+3. Set the public repository, private companion repository and secure token-file paths.
+4. Do not commit the local file or any token.
 
 ## Documentation
 
-Task-specific instructions belong in:
+The three manuals answer different questions:
 
-- `site/operations/` for routine operational procedures;
-- `site/technical/` for setup, code, publication, and troubleshooting guidance.
+| Manual | Purpose | Location |
+|---|---|---|
+| Operations Manual | Who performs each task, what decision is required and when to stop | `site/operations/` |
+| Technical Manual | How to configure, run, review, publish and troubleshoot the system | `site/technical/` |
+| Public Methods Manual | What BNR measures mean, how they are calculated and how to interpret them | `site/methods/` |
 
-During development, Git history is the implementation record. Documentation should remain concise and should be expanded only where it supports safe operation or handover.
+Project-wide principles are in `docs/bnr-refit-project-guiderails.md`. The concise operating and handover summary is in `docs/bnr-refit-operations-handover.md`.
 
-## Current status
+## Release and correction rule
 
-The repository is under active development. The intended separate Stata approval-and-promotion command is not yet complete; until it is implemented, existing publication helpers should be run only after the combined analytical, disclosure, interpretation, and publication-readiness review has been completed.
+Approval and publication are separate actions. The recognised approval roles are **BNR Lead**, **BNR Analyst** and **BNR Developer**, subject to BNR deciding who is authorised to approve dissemination.
+
+If a released result is wrong, correct the authoritative REDCap record, reference data, configuration or analytical code; rerun from the earliest affected step; repeat review and approval; publish the corrected package; then render and deploy the site. Never repair a generated CSV, workbook, figure, manifest or approval receipt by hand.
+
+## Current development boundary
+
+The CVD dashboard, tabulation and three routine briefing pathways are implemented. Remaining development includes the mortality workflow, hypertension and diabetes analytical modules, and final operational testing and handover. The repository history records implementation detail; these summary documents should change only when the operating model, methods, controls or responsibilities materially change.

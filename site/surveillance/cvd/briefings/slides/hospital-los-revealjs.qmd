@@ -15,7 +15,7 @@ format:
     logo: ../../../../assets/images/uwi-crestonly-20p.png
     footer: "Barbados National Registry | The University of the West Indies"
     css:
-      - ../../../../assets/css/reveal-fonts.css
+      - ../../../../assets/css/reveal-font.css
     include-in-header:
       text: |
         <style>

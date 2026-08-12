@@ -1,8 +1,8 @@
-﻿---
+---
 title: "System reference"
 description: "Primary technical reference for BNR Info-Hub files, folders, workflows, release controls, naming conventions, Stata globals and Git terminology."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-12
 toc-title: "Reference sections"
 toc-depth: 2
 ---
@@ -289,7 +289,7 @@ See [Briefings](../workflows/briefings/overview.qmd) for operator instructions.
 |---|---|---|
 | `ado/bnr_workbook.ado` | Creates a standard Excel workbook from a Stata dataset, including data and metadata sheets. | Rare |
 | `ado/bnr_yml.ado` | Creates standard dataset-metadata YAML from Stata labels, notes, formats and categories. | Rare |
-| `common/bnrcvd_globals.do` | Defines shared CVD run/display constants and compatibility aliases. | Developer-controlled |
+| `common/bnrcvd_globals.do` | Defines shared CVD run metadata and display constants. | Developer-controlled |
 | `config/bnr_paths_TEMPLATE.do` | Version-controlled template for workstation paths. | Update only when the standard path contract changes |
 | `config/bnr_paths_LOCAL.do` | Machine-specific roots and local credentials locations. Created from the template. | Per workstation; **never commit** |
 | `menu/bnr_menu.do` | Builds **User > BNR** in Stata and links menu items to dialogs. | Developer-controlled |
@@ -307,8 +307,6 @@ These files support migration, equivalence checking or controlled testing. They 
 | `briefings/ad-hoc/cvd_ad_hoc_workflow_test_2026_v1.do` | Tests the ad-hoc briefing branch of the current staging contract. |
 | `briefings/cvd_incidence/cvd_incidence_equivalence_check.do` | One-time incidence migration equivalence check. |
 | `briefings/cvd_case_fatality/cvd_case_fatality_equivalence_check.do` | One-time case-fatality migration equivalence check. |
-| `briefings/cvd_cases_2023/cvd_cases_2023_v2.do` | Frozen case-count migration pilot; case counts are no longer a routine briefing product. |
-| `briefings/cvd_cases_2023/cvd_cases_2023_v2_equivalence_check.do` | Equivalence evidence for the case-count migration pilot. |
 | `tables/bnr_step1_cvd_tables_regression.do` | Regression comparison used to validate the new Table Step 1 calculations against accepted historical outputs. |
 
 Do not add these files to the routine Stata menu.
@@ -323,24 +321,12 @@ The live tree still contains some superseded or historically linked code. It sho
 
 | File | Current replacement / reason retained |
 |---|---|
-| `common/bnr_apply_suppression.do` | Earlier metrics suppression helper; replaced by the current Step 5 pathway. |
-| `common/bnr_approve_publish_briefing.do` | Earlier combined briefing approval/publication controller. |
 | `common/bnr_publish_metric.do` | Earlier combined metric publisher. |
-| `common/bnr_stage_metric.do` | Earlier metric staging helper. |
-| `briefings/cvd_case_fatality/cvd_case_fatality_pre1.do` | Pre-migration comparison version. |
-| `monthly/bnr_cvd_redcap_extract_pre.do` | Replaced by `bnr_step1_cvd_redcap_extract.do`. |
-| `monthly/bnr_cvd_prepare_confidential.do` | Replaced by `bnr_step2_cvd_confidential.do`. |
-| `monthly/bnr_cvd_create_metric_inputs.do` | Replaced by `bnr_step3_metric_inputs.do`. |
-| `monthly/bnr_cvd_metric_controller.do` | Replaced by `bnr_step4_metrics.do`. |
-| `monthly/bnr_cvd_review_controller.do` | Replaced by `bnr_step5_review.do`. |
 
 ### Coupled historical material
 
 These files form historical units and should be retained/archived together rather than deleted individually:
 
-- `annual/build_cvd_annual_tabulations.do`
-- `briefings/cvd_cases_2023/cvd_cases_2023.do`
-- `common/bnrcvd_prep_2023_v1.do`
 - `common/bnr_publish_briefing.do`
 - `common/mirror_public_to_site.do`
 - `refit/bnrcvd-2023-forensics1.do`
@@ -602,19 +588,6 @@ Do not put the token itself in:
 
 The token file should contain only the token on one line and remain in approved secure storage.
 :::
-
-### Older static-briefing globals
-
-The path template also contains historical static-briefing globals such as:
-
-```text
-$BNR_BRIEF_CVD_CASES_2023
-$BNR_BRIEF_TABLES
-$BNR_BRIEF_FIGS
-$BNR_BRIEF_DATA
-```
-
-These support older retained products and should not be treated as the pattern for new routine workflows.
 
 ## Roles {#roles}
 

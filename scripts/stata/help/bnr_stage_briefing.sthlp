@@ -37,5 +37,6 @@ This prevents an earlier approval carrying forward after results have changed.
 {p 4 4 2}
 The helper never writes to {cmd:outputs/public/} or
 {cmd:site/downloads/files/}. After review, use
-{help bnr_approve_publish_briefing:bnr_approve_publish_briefing.do}.
+{help bnr_step2_approve_briefing:Briefing Step 2} to record approval. Then use
+{help bnr_step3_publish_briefing:Briefing Step 3} to publish the approved files.
 
