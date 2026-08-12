@@ -1,6 +1,0 @@
-## Why this matters
-
-Counts are the simplest and most transparent way to show what is happening among hospital-registered cardiovascular cases.
-
-Each number represents a stroke or heart attack recorded by the Barbados National Registry. Together, the counts help describe pressure on the health system and provide the foundation for later surveillance of trends, rates and inequalities.
-

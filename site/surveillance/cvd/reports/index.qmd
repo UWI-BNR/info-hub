@@ -1,8 +1,0 @@
-﻿---
-title: "CVD Reports"
-format: html
----
-
-# CVD Reports
-
-This section will contain longer CVD reports.

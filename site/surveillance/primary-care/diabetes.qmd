@@ -1,8 +1,0 @@
-﻿---
-title: "Diabetes"
-format: html
----
-
-# Diabetes
-
-This page will later describe diabetes surveillance outputs.

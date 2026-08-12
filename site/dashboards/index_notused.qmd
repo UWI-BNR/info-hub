@@ -1,8 +1,0 @@
-﻿---
-title: "Dashboards"
-format: html
----
-
-# Dashboards
-
-This section will contain static or pre-rendered dashboard products.

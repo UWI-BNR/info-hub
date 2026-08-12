@@ -1,8 +1,0 @@
-﻿---
-title: "CVD Data Tables"
-format: html
----
-
-# CVD Data Tables
-
-This section will describe and link to approved CVD data tables.

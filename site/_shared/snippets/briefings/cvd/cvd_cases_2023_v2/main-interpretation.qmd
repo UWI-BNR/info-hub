@@ -1,5 +1,0 @@
-The two 24-month lines show the accumulated difference between observed monthly stroke or heart attack cases and the recent five-year pattern for the same event type. This makes broad departures easier to see while avoiding overinterpretation of individual weeks.
-
-An upward slope means more cases than expected for that event type during that month; a downward slope means fewer. There is no reset at January 2023, so each final value represents the accumulated departure over the full two years.
-
-Month-to-month variation should be treated as a surveillance signal rather than evidence of a change in population incidence. Counts describe hospital-registered events and may also reflect changes in case ascertainment, care-seeking and access to hospital services.

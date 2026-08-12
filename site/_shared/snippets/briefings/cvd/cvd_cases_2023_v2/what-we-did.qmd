@@ -1,8 +1,0 @@
-## What we did
-
-We reviewed hospital-registered strokes and heart attacks occurring in 2023.
-
-For the time-series comparison, stroke and heart attack cases were combined into national monthly totals. Monthly counts for 2022 and 2023 were compared with the average for the same calendar month during 2018–2022. We also examined 2023 cases by event type, sex and whether the event occurred before age 70.
-
-Weekly values are not released.
-
