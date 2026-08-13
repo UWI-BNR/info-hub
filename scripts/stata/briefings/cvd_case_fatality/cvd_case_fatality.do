@@ -777,31 +777,14 @@ restore
 ** The former temporary save for legacy tabulations has been retired. The
 ** released briefing dataset is saved to the staging package below.
 
-** Recoding x-axis for visual clarity (graph separation)
-* x-axis shift
+** Create a separate x-axis position for visual clarity.
+* Keep year2 unchanged: it is the analytical period used in the public
+* dataset, metadata, and disclosure-review worklist.
 * The shift keeps the stroke and AMI series in their established side-by-side
-* layout. With seven periods (the 2023 briefing), shift remains exactly 6.
+* graph layout. With seven periods (the 2023 briefing), shift remains exactly 6.
 local shift = `number_periods' - 1
-replace year2 = year2 + `shift' if etype==2 
-
-* Add labels for the shifted AMI plotting positions. The first AMI position
-* deliberately meets the last stroke position, as in the established graph;
-* later AMI positions receive their corresponding period label.
-forvalues period_number = 2/`number_periods' {
-    local period_start = `analysis_start_year' + (2 * (`period_number' - 1))
-    local period_end = min(`period_start' + 1, `target_year')
-
-    if `period_start' == `period_end' {
-        local period_label "`period_start'"
-    }
-    else {
-        local period_label "`period_start'-`period_end'"
-    }
-
-    local shifted_position = `period_number' + `shift'
-    label define year2_ `shifted_position' "`period_label'", add
-}
-label values year2 year2_ 
+gen int x_position = year2
+replace x_position = x_position + `shift' if etype == 2
 
 * Line width / dot size
 local dot_out = 7
@@ -817,7 +800,7 @@ local start2 = 1 + `shift'
 local prob2 = 4 + `shift'
 local dots2 = (`number_periods' - 2) + `shift'
 
-local year "year2"
+local year "x_position"
 
 ** Legend location - square (y, x)
 local legend_circle1 17.5 1.5
@@ -934,6 +917,9 @@ if `number_periods' >= 8 {
         #delimit cr	
         graph export "`stagingfigures'/`output1'.png", replace width(3000)
 
+    * x_position was created only to lay out the graph.
+    * Remove it before exporting the analytical case-fatality dataset.
+    drop x_position
 
     ** DTA DATASET EXPORT
     notes drop _all

@@ -1,0 +1,256 @@
+diff --git a/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/results1.qmd b/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/results1.qmd
+index 8118e62..e7cc3b3 100644
+--- a/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/results1.qmd
++++ b/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/results1.qmd
+@@ -1 +1 @@
+-Between 2010 and 2023, in-hospital case fatality after stroke changed little, while case fatality after heart attack fluctuated but showed some evidence of an upward trend. Before age adjustment, women had higher case fatality than men for both conditions. In 2023, 27% of men and 34% of women admitted with cardiovascular disease died before discharge. After adjusting for age, the estimated female rate fell to 30%, suggesting that age explains part — but not all — of this gap. Women admitted with heart attack or stroke were, on average, seven years older than men, and women who died in hospital were similarly older. Seven in ten women, compared with just over half of men, were aged 70 years or older at the time of their event. Even after accounting for this older age profile, women remained more likely to die in hospital than men.
+\ No newline at end of file
++The solid lines show confirmed in-hospital case fatality and are the primary results for this briefing. In 2022–2023, confirmed case fatality after stroke was 21% in women and 22% in men; after heart attack it was 27% in women and 19% in men. From 2020 onwards, some discharge outcomes require further verification. The dotted lines and shaded regions show how the estimates would change if probable in-hospital deaths were included. They are a sensitivity range, not the headline values. The widening uncertainty in recent periods should be interpreted as a data-completeness issue alongside any possible change in clinical outcomes.
+diff --git a/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-this-means.qmd b/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-this-means.qmd
+index b409ea0..8411f89 100644
+--- a/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-this-means.qmd
++++ b/site/_shared/snippets/briefings/cvd/cvd_case_fatality_2023_v1/what-this-means.qmd
+@@ -1 +1 @@
+-Case-fatality rates show how outcomes differ after patients reach hospital care. The persistence of higher rates among women — only partly explained by their older age profile — highlights the need to understand whether differences in presentation, treatment, severity, comorbidity, or recovery may affect survival.
+\ No newline at end of file
++Case-fatality rates show how outcomes differ after patients reach hospital care. This briefing uses confirmed in-hospital deaths as its primary, conservative estimates. The uncertainty range shown for recent periods reflects possible additional in-hospital deaths whose discharge status needs verification; it should not be treated as a confirmed change in outcomes.
+diff --git a/site/surveillance/cvd/briefings/case-fatality.qmd b/site/surveillance/cvd/briefings/case-fatality.qmd
+index 5d9d5f5..335b88a 100644
+--- a/site/surveillance/cvd/briefings/case-fatality.qmd
++++ b/site/surveillance/cvd/briefings/case-fatality.qmd
+@@ -1,5 +1,5 @@
+ ---
+-title: "CVD case fatality in Barbados, 2012-2023"
++title: "CVD case fatality in Barbados, 2010-2023"
+ subtitle: "BNR briefing, 2023"
+ author: Ian Hambleton
+ description: "Deaths before discharge after stroke and heart attack"
+@@ -108,7 +108,7 @@ How do case-fatality patterns differ between women and men, and between strokes
+ 
+ ## Headline findings
+ 
+-Age-adjusted modelled case-fatality probability, 2022–2023.
++Confirmed in-hospital case fatality, 2022–2023.
+ 
+ ::: {.grid .mb-4}
+ 
+@@ -118,7 +118,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
+-<p class="display-6 fw-semibold mb-1">29%</p>
++<p class="display-6 fw-semibold mb-1">21%</p>
+ <p class="mb-0 small">case fatality</p>
+ 
+ :::
+@@ -131,7 +131,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
+-<p class="display-6 fw-semibold mb-1">30%</p>
++<p class="display-6 fw-semibold mb-1">22%</p>
+ <p class="mb-0 small">case fatality</p>
+ 
+ :::
+@@ -144,7 +144,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+-<p class="display-6 fw-semibold mb-1">16%</p>
++<p class="display-6 fw-semibold mb-1">27%</p>
+ <p class="mb-0 small">case fatality</p>
+ 
+ :::
+@@ -157,7 +157,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
+ <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
+-<p class="display-6 fw-semibold mb-1">14%</p>
++<p class="display-6 fw-semibold mb-1">19%</p>
+ <p class="mb-0 small">case fatality</p>
+ 
+ :::
+@@ -172,19 +172,19 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ ```{=html}
+ <p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
+-  Higher Case fatality among women for  
+-  <span style="color: rgb(164, 22, 26);">Heart attacks</span>
+-  and  
+-  <span style="color: rgb(139, 111, 180);">Strokes</span>
++  Confirmed case-fatality patterns differ by
++  <span style="color: rgb(164, 22, 26);">event type</span>
++  and
++  <span style="color: rgb(139, 111, 180);">sex</span>
+ </p>
+ ```
+ 
+ ::: {.card .border-0 .shadow-sm .mb-4}
+ ::: {.card-body}
+ 
+-![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing annual incidence rates from 2010 to 2023." width="100%"}
++![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing confirmed case-fatality percentages and an uncertainty region for probable deaths from 2010 to 2023." width="100%"}
+ 
+-[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){.small target="_blank" rel="noopener"}
++[Open full-size case-fatality figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){.small target="_blank" rel="noopener"}
+ 
+ :::
+ :::
+@@ -196,7 +196,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
+ 
+ ![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
+ 
+-[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){.small target="_blank" rel="noopener"}
++[Open full-size age-profile figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){.small target="_blank" rel="noopener"}
+ 
+ :::
+ :::
+@@ -224,4 +224,4 @@ The briefing outputs are available in three formats.
+ 
+ ## Suggested Citation
+ 
+-> Barbados National Registry. *Hospital Cardiovascular Incidence in Barbados: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-case-fatality.html. Accessed: [insert date accessed].
++> Barbados National Registry. *CVD Case Fatality in Barbados: BNR CVD case-fatality briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-fatality.html. Accessed: [insert date accessed].
+diff --git a/site/surveillance/cvd/briefings/pdf/case-fatality-pdf.qmd b/site/surveillance/cvd/briefings/pdf/case-fatality-pdf.qmd
+index 7668159..889dc24 100644
+--- a/site/surveillance/cvd/briefings/pdf/case-fatality-pdf.qmd
++++ b/site/surveillance/cvd/briefings/pdf/case-fatality-pdf.qmd
+@@ -96,19 +96,19 @@ format:
+ 
+ ## Key messages
+ 
+-- In 2022-2023, age-adjusted stroke case fatality was about 29% in women and 30% in men.
+-- In 2022-2023, age-adjusted heart attack case fatality was about 16% in women and 14% in men.
+-- Before age adjustment, women had higher case fatality than men for both conditions.
+-- Age explained part - but not all - of the higher case fatality observed among women.
++- In 2022-2023, confirmed in-hospital stroke case fatality was about 21% in women and 22% in men.
++- In 2022-2023, confirmed in-hospital heart-attack case fatality was about 27% in women and 19% in men.
++- The confirmed-death estimates are the primary reported results.
++- From 2020 onwards, the figure also shows the higher sensitivity estimate if probable in-hospital deaths are included.
+ 
+ ```{=typst}
+ #v(6pt)
+ #block(width: 100%)[
+   #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
+-    Higher case fatality in women after
+-    #text(fill: rgb("#A4161A"))[heart attack]
++    Confirmed case-fatality patterns by
++    #text(fill: rgb("#A4161A"))[event type]
+     and
+-    #text(fill: rgb("#8B6FB4"))[stroke]
++    #text(fill: rgb("#8B6FB4"))[sex]
+   ]
+ ]
+ #v(3pt)
+@@ -126,7 +126,7 @@ format:
+ #v(6pt)
+ #block(width: 100%)[
+   #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
+-    Older age partly explains the female excess in case fatality
++    Age profile and confirmed in-hospital case fatality
+   ]
+ ]
+ #v(3pt)
+diff --git a/site/surveillance/cvd/briefings/slides/case-fatality-revealjs.qmd b/site/surveillance/cvd/briefings/slides/case-fatality-revealjs.qmd
+index dc7b207..3b6baf7 100644
+--- a/site/surveillance/cvd/briefings/slides/case-fatality-revealjs.qmd
++++ b/site/surveillance/cvd/briefings/slides/case-fatality-revealjs.qmd
+@@ -223,31 +223,31 @@ format:
+ ::: {.number-grid}
+ ::: {.number-card}
+ <div class="label">Women | Stroke</div>
+-<div class="large-number">29%</div>
+-<div class="label">age-adjusted case fatality, 2022-2023</div>
++<div class="large-number">21%</div>
++<div class="label">confirmed case fatality, 2022-2023</div>
+ :::
+ 
+ ::: {.number-card}
+ <div class="label">Men | Stroke</div>
+-<div class="large-number">30%</div>
+-<div class="label">age-adjusted case fatality, 2022-2023</div>
++<div class="large-number">22%</div>
++<div class="label">confirmed case fatality, 2022-2023</div>
+ :::
+ 
+ ::: {.number-card}
+ <div class="label">Women | Heart attack</div>
+-<div class="large-number">16%</div>
+-<div class="label">age-adjusted case fatality, 2022-2023</div>
++<div class="large-number">27%</div>
++<div class="label">confirmed case fatality, 2022-2023</div>
+ :::
+ 
+ ::: {.number-card}
+ <div class="label">Men | Heart attack</div>
+-<div class="large-number">14%</div>
+-<div class="label">age-adjusted case fatality, 2022-2023</div>
++<div class="large-number">19%</div>
++<div class="label">confirmed case fatality, 2022-2023</div>
+ :::
+ :::
+ 
+ ::: {.insight-box}
+-Before age adjustment, women had higher case fatality than men for both conditions. Age explained part - but not all - of this gap.
++The headline values use confirmed in-hospital deaths only. The dotted lines and shaded regions show the additional uncertainty if probable in-hospital deaths are included.
+ :::
+ 
+ ## Why case fatality matters
+@@ -267,10 +267,10 @@ Case fatality is not a measure of population risk. It is a measure of survival a
+ We reviewed hospital-registered stroke and heart attack events in Barbados and summarised case fatality by event type, sex, and age profile.
+ 
+ - We used two-year periods to stabilise the estimates.
+-- We compared crude, unadjusted modelled, and age-adjusted modelled probabilities.
+-- We examined whether the higher case fatality observed among women was explained by age.
++- We report confirmed in-hospital deaths as the primary case-fatality estimates.
++- We show probable in-hospital deaths separately as a sensitivity range where discharge status remains unverified.
+ 
+-## Higher case fatality in women after <span class="heart">heart attack</span> and <span class="stroke">stroke</span>
++## Confirmed case-fatality patterns by <span class="heart">event type</span> and <span class="stroke">sex</span>
+ 
+ ::: {.columns}
+ ::: {.column width="68%"}
+@@ -280,9 +280,9 @@ We reviewed hospital-registered stroke and heart attack events in Barbados and s
+ ::: {.column width="32%"}
+ ### Main pattern
+ 
+-- Stroke case fatality changed little over time.
+-- Heart attack case fatality fluctuated and showed some evidence of an upward trend.
+-- Before age adjustment, women had higher case fatality than men for both conditions.
++- Solid lines show confirmed in-hospital case fatality.
++- Dotted lines and shaded regions show the sensitivity range when probable deaths are added.
++- The primary reported estimates remain the confirmed-death values.
+ 
+ ::: {.figure-note}
+ Figure source: BNR hospital-registered stroke and heart attack events.
+@@ -292,10 +292,10 @@ Figure source: BNR hospital-registered stroke and heart attack events.
+ 
+ ## Interpretation
+ 
+-Women admitted with heart attack or stroke were, on average, older than men.
++Women admitted with heart attack or stroke were, on average, older than men. The age profile provides useful context for the observed case-fatality patterns.
+ 
+ ::: {.insight-box}
+-The older age profile among women explained part of the female excess in case fatality, but did not remove it completely.
++The primary headline estimates remain based on confirmed in-hospital deaths. Age profiles can help interpret differences but do not replace review of clinical pathways and data completeness.
+ :::
+ 
+ This means the observed difference should be interpreted as a signal for further review rather than as evidence of one single cause.
+@@ -312,7 +312,7 @@ This means the observed difference should be interpreted as a signal for further
+ 
+ - Women were more likely than men to be aged 70 or older at the time of their event.
+ - Women who died in hospital were also older on average.
+-- Age explained part - but not all - of the female excess in case fatality.
++- Age profiles provide context when interpreting case-fatality differences.
+ 
+ ::: {.figure-note}
+ Age threshold: 70 years or older.
+@@ -324,7 +324,7 @@ Age threshold: 70 years or older.
+ 
+ Case-fatality rates show how outcomes differ after patients reach hospital care.
+ 
+-The persistence of higher rates among women - only partly explained by their older age profile - highlights the need to understand whether differences in presentation, treatment, severity, comorbidity, or recovery may affect survival.
++The confirmed-death estimates provide a conservative basis for monitoring outcomes. The uncertainty range in recent periods should prompt review of data completeness alongside presentation, treatment, severity, comorbidity, and recovery.
+ 
+ ::: {.insight-box}
+ The practical next step is not to assume a single explanation, but to review the patient pathway from symptom onset through hospital treatment and discharge outcome.

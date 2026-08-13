@@ -1,5 +1,5 @@
 ---
-title: "CVD case fatality in Barbados, 2012-2023"
+title: "CVD case fatality in Barbados, 2010-2023"
 subtitle: "BNR briefing, 2023"
 author: Ian Hambleton
 description: "Deaths before discharge after stroke and heart attack"
@@ -108,7 +108,7 @@ How do case-fatality patterns differ between women and men, and between strokes 
 
 ## Headline findings
 
-Age-adjusted modelled case-fatality probability, 2022–2023.
+Confirmed in-hospital case fatality, 2022–2023.
 
 ::: {.grid .mb-4}
 
@@ -118,7 +118,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
-<p class="display-6 fw-semibold mb-1">29%</p>
+<p class="display-6 fw-semibold mb-1">21%</p>
 <p class="mb-0 small">case fatality</p>
 
 :::
@@ -131,7 +131,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke</p>
-<p class="display-6 fw-semibold mb-1">30%</p>
+<p class="display-6 fw-semibold mb-1">22%</p>
 <p class="mb-0 small">case fatality</p>
 
 :::
@@ -144,7 +144,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Women</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
-<p class="display-6 fw-semibold mb-1">16%</p>
+<p class="display-6 fw-semibold mb-1">27%</p>
 <p class="mb-0 small">case fatality</p>
 
 :::
@@ -157,7 +157,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Men</p>
 <p class="text-uppercase fw-semibold small text-muted mb-1">Heart attack</p>
-<p class="display-6 fw-semibold mb-1">14%</p>
+<p class="display-6 fw-semibold mb-1">19%</p>
 <p class="mb-0 small">case fatality</p>
 
 :::
@@ -172,19 +172,19 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 ```{=html}
 <p class="mt-3 mb-2" style="font-size: 1.15rem; font-weight: 700;">
-  Higher Case fatality among women for  
-  <span style="color: rgb(164, 22, 26);">Heart attacks</span>
-  and  
-  <span style="color: rgb(139, 111, 180);">Strokes</span>
+  Confirmed case-fatality patterns differ by
+  <span style="color: rgb(164, 22, 26);">event type</span>
+  and
+  <span style="color: rgb(139, 111, 180);">sex</span>
 </p>
 ```
 
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
 
-![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing annual incidence rates from 2010 to 2023." width="100%"}
+![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){fig-alt="Line chart showing confirmed case-fatality percentages and an uncertainty region for probable deaths from 2010 to 2023." width="100%"}
 
-[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){.small target="_blank" rel="noopener"}
+[Open full-size case-fatality figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_2023.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
@@ -196,7 +196,7 @@ Age-adjusted modelled case-fatality probability, 2022–2023.
 
 ![](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
 
-[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){.small target="_blank" rel="noopener"}
+[Open full-size age-profile figure](../../../downloads/files/briefings/cvd_case_fatality_2023_v1/figures/cvd_case_fatality_age_group.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
@@ -224,4 +224,4 @@ The briefing outputs are available in three formats.
 
 ## Suggested Citation
 
-> Barbados National Registry. *Hospital Cardiovascular Incidence in Barbados: BNR CVD briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-case-fatality.html. Accessed: [insert date accessed].
+> Barbados National Registry. *CVD Case Fatality in Barbados: BNR CVD case-fatality briefing, 2023*. Barbados National Chronic Disease Registry, The University of the West Indies. Available at: https://uwi-bnr.github.io/info-hub/surveillance/cvd/briefings/case-fatality.html. Accessed: [insert date accessed].
