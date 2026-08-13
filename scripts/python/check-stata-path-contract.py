@@ -18,6 +18,9 @@ LEGACY_PATH_EXCEPTIONS = {
     Path("scripts/stata/refit/bnrcvd-2023-forensics1.do"),
 }
 
+LOCAL_PATH_CONFIGURATION = Path(
+    "scripts/stata/config/bnr_paths_LOCAL.do"
+)
 
 def main() -> int:
     """Report undefined path globals and return non-zero when any are found."""
@@ -33,7 +36,11 @@ def main() -> int:
         relative_path = path.relative_to(REPOSITORY_ROOT)
         for name in REFERENCE.findall(text):
             references.setdefault(name, set()).add(relative_path)
-        if path != PATH_TEMPLATE and relative_path not in LEGACY_PATH_EXCEPTIONS:
+        if (
+            path != PATH_TEMPLATE
+            and relative_path != LOCAL_PATH_CONFIGURATION
+            and relative_path not in LEGACY_PATH_EXCEPTIONS
+        ):
             for line_number, line in enumerate(text.splitlines(), 1):
                 stripped = line.lstrip()
                 if stripped.startswith(("*", "//")):

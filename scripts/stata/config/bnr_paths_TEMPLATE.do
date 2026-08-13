@@ -101,7 +101,7 @@ if _rc {
 
 foreach global_name in BNR_PRIVATE BNR_DATA_RAW BNR_DATA_FROZEN ///
         BNR_DATA_DERIVED BNR_STAGING BNR_PRIVATE_WORK BNR_PRIVATE_LOGS {
-    local check_path : global `global_name'
+    local check_path "${`global_name'}"
     quietly mata: st_local("path_exists", ///
         strofreal(direxists(st_local("check_path"))))
     if "`path_exists'" != "1" {
