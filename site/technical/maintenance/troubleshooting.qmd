@@ -121,7 +121,7 @@ If needed, repeat the Chapter 2 Python setup:
 
 ```powershell
 python -m pip install -r requirements.txt
-python -m pip install PyCap
+python scripts/python/check-python-environment.py
 ```
 
 Restart Stata afterwards.

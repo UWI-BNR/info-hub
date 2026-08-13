@@ -78,9 +78,13 @@ if "`replace_word'" != "" {
 *===============================================================================
 
 if "$BNR_STATA" == "" {
-    capture noisily do ///
-        "C:/yoshimi-hot/output/analyse-bnr/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
-    if _rc exit _rc
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
+    if _rc {
+        local config_rc = _rc
+        display as error ///
+            "Start Stata from BNR_REPO or load bnr_paths_LOCAL.do through profile.do."
+        exit `config_rc'
+    }
 }
 
 foreach path_name in BNR_STATA BNR_PRIVATE BNR_STAGING BNR_DATA_DERIVED BNR_PRIVATE_LOGS {

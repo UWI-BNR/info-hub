@@ -54,9 +54,8 @@ EXAMPLE
 clear all
 set more off
 
-* This is the only machine-specific path in this file.
-local localpath "C:/yoshimi-hot/output/analyse-bnr/info-hub"
-do "`localpath'/scripts/stata/config/bnr_paths_LOCAL.do"
+do "scripts/stata/config/bnr_paths_LOCAL.do"
+local localpath "$BNR_REPO"
 
 
 * =============================================================================
@@ -620,7 +619,7 @@ file write `download_manifest' "release_id: `package_id'" _n
 file write `download_manifest' "title: CVD annual tabulations" _n
 file write `download_manifest' "surveillance_area: CVD" _n
 file write `download_manifest' "domain: cvd" _n
-file write `download_manifest' "period: Data through `month_name' `release_year'" _n
+file write `download_manifest' "period: `release_year'-`month2'" _n
 file write `download_manifest' "release_date: `publication_date'" _n
 file write `download_manifest' "downloads:" _n
 file write `download_manifest' "  - title: Complete public tabulations package" _n

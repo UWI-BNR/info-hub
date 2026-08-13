@@ -32,7 +32,7 @@ BEGIN
   GROUPBOX gb_checks 15 272 530 205, label("Required approval confirmations")
   CHECKBOX ck_release 30 298 495 ., default(0) nomemory label("The intended dataset release and reporting period were used") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
   CHECKBOX ck_results 30 330 495 ., default(0) nomemory label("Results and permanent YTD presentation are plausible and correct") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
-  CHECKBOX ck_disclosure 30 362 495 ., default(0) nomemory label("Every suppression flag and disclosure-control decision was reviewed") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_disclosure 30 362 495 ., default(0) nomemory label("Every suppression flag, cross-table check and disclosure-control decision was reviewed") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
   CHECKBOX ck_workbook 30 394 495 ., default(0) nomemory label("The publication workbook and all public-ready products were inspected") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
   CHECKBOX ck_ready 30 426 495 ., default(0) nomemory label("The complete package is ready for publication") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
 
@@ -77,4 +77,3 @@ BEGIN
   stata
   close
 END
-

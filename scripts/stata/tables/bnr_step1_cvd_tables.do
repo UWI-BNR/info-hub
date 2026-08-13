@@ -70,9 +70,7 @@ VALIDATION NOTE
 clear all
 set more off
 
-* This is the only machine-specific path in this file.
-local localpath "C:/yoshimi-hot/output/analyse-bnr/info-hub"
-do "`localpath'/scripts/stata/config/bnr_paths_LOCAL.do"
+do "scripts/stata/config/bnr_paths_LOCAL.do"
 
 
 * =============================================================================

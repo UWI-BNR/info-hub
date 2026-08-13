@@ -119,6 +119,7 @@ They remain **private deidentified event-level data** and are not public downloa
 | `$BNR_PRIVATE_WORK` | Private reference/supporting datasets | Private |
 | `$BNR_PRIVATE_LOGS` | Stata workflow logs | Private, generated |
 | `$BNR_PUBLIC` | Authoritative approved public analytical packages | Public-approved, retained |
+| `$BNR_SITE` | Quarto source and website-mirror root | Public project source |
 | `$BNR_REPO/site/downloads/` | Website mirrors and download records used by Quarto | Public, rebuildable |
 | `$BNR_REPO/site/_site/` | Fully rendered website | Generated; do not edit or commit |
 
@@ -409,8 +410,9 @@ Some older dialog/help files remain in the tree pending controlled cleanup. The 
 | `site/scripts/build_download_catalogue.py` | Builds the central Downloads catalogue from approved product-level download records. It does not calculate surveillance results. |
 | `start-info-hub-edit.bat` | Convenience launcher for a local editing session: opens VS Code, activates the project environment for preview and starts Quarto preview. |
 | `.github/workflows/publish-site.yml` | GitHub Actions workflow that renders `site/` and deploys `site/_site` to GitHub Pages after `main` changes. |
-| `requirements.txt` | Short Python dependency list used for routine environment/site setup. |
-| `requirements-freeze.txt` | Detailed frozen Python environment record used mainly for troubleshooting/reproduction. |
+| `requirements.txt` | Maintained direct dependencies and compatible ranges used for routine workstation setup and CI. |
+| `requirements-freeze.txt` | Exact full Windows/Python 3.13 handover snapshot, including indirect dependencies, used for comparison or controlled reproduction. |
+| `scripts/python/check-python-environment.py` | Checks the Python baseline and imports every direct dependency without accessing REDCap or private data. |
 | `README.md` | Repository-level introduction. |
 | `DECISIONS.md` | Retained record of important technical/architectural decisions. |
 | `CHANGELOG.md` | Repository change history maintained at project level. |
@@ -555,7 +557,7 @@ Its exact role differs slightly by workflow. The approval receipt and manifest d
 | `$BNR_DIALOGS` | BNR Stata dialogs directory |
 | `$BNR_OUTPUTS` | Public repository output root |
 | `$BNR_PUBLIC` | Authoritative approved public analytical output root |
-| `$BNR_WORK` | Public-repository work area where used |
+| `$BNR_SITE` | Quarto source and website-mirror root |
 | `$BNR_DATA_RAW` | Private raw-data root |
 | `$BNR_DATA_FROZEN` | Private frozen-data root |
 | `$BNR_DATA_DERIVED` | Private derived-data root |
@@ -565,6 +567,10 @@ Its exact role differs slightly by workflow. The approval receipt and manifest d
 | `$BNR_REDCAP_TOKEN_FILE` | Path to the local text file containing the REDCap API token |
 
 The first two roots are machine-specific. Most other paths are derived from them.
+
+`$BNR_REDCAP_TOKEN_FILE` is the third machine-specific value. It contains only
+the secure token-file location. The private root and token file must both remain
+outside `$BNR_REPO`.
 
 ::: {.callout-warning collapse="true"}
 ## REDCap token rule

@@ -2,6 +2,7 @@
   output_type: "Metric dataset"
   output_title: "CVD burden metrics"
   output_id: "cvd_burden_cvd_2024_02"
+  version: "—"
   surveillance_area: "CVD"
   domain: "cvd"
   period: "2024-02"
@@ -16,63 +17,10 @@
   size_bytes: 243921
   sort_order: 20
 - title: "Full public output package"
-  output_type: "Briefing"
-  output_title: "CVD case-fatality in Barbados, 2012-2023"
-  output_id: "cvd_case_fatality_2023_v1"
-  surveillance_area: "CVD"
-  domain: "cvd"
-  period: "2023"
-  artefact_type: "ZIP package"
-  format: "ZIP"
-  description: |-
-    Complete public download package containing datasets, figures, metadata, workbook, and README file.
-  href: "files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip"
-  path: "files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip"
-  file: "bnr_cvd_case_fatality_2023_v1.zip"
-  updated: "2026-08-07"
-  size: "156.3 KB"
-  size_bytes: 160066
-  sort_order: 10
-- title: "Full public output package"
-  output_type: "Briefing"
-  output_title: "Barbados CVD incidence rates, 2010-2023"
-  output_id: "cvd_incidence_2023_v1"
-  surveillance_area: "CVD"
-  domain: "cvd"
-  period: "2023"
-  artefact_type: "ZIP package"
-  format: "ZIP"
-  description: |-
-    Complete public download package containing datasets, figures, metadata, workbook, and README file.
-  href: "files/briefings/cvd_incidence_2023_v1/bnr_cvd_incidence_2023_v1.zip"
-  path: "files/briefings/cvd_incidence_2023_v1/bnr_cvd_incidence_2023_v1.zip"
-  file: "bnr_cvd_incidence_2023_v1.zip"
-  updated: "2026-08-07"
-  size: "412.7 KB"
-  size_bytes: 422615
-  sort_order: 10
-- title: "Full public output package"
-  output_type: "Briefing"
-  output_title: "Barbados CVD length of stay, 2010-2023"
-  output_id: "cvd_los_2023_v1"
-  surveillance_area: "CVD"
-  domain: "cvd"
-  period: "2023"
-  artefact_type: "ZIP package"
-  format: "ZIP"
-  description: |-
-    Complete public download package containing datasets, figures, metadata, workbook, and README file.
-  href: "files/briefings/cvd_los_2023_v1/bnr_cvd_los_2023_v1.zip"
-  path: "files/briefings/cvd_los_2023_v1/bnr_cvd_los_2023_v1.zip"
-  file: "bnr_cvd_los_2023_v1.zip"
-  updated: "2026-08-07"
-  size: "240.3 KB"
-  size_bytes: 246056
-  sort_order: 10
-- title: "Full public output package"
   output_type: "Metric dataset"
   output_title: "CVD burden metrics"
   output_id: "cvd_burden_cvd_2024_01"
+  version: "—"
   surveillance_area: "CVD"
   domain: "cvd"
   period: "2024-01"
@@ -86,20 +34,78 @@
   size: "165.5 KB"
   size_bytes: 169460
   sort_order: 20
+- title: "Full public output package"
+  output_type: "Briefing"
+  output_title: "CVD case-fatality in Barbados, 2012-2023"
+  output_id: "cvd_case_fatality_2023_v1"
+  version: "v1"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "2023"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: |-
+    Complete public download package containing datasets, figures, metadata, workbook, and README file.
+  href: "files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip"
+  path: "files/briefings/cvd_case_fatality_2023_v1/bnr_cvd_case_fatality_2023_v1.zip"
+  file: "bnr_cvd_case_fatality_2023_v1.zip"
+  updated: "2026-08-13"
+  size: "156.1 KB"
+  size_bytes: 159889
+  sort_order: 10
+- title: "Full public output package"
+  output_type: "Briefing"
+  output_title: "Barbados CVD incidence rates, 2010-2023"
+  output_id: "cvd_incidence_2023_v1"
+  version: "v1"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "2023"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: |-
+    Complete public download package containing datasets, figures, metadata, workbook, and README file.
+  href: "files/briefings/cvd_incidence_2023_v1/bnr_cvd_incidence_2023_v1.zip"
+  path: "files/briefings/cvd_incidence_2023_v1/bnr_cvd_incidence_2023_v1.zip"
+  file: "bnr_cvd_incidence_2023_v1.zip"
+  updated: "2026-08-13"
+  size: "412.4 KB"
+  size_bytes: 422333
+  sort_order: 10
+- title: "Full public output package"
+  output_type: "Briefing"
+  output_title: "Barbados CVD length of stay, 2010-2023"
+  output_id: "cvd_los_2023_v1"
+  version: "v1"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "2023"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: |-
+    Complete public download package containing datasets, figures, metadata, workbook, and README file.
+  href: "files/briefings/cvd_los_2023_v1/bnr_cvd_los_2023_v1.zip"
+  path: "files/briefings/cvd_los_2023_v1/bnr_cvd_los_2023_v1.zip"
+  file: "bnr_cvd_los_2023_v1.zip"
+  updated: "2026-08-13"
+  size: "237.9 KB"
+  size_bytes: 243648
+  sort_order: 10
 - title: "Complete public tabulations package"
   output_type: "Tabulations"
   output_title: "CVD annual tabulations"
   output_id: "cvd_annual_tabulations"
+  version: "—"
   surveillance_area: "CVD"
   domain: "cvd"
-  period: "Data through January 2024"
+  period: "2024-01"
   artefact_type: "ZIP package"
   format: "ZIP"
   description: "Suppressed CVD tabulations with public datasets, workbook, metadata and readme."
   href: "annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip"
   path: "annual/cvd/latest/bnr_cvd_annual_tabulations_latest.zip"
   file: "bnr_cvd_annual_tabulations_latest.zip"
-  updated: "2026-08-07"
+  updated: "2026-08-13"
   size: "80.5 KB"
-  size_bytes: 82472
+  size_bytes: 82415
   sort_order: 30

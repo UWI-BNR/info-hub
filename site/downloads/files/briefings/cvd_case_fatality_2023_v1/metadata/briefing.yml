@@ -8,7 +8,7 @@ surveillance_area: CVD
 registry: BNR-CVD
 geography: Barbados
 period: 2023
-release_date: 2026-08-07
+release_date: 2026-08-13
 source_dataset_id: bnr_cvd_input_case_fatality_202401_v01
 source_dataset_release: 2024-01
 source_coverage_end: 2024-01-31
@@ -49,8 +49,8 @@ figures:
     file: figures/cvd_case_fatality_age_group.png
 
 build:
-  build_date:  7 Aug 2026
-  build_time: 09:34:47
+  build_date: 13 Aug 2026
+  build_time: 15:11:10
   stata_version: 19
   analyst: ianha
   analysis_script: scripts/stata/briefings/cvd_case_fatality/cvd_case_fatality.do

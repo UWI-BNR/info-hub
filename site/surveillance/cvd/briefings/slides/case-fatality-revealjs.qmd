@@ -223,31 +223,31 @@ format:
 ::: {.number-grid}
 ::: {.number-card}
 <div class="label">Women | Stroke</div>
-<div class="large-number">29%</div>
-<div class="label">age-adjusted case fatality, 2022-2023</div>
+<div class="large-number">21%</div>
+<div class="label">confirmed case fatality, 2022-2023</div>
 :::
 
 ::: {.number-card}
 <div class="label">Men | Stroke</div>
-<div class="large-number">30%</div>
-<div class="label">age-adjusted case fatality, 2022-2023</div>
+<div class="large-number">22%</div>
+<div class="label">confirmed case fatality, 2022-2023</div>
 :::
 
 ::: {.number-card}
 <div class="label">Women | Heart attack</div>
-<div class="large-number">16%</div>
-<div class="label">age-adjusted case fatality, 2022-2023</div>
+<div class="large-number">27%</div>
+<div class="label">confirmed case fatality, 2022-2023</div>
 :::
 
 ::: {.number-card}
 <div class="label">Men | Heart attack</div>
-<div class="large-number">14%</div>
-<div class="label">age-adjusted case fatality, 2022-2023</div>
+<div class="large-number">19%</div>
+<div class="label">confirmed case fatality, 2022-2023</div>
 :::
 :::
 
 ::: {.insight-box}
-Before age adjustment, women had higher case fatality than men for both conditions. Age explained part - but not all - of this gap.
+The headline values use confirmed in-hospital deaths only. The dotted lines and shaded regions show the additional uncertainty if probable in-hospital deaths are included.
 :::
 
 ## Why case fatality matters
@@ -267,10 +267,10 @@ Case fatality is not a measure of population risk. It is a measure of survival a
 We reviewed hospital-registered stroke and heart attack events in Barbados and summarised case fatality by event type, sex, and age profile.
 
 - We used two-year periods to stabilise the estimates.
-- We compared crude, unadjusted modelled, and age-adjusted modelled probabilities.
-- We examined whether the higher case fatality observed among women was explained by age.
+- We report confirmed in-hospital deaths as the primary case-fatality estimates.
+- We show probable in-hospital deaths separately as a sensitivity range where discharge status remains unverified.
 
-## Higher case fatality in women after <span class="heart">heart attack</span> and <span class="stroke">stroke</span>
+## Confirmed case-fatality patterns by <span class="heart">event type</span> and <span class="stroke">sex</span>
 
 ::: {.columns}
 ::: {.column width="68%"}
@@ -280,9 +280,9 @@ We reviewed hospital-registered stroke and heart attack events in Barbados and s
 ::: {.column width="32%"}
 ### Main pattern
 
-- Stroke case fatality changed little over time.
-- Heart attack case fatality fluctuated and showed some evidence of an upward trend.
-- Before age adjustment, women had higher case fatality than men for both conditions.
+- Solid lines show confirmed in-hospital case fatality.
+- Dotted lines and shaded regions show the sensitivity range when probable deaths are added.
+- The primary reported estimates remain the confirmed-death values.
 
 ::: {.figure-note}
 Figure source: BNR hospital-registered stroke and heart attack events.
@@ -292,10 +292,10 @@ Figure source: BNR hospital-registered stroke and heart attack events.
 
 ## Interpretation
 
-Women admitted with heart attack or stroke were, on average, older than men.
+Women admitted with heart attack or stroke were, on average, older than men. The age profile provides useful context for the observed case-fatality patterns.
 
 ::: {.insight-box}
-The older age profile among women explained part of the female excess in case fatality, but did not remove it completely.
+The primary headline estimates remain based on confirmed in-hospital deaths. Age profiles can help interpret differences but do not replace review of clinical pathways and data completeness.
 :::
 
 This means the observed difference should be interpreted as a signal for further review rather than as evidence of one single cause.
@@ -312,7 +312,7 @@ This means the observed difference should be interpreted as a signal for further
 
 - Women were more likely than men to be aged 70 or older at the time of their event.
 - Women who died in hospital were also older on average.
-- Age explained part - but not all - of the female excess in case fatality.
+- Age profiles provide context when interpreting case-fatality differences.
 
 ::: {.figure-note}
 Age threshold: 70 years or older.
@@ -324,7 +324,7 @@ Age threshold: 70 years or older.
 
 Case-fatality rates show how outcomes differ after patients reach hospital care.
 
-The persistence of higher rates among women - only partly explained by their older age profile - highlights the need to understand whether differences in presentation, treatment, severity, comorbidity, or recovery may affect survival.
+The confirmed-death estimates provide a conservative basis for monitoring outcomes. The uncertainty range in recent periods should prompt review of data completeness alongside presentation, treatment, severity, comorbidity, and recovery.
 
 ::: {.insight-box}
 The practical next step is not to assume a single explanation, but to review the patient pathway from symptom onset through hospital treatment and discharge outcome.

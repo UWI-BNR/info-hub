@@ -9,7 +9,7 @@
 | Stroke | Female | 12.5 | 3.0 | 19.0 |
 | Stroke | Male | 14.0 | 3.0 | 30.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2023
 
@@ -20,7 +20,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 9.0 | 4.0 | 20.0 |
 | Stroke | Male | 11.0 | 4.5 | 20.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2022
 
@@ -31,7 +31,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 11.0 | 3.0 | 21.0 |
 | Stroke | Male | 9.0 | 3.0 | 19.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2021
 
@@ -42,7 +42,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 7.0 | 3.0 | 19.0 |
 | Stroke | Male | 10.0 | 4.0 | 20.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2020
 
@@ -53,7 +53,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 6.0 | 2.0 | 12.5 |
 | Stroke | Male | 7.0 | 3.0 | 17.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2019
 
@@ -64,7 +64,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 8.0 | 3.0 | 18.0 |
 | Stroke | Male | 9.0 | 4.0 | 21.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2018
 
@@ -75,7 +75,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 6.0 | 1.0 | 16.0 |
 | Stroke | Male | 7.0 | 3.0 | 19.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2017
 
@@ -86,7 +86,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 6.0 | 1.0 | 13.0 |
 | Stroke | Male | 9.0 | 3.0 | 20.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2016
 
@@ -97,7 +97,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 6.0 | 1.0 | 16.0 |
 | Stroke | Male | 5.0 | 1.0 | 11.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2015
 
@@ -108,7 +108,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 5.0 | 2.0 | 11.0 |
 | Stroke | Male | 6.0 | 2.0 | 14.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2014
 
@@ -119,7 +119,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 5.0 | 2.0 | 14.0 |
 | Stroke | Male | 6.0 | 2.0 | 15.5 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2013
 
@@ -130,7 +130,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 7.5 | 4.0 | 15.0 |
 | Stroke | Male | 7.0 | 3.0 | 14.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2012
 
@@ -141,7 +141,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 7.0 | 2.0 | 13.5 |
 | Stroke | Male | 6.0 | 2.0 | 11.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2011
 
@@ -152,7 +152,7 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 4.0 | 1.0 | 9.0 |
 | Stroke | Male | 5.0 | 2.0 | 12.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 ### 2010
 
@@ -163,6 +163,6 @@ _— = suppressed because fewer than 6 eligible stays contribute._
 | Stroke | Female | 3.0 | 1.0 | 8.0 |
 | Stroke | Male | 5.0 | 1.0 | 11.0 |
 
-_— = suppressed because fewer than 6 eligible stays contribute._
+_— = suppressed because 1 to 5 eligible stays contribute._
 
 :::

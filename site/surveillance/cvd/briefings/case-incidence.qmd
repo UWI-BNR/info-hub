@@ -183,7 +183,7 @@ Age-standardised incidence rates per 100,000 population, 2023.
 
 ![](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){fig-alt="Line chart showing annual incidence rates from 2010 to 2023." width="100%"}
 
-[Open full-size weekly cases figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){.small target="_blank" rel="noopener"}
+[Open full-size annual incidence figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_annual.png){.small target="_blank" rel="noopener"}
 
 :::
 :::
@@ -201,9 +201,9 @@ Age-standardised incidence rates per 100,000 population, 2023.
 ::: {.card .border-0 .shadow-sm .mb-4}
 ::: {.card-body}
 
-![](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){fig-alt="Bar chart showing the proportion of stroke and heart attack cases under age 70 and age 70 or older, by sex." width="100%"}
+![](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){fig-alt="Rate-ratio figure showing cardiovascular incidence differences by event type, sex, and period." width="100%"}
 
-[Open full-size age distribution figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){.small target="_blank" rel="noopener"}
+[Open full-size rate-ratio figure](../../../downloads/files/briefings/cvd_incidence_2023_v1/figures/cvd_incidence_rate_ratios.png){.small target="_blank" rel="noopener"}
 
 :::
 :::

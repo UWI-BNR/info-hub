@@ -81,6 +81,7 @@ format:
 
 - Length of stay is a practical measure of hospital burden after stroke and heart attack events.
 - Median length of stay gives a robust summary of typical hospital use, avoiding distortion from rare very long stays.
+- Same-day stays count as one hospital day, and eligible admissions ending in hospital death are included.
 - Changes in typical length of stay can accumulate into meaningful bed demand when applied across many admissions.
 - Monitoring length of stay helps connect registry outputs to service planning and hospital capacity discussions.
 

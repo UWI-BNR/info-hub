@@ -56,6 +56,24 @@ Private raw data, derived event-level data, staging packages, logs and REDCap cr
 
 The website copies under `site/downloads/` can be rebuilt from `outputs/public/`; they are not the authoritative analytical archive.
 
+## Local editing launcher
+
+`start-info-hub-edit.bat` is a version-controlled Windows convenience launcher
+for website and documentation editing. Run it from the repository root to:
+
+1. open the repository in VS Code (or File Explorer if VS Code is unavailable);
+2. activate the local `venv-info-hub` virtual environment; and
+3. start a local Quarto preview at `http://127.0.0.1:4200/`.
+
+It derives the repository location from its own file location, so it must remain
+in the repository root. It does not run Stata, access REDCap, publish outputs,
+commit Git changes or deploy the website. Close the separate **BNR info-hub
+Quarto Preview** command window when the edit session is complete.
+
+The launcher requires a completed local Python environment and Quarto
+installation. It is a convenience entry point, not a substitute for the
+Technical Manual workstation setup or the controlled analytical workflows.
+
 ## Stata entry points
 
 Routine operators use **Stata > User > BNR**:
@@ -72,6 +90,22 @@ Machine-specific paths are kept outside version control. To configure a workstat
 2. Rename the copy to `bnr_paths_LOCAL.do`.
 3. Set the public repository, private companion repository and secure token-file paths.
 4. Do not commit the local file or any token.
+
+## Python environment
+
+Python 3.13 is the tested baseline. From an activated project virtual
+environment, install and check it with:
+
+```powershell
+python -m pip install -r requirements.txt
+python scripts/python/check-python-environment.py
+```
+
+`requirements.txt` is the maintained, cross-platform list used for routine
+setup and CI. `requirements-freeze.txt` is the exact full Windows environment
+snapshot retained for troubleshooting and controlled reproduction; it is not
+the routine installation file. Detailed setup and refresh instructions are in
+the Technical Manual.
 
 ## Documentation
 

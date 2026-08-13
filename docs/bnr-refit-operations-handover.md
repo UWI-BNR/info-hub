@@ -110,6 +110,14 @@ Public-safe code, documentation, approved outputs and website source
 
 Machine-specific roots and the REDCap token-file location are defined in the untracked scripts/stata/config/bnr_paths_LOCAL.do.
 
+3a. Local website and documentation editing
+
+start-info-hub-edit.bat is a tracked Windows convenience launcher in the public repository root. It derives the repository folder from its own location, opens VS Code (or File Explorer if VS Code is unavailable), activates venv-info-hub, and starts a local Quarto preview at http://127.0.0.1:4200/.
+
+It requires Quarto and the local Python environment to have been installed. It does not run Stata, access REDCap, prepare data, approve or publish outputs, commit Git changes, or deploy the site. Close the separate BNR info-hub Quarto Preview command window at the end of the editing session.
+
+The launcher is a convenience for editing public-safe website source. The Stata menu and the documented product-specific steps remain the controlled operational entry points.
+
 4. Routine entry point
 
 Load scripts/stata/menu/bnr_menu.do at Stata startup. Operators then use User > BNR.

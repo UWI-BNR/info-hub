@@ -1,8 +1,19 @@
-pandas
-numpy
-matplotlib
-plotly
-plotnine
-altair
-pyyaml
-jupyter
+# Direct Python dependencies for the supported BNR workstation environment.
+# Python 3.13 is the tested baseline. Install with:
+#   python -m pip install -r requirements.txt
+#
+# This file uses compatible ranges for routine setup. See
+# requirements-freeze.txt for the exact tested Windows environment snapshot.
+
+# Operational REDCap extraction (distribution PyCap; imported as redcap)
+PyCap>=2.7,<3
+
+# Analyst notebooks, data handling and visualisation
+altair>=6,<7
+jupyter>=1.1,<2
+matplotlib>=3.10,<4
+numpy>=2.4,<3
+pandas>=3,<4
+plotly>=6,<7
+plotnine>=0.15,<0.16
+PyYAML>=6,<7

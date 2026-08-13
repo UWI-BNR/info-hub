@@ -12,13 +12,13 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-08-07
+    2026-08-13
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
     BNR-CVD
   content: |-
-    Annual typical bed-days (based on median stay in days)
+    Annual typical bed-days based on median stay in days, including eligible hospital deaths.
   tier: |-
     Public aggregate output
   temporal: |-
@@ -30,7 +30,7 @@ metadata:
   description: |-
     Annual typical bed days, based on median length of stay in days.
   limitations: |-
-    Based on hospital CVD events
+    Based on hospital CVD events with valid admission and end dates; same-day stays count as one day.
   language: |-
     en
   software: |-
@@ -71,8 +71,8 @@ variables:
       
 
   - name: los50
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 50th percentile
     value_label: 
@@ -80,8 +80,8 @@ variables:
       
 
   - name: los25
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 25th percentile
     value_label: 
@@ -89,8 +89,8 @@ variables:
       
 
   - name: los75
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 75th percentile
     value_label: 
@@ -98,8 +98,8 @@ variables:
       
 
   - name: los05
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 5th percentile
     value_label: 
@@ -107,8 +107,8 @@ variables:
       
 
   - name: los95
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 95th percentile
     value_label: 
@@ -117,7 +117,7 @@ variables:
 
   - name: nevent
     type: long
-    format: %9.0g
+    format: %10.0g
     label: |-
       Number of events
     value_label: 

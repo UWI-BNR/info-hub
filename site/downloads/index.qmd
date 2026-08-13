@@ -19,6 +19,7 @@ listing:
     field-display-names:
       surveillance_area: "Area"
       period: "Period"
+      version: "Version"
       output_type: "Type"
       output_title: "Output"
       description: "Contents"
@@ -40,7 +41,7 @@ This page provides public download packages from approved Barbados National Regi
 
 > Each row represents one approved, versioned `ZIP` package. Briefing packages may contain datasets, figures, metadata, an Excel workbook, and a README file. Metric packages contain approved release-stamped and current datasets with accompanying metadata. Package contents vary by output.
 
-Use the search box to filter by output type, topic, period, surveillance area, or output title.
+Use the search box to filter by output type, topic, period, version, surveillance area, or output title.
 
 ## Reuse and citation
 

@@ -119,9 +119,13 @@ if `make_count' + `make_case_fatality' + `make_length_of_stay' + ///
 * Load the local path file only when the current Stata session has not already
 * loaded it. The path itself remains machine-specific and outside Git.
 if `"$BNR_STATA"' == "" {
-    capture noisily do ///
-        "C:/yoshimi-hot/output/analyse-bnr/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
-    if _rc exit _rc
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
+    if _rc {
+        local config_rc = _rc
+        display as error ///
+            "Start Stata from BNR_REPO or load bnr_paths_LOCAL.do through profile.do."
+        exit `config_rc'
+    }
 }
 
 foreach path in BNR_STATA BNR_DATA_DERIVED BNR_PRIVATE_LOGS {

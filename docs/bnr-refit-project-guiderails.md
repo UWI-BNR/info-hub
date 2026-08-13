@@ -73,6 +73,18 @@ The recognised technical approval roles are **BNR Lead**, **BNR Analyst** and **
 - Shared mechanics belong in common helpers; analytical decisions remain visible in analyst-owned DO files.
 - Publication steps copy only manifested approved files and must stop on identity, checksum or completeness failures.
 
+## Local editing utility
+
+`start-info-hub-edit.bat` is the tracked Windows launcher for a local website
+and documentation editing session. It opens the repository in VS Code and starts
+a local Quarto preview using `venv-info-hub`. It derives its root from its own
+location and must remain in the repository root.
+
+It is not an analytical, approval, publication, Git or deployment workflow. It
+does not access REDCap or private analytical data. The controlled Stata menu and
+product-specific approval and publication steps remain the only operational
+entry points for surveillance outputs.
+
 ## Documentation boundaries
 
 | Manual | Governing question |

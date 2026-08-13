@@ -12,7 +12,7 @@ metadata:
   version: |-
     v1
   created: |-
-    2026-08-07
+    2026-08-13
   creator: |-
     Ian Hambleton, Analyst
   registry: |-
@@ -28,9 +28,9 @@ metadata:
   unit_of_analysis: |-
     Event type by period
   description: |-
-    Annual median length of stay in days.
+    Annual median length of stay in days, including eligible hospital deaths.
   limitations: |-
-    Based on hospital CVD events
+    Based on hospital CVD events with valid admission and end dates; same-day stays count as one day.
   language: |-
     en
   software: |-
@@ -80,8 +80,8 @@ variables:
       0=All years; 1=2010-2011; 2=2012-2013; 3=2014-2015; 4=2016-2017; 5=2018-2019; 6=2020-2021; 7=2022-2023; 
 
   - name: los50
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 50th percentile
     value_label: 
@@ -89,8 +89,8 @@ variables:
       
 
   - name: los25
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 25th percentile
     value_label: 
@@ -98,8 +98,8 @@ variables:
       
 
   - name: los75
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 75th percentile
     value_label: 
@@ -107,8 +107,8 @@ variables:
       
 
   - name: los05
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 5th percentile
     value_label: 
@@ -116,8 +116,8 @@ variables:
       
 
   - name: los95
-    type: float
-    format: %9.0g
+    type: double
+    format: %10.0g
     label: |-
       Length of hospital stay: 95th percentile
     value_label: 
@@ -126,7 +126,7 @@ variables:
 
   - name: nevent
     type: long
-    format: %9.0g
+    format: %10.0g
     label: |-
       Number of events
     value_label: 

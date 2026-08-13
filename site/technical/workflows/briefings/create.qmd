@@ -47,6 +47,12 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
    - Confirm `readme.txt` and `downloads.yml` exist.
    - Do not treat a complete folder as approval. The package remains private until Steps 2 and 3.
 
+### Length-of-stay checks
+
+The length-of-stay briefing writes a concise eligibility and data-quality summary to its private Stata log. Check the number of eligible admissions, included deaths, same-day stays, unknown outcome status, missing or negative dates, and stays of 60 days or longer (including the 90-day priority subset).
+
+These are review flags, not automated data cleaning. Do not correct a source record in the briefing workflow. If a material issue is found, stop and resolve it through the separate BNR pre-REDCap or REDCap data-management process, then rebuild the affected Step 3 input and briefing package.
+
 ## Outputs
 
 The exact contents depend on briefing type, but every routine package is under:

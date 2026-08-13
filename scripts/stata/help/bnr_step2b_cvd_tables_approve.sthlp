@@ -15,8 +15,9 @@ suppress, rebuild, copy or publish any table product.
 {p 4 4 2}
 Complete Step 2A for the selected year and month. Review
 {cmd:review/qa_summary.txt}, {cmd:review/suppression_summary.txt}, every row in
-the private suppression workbook and all products under {cmd:public_ready/}.
-Close any workbook after inspection.
+the private suppression workbook, every row in
+{cmd:review/cross_table_disclosure_check.csv}, and all products under
+{cmd:public_ready/}. Close any workbook after inspection.
 
 {title:Dialog instructions}
 
@@ -71,8 +72,10 @@ of the dialog.
 {p 4 4 2}
 Step 2B confirms that the selected package is public-ready and unapproved, that
 its package ID and coverage match the dialog selection, and that every required
-file listed in {cmd:public_manifest.csv} exists. It refuses an incomplete,
-malformed or already-approved package.
+file listed in {cmd:public_manifest.csv} exists. It also requires a non-empty,
+well-formed cross-table audit in which every row is {cmd:PASS} and no exact
+reconstruction risk remains. It refuses an incomplete, malformed or
+already-approved package.
 
 {title:Approval receipt}
 
@@ -94,4 +97,3 @@ Never edit a generated product or the approval receipt manually.
 {p 4 4 2}
 Run Table Step 3 to promote the approved package. Step 3 must require the valid
 approval receipt and public manifest before copying any file.
-

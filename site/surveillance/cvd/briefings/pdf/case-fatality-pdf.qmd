@@ -96,19 +96,19 @@ format:
 
 ## Key messages
 
-- In 2022-2023, age-adjusted stroke case fatality was about 29% in women and 30% in men.
-- In 2022-2023, age-adjusted heart attack case fatality was about 16% in women and 14% in men.
-- Before age adjustment, women had higher case fatality than men for both conditions.
-- Age explained part - but not all - of the higher case fatality observed among women.
+- In 2022-2023, confirmed in-hospital stroke case fatality was about 21% in women and 22% in men.
+- In 2022-2023, confirmed in-hospital heart-attack case fatality was about 27% in women and 19% in men.
+- The confirmed-death estimates are the primary reported results.
+- From 2020 onwards, the figure also shows the higher sensitivity estimate if probable in-hospital deaths are included.
 
 ```{=typst}
 #v(6pt)
 #block(width: 100%)[
   #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
-    Higher case fatality in women after
-    #text(fill: rgb("#A4161A"))[heart attack]
+    Confirmed case-fatality patterns by
+    #text(fill: rgb("#A4161A"))[event type]
     and
-    #text(fill: rgb("#8B6FB4"))[stroke]
+    #text(fill: rgb("#8B6FB4"))[sex]
   ]
 ]
 #v(3pt)
@@ -126,7 +126,7 @@ format:
 #v(6pt)
 #block(width: 100%)[
   #text(font: "Noto Sans", size: 12.6pt, weight: "semibold")[
-    Older age partly explains the female excess in case fatality
+    Age profile and confirmed in-hospital case fatality
   ]
 ]
 #v(3pt)

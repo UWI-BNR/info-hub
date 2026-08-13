@@ -162,11 +162,12 @@ local package_id "cvd_burden_`release_id'"
 *===============================================================================
 
 if `"$BNR_STATA"' == "" {
-    capture noisily do ///
-        "C:/yoshimi-hot/output/analyse-bnr/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
     if _rc {
         local path_rc = _rc
         display as error "The BNR local path configuration could not be loaded."
+        display as error ///
+            "Start Stata from BNR_REPO or load bnr_paths_LOCAL.do through profile.do."
         exit `path_rc'
     }
 }

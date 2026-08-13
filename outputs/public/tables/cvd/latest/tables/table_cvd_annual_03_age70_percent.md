@@ -9,4 +9,4 @@
 | Preceding five-year comparison (2019-2023, months  | Stroke | Female | 30.4 | 69.6 |
 | Preceding five-year comparison (2019-2023, months  | Stroke | Male | 46.4 | 53.6 |
 
-_Percentages use events with known age group. Both complementary percentages are hidden when either age-group count is fewer than 6._
+_Percentages use events with known age group. Both complementary percentages are hidden when either age-group count is 1 to 5._

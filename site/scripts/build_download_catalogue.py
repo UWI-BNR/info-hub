@@ -297,6 +297,28 @@ def package_id_from_manifest(manifest, package_type, source_path):
     return package_id
 
 
+def version_label_from_manifest(manifest, package_type, output_id, source_path):
+    """Return the public version label used only by briefing packages.
+
+    Briefings retain a visible version because successive publications can
+    share the same coverage period. Metric and tabulation releases already
+    express their release in the period column, so their version cell is an
+    em dash rather than a duplicate identifier.
+    """
+    if package_type == "briefing":
+        match = re.search(r"_v([1-9][0-9]*)$", output_id)
+
+        if match:
+            return f"v{match.group(1)}"
+
+        raise CatalogueError(
+            f"Briefing ID must end in '_v<integer>' to create its version "
+            f"label in {source_path}: {output_id}"
+        )
+
+    return "—"
+
+
 def validated_iso_date(value, source_path):
     """Validate and return an ISO calendar date in YYYY-MM-DD form."""
     date_text = str(value).strip()
@@ -486,6 +508,9 @@ def rows_from_manifest(manifest, source_path):
     package_type = package_type_from_manifest(manifest, source_path)
     output_type = SUPPORTED_PACKAGE_TYPES[package_type]
     output_id = package_id_from_manifest(manifest, package_type, source_path)
+    version = version_label_from_manifest(
+        manifest, package_type, output_id, source_path
+    )
     output_title = required_text(manifest, "title", source_path)
     surveillance_area = required_text(manifest, "surveillance_area", source_path)
     domain = required_text(manifest, "domain", source_path)
@@ -515,6 +540,7 @@ def rows_from_manifest(manifest, source_path):
                 "output_type": output_type,
                 "output_title": output_title,
                 "output_id": output_id,
+                "version": version,
                 "surveillance_area": surveillance_area,
                 "domain": domain,
                 "period": period,
@@ -577,6 +603,7 @@ def write_catalogue(rows):
         "output_type",
         "output_title",
         "output_id",
+        "version",
         "surveillance_area",
         "domain",
         "period",
