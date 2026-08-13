@@ -43,11 +43,19 @@ earlier {cmd:approval.yml}, because rebuilt products must be approved again.
 {title:Disclosure-control rules}
 
 {p 4 4 2}
-The primary threshold is fewer than 6 contributing observations. The file also
-applies explicit complementary rules for annual totals, monthly All-CVD totals,
-paired age percentages, small DCO increments, and affected both-sex incidence
-totals. Ratios, case-fatality percentages and length-of-stay summaries use their
+The primary threshold is a contributing frequency from 1 to 5; a true zero is
+not automatically primary-suppressed. The file also applies explicit
+complementary rules for annual totals, monthly All-CVD totals, paired age
+percentages, small DCO increments, and affected both-sex incidence totals.
+Ratios, case-fatality percentages and length-of-stay summaries use their
 recorded supporting counts.
+
+{p 4 4 2}
+Tables 1 and 2 are controlled jointly. Step 2A first reconciles their exact
+annual and monthly counts. It then checks every annual margin, every monthly
+Stroke-plus-AMI total, and every annual-total-equals-monthly-sum relationship.
+The run stops if any published equation would contain exactly one hidden term,
+because that term would be recoverable by subtraction.
 
 {p 4 4 2}
 The public suppression symbol is an em dash ({cmd:—}). Numeric values in
@@ -67,6 +75,10 @@ Review these files under the package's {cmd:review/} folder:
 
 {p 8 8 2}
 {cmd:suppression_review.xlsx} - summary, worklist, rules and data dictionary.
+
+{p 8 8 2}
+{cmd:cross_table_disclosure_check.csv} - the fail-closed additive-equation
+audit for Tables 1 and 2. Every row must have status {cmd:PASS}.
 
 {title:Public-ready outputs}
 

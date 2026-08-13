@@ -35,6 +35,7 @@ OUTPUT
   The same private staging package gains:
     review/
       suppression_worklist.csv
+      cross_table_disclosure_check.csv
       suppression_review.xlsx
       suppression_summary.txt
     public_ready/
@@ -46,9 +47,11 @@ OUTPUT
       readme.txt
 
 DISCLOSURE RULE
-  Primary threshold: fewer than 6 contributing observations.
+  Primary threshold: a contributing frequency from 1 to 5. A true zero is not
+  automatically primary-suppressed.
   Complementary suppression is applied where a published total, paired
-  percentage, or DCO sensitivity result could reveal a primary-suppressed cell.
+  percentage, DCO sensitivity result, or another table could reveal a
+  primary-suppressed cell.
 
 COMMAND-LINE USE
   do bnr_step2a_cvd_tables.do release_year release_month [replace]
@@ -129,6 +132,7 @@ local public_metadata  "`public_ready'/metadata"
 local download_xlsx    "`public_workbook'/workbook_cvd_annual_tabulations.xlsx"
 local review_xlsx      "`review_dir'/suppression_review.xlsx"
 local worklist_csv     "`review_dir'/suppression_worklist.csv"
+local cross_table_csv  "`review_dir'/cross_table_disclosure_check.csv"
 
 * Step 2A must never create a new package in place of Step 1.
 capture confirm file "`step1_metadata'/package.yml"
@@ -222,12 +226,392 @@ foreach table_name in table1 table2 table3 table4 table5 table6 table7 {
 
 
 * =============================================================================
+* D2. BUILD AND AUDIT THE JOINT COUNT-TABLE DISCLOSURE PLAN
+* =============================================================================
+* Tables 1 and 2 publish different views of the same event counts. They must
+* therefore be controlled as one release, not as two independent tables.
+*
+* The plan deliberately preserves disease totals where possible:
+*   - if a sex-specific disease count is primary-suppressed, the other sex for
+*     that disease is complementary-suppressed and the disease total remains;
+*   - affected female/male All-CVD margins are also suppressed, because those
+*     margins could otherwise recreate the protected disease-by-sex cells;
+*   - if an annual total and its monthly components would leave exactly one
+*     hidden term, another monthly component is hidden deterministically; and
+*   - if no second covered month exists, the annual total is hidden instead.
+*
+* The final audit represents every published additive equation and stops the
+* run if any equation contains exactly one hidden term. In that situation the
+* hidden value could be recovered by subtraction.
+
+tempfile t1_event_totals t1_sex_totals t1_grand ///
+         t2_annual_totals t1_sdc_initial t1_sdc_plan ///
+         t2_sdc_initial t2_sdc_plan annual_initial annual_cross_flags ///
+         audit_t1 audit_t2 audit_cross combined_disclosure_audit
+
+* ---- D2.1 Reconcile the unsuppressed values before planning suppression ----
+
+use "`step1_data'/`table1'.dta", clear
+
+preserve
+    keep if inlist(etype, 1, 2) & inlist(sex, 1, 2)
+    collapse (sum) calculated_total=event_count, by(year etype)
+    save `t1_event_totals', replace
+restore
+
+preserve
+    keep if inlist(etype, 1, 2) & inlist(sex, 1, 2)
+    collapse (sum) calculated_total=event_count, by(year sex)
+    save `t1_sex_totals', replace
+restore
+
+preserve
+    keep if inlist(etype, 1, 2) & inlist(sex, 1, 2)
+    collapse (sum) calculated_total=event_count, by(year)
+    save `t1_grand', replace
+restore
+
+preserve
+    keep if inlist(etype, 1, 2) & sex == 3
+    keep year etype event_count
+    rename event_count published_total
+    merge 1:1 year etype using `t1_event_totals', assert(match) nogen
+    count if published_total != calculated_total
+    if r(N) {
+        display as error "Table Step 2A stopped: Table 1 event totals do not equal the sex-specific cells."
+        exit 459
+    }
+restore
+
+preserve
+    keep if etype == 3 & inlist(sex, 1, 2)
+    keep year sex event_count
+    rename event_count published_total
+    merge 1:1 year sex using `t1_sex_totals', assert(match) nogen
+    count if published_total != calculated_total
+    if r(N) {
+        display as error "Table Step 2A stopped: Table 1 sex totals do not equal the disease-specific cells."
+        exit 459
+    }
+restore
+
+preserve
+    keep if etype == 3 & sex == 3
+    keep year event_count
+    rename event_count published_total
+    merge 1:1 year using `t1_grand', assert(match) nogen
+    count if published_total != calculated_total
+    if r(N) {
+        display as error "Table Step 2A stopped: Table 1 grand totals do not equal the four detail cells."
+        exit 459
+    }
+restore
+
+use "`step1_data'/`table2'.dta", clear
+
+preserve
+    keep if inlist(etype, 1, 2)
+    reshape wide event_count, i(year month cell_available) j(etype)
+    rename event_count1 stroke_count
+    rename event_count2 ami_count
+    tempfile t2_disease_components
+    save `t2_disease_components', replace
+restore
+
+keep if etype == 3
+keep year month cell_available event_count
+rename event_count all_cvd_count
+merge 1:1 year month cell_available using `t2_disease_components', assert(match) nogen
+count if cell_available == 1 & all_cvd_count != stroke_count + ami_count
+if r(N) {
+    display as error "Table Step 2A stopped: Table 2 All-CVD counts do not equal Stroke plus AMI."
+    exit 459
+}
+
+use "`step1_data'/`table2'.dta", clear
+keep if cell_available == 1
+collapse (sum) monthly_total=event_count, by(year etype)
+save `t2_annual_totals', replace
+
+use "`step1_data'/`table1'.dta", clear
+keep if sex == 3
+keep year etype event_count
+rename event_count annual_total
+merge 1:1 year etype using `t2_annual_totals', assert(match) nogen
+count if annual_total != monthly_total
+if r(N) {
+    display as error "Table Step 2A stopped: annual counts in Table 1 do not equal the covered monthly counts in Table 2."
+    exit 459
+}
+
+* ---- D2.2 Initial Table 1 plan: protect the complete 3 x 3 margins ----
+
+use "`step1_data'/`table1'.dta", clear
+gen byte suppress_primary = inrange(event_count, 1, 5)
+gen byte suppress_secondary = 0
+gen str200 suppression_reason = ""
+replace suppression_reason = "Event count is between 1 and 5." if suppress_primary
+
+* Preserve disease totals by hiding both sex-specific disease cells whenever
+* either one is primary-suppressed.
+gen byte primary_detail = suppress_primary & inlist(etype, 1, 2) & inlist(sex, 1, 2)
+bysort year etype: egen byte affected_event = max(primary_detail)
+replace suppress_secondary = 1 if affected_event & inlist(etype, 1, 2) & ///
+    inlist(sex, 1, 2) & !suppress_primary
+replace suppression_reason = "Companion sex-specific count is hidden so the disease total can remain public." if ///
+    suppress_secondary & suppression_reason == ""
+
+* A sex-specific All-CVD margin would recreate a hidden disease-by-sex cell
+* when the other disease count is public. Hide both affected sex margins.
+gen byte hidden_detail = (suppress_primary | suppress_secondary) & ///
+    inlist(etype, 1, 2) & inlist(sex, 1, 2)
+bysort year sex: egen byte hidden_in_sex = max(hidden_detail)
+replace suppress_secondary = 1 if etype == 3 & inlist(sex, 1, 2) & ///
+    hidden_in_sex & !suppress_primary
+replace suppression_reason = "Sex-specific All-CVD margin is hidden to protect a disease-by-sex count." if ///
+    suppress_secondary & suppression_reason == ""
+
+* If a disease total, sex total or grand total is itself primary-suppressed,
+* hide its companion margin as well. This closes all six equations in the
+* Table 1 3 x 3 layout.
+gen byte hidden_event_total = (suppress_primary | suppress_secondary) & ///
+    inlist(etype, 1, 2) & sex == 3
+bysort year: egen byte any_hidden_event_total = max(hidden_event_total)
+replace suppress_secondary = 1 if any_hidden_event_total & ///
+    inlist(etype, 1, 2) & sex == 3 & !suppress_primary
+replace suppression_reason = "Companion disease total is hidden to protect an annual margin." if ///
+    suppress_secondary & suppression_reason == ""
+
+gen byte hidden_sex_total = (suppress_primary | suppress_secondary) & ///
+    etype == 3 & inlist(sex, 1, 2)
+bysort year: egen byte any_hidden_sex_total = max(hidden_sex_total)
+replace suppress_secondary = 1 if any_hidden_sex_total & etype == 3 & ///
+    inlist(sex, 1, 2) & !suppress_primary
+replace suppression_reason = "Companion sex total is hidden to protect an annual margin." if ///
+    suppress_secondary & suppression_reason == ""
+
+gen byte hidden_grand = suppress_primary & etype == 3 & sex == 3
+bysort year: egen byte any_hidden_grand = max(hidden_grand)
+replace suppress_secondary = 1 if any_hidden_grand & ///
+    ((inlist(etype, 1, 2) & sex == 3) | ///
+     (etype == 3 & inlist(sex, 1, 2))) & !suppress_primary
+replace suppression_reason = "Annual margin is hidden because the grand total is protected." if ///
+    suppress_secondary & suppression_reason == ""
+
+keep year etype sex suppress_primary suppress_secondary suppression_reason
+save `t1_sdc_initial', replace
+
+preserve
+    keep if sex == 3
+    keep year etype suppress_primary suppress_secondary
+    rename suppress_primary annual_primary
+    rename suppress_secondary annual_secondary
+    save `annual_initial', replace
+restore
+
+* ---- D2.3 Initial Table 2 plan: protect each monthly component equation ----
+
+use "`step1_data'/`table2'.dta", clear
+gen byte suppress_primary = inrange(event_count, 1, 5) & cell_available == 1
+gen byte suppress_secondary = 0
+gen str200 suppression_reason = ""
+replace suppression_reason = "Monthly event count is between 1 and 5." if suppress_primary
+
+gen byte hidden_disease = suppress_primary & inlist(etype, 1, 2)
+bysort year month: egen byte hidden_disease_in_month = max(hidden_disease)
+replace suppress_secondary = 1 if etype == 3 & hidden_disease_in_month & ///
+    !suppress_primary
+replace suppression_reason = "Monthly All-CVD total is hidden because it contains a protected disease count." if ///
+    suppress_secondary & suppression_reason == ""
+
+merge m:1 year etype using `annual_initial', assert(match) nogen
+gen byte monthly_hidden = (suppress_primary | suppress_secondary) & cell_available
+bysort year etype: egen int hidden_months = total(monthly_hidden)
+bysort year etype: egen int covered_months = total(cell_available)
+
+* Where the annual total is public and only one month is hidden, select the
+* smallest remaining covered month (earliest month breaks ties) as the second
+* hidden term. If there is no second covered month, flag the annual total.
+gen byte companion_candidate = cell_available & !monthly_hidden
+bysort year etype: egen double companion_value = ///
+    min(cond(companion_candidate, event_count, .))
+bysort year etype: egen byte companion_month = ///
+    min(cond(companion_candidate & event_count == companion_value, month, .))
+
+gen byte annual_needs_secondary = hidden_months == 1 & ///
+    annual_primary == 0 & annual_secondary == 0 & covered_months == 1
+
+replace suppress_secondary = 1 if hidden_months == 1 & ///
+    annual_primary == 0 & annual_secondary == 0 & covered_months > 1 & ///
+    month == companion_month & !suppress_primary
+replace suppression_reason = "Additional month is hidden so the annual total cannot reveal the protected month." if ///
+    suppress_secondary & suppression_reason == ""
+
+preserve
+    keep if annual_needs_secondary
+    keep year etype
+    duplicates drop
+    gen byte annual_cross_secondary = 1
+    save `annual_cross_flags', replace
+restore
+
+drop annual_primary annual_secondary monthly_hidden hidden_months covered_months ///
+     companion_candidate companion_value companion_month annual_needs_secondary ///
+     hidden_disease hidden_disease_in_month
+save `t2_sdc_initial', replace
+
+* ---- D2.4 Apply cross-table annual flags, then close Table 1 margins again ----
+
+use `t1_sdc_initial', clear
+merge m:1 year etype using `annual_cross_flags', nogen
+replace annual_cross_secondary = 0 if missing(annual_cross_secondary)
+replace suppress_secondary = 1 if sex == 3 & annual_cross_secondary & ///
+    !suppress_primary
+replace suppression_reason = "Annual total is hidden because only one covered monthly component exists and is protected." if ///
+    sex == 3 & annual_cross_secondary & !suppress_primary
+
+gen byte hidden_event_total = (suppress_primary | suppress_secondary) & ///
+    inlist(etype, 1, 2) & sex == 3
+bysort year: egen byte any_hidden_event_total = max(hidden_event_total)
+replace suppress_secondary = 1 if any_hidden_event_total & ///
+    inlist(etype, 1, 2) & sex == 3 & !suppress_primary
+replace suppression_reason = "Companion disease total is hidden to protect an annual margin." if ///
+    suppress_secondary & suppression_reason == ""
+
+gen byte hidden_sex_total = (suppress_primary | suppress_secondary) & ///
+    etype == 3 & inlist(sex, 1, 2)
+bysort year: egen byte any_hidden_sex_total = max(hidden_sex_total)
+replace suppress_secondary = 1 if any_hidden_sex_total & etype == 3 & ///
+    inlist(sex, 1, 2) & !suppress_primary
+replace suppression_reason = "Companion sex total is hidden to protect an annual margin." if ///
+    suppress_secondary & suppression_reason == ""
+
+gen byte hidden_grand = (suppress_primary | suppress_secondary) & ///
+    etype == 3 & sex == 3
+bysort year: egen byte any_hidden_grand = max(hidden_grand)
+replace suppress_secondary = 1 if any_hidden_grand & ///
+    ((inlist(etype, 1, 2) & sex == 3) | ///
+     (etype == 3 & inlist(sex, 1, 2))) & !suppress_primary
+replace suppression_reason = "Annual margin is hidden because the grand total is protected." if ///
+    suppress_secondary & suppression_reason == ""
+
+drop annual_cross_secondary hidden_event_total any_hidden_event_total ///
+     hidden_sex_total any_hidden_sex_total hidden_grand any_hidden_grand
+save `t1_sdc_plan', replace
+
+* ---- D2.5 Ensure a hidden annual total is not recreated by public months ----
+
+preserve
+    keep if sex == 3
+    keep year etype suppress_primary suppress_secondary
+    rename suppress_primary annual_primary
+    rename suppress_secondary annual_secondary
+    tempfile annual_final
+    save `annual_final', replace
+restore
+
+use `t2_sdc_initial', clear
+merge m:1 year etype using `annual_final', assert(match) nogen
+gen byte monthly_hidden = (suppress_primary | suppress_secondary) & cell_available
+bysort year etype: egen int hidden_months = total(monthly_hidden)
+gen byte annual_hidden = annual_primary | annual_secondary
+gen byte equation_has_one_hidden = annual_hidden + hidden_months == 1
+
+gen byte companion_candidate = equation_has_one_hidden & cell_available & !monthly_hidden
+bysort year etype: egen double companion_value = ///
+    min(cond(companion_candidate, event_count, .))
+bysort year etype: egen byte companion_month = ///
+    min(cond(companion_candidate & event_count == companion_value, month, .))
+
+replace suppress_secondary = 1 if companion_candidate & ///
+    month == companion_month & !suppress_primary
+replace suppression_reason = "Additional month is hidden to prevent reconstruction from the annual total." if ///
+    suppress_secondary & suppression_reason == ""
+
+drop annual_primary annual_secondary monthly_hidden hidden_months annual_hidden ///
+     equation_has_one_hidden companion_candidate companion_value companion_month
+save `t2_sdc_plan', replace
+
+* ---- D2.6 Fail-closed audit of every additive publication equation ----
+
+use `t1_sdc_plan', clear
+gen byte hidden = suppress_primary | suppress_secondary
+gen byte cell = (etype - 1) * 3 + sex
+keep year cell hidden
+reshape wide hidden, i(year) j(cell)
+expand 6
+bysort year: gen byte relation = _n
+gen str24 check_type = "table_01_margin"
+gen str120 cell_key = ""
+gen int terms_in_equation = 3
+gen int suppressed_terms = .
+replace cell_key = "year=" + string(year) + "; Stroke female + male = total" if relation == 1
+replace suppressed_terms = hidden1 + hidden2 + hidden3 if relation == 1
+replace cell_key = "year=" + string(year) + "; AMI female + male = total" if relation == 2
+replace suppressed_terms = hidden4 + hidden5 + hidden6 if relation == 2
+replace cell_key = "year=" + string(year) + "; female Stroke + AMI = All CVD" if relation == 3
+replace suppressed_terms = hidden1 + hidden4 + hidden7 if relation == 3
+replace cell_key = "year=" + string(year) + "; male Stroke + AMI = All CVD" if relation == 4
+replace suppressed_terms = hidden2 + hidden5 + hidden8 if relation == 4
+replace cell_key = "year=" + string(year) + "; Stroke + AMI totals = All CVD" if relation == 5
+replace suppressed_terms = hidden3 + hidden6 + hidden9 if relation == 5
+replace cell_key = "year=" + string(year) + "; female + male totals = All CVD" if relation == 6
+replace suppressed_terms = hidden7 + hidden8 + hidden9 if relation == 6
+keep check_type cell_key terms_in_equation suppressed_terms
+save `audit_t1', replace
+
+use `t2_sdc_plan', clear
+gen byte hidden = suppress_primary | suppress_secondary
+keep year month etype hidden
+reshape wide hidden, i(year month) j(etype)
+gen str24 check_type = "table_02_margin"
+gen str120 cell_key = "year=" + string(year) + "; month=" + string(month) + ///
+    "; Stroke + AMI = All CVD"
+gen int terms_in_equation = 3
+gen int suppressed_terms = hidden1 + hidden2 + hidden3
+keep check_type cell_key terms_in_equation suppressed_terms
+save `audit_t2', replace
+
+use `t2_sdc_plan', clear
+gen byte monthly_hidden = (suppress_primary | suppress_secondary) & cell_available
+collapse (sum) covered_months=cell_available suppressed_months=monthly_hidden, by(year etype)
+merge 1:1 year etype using `annual_final', assert(match) nogen
+gen byte annual_hidden = annual_primary | annual_secondary
+gen str24 check_type = "table_01_vs_table_02"
+gen str120 cell_key = "year=" + string(year) + "; event=" + string(etype) + ///
+    "; annual total = sum of covered months"
+gen int terms_in_equation = covered_months + 1
+gen int suppressed_terms = suppressed_months + annual_hidden
+keep check_type cell_key terms_in_equation suppressed_terms
+save `audit_cross', replace
+
+use `audit_t1', clear
+append using `audit_t2' `audit_cross'
+gen byte exact_reconstruction_risk = suppressed_terms == 1
+gen str6 check_status = cond(exact_reconstruction_risk, "FAIL", "PASS")
+order check_type cell_key terms_in_equation suppressed_terms ///
+      exact_reconstruction_risk check_status
+sort check_type cell_key
+save `combined_disclosure_audit', replace
+
+quietly count
+local cross_table_checks = r(N)
+quietly count if exact_reconstruction_risk
+local cross_table_failures = r(N)
+export delimited using "`cross_table_csv'", replace
+
+if `cross_table_failures' {
+    display as error "Table Step 2A stopped: the disclosure audit found a reconstructable hidden count."
+    display as result "Review: `cross_table_csv'"
+    exit 459
+}
+
+
+* =============================================================================
 * E. TABLE 1 -- ANNUAL EVENT COUNTS
 * =============================================================================
-* Primary suppression is assessed on the four base cells within each year:
-* Stroke/AMI by female/male. Any total containing a primary-suppressed base
-* cell is complementary-suppressed so the small value cannot be recovered by
-* subtraction.
+* Suppression flags come from the joint Table 1/Table 2 plan above. The plan
+* protects all annual margins while retaining disease totals where possible.
 
 use "`step1_data'/`table1'.dta", clear
 isid year etype sex
@@ -241,17 +625,7 @@ foreach required_variable in year etype sex event_count period_status coverage_e
 }
 
 gen double review_value = event_count
-gen byte suppress_primary = event_count < 6 & !missing(event_count) & ///
-    inlist(etype, 1, 2) & inlist(sex, 1, 2)
-
-bysort year etype: egen byte primary_in_event = max(suppress_primary)
-bysort year sex:   egen byte primary_in_sex   = max(suppress_primary)
-bysort year:       egen byte primary_in_year  = max(suppress_primary)
-
-gen byte suppress_secondary = 0
-replace suppress_secondary = 1 if sex == 3 & inlist(etype, 1, 2) & primary_in_event == 1
-replace suppress_secondary = 1 if etype == 3 & inlist(sex, 1, 2) & primary_in_sex == 1
-replace suppress_secondary = 1 if etype == 3 & sex == 3 & primary_in_year == 1
+merge 1:1 year etype sex using `t1_sdc_plan', assert(match) nogen
 
 gen str12 suppression_status = "none"
 replace suppression_status = "primary"   if suppress_primary == 1
@@ -259,10 +633,6 @@ replace suppression_status = "secondary" if suppress_secondary == 1 & suppress_p
 
 decode etype, gen(event_group)
 decode sex,   gen(sex_group)
-
-gen str200 suppression_reason = ""
-replace suppression_reason = "Event count is fewer than 6." if suppression_status == "primary"
-replace suppression_reason = "Total contains a primary-suppressed event count." if suppression_status == "secondary"
 
 quietly count if suppression_status == "primary"
 local t1_primary = r(N)
@@ -291,8 +661,7 @@ restore
 replace event_count = . if suppression_status != "none"
 gen str14 display_count = cond(missing(event_count), "—", trim(string(event_count, "%12.0fc")))
 
-drop review_value suppress_primary suppress_secondary ///
-     primary_in_event primary_in_sex primary_in_year suppression_reason
+drop review_value suppress_primary suppress_secondary suppression_reason
 order year etype event_group sex sex_group event_count display_count ///
       suppression_status period_status coverage_end
 
@@ -344,28 +713,20 @@ restore
 * =============================================================================
 * F. TABLE 2 -- MONTHLY EVENT COUNTS
 * =============================================================================
-* Stroke and AMI are the base cells. The corresponding All-CVD total is
-* complementary-suppressed whenever either component is primary-suppressed.
-* Future months remain unavailable and are not treated as suppressed zeroes.
+* Suppression flags come from the joint plan. It protects both the within-month
+* Stroke + AMI equation and the annual-total = sum-of-months equation.
 
 use "`step1_data'/`table2'.dta", clear
 isid year month etype
 
 gen double review_value = event_count
-gen byte suppress_primary = event_count < 6 & !missing(event_count) & ///
-    inlist(etype, 1, 2) & cell_available == 1
-bysort year month: egen byte primary_in_month = max(suppress_primary)
-gen byte suppress_secondary = etype == 3 & primary_in_month == 1
+merge 1:1 year month etype using `t2_sdc_plan', assert(match) nogen
 
 gen str12 suppression_status = "none"
 replace suppression_status = "primary"   if suppress_primary == 1
 replace suppression_status = "secondary" if suppress_secondary == 1
 
 decode etype, gen(event_group)
-gen str200 suppression_reason = ""
-replace suppression_reason = "Monthly event count is fewer than 6." if suppression_status == "primary"
-replace suppression_reason = "All-CVD total contains a primary-suppressed monthly count." if suppression_status == "secondary"
-
 quietly count if suppression_status == "primary"
 local t2_primary = r(N)
 quietly count if suppression_status == "secondary"
@@ -391,8 +752,7 @@ replace display_count = trim(string(event_count, "%12.0fc")) if ///
     suppression_status == "none" & cell_available == 1
 replace display_count = "Not available" if cell_available == 0
 
-drop review_value suppress_primary suppress_secondary ///
-     primary_in_month suppression_reason
+drop review_value suppress_primary suppress_secondary suppression_reason
 order year month etype event_group event_count display_count ///
       suppression_status cell_available period_status coverage_end
 
@@ -431,13 +791,13 @@ restore
 * G. TABLE 3 -- EVENT PERCENTAGE BY BROAD AGE GROUP
 * =============================================================================
 * The two percentages within each event/sex/period group are complementary.
-* If either age-group numerator is fewer than 6, both percentages are hidden.
+* If either age-group numerator is between 1 and 5, both percentages are hidden.
 
 use "`step1_data'/`table3'.dta", clear
 isid period etype sex age70
 
 gen double review_value = percentage
-gen byte suppress_primary = numerator_count < 6 & !missing(numerator_count)
+gen byte suppress_primary = inrange(numerator_count, 1, 5)
 bysort period etype sex: egen byte primary_in_pair = max(suppress_primary)
 gen byte suppress_secondary = primary_in_pair == 1 & suppress_primary == 0
 
@@ -451,7 +811,7 @@ decode sex,    gen(sex_group)
 gen str12 age_group = cond(age70 == 0, "Under 70", "70 and over")
 
 gen str200 suppression_reason = ""
-replace suppression_reason = "Age-group numerator is fewer than 6." if suppression_status == "primary"
+replace suppression_reason = "Age-group numerator is between 1 and 5." if suppression_status == "primary"
 replace suppression_reason = "Paired percentage is hidden to protect its primary-suppressed complement." if suppression_status == "secondary"
 
 quietly count if suppression_status == "primary"
@@ -522,7 +882,7 @@ restore
 * =============================================================================
 * H. TABLE 4 -- ANNUAL INCIDENCE RATES
 * =============================================================================
-* A complete rate row is hidden when its numerator is fewer than 6.
+* A complete rate row is hidden when its numerator is between 1 and 5.
 *
 * Two additional protections are applied:
 *   1. If adding DCO events produces a positive increment below 6, both the
@@ -534,7 +894,7 @@ use "`step1_data'/`table4'.dta", clear
 isid year dco etype sex
 
 gen double review_value = rateadj
-gen byte suppress_primary = numerator_count < 6 & !missing(numerator_count)
+gen byte suppress_primary = inrange(numerator_count, 1, 5)
 
 bysort year etype sex: egen double no_dco_count = ///
     max(cond(dco == 0, numerator_count, .))
@@ -558,7 +918,7 @@ decode sex,   gen(sex_group)
 decode dco,   gen(dco_group)
 
 gen str200 suppression_reason = ""
-replace suppression_reason = "Incidence numerator is fewer than 6." if suppression_status == "primary"
+replace suppression_reason = "Incidence numerator is between 1 and 5." if suppression_status == "primary"
 replace suppression_reason = "Without-DCO and DCO-added results are both hidden because their positive increment is fewer than 6." if ///
     suppression_status == "secondary" & small_dco_increment == 1
 replace suppression_reason = "Both-sex rate contains a suppressed sex-specific result." if ///
@@ -644,7 +1004,8 @@ use "`step1_data'/`table5'.dta", clear
 isid comparison_order
 
 gen double review_value = rate_ratio
-gen byte suppress_primary = comparison_count < 6 | reference_count < 6
+gen byte suppress_primary = inrange(comparison_count, 1, 5) | ///
+    inrange(reference_count, 1, 5)
 replace suppress_primary = 0 if missing(comparison_count) | missing(reference_count)
 gen byte suppress_secondary = 0
 
@@ -652,7 +1013,7 @@ gen str12 suppression_status = "none"
 replace suppression_status = "primary" if suppress_primary == 1
 
 gen str200 suppression_reason = ""
-replace suppression_reason = "At least one comparison count is fewer than 6." if suppression_status == "primary"
+replace suppression_reason = "At least one comparison count is between 1 and 5." if suppression_status == "primary"
 
 quietly count if suppression_status == "primary"
 local t5_primary = r(N)
@@ -725,7 +1086,8 @@ isid period_number etype sex
 
 gen double review_value = confirmed_cf_percent
 gen double survivor_count = denominator_count - confirmed_deaths
-gen byte suppress_primary = confirmed_deaths < 6 | survivor_count < 6
+gen byte suppress_primary = inrange(confirmed_deaths, 1, 5) | ///
+    inrange(survivor_count, 1, 5)
 replace suppress_primary = 0 if missing(confirmed_deaths) | missing(survivor_count)
 gen byte suppress_secondary = 0
 
@@ -736,7 +1098,7 @@ decode etype, gen(event_group)
 decode sex,   gen(sex_group)
 
 gen str200 suppression_reason = ""
-replace suppression_reason = "Confirmed deaths or complementary survivors are fewer than 6." if suppression_status == "primary"
+replace suppression_reason = "Confirmed deaths or complementary survivors are between 1 and 5." if suppression_status == "primary"
 
 quietly count if suppression_status == "primary"
 local t6_primary = r(N)
@@ -812,7 +1174,7 @@ use "`step1_data'/`table7'.dta", clear
 isid year etype sex
 
 gen double review_value = median_days
-gen byte suppress_primary = support_count < 6 & !missing(support_count)
+gen byte suppress_primary = inrange(support_count, 1, 5)
 gen byte suppress_secondary = 0
 
 gen str12 suppression_status = "none"
@@ -822,7 +1184,7 @@ decode etype, gen(event_group)
 decode sex,   gen(sex_group)
 
 gen str200 suppression_reason = ""
-replace suppression_reason = "Fewer than 6 eligible stays contribute to the summary." if suppression_status == "primary"
+replace suppression_reason = "Between 1 and 5 eligible stays contribute to the summary." if suppression_status == "primary"
 
 quietly count if suppression_status == "primary"
 local t7_primary = r(N)
@@ -995,24 +1357,33 @@ if `review_items' == 0 {
 }
 export excel using "`review_xlsx'", sheet("Worklist", replace) firstrow(varlabels)
 
+use `combined_disclosure_audit', clear
+label variable check_type                "Check type"
+label variable cell_key                  "Published additive relationship"
+label variable terms_in_equation         "Terms"
+label variable suppressed_terms          "Hidden terms"
+label variable exact_reconstruction_risk "Exactly one hidden term"
+label variable check_status              "Status"
+export excel using "`review_xlsx'", sheet("Cross-table checks", replace) firstrow(varlabels)
+
 clear
 set obs 7
 gen str10 table_id = ""
 gen str220 disclosure_rule = ""
 replace table_id = "table_01" in 1
-replace disclosure_rule = "Suppress a base event/sex count below 6; suppress each containing event, sex, and overall total." in 1
+replace disclosure_rule = "Jointly protect annual sex-by-disease cells and margins; retain disease totals where possible; audit against monthly counts." in 1
 replace table_id = "table_02" in 2
-replace disclosure_rule = "Suppress a Stroke or AMI monthly count below 6; suppress the corresponding All-CVD total." in 2
+replace disclosure_rule = "Protect monthly component totals and add a second hidden term where an annual total could reveal one protected month." in 2
 replace table_id = "table_03" in 3
-replace disclosure_rule = "If either age-group numerator is below 6, suppress both complementary percentages." in 3
+replace disclosure_rule = "If either age-group numerator is 1 to 5, suppress both complementary percentages." in 3
 replace table_id = "table_04" in 4
-replace disclosure_rule = "Suppress a rate row supported by fewer than 6 events; protect small DCO increments and affected both-sex totals." in 4
+replace disclosure_rule = "Suppress a rate row supported by 1 to 5 events; protect small DCO increments and affected both-sex totals." in 4
 replace table_id = "table_05" in 5
-replace disclosure_rule = "Suppress the ratio and confidence limits when either comparison count is below 6." in 5
+replace disclosure_rule = "Suppress the ratio and confidence limits when either comparison count is 1 to 5." in 5
 replace table_id = "table_06" in 6
-replace disclosure_rule = "Suppress case fatality when confirmed deaths or complementary survivors are below 6." in 6
+replace disclosure_rule = "Suppress case fatality when confirmed deaths or complementary survivors are 1 to 5." in 6
 replace table_id = "table_07" in 7
-replace disclosure_rule = "Suppress median and quartiles together when fewer than 6 eligible stays contribute." in 7
+replace disclosure_rule = "Suppress median and quartiles together when 1 to 5 eligible stays contribute." in 7
 label variable table_id        "Table"
 label variable disclosure_rule "Disclosure-control rule"
 export excel using "`review_xlsx'", sheet("Disclosure rules", replace) firstrow(varlabels)
@@ -1047,6 +1418,8 @@ putexcel set "`review_xlsx'", sheet("Summary") modify
 putexcel A1:E1, bold hcenter border(bottom) overwritefmt
 putexcel set "`review_xlsx'", sheet("Worklist") modify
 putexcel A1:H1, bold hcenter border(bottom) overwritefmt
+putexcel set "`review_xlsx'", sheet("Cross-table checks") modify
+putexcel A1:F1, bold hcenter border(bottom) overwritefmt
 putexcel set "`review_xlsx'", sheet("Disclosure rules") modify
 putexcel A1:B1, bold hcenter border(bottom) overwritefmt
 putexcel set "`review_xlsx'", sheet("Data dictionary") modify
@@ -1061,7 +1434,7 @@ file open summary using "`review_dir'/suppression_summary.txt", write replace te
 file write summary "BNR CVD TABLES: STEP 2A SUPPRESSION SUMMARY" _n
 file write summary "Package: `package_id'" _n
 file write summary "Coverage through: `coverage'" _n
-file write summary "Primary threshold: fewer than 6" _n
+file write summary "Primary frequency rule: 1 to 5" _n
 file write summary "" _n
 file write summary "Table 1: primary `t1_primary'; complementary `t1_secondary'" _n
 file write summary "Table 2: primary `t2_primary'; complementary `t2_secondary'" _n
@@ -1074,6 +1447,8 @@ file write summary "" _n
 file write summary "Total primary suppressions: `total_primary'" _n
 file write summary "Total complementary suppressions: `total_secondary'" _n
 file write summary "Total review items: `review_items'" _n
+file write summary "Additive disclosure checks: `cross_table_checks'" _n
+file write summary "Exact reconstruction failures: `cross_table_failures'" _n
 file write summary "" _n
 file write summary "Review suppression_review.xlsx and every public_ready product." _n
 file write summary "No approval or publication has been performed." _n
@@ -1091,7 +1466,7 @@ putexcel A1 = "BNR cardiovascular disease annual tabulations", bold
 putexcel A3 = "Package" B3 = "`package_id'"
 putexcel A4 = "Coverage through" B4 = "`coverage'"
 putexcel A6 = "Disclosure control"
-putexcel B6 = "Cells supported by fewer than 6 observations are suppressed. Complementary suppression is applied where required."
+putexcel B6 = "Cells supported by 1 to 5 observations are suppressed. True zeroes are not automatically suppressed. Complementary suppression is applied where required."
 putexcel A7 = "Suppression symbol" B7 = "—"
 putexcel A9 = "Status" B9 = "PUBLIC-READY FOR REVIEW — NOT YET APPROVED"
 putexcel A11 = "Year-to-date"
@@ -1161,7 +1536,7 @@ forvalues row = 1/`=_N' {
     local j = cvd_total[`row']
     file write md1 "| `a' | `b' | `c' | `d' | `e' | `f' | `g' | `h' | `i' | `j' |" _n
 }
-file write md1 _n "_YTD = year to date. — = suppressed because the value or a contributing value is fewer than 6._" _n
+file write md1 _n "_YTD = year to date. — = suppressed because a contributing frequency is 1 to 5 or complementary protection is required._" _n
 file close md1
 
 * -----------------------------------------------------------------------------
@@ -1211,7 +1586,7 @@ forvalues row = 1/`=_N' {
     local e = age_70_plus[`row']
     file write md3 "| `a' | `b' | `c' | `d' | `e' |" _n
 }
-file write md3 _n "_Percentages use events with known age group. Both complementary percentages are hidden when either age-group count is fewer than 6._" _n
+file write md3 _n "_Percentages use events with known age group. Both complementary percentages are hidden when either age-group count is 1 to 5._" _n
 file close md3
 
 * -----------------------------------------------------------------------------
@@ -1301,7 +1676,7 @@ forvalues yr = `release_year'(-1)2010 {
             file write md7 "| `a' | `b' | `c' | `d' | `e' |" _n
         }
     }
-    file write md7 _n "_— = suppressed because fewer than 6 eligible stays contribute._" _n _n
+    file write md7 _n "_— = suppressed because 1 to 5 eligible stays contribute._" _n _n
 }
 file write md7 ":::" _n
 file close md7
@@ -1317,6 +1692,7 @@ file write meta "product_type: cvd_annual_tabulations" _n
 file write meta "status: public_ready_unapproved" _n
 file write meta "coverage_end: `coverage'" _n
 file write meta "disclosure_threshold: 6" _n
+file write meta "primary_frequency_range: 1-5" _n
 file write meta "suppression_symbol: '—'" _n
 file write meta "workbook: workbook/workbook_cvd_annual_tabulations.xlsx" _n
 file write meta "approval_required: true" _n
@@ -1325,8 +1701,11 @@ file close meta
 
 file open disclosure using "`public_metadata'/disclosure_control.yml", write replace text
 file write disclosure "policy: BNR small-number disclosure control" _n
-file write disclosure "primary_rule: suppress values supported by fewer than 6 observations" _n
+file write disclosure "primary_rule: suppress values supported by 1 to 5 observations" _n
 file write disclosure "complementary_suppression: true" _n
+file write disclosure "cross_table_check: passed" _n
+file write disclosure "cross_table_equations_checked: `cross_table_checks'" _n
+file write disclosure "exact_reconstruction_failures: `cross_table_failures'" _n
 file write disclosure "suppression_symbol: '—'" _n
 file write disclosure "private_review_items: `review_items'" _n
 file write disclosure "primary_suppressions: `total_primary'" _n
@@ -1399,6 +1778,7 @@ foreach required_output in ///
     "`download_xlsx'" ///
     "`review_xlsx'" ///
     "`worklist_csv'" ///
+    "`cross_table_csv'" ///
     "`review_dir'/suppression_summary.txt" ///
     "`public_ready'/public_manifest.csv" ///
     "`public_metadata'/package.yml" ///
@@ -1443,6 +1823,7 @@ qui {
     noi display as result  "Coverage through: `coverage'"
     noi display as result  "Primary flags:    `total_primary'"
     noi display as result  "Secondary flags:  `total_secondary'"
+    noi display as result  "Disclosure checks: `cross_table_checks' passed"
     noi display as result  "Review items:     `review_items'"
     noi display as result  "Review workbook:  `review_xlsx'"
     noi display as result  "Public workbook:  `download_xlsx'"

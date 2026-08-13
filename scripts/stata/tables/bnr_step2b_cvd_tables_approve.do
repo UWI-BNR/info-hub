@@ -182,6 +182,7 @@ local step1_qa         "`review_dir'/qa_summary.txt"
 local suppression_sum  "`review_dir'/suppression_summary.txt"
 local suppression_csv  "`review_dir'/suppression_worklist.csv"
 local suppression_xlsx "`review_dir'/suppression_review.xlsx"
+local cross_table_csv  "`review_dir'/cross_table_disclosure_check.csv"
 
 local package_yml      "`public_metadata'/package.yml"
 local disclosure_yml   "`public_metadata'/disclosure_control.yml"
@@ -199,6 +200,7 @@ foreach required_file in ///
     "`suppression_sum'" ///
     "`suppression_csv'" ///
     "`suppression_xlsx'" ///
+    "`cross_table_csv'" ///
     "`package_yml'" ///
     "`disclosure_yml'" ///
     "`catalogue_csv'" ///
@@ -211,6 +213,33 @@ foreach required_file in ///
         display as result "Missing file: `required_file'"
         exit 601
     }
+}
+
+* The cross-table audit is a hard approval gate. Step 2A writes one row for
+* every additive relationship it checked. Exactly one hidden term would mean
+* that the hidden value can be reconstructed from the remaining public terms.
+import delimited using "`cross_table_csv'", varnames(1) stringcols(_all) clear
+
+foreach audit_variable in check_type cell_key exact_reconstruction_risk check_status {
+    capture confirm variable `audit_variable'
+    if _rc {
+        display as error "Table Step 2B stopped: the cross-table disclosure audit is malformed."
+        exit 459
+    }
+}
+
+quietly count
+if r(N) == 0 {
+    display as error "Table Step 2B stopped: the cross-table disclosure audit is empty."
+    exit 459
+}
+
+quietly count if strtrim(check_status) != "PASS" | ///
+    strtrim(exact_reconstruction_risk) != "0"
+if r(N) {
+    display as error "Table Step 2B stopped: a cross-table disclosure check has failed."
+    display as result "Review: `cross_table_csv'"
+    exit 459
 }
 
 

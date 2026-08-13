@@ -2,7 +2,7 @@
 title: "Apply and review disclosure control"
 description: "BNR small-number disclosure-control rules and practical human review across dashboards, tables and briefings."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-13
 ---
 
 ---
@@ -113,6 +113,10 @@ Anyone can calculate:
 The protected value has therefore still been disclosed.
 
 One or more additional values must be hidden. This is **secondary** or **complementary** suppression.
+
+For the annual CVD table, BNR normally keeps the disease total and hides the companion sex-specific count. Any female/male All-CVD margins that could recreate those hidden cells are protected as well. For example, if female AMI is 4 and male AMI is 12, both sex-specific AMI cells and the affected sex margins are hidden, while the AMI total of 16 may remain public. The monthly table may then safely show the same AMI total.
+
+The tabulation workflow also checks annual totals against their published monthly components. If an annual total would reveal the only hidden month, it hides another monthly component—or the annual total when no second covered month exists.
 
 The exact rule depends on the structure of the output. Dashboard metrics and tabulations therefore use different, clearly documented rules rather than one enormous generic suppression routine attempting to understand every table humanity might create.
 
@@ -248,4 +252,3 @@ Instead:
 5. approve only the rebuilt package.
 
 A substantive change to `bnr_sdc_v1` itself is a methodological and governance change. It should be agreed and documented before the code is changed.
-

@@ -2,7 +2,7 @@
 title: "Apply disclosure control and review tabulations"
 description: "Table Step 2A: suppress small numbers, create the exact proposed public products and complete the human review."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-13
 ---
 
 ---
@@ -11,7 +11,9 @@ date-modified: 2026-08-10
 
 Applies the BNR small-number disclosure rules to the seven Step 1 tables and creates the **exact products proposed for publication**. These products remain private and unapproved until Step 2B.
 
-The primary rule suppresses values supported by fewer than 6 observations. Complementary suppression is added where totals, paired percentages or related results could reveal a protected value.
+The primary rule suppresses values supported by 1 to 5 observations. A true zero is not automatically primary-suppressed. Complementary suppression is added where totals, paired percentages or related results could reveal a protected value.
+
+Tables 1 and 2 are checked jointly because they publish annual and monthly views of the same event counts. Step 2A reconciles their unsuppressed values, coordinates their suppression, and stops if any published additive relationship would leave exactly one hidden value recoverable by subtraction.
 
 ## Inputs
 
@@ -65,7 +67,23 @@ Check:
 
 An unexpected surge or absence of suppression should be investigated rather than accepted because the code completed.
 
-### 3. Review the Worklist sheet
+### 3. Review the cross-table checks
+
+Open the **Cross-table checks** sheet and:
+
+`review/cross_table_disclosure_check.csv`
+
+Confirm that every row has `check_status = PASS` and `exact_reconstruction_risk = 0`.
+
+The audit covers:
+
+- all six additive margins in each annual sex-by-disease table;
+- each monthly `Stroke + AMI = All CVD` relationship; and
+- each `annual total = sum of covered months` relationship shared by Tables 1 and 2.
+
+Step 2A should already have stopped if a row failed. The human review confirms that the number and structure of checks are plausible for the selected release.
+
+### 4. Review the Worklist sheet
 
 The **Worklist** contains the private exact value and supporting count for each affected row or cell.
 
@@ -81,7 +99,7 @@ The same information is available as:
 
 `review/suppression_worklist.csv`
 
-### 4. Review the Disclosure rules sheet
+### 5. Review the Disclosure rules sheet
 
 Use the **Disclosure rules** sheet as the table-specific rule reference.
 
@@ -95,7 +113,7 @@ Check that the implemented rule makes sense for the affected output. The seven t
 
 For the general BNR disclosure-control standard, see [Disclosure control](../../controls/disclosure-control.qmd).
 
-### 5. Review the public workbook
+### 6. Review the public workbook
 
 Open:
 
@@ -113,7 +131,7 @@ Check every table sheet:
 
 The workbook is public-safe in intent, but the reviewer is still responsible for confirming that it is safe.
 
-### 6. Review the public datasets
+### 7. Review the public datasets
 
 Open a selection of the `.dta` and `.csv` files under:
 
@@ -126,7 +144,7 @@ Check that:
 - unrestricted values agree with the reviewed Step 1 results; and
 - private supporting counts used to make suppression decisions have been removed where required.
 
-### 7. Review the website Markdown
+### 8. Review the website Markdown
 
 Inspect all seven files under:
 
@@ -142,7 +160,7 @@ Check:
 - table notes and definitions; and
 - consistency with the public workbook and datasets.
 
-### 8. Review metadata and the manifest
+### 9. Review metadata and the manifest
 
 Open:
 
@@ -169,6 +187,7 @@ If anything is wrong, do not manually edit generated products. Correct the appro
 |---|---|---|
 | `suppression_review.xlsx` | `.../review/` | Main private human review workbook containing exact values and supporting counts. |
 | `suppression_worklist.csv` | `.../review/` | Machine-readable list of every suppression review item. |
+| `cross_table_disclosure_check.csv` | `.../review/` | Fail-closed audit of annual margins, monthly margins and annual-versus-monthly reconstruction risk. |
 | `suppression_summary.txt` | `.../review/` | Plain summary of primary and complementary suppression counts. |
 | Seven suppressed `.dta/.csv` pairs | `.../public_ready/datasets/` | Public-safe table datasets proposed for release. |
 | `workbook_cvd_annual_tabulations.xlsx` | `.../public_ready/workbook/` | Exact workbook proposed for public download. |
