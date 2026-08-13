@@ -1,6 +1,9 @@
 policy: BNR small-number disclosure control
-primary_rule: suppress values supported by fewer than 6 observations
+primary_rule: suppress values supported by 1 to 5 observations
 complementary_suppression: true
+cross_table_check: passed
+cross_table_equations_checked: 315
+exact_reconstruction_failures: 0
 suppression_symbol: '—'
 private_review_items: 9
 primary_suppressions: 5

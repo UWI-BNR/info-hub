@@ -14,6 +14,6 @@
 | 2021 | 357 | 334 | 691 | 222 | 245 | 467 | 579 | 579 | 1,158 |
 | 2022 | 384 | 384 | 768 | 257 | 313 | 570 | 641 | 697 | 1,338 |
 | 2023 | 407 | 396 | 803 | 267 | 297 | 564 | 674 | 693 | 1,367 |
-| 2024 (YTD) | 28 | 21 | 49 | — | 11 | — | — | 32 | — |
+| 2024 (YTD) | 28 | 21 | 49 | — | — | 16 | — | — | 65 |
 
-_YTD = year to date. — = suppressed because the value or a contributing value is fewer than 6._
+_YTD = year to date. — = suppressed because a contributing frequency is 1 to 5 or complementary protection is required._
