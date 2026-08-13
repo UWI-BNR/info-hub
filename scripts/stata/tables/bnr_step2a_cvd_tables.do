@@ -450,7 +450,10 @@ replace suppression_reason = "Additional month is hidden so the annual total can
 preserve
     keep if annual_needs_secondary
     keep year etype
-    duplicates drop
+    quietly count
+    if r(N) > 0 {
+        duplicates drop
+    }
     gen byte annual_cross_secondary = 1
     save `annual_cross_flags', replace
 restore
