@@ -3,14 +3,14 @@ title: "Hospital length of stay"
 description: "How BNR summarises hospital stay following a registered CVD event."
 ---
 
-Length of stay is the number of completed days between hospital admission and the end of an eligible admission linked to a registered CVD event.
+Length of stay is the number of hospital days between admission and the end of an eligible admission linked to a registered CVD event. A same-day admission and discharge counts as one day.
 
 ## At a glance
 
 | Element | Description |
 |---|---|
 | **Question answered** | How long did eligible CVD admissions last? |
-| **Calculation** | Hospital end date minus admission date |
+| **Calculation** | Hospital end date minus admission date; same-day stays count as one day |
 | **Reported as** | Usually median days and interquartile range |
 | **Related measure** | Total bed-days |
 | **Unit** | Hospital admission linked to a CVD event |
@@ -24,16 +24,16 @@ Length of stay describes hospital use following CVD events. The median describes
 For admission \(i\):
 
 $$
-\text{Length of stay}_i = \text{hospital end date}_i - \text{admission date}_i
+\text{Length of stay}_i = \max(1, \text{hospital end date}_i - \text{admission date}_i)
 $$
 
 Total bed-days are obtained by adding lengths of stay across eligible admissions. BNR may also report the 25th and 75th percentiles, which enclose the middle half of observed stays.
 
 ## What is included and excluded?
 
-The measure includes completed hospital-registered CVD events with valid admission and hospital-end dates. Same-day stays are recorded as zero completed days. Admissions ending in death are included.
+The measure includes completed hospital-registered CVD events with valid admission and hospital-end dates. For an admission ending in discharge, the hospital-end date is the recorded discharge date. For an admission ending in death, it is the recorded date of death. Same-day stays are recorded as one hospital day.
 
-Death-certificate-only records, missing required dates and end dates before admission are excluded. Unusually long stays are checked, but a confirmed value is not excluded simply because it is extreme.
+Death-certificate-only records, missing required dates and end dates before admission are excluded. Where the recorded discharge status is missing, BNR applies its established date-of-death inference rule to identify likely alive and likely in-hospital death outcomes. Unusually long stays are flagged for review at 60 days and priority review at 90 days, but a confirmed value is not excluded simply because it is extreme.
 
 ## Worked example
 
@@ -53,7 +53,7 @@ A change in length of stay can reflect clinical need, pathways of care, discharg
 
 - Median stay and total bed-days answer different questions.
 - A shorter stay is not necessarily a better outcome.
-- Comparisons may be affected by event mix and whether in-hospital deaths are included.
+- Comparisons may be affected by event mix, survival and discharge pathways.
 - Invalid or incomplete dates reduce the eligible denominator.
 
 ## Related statistics and outputs
@@ -61,4 +61,3 @@ A change in length of stay can reflect clinical need, pathways of care, discharg
 - [CVD case fatality](case-fatality.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
 - [Hospital length-of-stay briefing](../../surveillance/cvd/briefings/hospital-los.qmd)
-

@@ -5,7 +5,7 @@ release_id: cvd_tables_2024_01
 title: CVD annual tabulations
 surveillance_area: CVD
 domain: cvd
-period: Data through January 2024
+period: 2024-01
 release_date: 2026-08-13
 downloads:
   - title: Complete public tabulations package

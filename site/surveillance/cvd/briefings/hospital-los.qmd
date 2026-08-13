@@ -116,7 +116,7 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 ::: {.card-body .text-center .p-3}
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke<br>2022-2023</p>
-<p class="display-6 fw-semibold mb-1">10 days</p>
+<p class="display-6 fw-semibold mb-1">9 days</p>
 <p class="mb-0 small">median hospital stay</p>
 
 :::
@@ -140,7 +140,7 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 ::: {.card-body .text-center .p-3}
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke<br>in 2023</p>
-<p class="display-6 fw-semibold mb-1">1,372</p>
+<p class="display-6 fw-semibold mb-1">1,659</p>
 <p class="mb-0 small">extra typical bed-days<br>vs 2014</p>
 
 :::
@@ -152,7 +152,7 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 ::: {.card-body .text-center .p-3}
 
 <p class="text-uppercase fw-semibold small text-muted mb-1">Stroke + AMI<br>in 2023</p>
-<p class="display-6 fw-semibold mb-1">1,684</p>
+<p class="display-6 fw-semibold mb-1">1,889</p>
 <p class="mb-0 small">extra typical bed-days<br>vs 2014</p>
 
 :::
@@ -161,7 +161,7 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 
 :::
 
-In 2022-2023, the typical hospital stay after stroke was longer than after AMI. Stroke also accounted for most of the additional typical bed-day pressure in 2023, compared with the 2014 baseline.
+In 2022-2023, the typical hospital stay after stroke was longer than after AMI: 9 days compared with 6 days. Stroke accounted for most of the additional typical bed-day pressure in 2023, compared with the 2014 baseline.
 
 
 

@@ -7,7 +7,7 @@ Surveillance area: CVD
 Registry: BNR-CVD
 Geography: Barbados
 Period: 2023
-Release date: 2026-08-07
+Release date: 2026-08-13
 
 Description:
 Public aggregate output package for the BNR CVD length-of-stay briefing.
@@ -25,7 +25,7 @@ The CSV files are open machine-readable versions of the released datasets.
 The YML files contain metadata exported from the Stata datasets.
 
 Limitations:
-Length of stay is based on hospital-ascertained CVD events only.
+Length of stay is based on hospital-ascertained CVD events with valid admission and end dates. Recorded and inferred in-hospital deaths are included.
 
 Rights and reuse:
 Public release. Cite the Barbados National Registry when reusing.

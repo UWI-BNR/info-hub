@@ -49,7 +49,7 @@ The span from the 25th to the 75th percentile, containing the middle half of obs
 ## L–R
 
 **Length of stay**  
-The number of completed days between hospital admission and the hospital-end date under the stated rules.
+The number of hospital days between admission and the hospital-end date under the stated rules. A same-day eligible admission counts as one day.
 
 **Median**  
 The middle value after observations are placed in order. Half are below it and half above it.
@@ -87,4 +87,3 @@ The continuing, systematic use of health information to monitor patterns and sup
 
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Measures overview](../measures/index.qmd)
-

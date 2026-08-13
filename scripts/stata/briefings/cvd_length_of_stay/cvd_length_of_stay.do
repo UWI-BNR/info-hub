@@ -276,7 +276,7 @@ local briefing_description ///
     "Public aggregate output package for the BNR CVD length-of-stay briefing."
 
 local briefing_limitations ///
-    "Length of stay is based on hospital-ascertained CVD events only."
+    "Length of stay is based on hospital-ascertained CVD events with valid admission and end dates. Recorded and inferred in-hospital deaths are included."
 
 local data_note ///
     "Aggregate hospital-ascertained length-of-stay and bed-day demand outputs."
@@ -563,9 +563,13 @@ forvalues period_number = 1/`number_periods' {
 label values year2 year2_
 order year2, after(yoe)
 
-** Vital Status At Discarge (sadi, 1=alive, 2=dead) 
-**      Incomplete variable
-**      Can improve by exploring date of death cf. date of discharge 
+** VITAL STATUS AT DISCHARGE / DEATH
+** ---------------------------------------------------------------------------
+** sadi is incomplete in the historical data. Keep the established inference
+** rule: when sadi is missing, use the time from event to recorded death to
+** distinguish likely alive, probable in-hospital death, and possible
+** in-hospital death. This is an analytical classification only: it does not
+** change any source record.
 * Difference between date of event and date of death (days)
     gen doe_dod_diff = dod - doe
 * Case-Fatality Rate (with uncertainty as follows): 
@@ -583,16 +587,53 @@ order year2, after(yoe)
     label define cf_ 1 "Conf.Alive" 2 "Undoc Alive" 3 "Conf.CF" 4 "Prob.CF" 5 "Poss.CF" .a "No dates"
     label values cf cf_ 
 
-** Length of stay is calculated for all records here. The released summaries
-** and both figures retain the established restriction to people confirmed
-** alive at discharge (cf == 1).
-    gen los_primary = dodi - doa 
-    order cf los_primary , after(sadi) 
-    label var cf "Vital status at discharge/death (with uncertainty)"
-    label var los_primary "Length of hospital stay (days)"
+** LENGTH-OF-STAY ELIGIBILITY AND REVIEW FLAGS
+** ---------------------------------------------------------------------------
+** The published length-of-stay measure includes all hospital events with a
+** known or inferred discharge/death status. For alive events, the hospital
+** end date is the recorded discharge date (dodi). For recorded, probable, or
+** possible in-hospital deaths, it is the recorded death date (dod).
+**
+** Same-day admissions are counted as one hospital day. Invalid or incomplete
+** dates are excluded from the analytical denominator but are not edited in
+** the source dataset. Long stays are retained and flagged for private review;
+** they are never automatically removed, capped, or replaced.
+    gen byte los_status_known = inlist(cf, 1, 2, 3, 4, 5)
+    gen byte los_uses_death_date = inlist(cf, 3, 4, 5)
 
-* IRH 13-NOV-2025 
-    * A number of -dodi- that seem too long for an in-hospital stay
+    gen double los_end_date = dodi
+    replace los_end_date = dod if los_uses_death_date == 1
+
+    gen double los_primary = los_end_date - doa
+    gen byte los_missing_dates = missing(doa) | missing(los_end_date)
+    gen byte los_negative_days = 0
+    replace los_negative_days = 1 if los_missing_dates == 0 & los_primary < 0
+    gen byte los_same_day = 0
+    replace los_same_day = 1 if los_missing_dates == 0 & los_primary == 0
+
+    replace los_primary = 1 if los_same_day == 1
+
+    gen byte los_include = 1
+    replace los_include = 0 if los_status_known == 0
+    replace los_include = 0 if los_missing_dates == 1
+    replace los_include = 0 if los_negative_days == 1
+
+    gen byte los_long_stay_60 = 0
+    replace los_long_stay_60 = 1 if los_primary >= 60 & los_include == 1
+    gen byte los_long_stay_90 = 0
+    replace los_long_stay_90 = 1 if los_primary >= 90 & los_include == 1
+
+    order cf los_status_known los_uses_death_date los_end_date los_primary ///
+        los_include los_same_day los_long_stay_60 los_long_stay_90, after(sadi)
+    label var cf "Vital status at discharge/death (with uncertainty)"
+    label var los_primary "Length of hospital stay (days; same-day stay = 1)"
+    label var los_include "Eligible for published length-of-stay summaries"
+    label var los_same_day "Same-day admission and end date"
+    label var los_long_stay_60 "Length of stay 60 days or longer"
+    label var los_long_stay_90 "Length of stay 90 days or longer"
+
+* IRH 13-NOV-2025
+    * A number of hospital stays seem too long for an in-hospital stay
     * Possibly linked to dodi change of meaning in 2023
     * JC notes (email to IRH 7-NOV-2023): 
     *       "...dlc used to mean date of last known contact 
@@ -603,19 +644,51 @@ order year2, after(yoe)
     *           (A) spread evenly through time
     *           (B) mostly among strokes
     * So this may well be a real effect - with hospital acting as longer-term post-care facility
-    gen los_poss_error = 0 
-    replace los_poss_error = 1 if los_primary>=60 & los_primary<. 
-    order cf los_poss_error , after(los_primary) 
+    * The 60-day flag is retained from the established review rule. The new
+    * 90-day flag identifies the small number of stays needing priority review.
+    * Neither flag changes the published estimate automatically.
+
+** PRIVATE ELIGIBILITY AND REVIEW SUMMARY
+** ---------------------------------------------------------------------------
+** These checks are written to the private Stata log. They deliberately do not
+** repair source data or create a public record-level output. Investigate any
+** material issue through the separate BNR administrative data process.
+    quietly count if los_include == 1
+    local los_included = r(N)
+    quietly count if los_uses_death_date == 1 & los_include == 1
+    local los_deaths_included = r(N)
+    quietly count if los_same_day == 1 & los_include == 1
+    local los_same_day_included = r(N)
+    quietly count if los_status_known == 0
+    local los_unknown_status = r(N)
+    quietly count if los_missing_dates == 1
+    local los_missing_dates_n = r(N)
+    quietly count if los_negative_days == 1
+    local los_negative_days_n = r(N)
+    quietly count if los_long_stay_60 == 1
+    local los_long_stay_60_n = r(N)
+    quietly count if los_long_stay_90 == 1
+    local los_long_stay_90_n = r(N)
+
+    display as text _n "Length-of-stay eligibility and review checks"
+    display as text "  Eligible admissions:             `los_included'"
+    display as text "  Included deaths:                 `los_deaths_included'"
+    display as text "  Same-day stays (counted as 1):   `los_same_day_included'"
+    display as text "  Unknown outcome status:          `los_unknown_status'"
+    display as text "  Missing admission/end date:      `los_missing_dates_n'"
+    display as text "  End date before admission:       `los_negative_days_n'"
+    display as text "  Long stays (60+ days):           `los_long_stay_60_n'"
+    display as text "  Priority review stays (90+):     `los_long_stay_90_n'"
 
 ** Median regression - exploratory trend checks retained from the legacy file.
 ** yoe is written explicitly. The former abbreviation "year" could be read as
 ** year2 after conversion and therefore was unsafe for future maintenance.
-qreg los_primary i.etype
-qreg los_primary i.sex
-qreg los_primary i.etype i.sex
-qreg los_primary i.etype i.sex yoe
-qreg los_primary i.sex yoe if etype == 1
-qreg los_primary i.sex yoe if etype == 2
+qreg los_primary i.etype if los_include == 1
+qreg los_primary i.sex if los_include == 1
+qreg los_primary i.etype i.sex if los_include == 1
+qreg los_primary i.etype i.sex yoe if los_include == 1
+qreg los_primary i.sex yoe if etype == 1 & los_include == 1
+qreg los_primary i.sex yoe if etype == 2 & los_include == 1
 
 ** Private temporary analysis dataset used by both figure sections.
 tempfile pid_los 
@@ -624,15 +697,15 @@ save `pid_los', replace
 ** Hospital days by Event Type and 2-year period 
 tempfile nevent1 nevent2 nevent3 nevent4 nevent5 
     preserve
-        collapse (count) nevent=los_primary if cf==1 , by(etype)
+        collapse (count) nevent=los_primary if los_include == 1 , by(etype)
         save `nevent1', replace 
     restore 
     preserve
-        collapse (count) nevent=los_primary if cf==1 , by(sex)
+        collapse (count) nevent=los_primary if los_include == 1 , by(sex)
         save `nevent2', replace 
     restore 
     preserve
-        collapse (count) nevent=los_primary if cf==1 , by(etype sex)
+        collapse (count) nevent=los_primary if los_include == 1 , by(etype sex)
         save `nevent3', replace 
     restore 
     preserve
@@ -640,7 +713,7 @@ tempfile nevent1 nevent2 nevent3 nevent4 nevent5
         * Such records cannot belong to a defined two-year period.  They
         * must not be carried into the period-specific denominator, because
         * the later export labels missing year2 as "All years" for display.
-        collapse (count) nevent=los_primary if cf==1 & year2 < . , by(etype year2)
+        collapse (count) nevent=los_primary if los_include == 1 & year2 < . , by(etype year2)
         save `nevent4', replace 
     restore 
     preserve 
@@ -666,25 +739,25 @@ tempfile nevent1 nevent2 nevent3 nevent4 nevent5
     restore
 
 * LoS Summary Metrics for graphic 
-* Graphic restricted to those alive at discharge 
+* Graphic includes eligible admissions ending in discharge or in-hospital death.
 * Create aggregrated dataset as a combination of several collapsed datasets 
     tempfile los1 los2 los3 los4 los5 los6
     preserve
         collapse (p50) los50=los_primary (p25) los25=los_primary     ///
                  (p75) los75=los_primary (p5) los05=los_primary     /// 
-                 (p95) los95=los_primary if cf==1 , by(etype)
+                 (p95) los95=los_primary if los_include == 1 , by(etype)
         save `los1', replace 
     restore 
     preserve
         collapse (p50) los50=los_primary (p25) los25=los_primary     ///
                  (p75) los75=los_primary (p5) los05=los_primary     /// 
-                 (p95) los95=los_primary if cf==1  , by(sex)
+                 (p95) los95=los_primary if los_include == 1  , by(sex)
         save `los2', replace 
     restore 
     preserve
         collapse (p50) los50=los_primary (p25) los25=los_primary     ///
                  (p75) los75=los_primary (p5) los05=los_primary     /// 
-                 (p95) los95=los_primary if cf==1  , by(etype sex)
+                 (p95) los95=los_primary if los_include == 1  , by(etype sex)
         save `los3', replace 
     restore 
     preserve
@@ -694,7 +767,7 @@ tempfile nevent1 nevent2 nevent3 nevent4 nevent5
         * row from entering the released dataset and figure.
         collapse (p50) los50=los_primary (p25) los25=los_primary     ///
                  (p75) los75=los_primary (p5) los05=los_primary     /// 
-                 (p95) los95=los_primary if cf==1 & year2 < . , by(etype year2)
+                 (p95) los95=los_primary if los_include == 1 & year2 < . , by(etype year2)
         save `los4', replace 
     restore 
 
@@ -857,8 +930,8 @@ forvalues period_number = 1/`number_periods' {
     notes _dta: temporal: 2010-`target_year'
     notes _dta: spatial: Barbados
     notes _dta: unit_of_analysis: Event type by period
-    notes _dta: description: Annual median length of stay in days.
-    notes _dta: limitations: Based on hospital CVD events
+    notes _dta: description: Annual median length of stay in days, including eligible hospital deaths.
+    notes _dta: limitations: Based on hospital CVD events with valid admission and end dates; same-day stays count as one day.
     notes _dta: language: en
     notes _dta: software: StataNow 19
     notes _dta: rights: CC BY 4.0 Attribution
@@ -879,7 +952,7 @@ keep if yoe>=2014
 ** Hospital days by Event Type and 2-year period 
 tempfile nevent1 nevent2
     preserve
-        collapse (count) nevent=los_primary if cf==1 , by(etype yoe)
+        collapse (count) nevent=los_primary if los_include == 1 , by(etype yoe)
         save `nevent1', replace 
         gen yaxis = _n
         order yaxis etype yoe
@@ -887,13 +960,13 @@ tempfile nevent1 nevent2
     restore
 
 * LoS Summary Metrics for graphic 
-* Graphic restricted to those alive at discharge 
+* Graphic includes eligible admissions ending in discharge or in-hospital death.
 * Create aggregrated dataset as a combination of several collapsed datasets 
     tempfile los1
     preserve
         collapse (p50) los50=los_primary (p25) los25=los_primary     ///
                  (p75) los75=los_primary (p5) los05=los_primary     /// 
-                 (p95) los95=los_primary if cf==1  , by(etype yoe)
+                 (p95) los95=los_primary if los_include == 1  , by(etype yoe)
         save `los1', replace 
     restore 
 
@@ -1040,13 +1113,13 @@ forvalues tick_year = 2014(2)`target_year' {
     notes _dta: created: `release_date'
     notes _dta: creator: Ian Hambleton, Analyst
     notes _dta: registry: BNR-CVD
-    notes _dta: content: Annual typical bed-days (based on median stay in days) 
+    notes _dta: content: Annual typical bed-days based on median stay in days, including eligible hospital deaths.
     notes _dta: tier: Public aggregate output
     notes _dta: temporal: 2014-`target_year'
     notes _dta: spatial: Barbados
     notes _dta: unit_of_analysis: Event type by period
     notes _dta: description: Annual typical bed days, based on median length of stay in days.
-    notes _dta: limitations: Based on hospital CVD events
+    notes _dta: limitations: Based on hospital CVD events with valid admission and end dates; same-day stays count as one day.
     notes _dta: language: en
     notes _dta: software: StataNow 19
     notes _dta: rights: CC BY 4.0 Attribution

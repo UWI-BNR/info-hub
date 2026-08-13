@@ -574,9 +574,9 @@ if r(N) == 0 {
 *       Short email: just request access
 *       Unknown - but possible that token may lapse after a time 
 *       Would then need replacing
-* do "${dofiles}\bnrcvd-unwpp.do"
+* do "${BNR_DATA_FROZEN}\bnrcvd-unwpp.do"
 ** ------------------------------------------
-    use "${data}\unwpp_brb_2020_2025.dta", clear 
+    use "${BNR_DATA_FROZEN}\unwpp_brb_2020_2025.dta", clear 
     keep if variantid == "4" 
     keep iso3 timelabel sex sexid agelabel value 
     * population year 
@@ -801,7 +801,7 @@ label var lbsrr_etype "Lower bound of ratio of adjusted rate - by CVD event type
 label var ubsrr_etype "Upper bound of ratio of adjusted rate - by CVD event type"
 
 save `bnr_incidence', replace
-save "${data}/bnrcvd-incidence.dta", replace 
+save "${BNR_DATA_FROZEN}/bnrcvd-incidence.dta", replace 
 
 ** ---------------------------------------------
 ** (7) ANALYTICS 1 - EVENT to DCO GAP OVER TIME

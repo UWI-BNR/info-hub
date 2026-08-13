@@ -216,7 +216,7 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 
 ::: {.number-grid}
 ::: {.number-card}
-<div class="large-number">10 days</div>
+<div class="large-number">9 days</div>
 <div class="label"><strong>Stroke, 2022-2023</strong><br>median hospital stay</div>
 :::
 
@@ -226,18 +226,18 @@ Length of stay turns CVD surveillance data into service-planning intelligence: i
 :::
 
 ::: {.number-card}
-<div class="large-number">1,372</div>
+<div class="large-number">1,659</div>
 <div class="label"><strong>Stroke, 2023</strong><br>extra typical bed-days vs 2014</div>
 :::
 
 ::: {.number-card}
-<div class="large-number">1,684</div>
+<div class="large-number">1,889</div>
 <div class="label"><strong>Stroke + AMI, 2023</strong><br>extra typical bed-days vs 2014</div>
 :::
 :::
 
 ::: {.insight-box}
-In 2022-2023, the typical hospital stay after stroke was longer than after AMI. Stroke also accounted for most of the additional typical bed-day pressure in 2023, compared with the 2014 baseline.
+In 2022-2023, the typical hospital stay after stroke was longer than after AMI: 9 days compared with 6 days. Stroke accounted for most of the additional typical bed-day pressure in 2023, compared with the 2014 baseline.
 :::
 
 ## Why this matters
@@ -257,6 +257,7 @@ Counts tell us how many patients arrive. Length of stay helps show how long thos
 We examined hospital length of stay for CVD events in Barbados from 2010 to 2023.
 
 - We focused on hospital-ascertained stroke and heart attack events.
+- We included eligible admissions ending in discharge or in-hospital death; same-day stays counted as one day.
 - We summarised typical stay using the median and interquartile range.
 - We estimated extra typical bed-days compared with a 2014 baseline.
 
