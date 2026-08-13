@@ -406,7 +406,13 @@ global BNR_REPO    "C:/your/path/info-hub"
 global BNR_PRIVATE "C:/your/secure/path/info-hub-private"
 ```
 
-The remaining standard globals are derived from these roots, including:
+Also set the path—not the value—of the REDCap token:
+
+```stata
+global BNR_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_redcap_token.txt"
+```
+
+The remaining standard globals are derived automatically, including:
 
 - `$BNR_STATA`
 - `$BNR_DATA_RAW`
@@ -416,14 +422,9 @@ The remaining standard globals are derived from these roots, including:
 - `$BNR_PRIVATE_WORK`
 - `$BNR_PRIVATE_LOGS`
 - `$BNR_PUBLIC`
+- `$BNR_SITE`
 
 ### 2. Configure the REDCap token file
-
-Dashboard Step 1 also requires:
-
-```stata
-global BNR_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_redcap_token.txt"
-```
 
 The token text file must:
 
@@ -450,7 +451,12 @@ display "$BNR_DATA_RAW"
 display "$BNR_DATA_DERIVED"
 display "$BNR_STAGING"
 display "$BNR_PUBLIC"
+display "$BNR_SITE"
 ```
+
+Loading the configuration now stops with an error if the repository root is
+wrong, a required private folder is absent, or the private workspace/token path
+sits inside the public Git repository.
 
 Check the token file exists without displaying its contents:
 
@@ -875,4 +881,3 @@ Machine-specific:
 - the authorised private workspace.
 
 Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live analytical release.
-

@@ -4,7 +4,8 @@
 *--------------------------------------------------------------------
 *
 * PURPOSE
-*   Shared session values and visual constants.
+*   Shared session values and visual constants. This file contains no
+*   machine-specific paths or credentials.
 *
 * IMPORTANT
 *   This file should not set project paths.
@@ -17,8 +18,16 @@
 version 19
 set more off
 
+if `"$BNR_REPO"' == "" | `"$BNR_STATA"' == "" {
+    display as error "BNR path configuration has not been loaded."
+    display as error ///
+        "Run scripts/stata/config/bnr_paths_LOCAL.do before bnrcvd_globals.do."
+    exit 198
+}
+
 *-------------------------------
 * Date and run metadata
+* Some values are retained for compatibility with analyst-authored reports.
 *-------------------------------
 local today_iso: display %tdCCYY-NN-DD daily("`c(current_date)'", "DMY")
 global todayiso "`today_iso'"
@@ -61,7 +70,7 @@ global str_m70 "139 111 180"
 global str_f   "156 137 184"
 global str_f70 "201 182 228"
 
-* Others
+* Additional retained palette colours
 global highlight  "255 186 8"
 global baseline   "141 153 174"
 global background "250 250 250"
@@ -69,7 +78,7 @@ global text       "46 46 46"
 global darkframe  "29 53 87"
 
 *-------------------------------
-* Unicode markers
+* Unicode markers retained for report compatibility
 *-------------------------------
 global dagger   = uchar(8224)
 global ddagger  = uchar(8225)

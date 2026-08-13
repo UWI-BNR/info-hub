@@ -95,10 +95,10 @@ set more off
 
 
 * ============================================================================
-* DO NOT TOUCH: SET LOCAL PROJECT PATH AND LOAD SHARED SETTINGS
+* DO NOT TOUCH: LOAD PROJECT PATHS AND SHARED SETTINGS
 * ============================================================================
-* localpath is the only machine-specific path in this DO file.
-* All other important folders are defined in the shared path/config files.
+* Run from the repository root. All machine-specific paths are confined to the
+* untracked bnr_paths_LOCAL.do file.
 *
 * bnr_paths_LOCAL.do:
 *   Defines local repository/output paths such as BNR_STAGING,
@@ -108,9 +108,9 @@ set more off
 *   Defines shared CVD display settings, including graph colours and
 *   other CVD-specific constants.
 
-local localpath "C:/yoshimi-hot/output/analyse-bnr/info-hub"
-do "`localpath'/scripts/stata/config/bnr_paths_LOCAL.do"
-do "`localpath'/scripts/stata/common/bnrcvd_globals.do"
+do "scripts/stata/config/bnr_paths_LOCAL.do"
+local localpath "$BNR_REPO"
+do "$BNR_STATA/common/bnrcvd_globals.do"
 
 
 * ============================================================================

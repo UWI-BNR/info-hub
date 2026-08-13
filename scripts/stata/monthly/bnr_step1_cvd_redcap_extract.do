@@ -83,17 +83,15 @@ if "`release_year'" == "" | "`release_month'" == "" {
     exit 198
 }
 
-* If the BNR configuration has already been loaded, retain it. Otherwise use
-* this workstation's bootstrap path. This keeps the established CLI command
-* unchanged and also lets the dialog call the same DO file.
+* If the BNR configuration has already been loaded, retain it. Otherwise load
+* the untracked local file relative to the repository root.
 if `"$BNR_STATA"' == "" {
-    capture noisily do ///
-        "C:/yoshimi-hot/output/analyse-bnr/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
     local config_rc = _rc
     if `config_rc' {
         display as error "The BNR local path configuration could not be loaded."
         display as error ///
-            "Check the bootstrap path near the top of bnr_step1_cvd_redcap_extract.do."
+            "Start Stata from BNR_REPO or load bnr_paths_LOCAL.do through profile.do."
         exit `config_rc'
     }
 }

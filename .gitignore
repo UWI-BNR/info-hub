@@ -26,10 +26,8 @@
 # Shared Stata configuration files and templates belong under:
 # scripts/stata/config/
 #
-# Normal Stata jobs should call:
-# scripts/stata/config/bnr_load_paths.do
-#
-# They should not directly call files under /local/.
+# Normal Stata jobs load the untracked:
+# scripts/stata/config/bnr_paths_LOCAL.do
 
 local-setup-notes.md
 

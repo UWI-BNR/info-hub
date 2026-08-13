@@ -106,16 +106,16 @@ if "`release_year'" == "" | "`release_month'" == "" {
 * 1. LOAD THE LOCAL BNR PATH CONFIGURATION
 * =============================================================================
 * Most workstations load this file automatically at Stata startup. The fallback
-* below allows the controller to run in a new session where paths are not yet set.
-* All established info-hub-private locations remain unchanged.
+* below works when Stata's current directory is the repository root.
 
 if `"$BNR_STATA"' == "" {
-    capture noisily do ///
-        "C:/yoshimi-hot/output/analyse-bnr/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
 
     if _rc {
         local config_rc = _rc
         display as error "The BNR local path configuration could not be loaded."
+        display as error ///
+            "Start Stata from BNR_REPO or load bnr_paths_LOCAL.do through profile.do."
         exit `config_rc'
     }
 }

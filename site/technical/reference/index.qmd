@@ -119,6 +119,7 @@ They remain **private deidentified event-level data** and are not public downloa
 | `$BNR_PRIVATE_WORK` | Private reference/supporting datasets | Private |
 | `$BNR_PRIVATE_LOGS` | Stata workflow logs | Private, generated |
 | `$BNR_PUBLIC` | Authoritative approved public analytical packages | Public-approved, retained |
+| `$BNR_SITE` | Quarto source and website-mirror root | Public project source |
 | `$BNR_REPO/site/downloads/` | Website mirrors and download records used by Quarto | Public, rebuildable |
 | `$BNR_REPO/site/_site/` | Fully rendered website | Generated; do not edit or commit |
 
@@ -556,7 +557,7 @@ Its exact role differs slightly by workflow. The approval receipt and manifest d
 | `$BNR_DIALOGS` | BNR Stata dialogs directory |
 | `$BNR_OUTPUTS` | Public repository output root |
 | `$BNR_PUBLIC` | Authoritative approved public analytical output root |
-| `$BNR_WORK` | Public-repository work area where used |
+| `$BNR_SITE` | Quarto source and website-mirror root |
 | `$BNR_DATA_RAW` | Private raw-data root |
 | `$BNR_DATA_FROZEN` | Private frozen-data root |
 | `$BNR_DATA_DERIVED` | Private derived-data root |
@@ -566,6 +567,10 @@ Its exact role differs slightly by workflow. The approval receipt and manifest d
 | `$BNR_REDCAP_TOKEN_FILE` | Path to the local text file containing the REDCap API token |
 
 The first two roots are machine-specific. Most other paths are derived from them.
+
+`$BNR_REDCAP_TOKEN_FILE` is the third machine-specific value. It contains only
+the secure token-file location. The private root and token file must both remain
+outside `$BNR_REPO`.
 
 ::: {.callout-warning collapse="true"}
 ## REDCap token rule

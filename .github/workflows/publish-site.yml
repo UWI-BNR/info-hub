@@ -36,6 +36,9 @@ jobs:
       - name: Check Python environment
         run: python scripts/python/check-python-environment.py
 
+      - name: Check Stata path contract
+        run: python scripts/python/check-stata-path-contract.py
+
       - name: Render Quarto site
         working-directory: site
         run: quarto render

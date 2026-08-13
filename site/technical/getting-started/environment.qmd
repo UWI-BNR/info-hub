@@ -104,6 +104,7 @@ A workstation uses two main root locations.
 |---|---|---|
 | `$BNR_REPO` | Root of the `info-hub` repository. Contains shared code, authoritative approved public outputs and the Quarto site. | Yes, subject to the controlled repository contents. |
 | `$BNR_PRIVATE` | Root of the private companion workspace. Contains identifiable data, deidentified analytical inputs, private staging, review material and private logs. | **No.** |
+| `$BNR_REDCAP_TOKEN_FILE` | Location of the separately secured REDCap token file. The global never contains the token itself. | **No.** |
 
 The exact local folders differ by workstation. They are defined in the machine-specific:
 
@@ -130,6 +131,7 @@ The private root is divided by purpose.
 | `$BNR_STAGING` | Review packages awaiting approval | Gives analysts an exact private package to inspect before anything is published. |
 | `$BNR_PRIVATE_WORK` | Controlled private reference and working files | Holds items such as population reference datasets used by analyses. |
 | `$BNR_PRIVATE_LOGS` | Stata operational logs | Preserves a readable record of each controlled run. |
+| `$BNR_SITE` | Quarto source root under the public repository | Provides the controlled website-mirror destination. |
 
 These folders are private even when a particular file is deidentified. **Deidentified does not automatically mean approved for public release.**
 
@@ -258,6 +260,5 @@ A mortality pathway is reserved for Chapter 6 once that implementation is comple
 6. **Prefer the simplest maintainable solution.** New tools or automation layers create future handover work as well as present-day convenience.
 
 The rest of this manual turns those principles into task-by-task instructions.
-
 
 
