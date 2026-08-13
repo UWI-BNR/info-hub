@@ -515,19 +515,19 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-The current REDCap extraction also requires **PyCap**, imported as `redcap`.
-
-Install it into the same environment:
-
-```powershell
-python -m pip install PyCap
-```
+This installs the supported analyst/notebook packages and **PyCap**, which the
+REDCap extraction imports as `redcap`.
 
 ### 4. Check the environment
 
+From the repository root, run the tracked environment check:
+
 ```powershell
-python -c "import pandas, numpy, yaml; from redcap import Project; print('BNR Python check passed')"
+python scripts/python/check-python-environment.py
 ```
+
+It must report Python 3.13, list every required package and finish with
+`PASSED`. It does not connect to REDCap or read private data.
 
 Then:
 
@@ -543,7 +543,24 @@ The first Python path should point inside:
 
 Record the Python version and environment path in `local-setup-notes.md`.
 
-`requirements-freeze.txt` is useful for troubleshooting exact versions. Routine installation should continue to use the shorter `requirements.txt`.
+The two requirement files have different purposes:
+
+- `requirements.txt` is the maintained list of direct project packages and
+  compatible version ranges. Use it for routine workstation setup and CI.
+- `requirements-freeze.txt` records the exact full Windows/Python 3.13
+  environment that was tested at handover, including indirect dependencies.
+  Use it to compare or reproduce a known environment when troubleshooting; it
+  is not the routine cross-platform installation file.
+
+After an authorised dependency change has been installed and tested on the
+canonical BNR Windows workstation, refresh the frozen record from the repository
+root:
+
+```powershell
+python -m pip freeze --all | Set-Content -Encoding utf8 requirements-freeze.txt
+```
+
+Review and commit changes to both requirement files together.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -858,5 +875,4 @@ Machine-specific:
 - the authorised private workspace.
 
 Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live analytical release.
-
 

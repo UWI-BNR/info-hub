@@ -73,6 +73,22 @@ Machine-specific paths are kept outside version control. To configure a workstat
 3. Set the public repository, private companion repository and secure token-file paths.
 4. Do not commit the local file or any token.
 
+## Python environment
+
+Python 3.13 is the tested baseline. From an activated project virtual
+environment, install and check it with:
+
+```powershell
+python -m pip install -r requirements.txt
+python scripts/python/check-python-environment.py
+```
+
+`requirements.txt` is the maintained, cross-platform list used for routine
+setup and CI. `requirements-freeze.txt` is the exact full Windows environment
+snapshot retained for troubleshooting and controlled reproduction; it is not
+the routine installation file. Detailed setup and refresh instructions are in
+the Technical Manual.
+
 ## Documentation
 
 The three manuals answer different questions:

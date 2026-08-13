@@ -409,8 +409,9 @@ Some older dialog/help files remain in the tree pending controlled cleanup. The 
 | `site/scripts/build_download_catalogue.py` | Builds the central Downloads catalogue from approved product-level download records. It does not calculate surveillance results. |
 | `start-info-hub-edit.bat` | Convenience launcher for a local editing session: opens VS Code, activates the project environment for preview and starts Quarto preview. |
 | `.github/workflows/publish-site.yml` | GitHub Actions workflow that renders `site/` and deploys `site/_site` to GitHub Pages after `main` changes. |
-| `requirements.txt` | Short Python dependency list used for routine environment/site setup. |
-| `requirements-freeze.txt` | Detailed frozen Python environment record used mainly for troubleshooting/reproduction. |
+| `requirements.txt` | Maintained direct dependencies and compatible ranges used for routine workstation setup and CI. |
+| `requirements-freeze.txt` | Exact full Windows/Python 3.13 handover snapshot, including indirect dependencies, used for comparison or controlled reproduction. |
+| `scripts/python/check-python-environment.py` | Checks the Python baseline and imports every direct dependency without accessing REDCap or private data. |
 | `README.md` | Repository-level introduction. |
 | `DECISIONS.md` | Retained record of important technical/architectural decisions. |
 | `CHANGELOG.md` | Repository change history maintained at project level. |
