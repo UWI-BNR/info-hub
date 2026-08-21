@@ -2,7 +2,7 @@
 title: "System reference"
 description: "Primary technical reference for BNR Info-Hub files, folders, workflows, release controls, naming conventions, Stata globals and Git terminology."
 date: 2026-08-10
-date-modified: 2026-08-12
+date-modified: 2026-08-21
 toc-title: "Reference sections"
 toc-depth: 2
 ---
@@ -74,11 +74,12 @@ See [The BNR analytics and publishing environment](../getting-started/environmen
 
 ## Workflow map {#workflow-map}
 
-Dashboard Steps 1-3 form the common CVD analytical-preparation pathway. The dashboard, tabulation and routine briefing workflows then branch from the approved Step 3 deidentified inputs.
+CVD events Steps 1-3 form the common CVD analytical-preparation pathway. CVD event metrics, tabulations and routine briefings then branch from the Step 3 deidentified inputs. CVD mortality uses a separate six-step pathway from the mortality death-certificate source.
 
 | Workflow | Main steps | Starts from | Finishes with |
 |---|---|---|---|
-| **Dashboard metrics** | Steps 1-6 | REDCap + frozen historical data | Approved metric package + website mirror |
+| **CVD event metrics** | Steps 1-6 | CVD REDCap + frozen historical data | Approved CVD burden metric package + website mirror |
+| **CVD mortality** | Steps 1-6 | Mortality REDCap death-certificate source | Approved mortality burden package + website mirror |
 | **Tabulations** | Steps 1, 2A, 2B, 3 | Step 3 `all_variables` input | Approved table release + stable/latest copies |
 | **Routine briefings** | Steps 1-3 | Relevant Step 3 input | Approved briefing package + website mirror |
 | **Quarto website** | Edit, render, Git review, merge to `main` | Approved website mirrors + QMD source | Public GitHub Pages site |
@@ -89,7 +90,7 @@ The Step 3 input datasets are the main fork point:
 
 | Step 3 dataset | Main downstream use |
 |---|---|
-| `count` | Dashboard burden/count metrics and incidence briefing |
+| `count` | CVD event burden/count metrics and incidence briefing |
 | `case_fatality` | Case-fatality briefing |
 | `length_of_stay` | Length-of-stay briefing |
 | `performance` | Reserved for care-performance analyses |
@@ -147,7 +148,8 @@ Do not infer a colleague's local path from examples in the manual.
 
 | Folder | Responsibility |
 |---|---|
-| `scripts/stata/monthly/` | Dashboard Steps 1-6 controllers |
+| `scripts/stata/monthly/` | CVD events Steps 1-6 controllers |
+| `scripts/stata/mortality/` | Mortality Steps 1-6, classifier support files and mortality workflow contract |
 | `scripts/stata/metrics/` | Metric-family analytical code |
 | `scripts/stata/tables/` | Tabulation workflow |
 | `scripts/stata/briefings/` | Briefing controllers and analyst-owned briefing code |
@@ -160,8 +162,7 @@ Do not infer a colleague's local path from examples in the manual.
 | `site/` | Quarto website source |
 | `site/_shared/` | Shared Quarto snippets |
 | `site/assets/` | Public styles, images and other site assets |
-| `site/dashboards/` | Dashboard presentation/application files |
-| `site/surveillance/` | Public surveillance pages, tabulations and briefings |
+| `site/surveillance/` | Public surveillance dashboards, tabulations and briefings |
 | `site/downloads/` | Public website mirrors and Downloads catalogue |
 | `site/technical/` | Technical Manual source |
 | `site/operations/` | Operations Manual source |
@@ -193,7 +194,7 @@ The tables below list the main current Stata files by responsibility.
 Paths are relative to `scripts/stata/`.
 
 ::: {.callout-note collapse="true"}
-## Dashboard metrics: current operational files
+## CVD events: current operational files
 
 | File | Responsibility | Main hand-off / dependency |
 |---|---|---|
@@ -201,25 +202,50 @@ Paths are relative to `scripts/stata/`.
 | `monthly/bnr_step2_cvd_confidential.do` | Combines the selected REDCap release with frozen history, reconciles the sources and writes the confidential cumulative dataset. | Step 1 + frozen history -> `$BNR_DATA_DERIVED` |
 | `monthly/bnr_step3_metric_inputs.do` | Creates authorised deidentified datasets for downstream analytical purposes. | Step 2 -> `metric_inputs/` |
 | `monthly/bnr_step4_metrics.do` | Controls metric calculation for the selected family and creates the private Step 4 package. | Calls the metric analysis file and staging helper |
-| `metrics/cvd/bnr_step4_cvd_burden.do` | Calculates the current CVD burden metrics and QA results in standard long format. | Called by Dashboard Step 4 |
-| `common/bnr_step4_stage_metric.do` | Packages unsuppressed metric results and QA material in private staging. | Called by Dashboard Step 4 |
+| `metrics/cvd/bnr_step4_cvd_burden.do` | Calculates the current CVD burden metrics and QA results in standard long format. | Called by CVD events Step 4 |
+| `common/bnr_step4_stage_metric.do` | Packages unsuppressed metric results and QA material in private staging. | Called by CVD events Step 4 |
 | `monthly/bnr_step5_review.do` | Runs the separate **prepare** and **approve** actions for dashboard releases. | Calls `common/bnr_step5_suppress.do` |
-| `common/bnr_step5_suppress.do` | Applies `bnr_sdc_v1` to the implemented dashboard metric structures and creates disclosure-review material. | Called by Dashboard Step 5 |
+| `common/bnr_step5_suppress.do` | Applies `bnr_sdc_v1` to the implemented dashboard metric structures and creates disclosure-review material. | Called by CVD events Step 5 |
 | `monthly/bnr_step6_publish.do` | Checks approval/manifest controls, promotes the approved metric payload and refreshes the website mirror. | Step 5 approved package -> `$BNR_PUBLIC` + site mirror |
 
-Current implemented dashboard metric family:
+Current implemented CVD event metric family:
 
 ```text
 burden
 ```
 
-Dashboard Step 4 staging uses:
+CVD events Step 4 staging uses:
 
 ```text
 $BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/
 ```
 
-See [Dashboard metrics](../workflows/dashboards/overview.qmd) for operator instructions.
+See [CVD events workflow](../workflows/dashboards/overview.qmd) for operator instructions.
+:::
+
+::: {.callout-note collapse="true"}
+## CVD mortality: current operational files
+
+| File | Responsibility | Main hand-off / dependency |
+|---|---|---|
+| `mortality/bnr_mort_s1_extract.do` | Extracts the selected mortality death-certificate release and creates the private all-deaths analytical source. | Mortality REDCap -> `$BNR_DATA_RAW/redcap/mortality/` |
+| `mortality/bnr_mort_s2_classify.do` | Applies the frozen BNR approximate CVD mortality classifier and creates the private classified mortality dataset and review outputs. | Step 1 -> `$BNR_DATA_DERIVED/mortality/` |
+| `mortality/bnr_mort_s2_rules.do` | Contains the approved classifier rules used by Step 2. | Called by Mortality Step 2 |
+| `mortality/bnr_mort_s2_rule_dictionary.csv` | Documents the classifier rules. | Step 2 companion reference |
+| `mortality/bnr_mort_s2_nosology.csv` | Documents the mortality terminology/nosology used by the classifier. | Step 2 companion reference |
+| `mortality/bnr_mort_s2_variable_dictionary.csv` | Documents the classified Step 2 variables. | Step 2 companion reference |
+| `mortality/bnr_mort_s2_methods.md` | Technical method description for the frozen mortality classifier. | Step 2 companion reference |
+| `mortality/bnr_mort_s3_burden.do` | Controls calculation and private staging of mortality burden metrics. | Step 2 -> `$BNR_STAGING/mortality/burden/` |
+| `mortality/bnr_mort_s3_calc.do` | Calculates mortality count/distribution metrics and QA. | Called by Mortality Step 3 |
+| `mortality/bnr_mort_s3_stage.do` | Validates and packages exact private Step 3 mortality metrics. | Called by Mortality Step 3 |
+| `mortality/bnr_mort_s4_review.do` | Revalidates Step 3, applies mortality-specific deterministic disclosure control and creates private review material plus the reviewed monthly reference asset. | Step 3 -> private review candidate |
+| `mortality/bnr_mort_s5_approve.do` | Records human approval of the exact Step 4 candidate and creates the private `public_ready` package. | Step 4 review -> approved private package |
+| `mortality/bnr_mort_s6_publish.do` | Verifies approval/manifest/file fingerprints, publishes the ten approved payload files, creates the ZIP/catalogue and refreshes the website mirror. | Step 5 -> `$BNR_PUBLIC/metrics/mortality/burden/` + site mirror |
+| `mortality/BNR_MORTALITY_WORKFLOW_CONTRACT.md` | Records the controlling workflow separation, analyst role and fixed disclosure-policy boundaries. | Development and maintenance reference |
+
+Mortality release IDs use `mort_YYYY_MM`. The published current data file is `mort_burden_metrics_current.csv`; the fixed monthly reference is `mort_monthly_reference_2015_2019.csv`.
+
+See [CVD mortality workflow](../workflows/mortality/overview.qmd) for operator instructions.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -338,12 +364,18 @@ Movement or deletion belongs in a controlled repository-cleanup task, followed b
 
 | Menu | Item |
 |---|---|
-| **User > BNR > Update dashboard** | Step 1: Extract REDCap data |
+| **User > BNR > Update CVD dashboard** | Step 1: Extract REDCap data |
 | | Step 2: Build cumulative dataset |
 | | Step 3: Build deidentified datasets |
 | | Step 4: Calculate metrics for dashboards |
 | | Step 5: Review and approve package for release |
 | | Step 6: Publish approved outputs |
+| **User > BNR > Update mortality dashboard** | Step 1: Extract mortality data |
+|  | Step 2: Classify causes of death |
+|  | Step 3: Build mortality burden data |
+|  | Step 4: Review mortality release |
+|  | Step 5: Approve reviewed mortality release |
+|  | Step 6: Publish approved outputs |
 | **User > BNR > Produce briefing** | Step 1: Build review package |
 | | Step 2: Review and approve briefing |
 | | Step 3: Publish approved briefing |
@@ -426,8 +458,9 @@ Some older dialog/help files remain in the tree pending controlled cleanup. The 
 | `site/_shared/` | Reusable snippets included in public pages. |
 | `site/assets/` | Stylesheets, images and other public site assets. |
 | `site/downloads/` | Approved website-mirror downloads and catalogue records. |
-| `site/surveillance/` | Surveillance narrative pages, tabulations and briefings. |
-| `site/dashboards/` | Dashboard presentation files. |
+| `site/surveillance/` | Surveillance dashboards, narrative pages, tabulations and briefings. |
+| `site/surveillance/cvd/metrics/burden/index.qmd` | CVD events dashboard source. |
+| `site/surveillance/cvd/metrics/mortality/index.qmd` | CVD mortality dashboard source. |
 | `site/technical/` | This Technical Manual. |
 | `site/operations/` | Operations Manual material. |
 | `site/_site/` | Rendered website generated by Quarto. **Never edit manually.** |
@@ -496,6 +529,7 @@ See [Approve and publish a release](../controls/approve-publish.qmd).
 |---|---|---|
 | `YYYYMM` | `202401` | Compact year/month used inside many filenames |
 | `YYYY_MM` | `2024_01` | Year/month form used in several package IDs/folders |
+| `mort_YYYY_MM` | `mort_2026_07` | Mortality release ID identifying the controlled release cycle/data freeze |
 | `yYYYY/mMM` | `y2024/m01` | Nested private derived-data folder structure |
 | `YYYY-MM-DD` | `2024-01-31` | ISO-style date used in metadata/receipts |
 
@@ -537,6 +571,8 @@ General pattern:
 
 Do not assume `current` and `latest` are interchangeable. Follow the convention used by that product family.
 
+For mortality, the release ID and publication date may be later than the latest observation period contained in the metrics. Keep **release identity** and **data coverage** separate.
+
 ### `public_ready`
 
 `public_ready` is an **approved-publication preparation area**, not the live public website.
@@ -565,17 +601,16 @@ Its exact role differs slightly by workflow. The approval receipt and manifest d
 | `$BNR_PRIVATE_WORK` | Private supporting/reference-data root |
 | `$BNR_PRIVATE_LOGS` | Private Stata log root |
 | `$BNR_REDCAP_TOKEN_FILE` | Path to the local text file containing the REDCap API token |
+| `$BNR_MORT_REDCAP_TOKEN_FILE` | Path to the local text file containing the mortality REDCap API token used by Mortality Step 1 |
 
 The first two roots are machine-specific. Most other paths are derived from them.
 
-`$BNR_REDCAP_TOKEN_FILE` is the third machine-specific value. It contains only
-the secure token-file location. The private root and token file must both remain
-outside `$BNR_REPO`.
+`$BNR_REDCAP_TOKEN_FILE` and `$BNR_MORT_REDCAP_TOKEN_FILE` contain only secure token-file locations. The private root and both token files must remain outside `$BNR_REPO`. The exact local settings are machine-specific.
 
 ::: {.callout-warning collapse="true"}
 ## REDCap token rule
 
-`$BNR_REDCAP_TOKEN_FILE` stores the **location** of the token file.
+`$BNR_REDCAP_TOKEN_FILE` and `$BNR_MORT_REDCAP_TOKEN_FILE` store the **locations** of the relevant token files.
 
 Do not put the token itself in:
 
@@ -664,6 +699,8 @@ See [Render and publish the website](../website/render-publish.qmd) for the step
 | **HITL** | Human-in-the-Loop review: the required human check of analytical correctness, disclosure safety and publication readiness. |
 | **Manifest** | A structured list describing the files belonging to, or authorised for, a package. |
 | **Package** | The group of datasets, metadata, figures, controls and other files belonging to one analytical release. |
+| **Primary mortality definition** | BNR mortality reporting definition containing Clear + Likely classifications. |
+| **Inclusive mortality definition** | Broader BNR mortality definition containing Clear + Likely + Possible classifications. |
 | **Publication** | Controlled movement of approved analytical files across the private/public boundary. |
 | **Public-ready** | Prepared for potential publication but not necessarily yet approved or published; read the workflow state/receipt. |
 | **QA** | Quality assurance checks carried out automatically or manually to confirm expected structure, consistency or behaviour. |
@@ -680,7 +717,10 @@ For operating instructions rather than lookup information:
 
 - [Analytics environment](../getting-started/environment.qmd)
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
-- [Dashboard metrics](../workflows/dashboards/overview.qmd)
+- [CVD events workflow](../workflows/dashboards/overview.qmd)
+- [CVD mortality workflow](../workflows/mortality/overview.qmd)
+- [Maintain the CVD events dashboard](../website/cvd-events-dashboard.qmd)
+- [Maintain the CVD mortality dashboard](../website/cvd-mortality-dashboard.qmd)
 - [Tabulations](../workflows/tabulations/overview.qmd)
 - [Briefings](../workflows/briefings/overview.qmd)
 - [Review an analytical release](../controls/review-release.qmd)

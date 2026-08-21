@@ -24,6 +24,14 @@ A stable “current” file is convenient for users who need the latest approved
 
 For research or formal reporting, retain the release identifier, coverage date, dataset metadata and access date rather than relying only on a copied value.
 
+## Release date and data period
+
+The **release date** is the date on which an approved package is published. The **latest data period** is the most recent observation represented in that package. They are not necessarily the same.
+
+This distinction is especially visible in mortality surveillance, where death-certificate processing and classification may mean that the latest complete calendar period predates the publication date. A release published in 2026 can therefore legitimately contain data ending in 2025 or earlier.
+
+Always use the displayed coverage period when describing how current the underlying data are.
+
 ## Comparing periods
 
 Before interpreting a change, check:

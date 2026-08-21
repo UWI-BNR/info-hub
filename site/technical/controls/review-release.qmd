@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Review an analytical release"
 description: "Common human checks for BNR dashboard, tabulation and briefing packages before approval."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -55,7 +55,8 @@ The main files differ by workflow:
 
 | Workflow | Main QA and review material |
 |---|---|
-| **Dashboard metrics** | Step 4 QA and Step 5 disclosure QA, brought together in `step5_review.xlsx`. |
+| **CVD event metrics** | Step 4 QA and Step 5 disclosure QA, brought together in `step5_review.xlsx`. |
+| **CVD mortality** | Step 3 QA plus the Step 4 mortality review workbook, review QA and review-basis files. |
 | **Tabulations** | Step 1 `qa_summary.txt`, followed by the Step 2A suppression review workbook and worklist. |
 | **Briefings** | Package checks plus `review/disclosure_flags.csv`. These flags are prompts for human review, not automatic suppression decisions. |
 
@@ -176,12 +177,15 @@ The restart rule differs slightly by workflow:
 
 | Workflow | If a reviewed package needs changing |
 |---|---|
-| **Dashboard metrics** | Return to the appropriate earlier step. `prepare replace` rebuilds Step 5 review material and removes the earlier approval state. |
+| **CVD event metrics** | Return to the appropriate earlier step. `prepare replace` rebuilds Step 5 review material and removes the earlier approval state. |
+| **CVD mortality** | Return to the earliest affected mortality step. If Step 4 is rerun, repeat the review and Step 5 approval before Step 6 publication. |
 | **Tabulations** | Rebuild Step 2A with explicit replacement when the proposed public files need to change, then review and approve again. |
 | **Briefings** | Once a briefing has been approved, make corrections using a new briefing version. |
 
 ## Workflow-specific review instructions
 
+- [CVD event metric review and approval](../workflows/dashboards/approve-metrics.qmd)
+- [CVD mortality Step 4 review](../workflows/mortality/review.qmd) and [Step 5 approval](../workflows/mortality/approve.qmd)
 Use this chapter alongside the detailed instructions for the product being released:
 
 - [Dashboard Step 5: Review and approve](../workflows/dashboards/approve-metrics.qmd)

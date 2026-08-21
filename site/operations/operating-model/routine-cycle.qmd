@@ -2,7 +2,7 @@
 title: "From cases to statistics"
 description: "The linked route from case finding through REDCap to approved BNR statistics."
 date: 2026-08-11
-date-modified: 2026-08-11
+date-modified: 2026-08-21
 ---
 
 ---
@@ -34,7 +34,8 @@ REDCap is the authoritative location for record-level corrections. Generated ext
 | Stage | Main action | Procedure |
 |---|---|---|
 | **Authorise the release** | Confirm the reporting period and extract the cumulative REDCap release through Stata | [Authorise a data release](../release/data-release.qmd) |
-| **Prepare and calculate dashboards** | Run shared preparation Steps 1–3 and dashboard Steps 4–6 | [Dashboard workflow](../post-redcap/dashboard-workflow.qmd) |
+| **Prepare CVD event outputs** | Run shared CVD preparation Steps 1–3 and CVD event Steps 4–6 | [CVD events workflow](../post-redcap/dashboard-workflow.qmd) |
+| **Produce CVD mortality outputs** | Run the separate six-step mortality extraction, classification and publication pathway | [CVD mortality workflow](../post-redcap/mortality-workflow.qmd) |
 | **Produce tabulations** | Generate, control, approve and publish the routine tables through Stata | [Tabulations workflow](../post-redcap/tabulations-workflow.qmd) |
 | **Produce briefings** | Create, review and publish analytical briefing packages through Stata | [Briefings workflow](../post-redcap/briefings-workflow.qmd) |
 | **Review and publish the site** | Complete human review, approval, Stata promotion and Quarto publication | [Review, approve and publish](../release/review-approve-publish.qmd) |
@@ -44,7 +45,7 @@ REDCap is the authoritative location for record-level corrections. Generated ext
 
 - Use one identified reporting period and package identity throughout a workflow.
 - Stata performs data preparation, calculation and controlled analytical publication.
-- Quarto presents approved public products; it does not recalculate them.
+- Quarto presents approved public products. Any documented display-only calculation must remain narrowly defined and must not replace the Stata analytical workflow.
 - Confidential data, logs and review material remain outside the public repository.
 - Successful analysis is not approval, and analytical publication is not website deployment.
 - Stop whenever the source, responsibility, result, disclosure status or approval is unclear.

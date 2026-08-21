@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Understand files, releases and versions"
 description: "A practical guide to which BNR copies are authoritative, which are rebuildable, and how release IDs, versions and replacement rules fit together."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ## What this chapter does
@@ -77,6 +77,10 @@ Private filenames often use:
 
 ## Release IDs and package IDs
 
+A release ID identifies the controlled data freeze or package cycle. It does **not** necessarily identify the latest observation represented in the data.
+
+For example, `mort_2026_07` identifies the July 2026 mortality release cycle, while the approved metrics may contain completed death periods only through an earlier calendar year. The mortality dashboard therefore displays **release date** and **latest data period** separately.
+
 A **release ID** identifies the selected data/reporting release.
 
 A **package ID** identifies a generated product package.
@@ -117,9 +121,13 @@ Interpret `replace` as:
 
 It is not a general permission to bypass a safety check.
 
-### Dashboard metrics
+### CVD event metrics
 
 If a dashboard package is rebuilt, rerun the required review/approval steps. Step 5 `prepare replace` invalidates the earlier Step 5 review/approval state.
+
+### CVD mortality
+
+Mortality release IDs use `mort_YYYY_MM`, for example `mort_2026_07`. Release-stamped files are preserved, while stable files such as `mort_burden_metrics_current.csv` are refreshed only through Mortality Step 6. Use `replace` only for a deliberate rerun or republication after the earlier output has been reviewed.
 
 ### Tabulations
 

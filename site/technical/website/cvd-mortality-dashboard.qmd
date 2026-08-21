@@ -1,0 +1,175 @@
+---
+title: "Maintain the CVD mortality dashboard"
+description: "How the Quarto mortality dashboard reads the approved Step 6 release, handles Primary/Inclusive views and protects the analytical publication boundary."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this page covers
+
+Use this page when maintaining the public **CVD mortality** dashboard after Mortality Step 6 has published an approved burden release.
+
+The dashboard is a Quarto/Observable publication layer. It reads only approved public mortality files from the website mirror.
+
+## Dashboard source
+
+The maintained QMD is:
+
+`site/surveillance/cvd/metrics/mortality/index.qmd`
+
+The dashboard reads:
+
+```text
+site/downloads/files/metrics/mortality/burden/datasets/
+  mort_burden_metrics_current.csv
+  mort_monthly_reference_2015_2019.csv
+```
+
+It also reads the matching release catalogue record under:
+
+`site/downloads/files/metrics/mortality/burden/catalogue/`
+
+for release-date information.
+
+The authoritative analytical copy remains under:
+
+`outputs/public/metrics/mortality/burden/`
+
+The QMD must never read from Step 2-5 private files or `public_ready`.
+
+## Stable current data and dynamic timelines
+
+The dashboard uses `mort_burden_metrics_current.csv`, not a release-stamped CSV, for its interactive views.
+
+Available years, quarters and months are derived from the rows in that current file. Do not hard-code 2024, 2025, 2026 or another end year into the dashboard merely to extend the timeline.
+
+The **release date** and **latest data period** are displayed separately because publication can lag the underlying observations.
+
+## Primary and Inclusive definitions
+
+The left-hand **Mortality definition** control allows:
+
+- Primary only;
+- Inclusive only; or
+- Primary and Inclusive together.
+
+The machine values remain:
+
+```text
+primary_clear_likely
+upper_clear_likely_possible
+```
+
+The public labels are **Primary** and **Inclusive**. The dashboard must never add the two definitions together because Inclusive already contains Primary.
+
+## Counts view
+
+The count view follows the approved mortality publication scope.
+
+### Monthly
+
+Monthly public rows are restricted to:
+
+- All CVD;
+- both sexes;
+- all ages; and
+- monthly count.
+
+Monthly charts use the fixed reviewed 2015-2019 reference asset. They must not calculate or display a rolling five-year monthly comparator.
+
+### Quarterly and annual
+
+Quarterly and annual views may show the approved CVD type, sex and age controls supported by the published rows. Five-year comparator lines are displayed only where the published metric dataset contains a usable comparator.
+
+When both Primary and Inclusive are selected, quarterly/annual observed series share the same chart so the definitions can be compared directly.
+
+## Distribution view
+
+The distribution view uses the approved annual `MORT-BURDEN-002` rows.
+
+It presents the published event-type, broad-age and sex distributions. When both mortality definitions are selected, the Primary and Inclusive charts are kept as separate full-width charts within each distribution subject so labels remain readable.
+
+The definition label/accent colour identifies Primary versus Inclusive. Category colours identify Heart/Stroke, age group or sex and remain stable across the two definitions.
+
+## The fixed monthly reference
+
+`mort_monthly_reference_2015_2019.csv` is an approved analytical asset containing calendar-month minimum, maximum and mean values for 2015-2019 for both public mortality definitions.
+
+The dashboard loads it exactly as published. It does not recalculate the reference from `mort_burden_metrics_current.csv`.
+
+## Year-to-date: documented presentation exception
+
+The monthly view includes one deliberately permitted presentation-derived statistic: **year-to-date count**.
+
+Observable sums the published monthly All-CVD counts from January to the selected month only when every contributing row is:
+
+- present;
+- complete;
+- unsuppressed; and
+- numeric.
+
+If any contributing month fails one of those conditions, YTD is unavailable. The dashboard never sums the remaining visible months and never reconstructs a protected month.
+
+YTD is not written back to a dataset and is not an independently published BNR metric.
+
+::: {.callout-warning title="Narrow exception only"}
+This documented YTD sum is a publication-layer convenience. It does not establish a general pathway for calculating surveillance measures, comparators, percentages, rates or suppression decisions in Observable or Quarto.
+:::
+
+## Suppression display
+
+The dashboard relies on the publication fields supplied by Mortality Step 6, including `suppression_status`, `display_value` and `disclosure_note`.
+
+It must:
+
+- preserve protected display values;
+- avoid plotting unavailable protected numbers;
+- never treat a protected value as zero;
+- never calculate a comparator or percentage from a protected value; and
+- never infer a protected value from related totals.
+
+## Data page and downloads
+
+The Data tab shows the published rows matching the current on-screen selection.
+
+The full download card links to the approved current CSV/DTA, reference asset, metadata and release ZIP. These products represent the complete published release.
+
+The **Download selected view (CSV)** action is different: the browser creates a convenience CSV containing the same selected rows and displayed values as the on-screen table. Protected values remain protected. This convenience file is not an authoritative analytical release and is not written back into `outputs/public/` or `site/downloads/`.
+
+## Public methods links
+
+Public interpretation belongs in the Public Methods Manual rather than in dashboard code. The main destination is:
+
+`site/methods/measures/mortality.qmd`
+
+with additional detail in:
+
+`site/methods/interpretation/classifying-cvd-deaths.qmd`
+
+When adding help/methods links to the dashboard, point users to those public pages rather than duplicating the method explanation inside the QMD.
+
+## After a new mortality release
+
+1. Confirm Mortality Step 6 completed with `PUBLISHED` and `Verification: PASSED`.
+2. Confirm the current metric file, fixed reference asset, metadata, release ZIP and catalogue record exist in the website mirror.
+3. Open the mortality dashboard locally.
+4. Check Primary only, Inclusive only and both definitions.
+5. Check monthly, quarterly and annual count views.
+6. Check the annual distribution view.
+7. Check data coverage, release date/latest period and the Data tab.
+8. Confirm protected values remain protected.
+9. Check all download links.
+10. Run a complete Quarto render and inspect Git changes before deployment.
+
+A normal new release should extend the available timeline automatically and should not require a dashboard-source edit.
+
+## If the dashboard fails
+
+- If the published current file is wrong or missing, return to the mortality analytical/publication workflow.
+- If the published data are correct but Observable reports an error, correct the dashboard source and rerender.
+- If a control offers a stratum absent from the published data, correct the publication-layer filtering rather than manufacturing a value.
+- If a protected value appears to be recoverable, stop publication and investigate before deployment.
+
+See [Update website content](update-content.qmd), [CVD mortality workflow](../workflows/mortality/overview.qmd) and [Apply and review disclosure control](../controls/disclosure-control.qmd).

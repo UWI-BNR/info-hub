@@ -111,8 +111,6 @@ website:
           contents:
             - text: "CVD burden"
               href: surveillance/cvd/metrics/burden/
-            - text: "CVD mortality"
-              href: surveillance/cvd/metrics/mortality/
  
         - section: "Briefings"
           contents:
@@ -157,7 +155,7 @@ website:
               href: methods/measures/case-fatality.qmd
             - text: "Hospital length of stay"
               href: methods/measures/length-of-stay.qmd
-            - text: "CVD mortality"
+            - text: "Mortality"
               href: methods/measures/mortality.qmd
             - text: "Hypertension"
               href: methods/measures/hypertension.qmd
@@ -170,8 +168,6 @@ website:
               href: methods/interpretation/counts-percentages-rates.qmd
             - text: "How CVD events are classified"
               href: methods/interpretation/classifying-cvd-events.qmd
-            - text: "How CVD deaths are classified"
-              href: methods/interpretation/classifying-cvd-deaths.qmd
             - text: "Data quality and completeness"
               href: methods/interpretation/data-quality-completeness.qmd
             - text: "Protecting confidentiality"
@@ -230,17 +226,15 @@ website:
               href: operations/post-redcap/index.qmd
             - text: "9. Authorise a data release"
               href: operations/release/data-release.qmd
-            - text: "10. CVD events workflow"
+            - text: "10. Dashboard workflow"
               href: operations/post-redcap/dashboard-workflow.qmd
-            - text: "11. CVD mortality workflow"
-              href: operations/post-redcap/mortality-workflow.qmd
-            - text: "12. Tabulations workflow"
+            - text: "11. Tabulations workflow"
               href: operations/post-redcap/tabulations-workflow.qmd
-            - text: "13. Briefings workflow"
+            - text: "12. Briefings workflow"
               href: operations/post-redcap/briefings-workflow.qmd
-            - text: "14. Review, approve and publish"
+            - text: "13. Review, approve and publish"
               href: operations/release/review-approve-publish.qmd
-            - text: "15. Correct a release"
+            - text: "14. Correct a release"
               href: operations/release/correct-release.qmd
 
         - section: "BNR analysis framework"
@@ -307,7 +301,7 @@ website:
             - text: "Overview"
               href: technical/workflows/overview.qmd
 
-            - section: "3. CVD events workflow"
+            - section: "3. Dashboard metrics"
               contents:
                 - text: "Overview"
                   href: technical/workflows/dashboards/overview.qmd
@@ -317,11 +311,11 @@ website:
                   href: technical/workflows/dashboards/prepare-confidential.qmd
                 - text: "Step 3: Create analytical inputs"
                   href: technical/workflows/dashboards/create-analysis-inputs.qmd
-                - text: "Step 4: Generate CVD event metrics"
+                - text: "Step 4: Generate dashboard metrics"
                   href: technical/workflows/dashboards/generate-metrics.qmd
                 - text: "Step 5: Review and approve"
                   href: technical/workflows/dashboards/approve-metrics.qmd
-                - text: "Step 6: Publish CVD event metrics"
+                - text: "Step 6: Publish dashboard metrics"
                   href: technical/workflows/dashboards/publish-metrics.qmd
 
             - section: "4. Tabulations"
@@ -348,22 +342,10 @@ website:
                 - text: "Step 3: Publish a briefing"
                   href: technical/workflows/briefings/publish.qmd
 
-            - section: "6. CVD mortality workflow"
+            - section: "6. Mortality workflow"
               contents:
                 - text: "Overview"
                   href: technical/workflows/mortality/overview.qmd
-                - text: "Step 1: Extract mortality data"
-                  href: technical/workflows/mortality/extract.qmd
-                - text: "Step 2: Classify CVD deaths"
-                  href: technical/workflows/mortality/classify.qmd
-                - text: "Step 3: Build mortality burden data"
-                  href: technical/workflows/mortality/build-burden.qmd
-                - text: "Step 4: Review mortality release"
-                  href: technical/workflows/mortality/review.qmd
-                - text: "Step 5: Approve mortality release"
-                  href: technical/workflows/mortality/approve.qmd
-                - text: "Step 6: Publish mortality outputs"
-                  href: technical/workflows/mortality/publish.qmd
 
         - section: "Review and publication controls"
           contents:
@@ -382,10 +364,6 @@ website:
               contents:
                 - text: "Overview"
                   href: technical/website/update-content.qmd
-                - text: "Maintain the CVD events dashboard"
-                  href: technical/website/cvd-events-dashboard.qmd
-                - text: "Maintain the CVD mortality dashboard"
-                  href: technical/website/cvd-mortality-dashboard.qmd
                 - text: "Update an existing briefing"
                   href: technical/website/update-briefing.qmd
 

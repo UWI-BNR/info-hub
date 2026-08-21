@@ -23,7 +23,7 @@ BNR surveillance is not a list of individual patients. Public outputs contain ag
 | **Cardiovascular disease (CVD)** | Definitions are available for event counts, event rates, case fatality and hospital length of stay. |
 | **Hypertension** | Measure page established; detailed specifications are being prepared for implementation. |
 | **Diabetes** | Measure page established; detailed specifications are being prepared for implementation. |
-| **Mortality** | General method page established; BNR publication specifications remain in development. |
+| **Mortality** | CVD mortality counts and percentage distributions are available using the BNR Primary and Inclusive mortality definitions. |
 
 Hypertension and diabetes are part of the main BNR measure programme. Their pages are holding pages only until the approved definitions and publications are ready.
 

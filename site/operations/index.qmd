@@ -2,7 +2,7 @@
 title: "Operations Manual"
 description: "How the Barbados National Registry carries out, governs and records its routine work."
 date: 2026-08-11
-date-modified: 2026-08-11
+date-modified: 2026-08-21
 ---
 
 ---
@@ -71,11 +71,11 @@ Visible BNR-team drafts for creating, resolving, maintaining and approving recor
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[09-14]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[09-15]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
 ### Post-REDCap analytics & publishing {.card-title}
 
-Step-by-step Stata workflows followed by controlled Quarto publication.
+CVD events, mortality, tables and briefings followed by controlled Quarto publication.
 
 ::: {.mt-auto}
 [Open section](post-redcap/index.qmd){.btn .btn-outline-primary .btn-sm}
@@ -162,4 +162,4 @@ The Operations Manual states the required process. Where a task needs menus, dia
 
 ## Status of this edition
 
-The post-REDCap analytics and publishing pages describe the implemented BNR refit system as step-by-step operational overviews, with links to detailed Technical Manual instructions. Pages covering work before and within REDCap remain visible BNR-team drafts so staff can suggest, complete and approve the local procedures.
+The post-REDCap analytics and publishing pages describe the implemented CVD events, CVD mortality, tabulation and briefing pathways as step-by-step operational overviews, with links to detailed Technical Manual instructions. Pages covering work before and within REDCap remain visible BNR-team drafts so staff can suggest, complete and approve the local procedures.

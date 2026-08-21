@@ -2,7 +2,7 @@
 title: "Review, approve and publish"
 subtitle: "The controlled route from private Stata staging to the public Info-Hub"
 date: 2026-08-11
-date-modified: 2026-08-11
+date-modified: 2026-08-21
 ---
 
 **Status:** Implemented common procedure.  
@@ -29,7 +29,7 @@ Use the product-specific Operations page for the correct Stata step and the [Tec
 
 ## Step 2: Correct before approval
 
-If any check fails, stop. Correct the authoritative REDCap record, analytical code or configuration and rerun from the earliest affected step. Never repair a generated dataset, table or figure by hand.
+If any check fails, stop. Correct the authoritative source record, analytical code or configuration and rerun from the earliest affected step. Never repair a generated dataset, table or figure by hand.
 
 ## Step 3: Record approval in Stata
 
@@ -37,7 +37,8 @@ Use the approval action belonging to the workflow:
 
 | Product | Stata approval action |
 |---|---|
-| Dashboard metrics | **User > BNR > Update dashboard > Step 5: Review and approve package for release** |
+| CVD event metrics | **User > BNR > Update CVD dashboard > Step 5: Review and approve package for release** |
+| CVD mortality | **User > BNR > Update mortality dashboard > Step 5: Approve reviewed mortality release** |
 | Tabulations | **User > BNR > Produce tables > Step 2B: Approve reviewed tables** |
 | Briefings | **User > BNR > Produce briefing > Step 2: Review and approve** |
 
@@ -49,7 +50,8 @@ Use the separate publication action for the same product and release:
 
 | Product | Stata publication action |
 |---|---|
-| Dashboard metrics | Dashboard **Step 6: Publish approved outputs** |
+| CVD event metrics | CVD event **Step 6: Publish approved outputs** |
+| CVD mortality | Mortality **Step 6: Publish approved outputs** |
 | Tabulations | Table **Step 3: Publish approved tables** |
 | Briefings | Briefing **Step 3: Publish approved briefing** |
 
@@ -63,7 +65,7 @@ Confirm that the Stata summary reports successful publication and verification. 
 4. Run a complete local site render.
 5. Inspect the rendered pages and Downloads catalogue.
 
-Quarto consumes approved public products. It must not recalculate results or point to private staging.
+Quarto consumes approved public products and must never point to private staging. Publication-layer behaviour must follow the documented dashboard contract; it must not become a second analytical workflow.
 
 ## Step 6: Review Git and deploy
 

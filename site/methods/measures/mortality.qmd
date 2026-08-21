@@ -1,42 +1,137 @@
 ---
-title: "Mortality"
-description: "How mortality measures will be presented in the BNR Info-Hub."
+title: "CVD mortality"
+description: "How BNR counts and describes deaths classified as cardiovascular disease."
 ---
 
-Mortality statistics describe deaths in a population during a stated period. This page establishes the public explanation that will be completed when the BNR mortality specifications and outputs are approved.
+BNR mortality statistics describe deaths that meet the Registry's practical cardiovascular mortality classification. The current dashboard reports **numbers of deaths** and **percentage distributions** using two related definitions: **Primary** and **Inclusive**.
 
-::: {.callout-note title="Publication status"}
-BNR mortality products are in development. No provisional formula or source rule on this holding page should be treated as an approved BNR measure.
+## At a glance
+
+| Element | Description |
+|---|---|
+| **Question answered** | How many deaths meet the BNR cardiovascular mortality classification, and how are those deaths distributed across broad groups? |
+| **Source** | Death-certificate information recorded for BNR mortality surveillance |
+| **Primary definition** | Clear + Likely BNR cardiovascular mortality classifications |
+| **Inclusive definition** | Clear + Likely + Possible BNR cardiovascular mortality classifications |
+| **Reported as** | Counts and percentage distributions |
+| **Current dashboard period** | Published calendar periods from 2010 onwards, according to the current approved release |
+
+[Open the CVD mortality dashboard](../../surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-primary}
+
+## What does the dashboard show?
+
+The dashboard has two main views.
+
+**Number of deaths** shows how many deaths meet the selected BNR mortality definition during a month, quarter or year.
+
+**Distribution of deaths** shows how the published deaths are divided between categories such as Heart and Stroke, women and men, or the broad age groups used for annual reporting.
+
+These two views answer different questions. A count describes **how many deaths were classified**. A percentage describes **how those classified deaths were divided between categories**.
+
+## Primary and Inclusive definitions
+
+The mortality classifier records different levels of evidence. The dashboard uses two nested definitions.
+
+| Dashboard definition | What it includes | How to interpret it |
+|---|---|---|
+| **Primary** | Clear + Likely | The main BNR reporting definition |
+| **Inclusive** | Clear + Likely + Possible | A broader definition that includes deaths where cardiovascular attribution is plausible but more uncertain |
+
+The Inclusive definition contains the Primary definition. They are **alternative ways of describing the same mortality burden and must not be added together**.
+
+For example, if 80 deaths meet the Primary definition and another 12 deaths are classified as Possible, the Inclusive count is 92. It is not 172.
+
+For more detail, see [How CVD deaths are classified](../interpretation/classifying-cvd-deaths.qmd).
+
+## Time periods and available breakdowns
+
+The dashboard deliberately uses different levels of detail at different time scales.
+
+| Time period | Published breakdowns |
+|---|---|
+| **Monthly** | All CVD, both sexes and all ages only |
+| **Quarterly** | All CVD, Heart and Stroke; both sexes, women and men |
+| **Annual** | All CVD, Heart and Stroke; both sexes, women and men; broad age groups for All CVD where available |
+
+The restricted monthly view reduces unnecessary disclosure risk. More detailed monthly breakdowns are not produced simply because the data exist privately.
+
+## Monthly historical context
+
+Monthly counts are shown against a **fixed 2015–2019 historical reference**.
+
+For each calendar month, the dashboard shows:
+
+- the lowest monthly count seen during 2015–2019;
+- the highest monthly count seen during 2015–2019; and
+- the average count for that calendar month during the same five-year period.
+
+This reference was reviewed as a fixed public asset. It is **not recalculated when a new mortality release is published**.
+
+::: {.callout-note title="What the monthly band is not"}
+The 2015–2019 band is historical context. It is not a forecast, confidence interval or rolling five-year average.
 :::
 
-## What mortality measures can tell us
+## Quarterly and annual comparisons
 
-Common measures include:
+Quarterly and annual count views may show an average from the previous five comparable years where that value is already present in the approved public dataset.
 
-- the number of deaths;
-- the crude death rate relative to the resident population;
-- age-specific death rates;
-- age-adjusted death rates for comparison; and
-- the distribution of deaths by cause.
+The dashboard does not create these comparison values. If a comparison is unavailable or protected, it is not reconstructed.
 
-## Decisions to record before publication
+## Year-to-date count
 
-The completed specification will state:
+The monthly view may show a **year-to-date** count. This is the one simple presentation calculation made by the dashboard: it adds the published monthly All-CVD counts from January to the latest selected month.
 
-| Element | To be confirmed |
-|---|---|
-| Population | Residence rules and period covered |
-| Death definition | Registered deaths and any registration-delay rules |
-| Cause | Underlying or contributing cause and the coding system used |
-| Denominator | Population source and release |
-| Adjustment | Age groups, standard population and interval method |
-| Revisions | Treatment of late registrations and cause corrections |
+The year-to-date value is shown only when every contributing month is present, complete and available for publication. If any contributing month is missing, incomplete or protected, the dashboard does not calculate the year-to-date total.
+
+## Percentage distributions
+
+Percentage distributions describe the **mix of classified CVD deaths**. They do not describe an individual's risk of dying and they are not population mortality rates.
+
+For example, a chart showing 30% Heart and 70% Stroke means that, among the published CVD deaths in that definition and period, 30% were classified as Heart and 70% as Stroke.
+
+See [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd) for the distinction between these forms of statistic.
+
+## Protected values
+
+BNR applies disclosure control before mortality data are published. A protected value is not zero and must not be inferred from totals, charts or another time period.
+
+The dashboard preserves the publication status supplied in the approved dataset. It does not reverse-engineer protected values.
+
+See [Protecting confidentiality](../interpretation/confidentiality.qmd).
+
+## How these statistics differ from official cause-of-death statistics
+
+The BNR method is a practical surveillance classification used while a formally assigned national **underlying cause of death** is not available to BNR for this purpose.
+
+It uses death-certificate wording and structure to assign approximate cardiovascular mortality classifications. It is **not full ICD-10 underlying-cause coding** and does not reproduce an official automated cause-of-death coding system.
+
+BNR mortality counts should therefore not be assumed to be directly equivalent to official national or international mortality series that use formal ICD-10 underlying-cause-of-death rules.
+
+## Release date and latest data period
+
+The date on which a mortality release is published may be later than the latest death period included in that release. The dashboard shows these separately.
+
+This reporting lag may reduce over time, but the release date should never be interpreted as the date of the latest underlying observation.
 
 ## Mortality is not case fatality
 
-Mortality uses the population as its denominator. [Case fatality](case-fatality.qmd) uses eligible CVD events as its denominator. The two measures therefore answer different questions.
+Mortality counts describe deaths classified through the mortality surveillance source. [Case fatality](case-fatality.qmd) describes the proportion of eligible hospital CVD events ending in death under the case-fatality definition.
+
+They answer different questions and use different analytical denominators.
 
 ## What to remember
 
-The final page will be completed before BNR mortality figures are described as routine public measures.
+- Primary is the main BNR mortality definition; Inclusive is a broader sensitivity definition.
+- Primary and Inclusive are alternatives and must not be added together.
+- Monthly reporting is intentionally restricted to All CVD, both sexes and all ages.
+- The monthly 2015–2019 reference is fixed historical context, not a rolling comparator.
+- Quarterly and annual five-year comparisons are shown only where already available in the approved public data.
+- Percentage distributions describe the mix of classified deaths, not population risk.
+- BNR mortality classifications are not identical to formal ICD-10 underlying-cause-of-death statistics.
 
+## Related pages
+
+- [How CVD deaths are classified](../interpretation/classifying-cvd-deaths.qmd)
+- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
+- [Protecting confidentiality](../interpretation/confidentiality.qmd)
+- [Releases, revisions and comparability](../interpretation/revisions-comparability.qmd)

@@ -13,7 +13,7 @@ Different measures answer different questions. A count describes volume; a rate 
 | [CVD incidence and event rates](incidence.qmd) | How frequently were eligible events recorded relative to the population? | Events per 100,000 population |
 | [CVD case fatality](case-fatality.qmd) | What proportion of eligible hospital events ended in death before discharge? | Percentage |
 | [Hospital length of stay](length-of-stay.qmd) | How long did eligible CVD admissions last? | Median days and interquartile range |
-| [Mortality](mortality.qmd) | How will deaths and death rates be described? | Number of deaths and population rates |
+| [CVD mortality](mortality.qmd) | How many deaths meet the BNR CVD mortality definitions, and how are they distributed? | Counts and percentage distributions |
 | [Hypertension](hypertension.qmd) | How will hypertension coverage, care and control be monitored? | Counts, percentages and rates |
 | [Diabetes](diabetes.qmd) | How will diabetes coverage, care and outcomes be monitored? | Counts, percentages and rates |
 

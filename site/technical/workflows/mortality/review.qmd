@@ -1,0 +1,79 @@
+---
+title: "Review the mortality release"
+description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this step does
+
+Mortality Step 4 revalidates the complete Step 3 burden package, applies the approved deterministic disclosure-control rules and creates the exact public candidate plus private review evidence.
+
+It does **not** approve the release, create `public_ready`, publish files or calculate mortality rates.
+
+## Input
+
+Step 4 reads the complete package under:
+
+`$BNR_STAGING/mortality/burden/mort_YYYY_MM/`
+
+including the release/current datasets, package metadata, QA receipt, Step 3 suppression worklist and package readme.
+
+## Run Step 4
+
+1. In Stata, choose **User > BNR > Update mortality dashboard > Step 4: Review mortality release**.
+2. Enter the same release year and month.
+3. Leave replacement unticked for the first review build.
+4. Run the step.
+5. Confirm the operational summary reports that the review package was created successfully.
+6. Open the Step 4 workbook named in the summary.
+
+## Review the package
+
+The reviewer must decide whether the release is analytically plausible, disclosure-safe and ready for approval.
+
+Check:
+
+- the release identity and analysis period;
+- the expected count/distribution structure for both Primary and Inclusive definitions;
+- the automated QA results;
+- private exact values for plausibility;
+- every protected row and its suppression reason;
+- the proposed public candidate, including absence of exact protected values;
+- the monthly publication restriction;
+- quarterly/annual comparator availability; and
+- the fixed 2015-2019 monthly historical-reference asset.
+
+The fixed monthly reference contains, for each calendar month and each public mortality definition, the 2015-2019 minimum, maximum and mean for All CVD, both sexes and all ages. After initial approval it is a fixed public analytical asset and must not be routinely recalculated.
+
+For the common policy, see [Apply and review disclosure control](../../controls/disclosure-control.qmd).
+
+## Outputs
+
+Step 4 writes private review files under the package `review/` folder:
+
+| Output | Purpose |
+|---|---|
+| `mort_s4_candidate.dta` | Exact disclosure-controlled candidate reviewed before Step 5. |
+| `mort_s4_review_mort_YYYY_MM.xlsx` | Main human-review workbook. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Machine-readable Step 4 QA receipt. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | Fingerprints the reviewed basis used later by Step 5. |
+| `mort_s4_monthly_reference_2015_2019.dta` and `.csv` | Private copy/candidate of the fixed monthly reference asset. |
+| `mort_s4_monthly_reference_2015_2019.yml` | Reference-asset metadata and control information. |
+| Step 4 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 7
+```
+
+Add `replace` only when a deliberate Step 4 rebuild is required. A rebuild means the human review must be completed again.
+
+## If review finds a problem
+
+Do not edit the workbook, candidate, suppression symbols or reference files.
+
+Correct the earliest affected source, reference, configuration or version-controlled code, rerun from that point and repeat Step 4 review before approval.

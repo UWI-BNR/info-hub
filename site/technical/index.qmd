@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Technical Manual"
-description: "Step-by-step guidance for operating and maintaining the BNR post-REDCap analytics and publishing environment."
+description: "Step-by-step guidance for operating and maintaining the BNR analytics and publishing environment."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -39,7 +39,7 @@ Environment and workstation setup.
 
 ### Analytical workflows {.card-title}
 
-Dashboards, tables and briefings.
+CVD events, mortality, tables and briefings.
 
 ::: {.mt-auto}
 [Open section](workflows/overview.qmd){.btn .btn-outline-primary .btn-sm}
@@ -128,7 +128,7 @@ Files, folders, commands and terms.
 
 ## What this manual covers
 
-The Technical Manual is the practical how-to guide for the BNR analytics and publishing environment **after data have been collected in REDCap**.
+The Technical Manual is the practical how-to guide for the BNR analytics and publishing environment **after data have entered the controlled analytical pathway**.
 
 Use it to run analytical workflows, review and approve outputs, publish controlled releases, maintain the Info-Hub website, make safe code changes and diagnose common problems.
 
@@ -138,8 +138,8 @@ It is designed for **dip-in, dip-out use**. Find the task you need, follow the s
 
 | Manual | Main purpose |
 |---|---|
-| **Technical Manual** | Operate and maintain the post-REDCap analytics, release and publishing environment. |
-| **[Operations Manual](../operations/index.qmd)** | Registry operating procedures before and within REDCap, including data collection, governance and routine registry operation. |
+| **Technical Manual** | Operate and maintain the analytics, release and publishing environment. |
+| **[Operations Manual](../operations/index.qmd)** | Registry operating procedures, responsibilities and routine decision points from source records through public release. |
 | **[Public Methods Manual](../methods/index.qmd)** | Plain-language explanation of the methods used to produce and interpret BNR public statistics. |
 
 The manuals overlap only where a handover between operational stages needs to be clear.
@@ -150,19 +150,16 @@ The manuals overlap only where a handover between operational stages needs to be
 |---|---|
 | **1. Analytics environment** | How Stata, private storage, public outputs, Quarto and GitHub fit together. |
 | **2. Set up a workstation** | Software, repositories, local paths and system checks. |
-| **3. Dashboard metrics** | Monthly REDCap extraction, shared analytical preparation, dashboard metrics, approval and publication. |
+| **3. CVD events workflow** | Monthly CVD REDCap extraction, shared analytical preparation, CVD event metrics, approval and publication. |
 | **4. Tabulations** | Routine CVD tables, disclosure control, review, approval and publication. |
 | **5. Briefings** | Routine and ad-hoc analytical briefing packages, including review, approval and publication. |
-| **6. Mortality workflow** | Reserved for the mortality pathway when implementation is complete. |
+| **6. CVD mortality workflow** | Mortality extraction, approximate CVD death classification, burden metrics, disclosure review, approval and publication. |
 | **7. Review an analytical release** | Common checks before any analytical release is approved. |
 | **8. Disclosure control** | BNR small-number rules and human disclosure review. |
 | **9. Approve and publish a release** | Common approval and promotion principles. |
 | **10. Render and publish the website** | Local Quarto rendering, checking and deployment. |
-| **11. Update website content** | Maintaining pages, briefings, listings, navigation and downloads. |
+| **11. Update website content** | Maintaining pages, dashboards, briefings, listings, navigation and downloads. |
 | **12. Make a safe code change** | Branch, edit, test, review and merge changes safely. |
 | **13. Files, releases and versions** | Important locations, package identities and version conventions. |
 | **14. Fix common problems** | Short symptom, cause and fix recipes. |
 | **15. System reference** | Workflow, command, folder, file and terminology quick reference. |
-
-
-

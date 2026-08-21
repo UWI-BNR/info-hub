@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Set up a workstation"
 description: "Configure a Windows workstation to run the BNR Stata workflows and maintain the Quarto Info-Hub."
 date: 2026-08-10
@@ -29,7 +29,7 @@ The detailed instructions are kept inside the stage callouts below so that the o
 | **1** | Install the supporting software | Git, Python, Quarto and VS Code are available. |
 | **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
 | **3** | Provision the private workspace | The authorised `info-hub-private` data and reference structure is available. |
-| **4** | Configure local paths and REDCap access | The public root, private root and token-file location resolve correctly. |
+| **4** | Configure local paths and REDCap access | The public root, private root and required CVD/mortality token-file locations resolve correctly. |
 | **5** | Create the Python environment | The project Python packages and PyCap are available. |
 | **6** | Configure Stata startup with `profile.do` | Paths, Python, dialogs and the BNR menu load automatically when Stata starts. |
 | **7** | Check the Quarto project | Quarto extensions are present and the site renders and previews locally. |
@@ -406,11 +406,14 @@ global BNR_REPO    "C:/your/path/info-hub"
 global BNR_PRIVATE "C:/your/secure/path/info-hub-private"
 ```
 
-Also set the path—not the value—of the REDCap token:
+Also set the paths—not the values—of the REDCap tokens used by the authorised workflows:
 
 ```stata
-global BNR_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_redcap_token.txt"
+global BNR_REDCAP_TOKEN_FILE      "C:/your/secure/path/bnr_redcap_token.txt"
+global BNR_MORT_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_mort_redcap_token.txt"
 ```
+
+The mortality token setting is required by Mortality Step 1. If the current tracked path template does not yet contain that line, add it to the local file and update the tracked template through the normal code-change process before handover.
 
 The remaining standard globals are derived automatically, including:
 
@@ -424,9 +427,9 @@ The remaining standard globals are derived automatically, including:
 - `$BNR_PUBLIC`
 - `$BNR_SITE`
 
-### 2. Configure the REDCap token file
+### 2. Configure the REDCap token files
 
-The token text file must:
+Each token text file must:
 
 - be stored outside the public repository;
 - contain only the API token on one line; and
@@ -458,10 +461,11 @@ Loading the configuration now stops with an error if the repository root is
 wrong, a required private folder is absent, or the private workspace/token path
 sits inside the public Git repository.
 
-Check the token file exists without displaying its contents:
+Check the token files exist without displaying their contents:
 
 ```stata
 confirm file "$BNR_REDCAP_TOKEN_FILE"
+confirm file "$BNR_MORT_REDCAP_TOKEN_FILE"
 ```
 
 ### Important
@@ -653,7 +657,8 @@ Confirm:
 
 is visible and contains:
 
-- **Update dashboard**
+- **Update CVD dashboard**
+- **Update mortality dashboard**
 - **Produce briefing**
 - **Produce tables**
 
@@ -795,6 +800,7 @@ Run:
 
 ```stata
 confirm file "$BNR_REDCAP_TOKEN_FILE"
+confirm file "$BNR_MORT_REDCAP_TOKEN_FILE"
 ```
 
 Do not print the token.
@@ -840,7 +846,8 @@ Setup date:
 
 Public repo path:
 Private root path:
-REDCap token-file location:
+CVD REDCap token-file location:
+Mortality REDCap token-file location:
 
 Stata version:
 Python version:
@@ -876,7 +883,7 @@ Machine-specific:
 - `bnr_paths_LOCAL.do`;
 - `profile.do`;
 - `venv-info-hub/`;
-- the REDCap token file;
+- the REDCap token files;
 - `local-setup-notes.md`; and
 - the authorised private workspace.
 

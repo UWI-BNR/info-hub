@@ -1,8 +1,8 @@
-﻿---
+---
 title: "The BNR analytics and publishing environment"
-description: "How the post-REDCap BNR system fits together: tools, data locations, review boundaries, public outputs and publication."
+description: "How the BNR analytical system fits together: tools, data locations, review boundaries, public outputs and publication."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -90,7 +90,7 @@ The public side never needs access to confidential source data or the private re
 | **Quarto** | Public website pages, dashboards, briefings, manuals and other presentation-layer content. |
 | **Git** | Local version control for code and publication source. |
 | **GitHub** | Shared remote repository and deployment of the static public site. |
-| **REDCap** | Operational registry data source for post-2023 CVD data. |
+| **REDCap** | Operational source for current CVD event records and the mortality death-certificate form used by the mortality workflow. |
 
 Stata remains the main analytical language because the system is intended to be maintainable by a Stata-skilled registry team. Python is deliberately a supporting dependency rather than a second analytical platform.
 
@@ -104,7 +104,8 @@ A workstation uses two main root locations.
 |---|---|---|
 | `$BNR_REPO` | Root of the `info-hub` repository. Contains shared code, authoritative approved public outputs and the Quarto site. | Yes, subject to the controlled repository contents. |
 | `$BNR_PRIVATE` | Root of the private companion workspace. Contains identifiable data, deidentified analytical inputs, private staging, review material and private logs. | **No.** |
-| `$BNR_REDCAP_TOKEN_FILE` | Location of the separately secured REDCap token file. The global never contains the token itself. | **No.** |
+| `$BNR_REDCAP_TOKEN_FILE` | Location of the separately secured CVD REDCap token file. The global never contains the token itself. | **No.** |
+| `$BNR_MORT_REDCAP_TOKEN_FILE` | Location of the separately secured mortality REDCap token file required by Mortality Step 1. | **No.** |
 
 The exact local folders differ by workstation. They are defined in the machine-specific:
 
@@ -135,9 +136,9 @@ The private root is divided by purpose.
 
 These folders are private even when a particular file is deidentified. **Deidentified does not automatically mean approved for public release.**
 
-That distinction matters especially after Dashboard Step 3. Step 3 creates the deidentified analytical inputs used by dashboards, tabulations and routine briefings, but those datasets remain in the private environment.
+That distinction matters especially after CVD events Step 3. Step 3 creates the deidentified analytical inputs used by CVD event metrics, tabulations and routine briefings, but those datasets remain in the private environment. Mortality has its own private extraction, classification and staging pathway.
 
-See [Analytical workflows](../workflows/overview.qmd) for the shared Step 1-3 preparation pathway and the three downstream reporting branches.
+See [Analytical workflows](../workflows/overview.qmd) for the shared CVD Steps 1-3 preparation layer and the separate mortality route.
 
 ## Private staging is the review workspace
 
@@ -238,17 +239,16 @@ The role recorded in a receipt identifies the capacity in which an approval was 
 
 Whatever the role, the person approving a release is expected to review the analytical content, disclosure risk and publication readiness. The system is designed to support that judgement with reproducible files and clear checks, not to replace it.
 
-## The three analytical workflows
+## The analytical workflows
 
-After the common Dashboard Steps 1-3 preparation pathway, the current system has three reporting routes.
+The current system has four operational reporting routes. CVD event metrics, tabulations and routine briefings share the CVD Steps 1-3 preparation layer. Mortality has its own six-step analytical and publication route.
 
 | Workflow | Main product | Manual chapter |
 |---|---|---|
-| Dashboard metrics | Routine interactive surveillance metrics | [Chapter 3](../workflows/dashboards/overview.qmd) |
-| Tabulations | Routine public CVD table set and workbook | [Chapter 4](../workflows/tabulations/overview.qmd) |
-| Briefings | Routine and ad-hoc analytical briefing packages | [Chapter 5](../workflows/briefings/overview.qmd) |
-
-A mortality pathway is reserved for Chapter 6 once that implementation is complete.
+| **CVD events** | Routine interactive CVD event metrics | [Chapter 3](../workflows/dashboards/overview.qmd) |
+| **Tabulations** | Routine public CVD table set and workbook | [Chapter 4](../workflows/tabulations/overview.qmd) |
+| **Briefings** | Routine and ad-hoc analytical briefing packages | [Chapter 5](../workflows/briefings/overview.qmd) |
+| **CVD mortality** | Approximate CVD mortality counts and distributions | [Chapter 6](../workflows/mortality/overview.qmd) |
 
 ## A few rules worth remembering
 

@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Update website content"
 description: "Maintain public Quarto pages, briefings, listings, navigation and downloads after analytical publication."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -112,6 +112,15 @@ Before publishing the change, complete the full render described in [Chapter 10]
 Then inspect the affected page and any linked page it influences.
 
 For example, a change to page metadata may also alter a Quarto listing; a change to `_quarto.yml` may alter navigation across the entire site.
+
+## Maintain a surveillance dashboard
+
+The CVD event and CVD mortality dashboards have dedicated maintenance pages because their Quarto/Observable controls must remain aligned with the approved public data structure.
+
+- [Maintain the CVD events dashboard](cvd-events-dashboard.qmd)
+- [Maintain the CVD mortality dashboard](cvd-mortality-dashboard.qmd)
+
+The general rule remains that Quarto presents approved analytical products. The mortality dashboard year-to-date count is the one documented narrow presentation exception; its safeguards are defined on the mortality dashboard maintenance page. Do not extend that exception to other statistics without an explicit methods and architecture decision.
 
 ## Update an existing briefing
 

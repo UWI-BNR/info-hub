@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Extract a REDCap release"
 description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly release."
 date: 2026-08-10
@@ -23,7 +23,7 @@ The token file location is defined in `scripts/stata/config/bnr_paths_LOCAL.do`.
 
 ## Run Step 1
 
-1. **Open Step 1.** In Stata, choose User > BNR > Update dashboard > Step 1: Extract REDCap data.
+1. **Open Step 1.** In Stata, choose User > BNR > Update CVD dashboard > Step 1: Extract REDCap data.
 2. **Select the release.** Enter the release year and release month.
 3. **Choose replacement behaviour.** For a first run, leave Replace an existing extract unticked.
 4. **Run the extract.** Select Run extract.

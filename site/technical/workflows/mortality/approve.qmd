@@ -1,0 +1,86 @@
+---
+title: "Approve the reviewed mortality release"
+description: "Mortality Step 5: record authorised human approval of the exact Step 4 candidate and create the private public_ready package."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this step does
+
+Mortality Step 5 records the authorised human approval of the exact package reviewed in Step 4.
+
+It revalidates the Step 4 candidate and QA receipt, verifies the recorded fingerprints, creates the private `public_ready` payload and writes `approval.yml` last.
+
+Step 5 does not calculate mortality metrics, alter suppression or publish files.
+
+## Before approving
+
+Complete the Step 4 workbook review first. Approval requires explicit confirmation that the reviewer has checked:
+
+- the release and period;
+- definitions and results;
+- disclosure control;
+- the candidate and review workbook; and
+- publication readiness, including the monthly reference asset.
+
+If any confirmation is not true, stop and return to the appropriate earlier step.
+
+## Run Step 5
+
+1. In Stata, choose **User > BNR > Update mortality dashboard > Step 5: Approve reviewed mortality release**.
+2. Enter the reviewed release year and month.
+3. Enter the approver's full name and select an authorised role.
+4. Complete every review confirmation.
+5. Run Step 5.
+6. Confirm the operational summary reports successful approval pending Step 6.
+7. Open `public_ready/approval.yml` and confirm the release, package, approver, role, disclosure status and manifest information are correct.
+
+Authorised technical roles are **BNR Lead**, **BNR Analyst** and **BNR Developer**. BNR retains responsibility for deciding who is authorised to approve dissemination.
+
+## Outputs
+
+Step 5 creates:
+
+`$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`
+
+The approved payload contains exactly ten public files:
+
+```text
+datasets/
+  mort_burden_metrics_mort_YYYY_MM.dta
+  mort_burden_metrics_mort_YYYY_MM.csv
+  mort_burden_metrics_current.dta
+  mort_burden_metrics_current.csv
+  mort_monthly_reference_2015_2019.dta
+  mort_monthly_reference_2015_2019.csv
+metadata/
+  mort_burden_metrics_mort_YYYY_MM.yml
+  mort_burden_metrics_current.yml
+  mort_burden_package.yml
+  mort_monthly_reference_2015_2019.yml
+```
+
+The private control files are:
+
+```text
+public_manifest.csv
+approval.yml
+```
+
+`approval.yml` means **approved, not published**. Step 6 must still verify and promote the package.
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" ///
+    2026 7 "Full name" "BNR Analyst" ///
+    release definitions disclosure candidate ready
+```
+
+The dialog is the preferred routine route because it makes the five confirmations explicit.
+
+## If Step 5 does not complete
+
+Do not edit the approval receipt, manifest or reviewed files. Restore the reviewed package or rerun Step 4 and complete the human review again.

@@ -1,0 +1,64 @@
+---
+title: "Extract mortality data"
+description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this step does
+
+Mortality Step 1 extracts the mortality REDCap source and creates a private all-deaths analytical dataset through the selected month-end.
+
+The API deliberately retrieves the full mortality REDCap project. Stata then keeps the death-certificate arm, retains the approved source fields and excludes valid deaths after the selected month-end.
+
+Step 1 does **not** classify Heart, Stroke or underlying cause of death.
+
+## Before starting
+
+- Use a completed calendar month. The workflow will not extract a future or unfinished month.
+- Confirm the authorised private workspace is available.
+- Confirm the mortality REDCap token-file path is configured as `$BNR_MORT_REDCAP_TOKEN_FILE`.
+- Use the same release year and month for the later mortality steps.
+
+The token itself must remain outside Git and must not appear in a DO file, QMD or log.
+
+## Run Step 1
+
+1. In Stata, choose **User > BNR > Update mortality dashboard > Step 1: Extract mortality data**.
+2. Enter the release year and month.
+3. Leave replacement unticked for the first run.
+4. Run the step.
+5. Check the operational summary for the selected release, cut-off date and private output location.
+6. Confirm the source CSV, analytical DTA, manifest and private log were created.
+7. Check that the record count and death-date range are plausible before continuing.
+
+## Outputs
+
+Step 1 writes to:
+
+`$BNR_DATA_RAW/redcap/mortality/yYYYY/mMM/`
+
+| Output | Purpose |
+|---|---|
+| `bnr_mort_s1_YYYYMM_raw.csv` | Restricted private mortality source CSV after the Stata filtering stage. |
+| `bnr_mort_s1_YYYYMM.dta` | Private analytical source with approved mortality fields plus Step 1 derived dates, cleaned cause text and QA flags. |
+| `bnr_mort_s1_YYYYMM_manifest.yml` | Source/release receipt for the extract. |
+| Step 1 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
+
+The DTA and CSV contain confidential mortality information and must never enter Git.
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/mortality/bnr_mort_s1_extract.do" 2026 7
+```
+
+Add `replace` only for a deliberate rebuild of an existing Step 1 release.
+
+## If Step 1 does not complete
+
+Read the reason and log path in the failure summary. Check the selected month, mortality token-file configuration, REDCap access and private output path.
+
+Do not use files from an incomplete run.

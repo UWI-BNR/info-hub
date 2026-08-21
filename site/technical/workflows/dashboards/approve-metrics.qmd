@@ -1,8 +1,8 @@
-﻿---
-title: "Review and approve dashboard metrics"
+---
+title: "Review and approve CVD event metrics"
 description: "Step 5: prepare the review package, complete the human review and record approval."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -23,7 +23,7 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
 
 ## Prepare the review package
 
-1. **Open Step 5.** In Stata, choose User > BNR > Update dashboard > Step 5: Review and approve package for release.
+1. **Open Step 5.** In Stata, choose User > BNR > Update CVD dashboard > Step 5: Review and approve package for release.
 2. **Select the release.** Enter the release year and release month.
 3. **Select the action.** Leave Burden selected and choose Prepare the review package.
 4. **Run prepare.** Leave replacement unticked for a first review and select Run Step 5.

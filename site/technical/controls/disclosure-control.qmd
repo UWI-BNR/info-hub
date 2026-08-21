@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Apply and review disclosure control"
-description: "BNR small-number disclosure-control rules and practical human review across dashboards, tables and briefings."
+description: "BNR small-number disclosure-control rules and practical human review across CVD events, mortality, tables and briefings."
 date: 2026-08-10
-date-modified: 2026-08-13
+date-modified: 2026-08-21
 ---
 
 ---
@@ -31,7 +31,7 @@ This is the **disclosure-control standard created for adoption across BNR public
 
 `bnr_sdc_v1` means **BNR Statistical Disclosure Control policy, version 1**. It is the short policy name stored in BNR code and metadata so that each release records which disclosure-control rules were used.
 
-For the current CVD workflows, `bnr_sdc_v1` means:
+For the current BNR surveillance workflows, `bnr_sdc_v1` means:
 
 1. exact supporting frequencies from **1 to 5** require primary suppression before publication;
 2. a true zero is not automatically primary-suppressed;
@@ -48,7 +48,7 @@ sdc_policy: bnr_sdc_v1
 
 ## The basic BNR rule
 
-For BNR CVD public reporting:
+For BNR public surveillance reporting:
 
 | Supporting frequency | BNR treatment |
 |---:|---|
@@ -64,7 +64,7 @@ The threshold of 6 is **BNR's operational rule**. The Handbook does not present 
 
 ## The suppression terms used by BNR
 
-The dashboard workflow records five possible statuses.
+The CVD event and mortality metric workflows may record several protection statuses.
 
 | Status | Plain-English meaning |
 |---|---|
@@ -74,7 +74,7 @@ The dashboard workflow records five possible statuses.
 | **Temporal** | A cumulative result is hidden because comparison with an earlier public release could reveal a small change. |
 | **Derived** | A percentage, distribution or other calculated result is hidden because it depends on a protected count. |
 
-For dashboard metrics, a suppressed row remains in the dataset, but its exact `value`, `numerator` and `denominator` are removed. `display_value` shows `*`.
+For metric datasets, a suppressed row may remain in the public structure, but the protected analytical value is removed from public use and a safe display field is supplied. The dashboard must use the published display and protection fields rather than reconstructing the number.
 
 Other BNR products may use different public wording or symbols. The important rule is that the protected number must not remain visible somewhere else in the release.
 
@@ -118,7 +118,7 @@ For the annual CVD table, BNR normally keeps the disease total and hides the com
 
 The tabulation workflow also checks annual totals against their published monthly components. If an annual total would reveal the only hidden month, it hides another monthly component—or the annual total when no second covered month exists.
 
-The exact rule depends on the structure of the output. Dashboard metrics and tabulations therefore use different, clearly documented rules rather than one enormous generic suppression routine attempting to understand every table humanity might create.
+The exact rule depends on the structure of the output. CVD event metrics, mortality and tabulations therefore use different, clearly documented deterministic rules rather than one generic routine attempting to infer every possible publication structure.
 
 ## Temporal differencing
 
@@ -150,7 +150,7 @@ A percentage, distribution, rate or total may reveal a protected count.
 
 For example, if one count in a two-category distribution is protected, publishing the other percentage may reveal the protected percentage because the pair adds to 100%.
 
-Dashboard metrics and tabulations therefore protect related calculated values where required.
+CVD event metrics, mortality and tabulations therefore protect related calculated values where required.
 
 ## Review the whole release
 
@@ -172,13 +172,14 @@ A value removed from a CSV but printed as `n=3` on a chart is still disclosed.
 
 A value hidden this month but recoverable by subtracting last month's published total is also still disclosed.
 
-## How the three current workflows differ
+## How the current workflows differ
 
 The same policy is applied in different ways because the outputs are different.
 
 | Workflow | How disclosure control works |
 |---|---|
-| **Dashboard metrics** | The workflow automatically identifies several known risks and creates a disclosure-controlled candidate. The reviewer sees the private values, the reasons for suppression and the proposed public result before approval. |
+| **CVD event metrics** | The workflow automatically identifies known risks and creates a disclosure-controlled candidate. The reviewer sees the private values, the reasons for suppression and the proposed public result before approval. |
+| **CVD mortality** | Step 4 revalidates the Step 3 package, applies the mortality-specific deterministic protection rules and creates the exact public candidate plus a private review workbook. Monthly public scope is deliberately restricted to All CVD, both sexes and all ages. |
 | **Tabulations** | Step 2A applies rules designed for each table, creates the suppressed public files, and produces a private worklist showing the affected cells for human review. |
 | **Briefings** | Step 1 creates `disclosure_flags.csv` to draw attention to possible small-number issues. The analyst then reviews the datasets, figures and full release. If an output is unsafe, the analyst changes the briefing analysis or presentation code and rebuilds it before approval. |
 

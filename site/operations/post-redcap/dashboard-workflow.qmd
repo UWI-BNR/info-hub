@@ -1,31 +1,31 @@
 ---
-title: "Run the dashboard workflow"
-description: "A step-by-step operational guide to the six Stata dashboard steps and shared analytical preparation pathway."
+title: "Run the CVD events workflow"
+description: "A step-by-step operational guide to the six Stata CVD events steps and shared analytical preparation pathway."
 date: 2026-08-11
-date-modified: 2026-08-11
+date-modified: 2026-08-21
 ---
 
 ---
 
 ## Purpose
 
-Use this workflow for every authorised monthly CVD release. Dashboard Steps 1–3 create the shared private inputs used by dashboards, tabulations and briefings. Steps 4–6 create, approve and publish the dashboard metric package.
+Use this workflow for every authorised monthly CVD event release. CVD events Steps 1–3 create the shared private inputs used by the CVD events dashboard, tabulations and briefings. Steps 4–6 create, approve and publish the CVD event metric package.
 
 ## Before starting
 
 - Confirm that the reporting year and month have been authorised through [Authorise a data release](../release/data-release.qmd).
 - Work on the authorised BNR workstation with the private workspace available.
-- Open Stata and confirm that **User > BNR > Update dashboard** is present.
+- Open Stata and confirm that **User > BNR > Update CVD dashboard** is present.
 - Use the same release year and month at every step.
 
 ## Step-by-step procedure
 
-1. **Extract REDCap data — Step 1.** Choose **User > BNR > Update dashboard > Step 1: Extract REDCap data**. Run the authorised release and confirm successful extraction, a plausible record count and a valid receipt. [Technical detail](../../technical/workflows/dashboards/extract-redcap.qmd).
+1. **Extract REDCap data — Step 1.** Choose **User > BNR > Update CVD dashboard > Step 1: Extract REDCap data**. Run the authorised release and confirm successful extraction, a plausible record count and a valid receipt. [Technical detail](../../technical/workflows/dashboards/extract-redcap.qmd).
 2. **Build the confidential cumulative dataset — Step 2.** Open Step 2 from the same menu, use the same year and month, and build the dataset. Confirm the historical and new record counts, date range and receipt. [Technical detail](../../technical/workflows/dashboards/prepare-confidential.qmd).
 3. **Create shared deidentified inputs — Step 3.** Open Step 3, select the full routine input set, complete the authorisation confirmations and run. Confirm that all intended datasets and receipts exist. [Technical detail](../../technical/workflows/dashboards/create-analysis-inputs.qmd).
-4. **Calculate dashboard metrics — Step 4.** Open Step 4, select the current metric family and create the private staging package. Check the run summary and automated QA before continuing. [Technical detail](../../technical/workflows/dashboards/generate-metrics.qmd).
+4. **Calculate CVD event metrics — Step 4.** Open Step 4, select the current metric family and create the private staging package. Check the run summary and automated QA before continuing. [Technical detail](../../technical/workflows/dashboards/generate-metrics.qmd).
 5. **Prepare, review and approve — Step 5.** First use Step 5 to prepare the review package. Open the named workbook and complete the analytical, QA and disclosure review. If satisfactory, reopen Step 5, select the approval action and record the authorised approver. Confirm `APPROVED - PENDING STEP 6`. [Technical detail](../../technical/workflows/dashboards/approve-metrics.qmd).
-6. **Publish the approved metrics — Step 6.** Open Step 6 for the same release and family, publish, and confirm `PUBLISHED` and `Verification: PASSED`. Check the authoritative public package, website mirror and ZIP. [Technical detail](../../technical/workflows/dashboards/publish-metrics.qmd).
+6. **Publish the approved CVD event metrics — Step 6.** Open Step 6 for the same release and family, publish, and confirm `PUBLISHED` and `Verification: PASSED`. Check the authoritative public package, website mirror and ZIP. [Technical detail](../../technical/workflows/dashboards/publish-metrics.qmd).
 7. **Check the website presentation.** Open the local Info-Hub editing session, render the affected dashboard and downloads pages through Quarto, and inspect links and labels. If no QMD or catalogue change is required, do not invent one.
 8. **Review and publish website changes.** In VS Code Source Control, confirm that only public-safe intended files changed. Render the complete site, commit, push and check deployment. [Website publication guide](../../technical/website/render-publish.qmd).
 

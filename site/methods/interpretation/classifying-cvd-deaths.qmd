@@ -1,0 +1,85 @@
+---
+title: "How CVD deaths are classified"
+description: "How BNR uses death-certificate information to create practical cardiovascular mortality classifications."
+---
+
+BNR uses a practical classification method to identify deaths with evidence of cardiovascular disease when a formally assigned national underlying cause of death is not available to the Registry for routine surveillance.
+
+## Why this matters
+
+A death certificate can mention several diseases and conditions. A cardiovascular term appearing anywhere on the certificate does not automatically mean that cardiovascular disease should be treated as the underlying cause.
+
+BNR therefore uses a structured method that considers:
+
+- the wording recorded on the death certificate;
+- whether information appears in Part I or Part II;
+- the order of the lines in Part I;
+- a small number of documented mortality-coding principles; and
+- the strength and uncertainty of the available evidence.
+
+The aim is a consistent **approximate cardiovascular mortality classification**, not a replacement for formal national cause-of-death coding.
+
+## Evidence classes
+
+The classifier places cardiovascular evidence into five broad classes.
+
+| Class | Plain-English meaning |
+|---|---|
+| **Clear** | Strong evidence that the death belongs in the relevant BNR cardiovascular mortality group |
+| **Likely** | Good evidence, although some uncertainty remains |
+| **Possible** | A cardiovascular attribution is plausible, but uncertainty is material |
+| **Mention only** | Relevant wording is present but does not support approximate underlying-cause attribution |
+| **No evidence** | No qualifying evidence was identified by the approved rules |
+
+## The two public definitions
+
+The mortality dashboard uses two nested definitions.
+
+| Definition | Evidence included |
+|---|---|
+| **Primary** | Clear + Likely |
+| **Inclusive** | Clear + Likely + Possible |
+
+The Inclusive definition is deliberately broader. Comparing the two gives readers a simple indication of how much the reported burden changes when more uncertain cardiovascular deaths are included.
+
+These are **classification-sensitivity definitions**, not confidence intervals and not statistical lower and upper bounds.
+
+## Heart and Stroke
+
+BNR mortality reporting distinguishes two broad cardiovascular families.
+
+**Heart** includes compatible ischaemic and coronary heart disease evidence. It is not limited to certificates that literally use the words acute myocardial infarction or heart attack.
+
+**Stroke** includes qualifying acute ischaemic stroke and non-traumatic cerebral haemorrhage patterns within the approved BNR Stroke family. Explicit traumatic and other excluded haemorrhage patterns are not treated as direct Stroke evidence under these rules.
+
+The public dashboard also reports **All CVD**, combining the resolved Heart and Stroke classifications according to the approved mortality method.
+
+## What happens when the certificate structure is uncertain?
+
+The position of information on the death certificate matters. If the original causal line structure is uncertain or has been combined in a way that loses that ordering, the classifier does not simply assume the strongest evidence class.
+
+This is one reason BNR retains explicit uncertainty classes rather than forcing every cardiovascular mention into a single yes/no category.
+
+## This is not full ICD-10 underlying-cause coding
+
+The BNR method uses some mortality-coding principles, but it does not implement the full international process for selecting and coding an official underlying cause of death.
+
+It should therefore not be described as equivalent to formal ICD-10 underlying-cause coding or to automated mortality-coding systems used for official national statistics.
+
+::: {.callout-warning title="Compare mortality series carefully"}
+An official national or international CVD mortality series may use different source information, ICD-10 code selections and underlying-cause rules. Similar labels do not guarantee equivalent definitions.
+:::
+
+## What to remember
+
+- A cardiovascular mention is not automatically classified as a cardiovascular underlying cause.
+- Primary includes Clear and Likely evidence.
+- Inclusive adds Possible evidence.
+- Inclusive contains Primary, so the two definitions must not be added together.
+- The method is designed for consistent BNR surveillance, not as a substitute for formal national cause-of-death coding.
+
+## Related measures
+
+- [CVD mortality](../measures/mortality.qmd)
+- [How CVD events are classified](classifying-cvd-events.qmd)
+- [Releases, revisions and comparability](revisions-comparability.qmd)
