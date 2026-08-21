@@ -22,10 +22,10 @@ version 19
 *
 * BNR_REDCAP_TOKEN_FILE contains the path to the token file, never the token.
 * Both the private root and token file must be outside the public repository.
-
-global BNR_REPO               "C:/path/to/info-hub"
-global BNR_PRIVATE            "C:/secure/path/to/info-hub-private"
-global BNR_REDCAP_TOKEN_FILE  "C:/secure/path/to/bnr_redcap_token.txt"
+global BNR_REPO                    "C:/path/to/info-hub"
+global BNR_PRIVATE                 "C:/secure/path/to/info-hub-private"
+global BNR_REDCAP_TOKEN_FILE       "C:/secure/path/to/bnr_redcap_token.txt"
+global BNR_MORT_REDCAP_TOKEN_FILE  "C:/secure/path/to/bnr_mort_redcap_token.txt"
 
 * ---- Derived public-repository folders --------------------------------------
 
@@ -51,10 +51,11 @@ global BNR_PRIVATE_LOGS  "$BNR_PRIVATE/logs/private"
 * ---- Safety and completeness checks -----------------------------------------
 
 if "$BNR_REPO" == "" | "$BNR_PRIVATE" == "" | ///
-        "$BNR_REDCAP_TOKEN_FILE" == "" {
+        "$BNR_REDCAP_TOKEN_FILE" == "" | ///
+        "$BNR_MORT_REDCAP_TOKEN_FILE" == "" {
     display as error "BNR local configuration is incomplete."
     display as error ///
-        "Set BNR_REPO, BNR_PRIVATE and BNR_REDCAP_TOKEN_FILE."
+        "Set BNR_REPO, BNR_PRIVATE and both REDCap token-file paths."
     exit 198
 }
 
@@ -63,6 +64,8 @@ if "$BNR_REPO" == "" | "$BNR_PRIVATE" == "" | ///
 local repo_check = lower(subinstr("$BNR_REPO", char(92), "/", .))
 local private_check = lower(subinstr("$BNR_PRIVATE", char(92), "/", .))
 local token_check = lower(subinstr("$BNR_REDCAP_TOKEN_FILE", char(92), "/", .))
+local mort_token_check = ///
+    lower(subinstr("$BNR_MORT_REDCAP_TOKEN_FILE", char(92), "/", .))
 
 while substr("`repo_check'", strlen("`repo_check'"), 1) == "/" {
     local repo_check = substr("`repo_check'", 1, strlen("`repo_check'") - 1)
@@ -81,6 +84,13 @@ if strpos("`private_check'/", "`repo_check'/") == 1 {
 if strpos("`token_check'", "`repo_check'/") == 1 {
     display as error ///
         "Unsafe BNR configuration: the REDCap token file is inside BNR_REPO."
+    display as error "Move the token file outside Git and update its path."
+    exit 198
+}
+
+if strpos("`mort_token_check'", "`repo_check'/") == 1 {
+    display as error ///
+        "Unsafe BNR configuration: the mortality REDCap token file is inside BNR_REPO."
     display as error "Move the token file outside Git and update its path."
     exit 198
 }
@@ -113,8 +123,8 @@ foreach global_name in BNR_PRIVATE BNR_DATA_RAW BNR_DATA_FROZEN ///
     }
 }
 
-* The token itself is checked only by Dashboard Step 1. This allows staff who
-* do not hold REDCap credentials to run authorised downstream workflows.
+* Token files themselves are checked only by the relevant Step 1 workflow.
+* This allows staff without REDCap credentials to run authorised downstream workflows.
 
 * ---- Stata session setup -----------------------------------------------------
 
