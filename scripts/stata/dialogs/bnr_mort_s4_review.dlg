@@ -1,0 +1,78 @@
+*! BNR Mortality Step 4: Prepare review candidate - Pass 2 dashboard alignment
+VERSION 19.0
+POSITION . . 500 380
+
+* EDIT BLOCK: RELEASE YEARS SHOWN IN THE PULL-DOWN LIST
+* Add later years here when required. Do not change the controller code.
+LIST release_years
+BEGIN
+2024
+2025
+2026
+2027
+2028
+2029
+2030
+2031
+2032
+2033
+2034
+2035
+2036
+2037
+2038
+2039
+2040
+END
+
+* DO NOT EDIT: STANDARD CALENDAR MONTHS
+LIST release_months
+BEGIN
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+END
+
+DIALOG main, label("BNR Mortality Step 4: Prepare review candidate")
+BEGIN
+  TEXTBOX tx_intro 15 15 470 48, label("Select a completed Step 3 mortality release. Step 4 revalidates the private package and creates the suppressed candidate and human-review materials.")
+
+  GROUPBOX gb_release 15 78 470 105, label("Completed Step 3 release")
+  TEXT tx_year 30 108 105 ., label("Release year:")
+  COMBOBOX cb_year 145 105 90 ., dropdownlist contents(release_years) nomemory
+  TEXT tx_month 255 108 105 ., label("Release month:")
+  COMBOBOX cb_month 365 105 70 ., dropdownlist contents(release_months) nomemory
+  TEXTBOX tx_path 30 140 425 28, label("Example: 2026 and 7 selects the private mort_2026_07 package.")
+
+  CHECKBOX ck_replace 20 205 460 ., default(0) nomemory label("Authorise replacement of the existing Step 4 candidate and review materials")
+
+  TEXTBOX tx_review 20 245 460 48, label("Open the generated review workbook first. If a problem is found, correct the source or code and rerun; never edit generated outputs.")
+  TEXTBOX tx_boundary 20 305 460 40, label("The candidate remains private. Step 4 creates no approval, public_ready package, public files, website files or mortality rates.")
+END
+
+OK ok1, label("Prepare candidate and review")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_mort_s4_review")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.cb_year
+  require main.cb_month
+  put "do $BNR_STATA/mortality/bnr_mort_s4_review.do "
+  put main.cb_year
+  put " "
+  put main.cb_month
+  if main.ck_replace {
+    put " replace"
+  }
+END

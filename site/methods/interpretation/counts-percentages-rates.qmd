@@ -32,6 +32,8 @@ $$
 
 Always check the denominator. A case-fatality percentage among hospital events is not a percentage of the whole population.
 
+In the CVD mortality dashboard, a percentage describes the **distribution of classified CVD deaths**. For example, the Heart/Stroke percentage shows how published CVD deaths are divided between those two groups. It is not the probability that a person in the population will die from Heart disease or Stroke.
+
 ## Population rates
 
 A rate relates events to the population and a period:
@@ -64,4 +66,5 @@ Compare statistics only when the event definition, source coverage, period, deno
 - [Number of CVD events](../measures/cvd-event-counts.qmd)
 - [CVD incidence and event rates](../measures/incidence.qmd)
 - [CVD case fatality](../measures/case-fatality.qmd)
+- [CVD mortality](../measures/mortality.qmd)
 

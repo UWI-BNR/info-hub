@@ -1,0 +1,37 @@
+schema: bnr_public_mortality_package_v1
+package_id: mort_burden_mort_2026_07
+package_status: public_ready
+release_id: mort_2026_07
+domain: mortality
+metric_family: burden
+created: 2026-08-21
+review_standard: bnr_mortality_review_v1
+disclosure_policy: bnr_sdc_v1
+dashboard_suppression_field: suppression_status
+dashboard_display_field: display_value
+dashboard_disclosure_note_field: disclosure_note
+insufficient_history_is_suppression: false
+primary_definition_rows: 1809
+upper_definition_rows: 1809
+case_definitions:
+  - primary_clear_likely
+  - upper_clear_likely_possible
+lower_bound_included: false
+combined_definition_primary: Step 2 cvd_prim
+combined_definition_upper: Step 2 cvd_incl
+resolved_family_primary: Step 2 cvd_sub_p
+resolved_family_upper: Step 2 cvd_sub_i
+cvd_dashboard_reporting_scope_aligned: true
+monthly_public_scope: all_cvd_all_sexes_all_ages_only
+monthly_rolling_comparator_included: false
+quarterly_annual_rolling_comparators_included: true
+monthly_historical_reference:
+  reference_id: mortality_monthly_reference_2015_2019
+  reference_period: 2015-2019
+  statistics: minimum_maximum_mean
+  asset_dta: datasets/mort_monthly_reference_2015_2019.dta
+  asset_csv: datasets/mort_monthly_reference_2015_2019.csv
+  asset_metadata: metadata/mort_monthly_reference_2015_2019.yml
+  routine_rule: checksum_verify_do_not_recalculate
+approved: true
+publication_boundary: pending_step_6

@@ -41,8 +41,10 @@ format:
 Explore the latest BNR CVD dashboard, updated weekly.
 
 ::: {.bnr-utility-links}
-[Live CVD surveillance](../surveillance/cvd/metrics/burden/index.qmd){.btn .btn-outline-primary}
+[Latest CVD events](../surveillance/cvd/metrics/burden/index.qmd){.btn .btn-outline-primary} [Latest CVD deaths](../surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-outline-primary}
 :::
+
+
 
 :::
 

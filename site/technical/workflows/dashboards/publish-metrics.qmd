@@ -1,8 +1,8 @@
-﻿---
-title: "Publish approved dashboard metrics"
+---
+title: "Publish approved CVD event metrics"
 description: "Step 6: verify and publish the exact CVD burden metric package approved in Step 5."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -23,7 +23,7 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
 
 ## Run Step 6
 
-1. **Open Step 6.** In Stata, choose User > BNR > Update dashboard > Step 6: Publish approved outputs.
+1. **Open Step 6.** In Stata, choose User > BNR > Update CVD dashboard > Step 6: Publish approved outputs.
 2. **Select the release.** Enter the approved release year and release month.
 3. **Select the metric family.** Leave Burden selected.
 4. **Choose republication behaviour.** Leave Authorise republication unticked for a first publication.

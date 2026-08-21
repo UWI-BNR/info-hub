@@ -1,49 +1,53 @@
-﻿---
+---
 title: "Analytical workflows"
-description: "How the dashboard, tabulation and briefing workflows share the same deidentified analytical preparation layer."
+description: "How the CVD events, mortality, tabulation and briefing workflows fit together."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
 
-## One preparation layer, three reporting pathways
+## CVD shared preparation plus a separate mortality pathway
 
-The three routine analytical workflows share the same data-preparation pathway.
+The BNR now has two analytical starting routes.
 
-Although the first three actions appear under **Update dashboard** in the Stata menu, they do more than prepare dashboard data. **Dashboard Steps 1-3 are the common analytical preparation layer for the wider BNR reporting system.**
+The **CVD events pathway** begins with the CVD REDCap release. Its first three steps form the common private preparation layer used by CVD event metrics, tabulations and routine briefings.
 
-[Dashboard Step 3](dashboards/create-analysis-inputs.qmd) is the main branch point. It creates the private deidentified analytical datasets used by the downstream workflows.
+The **CVD mortality pathway** begins with the mortality death-certificate REDCap source. It has its own six-step route because mortality extraction, classification, reporting structure and disclosure controls are different.
 
 ```{mermaid}
 flowchart TD
-    A["REDCap monthly release"] --> B["Dashboard Step 1<br/>Private REDCap extract"]
-    B --> C["Dashboard Step 2<br/>Confidential cumulative dataset"]
-    C --> D["Dashboard Step 3<br/>Deidentified analytical inputs"]
+    A["CVD REDCap release"] --> B["CVD events Step 1<br/>Private REDCap extract"]
+    B --> C["CVD events Step 2<br/>Confidential cumulative dataset"]
+    C --> D["CVD events Step 3<br/>Deidentified analytical inputs"]
 
-    D --> E["Dashboard metrics<br/>Steps 4-6"]
+    D --> E["CVD event metrics<br/>Steps 4-6"]
     D --> F["Tabulations<br/>Steps 1-3"]
     D --> G["Routine briefings<br/>Steps 1-3"]
+
+    M["Mortality REDCap death-certificate source"] --> N["CVD mortality workflow<br/>Steps 1-6"]
 
     E --> H["Approved public outputs"]
     F --> H
     G --> H
+    N --> H
 
     H --> I["Quarto publishing layer"]
     I --> J["BNR Info-Hub"]
 ```
 
-## How the branches differ
+## How the routes differ
 
-| Workflow | Step 3 input | What the workflow then owns |
+| Workflow | Private analytical input | What the workflow then owns |
 |---|---|---|
-| **Dashboard metrics** | Purpose-specific metric input, currently `count` for the burden family | Metric calculation, disclosure control, review, approval and metric publication. |
-| **Tabulations** | `all_variables` | Seven routine table calculations, table-specific suppression, review, approval and table publication. |
-| **Routine briefings** | `count`, `case_fatality` or `length_of_stay`, depending on the briefing | Analyst-owned calculations and figures, human disclosure review, approval and briefing-package publication. |
+| **CVD event metrics** | Purpose-specific Step 3 metric input, currently `count` for the burden family | Metric calculation, disclosure control, review, approval and metric publication. |
+| **CVD mortality** | Mortality Step 1 death-certificate extract, followed by the approved Step 2 classifier | Mortality classification, burden metrics, mortality-specific disclosure control, review, approval and publication. |
+| **Tabulations** | CVD Step 3 `all_variables` | Seven routine table calculations, table-specific suppression, review, approval and table publication. |
+| **Routine briefings** | CVD Step 3 `count`, `case_fatality` or `length_of_stay`, depending on the briefing | Analyst-owned calculations and figures, human disclosure review, approval and briefing-package publication. |
 
-This separation matters. Tabulations and briefings **do not rebuild the confidential cumulative dataset** and should not repeat the Step 1-3 preparation logic. They start from the approved deidentified products created by Dashboard Step 3.
+The CVD Step 3 products remain private. Tabulations and CVD briefings **do not rebuild the confidential cumulative dataset** and should not repeat the CVD Steps 1-3 preparation logic.
 
-The Step 3 products remain private. Each downstream workflow is responsible for creating its own reviewable output package and applying the disclosure and approval controls appropriate to that product.
+Mortality does not branch from CVD Step 3. Its own source, classification and six-step publication contract are documented in [CVD mortality workflow](mortality/overview.qmd).
 
 ## Ad-hoc briefings
 
@@ -53,8 +57,12 @@ An ad-hoc analysis is created in an analyst-owned DO file rather than through th
 
 For registry analyses, use an appropriate approved deidentified analytical source wherever the analysis permits. Any different source must be explicitly recorded in the briefing release metadata.
 
+The operational CVD mortality dashboard workflow is separate from the briefing dispatcher. A future mortality-rate briefing remains a separate analytical product unless and until it is migrated into that controlled briefing route.
+
 ## Compute and publish remain separate
 
-Stata creates and controls the analytical products. Quarto consumes only approved public products.
+Stata creates and controls the analytical products. Quarto consumes approved public products.
 
-Updating narrative pages, listings or other website content is therefore covered under **Operate the Info-Hub**, not inside the analytical workflow chapters.
+The one documented publication-layer convenience calculation is the mortality dashboard year-to-date count. Its narrow rules are described in [Maintain the CVD mortality dashboard](../website/cvd-mortality-dashboard.qmd); it does not establish a general analytical pathway in Quarto.
+
+Updating narrative pages, dashboards, listings or other website content is covered under **Operate the Info-Hub**, not inside the analytical workflow steps.

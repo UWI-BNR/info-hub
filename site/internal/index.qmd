@@ -17,3 +17,4 @@ These pages are not linked from the public navigation, but they are not password
 | Material | Purpose | Link |
 |---|---|---|
 | BNR Hub short tour | Short reveal.js presentation introducing the BNR Hub, its design philosophy, outputs, dashboard, and folder structure. | [Open slides](bnr-info-hub-tour.html){target="_blank" rel="noopener"} |
+| Mortality legacy code review | A short report on the original BNR method for defining UCoD, and how we could change this up | [Read document](./bnr-mortality-legacy-review.qmd)

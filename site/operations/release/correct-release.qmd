@@ -2,7 +2,7 @@
 title: "Correct or replace a release"
 subtitle: "Correct the authoritative source, then repeat the controlled workflow"
 date: 2026-08-11
-date-modified: 2026-08-11
+date-modified: 2026-08-21
 ---
 
 **Status:** Operational framework.  
@@ -23,7 +23,7 @@ Correct a published product transparently while preserving reproducibility, appr
 
 | Problem | Correct here |
 |---|---|
-| Event-level data or classification | Authoritative REDCap record |
+| Source data or source-record classification | Authoritative source system or controlled source dataset |
 | Calculation or programmed rule | Version-controlled Stata code or configuration |
 | Approved result described incorrectly | Quarto narrative, with substantive review if interpretation changes |
 | Typographical or layout problem only | Quarto source |
@@ -38,7 +38,7 @@ Never edit a generated analytical output to make it appear correct.
 4. Record a new approval through the relevant Stata approval step.
 5. Publish through the relevant Stata publication step and verify both the authoritative package and website mirror.
 
-Use the [dashboard](../post-redcap/dashboard-workflow.qmd), [tabulations](../post-redcap/tabulations-workflow.qmd) or [briefings](../post-redcap/briefings-workflow.qmd) procedure as appropriate.
+Use the [CVD events](../post-redcap/dashboard-workflow.qmd), [CVD mortality](../post-redcap/mortality-workflow.qmd), [tabulations](../post-redcap/tabulations-workflow.qmd) or [briefings](../post-redcap/briefings-workflow.qmd) procedure as appropriate.
 
 ## Step 4: Update the public presentation
 

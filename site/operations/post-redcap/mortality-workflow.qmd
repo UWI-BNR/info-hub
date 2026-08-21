@@ -1,0 +1,43 @@
+---
+title: "Run the CVD mortality workflow"
+description: "A step-by-step operational guide to the six Stata mortality steps from death-certificate extract to approved public burden data."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## Purpose
+
+Use this workflow to create an approved CVD mortality burden release from the BNR death-certificate data held in REDCap.
+
+The mortality route is separate from the CVD events preparation pathway. It has its own extraction, classification, calculation, disclosure review, approval and publication steps.
+
+## Before starting
+
+- Confirm the intended release year and month.
+- Work on the authorised BNR workstation with the private workspace available.
+- Confirm that the mortality REDCap token-file setting is available to the authorised operator for Step 1.
+- Open Stata and confirm that **User > BNR > Update mortality dashboard** is present.
+- Use the same release year and month at every mortality step.
+
+## Step-by-step procedure
+
+1. **Extract mortality data — Step 1.** Choose **User > BNR > Update mortality dashboard > Step 1: Extract mortality data**. Confirm successful completion, the selected month-end and a plausible mortality record count. The extract remains private. [Technical detail](../../technical/workflows/mortality/extract.qmd).
+2. **Classify causes of death — Step 2.** Run Step 2 for the same release. Review the operational summary and the private classification review outputs. This step applies the approved BNR approximate mortality classifier; it is not formal national underlying-cause coding. [Technical detail](../../technical/workflows/mortality/classify.qmd).
+3. **Build mortality burden data — Step 3.** Run Step 3 for the same release. Confirm the analysis years, count/distribution rows, Primary/Inclusive reporting structure and QA summary. The package remains private. [Technical detail](../../technical/workflows/mortality/build-burden.qmd).
+4. **Prepare and review the release — Step 4.** Run Step 4 and open the named private review workbook. Check the proposed public candidate, analytical plausibility, reporting scope, suppression, metadata and the fixed monthly historical reference. If anything is wrong or unclear, stop and return to the earliest affected step. [Technical detail](../../technical/workflows/mortality/review.qmd).
+5. **Approve the reviewed release — Step 5.** Only after the Step 4 review is complete, open Step 5, identify the authorised approver and complete the required confirmations. Approval creates the exact private `public_ready` package and approval controls; it does not publish. [Technical detail](../../technical/workflows/mortality/approve.qmd).
+6. **Publish the approved release — Step 6.** Run Step 6 for the same release. Confirm `PUBLISHED` and `Verification: PASSED`. Check the authoritative public package, release ZIP, catalogue record and website mirror. [Technical detail](../../technical/workflows/mortality/publish.qmd).
+7. **Check the website presentation.** Open the local Info-Hub editing session and inspect the CVD mortality dashboard, Data tab, Methods links and Downloads catalogue. A routine release should extend the dashboard timeline from the new `current` data without a QMD edit. [Dashboard maintenance guide](../../technical/website/cvd-mortality-dashboard.qmd).
+8. **Review and publish website changes.** If website source has changed, inspect the Git changes, run a complete Quarto render, commit and push the reviewed public-safe files, then check deployment. [Website publication guide](../../technical/website/render-publish.qmd).
+
+## Stop points
+
+Stop if a step fails, the release identity changes, an expected input is absent, classification or burden results are implausible, disclosure review is incomplete, approval does not match the payload, or private material appears in Git status.
+
+Do not correct a generated mortality dataset, suppression marker, workbook, metadata file, manifest or approval receipt by hand. Correct the authoritative source or version-controlled code and rerun from the earliest affected step.
+
+## Evidence retained
+
+Retain the private Step 1 and Step 2 outputs and logs, Step 3 staging package and QA, Step 4 review material, Step 5 approval controls, Step 6 publication log and the authoritative public release.

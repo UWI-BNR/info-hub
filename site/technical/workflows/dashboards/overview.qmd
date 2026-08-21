@@ -1,33 +1,33 @@
-﻿---
-title: "Run the dashboard metrics workflow"
-description: "Run the six-step CVD dashboard workflow from REDCap extract through review, approval and publication."
+---
+title: "Run the CVD events workflow"
+description: "Run the six-step CVD events workflow from REDCap extract through review, approval and publication."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
 
 ## What this workflow does
 
-Dashboard Steps 1-3 form the **shared analytical preparation pathway** for the BNR reporting environment.
+CVD events Steps 1-3 form the **shared analytical preparation pathway** for the BNR reporting environment.
 
 Steps 1 and 2 create the private source and confidential cumulative dataset. [Step 3](create-analysis-inputs.qmd) creates the deidentified analytical inputs used by:
 
-- dashboard metrics;
+- CVD event metrics;
 - [tabulations](../tabulations/overview.qmd); and
 - [routine briefings](../briefings/overview.qmd).
 
-Dashboard Steps 4-6 then calculate, review, approve and publish the dashboard metric package.
+CVD events Steps 4-6 then calculate, review, approve and publish the CVD burden metric package used by the public events dashboard.
 
 `REDCap -> private extract -> confidential cumulative dataset -> deidentified analytical inputs -> metrics -> review and approval -> publication`
 
-See [Analytical workflows](../overview.qmd) for the complete workflow map.
+See [Analytical workflows](../overview.qmd) for the complete workflow map and the separate mortality pathway.
 
 ## Run the workflow
 
 1. **[Step 1: Extract REDCap data](extract-redcap.qmd).** Create the private cumulative source snapshot.
 2. **[Step 2: Build the cumulative dataset](prepare-confidential.qmd).** Join the selected REDCap release to the frozen historical CVD data.
 3. **[Step 3: Build deidentified datasets](create-analysis-inputs.qmd).** Create the shared private analytical inputs.
-4. **[Step 4: Calculate dashboard metrics](generate-metrics.qmd).** Create the private metric staging package.
+4. **[Step 4: Calculate CVD event metrics](generate-metrics.qmd).** Create the private metric staging package.
 5. **[Step 5: Review and approve](approve-metrics.qmd).** Apply disclosure control, review the release and record approval.
 6. **[Step 6: Publish approved outputs](publish-metrics.qmd).** Promote only the approved package.

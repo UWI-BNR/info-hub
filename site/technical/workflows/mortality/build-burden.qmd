@@ -1,0 +1,74 @@
+---
+title: "Build mortality burden data"
+description: "Mortality Step 3: calculate the private mortality count/distribution lattice and create the staging package."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this step does
+
+Mortality Step 3 reads the classified Step 2 dataset, calculates the approved mortality burden measures and creates the private staging package.
+
+It creates exact private values. It does not apply the final public disclosure-control candidate, approve a release, copy files to the public repository, calculate population mortality rates or link DCO events.
+
+## Input
+
+`$BNR_DATA_DERIVED/mortality/yYYYY/mMM/bnr_mort_s2_YYYYMM.dta`
+
+The selected year/month identifies the **data freeze**. Step 3 derives the analysis period separately. The current dashboard series begins in 2010 and Step 3 includes completed calendar years only.
+
+## Published reporting structure prepared by Step 3
+
+The burden family contains two metric IDs:
+
+| Metric | Purpose |
+|---|---|
+| `MORT-BURDEN-001` | Mortality counts and approved rolling-comparator rows |
+| `MORT-BURDEN-002` | Annual percentage distributions |
+
+Both Primary and Inclusive mortality definitions are carried through the reporting lattice.
+
+The public monthly scope is deliberately restricted to All CVD, both sexes, all ages and monthly count. Quarterly and annual rows contain the additional approved event-type and sex detail; annual All-CVD rows also contain the approved broad age groups.
+
+## Run Step 3
+
+1. In Stata, choose **User > BNR > Update mortality dashboard > Step 3: Build mortality burden data**.
+2. Enter the Step 2 release year and month.
+3. Leave replacement unticked for a first run.
+4. Run the step.
+5. Confirm the summary reports `Completed successfully`.
+6. Check the reported analysis years and metric row counts.
+7. Open the staging package and confirm the datasets, metadata and review material are present.
+8. Do not treat the suppression-review workbook as the Step 4 human review package. Step 4 owns the public-candidate disclosure control and review materials.
+
+## Outputs
+
+The package is staged under:
+
+`$BNR_STAGING/mortality/burden/mort_YYYY_MM/`
+
+| Output | Purpose |
+|---|---|
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` and `.csv` | Exact private release-stamped burden data. |
+| `datasets/mort_burden_metrics_current.dta` and `.csv` | Exact private stable-name copies for the selected staging package. |
+| `metadata/mort_burden_package.yml` | Package identity, scope and provenance. |
+| `review/mort_burden_qa_mort_YYYY_MM.csv` | Automated calculation/staging QA. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` and `.xlsx` | Step 3 disclosure worklist feeding Step 4. |
+| `readme.txt` | Short private package guide. |
+| Step 3 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
+
+Do not edit any generated package file.
+
+## Command-line equivalent
+
+```stata
+do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 7
+```
+
+Use `replace` only for a deliberate rebuild. The optional `debug` word exposes detailed child-script output for development/troubleshooting and is not needed in routine use.
+
+## If Step 3 does not complete
+
+Check that the matching Step 2 DTA exists and that the selected release produces the expected completed-year analysis range. Read the private log before authorising replacement.

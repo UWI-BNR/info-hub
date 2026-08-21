@@ -1,0 +1,84 @@
+*! BNR Mortality Step 6: Publish an approved mortality release
+*! Pass 2, 21 August 2026
+*! Thin interface to mortality/bnr_mort_s6_publish.do
+
+VERSION 19.0
+POSITION . . 520 470
+
+* EDIT BLOCK: RELEASE YEARS SHOWN IN THE PULL-DOWN LIST
+* Add later years here when required. Do not change the controller code.
+LIST release_years
+BEGIN
+2024
+2025
+2026
+2027
+2028
+2029
+2030
+2031
+2032
+2033
+2034
+2035
+2036
+2037
+2038
+2039
+2040
+END
+
+* DO NOT EDIT: STANDARD CALENDAR MONTHS
+LIST release_months
+BEGIN
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+END
+
+DIALOG main, label("BNR Mortality Step 6: Publish approved outputs")
+BEGIN
+  TEXTBOX tx_intro 15 15 490 62, label("Publish the exact mortality burden package approved in Step 5. Step 6 verifies the approval, manifest and payload before creating authoritative public and website-download copies.")
+
+  GROUPBOX gb_period 15 92 490 72, label("Approved Step 5 release")
+  TEXT tx_year 30 122 100 ., label("Release year:")
+  COMBOBOX cb_year 140 118 90 ., dropdownlist contents(release_years) nomemory
+  TEXT tx_month 270 122 105 ., label("Release month:")
+  COMBOBOX cb_month 385 118 75 ., dropdownlist contents(release_months) nomemory
+
+  GROUPBOX gb_action 15 180 490 98, label("Publication protection")
+  CHECKBOX ck_replace 30 208 450 ., default(0) nomemory label("Authorise republication of this exact mortality release")
+  TEXTBOX tx_replace 30 238 450 28, label("Leave unticked for first publication. Use only after inspecting an existing or partly completed release.")
+
+  GROUPBOX gb_boundary 15 294 490 104, label("Workflow boundary")
+  TEXTBOX tx_boundary 30 320 450 64, label("Only the ten manifest-listed payload files are promoted, including the fixed monthly reference asset. approval.yml and public_manifest.csv remain private. Step 6 does not render, commit or deploy the website.")
+
+  TEXTBOX tx_synthetic 20 415 480 28, label("The synthetic 2099 suppression-test release is deliberately blocked.")
+END
+
+OK ok1, label("Publish Step 6")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_mort_s6_publish")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.cb_year
+  require main.cb_month
+  put "do $BNR_STATA/mortality/bnr_mort_s6_publish.do "
+  put main.cb_year
+  put " "
+  put main.cb_month
+  if main.ck_replace {
+    put " replace"
+  }
+END

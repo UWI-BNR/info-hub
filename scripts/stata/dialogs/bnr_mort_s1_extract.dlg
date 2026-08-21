@@ -1,0 +1,41 @@
+*! BNR Mortality Step 1 REDCap extract dialog
+*! version 0.1.0, 16 August 2026
+*! Thin interface to scripts/stata/mortality/bnr_mort_s1_extract.do
+
+VERSION 19.0
+POSITION . . 450 300
+
+DIALOG main, label("BNR Mortality - Step 1 extract")
+BEGIN
+    TEXTBOX intro 15 15 420 48, label("Extracts the private death-certificate data only and prepares the all-deaths Step 1 dataset. The tracking form is not extracted.")
+
+    GROUPBOX period 15 73 420 90, label("Release period")
+
+    TEXT year_label 30 98 105 ., label("Release year:")
+    SPINNER year 145 95 90 ., default(2026) min(2008) max(2100) nomemory error("Release year")
+
+    TEXT month_label 30 130 105 ., label("Release month:")
+    SPINNER month 145 127 90 ., default(7) min(1) max(12) nomemory error("Release month")
+
+    TEXT month_note 245 130 155 ., label("1 = Jan; 12 = Dec")
+
+    CHECKBOX replace 25 178 400 ., default(0) nomemory label("Replace an existing Step 1 extract for this month")
+
+    TEXTBOX output_note 25 215 400 42, label("Outputs: private raw CSV, analytical Stata dataset, YAML receipt and log. The dataset already open in Stata remains unchanged.")
+END
+
+OK ok1, label("Run extract")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_mort_s1_extract")
+RESET reset1
+
+PROGRAM command
+BEGIN
+    put "do $BNR_STATA/mortality/bnr_mort_s1_extract.do "
+    put main.year
+    put " "
+    put main.month
+    if main.replace {
+        put " replace"
+    }
+END

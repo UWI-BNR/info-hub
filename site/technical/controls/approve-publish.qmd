@@ -1,8 +1,8 @@
-﻿---
+---
 title: "Approve and publish a release"
 description: "How BNR records approval, ties it to exact files and then moves only approved files into the public environment."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -87,7 +87,8 @@ The current workflows use manifests slightly differently:
 
 | Workflow | Manifest control |
 |---|---|
-| **Dashboard metrics** | `public_manifest.csv` identifies seven approved files. Step 5 records a fingerprint of the manifest, and Step 6 checks the manifest and approved files before publication. |
+| **CVD event metrics** | `public_manifest.csv` identifies seven approved files. Step 5 records a fingerprint of the manifest, and Step 6 checks the manifest and approved files before publication. |
+| **CVD mortality** | `public_manifest.csv` identifies the ten approved mortality payload files. Step 5 writes `approval.yml` last; Step 6 verifies the approval, manifest and every approved file before publication. |
 | **Tabulations** | `public_manifest.csv` identifies 26 required public products. Step 2B checks the list and confirms that every required file exists before writing approval. Step 3 checks the list again before copying the files. |
 | **Briefings** | `review/public_manifest.csv` lists the approved briefing files with file size and checksum. Step 2 records the manifest fingerprint and approved file count in `approval.yml`, and Step 3 verifies them before publication. |
 
@@ -113,7 +114,8 @@ If something needs correcting:
 
 | Workflow | What to do |
 |---|---|
-| **Dashboard metrics** | Return to the required earlier step and repeat the review/approval cycle. `prepare replace` removes the earlier Step 5 approval state. |
+| **CVD event metrics** | Return to the required earlier step and repeat the review/approval cycle. `prepare replace` removes the earlier Step 5 approval state. |
+| **CVD mortality** | Return to the earliest affected mortality step, rerun Step 4 review material as required, repeat Step 5 approval, then publish through Step 6. |
 | **Tabulations** | Rebuild Step 2A with explicit replacement, then review and approve again. |
 | **Briefings** | Create a new briefing version. Do not overwrite the approved version. |
 
@@ -135,7 +137,7 @@ It should not recalculate results, make a new disclosure decision or approve an 
 
 ## Where the published files go
 
-### Dashboard metrics
+### CVD event metrics
 
 Dashboard Step 6 promotes the approved metric files to:
 
@@ -157,6 +159,22 @@ display "$BNR_REPO"
 `$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/burden/` to reach the dashboard website mirror.
 
 The machine-specific roots are defined in `scripts/stata/config/bnr_paths_LOCAL.do`. See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the full location model.
+
+### CVD mortality
+
+Mortality Step 6 publishes the approved burden payload to:
+
+```text
+outputs/public/metrics/mortality/burden/
+```
+
+and refreshes the website mirror at:
+
+```text
+site/downloads/files/metrics/mortality/burden/
+```
+
+The public package includes release-stamped and `current` mortality metric datasets, the fixed 2015-2019 monthly reference asset, metadata, a release ZIP and a catalogue record. `approval.yml` and `public_manifest.csv` remain private controls.
 
 ### Tabulations
 
@@ -237,6 +255,8 @@ Do not repair a partial release by manually copying individual files unless a do
 
 ## Product-specific instructions
 
+- [CVD event metric approval](../workflows/dashboards/approve-metrics.qmd) and [publication](../workflows/dashboards/publish-metrics.qmd)
+- [CVD mortality approval](../workflows/mortality/approve.qmd) and [publication](../workflows/mortality/publish.qmd)
 Use this chapter for the common principles, then follow the exact steps in:
 
 - [Dashboard Step 5: Review and approve](../workflows/dashboards/approve-metrics.qmd) and [Step 6: Publish](../workflows/dashboards/publish-metrics.qmd)

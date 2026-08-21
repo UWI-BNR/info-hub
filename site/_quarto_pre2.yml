@@ -1,0 +1,384 @@
+project:
+  type: website
+  resources:
+    - assets/images/**
+    - "assets/images/listings/*"
+    - assets/fonts/**
+    - downloads/**
+  pre-render:
+    - python scripts/build_download_catalogue.py
+  render:
+    - "*.qmd"
+    - "**/*.qmd"
+    - "!downloads/annual/cvd/latest/tables/*.md"
+    - "!downloads/annual/cvd/**/*.md"
+  output-dir: _site
+  preview:
+    port: 4200
+    browser: true
+
+# brand: _brand.yml
+
+format:
+  html:
+    theme:
+      light:
+        - flatly
+        - assets/scss/bnr.scss
+#      dark:
+#        - darkly
+#        - assets/scss/bnr.scss
+    toc: true
+    toc-depth: 3
+    anchor-sections: true
+    smooth-scroll: true
+    link-external-icon: false
+    link-external-newwindow: false
+    fig-cap-location: bottom
+    fontsize: 1rem
+    linestretch: 1.55
+
+website:
+  title: "BNR Hub"
+  site-url: https://uwi-bnr.github.io/info-hub/
+  repo-url: https://github.com/UWI-BNR/info-hub
+
+  page-navigation: true
+  back-to-top-navigation: true
+  bread-crumbs: true
+  reader-mode: true
+
+  search:
+    location: navbar
+    type: overlay
+  open-graph: true
+  image: assets/images/site-preview.png
+
+  page-footer:
+    border: true
+    left: "© 2026, The UWI"
+    center:
+      - text: "Data Downloads"
+        href: downloads/index.qmd
+      - text: "Operations Manual"
+        href: operations/index.qmd
+      - text: "Technical Manual"
+        href: technical/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/UWI-BNR/info-hub
+        aria-label: GitHub repository
+      - text: "Analytics: Stata · Python<br>Publishing: Quarto · Bootstrap/Flatly"
+
+  navbar:
+    background: primary 
+    pinned: true
+    logo: assets/images/uwi-crestonly-20p.png
+    logo-alt: "University of the West Indies crest"
+    title: "BNR Hub"
+    collapse: true
+    toggle-position: right
+
+    left:
+      - href: news/index.qmd
+        text: Latest
+      - text: Surveillance
+        menu:
+        - href: surveillance/cvd/index.qmd
+          text: Cardiovascular disease
+        - href: surveillance/hypertension/index.qmd
+          text: Hypertension
+        - href: surveillance/diabetes/index.qmd
+          text: Diabetes
+      - href: downloads/index.qmd
+        text: Downloads
+      - href: methods/index.qmd
+        text: Methods
+      - href: about/index.qmd
+        text: About
+
+  sidebar:
+    - id: cvd
+      title: "CVD surveillance"
+      style: "docked"
+      search: true
+      collapse-level: 1
+      contents:
+        # - text: "CVD home"
+        #   href: surveillance/cvd/listing.qmd
+
+        - section: "Current indicators"
+          contents:
+            - text: "CVD burden"
+              href: surveillance/cvd/metrics/burden/
+            - text: "CVD mortality"
+              href: surveillance/cvd/metrics/mortality/index.qmd
+ 
+        - section: "Briefings"
+          contents:
+            - text: "CVD incidence, 2023"
+              href: surveillance/cvd/briefings/case-incidence.qmd
+            - text: "CVD case fatality, 2023"
+              href: surveillance/cvd/briefings/case-fatality.qmd
+            - text: "CVD hospital stay, 2023"
+              href: surveillance/cvd/briefings/hospital-los.qmd
+        - text: "Annual tabulations"
+          href: surveillance/cvd/tabulations/
+        - section: "Downloads"
+          contents:
+            - text: "Data Downloads"
+              href: downloads/index.qmd
+
+    - id: methods
+      title: "Public Methods Manual"
+      style: "docked"
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "Methods home"
+          href: methods/index.qmd
+
+        - section: "Start here"
+          contents:
+            - text: "About BNR surveillance"
+              href: methods/about/bnr-surveillance.qmd
+            - text: "From records to statistics"
+              href: methods/about/records-to-statistics.qmd
+
+        - section: "Understanding our measures"
+          contents:
+            - text: "Measures overview"
+              href: methods/measures/index.qmd
+            - text: "Number of CVD events"
+              href: methods/measures/cvd-event-counts.qmd
+            - text: "CVD incidence and event rates"
+              href: methods/measures/incidence.qmd
+            - text: "CVD case fatality"
+              href: methods/measures/case-fatality.qmd
+            - text: "Hospital length of stay"
+              href: methods/measures/length-of-stay.qmd
+            - text: "Mortality"
+              href: methods/measures/mortality.qmd
+            - text: "Hypertension"
+              href: methods/measures/hypertension.qmd
+            - text: "Diabetes"
+              href: methods/measures/diabetes.qmd
+
+        - section: "Understanding the methods"
+          contents:
+            - text: "Counts, percentages and rates"
+              href: methods/interpretation/counts-percentages-rates.qmd
+            - text: "How CVD events are classified"
+              href: methods/interpretation/classifying-cvd-events.qmd
+            - text: "Data quality and completeness"
+              href: methods/interpretation/data-quality-completeness.qmd
+            - text: "Protecting confidentiality"
+              href: methods/interpretation/confidentiality.qmd
+            - text: "Releases, revisions and comparability"
+              href: methods/interpretation/revisions-comparability.qmd
+
+        - section: "Reference and data access"
+          contents:
+            - text: "Glossary"
+              href: methods/reference/glossary.qmd
+            - text: "Research data access"
+              href: methods/responsible-data-use/research-data-access.qmd
+            - text: "Data Sharing Agreement"
+              href: methods/responsible-data-use/dsa-methods.qmd
+
+    - id: operations
+      title: "Operations Manual"
+      style: "docked"
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "Start here"
+          href: operations/index.qmd
+
+        - section: "How the registry works"
+          contents:
+            - text: "1. Roles and decision rights"
+              href: operations/operating-model/roles-decision-rights.qmd
+            - text: "2. From cases to statistics"
+              href: operations/operating-model/routine-cycle.qmd
+            - text: "Records and handover"
+              href: operations/operating-model/records-handover.qmd
+
+        - section: "Before REDCap"
+          contents:
+            - text: "3. Identify potential cases"
+              href: operations/pre-redcap/identify-assess.qmd
+            - text: "4. Abstract source information"
+              href: operations/pre-redcap/abstract-verify.qmd
+
+        - section: "Working in REDCap"
+          contents:
+            - text: "5. Create and complete a record"
+              href: operations/redcap/create-complete-record.qmd
+            - text: "6. Resolve record queries"
+              href: operations/redcap/resolve-record-queries.qmd
+            - text: "7. Maintain the REDCap database"
+              href: operations/redcap/database-maintenance.qmd
+            - text: "8. Approve a data record"
+              href: operations/redcap/approve-data-record.qmd
+
+        - section: "Post-REDCap analytics & publishing"
+          contents:
+            - text: "Overview"
+              href: operations/post-redcap/index.qmd
+            - text: "9. Authorise a data release"
+              href: operations/release/data-release.qmd
+            - text: "10. Dashboard workflow"
+              href: operations/post-redcap/dashboard-workflow.qmd
+            - text: "11. Tabulations workflow"
+              href: operations/post-redcap/tabulations-workflow.qmd
+            - text: "12. Briefings workflow"
+              href: operations/post-redcap/briefings-workflow.qmd
+            - text: "13. Review, approve and publish"
+              href: operations/release/review-approve-publish.qmd
+            - text: "14. Correct a release"
+              href: operations/release/correct-release.qmd
+
+        - section: "BNR analysis framework"
+          contents:
+            - text: "Overview"
+              href: operations/data/analysis-framework.qmd
+            - text: "Statistical Analysis Plan"
+              href: operations/data/sap.qmd
+            - text: "Metric specification register"
+              href: operations/data/sap-metrics.qmd
+
+        - section: "Data sharing & governance"
+          contents:
+            - text: "Overview"
+              href: operations/governance/data-sharing-governance.qmd
+            - text: "Handle a data request"
+              href: operations/governance/data-access-requests.qmd
+            - text: "Data sharing guide"
+              href: operations/data/data-governance/sharing-guide.qmd
+            - text: "Data sharing procedure"
+              href: operations/data/data-governance/sharing-sop.qmd
+            - text: "Dataset release procedure"
+              href: operations/data/data-governance/dataset-release.qmd
+            - text: "Dataset dissemination procedure"
+              href: operations/data/data-governance/dataset-dissemination.qmd
+            - section: "Governance documents"
+              contents:
+                - text: "Data access statement"
+                  href: operations/data/data-governance/data-access-statement.qmd
+                - text: "Data Sharing Agreement"
+                  href: operations/data/data-governance/dsa-om.qmd
+                - text: "Data Trust framework"
+                  href: operations/data/data-governance/dtrust.qmd
+
+        - section: "BNR Refit Audit"
+          contents:
+            - text: "About the audit"
+              href: operations/bnr-refit/index.qmd
+            - text: "Audit summary"
+              href: operations/bnr-refit/audit-summary.qmd
+            - text: "Full audit"
+              href: operations/bnr-refit/audit-full.qmd
+            - text: "CVD dataset rebuild"
+              href: operations/bnr-refit/cvd-data-rebuild.qmd  
+
+    - id: technical
+      title: "Technical Manual"
+      style: "docked"
+      search: true
+      collapse-level: 1
+      contents:
+        - text: "Home"
+          href: technical/index.qmd
+
+        - section: "Getting started"
+          contents:
+            - text: "1. Analytics environment"
+              href: technical/getting-started/environment.qmd
+            - text: "2. Set up a workstation"
+              href: technical/getting-started/workstation-setup.qmd
+
+        - section: "Analytical workflows"
+          contents:
+            - text: "Overview"
+              href: technical/workflows/overview.qmd
+
+            - section: "3. Dashboard metrics"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/dashboards/overview.qmd
+                - text: "Step 1: Extract a REDCap release"
+                  href: technical/workflows/dashboards/extract-redcap.qmd
+                - text: "Step 2: Prepare confidential dataset"
+                  href: technical/workflows/dashboards/prepare-confidential.qmd
+                - text: "Step 3: Create analytical inputs"
+                  href: technical/workflows/dashboards/create-analysis-inputs.qmd
+                - text: "Step 4: Generate dashboard metrics"
+                  href: technical/workflows/dashboards/generate-metrics.qmd
+                - text: "Step 5: Review and approve"
+                  href: technical/workflows/dashboards/approve-metrics.qmd
+                - text: "Step 6: Publish dashboard metrics"
+                  href: technical/workflows/dashboards/publish-metrics.qmd
+
+            - section: "4. Tabulations"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/tabulations/overview.qmd
+                - text: "Step 1: Generate tabulations"
+                  href: technical/workflows/tabulations/generate.qmd
+                - text: "Step 2A: Disclosure control and review"
+                  href: technical/workflows/tabulations/disclosure-control.qmd
+                - text: "Step 2B: Approve tabulations"
+                  href: technical/workflows/tabulations/approve.qmd
+                - text: "Step 3: Publish tabulations"
+                  href: technical/workflows/tabulations/publish.qmd
+
+            - section: "5. Briefings"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/briefings/overview.qmd
+                - text: "Step 1: Create a routine briefing"
+                  href: technical/workflows/briefings/create.qmd
+                - text: "Step 2: Review and approve"
+                  href: technical/workflows/briefings/approve.qmd
+                - text: "Step 3: Publish a briefing"
+                  href: technical/workflows/briefings/publish.qmd
+
+            - section: "6. Mortality workflow"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/mortality/overview.qmd
+
+        - section: "Review and publication controls"
+          contents:
+            - text: "7. Review an analytical release"
+              href: technical/controls/review-release.qmd
+            - text: "8. Disclosure control"
+              href: technical/controls/disclosure-control.qmd
+            - text: "9. Approve and publish a release"
+              href: technical/controls/approve-publish.qmd
+
+        - section: "Operate the Info-Hub"
+          contents:
+            - text: "10. Render and publish website"
+              href: technical/website/render-publish.qmd
+            - section: "11. Update website content"
+              contents:
+                - text: "Overview"
+                  href: technical/website/update-content.qmd
+                - text: "Update an existing briefing"
+                  href: technical/website/update-briefing.qmd
+
+        - section: "Maintain and recover"
+          contents:
+            - text: "12. Make a safe code change"
+              href: technical/maintenance/safe-code-change.qmd
+            - text: "13. Files, releases and versions"
+              href: technical/maintenance/files-releases-versions.qmd
+            - text: "14. Fix common problems"
+              href: technical/maintenance/troubleshooting.qmd
+
+        - section: "Quick reference"
+          contents:
+            - text: "15. System reference"
+              href: technical/reference/index.qmd

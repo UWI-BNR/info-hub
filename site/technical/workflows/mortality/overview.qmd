@@ -1,15 +1,62 @@
-﻿---
-title: "Run the mortality workflow"
-title-block-style: none
-toc: true
-toc-depth: 2
-number-sections: false
+---
+title: "Run the CVD mortality workflow"
+description: "Run the six-step mortality workflow from the private death-certificate extract through classification, review, approval and controlled publication."
+date: 2026-08-21
+date-modified: 2026-08-21
 ---
 
-This pathway will be documented when the mortality workflow has been implemented.
+---
 
-::: {.callout-note}
-## Status
+## What this workflow does
 
-This page is part of the Technical Manual v0.2 scaffold and has not yet been drafted.
-:::
+The mortality pathway is a separate six-step analytical workflow. It starts from the BNR mortality REDCap source and finishes with an approved public mortality burden package and website mirror.
+
+It does **not** use the CVD event Step 1-3 analytical inputs.
+
+`mortality REDCap -> private extract -> CVD death classification -> private burden package -> disclosure-controlled review -> approval -> publication`
+
+The workflow keeps calculation, disclosure control, human approval and publication as separate actions.
+
+## Run the workflow
+
+1. **[Step 1: Extract mortality data](extract.qmd).** Create the private all-deaths source extract through the selected month-end.
+2. **[Step 2: Classify causes of death](classify.qmd).** Apply the frozen BNR Heart/Stroke approximate mortality classifier.
+3. **[Step 3: Build mortality burden data](build-burden.qmd).** Calculate the private count and distribution reporting lattice and stage the release.
+4. **[Step 4: Review the mortality release](review.qmd).** Revalidate the package, apply deterministic disclosure control and create the private human-review materials.
+5. **[Step 5: Approve the reviewed release](approve.qmd).** Record human approval of the exact reviewed candidate and create the private `public_ready` package.
+6. **[Step 6: Publish approved outputs](publish.qmd).** Verify the approval and manifest, then promote only the approved payload.
+
+## What the workflow publishes
+
+The current burden family publishes:
+
+- mortality counts (`MORT-BURDEN-001`);
+- annual percentage distributions (`MORT-BURDEN-002`);
+- Primary and Inclusive mortality definitions;
+- monthly, quarterly and annual reporting rows under the approved publication scope; and
+- the fixed reviewed 2015-2019 monthly historical-reference asset.
+
+Population mortality rates and DCO linkage are outside this workflow.
+
+## Publication boundary
+
+All Step 1-5 material remains private. Step 6 alone may copy the approved payload to:
+
+`$BNR_PUBLIC/metrics/mortality/burden/`
+
+and refresh the disposable website mirror under:
+
+`$BNR_REPO/site/downloads/files/metrics/mortality/burden/`
+
+The public dashboard then reads only from that website mirror. See [Maintain the CVD mortality dashboard](../../website/cvd-mortality-dashboard.qmd).
+
+## Fixed workflow rules
+
+- Supporting frequencies from 1 to 5 receive primary suppression.
+- A true zero is not automatically primary-suppressed.
+- Secondary protection is deterministic and automatic.
+- Analysts review the generated candidate; they do not edit generated suppression decisions or public-ready files.
+- Approval does not itself publish the release.
+- Generated datasets, metadata, manifests and approval receipts are never repaired by hand.
+
+See [Apply and review disclosure control](../../controls/disclosure-control.qmd) for the common BNR policy.

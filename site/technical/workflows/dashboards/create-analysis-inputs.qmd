@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Create deidentified analytical inputs"
 description: "Step 3: create the private deidentified datasets used by dashboards, tabulations and briefings."
 date: 2026-08-10
@@ -20,7 +20,7 @@ Removes direct identifiers using approved positive variable lists and creates pu
 
 ## Run Step 3
 
-1. **Open Step 3.** In Stata, choose User > BNR > Update dashboard > Step 3: Build deidentified datasets.
+1. **Open Step 3.** In Stata, choose User > BNR > Update CVD dashboard > Step 3: Build deidentified datasets.
 2. **Select the release.** Enter the release year and release month.
 3. **Select datasets.** For a routine full refresh, leave Counts and incidence, Case fatality, Length of stay, Care performance, and All approved variables selected.
 4. **Choose replacement behaviour.** For a first run, leave Replace selected existing datasets unticked.

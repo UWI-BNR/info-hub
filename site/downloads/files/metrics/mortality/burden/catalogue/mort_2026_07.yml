@@ -1,0 +1,27 @@
+schema: bnr_download_manifest_v1
+package_type: metric
+package_id: mort_burden_mort_2026_07
+release_id: mort_2026_07
+surveillance_area: Mortality
+domain: mortality
+metric_family: burden
+period: 2026-07
+release_date: 2026-08-21
+
+title: |-
+  Mortality burden metrics
+
+description: |-
+  Approved BNR mortality burden datasets and metadata for release 2026-07.
+
+downloads:
+  - id: mort_burden_mort_2026_07_zip
+    title: Full public output package
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_mort_burden_mort_2026_07.zip
+    href: files/metrics/mortality/burden/bnr_mort_burden_mort_2026_07.zip
+    description: |-
+      Release-stamped and current mortality burden datasets with metadata.
+    include_in_listing: true
+    sort_order: 30

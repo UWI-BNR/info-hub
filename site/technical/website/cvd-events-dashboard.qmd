@@ -1,0 +1,95 @@
+---
+title: "Maintain the CVD events dashboard"
+description: "How the Quarto CVD events dashboard reads approved public data and how to check it after an analytical release."
+date: 2026-08-21
+date-modified: 2026-08-21
+---
+
+---
+
+## What this page covers
+
+Use this page when maintaining the public **CVD burden** dashboard after the CVD events workflow has published an approved metric release.
+
+The dashboard is a Quarto/Observable publication layer. It visualises approved public values; it does not replace the Stata analytical workflow.
+
+## Dashboard source
+
+The maintained QMD is:
+
+`site/surveillance/cvd/metrics/burden/index.qmd`
+
+The dashboard reads the stable current CSV from the website mirror:
+
+`site/downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv`
+
+The authoritative analytical copy remains under:
+
+`outputs/public/metrics/cvd/burden/`
+
+Do not point the QMD to private derived data or staging.
+
+## What the dashboard presents
+
+The current dashboard has two indicator views:
+
+- **Event count**; and
+- **Event distribution**.
+
+Count views allow the approved monthly, quarterly and annual period controls, CVD event-type controls and age controls supported by the public dataset. The dashboard also distinguishes incomplete periods and displays published five-year comparator rows where available.
+
+The distribution view is annual and presents the approved event-type, broad-age and sex distributions.
+
+The **Data** tab shows published rows for the selected view and links to the approved current CSV, Stata dataset and release ZIP.
+
+## Publication-layer rule
+
+The CVD dashboard should:
+
+- filter approved public rows;
+- format supplied values;
+- plot supplied values;
+- respect the supplied suppression and completeness fields; and
+- link to approved public downloads.
+
+It should not calculate a replacement count, percentage, rate, comparator or suppression decision.
+
+If a displayed analytical value is wrong, return to the [CVD events workflow](../workflows/dashboards/overview.qmd) rather than correcting the QMD.
+
+## Suppressed and incomplete values
+
+Suppressed values remain protected. They must not be inferred from another displayed row, chart or total.
+
+Incomplete periods are part of the approved public dataset and are visually distinguished from complete periods. The dashboard should not relabel an incomplete period as complete simply because the page has rendered successfully.
+
+## Public methods links
+
+Public interpretation belongs in the Public Methods Manual rather than in dashboard code. The main destinations are:
+
+- `site/methods/measures/cvd-event-counts.qmd`; and
+- `site/methods/interpretation/classifying-cvd-events.qmd`.
+
+Use the general [counts, percentages and rates](../../methods/interpretation/counts-percentages-rates.qmd) and [confidentiality](../../methods/interpretation/confidentiality.qmd) pages for shared interpretation. When adding help/methods links to the dashboard, point users to these public pages rather than duplicating the explanation inside the QMD.
+
+## After a new CVD event release
+
+1. Confirm CVD Step 6 completed successfully.
+2. Confirm the website mirror contains the refreshed `cvd_burden_metrics_current.csv` and matching approved download products.
+3. Start the local Info-Hub editing session.
+4. Open the CVD dashboard and check the latest period, controls, cards, charts and Data tab.
+5. Check that suppressed/incomplete periods still display correctly.
+6. Check the Downloads catalogue and links.
+7. Run a complete Quarto render.
+8. Review Git changes before commit and deployment.
+
+A routine release should not require editing the QMD merely to extend the timeline. Period controls are derived from the current published data.
+
+## If the dashboard fails
+
+First separate a **data/publication problem** from a **Quarto/Observable problem**.
+
+- If the current CSV or approved value is wrong or missing, return to the analytical publication pathway.
+- If the approved CSV is correct but the page fails to load, filter or plot it, inspect the QMD/Observable code and browser error.
+- If download links fail, check the Step 6 website mirror before changing the page path.
+
+See [Update website content](update-content.qmd) and [Fix common problems](../maintenance/troubleshooting.qmd).

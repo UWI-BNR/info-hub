@@ -20,6 +20,9 @@ The proportion of eligible disease events that end in death within the defined o
 **Confidence interval**  
 A range expressing statistical uncertainty around an estimate under a stated method. It does not capture every source of data-quality uncertainty.
 
+**BNR mortality classification**  
+The practical method BNR uses to classify cardiovascular deaths from death-certificate wording and structure. It is an approximate surveillance classification, not formal national ICD-10 underlying-cause coding.
+
 **Crude rate**  
 The observed event count divided by the relevant population, without age adjustment.
 
@@ -43,6 +46,12 @@ The number of eligible events relative to a stated population and period, often 
 **Incidence**  
 The occurrence of new disease or health events in a population over time. In BNR CVD publications, check whether the displayed measure is specifically an event rate and which sources are included.
 
+**Historical reference band**  
+A fixed range from a stated historical period used to give context to a current value. In the mortality dashboard, the monthly band uses the minimum and maximum for each calendar month during 2015–2019 and is not recalculated with each release.
+
+**Inclusive mortality definition**  
+The broader BNR CVD mortality definition containing deaths classified as Clear, Likely or Possible. It includes every death in the Primary definition.
+
 **Interquartile range (IQR)**  
 The span from the 25th to the 75th percentile, containing the middle half of observed values.
 
@@ -65,6 +74,9 @@ A proportion multiplied by 100.
 
 **Population denominator**  
 The population estimate used to calculate a population rate.
+
+**Primary mortality definition**  
+The main BNR CVD mortality definition containing deaths classified as Clear or Likely by the approved mortality method.
 
 **Release**  
 An approved, identifiable version of a public dataset or output package.

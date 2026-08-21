@@ -1,8 +1,8 @@
-﻿---
-title: "Generate dashboard metrics"
+---
+title: "Generate CVD event dashboard metrics"
 description: "Step 4: calculate the CVD burden metrics and create the private staging package."
 date: 2026-08-10
-date-modified: 2026-08-10
+date-modified: 2026-08-21
 ---
 
 ---
@@ -20,7 +20,7 @@ Calculates the current CVD burden metric family from the Step 3 count dataset an
 
 ## Run Step 4
 
-1. **Open Step 4.** In Stata, choose User > BNR > Update dashboard > Step 4: Calculate metrics for dashboards.
+1. **Open Step 4.** In Stata, choose User > BNR > Update CVD dashboard > Step 4: Calculate metrics for dashboards.
 2. **Select the release.** Enter the release year and release month.
 3. **Select the metric family.** Leave Burden selected. Other families are currently disabled.
 4. **Choose replacement behaviour.** For a first run, leave Authorise replacement unticked.
