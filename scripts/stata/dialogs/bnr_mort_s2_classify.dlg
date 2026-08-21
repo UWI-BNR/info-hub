@@ -1,0 +1,44 @@
+*! BNR Mortality Step 2 classification dialog
+*! package version 1.0.0, classifier definition 0.6.1 frozen
+*! 19 August 2026
+*! Thin interface to scripts/stata/mortality/bnr_mort_s2_classify.do
+
+VERSION 19.0
+POSITION . . 470 335
+
+DIALOG main, label("BNR Mortality - Step 2 classify causes")
+BEGIN
+    TEXTBOX intro 15 15 440 60, label("Applies the frozen BNR-Heart / BNR-Stroke approximate underlying-cause rules to the matching private Step 1 all-deaths dataset. This is not formal national ICD coding.")
+
+    GROUPBOX period 15 85 440 90, label("Release period")
+
+    TEXT year_label 30 110 105 ., label("Release year:")
+    SPINNER year 145 107 90 ., default(2026) min(2008) max(2100) nomemory error("Release year")
+
+    TEXT month_label 30 142 105 ., label("Release month:")
+    SPINNER month 145 139 90 ., default(7) min(1) max(12) nomemory error("Release month")
+
+    TEXT month_note 245 142 155 ., label("1 = Jan; 12 = Dec")
+
+    CHECKBOX replace 25 190 420 ., default(0) nomemory label("Replace an existing Step 2 release for this month")
+
+    TEXTBOX method_note 25 225 420 48, label("Primary = Clear + Likely. Inclusive also includes Possible. These are classification-sensitivity scenarios, not confidence intervals.")
+
+    TEXTBOX output_note 25 280 420 32, label("Outputs remain private. Review the operational run summary before proceeding to Step 3.")
+END
+
+OK ok1, label("Classify")
+CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_mort_s2_classify")
+RESET reset1
+
+PROGRAM command
+BEGIN
+    put "do $BNR_STATA/mortality/bnr_mort_s2_classify.do "
+    put main.year
+    put " "
+    put main.month
+    if main.replace {
+        put " replace"
+    }
+END

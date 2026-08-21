@@ -1,0 +1,66 @@
+﻿variable,group,plain_language_description,values_or_format,why_retained
+record_id,Record identity,Internal REDCap mortality record identifier.,Text; source value,Needed to return a flagged death to the source REDCap record and to merge selected Step 2 evidence to the matching private Step 1 death for future DCO processing. Private; never public.
+dth_date,Time,Date of death used by the analytical workflow.,Stata daily date,Core time variable.
+dth_year,Time,Calendar year of death.,Integer year,Core reporting period.
+dth_month,Time,Calendar month of death.,1-12,Core reporting period.
+dth_qtr,Time,Calendar quarter of death.,1-4,Core reporting period.
+sex,Demography,Sex code recorded in the source mortality record.,Source REDCap code; retained unchanged,Retained for downstream stratification; Step 2 does not recode it.
+age,Demography,Age value recorded on the death certificate.,Source text/numeric string,Used together with agetxt to interpret age.
+agetxt,Demography,Unit/code that describes how the source age value is expressed.,Source REDCap code; retained unchanged,"Needed to interpret age correctly, especially infant deaths."
+parish,Demography,Residence parish code recorded in the source mortality record.,Source REDCap code; retained unchanged,Retained for possible downstream stratification; publication remains subject to disclosure control.
+qa_dod,Step 1 QA,Step 1 flag: death date is missing or invalid.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_pre08,Step 1 QA,Step 1 flag: death date is before the expected 2008 start of the mortality series.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_year,Step 1 QA,Step 1 flag: source death year disagrees with the derived death date.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_reg,Step 1 QA,Step 1 flag: registration date is missing or invalid.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_dup,Step 1 QA,Step 1 flag: source marks the record as a possible duplicate.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_cert,Step 1 QA,Step 1 flag: all six cause-of-death text fields are blank.,0 No; 1 Yes,Important for interpreting a No-evidence classification.
+qa_sex,Step 1 QA,Step 1 flag: sex code is outside the expected source values.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_age,Step 1 QA,Step 1 flag: age value or age-unit code is missing or invalid.,0 No; 1 Yes,Preserves upstream data-quality status.
+qa_any,Step 1 QA,Step 1 flag: one or more upstream QA flags are present.,0 No; 1 Yes,Single summary QA flag.
+cod1a,Certificate source,"Original certificate wording: Part I(a), immediate condition leading to death.",Text; unchanged source wording,Retained for audit and human review.
+cod1b,Certificate source,"Original certificate wording: Part I(b), condition giving rise to I(a).",Text; unchanged source wording,Retained for audit and human review.
+cod1c,Certificate source,"Original certificate wording: Part I(c), earlier antecedent condition.",Text; unchanged source wording,Retained for audit and human review.
+cod1d,Certificate source,"Original certificate wording: Part I(d), earliest antecedent condition where used.",Text; unchanged source wording,Retained for audit and human review.
+cod2a,Certificate source,"Original certificate wording: Part II(a), other significant contributing condition.",Text; unchanged source wording,Retained for audit and human review.
+cod2b,Certificate source,"Original certificate wording: Part II(b), other significant contributing condition.",Text; unchanged source wording,Retained for audit and human review.
+c1a_cln,Certificate cleaned copy,Cleaned analytical copy of Part I(a); source cod1a is never overwritten.,Text,Retained so the analyst can see the standardised text used as the basis for matching.
+c1b_cln,Certificate cleaned copy,Cleaned analytical copy of Part I(b); source cod1b is never overwritten.,Text,Retained for transparent audit.
+c1c_cln,Certificate cleaned copy,Cleaned analytical copy of Part I(c); source cod1c is never overwritten.,Text,Retained for transparent audit.
+c1d_cln,Certificate cleaned copy,Cleaned analytical copy of Part I(d); source cod1d is never overwritten.,Text,Retained for transparent audit.
+c2a_cln,Certificate cleaned copy,Cleaned analytical copy of Part II(a); source cod2a is never overwritten.,Text,Retained for transparent audit.
+c2b_cln,Certificate cleaned copy,Cleaned analytical copy of Part II(b); source cod2b is never overwritten.,Text,Retained for transparent audit.
+source_structure,Source provenance,Confidence in whether the surviving electronic record preserves the original certificate line structure.,1 Lines preserved; 2 Known BNR-concatenated representation; 3 Structure/provenance uncertain,Controls whether Clear classification is allowed; it is not a disease rule.
+cons_supported,Source provenance,Indicates whether source structure is good enough to support Clear/Conservative classification.,0 No; 1 Yes,Simple downstream flag for Conservative availability at record level.
+p1_pattern,Certificate structure,"Pattern of populated Part I lines, for example a, ab, abc, abcd or blank.",Text pattern,Makes the certificate structure visible without retaining internal detector flags.
+p1_low,Certificate structure,Lowest populated Part I line.,0 None; 1 I(a); 2 I(b); 3 I(c); 4 I(d),Key plain structural input to the approximation.
+p1_gap,Certificate structure,"Indicates a gapped or non-standard Part I pattern, such as I(a) and I(c) with I(b) blank.",0 No; 1 Yes,Flags a structure in which simple causal interpretation is less reliable.
+hrt_cls,BNR-Heart result,Automated evidence class for BNR-Heart as the approximate underlying cause of death.,1 Clear; 2 Likely; 3 Possible; 4 Mention only; 5 No evidence,Core Heart classification.
+hrt_rule,BNR-Heart result,Stable rule identifier that explains why the final automated Heart evidence class was assigned.,HRT_* rule ID,Analytical provenance. IDs are never recycled for a different released rule.
+hrt_rule_desc,BNR-Heart result,Plain-language explanation of the Heart rule recorded in hrt_rule.,Text,Allows the DTA and review file to be understood without opening Stata code.
+hrt_nos,BNR-Heart provenance,Primary nosology/provenance identifier supporting the Heart decision where a specific external principle applies.,NOS* ID or blank,Links to bnr_mort_s2_nosology.csv.
+hrt_basis,BNR-Heart result,"Type of Heart evidence found, such as explicit AMI, IHD/coronary disease, both, or sudden cardiac death.",Text category,Separates surveillance-family classification from the diagnostic wording that supported it.
+hrt_scope,BNR-Heart provenance,BNR surveillance-scope provenance identifier for the broader fatal-event Heart definition.,NOS017 when Heart evidence is present,Documents why fatal BNR-Heart surveillance is not restricted to certificates literally saying AMI.
+hrt_structure_cap,BNR-Heart provenance,Indicates that a Heart classification that would otherwise be Clear was reduced to Likely because source line structure is not preserved.,0 No; 1 Yes,Makes source-data uncertainty explicit.
+hrt_cons,BNR-Heart scenario,Death is included in the Conservative Heart sensitivity scenario.,0 No; 1 Yes; Clear only,Scenario flag.
+hrt_prim,BNR-Heart scenario,Death is included in the Primary Heart sensitivity scenario.,0 No; 1 Yes; Clear + Likely,Default reporting scenario flag.
+hrt_incl,BNR-Heart scenario,Death is included in the Inclusive Heart sensitivity scenario.,0 No; 1 Yes; Clear + Likely + Possible,Upper sensitivity scenario flag.
+str_cls,BNR-Stroke result,Automated evidence class for BNR-Stroke as the approximate underlying cause of death.,1 Clear; 2 Likely; 3 Possible; 4 Mention only; 5 No evidence,Core Stroke classification.
+str_rule,BNR-Stroke result,Stable rule identifier that explains why the final automated Stroke evidence class was assigned.,STR_* rule ID,Analytical provenance. IDs are never recycled for a different released rule.
+str_rule_desc,BNR-Stroke result,Plain-language explanation of the Stroke rule recorded in str_rule.,Text,Allows the DTA and review file to be understood without opening Stata code.
+str_nos,BNR-Stroke provenance,Primary nosology/provenance identifier supporting the Stroke decision where a specific external principle applies.,NOS* ID or blank,Links to bnr_mort_s2_nosology.csv.
+str_basis,BNR-Stroke result,"Type of Stroke evidence found, such as Stroke/CVA, cerebral infarction/thrombosis, cerebral haemorrhage, or generic intracranial haemorrhage.",Text category,Separates surveillance-family classification from the diagnostic wording that supported it.
+str_scope,BNR-Stroke provenance,BNR surveillance-scope provenance identifier for the fatal-event Stroke definition.,NOS018 when Stroke evidence is present,Links the classification to the established BNR-Stroke surveillance definition.
+str_structure_cap,BNR-Stroke provenance,Indicates that a Stroke classification that would otherwise be Clear was reduced to Likely because source line structure is not preserved.,0 No; 1 Yes,Makes source-data uncertainty explicit.
+str_cons,BNR-Stroke scenario,Death is included in the Conservative Stroke sensitivity scenario.,0 No; 1 Yes; Clear only,Scenario flag.
+str_prim,BNR-Stroke scenario,Death is included in the Primary Stroke sensitivity scenario.,0 No; 1 Yes; Clear + Likely,Default reporting scenario flag.
+str_incl,BNR-Stroke scenario,Death is included in the Inclusive Stroke sensitivity scenario.,0 No; 1 Yes; Clear + Likely + Possible,Upper sensitivity scenario flag.
+cvd_cls,Combined endpoint,Evidence class for the combined BNR-Heart-or-Stroke endpoint.,1 Clear; 2 Likely; 3 Possible; 4 Mention only; 5 No evidence,Combined endpoint only; it is not all cardiovascular mortality.
+cvd_structure_cap,Combined endpoint,Indicates that a combined Clear classification was reduced to Likely because source line structure is not preserved.,0 No; 1 Yes,Makes source-data uncertainty explicit.
+cvd_cons,Combined scenario,Death is included in the Conservative combined BNR-Heart-or-Stroke scenario.,0 No; 1 Yes,Combined scenario flag.
+cvd_prim,Combined scenario,Death is included in the Primary combined BNR-Heart-or-Stroke scenario.,0 No; 1 Yes,Combined scenario flag.
+cvd_incl,Combined scenario,Death is included in the Inclusive combined BNR-Heart-or-Stroke scenario.,0 No; 1 Yes,Combined scenario flag.
+cvd_sub_c,Combined subtype,Resolved surveillance family under the Conservative scenario.,0 Not included; 1 BNR-Heart; 2 BNR-Stroke; 3 Heart/Stroke unresolved,Shows which family contributes to the combined endpoint.
+cvd_sub_p,Combined subtype,Resolved surveillance family under the Primary scenario.,0 Not included; 1 BNR-Heart; 2 BNR-Stroke; 3 Heart/Stroke unresolved,Shows which family contributes to the combined endpoint.
+cvd_sub_i,Combined subtype,Resolved surveillance family under the Inclusive scenario.,0 Not included; 1 BNR-Heart; 2 BNR-Stroke; 3 Heart/Stroke unresolved,Shows which family contributes to the combined endpoint.
+review_req,Review,High-priority Step 2 human-review flag.,0 No; 1 Yes,Identifies certificates where competing wording or unusual structure deserves focused BNR review.
+review_reason,Review,Plain-language reason the record was placed in the high-priority Step 2 review queue.,Text,Explains review selection without requiring knowledge of internal detector variables.

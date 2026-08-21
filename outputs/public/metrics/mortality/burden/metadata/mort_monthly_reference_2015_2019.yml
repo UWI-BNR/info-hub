@@ -1,0 +1,13 @@
+schema: bnr_mortality_monthly_reference_v1
+status: approved_reference_asset
+approved_via: approval.yml
+reference_id: mortality_monthly_reference_2015_2019
+reference_period: 2015-2019
+frequency: monthly
+public_scope: all_cvd_all_sexes_all_ages_only
+statistics: minimum_maximum_mean
+scenario_count: 2
+calendar_month_rows: 24
+source_release_id: mort_2026_07
+recalculation_rule: do_not_recalculate_after_initial_approval
+publication_boundary: pending_step_6

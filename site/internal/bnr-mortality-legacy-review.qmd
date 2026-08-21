@@ -1,0 +1,69 @@
+---
+title: "Legacy Mortality Workflow: Archaeological Review"
+subtitle: "Useful clues from the previous BNR mortality code"
+format:
+  html:
+    toc: false
+    embed-resources: true
+    page-layout: article
+date: "17 August 2026"
+---
+
+## Purpose
+
+This was a **historical code review, not a validation exercise**. The legacy mortality DO files were reviewed to understand how previous analysts cleaned death data and identified possible stroke and heart-attack deaths.
+
+I'm treating this legacy code as useful mainly as evidence about wording, spelling variants, and judgement problems encountered in the historical death-certificate data.
+
+## What was very useful
+
+The old workflow contains several useful clues:
+
+- It documents real certificate terminology and spelling variants previously encountered in the database.
+- Stroke searches included terms such as `STROKE`, `CVA`, `CEREBROVASCULAR`, `INTRACEREBRAL`, `SUBARACHNOID`, `LACUNAR`, and multiple misspellings.
+- Heart searches included stems and phrases such as `MYOCARD`, `MYOCAD`, `HEART ATT`, `CORONARY THROMB`, and ischaemic/ischaemic-heart terminology.
+- The analysts recognised that simple text matching could create false positives. For example, the code explicitly treated `CARDIAC ARREST` as insufficient on its own and recorded discussion around whether broader cardiovascular terminology should count.
+- Candidate records were manually reviewed after the initial text searches, showing an appreciation that regex matching alone was not a sufficient final classification.
+
+These terms are valuable **seed vocabulary** for the new exploratory work, but each must be re-tested against the current REDCap-derived mortality data.
+
+## What we will not carry forward
+
+Several features of the legacy approach are unsuitable for the refitted workflow, I would say:
+
+- Most important, data cleaning and analytical classification were mixed together. This was an inevitable consequence of BNR process over the past few years. The code contains many record-specific corrections to names, sex, national identifiers, dates, parishes, onset fields, and cause text.
+- The earliest data preparation `.do` files used `.xlsx` files as inputs, suggesting a pre-Stata step, with some reliance on spreadsheeting.
+- The six cause-of-death fields were concatenated into a single `coddeath` string. This loses the distinction between Part I(a)-I(d) and Part II, which is important when approximating underlying cause.
+- Some regex searches were deliberately broad, including terms such as `CEREBRAL` or `ISCHEMI`, creating at least the potential for false-positive candidate identification.
+- Large numbers of record-specific manual overrides followed the automated searches. These decisions were embedded in code, not used to improve the pre-analyse BNR process.
+- Mortality preparation, disease classification, and event-linkage tasks were interwoven into the same `.do` file set.
+
+The main lesson is not that the previous analysts were wrong to review difficult records. Rather, the workflow gave **data cleaning, text detection, and clinical interpretation too few boundaries**. We all know that this was an inevitable consequence of BNR abstraction and recording processes. 
+
+## Why certificate ordering matters
+
+The international medical certificate of cause of death is intentionally structured rather than being a single free-text field. WHO defines the underlying cause as the disease or injury that **initiated the chain of morbid events leading directly to death**. Part I is used to record that causal sequence, while Part II records other significant conditions that contributed to death but are not stated as part of the direct sequence.[^who-cod]
+
+Assuming best practice certificate completion - and that of course is an assumption behind our revamp... this means that the same diagnosis can have a different interpretation depending on where it appears. A condition on a lower used Part I line may represent the antecedent condition that gave rise to conditions above it, whereas an isolated Part II entry is generally evidence of contribution rather than evidence that it initiated the fatal sequence.
+
+Current WHO mortality-selection guidance makes this ordering operational. Its underlying-cause selection process explicitly considers the **lowest used Part I line**, causal sequences between entries, and whether the condition on that line can account for the entries above it.[^who-icd]
+
+For BNR, this does **not** mean reproducing the complete formal WHO ICD mortality-coding algorithm. The current project is building a transparent BNR approximation of UCoD from available certificate text. It does mean that collapsing `cod1a-cod1d` and `cod2a-cod2b` into one undifferentiated string would discard information that international mortality practice considers analytically important.
+
+## Revised approach
+
+The refitted workflow separates those responsibilities.
+
+1. **REDCap is the source-data baseline.** Genuine data corrections are made in REDCap, not patched in analytical DO files.
+2. **Step 1 in our new mortality workflow preserves the certificate structure**, including `cod1a-cod1d` and `cod2a-cod2b`, with separate cleaned analytical copies where useful.
+3. **Step 2 first explores the real historical text.** Legacy regex terms are used as seed vocabulary alongside newly discovered expressions, abbreviations, and misspellings.
+4. **Classification remains line-specific.** Wording, certificate position, Part I causal sequence, Part II mentions, competing causes, and onset information can all contribute to the interpretation.
+5. So in our new approach, a text match does **not** automatically equal approximate underlying cause. AMI and stroke will be assigned transparent evidence categories such as *Clear*, *Likely*, *Possible*, *Mention only*, and *No evidence*.
+6. Difficult or ambiguous records are targeted for human review. For data management persistence, this human adjudication is stored back in REDCap and can override the automated classification on the next run. So this new approach requires a few new variables in the mortality database.
+7. linkage of death (from any cause) with the CVD event database is a completely separate future workflow - it has nothing to do with mortality classification.
+
+**In short:** the legacy code provides a useful vocabulary map. The new workflow will build a reproducible, certificate-aware classification method from the current REDCap data rather than reproducing the historical rules.
+
+[^who-cod]: World Health Organization. *Cause of death*. WHO notes that international mortality statistics use the underlying cause of death and that the recommended Medical Certificate of Cause of Death records conditions leading directly to death and antecedent conditions giving rise to the underlying cause. <https://www.who.int/standards/classifications/classification-of-diseases/cause-of-death>{target="_blank" rel="noopener"}
+
+[^who-icd]: World Health Organization. *ICD-11 Reference Guide*, mortality coding instructions, including selection of the underlying cause and the step considering the first condition on the lowest used line causing the entries above it. <https://icdcdn.who.int/icd11referenceguide/en/html/index.html>{target="_blank" rel="noopener"}

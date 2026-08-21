@@ -109,3 +109,21 @@
   size: "80.5 KB"
   size_bytes: 82415
   sort_order: 30
+- title: "Full public output package"
+  output_type: "Metric dataset"
+  output_title: "Mortality burden metrics"
+  output_id: "mort_burden_mort_2026_07"
+  version: "—"
+  surveillance_area: "Mortality"
+  domain: "mortality"
+  period: "2026-07"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: "Release-stamped and current mortality burden datasets with metadata."
+  href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_07.zip"
+  path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_07.zip"
+  file: "bnr_mort_burden_mort_2026_07.zip"
+  updated: "2026-08-21"
+  size: "227.2 KB"
+  size_bytes: 232604
+  sort_order: 30
