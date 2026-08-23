@@ -61,6 +61,20 @@ execute:
 .bnr-coverage-present { color: #045174; font-weight: 800; }
 .bnr-coverage-absent { color: #b7bec3; }
 .bnr-coverage-key { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: .15rem 0 .3rem; font-size: .84rem; color: #555; }
+.bnr-quality-key { display: flex; gap: 1.1rem; flex-wrap: wrap; margin: .15rem 0 .35rem; font-size: .84rem; color: #555; }
+.bnr-quality-key-item { display: inline-flex; align-items: center; gap: .3rem; }
+.bnr-quality-swatch { width: .9rem; height: .9rem; border: 1px solid rgba(0,0,0,.12); border-radius: .18rem; display: inline-block; }
+.bnr-quality-swatch-low { background: #d6eddf; }
+.bnr-quality-swatch-medium { background: #ffe7a8; }
+.bnr-quality-swatch-high { background: #f3c6cc; }
+/* Put the quality colour on an inner block rather than the table cell itself.
+   Quarto/Bootstrap table rules can otherwise paint over td backgrounds. */
+.bnr-quality-cell { padding: .05rem !important; }
+.bnr-quality-value { display: block; width: 100%; padding: .18rem .08rem; border-radius: .22rem; font-weight: 750; line-height: 1.1; }
+.bnr-quality-low { background: #d6eddf; color: #235b42; }
+.bnr-quality-medium { background: #ffe7a8; color: #6b5600; }
+.bnr-quality-high { background: #f3c6cc; color: #842029; }
+.bnr-quality-unavailable { color: #b7bec3; }
 .bnr-data-tabs { display: flex; align-items: end; gap: .15rem; border-bottom: 1px solid #dee2e6; margin: .25rem 0 .55rem; }
 .bnr-data-tab { display: inline-block; padding: .38rem .7rem; border: 1px solid transparent; border-bottom: 0; border-radius: .3rem .3rem 0 0; text-decoration: none !important; font-weight: 600; font-size: .9rem; }
 .bnr-data-tab-active { background: #fff; border-color: #dee2e6; color: #2c3e50; margin-bottom: -1px; }
@@ -107,11 +121,19 @@ execute:
 // site/downloads/. It does not classify deaths, calculate percentages, calculate
 // rolling comparators, apply disclosure control, or reconstruct protected values.
 //
-// The one deliberately permitted presentation-derived statistic is YTD count.
-// YTD is the sum of complete, published monthly counts from January to the selected
-// month. It is shown only when every contributing month is present, complete,
-// unsuppressed and numeric. Otherwise YTD is unavailable. YTD is not an independently
-// released BNR metric and is never written back to a dataset.
+// Two deliberately permitted presentation-derived statistics are used here:
+//
+// 1. YTD count is the sum of complete, published monthly counts from January to the
+//    selected month. It is shown only when every contributing month is present, complete,
+//    unsuppressed and numeric. Otherwise YTD is unavailable.
+// 2. Possible-only deaths is the difference between the published Inclusive and Primary
+//    annual counts for the same year and CVD type. For comparability across All CVD, Heart
+//    and Stroke, the quality matrix standardises this difference as a percentage of the
+//    Inclusive annual count. It is shown only when both source counts are present, complete,
+//    unsuppressed and numeric.
+//
+// Neither statistic is an independently released BNR metric and neither is written back
+// to a dataset.
 //
 // The fixed 2015-2019 monthly reference asset is loaded exactly as published. The
 // dashboard never recalculates that reference asset.
@@ -898,7 +920,89 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
 }
 ```
 
-## Coverage {height=365}
+## Quality {height=410}
+
+```{ojs}
+//| echo: false
+// This matrix is a deliberately permitted presentation-derived quality measure.
+// For each year and CVD type, it subtracts the published Primary annual count from
+// the published Inclusive annual count, then expresses that difference as a share
+// of the Inclusive annual count so All CVD, Heart and Stroke are directly comparable.
+// No value is calculated if either source count is incomplete, protected, missing
+// or non-numeric.
+{
+  const annualRows = burden.filter(d =>
+    d.metric_id === "MORT-BURDEN-001" &&
+    d.period_type === "annual" &&
+    d.statistic === "annual_count" &&
+    d.sex === "all" &&
+    d.age_group === "all" &&
+    ["all_cvd", "heart", "stroke"].includes(d.event_type)
+  )
+  const yearsPresent = annualRows.map(d => d.period_year).filter(Number.isFinite)
+  const lastYear = yearsPresent.length ? Math.max(...yearsPresent) : null
+  const years = lastYear === null || lastYear < 2010
+    ? []
+    : Array.from({length: lastYear - 2010 + 1}, (_, i) => 2010 + i)
+  const events = [
+    {key: "all_cvd", label: "All CVD"},
+    {key: "heart", label: "Heart"},
+    {key: "stroke", label: "Stroke"}
+  ]
+  const rowFor = (eventType, year, definition) => annualRows.find(d =>
+    d.event_type === eventType &&
+    d.period_year === year &&
+    d.case_definition === definition
+  ) || null
+  const possibleOnly = (eventType, year) => {
+    const primary = rowFor(eventType, year, "primary_clear_likely")
+    const inclusive = rowFor(eventType, year, "upper_clear_likely_possible")
+    if (!primary || !inclusive || !isComplete(primary) || !isComplete(inclusive) || !isSafe(primary) || !isSafe(inclusive)) return null
+    const difference = inclusive.value - primary.value
+    if (!Number.isFinite(difference) || difference < 0 || !Number.isFinite(inclusive.value) || inclusive.value <= 0) return null
+    const possibleShare = 100 * difference / inclusive.value
+    if (!Number.isFinite(possibleShare)) return null
+    return {difference, possibleShare, primary: primary.value, inclusive: inclusive.value}
+  }
+  const qualityRounded = possibleShare => Math.round(possibleShare)
+  const qualityStyle = possibleShare => {
+    const rounded = qualityRounded(possibleShare)
+    return rounded < 20 ? "background:#d6eddf;color:#235b42;" :
+      rounded < 30 ? "background:#ffe7a8;color:#6b5600;" :
+      "background:#f3c6cc;color:#842029;"
+  }
+  const qualityPercent = x => `${qualityRounded(x)}%`
+
+  return html`<div class="bnr-definition-panel">
+    <div class="bnr-section-title">Possible deaths - quality measure</div>
+    <p class="bnr-trend-note">Each cell shows deaths included only in the <strong>Inclusive</strong> definition as a percentage of that Inclusive annual count. This standardises the measure so All CVD, Heart and Stroke can be compared directly. Hover over a cell to see the underlying number of Possible-only deaths.</p>
+    <div class="bnr-quality-key">
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20</span>
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20-29</span>
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30+</span>
+    </div>
+    <div class="bnr-coverage-scroll">
+      <table class="bnr-coverage-table" aria-label="Possible-only CVD deaths as a percentage of Inclusive annual deaths by year and CVD type">
+        <thead><tr><th></th>${years.map(year => html`<th scope="col">${year}</th>`)}</tr></thead>
+        <tbody>
+          ${events.map(event => html`<tr>
+            <th scope="row" class="bnr-coverage-label">${event.label}</th>
+            ${years.map(year => {
+              const result = possibleOnly(event.key, year)
+              return result
+                ? html`<td class="bnr-coverage-cell bnr-quality-cell" title=${`${event.label}: ${year} · ${qualityPercent(result.possibleShare)} of Inclusive deaths were Possible-only · ${formatNumber(result.difference)} deaths (Inclusive ${formatNumber(result.inclusive)} minus Primary ${formatNumber(result.primary)})`}><span class="bnr-quality-value" style=${qualityStyle(result.possibleShare)}>${qualityRounded(result.possibleShare)}</span></td>`
+                : html`<td class="bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable" title=${`${event.label}: ${year} · quality measure unavailable`}>-</td>`
+            })}
+          </tr>`)}
+        </tbody>
+      </table>
+    </div>
+    <div class="bnr-note-box"><strong>How to use this:</strong> Lower percentages mean less reliance on the Possible classification. Values are rounded to the nearest whole percentage. The green, amber and red bands indicate lower (&lt;20), moderate (20-29) and higher (30+) reliance on Possible classifications; they are pragmatic visual flags, not formal quality standards. Protected or incomplete source values are never reconstructed.</div>
+  </div>`
+}
+```
+
+## Coverage {height=375}
 
 ```{ojs}
 //| echo: false
