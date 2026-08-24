@@ -1,0 +1,13 @@
+schema_version,ascertainment_scope,event_type,sex,age_group,period_month,reference_start_year,reference_end_year,reference_min,reference_mean,reference_max,method,reference_status
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,1,2015,2019,68,77,90,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,2,2015,2019,55,66.8,75,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,3,2015,2019,58,71.2,87,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,4,2015,2019,55,70,83,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,5,2015,2019,56,72.2,91,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,6,2015,2019,48,61,76,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,7,2015,2019,62,64.59999999999999,69,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,8,2015,2019,53,64.8,75,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,9,2015,2019,46,64.59999999999999,94,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,10,2015,2019,55,63.2,72,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,11,2015,2019,63,69.2,79,calendar_month_min_mean_max,first_hardened_release
+bnr_cvd_monthly_reference_v1,hospital_only,all_cvd,all,all,12,2015,2019,44,62.8,78,calendar_month_min_mean_max,first_hardened_release

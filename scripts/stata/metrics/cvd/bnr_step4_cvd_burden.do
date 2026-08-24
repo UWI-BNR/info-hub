@@ -1,7 +1,7 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_step4_cvd_burden.do
- VERSION:     2.2.0 (30 July 2026)
+ VERSION:     2.3.0 (24 August 2026)
  PROJECT:     BNR Refit Phase 2
  PURPOSE:     Calculate CVD-BURDEN-001 and CVD-BURDEN-002
 
@@ -18,7 +18,7 @@
    source_dta source_yml release_id output_dta qa_dta release_year release_month
 
  METRICS:
-   CVD-BURDEN-001  Hospital-registered CVD event count
+   CVD-BURDEN-001  Hospital-recorded CVD event count
    CVD-BURDEN-002  CVD event distribution
 ===============================================================================
 */
@@ -142,7 +142,7 @@ if _rc {
 * EDIT BLOCK:
 * APPLY STANDARD CVD BURDEN RESTRICTIONS
 * ==============================================================================
-* CVD-BURDEN-001 is currently defined as hospital-registered events.
+* CVD-BURDEN-001 is currently defined as hospital-recorded events.
 * DCO-only records are excluded for this metric unless a future source_status
 * dimension explicitly includes them.
 
@@ -175,7 +175,7 @@ capture decode etype, gen(metric_event_type)
 if _rc {
     gen str30 metric_event_type = ""
     replace metric_event_type = "stroke" if etype == 1
-    replace metric_event_type = "ami"    if etype == 2
+    replace metric_event_type = "heart"  if etype == 2
     replace metric_event_type = "etype_" + string(etype) ///
         if metric_event_type == "" & !missing(etype)
 }
@@ -185,8 +185,8 @@ replace metric_event_type = subinstr(metric_event_type, " ", "_", .)
 replace metric_event_type = subinstr(metric_event_type, "-", "_", .)
 
 replace metric_event_type = "stroke" if inlist(metric_event_type, "1", "str")
-replace metric_event_type = "ami" ///
-    if inlist(metric_event_type, "2", "acute_mi", "heart_attack", ///
+replace metric_event_type = "heart" ///
+    if inlist(metric_event_type, "2", "ami", "acute_mi", "heart_attack", ///
               "acute_myocardial_infarction", "myocardial_infarction")
 
 replace metric_event_type = "unknown" ///
@@ -487,35 +487,21 @@ foreach yy of local annual_age_years {
 
 
 * ==============================================================================
-* CREATE EXPANDED DATASET FOR MONTHLY COUNT STRATIFICATIONS
+* CREATE THE APPROVED MONTHLY PUBLIC LATTICE
 * ==============================================================================
-* Monthly counts are not age-stratified and are restricted to all CVD.
-* This avoids sparse disease-type cells while keeping the dashboard product
-* useful. Disease-type stratification is provided at quarterly and annual
-* resolution.
+* Monthly publication is deliberately limited to one directly calculated row:
+*   - all CVD;
+*   - both sexes combined; and
+*   - all ages.
+*
+* Keep detailed sex, age and event-type data in the private Step 2 and Step 3
+* layers. They do not enter the monthly public metric lattice and therefore
+* cannot create a public small-number or reconstruction route.
 
 use `base', clear
 
-gen long __source_id = _n
-
-expand 2
-
-bysort __source_id: gen byte __copy = _n
-
 replace metric_event_type = "all_cvd"
-replace metric_sex        = "all" if __copy == 2
-
-drop __source_id __copy
-
-tempfile expanded_monthly_counts
-save `expanded_monthly_counts', replace
-
-
-* ==============================================================================
-* CVD-BURDEN-001: MONTHLY EVENT COUNTS
-* ==============================================================================
-
-use `expanded_monthly_counts', clear
+replace metric_sex        = "all"
 
 drop if missing(moe)
 
@@ -543,114 +529,12 @@ gen str25 status_flag   = "final"
 tempfile monthly_counts
 save `monthly_counts', replace
 
-* The agreed monthly product is all CVD by sex. If any actual sex stratum has
-* a frequency from 1 to 5, stop here so BNR can decide whether monthly output
-* should instead be unstratified by sex.
-quietly count if metric_sex != "all" & inrange(value, 1, 5)
-if r(N) {
-    display as error ///
-        "Monthly all-CVD sex counts from 1 to 5 were found."
-    display as error ///
-        "Step 4 has stopped before creating a staging package."
-    display as error ///
-        "Review whether monthly results should be all-sex only."
-    list period_year period_month metric_sex value ///
-        if metric_sex != "all" & inrange(value, 1, 5), ///
-        noobs clean abbreviate(20)
-    exit 459
-}
-
-
-* ==============================================================================
-* CVD-BURDEN-001: MONTHLY SAME-MONTH PREVIOUS 5-YEAR MEAN
-* ==============================================================================
-* For each monthly count row, calculate the mean count for the same calendar
-* month over the previous five years.
-*
-* Example:
-*   2023_m12 comparator = mean of Dec 2018, Dec 2019, Dec 2020,
-*                         Dec 2021, Dec 2022
-*
-* This supports dashboard cards and comparator lines while preserving seasonal
-* structure in monthly counts.
-
-use `monthly_counts', clear
-
-keep period_year period_month metric_event_type metric_sex value
-
-fillin period_year period_month metric_event_type metric_sex
-
-replace value = 0 if missing(value)
-gen byte __primary_component = ///
-    inrange(value, 1, `primary_suppression_threshold' - 1)
-drop _fillin
-
-tempfile monthly_for_comparison
-save `monthly_for_comparison', replace
-
-levelsof period_year, local(monthly_years)
-levelsof period_month, local(months)
-
-tempfile monthly_same_month_previous_5yr
-local monthly_first 1
-
-foreach yy of local monthly_years {
-
-    foreach mm of local months {
-
-        use `monthly_for_comparison', clear
-
-        keep if period_month == `mm'
-        keep if inrange(period_year, `yy' - 5, `yy' - 1)
-
-        if _N > 0 & (`yy' < `year_num' | ///
-                (`yy' == `year_num' & `mm' <= `month_num')) {
-
-            collapse ///
-                (mean) value = value ///
-                (sum)  numerator = value ///
-                (sum)  related_primary_cells = __primary_component ///
-                (count) comparison_n = value, ///
-                by(metric_event_type metric_sex)
-
-            gen int period_year    = `yy'
-            gen int period_month   = `mm'
-            gen str10 period_start = string(period_year, "%04.0f") + "-" + ///
-                                      string(period_month, "%02.0f") + "-01"
-            gen str20 period       = string(period_year, "%04.0f") + "_m" + ///
-                                      string(period_month, "%02.0f")
-
-            gen str20 metric_id    = "CVD-BURDEN-001"
-            gen str20 release_id   = "`release_id'"
-            gen str12 period_type  = "monthly"
-            gen str45 statistic    = "monthly_same_month_previous_5yr_mean"
-            gen str15 unit         = "count"
-            gen double denominator = .
-
-            gen str25 status_flag  = "final"
-            replace status_flag    = "insufficient_history" if comparison_n < 5
-            replace value          = . if comparison_n < 5
-            replace numerator      = . if comparison_n < 5
-
-            if `monthly_first' {
-                save `monthly_same_month_previous_5yr', replace
-                local monthly_first 0
-            }
-            else {
-                append using `monthly_same_month_previous_5yr'
-                save `monthly_same_month_previous_5yr', replace
-            }
-        }
-    }
-}
-
-
 * ==============================================================================
 * CREATE EXPANDED DATASET FOR QUARTERLY COUNT STRATIFICATIONS
 * ==============================================================================
 * Calendar quarters run Jan-Mar, Apr-Jun, Jul-Sep and Oct-Dec. Quarterly rows
 * retain event-type and sex stratification, providing a less sparse resolution
-* for AMI and stroke than the all-CVD-only monthly output.
+* for Heart and Stroke than the all-CVD-only monthly output.
 
 use `base', clear
 
@@ -919,7 +803,6 @@ append using `annual_previous_5yr'
 append using `annual_age_counts'
 append using `annual_age_previous_5yr'
 append using `monthly_counts'
-append using `monthly_same_month_previous_5yr'
 append using `quarterly_counts'
 append using `quarterly_5yr_compare'
 append using `dist_event_type'
@@ -941,6 +824,19 @@ if _rc gen str20 age_group = "all"
 replace age_group = "all" if missing(age_group) | age_group == ""
 
 gen str30 source_status = "`source_status'"
+
+* ------------------------------------------------------------------------------
+* HARDENED PUBLIC-SCHEMA FIELDS
+* ------------------------------------------------------------------------------
+* Stage 2 remains hospital-only. Add the stable v2 fields now, with their only
+* valid hospital-only values, so later DCO work adds rows rather than changing
+* the meaning of existing public rows.
+gen str28 schema_version = "bnr_cvd_public_metric_v2"
+gen str24 ascertainment_scope = "hospital_only"
+gen str20 mortality_definition = "not_applicable"
+gen str12 estimate_basis = "observed"
+gen double linkage_lower_value = .
+gen double linkage_upper_value = .
 
 * Complete-period indicator. Monthly rows are always complete because the
 * selected extract represents a completed month. The current quarter and year
@@ -1000,10 +896,11 @@ replace suppression_reason = "derived_from_primary_suppression" ///
 * ==============================================================================
 
 order ///
-    metric_id release_id period_type period period_start ///
+    schema_version metric_id release_id period_type period period_start ///
     period_year period_month period_quarter period_complete ///
-    event_type sex age_group source_status ///
-    statistic value unit numerator denominator comparison_n status_flag ///
+    event_type sex age_group source_status ascertainment_scope ///
+    mortality_definition estimate_basis statistic value linkage_lower_value ///
+    linkage_upper_value unit numerator denominator comparison_n status_flag ///
     sdc_policy primary_suppression_threshold primary_suppression ///
     related_primary_cells related_suppression_review suppression_review ///
     suppression_reason
@@ -1015,6 +912,7 @@ sort ///
 label data "BNR CVD burden metrics"
 
 label var metric_id        "Metric identifier"
+label var schema_version   "Public metric schema version"
 label var release_id       "Data release identifier"
 label var period_type      "Period type"
 label var period           "Reporting period"
@@ -1027,8 +925,13 @@ label var event_type       "Event type"
 label var sex              "Sex"
 label var age_group        "Age group"
 label var source_status    "Source status"
+label var ascertainment_scope "Event ascertainment scope"
+label var mortality_definition "Mortality definition for DCO estimate"
+label var estimate_basis   "Observed or estimated metric basis"
 label var statistic        "Statistic"
 label var value            "Metric value"
+label var linkage_lower_value "Linkage lower bound; DCO rows only"
+label var linkage_upper_value "Linkage upper bound; DCO rows only"
 label var unit             "Metric unit"
 label var numerator        "Numerator"
 label var denominator      "Denominator"
@@ -1060,12 +963,12 @@ notes _dta: source_dataset: `source_dataset'
 notes _dta: source_metadata: `source_metadata'
 notes _dta: unit_of_analysis: Aggregate metric row
 notes _dta: content: Long-format aggregate CVD burden metric output
-notes _dta: restrictions: Hospital-registered CVD events; DCO-only records excluded; 2009 excluded by design
+notes _dta: restrictions: Hospital-recorded CVD events; legacy DCO-only records excluded; 2009 excluded by design
 notes _dta: age_dimension: Annual all-CVD counts, annual previous-five-year means and annual age distributions are provided for under_70 and age_70_plus; age is not combined with sex or individual event type
-notes _dta: time_dimension: Monthly all-CVD counts by sex; quarterly counts by event type and sex; annual counts by event type and sex plus separate all-CVD age-group rows
+notes _dta: time_dimension: Monthly all-CVD both-sex counts only; quarterly counts by event type and sex; annual counts by event type and sex plus separate all-CVD age-group rows
 notes _dta: distribution_dimension: Annual event-type, sex and known-age distributions are produced; age distribution is all-CVD and both-sexes only
 notes _dta: comparator_annual: annual_previous_5yr_mean is the mean of the same stratum in the previous five calendar years
-notes _dta: comparator_monthly: monthly_same_month_previous_5yr_mean is the mean of the same calendar month and stratum in the previous five years
+notes _dta: comparator_monthly: No rolling monthly comparator is produced; a separately approved fixed 2015-2019 seasonal reference asset is prepared during review
 notes _dta: comparator_quarterly: quarterly_same_quarter_previous_5yr_mean is the mean of the same calendar quarter and stratum in the previous five years
 notes _dta: completeness: period_complete is 1 for complete periods and 0 for the current incomplete quarter or year; monthly rows are always complete
 notes _dta: confidence_intervals: Not calculated for this burden metric product
@@ -1087,7 +990,9 @@ notes _dta: created: `c(current_date)' `c(current_time)'
 
 local required_output_variables metric_id release_id period_type period ///
     period_start period_year period_month period_quarter period_complete ///
-    event_type sex age_group source_status statistic value unit numerator denominator ///
+    event_type sex age_group source_status schema_version ascertainment_scope ///
+    mortality_definition estimate_basis linkage_lower_value linkage_upper_value ///
+    statistic value unit numerator denominator ///
     comparison_n status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells related_suppression_review ///
     suppression_review suppression_reason
@@ -1105,6 +1010,11 @@ if !_rc {
 isid metric_id period_type period_year period_month event_type sex age_group statistic, missok
 assert inlist(metric_id, "CVD-BURDEN-001", "CVD-BURDEN-002")
 assert release_id == "`release_id'"
+assert schema_version == "bnr_cvd_public_metric_v2"
+assert ascertainment_scope == "hospital_only"
+assert mortality_definition == "not_applicable"
+assert estimate_basis == "observed"
+assert missing(linkage_lower_value) & missing(linkage_upper_value)
 assert inlist(period_type, "annual", "monthly", "quarterly")
 assert inlist(unit, "count", "percent")
 assert !missing(period_complete)
@@ -1112,6 +1022,48 @@ assert primary_suppression_threshold == 6
 assert sdc_policy == "bnr_sdc_v1"
 assert suppression_review == (primary_suppression | related_suppression_review)
 assert inlist(age_group, "all", "under_70", "age_70_plus")
+
+* Validate the fixed public reference when it already exists.  The first
+* hardened release has no authoritative asset yet: Step 5 creates it from this
+* approved Step 4 output, after which all later Step 4 runs validate the copy.
+local reference_asset_status "first_hardened_release_pending"
+local reference_dta "$BNR_PUBLIC/metrics/cvd/burden/cvd_monthly_reference_2015_2019.dta"
+local reference_csv "$BNR_PUBLIC/metrics/cvd/burden/cvd_monthly_reference_2015_2019.csv"
+local reference_yml "$BNR_PUBLIC/metrics/cvd/burden/metadata/cvd_monthly_reference_2015_2019.yml"
+capture confirm file `"`reference_dta'"'
+local reference_dta_exists = (_rc == 0)
+capture confirm file `"`reference_csv'"'
+local reference_csv_exists = (_rc == 0)
+capture confirm file `"`reference_yml'"'
+local reference_yml_exists = (_rc == 0)
+local reference_files = `reference_dta_exists' + `reference_csv_exists' + ///
+    `reference_yml_exists'
+if `reference_files' > 0 & `reference_files' < 3 {
+    display as error "The published CVD monthly reference asset is incomplete."
+    exit 459
+}
+if `reference_files' == 3 {
+    preserve
+        use `"`reference_dta'"', clear
+        isid period_month
+        assert _N == 12
+        assert schema_version == "bnr_cvd_monthly_reference_v1"
+        assert ascertainment_scope == "hospital_only"
+        assert event_type == "all_cvd"
+        assert sex == "all" & age_group == "all"
+        assert reference_start_year == 2015 & reference_end_year == 2019
+        assert !missing(reference_min, reference_mean, reference_max)
+        assert reference_min <= reference_mean & reference_mean <= reference_max
+    restore
+    local reference_asset_status "existing_asset_validated"
+}
+
+* The monthly public contract is deliberately one all-CVD, both-sex, all-age
+* count series. It must never quietly regain sex, age, subtype or rolling rows.
+quietly count if period_type == "monthly" & ///
+    !(metric_id == "CVD-BURDEN-001" & statistic == "monthly_count" & ///
+      event_type == "all_cvd" & sex == "all" & age_group == "all")
+assert r(N) == 0
 
 * Protect the agreed boundary for age stratification. Any age-specific row must
 * be annual, all-CVD and both-sexes. CVD-BURDEN-001 contributes the observed
@@ -1161,7 +1113,7 @@ save `"`output_dta'"', replace
 * A small, plain QA dataset is easier to review than a long catalogue of checks
 * that duplicate assertions already visible above.
 clear
-set obs 11
+set obs 13
 generate str44 check = ""
 generate str8 result = "PASS"
 generate str120 detail = ""
@@ -1188,6 +1140,10 @@ replace check = "Age-stratification boundary" in 10
 replace detail = "`age_specific_rows' annual all-CVD age-stratified rows; no age-by-sex or age-by-event rows" in 10
 replace check = "Metric rows created" in 11
 replace detail = "`metric_rows' rows: `metric_001_rows' CVD-BURDEN-001 and `metric_002_rows' CVD-BURDEN-002" in 11
+replace check = "Monthly public lattice" in 12
+replace detail = "Monthly output is all-CVD, both-sex, all-age monthly_count only; no rolling comparator rows" in 12
+replace check = "Fixed monthly reference asset" in 13
+replace detail = "`reference_asset_status'" in 13
 
 label data "BNR CVD burden metric QA checks"
 save `"`qa_dta'"', replace

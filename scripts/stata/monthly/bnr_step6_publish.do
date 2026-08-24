@@ -1,10 +1,10 @@
 *===============================================================================
 * DO-FILE:     bnr_step6_publish.do
-* VERSION:     1.1.0 (4 August 2026)
+* VERSION:     1.2.0 (24 August 2026)
 * PROJECT:     BNR Refit Phase 2
 * WORKFLOW:    Step 6 - publish an approved metric package
 *
-* PURPOSE:     Promote the exact seven files approved by Step 5:
+* PURPOSE:     Promote the exact ten files approved by Step 5:
 *              1. read them from the private public_ready folder;
 *              2. copy them to the authoritative outputs/public folder;
 *              3. create one release ZIP;
@@ -58,7 +58,7 @@ program define _bnr_step6_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 6: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         1.1.0"
+    noisily display as error "  Script version:         1.2.0"
     noisily display as error "  Selected release:       `selected_release'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -222,6 +222,12 @@ local source_current_yml ///
     "`ready_folder'/metadata/cvd_burden_metrics_current.yml"
 local source_package_yml ///
     "`ready_folder'/metadata/metric_package.yml"
+local source_reference_dta ///
+    "`ready_folder'/datasets/cvd_monthly_reference_2015_2019.dta"
+local source_reference_csv ///
+    "`ready_folder'/datasets/cvd_monthly_reference_2015_2019.csv"
+local source_reference_yml ///
+    "`ready_folder'/metadata/cvd_monthly_reference_2015_2019.yml"
 
 * Authoritative public files.
 local public_release_dta ///
@@ -238,6 +244,12 @@ local public_current_yml ///
     "`public_metadata'/cvd_burden_metrics_current.yml"
 local public_package_yml ///
     "`public_metadata'/metric_package.yml"
+local public_reference_dta ///
+    "`public_folder'/cvd_monthly_reference_2015_2019.dta"
+local public_reference_csv ///
+    "`public_folder'/cvd_monthly_reference_2015_2019.csv"
+local public_reference_yml ///
+    "`public_metadata'/cvd_monthly_reference_2015_2019.yml"
 local zip_name "bnr_cvd_burden_`release_id'.zip"
 local public_zip "`public_folder'/`zip_name'"
 local catalogue_name "`release_id'.yml"
@@ -258,6 +270,12 @@ local website_current_yml ///
     "`website_metadata'/cvd_burden_metrics_current.yml"
 local website_package_yml ///
     "`website_metadata'/metric_package.yml"
+local website_reference_dta ///
+    "`website_folder'/cvd_monthly_reference_2015_2019.dta"
+local website_reference_csv ///
+    "`website_folder'/cvd_monthly_reference_2015_2019.csv"
+local website_reference_yml ///
+    "`website_metadata'/cvd_monthly_reference_2015_2019.yml"
 local website_zip "`website_folder'/`zip_name'"
 local website_catalogue_record "`website_catalogue'/`catalogue_name'"
 
@@ -274,7 +292,7 @@ log using `"`private_log'"', text replace name(step6)
 quietly {
 
 noisily display as text "BNR CVD STEP 6: PUBLISH APPROVED OUTPUTS"
-noisily display as result "  Script version:       1.1.0"
+noisily display as result "  Script version:       1.2.0"
 noisily display as result "  Selected release:     `selected_release'"
 noisily display as result "  Metric family:        burden"
 noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
@@ -323,6 +341,7 @@ local approval_role_ok 0
 local approval_review_ok 0
 local approval_policy_ok 0
 local approval_disclosure_ok 0
+local approval_reference_ok 0
 local approval_manifest_name_ok 0
 local approval_payload_root_ok 0
 local approval_scope_ok 0
@@ -364,6 +383,9 @@ while r(eof) == 0 {
     }
     if `"`approval_line'"' == "disclosure_check: passed" {
         local approval_disclosure_ok 1
+    }
+    if `"`approval_line'"' == "monthly_reference_reviewed: true" {
+        local approval_reference_ok 1
     }
     if `"`approval_line'"' == ///
             "public_ready_manifest: public_manifest.csv" {
@@ -415,9 +437,9 @@ if !`approval_role_ok' {
         "approval.yml does not contain an authorised BNR approval role."
 }
 if !`approval_review_ok' | !`approval_policy_ok' | ///
-        !`approval_disclosure_ok' {
+        !`approval_disclosure_ok' | !`approval_reference_ok' {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The required Step 5 review or disclosure approval is absent."
+        "The required Step 5 review, disclosure or monthly-reference approval is absent."
 }
 if !`approval_manifest_name_ok' | !`approval_payload_root_ok' | ///
         !`approval_scope_ok' | !`approval_promotion_ok' {
@@ -480,9 +502,9 @@ if _rc {
 }
 
 quietly count
-if r(N) != 7 {
+if r(N) != 10 {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The public manifest must contain exactly seven approved payload files."
+        "The public manifest must contain exactly ten approved payload files."
 }
 
 capture quietly isid relative_path
@@ -497,7 +519,7 @@ if r(N) != 0 {
         "Every manifest payload_root value must be a single period."
 }
 
-* Check each approved relative path explicitly. Seven rows plus seven successful
+* Check each approved relative path explicitly. Ten rows plus ten successful
 * checks also prove that there are no unrecognised or missing payload rows.
 quietly count if relative_path == ///
     "datasets/cvd_burden_metrics_`release_id'.dta" & file_type == "dta"
@@ -546,6 +568,27 @@ quietly count if relative_path == ///
 if r(N) != 1 {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
         "The package metadata file is absent from the approved manifest."
+}
+
+quietly count if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.dta" & file_type == "dta"
+if r(N) != 1 {
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        "The monthly reference DTA is absent from the approved manifest."
+}
+
+quietly count if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.csv" & file_type == "csv"
+if r(N) != 1 {
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        "The monthly reference CSV is absent from the approved manifest."
+}
+
+quietly count if relative_path == ///
+    "metadata/cvd_monthly_reference_2015_2019.yml" & file_type == "yml"
+if r(N) != 1 {
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        "The monthly reference metadata is absent from the approved manifest."
 }
 
 
@@ -599,11 +642,32 @@ quietly summarize checksum if relative_path == ///
     "metadata/metric_package.yml", meanonly
 local package_yml_checksum = r(mean)
 
+quietly summarize file_size if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.dta", meanonly
+local reference_dta_size = r(mean)
+quietly summarize checksum if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.dta", meanonly
+local reference_dta_checksum = r(mean)
+
+quietly summarize file_size if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.csv", meanonly
+local reference_csv_size = r(mean)
+quietly summarize checksum if relative_path == ///
+    "datasets/cvd_monthly_reference_2015_2019.csv", meanonly
+local reference_csv_checksum = r(mean)
+
+quietly summarize file_size if relative_path == ///
+    "metadata/cvd_monthly_reference_2015_2019.yml", meanonly
+local reference_yml_size = r(mean)
+quietly summarize checksum if relative_path == ///
+    "metadata/cvd_monthly_reference_2015_2019.yml", meanonly
+local reference_yml_checksum = r(mean)
+
 
 clear
 
 *===============================================================================
-* 7. VERIFY ALL SEVEN PRIVATE SOURCE FILES BEFORE COPYING ANYTHING
+* 7. VERIFY ALL TEN PRIVATE SOURCE FILES BEFORE COPYING ANYTHING
 *===============================================================================
 
 quietly _bnr_step6_verify_file `"`source_release_dta'"' ///
@@ -656,6 +720,30 @@ if !r(ok) {
 
 quietly _bnr_step6_verify_file `"`source_package_yml'"' ///
     "`package_yml_size'" "`package_yml_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`source_reference_dta'"' ///
+    "`reference_dta_size'" "`reference_dta_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`source_reference_csv'"' ///
+    "`reference_csv_size'" "`reference_csv_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`source_reference_yml'"' ///
+    "`reference_yml_size'" "`reference_yml_checksum'"
 if !r(ok) {
     local verify_reason `"`r(reason)'"'
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
@@ -771,11 +859,11 @@ if "`website_folder_exists'" != "1" | ///
 }
 
 *===============================================================================
-* 10. COPY THE SEVEN APPROVED FILES TO AUTHORITATIVE PUBLIC OUTPUT
+* 10. COPY THE TEN APPROVED FILES TO AUTHORITATIVE PUBLIC OUTPUT
 *===============================================================================
 
 * These statements are deliberately explicit. There is no dynamic filename
-* construction or recursive folder copy: only the seven manifested files cross
+* construction or recursive folder copy: only the ten manifested files cross
 * the private-to-public boundary.
 capture quietly copy `"`source_release_dta'"' `"`public_release_dta'"', replace
 if _rc {
@@ -824,6 +912,27 @@ if _rc {
     local copy_rc = _rc
     _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
         `"Could not refresh authoritative package metadata: `public_package_yml'"'
+}
+
+capture quietly copy `"`source_reference_dta'"' `"`public_reference_dta'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh the monthly reference DTA: `public_reference_dta'"'
+}
+
+capture quietly copy `"`source_reference_csv'"' `"`public_reference_csv'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh the monthly reference CSV: `public_reference_csv'"'
+}
+
+capture quietly copy `"`source_reference_yml'"' `"`public_reference_yml'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh monthly reference metadata: `public_reference_yml'"'
 }
 
 
@@ -887,6 +996,30 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
+quietly _bnr_step6_verify_file `"`public_reference_dta'"' ///
+    "`reference_dta_size'" "`reference_dta_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`public_reference_csv'"' ///
+    "`reference_csv_size'" "`reference_csv_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`public_reference_yml'"' ///
+    "`reference_yml_size'" "`reference_yml_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
 
 *===============================================================================
 * 12. CREATE ONE RELEASE ZIP FROM THE VERIFIED PUBLIC COPY
@@ -914,7 +1047,10 @@ capture quietly zipfile ///
     "cvd_burden_metrics_current.csv" ///
     "metadata/cvd_burden_metrics_`release_id'.yml" ///
     "metadata/cvd_burden_metrics_current.yml" ///
-    "metadata/metric_package.yml", ///
+    "metadata/metric_package.yml" ///
+    "cvd_monthly_reference_2015_2019.dta" ///
+    "cvd_monthly_reference_2015_2019.csv" ///
+    "metadata/cvd_monthly_reference_2015_2019.yml", ///
     saving(`"`public_zip'"', replace)
 local zip_rc = _rc
 
@@ -934,9 +1070,9 @@ if `restore_folder_rc' {
         `"`private_log'"' ///
         `"The original working folder could not be restored: `original_folder'"'
 }
-if `zip_files' != 7 {
+if `zip_files' != 10 {
     _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
-        "The release ZIP did not contain all seven approved payload files."
+        "The release ZIP did not contain all ten approved payload files."
 }
 
 capture confirm file `"`public_zip'"'
@@ -954,7 +1090,7 @@ local public_zip_checksum = r(checksum)
 *===============================================================================
 
 * This small record is publication metadata, not an eighth analytical payload.
-* It is created only after the approved seven-file ZIP has been built and
+* It is created only after the approved ten-file ZIP has been built and
 * verified. The central Python builder later reads this record; Step 6 does not
 * run Python, edit downloads.yml, render Quarto or deploy the website.
 tempname catalogue_handle
@@ -1073,6 +1209,30 @@ if _rc {
         `"Could not refresh website package metadata: `website_package_yml'"'
 }
 
+capture quietly copy `"`public_reference_dta'"' ///
+    `"`website_reference_dta'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh website monthly reference DTA: `website_reference_dta'"'
+}
+
+capture quietly copy `"`public_reference_csv'"' ///
+    `"`website_reference_csv'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh website monthly reference CSV: `website_reference_csv'"'
+}
+
+capture quietly copy `"`public_reference_yml'"' ///
+    `"`website_reference_yml'"', replace
+if _rc {
+    local copy_rc = _rc
+    _bnr_step6_fail `copy_rc' "`selected_release'" `"`private_log'"' ///
+        `"Could not refresh website monthly reference metadata: `website_reference_yml'"'
+}
+
 
 capture quietly copy `"`public_zip'"' `"`website_zip'"', replace
 if _rc {
@@ -1149,6 +1309,30 @@ if !r(ok) {
         `"`verify_reason'"'
 }
 
+quietly _bnr_step6_verify_file `"`website_reference_dta'"' ///
+    "`reference_dta_size'" "`reference_dta_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`website_reference_csv'"' ///
+    "`reference_csv_size'" "`reference_csv_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
+quietly _bnr_step6_verify_file `"`website_reference_yml'"' ///
+    "`reference_yml_size'" "`reference_yml_checksum'"
+if !r(ok) {
+    local verify_reason `"`r(reason)'"'
+    _bnr_step6_fail 459 "`selected_release'" `"`private_log'"' ///
+        `"`verify_reason'"'
+}
+
 
 quietly _bnr_step6_verify_file `"`website_zip'"' ///
     "`public_zip_size'" "`public_zip_checksum'"
@@ -1174,10 +1358,10 @@ noisily display as text ""
 noisily display as text "============================================================================="
 noisily display as text "STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as result "  Run status:             PUBLISHED"
-noisily display as result "  Script version:         1.1.0"
+noisily display as result "  Script version:         1.2.0"
 noisily display as result "  Selected release:       `selected_release'"
 noisily display as result "  Metric family:          burden"
-noisily display as result "  Approved payload files: 7"
+noisily display as result "  Approved payload files: 10"
 noisily display as result "  Release ZIP:            `zip_name'"
 noisily display as result "  Catalogue record:       catalogue/`catalogue_name'"
 noisily display as result `"  Authoritative public:   `public_folder'"'

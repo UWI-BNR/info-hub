@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step5_review.do
-VERSION:     2.6.8 (24 August 2026)
+VERSION:     2.6.1 (24 August 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Step 5 - prepare, review and record approval
 
@@ -74,7 +74,7 @@ program define _bnr_step5_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 5: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         2.6.8"
+    noisily display as error "  Script version:         2.6.1"
     noisily display as error "  Selected release:       `release_id'"
     noisily display as error "  Action:                 `action'"
     noisily display as error `"  Reason:                 `reason'"'
@@ -295,7 +295,6 @@ local review_candidate "`review_dir'/step5_candidate.dta"
 local review_disclosure_qa "`review_dir'/step5_disclosure_qa.csv"
 local review_equation_audit_dta "`review_dir'/step5_equation_audit.dta"
 local review_equation_audit "`review_dir'/step5_equation_audit.csv"
-local review_row_audit_dta "`review_dir'/step5_row_audit.dta"
 local review_basis "`review_dir'/step5_review_basis.csv"
 local review_workbook "`review_dir'/step5_review.xlsx"
 local review_reference_dta "`review_dir'/cvd_monthly_reference_2015_2019.dta"
@@ -347,7 +346,7 @@ log using `"`output_log'"', text replace name(step5)
 quietly {
 
 noisily display as text "BNR CVD STEP 5: HUMAN REVIEW AND APPROVAL"
-noisily display as result "  Script version:   2.6.8"
+noisily display as result "  Script version:   2.6.1"
 noisily display as result "  Selected release: `year4'-`month2'"
 noisily display as result "  Metric family:    burden"
 noisily display as result "  Action:           `action'"
@@ -388,7 +387,6 @@ if "`action'" == "prepare" {
             `"`review_disclosure_qa'"' ///
             `"`review_equation_audit_dta'"' ///
             `"`review_equation_audit'"' ///
-            `"`review_row_audit_dta'"' ///
             `"`review_reference_dta'"' ///
             `"`review_reference_csv'"' ///
             `"`review_reference_yml'"' ///
@@ -438,7 +436,6 @@ if "`action'" == "prepare" {
         capture erase `"`review_disclosure_qa'"'
         capture erase `"`review_equation_audit_dta'"'
         capture erase `"`review_equation_audit'"'
-        capture erase `"`review_row_audit_dta'"'
         capture erase `"`review_reference_dta'"'
         capture erase `"`review_reference_csv'"'
         capture erase `"`review_reference_yml'"'
@@ -483,19 +480,7 @@ if "`action'" == "prepare" {
 
     * The reference is created only for the first hardened package.  Future
     * releases copy the already-published asset for checksum-bound review.
-    * This local is set here rather than returned by the helper, because the
-    * helper is deliberately a simple do-file rather than an rclass program.
-    local reference_source "first_hardened_release_calculation"
-    capture confirm file `"`public_reference_dta'"'
-    local reference_dta_exists = (_rc == 0)
-    capture confirm file `"`public_reference_csv'"'
-    local reference_csv_exists = (_rc == 0)
-    capture confirm file `"`public_reference_yml'"'
-    local reference_yml_exists = (_rc == 0)
-    if `reference_dta_exists' & `reference_csv_exists' & `reference_yml_exists' {
-        local reference_source "approved_public_asset"
-    }
-    capture noisily do "$BNR_STATA/metrics/cvd/bnr_step5_cvd_monthly_reference.do" ///
+    capture quietly do "$BNR_STATA/metrics/cvd/bnr_step5_cvd_monthly_reference.do" ///
         `"`private_dta'"' `"`review_reference_dta'"' ///
         `"`review_reference_csv'"' `"`review_reference_yml'"' ///
         `"`public_reference_dta'"' `"`public_reference_csv'"' ///
@@ -508,6 +493,8 @@ if "`action'" == "prepare" {
             `"`output_log'"' `"`reference_reason'"'
         exit _rc
     }
+    local reference_source "`r(reference_source)'"
+
     use `"`private_dta'"', clear
     quietly count if release_id != "`release_id'"
     if r(N) {
@@ -526,7 +513,6 @@ if "`action'" == "prepare" {
     capture quietly do "$BNR_STATA/common/bnr_step5_suppress.do" ///
         `"`private_dta'"' `"`review_candidate'"' `"`step5_qa'"' ///
         `"`review_equation_audit_dta'"' ///
-        `"`review_row_audit_dta'"' ///
         "`release_id'" `"`previous_public_dta'"' ///
         `"`previous_private_dta'"' "`previous_release_id'"
     if _rc {
@@ -593,10 +579,6 @@ if "`action'" == "prepare" {
     post `basis_handle' ("step5_equation_audit") ///
         (`"`review_equation_audit'"') (r(filelen)) (r(checksum))
 
-    quietly checksum `"`review_row_audit_dta'"'
-    post `basis_handle' ("step5_row_audit") ///
-        (`"`review_row_audit_dta'"') (r(filelen)) (r(checksum))
-
     quietly checksum `"`review_reference_dta'"'
     post `basis_handle' ("monthly_reference_dta") ///
         (`"`review_reference_dta'"') (r(filelen)) (r(checksum))
@@ -619,7 +601,7 @@ if "`action'" == "prepare" {
     * -----------------------------------------------------------------------
 
     clear
-    set obs 17
+    set obs 16
     generate str32 review_item = ""
     generate str244 detail = ""
     replace review_item = "Review status" in 1
@@ -656,12 +638,9 @@ if "`action'" == "prepare" {
     replace detail = "2015-2019 fixed reference source: `reference_source'" in 14
     replace review_item = "Equation audit" in 15
     replace detail = "Review deterministic additive and comparator closure decisions." in 15
-    replace review_item = "Private row audit" in 16
+    replace review_item = "If not approved" in 16
     replace detail = ///
-        "Review Step 4/5 disclosure provenance in step5_row_audit.dta and workbook audit sheets." in 16
-    replace review_item = "If not approved" in 17
-    replace detail = ///
-        "Do not edit generated files. Correct the appropriate earlier source or code and rerun." in 17
+        "Do not edit generated files. Correct the appropriate earlier source or code and rerun." in 16
     export excel using `"`review_workbook'"', ///
         sheet("Review") firstrow(variables) replace
 
@@ -690,26 +669,24 @@ if "`action'" == "prepare" {
         sheet("Private results") firstrow(variables) sheetmodify
 
     use `"`private_dta'"', clear
-    generate long __private_row_id = _n
+    generate long review_row = _n
     rename value private_value
     rename numerator private_numerator
     rename denominator private_denominator
-    keep __private_row_id metric_id release_id period_type period period_complete ///
+    keep review_row metric_id release_id period_type period period_complete ///
         event_type sex age_group statistic private_value unit private_numerator ///
         private_denominator comparison_n
-    isid __private_row_id
     tempfile private_review
     save `"`private_review'"', replace
 
-    * Disclosure provenance and current exact values are deliberately separate.
-    * Join through the helper's private, pre-sort row identifier. This avoids
-    * interpreting valid blank month/quarter fields as an invalid key.
-    use `"`review_row_audit_dta'"', clear
-    isid __private_row_id
-    merge 1:1 __private_row_id using `"`private_review'"'
-    assert _merge == 3
-    drop _merge
-    drop __private_row_id
+    use `"`review_candidate'"', clear
+    generate long review_row = _n
+    keep review_row step4_primary_flag step4_related_flag ///
+        previous_release_id previous_release_found previous_value ///
+        temporal_increment temporal_check step5_temporal_flag ///
+        step5_complementary_flag step5_derived_flag suppression_status ///
+        disclosure_note suppression_note
+    merge 1:1 review_row using `"`private_review'"', nogen
     keep if suppression_status != "none"
     quietly count
     if r(N) {
@@ -720,6 +697,7 @@ if "`action'" == "prepare" {
             previous_value temporal_increment temporal_check ///
             step5_temporal_flag step5_complementary_flag ///
             step5_derived_flag suppression_status disclosure_note
+        drop review_row
         export excel using `"`review_workbook'"', ///
             sheet("Suppression") firstrow(variables) sheetmodify
     }
@@ -736,7 +714,7 @@ if "`action'" == "prepare" {
     * DISCLOSURE AUDIT
     * This private sheet shows the individual rule flags behind every final
     * decision, including rows where no disclosure restriction was identified.
-    use `"`review_row_audit_dta'"', clear
+    use `"`review_candidate'"', clear
     keep metric_id release_id period_type period period_complete event_type ///
         sex age_group statistic step4_primary_flag step4_related_flag ///
         previous_release_id previous_release_found previous_value ///
@@ -752,28 +730,12 @@ if "`action'" == "prepare" {
     export excel using `"`review_workbook'"', ///
         sheet("Disclosure audit") firstrow(variables) sheetmodify
 
-    * A header-only audit CSV is valid when no public equation required a
-    * complementary or derived protection.  Importing that CSV would stop
-    * with r(2000), so build a plain-language workbook sheet from the private
-    * DTA instead.
-    use `"`review_equation_audit_dta'"', clear
-    quietly count
-    if r(N) {
-        export excel using `"`review_workbook'"', ///
-            sheet("Equation audit") firstrow(variables) sheetmodify
-    }
-    else {
-        clear
-        set obs 1
-        generate str32 audit_status = "No closure actions required"
-        generate str244 detail = ///
-            "No approved public equation contained exactly one protected term in this release."
-        export excel using `"`review_workbook'"', ///
-            sheet("Equation audit") firstrow(variables) sheetmodify
-    }
+    import delimited using `"`review_equation_audit'"', varnames(1) clear
+    export excel using `"`review_workbook'", ///
+        sheet("Equation audit") firstrow(variables) sheetmodify
 
     use `"`review_reference_dta'"', clear
-    export excel using `"`review_workbook'"', ///
+    export excel using `"`review_workbook'", ///
         sheet("Monthly reference") firstrow(variables) sheetmodify
 
     use `"`review_candidate'"', clear
@@ -791,7 +753,6 @@ if "`action'" == "prepare" {
             `"`review_candidate'"' ///
             `"`review_disclosure_qa'"' ///
             `"`review_equation_audit'"' ///
-            `"`review_row_audit_dta'"' ///
             `"`review_reference_dta'"' ///
             `"`review_reference_csv'"' ///
             `"`review_reference_yml'"' ///
@@ -835,8 +796,7 @@ if "`action'" == "approve" {
 
     foreach required_file in `"`review_workbook'"' `"`review_basis'"' ///
             `"`review_candidate'"' `"`review_disclosure_qa'"' ///
-            `"`review_equation_audit'"' `"`review_row_audit_dta'"' ///
-            `"`review_reference_dta'"' ///
+            `"`review_equation_audit'"' `"`review_reference_dta'"' ///
             `"`review_reference_csv'"' `"`review_reference_yml'"' {
         capture confirm file `"`required_file'"'
         if _rc {
@@ -939,23 +899,6 @@ if "`action'" == "approve" {
         exit _rc
     }
 
-    * The candidate is the public payload source.  Internal disclosure
-    * provenance is permitted only in step5_row_audit.dta and must cause an
-    * approval failure if it reaches this file.
-    local nonpublic_candidate_fields step4_primary_flag step4_related_flag ///
-        previous_release_id previous_release_found previous_value ///
-        temporal_increment temporal_check step5_temporal_flag ///
-        step5_complementary_flag step5_derived_flag __source_row ///
-        __comparator_offset
-    foreach variable of local nonpublic_candidate_fields {
-        capture confirm variable `variable'
-        if !_rc {
-            _bnr_step5_fail 459 "`action'" "`release_id'" `"`output_log'"' ///
-                "The reviewed candidate retains an internal disclosure field: `variable'."
-            exit _rc
-        }
-    }
-
     quietly count
     local public_rows = r(N)
     quietly count if suppression_status == "primary"
@@ -987,10 +930,9 @@ if "`action'" == "approve" {
     }
 
     * Confirm the candidate and every authoritative source file are unchanged.
-    * The ten files include the private row audit, fixed monthly reference and
-    * equation audit.
+    * The nine files include the fixed monthly reference and equation audit.
     import delimited using `"`review_basis'"', varnames(1) stringcols(_all) clear
-    if _N != 10 {
+    if _N != 9 {
         _bnr_step5_fail 459 "`action'" "`release_id'" ///
             `"`output_log'"' "The review-basis file has the wrong number of rows."
         exit _rc
@@ -1121,22 +1063,18 @@ if "`action'" == "approve" {
         exit _rc
     }
 
-    * The final five reviewed controls are new in the hardened contract.  Use
+    * The final four reviewed controls are new in the hardened contract.  Use
     * explicit mappings so their position in the basis file remains auditable.
-    forvalues basis_row = 6/10 {
+    forvalues basis_row = 6/9 {
         if `basis_row' == 6 {
             local expected_role "step5_equation_audit"
             local expected_path `"`review_equation_audit'"'
         }
         else if `basis_row' == 7 {
-            local expected_role "step5_row_audit"
-            local expected_path `"`review_row_audit_dta'"'
-        }
-        else if `basis_row' == 8 {
             local expected_role "monthly_reference_dta"
             local expected_path `"`review_reference_dta'"'
         }
-        else if `basis_row' == 9 {
+        else if `basis_row' == 8 {
             local expected_role "monthly_reference_csv"
             local expected_path `"`review_reference_csv'"'
         }
@@ -1459,7 +1397,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 5: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             `summary_status'"
-noisily display as text   "  Script version:         2.6.8"
+noisily display as text   "  Script version:         2.6.1"
 noisily display as text   "  Selected release:       `release_id'"
 noisily display as text   "  Metric family:          burden"
 

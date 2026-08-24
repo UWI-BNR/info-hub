@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step5_suppress.do
-VERSION:     2.4.1 (30 July 2026)
+VERSION:     2.5.5 (24 August 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Step 5 - create a disclosure-controlled review candidate
 
@@ -13,7 +13,7 @@ PURPOSE:     Apply the BNR public disclosure-control contract to one exact
              3. removes exact numeric content from every suppressed row;
              4. writes an asterisk to display_value for suppressed rows;
              5. removes internal Step 4 disclosure-review fields;
-             6. creates a disclosure QA dataset;
+             6. creates disclosure QA, equation and private row-level audits;
              7. stops if any disclosure QA check fails.
 
              The helper does NOT create public_ready, approve, promote or
@@ -46,6 +46,8 @@ USAGE:       Called only by bnr_step5_review.do.
 ARGUMENTS:   private_dta
              public_dta
              disclosure_qa_dta
+             disclosure_equation_audit_dta
+             disclosure_row_audit_dta
              release_id
              previous_public_dta
              previous_private_dta
@@ -60,13 +62,17 @@ version 19
 set more off
 
 * ---------------------------------------------------------------------------
-* 1. RECEIVE AND CHECK THE FOUR-FILE CONTRACT FROM THE STEP 5 CONTROLLER
+* 1. RECEIVE AND CHECK THE STEP 5 CONTROLLER CONTRACT
 * ---------------------------------------------------------------------------
-args private_dta public_dta disclosure_qa_dta release_id ///
+args private_dta public_dta disclosure_qa_dta disclosure_equation_audit_dta ///
+    disclosure_row_audit_dta release_id ///
     previous_public_dta previous_private_dta previous_release_id
 
 if `"`private_dta'"' == "" | `"`public_dta'"' == "" | ///
-        `"`disclosure_qa_dta'"' == "" | `"`release_id'"' == "" | ///
+        `"`disclosure_qa_dta'"' == "" | ///
+        `"`disclosure_equation_audit_dta'"' == "" | ///
+        `"`disclosure_row_audit_dta'"' == "" | ///
+        `"`release_id'"' == "" | ///
         `"`previous_public_dta'"' == "" | ///
         `"`previous_private_dta'"' == "" | `"`previous_release_id'"' == "" {
     display as error "bnr_step5_suppress.do received an incomplete contract."
@@ -82,15 +88,24 @@ if _rc {
 
 use `"`private_dta'"', clear
 
+* This private-only row identifier is created before any disclosure sorting.
+* It lets the reviewer workbook rejoin private values to their disclosure
+* provenance without relying on structural time fields that are correctly
+* blank for annual or quarterly rows.
+generate long __private_row_id = _n
+isid __private_row_id
+
 * ---------------------------------------------------------------------------
 * 2. CHECK THE PRIVATE STEP 4 METRIC DATASET
 *
 * These variables form the minimum interface between Step 4 and Step 5.
 * Keeping the list here makes the hand-off contract visible in one place.
 * ---------------------------------------------------------------------------
-local required_variables metric_id release_id period_type period ///
+local required_variables schema_version metric_id release_id period_type period ///
     period_start period_year period_month period_quarter period_complete ///
-    event_type sex age_group source_status statistic value unit numerator denominator ///
+    event_type sex age_group source_status ascertainment_scope ///
+    mortality_definition estimate_basis statistic value unit numerator denominator ///
+    linkage_lower_value linkage_upper_value ///
     comparison_n status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells related_suppression_review ///
     suppression_review suppression_reason
@@ -123,6 +138,33 @@ foreach identifier in eid recid patid fname lname name dob address telephone ///
         display as error "Potential individual identifier found: `identifier'"
         exit 459
     }
+}
+
+quietly count if schema_version != "bnr_cvd_public_metric_v2"
+if r(N) {
+    display as error "Step 5 requires the approved CVD public metric schema v2."
+    exit 459
+}
+
+quietly count if ascertainment_scope != "hospital_only" | ///
+    mortality_definition != "not_applicable" | estimate_basis != "observed"
+if r(N) {
+    display as error "Stage 2 accepts hospital-only observed CVD metrics only."
+    exit 459
+}
+
+quietly count if !missing(linkage_lower_value) | !missing(linkage_upper_value)
+if r(N) {
+    display as error "Hospital-only Stage 2 rows must not contain linkage bounds."
+    exit 459
+}
+
+quietly count if period_type == "monthly" & ///
+    !(metric_id == "CVD-BURDEN-001" & statistic == "monthly_count" & ///
+      event_type == "all_cvd" & sex == "all" & age_group == "all")
+if r(N) {
+    display as error "A monthly row falls outside the approved public lattice."
+    exit 459
 }
 
 * AGE-DIMENSION CONTRACT
@@ -202,7 +244,7 @@ replace suppression_status = "primary" if step4_primary_flag == 1
 * A negative change indicates a data revision rather than a new-event count.
 * It is conservatively withheld for review and clearly identified in the audit.
 *
-* Only incomplete AMI and stroke cumulative count rows are assessed here.
+* Only incomplete Heart and Stroke cumulative count rows are assessed here.
 generate byte __temporal_candidate = period_complete == 0 & ///
     inlist(period_type, "quarterly", "annual") & ///
     event_type != "all_cvd" & ///
@@ -249,6 +291,10 @@ if `previous_approved' {
             if _rc local previous_public_structure_ok 0
         }
         if `previous_public_structure_ok' {
+            * Stage 2 renamed the legacy AMI grouping to Heart.  The
+            * historical public payload remains valid, so bridge that label
+            * only while matching the previous-release temporal lattice.
+            replace event_type = "heart" if lower(strtrim(event_type)) == "ami"
             keep if inlist(statistic, "annual_count", "quarterly_count")
             keep metric_id period_type period_year period_quarter event_type ///
                 sex age_group statistic suppression_status
@@ -272,6 +318,10 @@ if `previous_private_found' {
             if _rc local previous_private_structure_ok 0
         }
         if `previous_private_structure_ok' {
+            * Apply the identical bridge to the private Step 4 counterpart so
+            * public approval evidence and its protected prior value use the
+            * same historical event-type key.
+            replace event_type = "heart" if lower(strtrim(event_type)) == "ami"
             keep if inlist(statistic, "annual_count", "quarterly_count")
             keep metric_id period_type period_year period_quarter event_type ///
                 sex age_group statistic value
@@ -360,11 +410,11 @@ replace suppression_status = "temporal" if ///
 
 * SECONDARY / COMPLEMENTARY SUPPRESSION
 *
-* Annual and quarterly AMI/stroke counts form a two-by-two event-by-sex table:
+* Annual and quarterly Heart/Stroke counts form a two-by-two event-by-sex table:
 *
 *                      Female          Male
 *                   -------------------------
-*             AMI   |  interior cell   interior cell
+*           Heart   |  interior cell   interior cell
 *          Stroke   |  interior cell   interior cell
 *
 * The table is published together with row totals, sex totals and an all-CVD
@@ -374,12 +424,12 @@ replace suppression_status = "temporal" if ///
 *
 * The simplest robust rule is therefore panel based:
 *
-*   If ANY AMI/stroke female/male count in an annual or quarterly panel is
+*   If ANY Heart/Stroke female/male count in an annual or quarterly panel is
 *   primary- or temporal-suppressed, ALL FOUR interior cells in that same
 *   panel are suppressed.
 *
 * This rule is deliberately narrow. It does not suppress:
-*   - both-sex AMI or stroke totals;
+*   - both-sex Heart or Stroke totals;
 *   - all-CVD sex totals;
 *   - age-specific rows;
 *   - monthly rows; or
@@ -388,7 +438,7 @@ replace suppression_status = "temporal" if ///
 * The rule is applied separately to each annual or quarterly count panel.
 generate byte __protected_interior = ///
     inlist(statistic, "annual_count", "quarterly_count") & ///
-    inlist(event_type, "ami", "stroke") & ///
+    inlist(event_type, "heart", "stroke") & ///
     inlist(sex, "female", "male") & ///
     suppression_status != "none"
 
@@ -401,10 +451,183 @@ bysort period_type period_year period_month period_quarter statistic: ///
 replace step5_complementary_flag = 1 if suppression_status == "none" & ///
     __protected_panel == 1 & ///
     inlist(statistic, "annual_count", "quarterly_count") & ///
-    inlist(event_type, "ami", "stroke") & ///
+    inlist(event_type, "heart", "stroke") & ///
     inlist(sex, "female", "male")
 
 replace suppression_status = "secondary" if step5_complementary_flag == 1
+
+* ITERATIVE CROSS-FREQUENCY EQUATION CLOSURE
+*
+* The public CVD lattice now contains monthly all-CVD combined-sex counts,
+* quarterly all-CVD combined-sex counts and annual all-CVD combined-sex counts.
+* A single protected component in any additive equation would reveal that
+* component by subtraction.  The loop below deterministically chooses the
+* earliest available component as complementary protection and repeats until
+* the three applicable time equations are closed:
+*
+*   quarterly count = its three monthly counts
+*   annual count = its four quarterly counts
+*   annual count = its twelve monthly counts
+*
+* Heart/Stroke and sex equations are deliberately not asserted here.  The
+* approved contract does not declare all-CVD to be a simple Heart + Stroke sum,
+* and sex-specific rows are not published at monthly resolution.
+generate byte __time_complementary_flag = 0
+generate str32 __equation_id = ""
+generate str120 __equation_description = ""
+generate double __equation_source_period = .
+generate double __time_period_code = period_year * 100 + ///
+    cond(period_type == "monthly", period_month, ///
+    cond(period_type == "quarterly", 50 + period_quarter, 99))
+
+forvalues closure_iteration = 1/20 {
+    local closure_changed 0
+
+    * Quarterly all-CVD total and its three months.
+    generate byte __mq_member = event_type == "all_cvd" & sex == "all" & ///
+        age_group == "all" & ///
+        ((period_type == "monthly" & statistic == "monthly_count") | ///
+         (period_type == "quarterly" & statistic == "quarterly_count"))
+    bysort period_year period_quarter: egen byte __mq_member_n = total(__mq_member)
+    bysort period_year period_quarter: egen byte __mq_protected_n = ///
+        total(__mq_member & suppression_status != "none")
+    bysort period_year period_quarter: egen double __mq_source_period = ///
+        max(cond(__mq_member & suppression_status != "none", __time_period_code, .))
+    generate byte __mq_candidate = __mq_member == 1 & __mq_member_n == 4 & ///
+        __mq_protected_n == 1 & suppression_status == "none" & ///
+        period_type == "monthly" & statistic == "monthly_count"
+    sort period_year period_quarter period
+    by period_year period_quarter: generate byte __mq_choice = ///
+        __mq_candidate == 1 & sum(__mq_candidate) == 1
+    quietly count if __mq_choice == 1
+    if r(N) {
+        replace step5_complementary_flag = 1 if __mq_choice == 1
+        replace __time_complementary_flag = 1 if __mq_choice == 1
+        replace __equation_id = "MQ-" + string(period_year, "%04.0f") + ///
+            "-Q" + string(period_quarter, "%01.0f") if __mq_choice == 1
+        replace __equation_description = ///
+            "Quarterly all-CVD count equals its three monthly counts." ///
+            if __mq_choice == 1
+        replace __equation_source_period = __mq_source_period if __mq_choice == 1
+        replace suppression_status = "secondary" if __mq_choice == 1
+        local closure_changed 1
+    }
+    drop __mq_member __mq_member_n __mq_protected_n __mq_source_period ///
+        __mq_candidate __mq_choice
+
+    * Annual all-CVD total and its four quarters.
+    generate byte __qa_member = event_type == "all_cvd" & sex == "all" & ///
+        age_group == "all" & ///
+        ((period_type == "quarterly" & statistic == "quarterly_count") | ///
+         (period_type == "annual" & statistic == "annual_count"))
+    bysort period_year: egen byte __qa_member_n = total(__qa_member)
+    bysort period_year: egen byte __qa_protected_n = ///
+        total(__qa_member & suppression_status != "none")
+    bysort period_year: egen double __qa_source_period = ///
+        max(cond(__qa_member & suppression_status != "none", __time_period_code, .))
+    generate byte __qa_candidate = __qa_member == 1 & __qa_member_n == 5 & ///
+        __qa_protected_n == 1 & suppression_status == "none" & ///
+        period_type == "quarterly" & statistic == "quarterly_count"
+    sort period_year period_quarter period
+    by period_year: generate byte __qa_choice = ///
+        __qa_candidate == 1 & sum(__qa_candidate) == 1
+    quietly count if __qa_choice == 1
+    if r(N) {
+        replace step5_complementary_flag = 1 if __qa_choice == 1
+        replace __time_complementary_flag = 1 if __qa_choice == 1
+        replace __equation_id = "QA-" + string(period_year, "%04.0f") if __qa_choice == 1
+        replace __equation_description = ///
+            "Annual all-CVD count equals its four quarterly counts." ///
+            if __qa_choice == 1
+        replace __equation_source_period = __qa_source_period if __qa_choice == 1
+        replace suppression_status = "secondary" if __qa_choice == 1
+        local closure_changed 1
+    }
+    drop __qa_member __qa_member_n __qa_protected_n __qa_source_period ///
+        __qa_candidate __qa_choice
+
+    * Annual all-CVD total and its twelve months.
+    generate byte __ma_member = event_type == "all_cvd" & sex == "all" & ///
+        age_group == "all" & ///
+        ((period_type == "monthly" & statistic == "monthly_count") | ///
+         (period_type == "annual" & statistic == "annual_count"))
+    bysort period_year: egen byte __ma_member_n = total(__ma_member)
+    bysort period_year: egen byte __ma_protected_n = ///
+        total(__ma_member & suppression_status != "none")
+    bysort period_year: egen double __ma_source_period = ///
+        max(cond(__ma_member & suppression_status != "none", __time_period_code, .))
+    generate byte __ma_candidate = __ma_member == 1 & __ma_member_n == 13 & ///
+        __ma_protected_n == 1 & suppression_status == "none" & ///
+        period_type == "monthly" & statistic == "monthly_count"
+    sort period_year period_month period
+    by period_year: generate byte __ma_choice = ///
+        __ma_candidate == 1 & sum(__ma_candidate) == 1
+    quietly count if __ma_choice == 1
+    if r(N) {
+        replace step5_complementary_flag = 1 if __ma_choice == 1
+        replace __time_complementary_flag = 1 if __ma_choice == 1
+        replace __equation_id = "MA-" + string(period_year, "%04.0f") if __ma_choice == 1
+        replace __equation_description = ///
+            "Annual all-CVD count equals its twelve monthly counts." ///
+            if __ma_choice == 1
+        replace __equation_source_period = __ma_source_period if __ma_choice == 1
+        replace suppression_status = "secondary" if __ma_choice == 1
+        local closure_changed 1
+    }
+    drop __ma_member __ma_member_n __ma_protected_n __ma_source_period ///
+        __ma_candidate __ma_choice
+
+    if `closure_changed' == 0 {
+        continue, break
+    }
+}
+
+* A rolling five-year mean remains public only when every contributing count is
+* public.  This conservative rule closes direct and overlapping-comparator
+* subtraction routes without attempting to reconstruct them one at a time.
+tempfile comparator_risk
+preserve
+    keep if suppression_status != "none" & ///
+        inlist(statistic, "annual_count", "quarterly_count")
+    keep metric_id period_type period_year period_quarter event_type sex ///
+        age_group statistic period_month
+    quietly count
+    if r(N) {
+        generate double __comparator_source_period = period_year * 100 + ///
+            cond(period_type == "quarterly", 50 + period_quarter, 99)
+        generate long __source_row = _n
+        expand 5
+        bysort __source_row: generate byte __comparator_offset = _n
+        replace period_year = period_year + __comparator_offset
+        replace statistic = "annual_previous_5yr_mean" if statistic == "annual_count"
+        replace statistic = "quarterly_same_quarter_previous_5yr_mean" ///
+            if statistic == "quarterly_count"
+        duplicates drop metric_id period_type period_year period_quarter ///
+            event_type sex age_group statistic, force
+    }
+    else {
+        * An empty risk set is valid: create the merge field without asking
+        * Stata to generate an observation-level offset in a zero-row dataset.
+        generate double __comparator_source_period = .
+    }
+    save `"`comparator_risk'"', replace
+restore
+
+merge m:1 metric_id period_type period_year period_quarter event_type sex ///
+    age_group statistic using `"`comparator_risk'"', keep(master match) nogen
+generate byte __comparator_derived_flag = !missing(__comparator_source_period) & ///
+    suppression_status == "none" & ///
+    inlist(statistic, "annual_previous_5yr_mean", ///
+    "quarterly_same_quarter_previous_5yr_mean")
+replace step5_derived_flag = 1 if __comparator_derived_flag == 1
+replace __equation_id = "ROLLING-" + string(period_year, "%04.0f") if ///
+    __comparator_derived_flag == 1
+replace __equation_description = ///
+    "Rolling five-year comparator includes a protected count." if ///
+    __comparator_derived_flag == 1
+replace __equation_source_period = __comparator_source_period if ///
+    __comparator_derived_flag == 1
+replace suppression_status = "derived" if __comparator_derived_flag == 1
 
 * DERIVED DISTRIBUTIONS
 *
@@ -414,7 +637,7 @@ replace suppression_status = "secondary" if step5_complementary_flag == 1
 * otherwise reveal the protected percentage because the pair sums to 100.
 *
 * The checks are deliberately separate for sex, event type and age so that a
-* protected AMI-by-sex cell cannot spread into unrelated age distributions.
+* protected Heart-by-sex cell cannot spread into unrelated age distributions.
 generate byte __protected_count = ///
     inlist(statistic, "annual_count", "quarterly_count") & ///
     suppression_status != "none"
@@ -426,10 +649,10 @@ bysort period_year event_type: egen byte __sex_panel_protected = ///
 replace step5_derived_flag = 1 if statistic == "sex_distribution" & ///
     __sex_panel_protected == 1
 
-* Event-type distributions use annual AMI and stroke totals for both sexes.
+* Event-type distributions use annual Heart and Stroke totals for both sexes.
 bysort period_year: egen byte __event_panel_protected = ///
     max(__protected_count & period_type == "annual" & sex == "all" & ///
-        age_group == "all" & inlist(event_type, "ami", "stroke"))
+        age_group == "all" & inlist(event_type, "heart", "stroke"))
 replace step5_derived_flag = 1 if statistic == "event_type_distribution" & ///
     __event_panel_protected == 1
 
@@ -533,6 +756,8 @@ local linked_misclassified = r(N)
 replace value = .       if suppression_status != "none"
 replace numerator = .   if suppression_status != "none"
 replace denominator = . if suppression_status != "none"
+replace linkage_lower_value = . if suppression_status != "none"
+replace linkage_upper_value = . if suppression_status != "none"
 
 * Internal Step 4 review fields must not travel into the public candidate.
 * Their purpose has been converted into suppression_status and suppression_note.
@@ -545,9 +770,11 @@ drop primary_suppression_threshold primary_suppression ///
 * suppression were applied to the intended panels. They are removed only
 * after all checks have passed, immediately before the candidate is saved.
 
-order metric_id release_id period_type period period_start period_year ///
+order schema_version metric_id release_id period_type period period_start period_year ///
     period_month period_quarter period_complete event_type sex age_group ///
-    source_status statistic value display_value unit numerator denominator ///
+    source_status ascertainment_scope mortality_definition estimate_basis ///
+    statistic value display_value unit numerator denominator ///
+    linkage_lower_value linkage_upper_value ///
     comparison_n status_flag sdc_policy step4_primary_flag step4_related_flag ///
     previous_release_id previous_release_found previous_value ///
     temporal_increment temporal_check step5_temporal_flag ///
@@ -573,6 +800,45 @@ label variable step5_temporal_flag "Step 5 temporal disclosure flag"
 label variable step5_complementary_flag "Step 5 complementary disclosure flag"
 label variable step5_derived_flag "Step 5 derived-value disclosure flag"
 
+* The audit contains only disclosure structure, not exact values.  It records
+* each equation that required a deterministic complementary or comparator
+* decision so a reviewer can trace the protection route without recreating it.
+preserve
+    keep if __equation_id != ""
+    keep __equation_id __equation_description __equation_source_period ///
+        metric_id release_id period_type period period_year period_month ///
+        period_quarter event_type sex age_group statistic suppression_status
+    rename __equation_id equation_id
+    rename __equation_description equation_description
+    rename __equation_source_period protected_source_period
+    rename period complementary_period
+    rename statistic complementary_statistic
+    rename suppression_status final_public_status
+    order equation_id equation_description protected_source_period ///
+        metric_id release_id period_type complementary_period period_year ///
+        period_month period_quarter event_type sex age_group ///
+        complementary_statistic final_public_status
+    sort equation_id complementary_period complementary_statistic
+    save `"`disclosure_equation_audit_dta'"', replace
+restore
+
+* Keep a complete, private row-level audit separate from the public candidate.
+* It contains disclosure provenance but no current exact metric values; the
+* review controller joins it to the private Step 4 dataset by a stable private
+* row identifier when building the reviewer workbook.
+preserve
+    keep __private_row_id metric_id release_id period_type period period_start period_year ///
+        period_month period_quarter period_complete event_type ///
+        sex age_group statistic step4_primary_flag step4_related_flag ///
+        previous_release_id previous_release_found previous_value ///
+        temporal_increment temporal_check step5_temporal_flag ///
+        step5_complementary_flag step5_derived_flag suppression_status ///
+        disclosure_note suppression_note
+    isid __private_row_id
+    sort __private_row_id
+    save `"`disclosure_row_audit_dta'"', replace
+restore
+
 notes _dta: package_status: review_candidate
 notes _dta: disclosure_policy: bnr_sdc_v1
 notes _dta: suppressed_rows_retain_categories: true
@@ -580,6 +846,38 @@ notes _dta: suppressed_exact_numeric_fields_removed: true
 notes _dta: observable_contract: use suppression_status; do not infer suppression from missing value
 notes _dta: disclosure_note_contract: every row contains a plain-language disclosure note
 notes _dta: age_scope: age-specific rows are annual all-CVD only
+
+* Recheck the final candidate before writing QA.  Each populated equation must
+* have either no protected term or at least two; exactly one is reconstructable.
+generate byte __mq_member = event_type == "all_cvd" & sex == "all" & ///
+    age_group == "all" & ///
+    ((period_type == "monthly" & statistic == "monthly_count") | ///
+     (period_type == "quarterly" & statistic == "quarterly_count"))
+bysort period_year period_quarter: egen byte __mq_member_n = total(__mq_member)
+bysort period_year period_quarter: egen byte __mq_protected_n = ///
+    total(__mq_member & suppression_status != "none")
+quietly count if __mq_member_n == 4 & __mq_protected_n == 1
+local open_monthly_quarter_equations = r(N)
+
+generate byte __qa_member = event_type == "all_cvd" & sex == "all" & ///
+    age_group == "all" & ///
+    ((period_type == "quarterly" & statistic == "quarterly_count") | ///
+     (period_type == "annual" & statistic == "annual_count"))
+bysort period_year: egen byte __qa_member_n = total(__qa_member)
+bysort period_year: egen byte __qa_protected_n = ///
+    total(__qa_member & suppression_status != "none")
+quietly count if __qa_member_n == 5 & __qa_protected_n == 1
+local open_quarterly_annual_equations = r(N)
+
+generate byte __ma_member = event_type == "all_cvd" & sex == "all" & ///
+    age_group == "all" & ///
+    ((period_type == "monthly" & statistic == "monthly_count") | ///
+     (period_type == "annual" & statistic == "annual_count"))
+bysort period_year: egen byte __ma_member_n = total(__ma_member)
+bysort period_year: egen byte __ma_protected_n = ///
+    total(__ma_member & suppression_status != "none")
+quietly count if __ma_member_n == 13 & __ma_protected_n == 1
+local open_monthly_annual_equations = r(N)
 
 * ---------------------------------------------------------------------------
 * 6. DISCLOSURE QA
@@ -618,11 +916,18 @@ local result = cond(`linked_misclassified' == 0, "PASS", "FAIL")
 post `qa_handle' ("Linked suppression applied") ("`result'") ///
     ("Every Step 4 linked-risk row was suppressed")
 
+local open_time_equations = `open_monthly_quarter_equations' + ///
+    `open_quarterly_annual_equations' + `open_monthly_annual_equations'
+local result = cond(`open_time_equations' == 0, "PASS", "FAIL")
+post `qa_handle' ("Cross-frequency equation closure") ("`result'") ///
+    ("No monthly-quarterly or annual equation has exactly one protected term")
+
 quietly count if suppression_status != "none" & ///
-    (!missing(value) | !missing(numerator) | !missing(denominator))
+    (!missing(value) | !missing(numerator) | !missing(denominator) | ///
+    !missing(linkage_lower_value) | !missing(linkage_upper_value))
 local result = cond(r(N) == 0, "PASS", "FAIL")
 post `qa_handle' ("Suppressed numeric fields blank") ("`result'") ///
-    ("No suppressed row retains value, numerator or denominator")
+    ("No suppressed row retains values, components or linkage bounds")
 
 quietly count if suppression_status != "none" & display_value != "*"
 local result = cond(r(N) == 0, "PASS", "FAIL")
@@ -641,11 +946,11 @@ post `qa_handle' ("Complementary suppression separation") ("`result'") ///
 
 quietly count if __protected_panel == 1 & ///
     inlist(statistic, "annual_count", "quarterly_count") & ///
-    inlist(event_type, "ami", "stroke") & ///
+    inlist(event_type, "heart", "stroke") & ///
     inlist(sex, "female", "male") & suppression_status == "none"
 local result = cond(r(N) == 0, "PASS", "FAIL")
 post `qa_handle' ("Protected panels fully suppressed") ("`result'") ///
-    ("All four AMI/stroke sex-specific cells are suppressed in every protected panel")
+    ("All four Heart/Stroke sex-specific cells are suppressed in every protected panel")
 
 quietly count if step5_temporal_flag == 1 & suppression_status == "none"
 local result = cond(r(N) == 0, "PASS", "FAIL")
@@ -681,8 +986,8 @@ foreach variable of local private_flags {
     if !_rc local private_flag_found 1
 }
 local result = cond(`private_flag_found' == 0, "PASS", "FAIL")
-post `qa_handle' ("Private review fields removed") ("`result'") ///
-    ("Internal Step 4 suppression fields are absent from the review candidate")
+post `qa_handle' ("Step 4 input fields removed") ("`result'") ///
+    ("Raw Step 4 suppression inputs are absent before the public projection is saved")
 
 local identifier_found 0
 foreach identifier in eid recid patid fname lname name dob address telephone ///
@@ -710,9 +1015,47 @@ if `failed_checks' {
 * The QA checks above have now finished using these internal helper variables.
 * Remove them before the review candidate is saved so that they do not enter
 * the handover dataset or any later publication output.
+capture drop __source_row __comparator_offset
 drop __protected_interior __protected_panel ///
-    __temporal_candidate __period_start __protected_count ///
-    __sex_panel_protected __event_panel_protected __age_panel_protected
+    __private_row_id __temporal_candidate __period_start __protected_count ///
+    __sex_panel_protected __event_panel_protected __age_panel_protected ///
+    __time_complementary_flag __equation_id __equation_description ///
+    __equation_source_period __time_period_code __comparator_source_period ///
+    __comparator_derived_flag ///
+    __mq_member __mq_member_n __mq_protected_n ///
+    __qa_member __qa_member_n __qa_protected_n ///
+    __ma_member __ma_member_n __ma_protected_n
+
+* Public candidate projection: the row-level disclosure provenance belongs in
+* step5_row_audit.dta, never in a review candidate or public-ready payload.
+drop step4_primary_flag step4_related_flag ///
+    previous_release_id previous_release_found previous_value ///
+    temporal_increment temporal_check step5_temporal_flag ///
+    step5_complementary_flag step5_derived_flag
+
+local nonpublic_candidate_fields step4_primary_flag step4_related_flag ///
+    previous_release_id previous_release_found previous_value ///
+    temporal_increment temporal_check step5_temporal_flag ///
+    step5_complementary_flag step5_derived_flag __source_row ///
+    __comparator_offset __private_row_id
+foreach variable of local nonpublic_candidate_fields {
+    capture confirm variable `variable'
+    if !_rc {
+        display as error "Internal disclosure field remains in public candidate: `variable'"
+        exit 459
+    }
+}
+
+preserve
+    use `"`disclosure_qa_dta'"', clear
+    local qa_rows = _N + 1
+    set obs `qa_rows'
+    replace check = "Public-candidate projection" in L
+    replace result = "PASS" in L
+    replace detail = ///
+        "Internal disclosure provenance is retained only in the private row audit." in L
+    save `"`disclosure_qa_dta'"', replace
+restore
 
 * ---------------------------------------------------------------------------
 * 7. SAVE THE REVIEW CANDIDATE ONLY AFTER ALL QA CHECKS PASS

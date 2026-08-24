@@ -1,7 +1,7 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_step4_metrics.do
- VERSION:     2.2.1 (30 July 2026)
+VERSION:     2.3.0 (24 August 2026)
  PROJECT:     BNR Refit Phase 2
  PURPOSE:     Calculate the CVD burden metrics and create a private staging package
 
@@ -87,7 +87,8 @@ if "$BNR_STATA" == "" {
     }
 }
 
-foreach path_name in BNR_STATA BNR_PRIVATE BNR_STAGING BNR_DATA_DERIVED BNR_PRIVATE_LOGS {
+foreach path_name in BNR_STATA BNR_PRIVATE BNR_STAGING BNR_PUBLIC ///
+        BNR_DATA_DERIVED BNR_PRIVATE_LOGS {
     if "$`path_name'" == "" {
         display as error "Required path is not configured: `path_name'"
         exit 198
@@ -146,7 +147,7 @@ log using `"`private_log'"', text replace name(step4)
 quietly {
 
 noisily display as text "BNR CVD STEP 4: METRIC CALCULATION AND STAGING"
-noisily display as result "  Script version:       2.2.1"
+noisily display as result "  Script version:       2.3.0"
 noisily display as result "  Selected release:     `selected_release'"
 noisily display as result "  Metric family:        burden"
 noisily display as result "  Replace authorised:    " cond(`replace_existing', "yes", "no")
@@ -256,7 +257,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 4: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             Completed successfully"
-noisily display as text   "  Script version:         2.2.1"
+noisily display as text   "  Script version:         2.3.0"
 noisily display as text   "  Selected release:       `selected_release'"
 noisily display as text   "  Metric family:          burden"
 noisily display as text   "  Metric rows:            `metric_rows_display'"

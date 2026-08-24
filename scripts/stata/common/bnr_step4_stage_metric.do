@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step4_stage_metric.do
-VERSION:     1.4.1 (12 August 2026)
+VERSION:     1.5.0 (24 August 2026)
 PROJECT:     BNR Refit Phase 2
 PURPOSE:     Create a standard staging-only metric review package
 
@@ -109,11 +109,31 @@ local required_variables metric_id release_id period_type period period_start //
     status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells related_suppression_review ///
     suppression_review suppression_reason
+if "`domain'" == "cvd" {
+    local required_variables `required_variables' schema_version ///
+        ascertainment_scope mortality_definition estimate_basis ///
+        linkage_lower_value linkage_upper_value
+}
 foreach variable of local required_variables {
     capture confirm variable `variable'
     if _rc {
         display as error "Aggregate metric variable is absent: `variable'"
         exit 111
+    }
+}
+
+if "`domain'" == "cvd" {
+    quietly count if schema_version != "bnr_cvd_public_metric_v2"
+    if r(N) {
+        display as error "CVD staging requires the approved public metric schema v2."
+        exit 459
+    }
+    quietly count if period_type == "monthly" & ///
+        !(metric_id == "CVD-BURDEN-001" & statistic == "monthly_count" & ///
+          event_type == "all_cvd" & sex == "all" & age_group == "all")
+    if r(N) {
+        display as error "A CVD monthly row falls outside the approved public lattice."
+        exit 459
     }
 }
 
@@ -198,7 +218,7 @@ post `dictionary_handle' ("release_id") ("string") ("Selected CVD release identi
 post `dictionary_handle' ("period_type") ("string") ("Time resolution of the result.") ("Assess time series")
 post `dictionary_handle' ("period") ("string") ("Human-readable reporting period.") ("Locate result")
 post `dictionary_handle' ("period_complete") ("0 or 1") ("Whether the reporting period is complete; current quarter/year can be 0 at a monthly extract.") ("Label period-to-date")
-post `dictionary_handle' ("event_type") ("string") ("CVD event grouping, for example AMI or stroke.") ("Check disclosure context")
+post `dictionary_handle' ("event_type") ("string") ("CVD event grouping, for example Heart or Stroke.") ("Check disclosure context")
 post `dictionary_handle' ("sex") ("string") ("Sex stratum represented by the row.") ("Check subtraction risk")
 post `dictionary_handle' ("age_group") ("string") ("Age stratum represented by the row: all, under_70 or age_70_plus.") ("Check disclosure context")
 post `dictionary_handle' ("statistic") ("string") ("Statistic or output row type.") ("Interpret result")
@@ -223,7 +243,9 @@ foreach dataset_id in `release_dataset' `current_dataset' {
     local yml_path "`metadata_dir'/`dataset_id'.yml"
     tempname dataset_yml
     file open `dataset_yml' using `"`yml_path'"', write text replace
-    file write `dataset_yml' "schema: bnr_metric_dataset_v1" _n
+    local staging_schema "bnr_metric_dataset_v1"
+    if "`domain'" == "cvd" local staging_schema "bnr_cvd_public_metric_v2"
+    file write `dataset_yml' "schema: `staging_schema'" _n
     file write `dataset_yml' "dataset_id: `dataset_id'" _n
     file write `dataset_yml' "package_status: staging" _n
     file write `dataset_yml' "domain: `domain'" _n
@@ -249,12 +271,19 @@ foreach dataset_id in `release_dataset' `current_dataset' {
     file write `dataset_yml' "unit_of_analysis: aggregate_metric_row" _n
     file write `dataset_yml' "individual_level_data: false" _n
     file write `dataset_yml' "human_review_required: true" _n
+    if "`domain'" == "cvd" {
+        file write `dataset_yml' "monthly_public_scope: all_cvd_all_sexes_all_ages_only" _n
+        file write `dataset_yml' "monthly_rolling_comparator_included: false" _n
+        file write `dataset_yml' "monthly_historical_reference: cvd_monthly_reference_2015_2019" _n
+    }
     file close `dataset_yml'
 }
 
 tempname package_meta
 file open `package_meta' using `"`package_yml'"', write text replace
-file write `package_meta' "schema: bnr_metric_package_v1" _n
+local package_schema "bnr_metric_package_v1"
+if "`domain'" == "cvd" local package_schema "bnr_cvd_public_metric_package_v2"
+file write `package_meta' "schema: `package_schema'" _n
 file write `package_meta' "package_id: `domain'_`metric_family'_`release_id'" _n
 file write `package_meta' "package_status: staging" _n
 file write `package_meta' "domain: `domain'" _n
