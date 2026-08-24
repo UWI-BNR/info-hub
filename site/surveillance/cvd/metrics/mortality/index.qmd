@@ -75,6 +75,32 @@ execute:
 .bnr-quality-medium { background: #ffe7a8; color: #6b5600; }
 .bnr-quality-high { background: #f3c6cc; color: #842029; }
 .bnr-quality-unavailable { color: #b7bec3; }
+.bnr-quality-era-row th { font-size: .76rem !important; font-weight: 650 !important; color: #44515a !important; padding-top: .2rem !important; padding-bottom: .25rem !important; }
+.bnr-coverage-table .bnr-quality-era-old { background: #f5f6f7 !important; border-radius: .22rem; }
+.bnr-coverage-table .bnr-quality-era-new { background: #eef4f7 !important; border-radius: .22rem; }
+.bnr-coverage-table .bnr-quality-era-start { border-left: 2px solid #8aa6b4 !important; }
+.bnr-quality-value { cursor: help; }
+.bnr-quality-hover-detail {
+  height: 2.15rem;
+  margin: .28rem 0 .38rem;
+  padding: .38rem .55rem;
+  border: 1px solid #dce4e8;
+  border-radius: .3rem;
+  background: #f7f9fa;
+  color: #52616b;
+  font-size: .82rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.bnr-quality-hover-active {
+  color: #25333b;
+  font-weight: 600;
+  background: #f2f6f8;
+}
 .bnr-data-tabs { display: flex; align-items: end; gap: .15rem; border-bottom: 1px solid #dee2e6; margin: .25rem 0 .55rem; }
 .bnr-data-tab { display: inline-block; padding: .38rem .7rem; border: 1px solid transparent; border-bottom: 0; border-radius: .3rem .3rem 0 0; text-decoration: none !important; font-weight: 600; font-size: .9rem; }
 .bnr-data-tab-active { background: #fff; border-color: #dee2e6; color: #2c3e50; margin-bottom: -1px; }
@@ -920,11 +946,11 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
 }
 ```
 
-## Quality {height=410}
+## Possible deaths {height=525}
 
 ```{ojs}
 //| echo: false
-// This matrix is a deliberately permitted presentation-derived quality measure.
+// This matrix is a deliberately permitted presentation-derived measure.
 // For each year and CVD type, it subtracts the published Primary annual count from
 // the published Inclusive annual count, then expresses that difference as a share
 // of the Inclusive annual count so All CVD, Heart and Stroke are directly comparable.
@@ -944,6 +970,8 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const years = lastYear === null || lastYear < 2010
     ? []
     : Array.from({length: lastYear - 2010 + 1}, (_, i) => 2010 + i)
+  const yearsBefore2018 = years.filter(year => year < 2018)
+  const yearsFrom2018 = years.filter(year => year >= 2018)
   const events = [
     {key: "all_cvd", label: "All CVD"},
     {key: "heart", label: "Heart"},
@@ -972,33 +1000,72 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       "background:#f3c6cc;color:#842029;"
   }
   const qualityPercent = x => `${qualityRounded(x)}%`
+  const yearCellClass = year => year === 2018 ? "bnr-quality-era-start" : ""
 
-  return html`<div class="bnr-definition-panel">
-    <div class="bnr-section-title">Possible deaths - quality measure</div>
-    <p class="bnr-trend-note">Each cell shows deaths included only in the <strong>Inclusive</strong> definition as a percentage of that Inclusive annual count. This standardises the measure so All CVD, Heart and Stroke can be compared directly. Hover over a cell to see the underlying number of Possible-only deaths.</p>
+  const qualityPanel = html`<div class="bnr-definition-panel">
+    <div class="bnr-section-title">How much does the estimate rely on Possible deaths?</div>
+    <p class="bnr-trend-note">Each number is the percentage of deaths in the <strong>Inclusive</strong> estimate that are not in the <strong>Primary</strong> estimate. In simple terms, it shows how much the estimate depends on deaths classified as <strong>Possible</strong>. Hover over a number to see the death counts behind the percentage.</p>
     <div class="bnr-quality-key">
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20</span>
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20-29</span>
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30+</span>
     </div>
     <div class="bnr-coverage-scroll">
-      <table class="bnr-coverage-table" aria-label="Possible-only CVD deaths as a percentage of Inclusive annual deaths by year and CVD type">
-        <thead><tr><th></th>${years.map(year => html`<th scope="col">${year}</th>`)}</tr></thead>
+      <table class="bnr-coverage-table" aria-label="Deaths classified as Possible as a percentage of Inclusive annual deaths by year and CVD type">
+        <thead>
+          <tr class="bnr-quality-era-row">
+            <th></th>
+            ${yearsBefore2018.length ? html`<th colspan=${yearsBefore2018.length} class="bnr-quality-era-old">2010-2017 · causes stored together</th>` : ""}
+            ${yearsFrom2018.length ? html`<th colspan=${yearsFrom2018.length} class="bnr-quality-era-new bnr-quality-era-start">2018 onward · certificate lines stored separately</th>` : ""}
+          </tr>
+          <tr><th></th>${years.map(year => html`<th scope="col" class=${yearCellClass(year)}>${year}</th>`)}</tr>
+        </thead>
         <tbody>
           ${events.map(event => html`<tr>
             <th scope="row" class="bnr-coverage-label">${event.label}</th>
             ${years.map(year => {
               const result = possibleOnly(event.key, year)
+              const eraClass = yearCellClass(year)
               return result
-                ? html`<td class="bnr-coverage-cell bnr-quality-cell" title=${`${event.label}: ${year} · ${qualityPercent(result.possibleShare)} of Inclusive deaths were Possible-only · ${formatNumber(result.difference)} deaths (Inclusive ${formatNumber(result.inclusive)} minus Primary ${formatNumber(result.primary)})`}><span class="bnr-quality-value" style=${qualityStyle(result.possibleShare)}>${qualityRounded(result.possibleShare)}</span></td>`
-                : html`<td class="bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable" title=${`${event.label}: ${year} · quality measure unavailable`}>-</td>`
+                ? html`<td class=${`bnr-coverage-cell bnr-quality-cell ${eraClass}`}><span class="bnr-quality-value" style=${qualityStyle(result.possibleShare)} data-event=${event.key} data-year=${year} tabindex="0">${qualityRounded(result.possibleShare)}</span></td>`
+                : html`<td class=${`bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable ${eraClass}`}>-</td>`
             })}
           </tr>`)}
         </tbody>
       </table>
     </div>
-    <div class="bnr-note-box"><strong>How to use this:</strong> Lower percentages mean less reliance on the Possible classification. Values are rounded to the nearest whole percentage. The green, amber and red bands indicate lower (&lt;20), moderate (20-29) and higher (30+) reliance on Possible classifications; they are pragmatic visual flags, not formal quality standards. Protected or incomplete source values are never reconstructed.</div>
+    <div class="bnr-quality-hover-detail">Hover over a number to see the death counts behind that percentage.</div>
+    <div class="bnr-note-box"><strong>Why 2018 and later look different:</strong> Before 2018, causes of death were usually stored together in one text field, so the original order on the death certificate was not available. From 2018, the certificate lines were stored separately. This lets BNR show uncertainty more clearly, so more deaths can appear as Possible. A higher percentage after 2018 does <strong>not</strong> necessarily mean that the data became worse. Values before and after 2018 should therefore be compared with care. The colours show lower, moderate and higher percentages only; they are not a judgement of data quality.</div>
   </div>`
+
+  const hoverDetail = qualityPanel.querySelector(".bnr-quality-hover-detail")
+  const resetHoverDetail = () => {
+    hoverDetail.textContent = "Hover over a number to see the death counts behind that percentage."
+    hoverDetail.classList.remove("bnr-quality-hover-active")
+  }
+
+  qualityPanel.querySelectorAll(".bnr-quality-value[data-event][data-year]").forEach(cell => {
+    const showHoverDetail = () => {
+      const eventType = cell.getAttribute("data-event")
+      const year = Number(cell.getAttribute("data-year"))
+      const event = events.find(item => item.key === eventType)
+      const result = possibleOnly(eventType, year)
+
+      if (!event || !result) {
+        resetHoverDetail()
+        return
+      }
+
+      hoverDetail.textContent = `${event.label}, ${year} (difference ${qualityPercent(result.possibleShare)}) · Total Inclusive deaths: ${formatNumber(result.inclusive)} · Clear + Likely: ${formatNumber(result.primary)} · Possible: ${formatNumber(result.difference)}`
+      hoverDetail.classList.add("bnr-quality-hover-active")
+    }
+    cell.addEventListener("mouseenter", showHoverDetail)
+    cell.addEventListener("focus", showHoverDetail)
+    cell.addEventListener("mouseleave", resetHoverDetail)
+    cell.addEventListener("blur", resetHoverDetail)
+  })
+
+  return qualityPanel
 }
 ```
 
