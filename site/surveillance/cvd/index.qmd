@@ -45,7 +45,7 @@ The Barbados National Registry monitors major cardiovascular events, including s
 Explore the latest BNR CVD dashboard, updated weekly.
 
 ::: {.bnr-utility-links}
-[Live CVD surveillance](./metrics/burden/index.qmd){.btn .btn-outline-primary}
+[Latest CVD events](./metrics/burden/index.qmd){.btn .btn-outline-primary} [Latest CVD deaths](./metrics/mortality/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::
