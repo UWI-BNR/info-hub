@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: test_bnr_cvd_stage5_expanded_stage5_structural_secondary.do
-VERSION: 0.6.0 (26 August 2026)
+VERSION: 0.6.1 (27 August 2026)
 PURPOSE: Synthetic test for structural secondary flags.
 *******************************************************************************/
 
@@ -8,14 +8,14 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 Stage 5 structural-secondary test v0.6.0"
+display as result "Running expanded CVD Step 5 Stage 5 structural-secondary test v0.6.1"
 
 if "$BNR_STATA" == "" exit 198
 local helper_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do"
 capture confirm file "`helper_path'"
 assert _rc == 0
 
-tempfile primary_input support_input closure_output qa_output
+tempfile primary_input support_input closure_output qa_output empty_support_input empty_closure_output empty_qa_output
 
 clear
 set obs 4
@@ -59,6 +59,27 @@ quietly count if event_type == "stroke" & ascertainment_scope == "hospital_only"
 assert r(N) == 1
 
 use "`qa_output'", clear
+assert _N == 4
+assert result == "PASS"
+
+clear
+set obs 1
+generate str20 mortality_definition = "primary"
+generate int period_year = 2099
+generate str20 event_type = "heart"
+generate str8 sex = "female"
+generate double dco_lower_component_n = 0
+generate double dco_central_component_n = 0
+generate double dco_upper_component_n = 0
+save "`empty_support_input'", replace
+
+do "`helper_path'" "`primary_input'" "`empty_support_input'" "`empty_closure_output'" "`empty_qa_output'" "cvd_2099_01"
+
+use "`empty_closure_output'", clear
+quietly count if stage5_structural_secondary == 1
+assert r(N) == 0
+
+use "`empty_qa_output'", clear
 assert _N == 4
 assert result == "PASS"
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do
-VERSION: 0.6.0 (26 August 2026)
+VERSION: 0.6.1 (27 August 2026)
 PURPOSE: Flag structural secondary suppression for private DCO residuals.
 
 Policy in this limited block:
@@ -16,7 +16,7 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 Stage 5 structural-secondary helper v0.6.0"
+display as result "Running expanded CVD Step 5 Stage 5 structural-secondary helper v0.6.1"
 
 args primary_private_dta support_dta closure_private_dta qa_dta release_id
 
@@ -41,15 +41,35 @@ foreach variable of local support_required {
 * Unknown-sex residual: any non-zero component requires a male companion.
 preserve
 keep if sex == "unknown"
-generate byte stage5_unknown_support_present = dco_lower_component_n > 0 | dco_central_component_n > 0 | dco_upper_component_n > 0
-collapse (max) stage5_unknown_support_present, by(mortality_definition period_year event_type)
+quietly count
+if r(N) == 0 {
+    clear
+    generate str20 mortality_definition = ""
+    generate int period_year = .
+    generate str20 event_type = ""
+    generate byte stage5_unknown_support_present = .
+}
+else {
+    generate byte stage5_unknown_support_present = dco_lower_component_n > 0 | dco_central_component_n > 0 | dco_upper_component_n > 0
+    collapse (max) stage5_unknown_support_present, by(mortality_definition period_year event_type)
+}
 save "`unknown_support'", replace
 restore
 
 * Mixed subtype residual: any non-zero component requires a Stroke companion.
 keep if event_type == "mixed_unallocated"
-generate byte stage5_mixed_support_present = dco_lower_component_n > 0 | dco_central_component_n > 0 | dco_upper_component_n > 0
-collapse (max) stage5_mixed_support_present, by(mortality_definition period_year sex)
+quietly count
+if r(N) == 0 {
+    clear
+    generate str20 mortality_definition = ""
+    generate int period_year = .
+    generate str8 sex = ""
+    generate byte stage5_mixed_support_present = .
+}
+else {
+    generate byte stage5_mixed_support_present = dco_lower_component_n > 0 | dco_central_component_n > 0 | dco_upper_component_n > 0
+    collapse (max) stage5_mixed_support_present, by(mortality_definition period_year sex)
+}
 save "`mixed_support'", replace
 
 use "`primary_private_dta'", clear
