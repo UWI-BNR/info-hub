@@ -81,7 +81,7 @@ do "$BNR_STATA/metrics/cvd/bnr_cvd_run_unresolved_estimation.do" 2024 04 2026 07
 
 Both outputs are private, in:
 
-`$BNR_PRIVATE/data/derived/cvd_linkage/y2024/m04/mort_y2026_m07/`
+`$BNR_PRIVATE/data/derived/cvd/y2024/m04/linkage/mort_y2026_m07/`
 
 - `stage4_unresolved_estimation_cvd_2024_04_mort_2026_07.dta` — private annual
   aggregate components and estimation provenance. Do **not** upload it.

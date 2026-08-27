@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step6_publish_expanded_cvd.do
-VERSION: 3.0.0 (27 August 2026)
+VERSION: 3.1.0 (27 August 2026)
 PURPOSE: Verify and publish an approved combined CVD package.
 USAGE:   do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2024 4
 *******************************************************************************/
@@ -32,6 +32,7 @@ local source_meta "`ready'/metadata"
 local public "$BNR_PUBLIC/metrics/cvd"
 local public_meta "`public'/metadata"
 local public_releases "`public'/releases"
+local public_catalogue "`public'/catalogue"
 local site "$BNR_REPO/site/downloads/files/metrics/cvd"
 local site_releases "`site'/releases"
 local site_catalogue "`site'/catalogue"
@@ -44,7 +45,7 @@ local current_yml "cvd_metrics_current.yml"
 local package_yml "metric_package.yml"
 local zip_name "cvd_metrics_`release_id'.zip"
 local public_zip "`public_releases'/`zip_name'"
-local catalogue "`public_releases'/`release_id'.yml"
+local catalogue "`public_catalogue'/`release_id'.yml"
 
 foreach required_file in manifest approval {
     capture confirm file "``required_file''"
@@ -57,6 +58,7 @@ local family_ok 0
 local promotion_ok 0
 local approved_size .
 local approved_checksum .
+local approved_date ""
 tempname approval_handle
 file open `approval_handle' using "`approval'", read text
 file read `approval_handle' line
@@ -66,13 +68,14 @@ while r(eof) == 0 {
     if "`line'" == "release_id: `release_id'" local release_ok 1
     if "`line'" == "metric_family: combined_cvd_metrics" local family_ok 1
     if "`line'" == "promotion_status: pending_step_6" local promotion_ok 1
+    if strpos("`line'", "approved_date:") == 1 local approved_date = strtrim(substr("`line'", 15, .))
     if strpos("`line'", "manifest_size:") == 1 local approved_size = real(strtrim(substr("`line'", 15, .)))
     if strpos("`line'", "manifest_checksum:") == 1 local approved_checksum = real(strtrim(substr("`line'", 19, .)))
     file read `approval_handle' line
 }
 file close `approval_handle'
 quietly checksum "`manifest'"
-if !`status_ok' | !`release_ok' | !`family_ok' | !`promotion_ok' | r(filelen) != `approved_size' | r(checksum) != `approved_checksum' exit 459
+if !`status_ok' | !`release_ok' | !`family_ok' | !`promotion_ok' | "`approved_date'" == "" | r(filelen) != `approved_size' | r(checksum) != `approved_checksum' exit 459
 
 import delimited using "`manifest'", varnames(1) clear
 foreach variable in file_path file_size checksum {
@@ -91,6 +94,7 @@ capture mkdir "$BNR_PRIVATE_LOGS"
 capture mkdir "`public'"
 capture mkdir "`public_meta'"
 capture mkdir "`public_releases'"
+capture mkdir "`public_catalogue'"
 capture mkdir "`site'"
 capture mkdir "`site_releases'"
 capture mkdir "`site_catalogue'"
@@ -113,12 +117,32 @@ cd "`original_folder'"
 tempname catalogue_handle
 file open `catalogue_handle' using "`catalogue'", write text replace
 file write `catalogue_handle' "schema: bnr_download_manifest_v1" _n
+file write `catalogue_handle' "package_type: metric" _n
 file write `catalogue_handle' "package_id: `package_id'" _n
 file write `catalogue_handle' "release_id: `release_id'" _n
+file write `catalogue_handle' "surveillance_area: CVD" _n
 file write `catalogue_handle' "domain: cvd" _n
 file write `catalogue_handle' "metric_family: combined_cvd_metrics" _n
-file write `catalogue_handle' "file: `zip_name'" _n
-file write `catalogue_handle' "include_in_listing: true" _n
+file write `catalogue_handle' "period: `release_id'" _n
+file write `catalogue_handle' "release_date: `approved_date'" _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "title: |-" _n
+file write `catalogue_handle' "  Combined CVD metrics" _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "description: |-" _n
+file write `catalogue_handle' "  Approved combined CVD burden and annual incidence-rate datasets for `release_id'." _n
+file write `catalogue_handle' "" _n
+file write `catalogue_handle' "downloads:" _n
+file write `catalogue_handle' "  - id: `package_id'_zip" _n
+file write `catalogue_handle' "    title: Full public output package" _n
+file write `catalogue_handle' "    artefact_type: ZIP package" _n
+file write `catalogue_handle' "    format: ZIP" _n
+file write `catalogue_handle' "    file: `zip_name'" _n
+file write `catalogue_handle' "    href: files/metrics/cvd/releases/`zip_name'" _n
+file write `catalogue_handle' "    description: |-" _n
+file write `catalogue_handle' "      Release-stamped and current combined CVD datasets with metadata." _n
+file write `catalogue_handle' "    include_in_listing: true" _n
+file write `catalogue_handle' "    sort_order: 20" _n
 file close `catalogue_handle'
 copy "`public'/`current_csv'" "`site'/`current_csv'", replace
 copy "`public_zip'" "`site_releases'/`zip_name'", replace

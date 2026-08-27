@@ -1,114 +1,48 @@
 {smcl}
-{title:BNR Step 5: Review and approval}
+{title:BNR Step 5: Review and approval of the combined CVD package}
 
 {p 4 4 2}
-{cmd:db bnr_step5_review} opens the Step 5 dialog. Step 5 has two
-separate actions: prepare a disclosure-controlled review package, then record
-approval only after the human review is complete.
+Step 5 has two separate actions: prepare a disclosure-controlled private review
+package, then record approval only after human review is complete.
 
-{title:Metric families}
-
-{p 4 4 2}
-The dialog shows the full planned CVD metric-family menu. At present, only
-{bf:Burden - event counts and distributions} is enabled. Incidence and rates,
-case fatality, length of stay / hospital use, data quality, care performance and
-mortality remain visible but disabled until their Step 4 outputs and
-family-specific disclosure rules are implemented.
-
-{p 4 4 2}
-When further families are enabled, the dialog may prepare or approve several
-selected families in one session, but it will run each family as a separate
-package. Each package keeps its own workbook, fingerprints, approval record and
-eventual Step 6 promotion check.
-
-{title:Prepare syntax}
+{title:Syntax}
 
 {p 8 8 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:burden prepare} [{cmd:replace}]
+{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:prepare} [{cmd:replace}]
 
 {p 8 8 2}
-Example:
-{cmd:. do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 2 burden prepare}
+{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"} [{cmd:replace}]
+
+{title:Prepare}
 
 {p 4 4 2}
-Prepare reads the completed Step 4 private staging package, confirms that Step 4
-QA passed, creates a disclosure-controlled candidate inside {cmd:review/},
-removes exact values from suppressed rows, and creates disclosure QA, a concise
-reviewer workbook and a review-basis fingerprint file. It does not create
-{cmd:public_ready/}, an approval or any public file.
-
-{title:Human review}
-
-{p 4 4 2}
-Open {cmd:review/step5_review.xlsx}. An authorised BNR Lead, BNR Analyst or BNR
-Developer must review analytical plausibility, disclosure control,
-interpretation and publication readiness together.
-
-{p 4 4 2}
-If the package is not satisfactory, do not edit generated files. Correct the
-appropriate earlier source or version-controlled code, rerun from that step,
-then prepare a new Step 5 package.
-
-{title:Approval syntax}
+Prepare reads the completed combined Step 4 package from:
 
 {p 8 8 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:burden approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"}
-
-{p 8 8 2}
-Example:
-{cmd:. do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 2 burden approve "Full name" "BNR Developer"}
+{cmd:$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/}
 
 {p 4 4 2}
-Approval requires a nonblank approver name, rechecks disclosure QA and confirms
-that the reviewed candidate and its authoritative Step 4 sources are unchanged.
-Only then does it create {cmd:public_ready/},
-{cmd:public_ready/public_manifest.csv} and {cmd:public_ready/approval.yml}.
-The release-stamped payload files keep their monthly identity, while stable
-{cmd:current} files support dashboards. Manifest paths are relative to
-{cmd:public_ready/}. The approval records the checksum and size of the manifest
-itself. If a file or the manifest later changes, Step 6 must refuse
-promotion.
-
-{title:Suppression contract}
+It creates a disclosure-controlled candidate and private review material in its
+{cmd:review/} folder. Open {cmd:step5_review.xlsx} first. Its supporting
+sheets show disclosure QA, the equation audit, protected-row worklist and the
+fingerprint register.
 
 {p 4 4 2}
-Suppressed rows remain in the public-ready dataset. Their exact {cmd:value},
-{cmd:numerator} and {cmd:denominator} are missing, {cmd:display_value} is
-{cmd:*}, and {cmd:suppression_status} is {cmd:primary}, {cmd:secondary} or
-{cmd:derived}. Unsuppressed rows use {cmd:none}. Observable must read
-{cmd:suppression_status}; a missing value alone does not mean suppression.
+Prepare creates no {cmd:public_ready/} folder, public file or website file.
+If review identifies a problem, do not edit generated outputs. Correct the
+earlier source or version-controlled code and prepare a new review package.
+
+{title:Approve}
 
 {p 4 4 2}
-Incomplete quarterly and annual disease-specific values are derived-suppressed.
-Otherwise, differencing successive monthly releases could reconstruct the
-disease-specific monthly counts that Step 4 deliberately withholds.
+Approval rechecks the reviewed fingerprints and disclosure QA. Only then does
+it create the immutable {cmd:public_ready/} payload, including release-stamped
+and {cmd:current} datasets, metadata, a seven-file manifest and
+{cmd:approval.yml}. DCO components and other private accounting fields never
+enter that payload.
 
 {title:Boundary}
 
 {p 4 4 2}
-Step 5 never writes to {cmd:outputs/public/}, the website mirror or GitHub.
-Step 6 alone may promote a valid approved {cmd:public_ready/} package.
-
-{title:End-of-run status}
-
-{p 4 4 2}
-Routine Stata commands run quietly. The Results window and private log show a
-short run heading followed by one operational result, rather than the controller
-source code.
-
-{p 4 4 2}
-Every completed action ends with a clearly separated {bf:STEP 5: OPERATIONAL
-RUN SUMMARY}. It appears after all preparation or approval work, immediately
-before the private log closes, so it is the last substantive information in both
-the Results window and the log.
-
-{p 4 4 2}
-For Prepare, start with the file labelled {bf:OPEN THIS FILE FIRST}:
-{cmd:review/step5_review.xlsx}. The same summary then lists the supporting
-candidate, disclosure QA, review record and private log. For Approve, it lists
-the public-ready package, manifest, approval record and private log.
-
-{p 4 4 2}
-A failed action ends with the same {bf:STEP 5: OPERATIONAL RUN SUMMARY}
-heading used by successful runs. It reports {bf:Did not complete}, the action,
-reason, private log and required response.
+Step 5 never writes to {cmd:outputs/public/} or the website mirror. Step 6
+alone may promote the exact approved package.

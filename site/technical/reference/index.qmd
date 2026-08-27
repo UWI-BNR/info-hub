@@ -217,7 +217,7 @@ burden
 CVD events Step 4 staging uses:
 
 ```text
-$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/
+$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/
 ```
 
 See [CVD events workflow](../workflows/dashboards/overview.qmd) for operator instructions.

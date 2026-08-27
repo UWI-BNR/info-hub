@@ -141,11 +141,11 @@ It should not recalculate results, make a new disclosure decision or approve an 
 
 Dashboard Step 6 promotes the approved metric files to:
 
-`$BNR_PUBLIC/metrics/cvd/burden/`
+`$BNR_PUBLIC/metrics/cvd/`
 
 It also refreshes:
 
-`$BNR_REPO/site/downloads/files/metrics/cvd/burden/`
+`$BNR_REPO/site/downloads/files/metrics/cvd/`
 
 The dashboard approval and manifest remain private control files.
 
@@ -156,7 +156,7 @@ display "$BNR_PUBLIC"
 display "$BNR_REPO"
 ```
 
-`$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/burden/` to reach the dashboard website mirror.
+`$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/` to reach the combined-CVD website mirror.
 
 The machine-specific roots are defined in `scripts/stata/config/bnr_paths_LOCAL.do`. See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the full location model.
 
@@ -262,4 +262,3 @@ Use this chapter for the common principles, then follow the exact steps in:
 - [Dashboard Step 5: Review and approve](../workflows/dashboards/approve-metrics.qmd) and [Step 6: Publish](../workflows/dashboards/publish-metrics.qmd)
 - [Tabulations Step 2B: Approve](../workflows/tabulations/approve.qmd) and [Step 3: Publish](../workflows/tabulations/publish.qmd)
 - [Briefing Step 2: Review and approve](../workflows/briefings/approve.qmd) and [Step 3: Publish](../workflows/briefings/publish.qmd)
-

@@ -1,6 +1,6 @@
 ---
-title: "Review and approve CVD event metrics"
-description: "Step 5: prepare the review package, complete the human review and record approval."
+title: "Review and approve combined CVD metrics"
+description: "Step 5: prepare the combined CVD review package, complete human review and record approval."
 date: 2026-08-10
 date-modified: 2026-08-21
 ---
@@ -15,9 +15,9 @@ Step 5 first creates the disclosure-controlled review package. After human revie
 
 | Input | Private location | Purpose |
 |---|---|---|
-| Step 4 metric dataset | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/datasets/` | Private calculated values used for analytical review. |
-| Step 4 QA file | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/review/` | Confirms the Step 4 package passed its automated checks. |
-| Step 4 package metadata | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/metadata/metric_package.yml` | Confirms package identity and provenance. |
+| Step 4 metric datasets | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/datasets/` | Private burden and annual-rate calculation products used for review. |
+| Step 4 DCO component sidecar | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Private evidence for rate suppression; it is never public. |
+| Step 4 QA material | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Confirms the staged package passed automated checks. |
 
 See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of the private staging area and the later `public_ready` boundary.
 
@@ -25,7 +25,7 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
 
 1. **Open Step 5.** In Stata, choose User > BNR > Update CVD dashboard > Step 5: Review and approve package for release.
 2. **Select the release.** Enter the release year and release month.
-3. **Select the action.** Leave Burden selected and choose Prepare the review package.
+3. **Select the action.** Choose Prepare the review package.
 4. **Run prepare.** Leave replacement unticked for a first review and select Run Step 5.
 5. **Open the workbook.** The summary must say `READY FOR HUMAN REVIEW`. Open the file shown beside `OPEN THIS FILE FIRST`.
 
@@ -38,7 +38,7 @@ The reviewer remains responsible for deciding whether the release is analyticall
 
 Start with:
 
-`$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/review/step5_review.xlsx`
+`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/step5_review.xlsx`
 
 Work through the workbook in this order.
 
@@ -47,15 +47,15 @@ Work through the workbook in this order.
 Confirm:
 
 - **Review status** is `READY FOR HUMAN REVIEW`.
-- The **Package**, **Release** and **Metric family** are the ones you intended to review.
-- The private and reviewed-candidate row counts are plausible.
-- The workbook records the expected number of suppressed rows.
+- The **Release** is the one you intended to review.
+- Every result on the **Disclosure QA** and **Equation audit** sheets is `PASS`.
+- The protected-row worklist is plausible and has no visible numeric value in the candidate fields.
 
 If the release identity is wrong, stop. Do not continue the review.
 
-### 2. QA sheet
+### 2. Disclosure QA sheet
 
-This combines the Step 4 calculation QA and Step 5 disclosure QA.
+This is the machine-readable Step 5 disclosure QA.
 
 Check the `result` column. Every automated check should be `PASS`.
 
@@ -65,49 +65,13 @@ The machine-readable Step 5 version is also saved as:
 
 `step5_disclosure_qa.csv`
 
-### 3. Private results sheet
+### 3. Equation audit and protected worklist
 
-These are the unsuppressed analytical results and remain private.
+The equation audit checks burden-count, comparator and rate closure. The worklist
+identifies every protected candidate row. Review both sheets together and
+investigate any unexpected pattern before approval.
 
-Review the values for plausibility:
-
-- expected reporting periods are present and complete;
-- counts and distributions are credible for the selected release;
-- event-type, sex and age breakdowns behave as expected;
-- values do not show unexplained jumps, losses or duplicates compared with the surrounding periods.
-
-This is an analytical review, not just a search for code errors. If a value looks surprising, investigate it before approval.
-
-### 4. Suppression sheet
-
-This sheet contains rows requiring disclosure review and shows the private values beside the disclosure-control decision.
-
-For each row, check:
-
-- `suppression_status` is appropriate;
-- the private value, numerator or denominator explains why the row is being protected;
-- primary and complementary suppression decisions make sense together;
-- where temporal checking is relevant, review the previous release and calculated increment;
-- no apparently disclosive value has been left unrestricted.
-
-The possible final statuses include `primary`, `secondary`, `temporal` and `derived`.
-
-For the general BNR disclosure-control rules, see [Disclosure control](../../controls/disclosure-control.qmd).
-
-### 5. Disclosure audit sheet
-
-Use this as the full audit trail behind the final disclosure decisions.
-
-Spot-check:
-
-- suppressed rows against their individual rule flags;
-- a selection of rows marked as unrestricted;
-- temporal decisions where a previous release was available;
-- age-specific rows, which should appear only within the approved age-reporting scope.
-
-The aim is to detect both under-suppression and unexpected over-suppression.
-
-### 6. Public candidate sheet
+### 4. Candidate and fingerprint register
 
 This is the dataset intended to become public if approved.
 
@@ -120,15 +84,9 @@ Check that:
 
 This sheet should make sense as a public product without reference to confidential information.
 
-### 7. Files sheet
-
-This identifies the exact files covered by the review.
-
-Confirm that the paths refer to the selected release. The workflow records file sizes and checksums so that approval can later verify that these files have not changed.
-
-The machine-readable file record is:
-
-`step5_review_basis.csv`
+The fingerprint register identifies the exact candidate and audit files covered by
+the review. Approval verifies their size and checksum before it can create the
+public-ready package.
 
 ### Decision
 
@@ -145,7 +103,7 @@ If any check is not satisfactory, do not edit the workbook, candidate dataset or
 4. **Run approval.** Select Run Step 5.
 5. **Check completion.** The summary must say `APPROVED - PENDING STEP 6`.
 6. **Review the approval receipt.**
-   - Open `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/public_ready/approval.yml`.
+   - Open `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/approval.yml`.
    - Confirm `status: approved`.
    - Confirm `package_id`, `release_id` and `metric_family` match the package just reviewed.
    - Confirm `approved_by`, `approved_role` and `approved_date` are correct.
@@ -164,11 +122,11 @@ If the receipt is missing or any field is wrong, do not proceed to Step 6. Resol
 
 | Output | Private location | Purpose |
 |---|---|---|
-| `step5_review.xlsx` | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/review/` | Main human review workbook. |
+| `step5_review.xlsx` | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Main human review workbook with QA, equation audit, worklist and fingerprints. |
 | `step5_candidate.dta` | Same `review` folder | Disclosure-controlled candidate reviewed before approval. |
 | `step5_disclosure_qa.csv` | Same `review` folder | Machine-readable disclosure-control QA. |
 | `step5_review_basis.csv` | Same `review` folder | Fingerprints the exact files covered by the review. |
-| `public_ready/` package | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/public_ready/` | Exact approved payload waiting for Step 6. |
+| `public_ready/` package | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/` | Exact approved combined-CVD payload waiting for Step 6. |
 | `public_manifest.csv` | `public_ready/` | Lists and fingerprints the files Step 6 is authorised to promote. |
 | `approval.yml` | `public_ready/` | Records who approved the exact package and binds that approval to the manifest Step 6 must verify. |
 | Step 5 log | `$BNR_PRIVATE_LOGS/` | Operational record of prepare or approve. |

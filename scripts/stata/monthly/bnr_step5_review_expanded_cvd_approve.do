@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_review_expanded_cvd_approve.do
-VERSION: 3.1.0 (27 August 2026)
+VERSION: 3.2.0 (27 August 2026)
 PURPOSE: Verify the reviewed combined CVD candidate and create public_ready.
 USAGE:   do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_approve.do" 2024 4 "Full name" "BNR Analyst"
 
@@ -95,6 +95,7 @@ capture mkdir "`ready_dir'"
 capture mkdir "`ready_data'"
 capture mkdir "`ready_meta'"
 use "`candidate_dta'", clear
+label data "BNR combined CVD metrics"
 export delimited using "`public_csv'", replace
 save "`public_dta'", replace
 export delimited using "`current_csv'", replace

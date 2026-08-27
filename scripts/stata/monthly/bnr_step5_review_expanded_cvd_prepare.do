@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_review_expanded_cvd_prepare.do
-VERSION: 3.0.1 (27 August 2026)
+VERSION: 3.1.0 (27 August 2026)
 PURPOSE: Prepare the combined CVD Step 5 disclosure-review candidate.
 USAGE:   do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_prepare.do" 2024 4
          do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_prepare.do" 2024 4 replace
@@ -97,5 +97,20 @@ replace detail = "step5_review_basis.csv identifies the exact reviewed files." i
 replace review_item = "If not approved" in 8
 replace detail = "Do not edit generated files; correct the earlier source or code and rerun." in 8
 export excel using "`review_workbook'", sheet("Review") firstrow(variables) replace
+
+* Supporting review sheets keep the machine-readable evidence visible in the
+* workbook without changing the authoritative DTA and CSV review artefacts.
+use "`qa_dta'", clear
+export excel using "`review_workbook'", sheet("Disclosure QA") firstrow(variables) sheetreplace
+
+use "`equation_dta'", clear
+export excel using "`review_workbook'", sheet("Equation audit") firstrow(variables) sheetreplace
+
+use "`candidate_dta'", clear
+keep if suppression_status != "none"
+export excel using "`review_workbook'", sheet("Protected worklist") firstrow(variables) sheetreplace
+
+import delimited using "`review_basis'", varnames(1) clear
+export excel using "`review_workbook'", sheet("Fingerprint register") firstrow(variables) sheetreplace
 display as result "Expanded CVD Step 5 PREPARE passed."
 log close step5

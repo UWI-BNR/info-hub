@@ -1,6 +1,6 @@
 ---
-title: "Publish approved CVD event metrics"
-description: "Step 6: verify and publish the exact CVD burden metric package approved in Step 5."
+title: "Publish approved combined CVD metrics"
+description: "Step 6: verify and publish the exact combined CVD package approved in Step 5."
 date: 2026-08-10
 date-modified: 2026-08-21
 ---
@@ -15,7 +15,7 @@ Verifies the Step 5 approval, manifest and approved payload before promoting the
 
 | Input | Private location | Purpose |
 |---|---|---|
-| `approval.yml` | `$BNR_STAGING/metrics/cvd/burden/cvd_YYYY_MM/public_ready/` | Confirms that the package is approved for Step 6. |
+| `approval.yml` | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/` | Confirms that the package is approved for Step 6. |
 | `public_manifest.csv` | Same `public_ready` folder | Defines and fingerprints the exact approved payload. |
 | Seven approved payload files | `public_ready/datasets/` and `public_ready/metadata/` | Release-stamped and `current` datasets plus metadata approved in Step 5. |
 
@@ -25,13 +25,13 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
 
 1. **Open Step 6.** In Stata, choose User > BNR > Update CVD dashboard > Step 6: Publish approved outputs.
 2. **Select the release.** Enter the approved release year and release month.
-3. **Select the metric family.** Leave Burden selected.
+3. **Confirm the package.** Step 6 publishes the approved combined CVD package.
 4. **Choose republication behaviour.** Leave Authorise republication unticked for a first publication.
 5. **Publish.** Select Publish Step 6.
-6. **Check the run summary.** Confirm `Run status: PUBLISHED` and `Verification: PASSED`.
+6. **Check completion.** Confirm that the run reports `Expanded CVD Step 6 publish passed.`
 7. **Inspect the published release.**
-   - Open `$BNR_PUBLIC/metrics/cvd/burden/` and confirm the selected release exists.
-   - Open `$BNR_REPO/site/downloads/files/metrics/cvd/burden/` and confirm the matching website-mirror copy exists.
+   - Open `$BNR_PUBLIC/metrics/cvd/` and confirm the selected release exists.
+   - Open `$BNR_REPO/site/downloads/files/metrics/cvd/` and confirm the current CSV, matching ZIP and catalogue record exist.
    - Open the release ZIP and confirm it contains the expected approved datasets and metadata.
    - Open the release metadata and catalogue record and confirm the release identity.
    - Confirm that private control files such as `approval.yml` and `public_manifest.csv` have **not** been copied into the public package.
@@ -40,10 +40,10 @@ See [The BNR analytics and publishing environment](../../getting-started/environ
 
 | Output | Location | Purpose |
 |---|---|---|
-| Approved metric datasets and metadata | `$BNR_PUBLIC/metrics/cvd/burden/` | Authoritative public copy of the approved release. |
-| Release ZIP | `$BNR_PUBLIC/metrics/cvd/burden/` | Downloadable release package containing the approved datasets and metadata. |
-| Catalogue record | `$BNR_PUBLIC/metrics/cvd/burden/catalogue/` | Registers the release ZIP for the Downloads catalogue. |
-| Website download mirror | `$BNR_REPO/site/downloads/files/metrics/cvd/burden/` | Disposable website copy refreshed from the authoritative public output. |
+| Approved metric datasets and metadata | `$BNR_PUBLIC/metrics/cvd/` | Authoritative public copy of the approved combined release. |
+| Release ZIP | `$BNR_PUBLIC/metrics/cvd/releases/` | Downloadable release package containing the approved datasets and metadata. |
+| Catalogue record | `$BNR_PUBLIC/metrics/cvd/catalogue/` | Registers the release ZIP for the Downloads catalogue. |
+| Website download mirror | `$BNR_REPO/site/downloads/files/metrics/cvd/` | Lean copy: current CSV, release ZIP and catalogue record only. |
 | Step 6 log | `$BNR_PRIVATE_LOGS/` | Operational publication and verification record. |
 
 To see the configured public root:
@@ -55,7 +55,7 @@ display "$BNR_PUBLIC"
 ## Command-line equivalent
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 1 burden
+do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 4
 ```
 
 Add `replace` only for a deliberate republication of an existing release.

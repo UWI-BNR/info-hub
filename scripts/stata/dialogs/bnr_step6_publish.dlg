@@ -1,13 +1,12 @@
-*! BNR CVD Step 6: Publish an approved metric package
-*! version 1.0.0, 28 July 2026
-*! Thin interface to scripts/stata/monthly/bnr_step6_publish.do
+*! BNR CVD Step 6: Publish an approved combined CVD package
+*! version 4.1.0, 27 August 2026
 
 VERSION 19.0
 POSITION . . 500 440
 
 DIALOG main, label("BNR Step 6: Publish approved outputs")
 BEGIN
-  TEXTBOX tx_intro 15 15 470 62, label("Publish the exact package already approved in Step 5. Step 6 verifies approval and checksums, writes authoritative public files, creates the release ZIP, and refreshes the website-download mirror.")
+  TEXTBOX tx_intro 15 15 470 62, label("Publish the exact combined CVD package already approved in Step 5. Step 6 verifies approval and checksums, writes authoritative public files, creates the release ZIP, and refreshes the website-download mirror.")
 
   GROUPBOX gb_period 15 92 470 68, label("Approved Step 5 release")
   TEXT tx_year      30 120 100 ., label("Release year:")
@@ -15,8 +14,8 @@ BEGIN
   TEXT tx_month     270 120 95 ., label("Release month:")
   SPINNER ed_month  380 117 70 ., default(1) min(1) max(12) nomemory error("Release month")
 
-  GROUPBOX gb_family 15 174 470 64, label("Metric family")
-  CHECKBOX ck_burden 30 201 430 ., default(1) nomemory label("Burden - event counts and distributions")
+  GROUPBOX gb_package 15 174 470 64, label("Approved package")
+  TEXTBOX tx_package 30 198 430 25, label("Combined CVD burden and annual incidence-rate release")
 
   GROUPBOX gb_action 15 252 470 88, label("Publication protection")
   CHECKBOX ck_replace 30 279 430 ., default(0) nomemory label("Authorise republication of this exact release")
@@ -36,9 +35,7 @@ BEGIN
   put main.ed_year
   put " "
   put main.ed_month
-  put " burden"
   if main.ck_replace {
     put " replace"
   }
 END
-

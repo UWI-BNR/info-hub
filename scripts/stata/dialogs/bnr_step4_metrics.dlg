@@ -1,30 +1,30 @@
-*! BNR CVD Step 4: Calculate metrics and create private staging packages
-*! Thin interface to scripts/stata/monthly/bnr_step4_metrics.do
+*! BNR CVD Step 4: Calculate and privately stage combined CVD metrics
+*! version 3.1.0, 27 August 2026
 
 VERSION 19.0
-POSITION . . 470 445
+POSITION . . 500 500
 
 DIALOG main, label("BNR Step 4: Calculate and stage metrics")
 BEGIN
-  TEXTBOX tx_intro 15 15 440 38, label("Select a completed Step 3 release. Burden is currently the only implemented metric family.")
+  TEXTBOX tx_intro 15 15 470 42, label("Select the completed CVD Step 3 release and the mortality release used for private DCO linkage and annual-rate calculation.")
 
-  GROUPBOX gb_period 15 68 440 65, label("Completed release")
-  TEXT tx_year      30 95 100 ., label("Release year:")
-  SPINNER ed_year   140 92 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
-  TEXT tx_month     260 95 95 ., label("Release month:")
-  SPINNER ed_month  365 92 70 ., default(1) min(1) max(12) nomemory error("Release month")
+  GROUPBOX gb_cvd_period 15 72 470 65, label("Completed CVD Step 3 release")
+  TEXT tx_year      30 99 100 ., label("Release year:")
+  SPINNER ed_year   140 96 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month     280 99 95 ., label("Release month:")
+  SPINNER ed_month  390 96 70 ., default(1) min(1) max(12) nomemory error("Release month")
 
-  GROUPBOX gb_metrics 15 150 440 172, label("Metric families")
-  CHECKBOX ck_burden 30 172 400 ., default(1) nomemory label("Burden - event counts and distributions")
-  CHECKBOX ck_rate 30 194 400 ., default(0) nomemory label("Rate - planned") onclickoff(main.ck_rate.disable)
-  CHECKBOX ck_outcome 30 216 400 ., default(0) nomemory label("Outcome - planned") onclickoff(main.ck_outcome.disable)
-  CHECKBOX ck_hospital 30 238 400 ., default(0) nomemory label("Hospital use - planned") onclickoff(main.ck_hospital.disable)
-  CHECKBOX ck_quality 30 260 400 ., default(0) nomemory label("Data quality - planned") onclickoff(main.ck_quality.disable)
-  CHECKBOX ck_performance 30 282 400 ., default(0) nomemory label("Care performance - planned") onclickoff(main.ck_performance.disable)
-  CHECKBOX ck_mortality 30 304 400 ., default(0) nomemory label("Mortality - planned; separate input required") onclickoff(main.ck_mortality.disable)
+  GROUPBOX gb_mortality_period 15 151 470 65, label("Completed mortality release for linkage")
+  TEXT tx_mort_year      30 178 110 ., label("Mortality year:")
+  SPINNER ed_mort_year   145 175 85 ., default(2026) min(2024) max(2100) nomemory error("Mortality year")
+  TEXT tx_mort_month     280 178 95 ., label("Mortality month:")
+  SPINNER ed_mort_month  390 175 70 ., default(1) min(1) max(12) nomemory error("Mortality month")
 
-  CHECKBOX ck_replace 20 340 430 ., default(0) nomemory label("Authorise replacement of the existing staging package")
-  TEXTBOX tx_boundary 20 370 430 32, label("Step 4 remains private. Step 5 completes analytical review and disclosure control.")
+  GROUPBOX gb_package 15 230 470 64, label("Implemented package")
+  TEXTBOX tx_package 30 254 430 25, label("Combined CVD burden and annual incidence rates, with private DCO support.")
+
+  CHECKBOX ck_replace 20 312 450 ., default(0) nomemory label("Authorise replacement of the existing private staging package")
+  TEXTBOX tx_boundary 20 345 450 44, label("Step 4 remains private. It performs the ordered linkage and rate calculations, then stages burden, rates and private DCO components for Step 5 review.")
 END
 
 OK ok1, label("Run Step 4")
@@ -36,11 +36,16 @@ PROGRAM command
 BEGIN
   require main.ed_year
   require main.ed_month
+  require main.ed_mort_year
+  require main.ed_mort_month
   put "do $BNR_STATA/monthly/bnr_step4_metrics.do "
   put main.ed_year
   put " "
   put main.ed_month
-  put " burden"
+  put " "
+  put main.ed_mort_year
+  put " "
+  put main.ed_mort_month
   if main.ck_replace {
     put " replace"
   }
