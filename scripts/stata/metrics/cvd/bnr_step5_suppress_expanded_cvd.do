@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd.do
-VERSION: 1.0.1 (27 August 2026)
+VERSION: 2.0.0 (27 August 2026)
 PURPOSE: Run the tested expanded CVD Step 5 private disclosure-control chain.
 
 Inputs are the existing burden lattice, v1.0.7 annual rate lattice, and private
@@ -13,7 +13,7 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 helper v1.0.1"
+display as result "Running expanded CVD Step 5 helper v2.0.0"
 
 args burden_dta rates_dta components_dta candidate_dta qa_dta equation_audit_dta row_audit_dta release_id
 
@@ -27,9 +27,10 @@ foreach input_file in burden_dta rates_dta components_dta {
     if _rc exit 601
 }
 
+local component_dir "$BNR_STATA/metrics/cvd/private/expanded_disclosure"
 local component_files stage1_combine stage2_dco_support stage3_primary_flags stage5_structural_secondary stage6_existing_closure stage7_rate_equation_audit stage8_full_projection stage9_candidate_audit
 foreach component of local component_files {
-    local component_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_`component'.do"
+    local component_path "`component_dir'/bnr_step5_suppress_expanded_cvd_`component'.do"
     capture confirm file "`component_path'"
     if _rc {
         display as error "Required expanded Step 5 component is absent: `component_path'"
@@ -37,14 +38,14 @@ foreach component of local component_files {
     }
 }
 
-local stage1_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage1_combine.do"
-local stage2_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage2_dco_support.do"
-local stage3_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage3_primary_flags.do"
-local stage5_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do"
-local stage6_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage6_existing_closure.do"
-local stage7_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage7_rate_equation_audit.do"
-local stage8_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage8_full_projection.do"
-local stage9_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do"
+local stage1_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage1_combine.do"
+local stage2_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage2_dco_support.do"
+local stage3_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage3_primary_flags.do"
+local stage5_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do"
+local stage6_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage6_existing_closure.do"
+local stage7_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage7_rate_equation_audit.do"
+local stage8_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage8_full_projection.do"
+local stage9_path "`component_dir'/bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do"
 
 tempfile combined_private support_private primary_private structural_private closure_private audited_private stage1_qa stage2_qa stage3_qa stage5_qa stage6_qa stage7_qa stage8_qa stage9_qa
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: test_bnr_cvd_stage5_expanded_end_to_end.do
-VERSION: 1.0.1 (27 August 2026)
+VERSION: 2.0.0 (27 August 2026)
 PURPOSE: End-to-end synthetic test for the expanded CVD Step 5 helper.
 *******************************************************************************/
 
@@ -8,7 +8,7 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 end-to-end test v1.0.1"
+display as result "Running expanded CVD Step 5 end-to-end test v2.0.0"
 
 if "$BNR_STATA" == "" exit 198
 local helper_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd.do"
