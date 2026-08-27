@@ -1,0 +1,4 @@
+package_id: cvd_metrics_cvd_2024_04
+release_id: cvd_2024_04
+status: approved
+metric_family: combined_cvd_metrics

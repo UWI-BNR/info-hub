@@ -2,7 +2,7 @@
 
 DO-FILE:     bnr_cvd_run_unresolved_estimation.do
 
-VERSION:     1.0.1 (25 August 2026)
+VERSION:     1.0.2 (27 August 2026)
 
 PURPOSE:     Stage 4D controller for private annual aggregate unresolved-linkage
               estimation. It reads the completed Stage 4C candidate diagnostic
@@ -80,7 +80,7 @@ local cvd_release "cvd_`cvd_year4'_`cvd_month2'"
 local mortality_release "mort_`mortality_year4'_`mortality_month2'"
 local linkage_release "`cvd_release'_`mortality_release'"
 
-local input_dir "$BNR_PRIVATE/data/derived/cvd_linkage/y`cvd_year4'/m`cvd_month2'/mort_y`mortality_year4'_m`mortality_month2'"
+local input_dir "$BNR_PRIVATE/data/derived/cvd/y`cvd_year4'/m`cvd_month2'/linkage/mort_y`mortality_year4'_m`mortality_month2'"
 local linkage_input "`input_dir'/stage4_l01_l03_episode_diagnostic_`linkage_release'.dta"
 local results_output "`input_dir'/stage4_unresolved_estimation_`linkage_release'.dta"
 local qa_output "`input_dir'/stage4_unresolved_estimation_qa_`linkage_release'.csv"

@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_cvd_run_incidence_rate_estimation.do
-VERSION:     1.0.7 (26 August 2026)
+VERSION:     1.0.8 (27 August 2026)
 RELEASE:     Stage 3 rate-construction integrated release 1.0.7
 PURPOSE:     Private controller for annual CVD crude and age-standardised rates.
 
@@ -54,7 +54,7 @@ local my : display %04.0f `my_num'
 local mm : display %02.0f `mm_num'
 local release "`cy'_`cm'_mort_`my'_`mm'"
 local linkage_release "cvd_`release'"
-local linkage_dir "$BNR_PRIVATE/data/derived/cvd_linkage/y`cy'/m`cm'/mort_y`my'_m`mm'"
+local linkage_dir "$BNR_PRIVATE/data/derived/cvd/y`cy'/m`cm'/linkage/mort_y`my'_m`mm'"
 local reference_dir "$BNR_PRIVATE/data/reference/population"
 
 local events_input "$BNR_PRIVATE/data/derived/cvd/y`cy'/m`cm'/bnr_cvd_confidential_`cy'`cm'_v01.dta"

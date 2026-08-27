@@ -2,7 +2,7 @@
 
 DO-FILE:     bnr_cvd_prepare_linkage_inputs.do
 
-VERSION:     1.0.0 (24 August 2026)
+VERSION:     1.0.1 (27 August 2026)
 
 PURPOSE:     Stage 3 private input assembly for the CVD mortality-linkage work.
 
@@ -109,10 +109,11 @@ local mortality_classified ///
 local cvd_confidential ///
     "$BNR_PRIVATE/data/derived/cvd/y`cvd_year4'/m`cvd_month2'/bnr_cvd_confidential_`cvd_year4'`cvd_month2'_v01.dta"
 
-local output_root "$BNR_PRIVATE/data/derived/cvd_linkage"
+local output_root "$BNR_PRIVATE/data/derived/cvd"
 local output_year "`output_root'/y`cvd_year4'"
 local output_month "`output_year'/m`cvd_month2'"
-local output_dir "`output_month'/mort_y`mortality_year4'_m`mortality_month2'"
+local output_linkage "`output_month'/linkage"
+local output_dir "`output_linkage'/mort_y`mortality_year4'_m`mortality_month2'"
 
 local deaths_output ///
     "`output_dir'/bnr_cvd_linkage_deaths_`linkage_release'.dta"
@@ -146,6 +147,7 @@ capture mkdir "$BNR_PRIVATE/data/derived"
 capture mkdir "`output_root'"
 capture mkdir "`output_year'"
 capture mkdir "`output_month'"
+capture mkdir "`output_linkage'"
 capture mkdir "`output_dir'"
 capture mkdir "$BNR_PRIVATE_LOGS"
 

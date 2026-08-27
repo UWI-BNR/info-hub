@@ -2,7 +2,7 @@
 
 DO-FILE:     bnr_cvd_profile_linkage_inputs.do
 
-VERSION:     1.0.3 (25 August 2026)
+VERSION:     1.0.4 (27 August 2026)
 
 PURPOSE:     Stage 4A private preflight for deterministic CVD mortality linkage.
 
@@ -95,7 +95,7 @@ local mortality_release "mort_`mortality_year4'_`mortality_month2'"
 local linkage_release "`cvd_release'_`mortality_release'"
 
 local input_dir ///
-    "$BNR_PRIVATE/data/derived/cvd_linkage/y`cvd_year4'/m`cvd_month2'/mort_y`mortality_year4'_m`mortality_month2'"
+    "$BNR_PRIVATE/data/derived/cvd/y`cvd_year4'/m`cvd_month2'/linkage/mort_y`mortality_year4'_m`mortality_month2'"
 local deaths_input ///
     "`input_dir'/bnr_cvd_linkage_deaths_`linkage_release'.dta"
 local events_input ///

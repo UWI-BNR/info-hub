@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_cvd_run_joint_subtype_estimation.do
-VERSION:     1.0.6 (25 August 2026)
+VERSION:     1.0.7 (27 August 2026)
 PURPOSE:     Stage 4E-c controller for joint Heart/Stroke/mixed DCO allocation.
 USAGE:       do "$BNR_STATA/metrics/cvd/bnr_cvd_run_joint_subtype_estimation.do" 2024 04 2026 07 replace
 *******************************************************************************/
@@ -31,7 +31,7 @@ local my : display %04.0f `my_num'
 local mm : display %02.0f `mm_num'
 local release "`cy'_`cm'_mort_`my'_`mm'"
 local linkage_release "cvd_`release'"
-local dir "$BNR_PRIVATE/data/derived/cvd_linkage/y`cy'/m`cm'/mort_y`my'_m`mm'"
+local dir "$BNR_PRIVATE/data/derived/cvd/y`cy'/m`cm'/linkage/mort_y`my'_m`mm'"
 local all_input "`dir'/stage4_unresolved_estimation_cvd_`release'.dta"
 local concordance_input "`dir'/stage4_subtype_concordance_`linkage_release'.dta"
 local results_output "`dir'/stage4_joint_subtype_estimation_cvd_`release'.dta"

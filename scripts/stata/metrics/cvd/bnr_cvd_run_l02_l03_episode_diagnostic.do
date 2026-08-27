@@ -2,7 +2,7 @@
 
 DO-FILE:     bnr_cvd_run_l02_l03_episode_diagnostic.do
 
-VERSION:     1.0.4 (25 August 2026)
+VERSION:     1.0.5 (27 August 2026)
 
 PURPOSE:     Stage 4C controller for the private deterministic L02/L03 and
               episode-linkage diagnostic.
@@ -82,7 +82,7 @@ local cvd_release "cvd_`cvd_year4'_`cvd_month2'"
 local mortality_release "mort_`mortality_year4'_`mortality_month2'"
 local linkage_release "`cvd_release'_`mortality_release'"
 
-local input_dir "$BNR_PRIVATE/data/derived/cvd_linkage/y`cvd_year4'/m`cvd_month2'/mort_y`mortality_year4'_m`mortality_month2'"
+local input_dir "$BNR_PRIVATE/data/derived/cvd/y`cvd_year4'/m`cvd_month2'/linkage/mort_y`mortality_year4'_m`mortality_month2'"
 local l01_input "`input_dir'/stage4_l01_episode_diagnostic_`linkage_release'.dta"
 local events_input "`input_dir'/bnr_cvd_linkage_events_`linkage_release'.dta"
 local results_output "`input_dir'/stage4_l01_l03_episode_diagnostic_`linkage_release'.dta"
