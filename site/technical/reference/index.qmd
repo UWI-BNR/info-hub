@@ -78,7 +78,7 @@ CVD events Steps 1-3 form the common CVD analytical-preparation pathway. CVD eve
 
 | Workflow | Main steps | Starts from | Finishes with |
 |---|---|---|---|
-| **CVD event metrics** | Steps 1-6 | CVD REDCap + frozen historical data | Approved CVD burden metric package + website mirror |
+| **CVD event metrics** | Steps 1-6 | CVD REDCap + frozen historical data + completed mortality release | Approved combined CVD metric package + minimal website mirror |
 | **CVD mortality** | Steps 1-6 | Mortality REDCap death-certificate source | Approved mortality burden package + website mirror |
 | **Tabulations** | Steps 1, 2A, 2B, 3 | Step 3 `all_variables` input | Approved table release + stable/latest copies |
 | **Routine briefings** | Steps 1-3 | Relevant Step 3 input | Approved briefing package + website mirror |
@@ -201,17 +201,17 @@ Paths are relative to `scripts/stata/`.
 | `monthly/bnr_step1_cvd_redcap_extract.do` | Extracts the selected cumulative CVD REDCap release and writes raw CSV/DTA, extraction metadata and log. | REDCap -> `$BNR_DATA_RAW` |
 | `monthly/bnr_step2_cvd_confidential.do` | Combines the selected REDCap release with frozen history, reconciles the sources and writes the confidential cumulative dataset. | Step 1 + frozen history -> `$BNR_DATA_DERIVED` |
 | `monthly/bnr_step3_metric_inputs.do` | Creates authorised deidentified datasets for downstream analytical purposes. | Step 2 -> `metric_inputs/` |
-| `monthly/bnr_step4_metrics.do` | Controls metric calculation for the selected family and creates the private Step 4 package. | Calls the metric analysis file and staging helper |
-| `metrics/cvd/bnr_step4_cvd_burden.do` | Calculates the current CVD burden metrics and QA results in standard long format. | Called by CVD events Step 4 |
-| `common/bnr_step4_stage_metric.do` | Packages unsuppressed metric results and QA material in private staging. | Called by CVD events Step 4 |
-| `monthly/bnr_step5_review.do` | Runs the separate **prepare** and **approve** actions for dashboard releases. | Calls `common/bnr_step5_suppress.do` |
-| `common/bnr_step5_suppress.do` | Applies `bnr_sdc_v1` to the implemented dashboard metric structures and creates disclosure-review material. | Called by CVD events Step 5 |
+| `monthly/bnr_step4_metrics.do` | Runs ordered combined CVD/mortality-linked calculations and creates the private Step 4 package. | Calls CVD calculation controllers and combined staging helper |
+| `metrics/cvd/bnr_step4_cvd_burden.do` | Calculates hospital-only CVD burden results. | Called by CVD events Step 4 |
+| `metrics/cvd/bnr_step4_stage_expanded_cvd.do` | Packages burden, annual rates and private component evidence in combined staging. | Called by CVD events Step 4 |
+| `monthly/bnr_step5_review.do` | Runs canonical **prepare** and **approve** actions for combined CVD releases. | Calls `metrics/cvd/bnr_step5_suppress_expanded_cvd.do` |
+| `metrics/cvd/bnr_step5_suppress_expanded_cvd.do` | Applies the combined count/rate/DCO disclosure contract and creates review evidence. | Called by CVD events Step 5 |
 | `monthly/bnr_step6_publish.do` | Checks approval/manifest controls, promotes the approved metric payload and refreshes the website mirror. | Step 5 approved package -> `$BNR_PUBLIC` + site mirror |
 
 Current implemented CVD event metric family:
 
 ```text
-burden
+combined CVD counts and annual rates
 ```
 
 CVD events Step 4 staging uses:

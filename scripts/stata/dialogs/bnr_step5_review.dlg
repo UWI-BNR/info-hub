@@ -1,68 +1,54 @@
-*! BNR CVD Step 5: Prepare or approve combined CVD release
-*! version 4.1.0, 27 August 2026
-
+*! BNR CVD Step 5: prepare review material or record approval
 VERSION 19.0
-POSITION . . 500 530
-
+POSITION . . 500 520
 LIST approver_roles
 BEGIN
 BNR Lead
 BNR Analyst
 BNR Developer
 END
-
 DIALOG main, label("BNR Step 5: Review and approval")
 BEGIN
-  TEXTBOX tx_intro 15 15 470 58, label("Prepare the private combined CVD review package. After human review, run Step 5 again and record approval. Approval alone creates public_ready; Step 6 alone publishes.")
-
-  GROUPBOX gb_period 15 82 470 62, label("Step 4 release")
-  TEXT tx_year      30 108 100 ., label("Release year:")
-  SPINNER ed_year   140 105 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
-  TEXT tx_month     270 108 95 ., label("Release month:")
-  SPINNER ed_month  380 105 70 ., default(1) min(1) max(12) nomemory error("Release month")
-
-  GROUPBOX gb_package 15 158 470 54, label("Package")
-  TEXTBOX tx_package 30 181 430 22, label("Combined CVD burden and annual incidence-rate release")
-
-  GROUPBOX gb_action 15 226 470 78, label("Action")
-  RADIO rb_prepare 30 249 430 ., first default(1) nomemory label("Prepare the review package")
-  RADIO rb_approve 30 274 430 ., last nomemory label("Record approval after completing the review")
-
-  GROUPBOX gb_approver 15 318 470 88, label("Required only when recording approval")
-  TEXT tx_name 30 344 110 ., label("Approver name:")
-  EDIT ed_name 145 341 320 ., nomemory error("Approver name")
-  TEXT tx_role 30 374 110 ., label("Approver role:")
-  COMBOBOX cb_role 145 371 320 ., dropdownlist contents(approver_roles) nomemory
-
-  CHECKBOX ck_replace 20 422 460 ., default(0) nomemory label("Authorise replacement of an existing review or approved package")
-  TEXTBOX tx_boundary 20 450 460 34, label("Do not use replacement to amend generated values. Correct the earlier source or code, rerun, review again, then approve.")
+  TEXTBOX tx_intro 15 15 470 42, label("Prepare combined CVD review evidence. Approve only after completing the human review.")
+  GROUPBOX gb_period 15 72 470 62, label("Step 4 CVD release")
+  TEXT tx_year 30 98 100 ., label("Year:")
+  SPINNER ed_year 140 95 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 270 98 95 ., label("Month:")
+  SPINNER ed_month 380 95 70 ., default(1) min(1) max(12) nomemory error("Release month")
+  GROUPBOX gb_action 15 150 470 78, label("Action")
+  RADIO rb_prepare 30 173 430 ., first default(1) nomemory label("Prepare the review package")
+  RADIO rb_approve 30 198 430 ., last nomemory label("Record approval after completing the review")
+  GROUPBOX gb_approver 15 240 470 88, label("Required only for approval")
+  TEXT tx_name 30 266 110 ., label("Approver name:")
+  EDIT ed_name 145 263 320 ., nomemory error("Approver name")
+  TEXT tx_role 30 296 110 ., label("Approver role:")
+  COMBOBOX cb_role 145 293 320 ., dropdownlist contents(approver_roles) nomemory
+  CHECKBOX ck_replace 20 350 460 ., default(0) nomemory label("Authorise deliberate replacement of this release state")
+  TEXTBOX tx_boundary 20 390 460 32, label("public_ready is created only by approval. Step 5 creates no public or website files.")
 END
-
 OK ok1, label("Run Step 5")
 CANCEL cancel1, label("Cancel")
 HELP help1, view("help bnr_step5_review")
 RESET reset1
-
 PROGRAM command
 BEGIN
   put "do $BNR_STATA/monthly/bnr_step5_review.do "
   put main.ed_year
   put " "
   put main.ed_month
+  put " "
   if main.rb_prepare {
-    put " prepare"
-    if main.ck_replace {
-      put " replace"
-    }
+    put "prepare"
   }
   if main.rb_approve {
     require main.ed_name
-    put " approve "
+    require main.cb_role
+    put "approve "
     put /smartquote main.ed_name
     put " "
     put /smartquote main.cb_role
-    if main.ck_replace {
-      put " replace"
-    }
+  }
+  if main.ck_replace {
+    put " replace"
   }
 END

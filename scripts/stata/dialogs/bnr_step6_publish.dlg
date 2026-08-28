@@ -1,34 +1,21 @@
-*! BNR CVD Step 6: Publish an approved combined CVD package
-*! version 4.1.0, 27 August 2026
-
+*! BNR CVD Step 6: publish an approved combined CVD package
 VERSION 19.0
-POSITION . . 500 440
-
-DIALOG main, label("BNR Step 6: Publish approved outputs")
+POSITION . . 500 360
+DIALOG main, label("BNR Step 6: Publish approved CVD metrics")
 BEGIN
-  TEXTBOX tx_intro 15 15 470 62, label("Publish the exact combined CVD package already approved in Step 5. Step 6 verifies approval and checksums, writes authoritative public files, creates the release ZIP, and refreshes the website-download mirror.")
-
-  GROUPBOX gb_period 15 92 470 68, label("Approved Step 5 release")
-  TEXT tx_year      30 120 100 ., label("Release year:")
-  SPINNER ed_year   140 117 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
-  TEXT tx_month     270 120 95 ., label("Release month:")
-  SPINNER ed_month  380 117 70 ., default(1) min(1) max(12) nomemory error("Release month")
-
-  GROUPBOX gb_package 15 174 470 64, label("Approved package")
-  TEXTBOX tx_package 30 198 430 25, label("Combined CVD burden and annual incidence-rate release")
-
-  GROUPBOX gb_action 15 252 470 88, label("Publication protection")
-  CHECKBOX ck_replace 30 279 430 ., default(0) nomemory label("Authorise republication of this exact release")
-  TEXTBOX tx_replace 30 304 430 24, label("Leave unticked for a first publication. Use only after checking an existing release.")
-
-  TEXTBOX tx_boundary 20 354 460 42, label("Only files listed in public_manifest.csv are promoted. approval.yml and public_manifest.csv remain private controls.")
+  TEXTBOX tx_intro 15 15 470 50, label("Step 6 verifies the approved combined CVD package, publishes it, creates its ZIP and refreshes the minimal website mirror.")
+  GROUPBOX gb_period 15 82 470 68, label("Approved Step 5 CVD release")
+  TEXT tx_year 30 110 100 ., label("Year:")
+  SPINNER ed_year 140 107 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
+  TEXT tx_month 270 110 95 ., label("Month:")
+  SPINNER ed_month 380 107 70 ., default(1) min(1) max(12) nomemory error("Release month")
+  CHECKBOX ck_replace 30 180 430 ., default(0) nomemory label("Authorise republication of this exact release")
+  TEXTBOX tx_boundary 20 225 460 42, label("Only approved manifest files are promoted. approval.yml and public_manifest.csv remain private controls.")
 END
-
 OK ok1, label("Publish Step 6")
 CANCEL cancel1, label("Cancel")
 HELP help1, view("help bnr_step6_publish")
 RESET reset1
-
 PROGRAM command
 BEGIN
   put "do $BNR_STATA/monthly/bnr_step6_publish.do "

@@ -1,8 +1,8 @@
 /*******************************************************************************
 DO-FILE:     test_bnr_cvd_construct_incidence_rates.do
-VERSION:     1.0.7 (26 August 2026)
-RELEASE:     Stage 3 rate-construction integrated release 1.0.7
-PURPOSE:     Synthetic tests for private annual CVD rate construction and QA.
+VERSION:     1.0.8 (28 August 2026)
+PURPOSE:     Synthetic tests for private annual CVD rate construction, including
+             the annual all-age additional-DCO and hospital-plus-DCO counts.
 *******************************************************************************/
 version 19
 clear all
@@ -89,22 +89,39 @@ quietly summarize dco_central_component_n if mortality_definition == "primary" &
 assert abs(r(sum) - 6) < 0.000001
 
 use `"`rates'"', clear
-assert _N == 108
+quietly levelsof dth_year, local(rate_years)
+local completed_years : word count `rate_years'
+assert _N == 90 * `completed_years'
 assert inrange(dth_year, 2010, 2011)
 assert release_id == "cvd_2012_04"
 assert schema_version == "bnr_cvd_public_metric_v2"
 assert status_flag == "final"
 assert inlist(sex, "all", "female", "male")
 assert inlist(event_type, "all_cvd", "heart", "stroke")
-assert inlist(age_group, "all", "age_standardised")
-assert ascertainment_scope == "hospital_only" if mortality_definition == "not_applicable"
-assert ascertainment_scope == "hospital_plus_dco" if inlist(mortality_definition, "primary", "inclusive")
-assert linkage_lower_value <= value & value <= linkage_upper_value if ascertainment_scope == "hospital_plus_dco"
-assert missing(linkage_lower_value, linkage_upper_value) if ascertainment_scope == "hospital_only"
-assert !missing(numerator) & !missing(denominator) if age_group == "all"
-assert missing(numerator) & missing(denominator) if age_group == "age_standardised"
+
+* 54 annual incidence-rate rows and 36 annual DCO count rows per completed year.
+quietly count if metric_id == "CVD-INCIDENCE-001"
+assert r(N) == 54 * `completed_years'
+assert inlist(age_group, "all", "age_standardised") if metric_id == "CVD-INCIDENCE-001"
+assert ascertainment_scope == "hospital_only" if metric_id == "CVD-INCIDENCE-001" & mortality_definition == "not_applicable"
+assert ascertainment_scope == "hospital_plus_dco" if metric_id == "CVD-INCIDENCE-001" & inlist(mortality_definition, "primary", "inclusive")
+assert linkage_lower_value <= value & value <= linkage_upper_value if metric_id == "CVD-INCIDENCE-001" & ascertainment_scope == "hospital_plus_dco"
+assert missing(linkage_lower_value, linkage_upper_value) if metric_id == "CVD-INCIDENCE-001" & ascertainment_scope == "hospital_only"
+assert !missing(numerator) & !missing(denominator) if metric_id == "CVD-INCIDENCE-001" & age_group == "all"
+assert missing(numerator) & missing(denominator) if metric_id == "CVD-INCIDENCE-001" & age_group == "age_standardised"
+
+quietly count if metric_id == "CVD-BURDEN-001"
+assert r(N) == 36 * `completed_years'
+assert age_group == "all" if metric_id == "CVD-BURDEN-001"
+assert inlist(mortality_definition, "primary", "inclusive") if metric_id == "CVD-BURDEN-001"
+assert inlist(ascertainment_scope, "additional_dco", "hospital_plus_dco") if metric_id == "CVD-BURDEN-001"
+quietly count if metric_id == "CVD-BURDEN-001" & ascertainment_scope == "additional_dco"
+assert r(N) == 18 * `completed_years'
+quietly count if metric_id == "CVD-BURDEN-001" & ascertainment_scope == "hospital_plus_dco"
+assert r(N) == 18 * `completed_years'
+assert linkage_lower_value <= value & value <= linkage_upper_value if metric_id == "CVD-BURDEN-001"
 
 import delimited using `"`qa_output'"', varnames(1) clear
 quietly count if value != 0
 assert r(N) == 0
-noisily display as result "PASS: CVD private annual rate-construction synthetic tests completed."
+noisily display as result "PASS: CVD private annual rate-and-DCO-count synthetic tests completed."

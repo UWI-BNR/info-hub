@@ -156,7 +156,7 @@ display "$BNR_PUBLIC"
 display "$BNR_REPO"
 ```
 
-`$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/` to reach the combined-CVD website mirror.
+`$BNR_PUBLIC` shows the local authoritative public-output root. `$BNR_REPO` shows the local `info-hub` repository root; append `site/downloads/files/metrics/cvd/` to reach the minimal website mirror.
 
 The machine-specific roots are defined in `scripts/stata/config/bnr_paths_LOCAL.do`. See [The BNR analytics and publishing environment](../getting-started/environment.qmd) for the full location model.
 

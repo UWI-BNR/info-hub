@@ -1,144 +1,45 @@
 ---
 title: "Review and approve combined CVD metrics"
-description: "Step 5: prepare the combined CVD review package, complete human review and record approval."
-date: 2026-08-10
-date-modified: 2026-08-21
+description: "Step 5: prepare disclosure-review evidence and record approval."
+date-modified: 2026-08-28
 ---
 
----
-
-## What this step does
-
-Step 5 first creates the disclosure-controlled review package. After human review, it checks that the reviewed files are unchanged and records approval.
-
-## Inputs
-
-| Input | Private location | Purpose |
-|---|---|---|
-| Step 4 metric datasets | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/datasets/` | Private burden and annual-rate calculation products used for review. |
-| Step 4 DCO component sidecar | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Private evidence for rate suppression; it is never public. |
-| Step 4 QA material | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Confirms the staged package passed automated checks. |
-
-See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of the private staging area and the later `public_ready` boundary.
-
-## Prepare the review package
-
-1. **Open Step 5.** In Stata, choose User > BNR > Update CVD dashboard > Step 5: Review and approve package for release.
-2. **Select the release.** Enter the release year and release month.
-3. **Select the action.** Choose Prepare the review package.
-4. **Run prepare.** Leave replacement unticked for a first review and select Run Step 5.
-5. **Open the workbook.** The summary must say `READY FOR HUMAN REVIEW`. Open the file shown beside `OPEN THIS FILE FIRST`.
-
-## Review the package
-
-The reviewer remains responsible for deciding whether the release is analytically plausible, disclosure-safe and suitable for publication.
-
-::: {.callout-note collapse="true"}
-## Detailed dashboard review
-
-Start with:
-
-`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/step5_review.xlsx`
-
-Work through the workbook in this order.
-
-### 1. Review sheet
-
-Confirm:
-
-- **Review status** is `READY FOR HUMAN REVIEW`.
-- The **Release** is the one you intended to review.
-- Every result on the **Disclosure QA** and **Equation audit** sheets is `PASS`.
-- The protected-row worklist is plausible and has no visible numeric value in the candidate fields.
-
-If the release identity is wrong, stop. Do not continue the review.
-
-### 2. Disclosure QA sheet
-
-This is the machine-readable Step 5 disclosure QA.
-
-Check the `result` column. Every automated check should be `PASS`.
-
-Use the `detail` column to understand what each check tested. A non-passing result must be resolved before approval.
-
-The machine-readable Step 5 version is also saved as:
-
-`step5_disclosure_qa.csv`
-
-### 3. Equation audit and protected worklist
-
-The equation audit checks burden-count, comparator and rate closure. The worklist
-identifies every protected candidate row. Review both sheets together and
-investigate any unexpected pattern before approval.
-
-### 4. Candidate and fingerprint register
-
-This is the dataset intended to become public if approved.
-
-Check that:
-
-- suppressed rows contain no exact `value`, `numerator` or `denominator`;
-- disclosure notes are present;
-- unrestricted values agree with the reviewed private results;
-- the release contains the expected periods, strata and metric identifiers.
-
-This sheet should make sense as a public product without reference to confidential information.
-
-The fingerprint register identifies the exact candidate and audit files covered by
-the review. Approval verifies their size and checksum before it can create the
-public-ready package.
-
-### Decision
-
-If all checks are satisfactory, proceed to **Record approval** below.
-
-If any check is not satisfactory, do not edit the workbook, candidate dataset or other generated files. Correct the appropriate source data or workflow code, rerun from the necessary earlier step, and review the rebuilt package again.
-:::
-
-## Record approval
-
-1. **Open Step 5 again.** Use the same release.
-2. **Select approval.** Choose Record approval after completing the review.
-3. **Identify the approver.** Enter the full name and select an authorised role.
-4. **Run approval.** Select Run Step 5.
-5. **Check completion.** The summary must say `APPROVED - PENDING STEP 6`.
-6. **Review the approval receipt.**
-   - Open `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/approval.yml`.
-   - Confirm `status: approved`.
-   - Confirm `package_id`, `release_id` and `metric_family` match the package just reviewed.
-   - Confirm `approved_by`, `approved_role` and `approved_date` are correct.
-   - Confirm `review_standard: bnr_metric_review_v1`.
-   - Confirm `disclosure_policy: bnr_sdc_v1` and `disclosure_check: passed`.
-   - Confirm the receipt names `public_manifest.csv` and records its size and checksum.
-   - Confirm `promotion_status: pending_step_6`.
-
-Authorised roles are BNR Lead, BNR Analyst, and BNR Developer.
-
-The approval receipt is the durable, machine-readable evidence that a named authorised reviewer approved the **exact manifest and payload** produced by Step 5. Step 6 reads this receipt before promotion. It records approval; it does not itself mean that the package has been published.
-
-If the receipt is missing or any field is wrong, do not proceed to Step 6. Resolve the problem and record approval again through the workflow rather than editing `approval.yml` manually.
-
-## Outputs
-
-| Output | Private location | Purpose |
-|---|---|---|
-| `step5_review.xlsx` | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/` | Main human review workbook with QA, equation audit, worklist and fingerprints. |
-| `step5_candidate.dta` | Same `review` folder | Disclosure-controlled candidate reviewed before approval. |
-| `step5_disclosure_qa.csv` | Same `review` folder | Machine-readable disclosure-control QA. |
-| `step5_review_basis.csv` | Same `review` folder | Fingerprints the exact files covered by the review. |
-| `public_ready/` package | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/` | Exact approved combined-CVD payload waiting for Step 6. |
-| `public_manifest.csv` | `public_ready/` | Lists and fingerprints the files Step 6 is authorised to promote. |
-| `approval.yml` | `public_ready/` | Records who approved the exact package and binds that approval to the manifest Step 6 must verify. |
-| Step 5 log | `$BNR_PRIVATE_LOGS/` | Operational record of prepare or approve. |
-
-To see the local staging root:
+## Prepare
 
 ```stata
-display "$BNR_STAGING"
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 prepare
 ```
 
-## If Step 5 does not complete
+This reads `$BNR_STAGING/metrics/cvd/cvd_2024_04/` and writes private review
+evidence to its `review/` folder. Use `prepare replace` only to deliberately
+rebuild the review state.
 
-Read the **Reason** and **Log** lines in the operational summary.
+Review, at minimum:
 
-For a failed prepare action, check the Step 4 package and QA files. For a failed approval action, confirm the review files have not changed since preparation. If review must restart, rebuild deliberately and complete the human review again.
+- `step5_review.xlsx` — human review guide;
+- `step5_disclosure_qa.csv` — every row must be `PASS`;
+- `step5_equation_audit.csv` — annual count/rate representation closure;
+- `step5_row_audit.dta` — protection propagation and numeric blanking; and
+- `step5_review_basis.csv` — fingerprints of the reviewed evidence.
+
+For annual DCO counts, check that the review records the protected identity
+`hospital only + additional DCO = hospital plus DCO`. Do not edit generated
+evidence, candidates or workbooks manually; correct code or input, rerun and
+review again.
+
+## Approve
+
+After an authorised BNR Lead, BNR Analyst or BNR Developer has completed the
+review, run:
+
+```stata
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 approve "Full name" "BNR Developer"
+```
+
+Approval rechecks the review fingerprints and QA, then writes the private
+`public_ready/` package, `public_manifest.csv` and `approval.yml`. It does not
+publish. Use `replace` only for a deliberate re-approval of the same release.
+
+The public-ready candidate must not contain private linkage, component,
+allocation or suppression-decision fields. Protected rows remain in the public
+dataset with blank numeric fields and `display_value: *`.

@@ -1,48 +1,17 @@
 {smcl}
-{title:BNR Step 5: Review and approval of the combined CVD package}
+{title:BNR Step 5: Review and approve combined CVD metrics}
 
-{p 4 4 2}
-Step 5 has two separate actions: prepare a disclosure-controlled private review
-package, then record approval only after human review is complete.
+{pstd}Step 5 has separate {cmd:prepare} and {cmd:approve} actions. It never writes to {cmd:outputs/public/} or the website mirror.
 
 {title:Syntax}
-
-{p 8 8 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:prepare} [{cmd:replace}]
-
-{p 8 8 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year} {it:month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"} [{cmd:replace}]
+{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:prepare} [{cmd:replace}]
+{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"} [{cmd:replace}]
 
 {title:Prepare}
+{pstd}Prepare reads the combined private Step 4 package at {cmd:$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/}, creates a disclosure-controlled candidate and writes its review evidence to {cmd:review/}. Review {cmd:step5_review.xlsx}, {cmd:step5_disclosure_qa.csv}, {cmd:step5_equation_audit.csv}, {cmd:step5_row_audit.dta} and {cmd:step5_review_basis.csv}. Every automated result must be {cmd:PASS}.
 
-{p 4 4 2}
-Prepare reads the completed combined Step 4 package from:
+{title:Approval}
+{pstd}After human review, approve rechecks the saved fingerprints and QA before creating {cmd:public_ready/}, its seven-file manifest and {cmd:approval.yml}. A previous approval is immutable unless {cmd:replace} is explicitly supplied.
 
-{p 8 8 2}
-{cmd:$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/}
-
-{p 4 4 2}
-It creates a disclosure-controlled candidate and private review material in its
-{cmd:review/} folder. Open {cmd:step5_review.xlsx} first. Its supporting
-sheets show disclosure QA, the equation audit, protected-row worklist and the
-fingerprint register.
-
-{p 4 4 2}
-Prepare creates no {cmd:public_ready/} folder, public file or website file.
-If review identifies a problem, do not edit generated outputs. Correct the
-earlier source or version-controlled code and prepare a new review package.
-
-{title:Approve}
-
-{p 4 4 2}
-Approval rechecks the reviewed fingerprints and disclosure QA. Only then does
-it create the immutable {cmd:public_ready/} payload, including release-stamped
-and {cmd:current} datasets, metadata, a seven-file manifest and
-{cmd:approval.yml}. DCO components and other private accounting fields never
-enter that payload.
-
-{title:Boundary}
-
-{p 4 4 2}
-Step 5 never writes to {cmd:outputs/public/} or the website mirror. Step 6
-alone may promote the exact approved package.
+{title:Suppression contract}
+{pstd}Protected public rows remain present but have blank numeric fields and {cmd:display_value} {cmd:*}. For the annual DCO rows, protection is audited across hospital-only, additional-DCO and hospital-plus-DCO count identities and all released rate representations. The dashboard must only filter and display these supplied public rows; it must never reconstruct a protected value.

@@ -1,30 +1,22 @@
-*! BNR CVD Step 4: Calculate and privately stage combined CVD metrics
-*! version 3.1.0, 27 August 2026
-
+*! BNR CVD Step 4: calculate and privately stage combined CVD metrics
 VERSION 19.0
-POSITION . . 500 500
+POSITION . . 470 400
 
-DIALOG main, label("BNR Step 4: Calculate and stage metrics")
+DIALOG main, label("BNR Step 4: Calculate and stage combined CVD metrics")
 BEGIN
-  TEXTBOX tx_intro 15 15 470 42, label("Select the completed CVD Step 3 release and the mortality release used for private DCO linkage and annual-rate calculation.")
-
-  GROUPBOX gb_cvd_period 15 72 470 65, label("Completed CVD Step 3 release")
-  TEXT tx_year      30 99 100 ., label("Release year:")
-  SPINNER ed_year   140 96 85 ., default(2024) min(2024) max(2100) nomemory error("Release year")
-  TEXT tx_month     280 99 95 ., label("Release month:")
-  SPINNER ed_month  390 96 70 ., default(1) min(1) max(12) nomemory error("Release month")
-
-  GROUPBOX gb_mortality_period 15 151 470 65, label("Completed mortality release for linkage")
-  TEXT tx_mort_year      30 178 110 ., label("Mortality year:")
-  SPINNER ed_mort_year   145 175 85 ., default(2026) min(2024) max(2100) nomemory error("Mortality year")
-  TEXT tx_mort_month     280 178 95 ., label("Mortality month:")
-  SPINNER ed_mort_month  390 175 70 ., default(1) min(1) max(12) nomemory error("Mortality month")
-
-  GROUPBOX gb_package 15 230 470 64, label("Implemented package")
-  TEXTBOX tx_package 30 254 430 25, label("Combined CVD burden and annual incidence rates, with private DCO support.")
-
-  CHECKBOX ck_replace 20 312 450 ., default(0) nomemory label("Authorise replacement of the existing private staging package")
-  TEXTBOX tx_boundary 20 345 450 44, label("Step 4 remains private. It performs the ordered linkage and rate calculations, then stages burden, rates and private DCO components for Step 5 review.")
+  TEXTBOX tx_intro 15 15 440 38, label("Step 4 requires a CVD release and a completed mortality release. It remains private.")
+  GROUPBOX gb_cvd 15 68 440 65, label("CVD release")
+  TEXT tx_cvd_year 30 95 100 ., label("Year:")
+  SPINNER ed_cvd_year 140 92 85 ., default(2024) min(2024) max(2100) nomemory error("CVD release year")
+  TEXT tx_cvd_month 260 95 95 ., label("Month:")
+  SPINNER ed_cvd_month 365 92 70 ., default(1) min(1) max(12) nomemory error("CVD release month")
+  GROUPBOX gb_mort 15 148 440 65, label("Completed mortality release")
+  TEXT tx_mort_year 30 175 100 ., label("Year:")
+  SPINNER ed_mort_year 140 172 85 ., default(2026) min(2024) max(2100) nomemory error("Mortality release year")
+  TEXT tx_mort_month 260 175 95 ., label("Month:")
+  SPINNER ed_mort_month 365 172 70 ., default(1) min(1) max(12) nomemory error("Mortality release month")
+  CHECKBOX ck_replace 20 235 430 ., default(0) nomemory label("Authorise replacement of the existing staging package")
+  TEXTBOX tx_boundary 20 280 430 32, label("Step 4 calculates combined counts and annual rates. Step 5 performs disclosure review and approval.")
 END
 
 OK ok1, label("Run Step 4")
@@ -34,14 +26,14 @@ RESET reset1
 
 PROGRAM command
 BEGIN
-  require main.ed_year
-  require main.ed_month
+  require main.ed_cvd_year
+  require main.ed_cvd_month
   require main.ed_mort_year
   require main.ed_mort_month
   put "do $BNR_STATA/monthly/bnr_step4_metrics.do "
-  put main.ed_year
+  put main.ed_cvd_year
   put " "
-  put main.ed_month
+  put main.ed_cvd_month
   put " "
   put main.ed_mort_year
   put " "

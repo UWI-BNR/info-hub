@@ -1,76 +1,42 @@
 ---
 title: "Generate combined CVD metrics"
-description: "Step 4: calculate private CVD burden and annual-rate products, then create the combined staging package."
-date: 2026-08-10
-date-modified: 2026-08-21
+description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
+date-modified: 2026-08-28
 ---
 
----
+## Purpose
 
-## What this step does
+Step 4 combines the CVD Step 3 count input with a completed mortality release.
+It calculates and privately stages hospital-only burden results, annual
+hospital-plus-DCO rates, and the private DCO component evidence used by Step 5.
+It does not review, approve or publish.
 
-Runs private CVD--mortality linkage and annual-rate calculations, calculates CVD
-burden metrics, and creates the combined private staging package used for Step 5
-review and approval.
+## Required inputs
 
-## Inputs
-
-| Input | Private location | Purpose |
-|---|---|---|
-| Step 3 count dataset | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/bnr_cvd_input_count_YYYYMM_v01.dta` | Private event-level input for burden calculation. |
-| Step 3 count YAML receipt | Same `metric_inputs` folder | Confirms source release and provenance. |
-| Mortality release | `mort_YYYY_MM` | Required private input for DCO linkage and annual incidence-rate calculation. |
-
-## Run Step 4
-
-1. **Open Step 4.** In Stata, choose User > BNR > Update CVD dashboard > Step 4: Calculate metrics for dashboards.
-2. **Select both releases.** Enter the CVD release year/month and the mortality release year/month used for linkage.
-3. **Confirm the package.** Step 4 stages the combined burden and annual-rate package.
-4. **Choose replacement behaviour.** For a first run, leave Authorise replacement unticked.
-5. **Run Step 4.** Select Run Step 4.
-6. **Check the run summary.** Confirm the operational summary shows a successful run and lists the staging package, QA review file and suppression workbook.
-7. **Inspect the staging package.**
-   - Open `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`.
-   - Confirm that the `datasets` and `review` folders exist.
-   - Confirm that the files listed in the run summary are present.
-   - Open the QA CSV and confirm that the package is ready to proceed to Step 5.
-   - Do not perform the Step 5 human disclosure review here.
-
-## Outputs
-
-The staging package is created under:
-
-`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
-
-| Output | Purpose |
+| Input | Location |
 |---|---|
-| Burden and annual-rate `.dta` files | Separate private calculation products for the selected release. |
-| Private DCO component sidecar | Confidential support evidence used only during Step 5 disclosure control. |
-| QA review material | Machine-readable checks on the staged calculation products. |
-| Step 4 log | Operational record stored under `$BNR_PRIVATE_LOGS/`. |
+| Step 3 count data and receipt | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/` |
+| Completed mortality-linked CVD calculations | `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/` |
 
-Do not edit generated staging files manually.
-
-See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the distinction between private staging, authoritative public outputs and the website mirror.
-
-To see the local staging root:
-
-```stata
-display "$BNR_STAGING"
-```
-
-## Command-line equivalent
+## Run
 
 ```stata
 do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 4 2026 7
 ```
 
-Add `replace` only for a deliberate rebuild of the staging package.
+Use `replace` only to deliberately rebuild the same CVD release.
 
-## If Step 4 does not complete
+## Output and checks
 
-Read the **Reason** and **Log** lines in the operational summary.
+The private staging package is:
 
-First confirm that the matching Step 3 count dataset/YAML receipt and the selected
-mortality release exist. If a staging package already exists, inspect it before
-authorising replacement.
+`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
+
+Inspect its `datasets/`, `metadata/` and `review/` folders and confirm the
+controller reports successful combined calculation and staging. Do not alter
+generated products by hand. The following Step 5 preparation supplies the
+human review workbook and disclosure QA.
+
+Annual DCO-facing public-shaped rows are limited to All CVD, Heart and Stroke;
+all, female and male; and Primary/Inclusive definitions. Additional-DCO counts
+are annual and all-age only; component accounting remains private.

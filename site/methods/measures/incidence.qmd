@@ -24,6 +24,13 @@ A rate makes event numbers more comparable when populations differ in size. BNR 
 | **Hospital-based event rate** | Eligible hospital-registered events | Recorded serious CVD events relative to the resident population |
 | **Estimated national event rate** | Hospital events plus identified death-certificate-only events | A broader estimate, subject to the quality and completeness of death-certificate ascertainment |
 
+The approved DCO-enhanced rates are annual only and are supplied as crude and
+age-standardised rates for All CVD, Heart and Stroke, and for all, female and
+male sexes. Primary and Inclusive are alternative mortality definitions, not
+uncertainty bounds. They are calculated in the private Stata workflow and
+released as values or `*`; the website does not calculate, add or subtract
+rates from public rows.
+
 ## How do we calculate it?
 
 The crude rate is:
@@ -68,4 +75,3 @@ BNR publications have historically used the familiar term *incidence*. Because t
 - [Number of CVD events](cvd-event-counts.qmd)
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [CVD incidence briefing](../../surveillance/cvd/briefings/case-incidence.qmd)
-

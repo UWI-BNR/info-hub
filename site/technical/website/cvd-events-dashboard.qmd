@@ -1,37 +1,46 @@
 ---
-title: "Maintain the CVD events dashboard"
-description: "How the Quarto CVD events dashboard reads approved public data and how to check it after an analytical release."
+title: "CVD events dashboard transition note"
+description: "Current data-location and scope boundary before the separate CVD dashboard rebuild."
 date: 2026-08-21
-date-modified: 2026-08-21
+date-modified: 2026-08-28
 ---
 
 ---
 
 ## What this page covers
 
-Use this page when maintaining the public **CVD burden** dashboard after the CVD events workflow has published an approved metric release.
+The current burden dashboard source is a legacy page. Do not amend it as part
+of routine analytical publication. A separate dashboard rebuild will consume
+the combined public CVD release and add its approved annual scope controls.
 
 The dashboard is a Quarto/Observable publication layer. It visualises approved public values; it does not replace the Stata analytical workflow.
 
 ## Dashboard source
 
-The maintained QMD is:
+The legacy QMD is:
 
 `site/surveillance/cvd/metrics/burden/index.qmd`
 
 The dashboard reads the stable current CSV from the website mirror:
 
-`site/downloads/files/metrics/cvd/burden/cvd_burden_metrics_current.csv`
+`site/downloads/files/metrics/cvd/cvd_metrics_current.csv`
 
 The authoritative analytical copy remains under:
 
-`outputs/public/metrics/cvd/burden/`
+`outputs/public/metrics/cvd/`
 
-Do not point the QMD to private derived data or staging.
+Do not point any QMD to private derived data or staging. The legacy QMD still
+uses a retired burden-only path and is intentionally deferred for replacement.
 
-## What the dashboard presents
+## Approved public scope for the rebuild
 
-The current dashboard has two indicator views:
+The new combined public file includes hospital-only counts plus annual
+hospital-plus-DCO and additional-DCO counts, and annual crude/age-standardised
+rates. DCO-related display controls must be annual only, all-age only, and
+must respect supplied suppression fields. The dashboard must never calculate
+or reconstruct a count, rate or suppressed component.
+
+The legacy dashboard has two burden-only indicator views:
 
 - **Event count**; and
 - **Event distribution**.

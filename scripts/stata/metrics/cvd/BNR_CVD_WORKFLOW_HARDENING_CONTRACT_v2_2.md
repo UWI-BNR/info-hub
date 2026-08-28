@@ -1,7 +1,7 @@
 # BNR CVD events workflow hardening contract
 
 **Status:** Approved amended design baseline for rate implementation  
-**Version:** 2.2 (26 August 2026)  
+**Version:** 2.3 (28 August 2026)  
 **Applies from:** approval of the joint subtype estimator and rate-construction work  
 **Replaces:** Version 2.0 of this contract. It retains the completed hardening decisions and adds the approved joint subtype, incidence-rate and sex-stratified rate extensions.
 
@@ -75,7 +75,7 @@ incidence series.
 
 | Concept | Public field | Allowed values | Meaning |
 |---|---|---|---|
-| Event ascertainment | `ascertainment_scope` | `hospital_only`, `hospital_plus_dco` | Whether the numerator includes estimated additional DCOs. |
+| Event ascertainment | `ascertainment_scope` | `hospital_only`, `additional_dco`, `hospital_plus_dco` | Hospital-only is observed. `additional_dco` is the released annual all-age DCO component; `hospital_plus_dco` is the combined estimate. |
 | Mortality definition | `mortality_definition` | `not_applicable`, `primary`, `inclusive` | Mortality classification used only for DCO-enhanced values. |
 | Estimate basis | `estimate_basis` | `observed`, `estimated` | Observed hospital metric or DCO-enhanced estimate. |
 | Linkage uncertainty | `linkage_lower_value`, `linkage_upper_value` | numeric or missing | Bounds around DCO-enhanced central values only. |
@@ -255,7 +255,7 @@ or calculate epidemiological estimates.
 | `age_group` | `all`, `under_70`, `age_70_plus`, `age_standardised` (public); 5-year bands privately | Valid lattice only |
 | `period_type` | `monthly`, `quarterly`, `annual` | Valid lattice only |
 | Existing period fields | existing date/order fields | All rows |
-| `ascertainment_scope` | `hospital_only`, `hospital_plus_dco` | All rows |
+| `ascertainment_scope` | `hospital_only`, `additional_dco`, `hospital_plus_dco` | `additional_dco` is annual/all-age count only; hospital-plus-DCO is available only in the approved annual rate/count lattice. |
 | `mortality_definition` | `not_applicable`, `primary`, `inclusive` | `primary`/`inclusive` only for DCO rows |
 | `estimate_basis` | `observed`, `estimated` | All rows |
 | `value` | number or blank | Central value; blank if suppressed |
@@ -295,6 +295,27 @@ accounting category remain private.
 National Heart and Stroke DCO-incidence estimates are included in the amended
 annual rate contract. They remain separate estimates and must not be added to
 reproduce All-CVD. `mixed_unallocated` remains private accounting output.
+
+### Annual DCO count release amendment
+
+The public package also releases the two annual all-age count representations
+needed to describe the DCO contribution: `additional_dco` and
+`hospital_plus_dco`. They are limited to All CVD, Heart and Stroke; all,
+female and male; and Primary and Inclusive mortality definitions. No monthly,
+quarterly, age-specific or component-level DCO count is public.
+
+For every identical released annual stratum the private review must audit:
+
+\[
+\text{hospital-only count} + \text{additional-DCO count}
+= \text{hospital-plus-DCO count}.
+\]
+
+If any term is protected, deterministic companion protection must prevent
+recovery from the other two terms. The same protection decision applies to the
+associated released hospital-plus-DCO count, crude-rate and ASR
+representations. `mixed_unallocated`, unknown-sex support and allocation
+components remain private.
 
 ## Fixed monthly reference asset
 

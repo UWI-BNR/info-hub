@@ -1,9 +1,11 @@
 ---
 title: "Number of CVD events"
-description: "How BNR counts eligible hospital-registered cardiovascular events."
+description: "How BNR reports hospital-registered and approved annual DCO-enhanced cardiovascular event counts."
 ---
 
-The CVD event count is the number of eligible heart attack and stroke events registered from hospital information during a stated period.
+The CVD event count is the number of eligible heart and stroke events recorded
+from hospital information during a stated period. The annual public release
+also contains approved DCO-enhanced national count representations.
 
 ## At a glance
 
@@ -49,6 +51,21 @@ These fictional numbers describe 200 events. They do not necessarily describe 20
 
 A change in counts can reflect a real change in disease burden, but also population size, health-care use, diagnostic practice, timeliness or completeness. Counts should not be interpreted as population incidence unless a suitable population denominator is used.
 
+## Annual DCO-enhanced counts
+
+For annual all-age reporting only, the public release may show:
+
+- **Hospital only** — eligible events recorded from hospital information;
+- **Additional DCO** — the approved estimated contribution from eligible
+  death-certificate-only events; and
+- **Hospital plus DCO** — the corresponding broader annual estimate.
+
+These representations are available for All CVD, Heart and Stroke and for all,
+female and male sexes, using either the Primary or Inclusive mortality
+definition where relevant. They are not available for monthly, quarterly or
+age-specific views. Suppressed values are shown as `*`; they must not be
+derived by subtracting other displayed values.
+
 ## Things to bear in mind
 
 - The Queen Elizabeth Hospital is Barbados's only tertiary hospital, so hospital events provide an important view of serious CVD burden.
@@ -60,4 +77,3 @@ A change in counts can reflect a real change in disease burden, but also populat
 - [CVD incidence and event rates](incidence.qmd)
 - [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
 - [CVD surveillance outputs](../../surveillance/cvd/index.qmd)
-

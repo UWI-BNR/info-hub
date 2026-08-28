@@ -17,7 +17,7 @@ Steps 1 and 2 create the private source and confidential cumulative dataset. [St
 - [tabulations](../tabulations/overview.qmd); and
 - [routine briefings](../briefings/overview.qmd).
 
-CVD events Steps 4-6 then calculate, review, approve and publish the CVD burden metric package used by the public events dashboard.
+CVD events Steps 4-6 then calculate, review, approve and publish the combined CVD metric package. Dashboard rebuilding is a separate publication-layer task that consumes the approved public release.
 
 `REDCap -> private extract -> confidential cumulative dataset -> deidentified analytical inputs -> metrics -> review and approval -> publication`
 
