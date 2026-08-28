@@ -1,27 +1,31 @@
 /*******************************************************************************
 DO-FILE: test_bnr_cvd_stage5_expanded_end_to_end.do
-VERSION: 2.1.1 (27 August 2026)
-PURPOSE: End-to-end synthetic test for annual DCO count and rate disclosure.
+VERSION: 2.2.0 (28 August 2026)
+PURPOSE: End-to-end synthetic test for annual DCO count, rate and
+         statistical-CI disclosure.
 
 Tests one annual/all-age Heart/Female equation:
   hospital (20) + additional DCO (3) = hospital plus DCO (23).
-The DCO component is primary-suppressed.  Its count, total count, crude rate
-and ASR must be suppressed, while the hospital count and representations remain
-available.  This proves the count identity cannot reconstruct the small DCO.
+
+The DCO component is primary-suppressed. Its count, total count, crude rate,
+ASR and numerical CI bounds must be suppressed, while the hospital count and
+hospital-rate representations remain available. CI method and level metadata
+remain on protected rate rows.
 *******************************************************************************/
 
 version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 end-to-end test v2.1.1"
+display as result "Running expanded CVD Step 5 end-to-end test v2.2.0"
 
 if "$BNR_STATA" == "" exit 198
 local helper_path "$BNR_STATA/metrics/cvd/bnr_step5_suppress_expanded_cvd.do"
 capture confirm file "`helper_path'"
 assert _rc == 0
 
-tempfile burden_input rates_input components_input candidate_output qa_output equation_output row_output
+tempfile burden_input rates_input components_input candidate_output ///
+    qa_output equation_output row_output
 
 * Established hospital-only annual count.
 clear
@@ -61,7 +65,7 @@ generate byte suppression_review = 0
 generate str80 suppression_reason = ""
 save "`burden_input'", replace
 
-* Rate core output: hospital rate pair, total count/rate triplet, and DCO count.
+* Rate-core output: hospital rate pair, total count/rate triplet, and DCO count.
 clear
 set obs 6
 generate str28 schema_version = "bnr_cvd_public_metric_v2"
@@ -81,7 +85,6 @@ replace ascertainment_scope = "hospital_plus_dco" in 3/5
 replace ascertainment_scope = "additional_dco" in 6
 generate str20 mortality_definition = "not_applicable"
 replace mortality_definition = "primary" in 3/6
-replace mortality_definition = "primary" in 5
 generate str12 estimate_basis = "observed"
 replace estimate_basis = "estimated" in 3/6
 generate str18 unit = "rate_per_100000"
@@ -107,6 +110,22 @@ replace linkage_lower_value = 23 in 5
 replace linkage_upper_value = 23 in 5
 replace linkage_lower_value = 3 in 6
 replace linkage_upper_value = 3 in 6
+
+* Statistical CI fields exist only on rate rows.
+generate double ci_lower_value = .
+generate double ci_upper_value = .
+replace ci_lower_value = 80 in 1/2
+replace ci_upper_value = 120 in 1/2
+replace ci_lower_value = 90 in 3/4
+replace ci_upper_value = 130 in 3/4
+generate byte ci_level = .
+replace ci_level = 95 in 1/4
+generate str40 ci_method = ""
+replace ci_method = "poisson_exact_garwood" in 1
+replace ci_method = "fay_feuer_gamma" in 2
+replace ci_method = "conditional_gamma" in 3
+replace ci_method = "conditional_fay_feuer_gamma" in 4
+
 generate byte period_complete = 1
 generate str25 status_flag = "final"
 save "`rates_input'", replace
@@ -124,19 +143,43 @@ generate double dco_central_component_n = 3
 generate double dco_upper_component_n = 3
 save "`components_input'", replace
 
-do "`helper_path'" "`burden_input'" "`rates_input'" "`components_input'" "`candidate_output'" "`qa_output'" "`equation_output'" "`row_output'" "cvd_2099_01"
+do "`helper_path'" "`burden_input'" "`rates_input'" "`components_input'" ///
+    "`candidate_output'" "`qa_output'" "`equation_output'" "`row_output'" ///
+    "cvd_2099_01"
 
 use "`candidate_output'", clear
-quietly count if suppression_status != "none" & (!missing(value) | !missing(numerator) | !missing(denominator) | !missing(linkage_lower_value) | !missing(linkage_upper_value))
+
+quietly count if suppression_status != "none" & ///
+    (!missing(value) | !missing(numerator) | !missing(denominator) | ///
+    !missing(linkage_lower_value) | !missing(linkage_upper_value) | ///
+    !missing(ci_lower_value) | !missing(ci_upper_value))
 assert r(N) == 0
-quietly count if ascertainment_scope == "additional_dco" & suppression_status == "primary"
+
+quietly count if ascertainment_scope == "additional_dco" & ///
+    suppression_status == "primary"
 assert r(N) == 1
-quietly count if ascertainment_scope == "hospital_plus_dco" & suppression_status == "primary"
+
+quietly count if ascertainment_scope == "hospital_plus_dco" & ///
+    suppression_status == "primary"
 assert r(N) == 3
-quietly count if ascertainment_scope == "hospital_only" & suppression_status == "none"
+
+quietly count if ascertainment_scope == "hospital_only" & ///
+    suppression_status == "none"
 assert r(N) == 3
+
 quietly count if ascertainment_scope == "hospital_only" & missing(value)
 assert r(N) == 0
+
+* Protected rate rows keep method/level but not numerical limits.
+assert ci_level == 95 & ci_method != "" ///
+    if metric_id == "CVD-INCIDENCE-001" & suppression_status != "none"
+assert missing(ci_lower_value) & missing(ci_upper_value) ///
+    if metric_id == "CVD-INCIDENCE-001" & suppression_status != "none"
+
+* Unprotected hospital rate rows retain numerical CI fields.
+assert !missing(ci_lower_value, ci_upper_value) ///
+    if metric_id == "CVD-INCIDENCE-001" & ///
+    ascertainment_scope == "hospital_only"
 
 use "`equation_output'", clear
 assert result == "PASS"
@@ -147,7 +190,7 @@ use "`row_output'", clear
 assert result == "PASS"
 
 use "`qa_output'", clear
-assert _N == 32
+assert _N == 33
 assert result == "PASS"
 
-display as result "Expanded CVD Step 5 end-to-end test passed."
+display as result "Expanded CVD Step 5 end-to-end CI test passed."

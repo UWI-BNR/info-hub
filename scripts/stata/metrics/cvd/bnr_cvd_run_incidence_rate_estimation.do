@@ -1,14 +1,18 @@
 /*******************************************************************************
 DO-FILE:     bnr_cvd_run_incidence_rate_estimation.do
-VERSION:     1.0.8 (27 August 2026)
-RELEASE:     Stage 3 rate-construction integrated release 1.0.7
+VERSION:     1.0.9 (28 August 2026)
+RELEASE:     Statistical CI amendment 1.0.0
 PURPOSE:     Private controller for annual CVD crude and age-standardised rates.
 
-USAGE:       do "$BNR_STATA/metrics/cvd/bnr_cvd_run_incidence_rate_estimation.do" 2024 04 2026 07 replace
+USAGE:       do "$BNR_STATA/metrics/cvd/bnr_cvd_run_incidence_rate_estimation.do" 2024 05 2026 07 replace
 
 NOTE:        Before this pass, prepare the two private reference assets using
              bnr_cvd_prepare_rate_reference.do. This controller never creates
              public output or invokes disclosure-control promotion.
+
+             After the existing rate core completes, the bounded CI helper adds
+             95% statistical confidence intervals to the private rate candidate.
+             Existing central estimates and linkage limits must remain unchanged.
 *******************************************************************************/
 version 19
 clear all
@@ -97,24 +101,49 @@ foreach f in rates_output components_output qa_output {
     }
 }
 
+local ci_helper "$BNR_STATA/metrics/cvd/bnr_cvd_add_rate_confidence_intervals.do"
+capture confirm file "`ci_helper'"
+if _rc {
+    display as error "Statistical CI helper is missing: `ci_helper'"
+    exit 601
+}
+
 capture mkdir "$BNR_PRIVATE_LOGS"
 capture log close stage4rates
 log using `"`output_log'"', text replace name(stage4rates)
 display as text "BNR CVD PRIVATE ANNUAL INCIDENCE RATE CONSTRUCTION"
-display as text "Implementation release: 1.0.7"
+display as text "Implementation release: statistical CI amendment 1.0.0"
 local complete_year = `cy_num'
 if `cm_num' < 12 local complete_year = `cy_num' - 1
 display as text "Complete annual rate range: 2010--`complete_year'"
-capture noisily do "$BNR_STATA/metrics/cvd/bnr_cvd_construct_incidence_rates_core.do" `"`events_input'"' `"`linkage_input'"' `"`joint_input'"' `"`population_input'"' `"`standard_input'"' `"`rates_output'"' `"`components_output'"' `"`qa_output'"' `cy' `cm'
+
+capture noisily do "$BNR_STATA/metrics/cvd/bnr_cvd_construct_incidence_rates_core.do" ///
+    `"`events_input'"' `"`linkage_input'"' `"`joint_input'"' ///
+    `"`population_input'"' `"`standard_input'"' `"`rates_output'"' ///
+    `"`components_output'"' `"`qa_output'"' `cy' `cm'
 if _rc {
     local rc = _rc
     display as error "Rate construction did not complete; no public output was created."
     log close stage4rates
     exit `rc'
 }
+
+capture noisily do "`ci_helper'" ///
+    `"`events_input'"' `"`components_output'"' ///
+    `"`population_input'"' `"`standard_input'"' ///
+    `"`rates_output'"' `"`qa_output'"' `cy' `cm'
+if _rc {
+    local rc = _rc
+    display as error "Statistical CI construction did not complete."
+    display as error "The private rate candidate must not be staged."
+    log close stage4rates
+    exit `rc'
+}
+
 display as result "Private annual CVD rate construction completed."
 display as result "  Candidate rates: `rates_output'"
 display as result "  Components:      `components_output'"
 display as result "  QA:              `qa_output'"
+display as result "  Statistical CIs: added to CVD-INCIDENCE-001 rows"
 display as result "  Log:             `output_log'"
 log close stage4rates

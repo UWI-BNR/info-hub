@@ -38,9 +38,9 @@ execute:
 .bnr-headline-value { font-size: 1.65rem; font-weight: 700; line-height: 1.1; }
 .bnr-headline-note, .bnr-period-note { font-size: .85rem; color: #666; margin-top: .2rem; }
 .bnr-definition-values { display: flex; flex-direction: column; gap: .25rem; margin-top: .1rem; }
-.bnr-definition-value-row { display: grid; grid-template-columns: minmax(72px,auto) 1fr; gap: .45rem; align-items: baseline; }
+.bnr-definition-value-row { display: grid; grid-template-columns: 160px minmax(72px,1fr); gap: .55rem; align-items: baseline; }
 .bnr-definition-value-name { font-size: .82rem; font-weight: 700; }
-.bnr-definition-value-number { font-size: 1.35rem; font-weight: 700; line-height: 1.05; color: #222; }
+.bnr-definition-value-number { font-size: 1.35rem; font-weight: 700; line-height: 1.05; color: #222; text-align: left; }
 .bnr-definition-value-note { grid-column: 2; font-size: .78rem; color: #666; margin-top: -.12rem; }
 .bnr-distribution-stack { display: flex; flex-direction: column; gap: .3rem; align-items: stretch; }
 .bnr-distribution-card { border: 1px solid #e5e7e9; border-left: 4px solid #c7ced3; border-radius: .35rem; padding: .45rem .6rem .5rem; background: #fff; min-width: 0; width: 100%; }
@@ -117,6 +117,8 @@ execute:
 .bnr-legend-line { display: inline-block; width: 28px; height: 0; border-top: 3px solid; }
 .bnr-legend-dotted { border-top-style: dashed; opacity: .5; }
 .bnr-legend-swatch { display: inline-block; width: 16px; height: 16px; border: 1px solid rgba(0,0,0,.25); border-radius: .2rem; }
+.bnr-legend-whisker { display: inline-block; width: 16px; height: 16px; border-left: 2px solid #5f6368; opacity: .7; margin-left: 7px; }
+.bnr-legend-uncertainty-band { display: inline-block; width: 18px; height: 12px; border: 1px solid rgba(0,0,0,.18); border-radius: .2rem; background: rgba(95,99,104,.12); }
 .bnr-definition-panel { border-top: 1px solid #e9ecef; padding-top: .5rem; margin-top: .65rem; }
 .bnr-release-grid { display: grid; grid-template-columns: repeat(4,minmax(140px,1fr)); gap: .65rem; margin-top: .45rem; }
 .bnr-release-item { border: 1px solid #dee2e6; border-radius: .35rem; padding: .55rem .65rem; background: #fff; }
@@ -145,8 +147,10 @@ execute:
 // PUBLICATION-LAYER CONTRACT
 // --------------------------
 // This dashboard reads only approved public CVD files mirrored under site/downloads/.
-// It does not calculate CVD rates, percentages, rolling comparators, disclosure
-// decisions, DCO linkage quantities, or protected values.
+// It does not calculate CVD rates, statistical confidence intervals,
+// percentages, rolling comparators, disclosure decisions, DCO linkage
+// quantities, or protected values. Statistical CI fields and linkage bounds
+// are read exactly as released by the approved public workflow.
 //
 // The fixed 2015-2019 monthly reference is loaded exactly as published.
 // One presentation-derived statistic follows the mortality dashboard pattern:
@@ -235,6 +239,71 @@ rateStatistic = d => d === "asr"
 rateAgeGroup = d => d === "asr"
   ? "age_standardised"
   : "all"
+
+
+rateIntervalNumber = value => Number.isFinite(value)
+  ? Number(value).toFixed(1)
+  : "—"
+
+rateCardIntervalNumber = value => Number.isFinite(value)
+  ? Math.round(Number(value)).toLocaleString()
+  : "—"
+
+ciMethodLabel = method => ({
+  poisson_exact_garwood: "Exact Poisson / Garwood",
+  fay_feuer_gamma: "Fay–Feuer gamma",
+  conditional_gamma: "Conditional gamma",
+  conditional_fay_feuer_gamma: "Conditional Fay–Feuer gamma"
+})[method] || method || "—"
+
+statisticalCiText = d => {
+  if (!d || d.metric_id !== "CVD-INCIDENCE-001") return "—"
+  if (d.suppression_status !== "none") return "*"
+  if (!Number.isFinite(d.ci_lower_value) || !Number.isFinite(d.ci_upper_value)) return "—"
+  return `${rateIntervalNumber(d.ci_lower_value)}–${rateIntervalNumber(d.ci_upper_value)}`
+}
+
+linkageUncertaintyText = d => {
+  if (!d || d.metric_id !== "CVD-INCIDENCE-001") return "—"
+  if (d.ascertainment_scope !== "hospital_plus_dco") return "Not applicable"
+  if (d.suppression_status !== "none") return "*"
+  if (!Number.isFinite(d.linkage_lower_value) || !Number.isFinite(d.linkage_upper_value)) return "—"
+  return `${rateIntervalNumber(d.linkage_lower_value)}–${rateIntervalNumber(d.linkage_upper_value)}`
+}
+
+statisticalCiCardText = d => {
+  if (!d || d.metric_id !== "CVD-INCIDENCE-001") return "—"
+  if (d.suppression_status !== "none") return "*"
+  if (!Number.isFinite(d.ci_lower_value) || !Number.isFinite(d.ci_upper_value)) return "—"
+  return `${rateCardIntervalNumber(d.ci_lower_value)}–${rateCardIntervalNumber(d.ci_upper_value)}`
+}
+
+linkageUncertaintyCardText = d => {
+  if (!d || d.metric_id !== "CVD-INCIDENCE-001") return "—"
+  if (d.ascertainment_scope !== "hospital_plus_dco") return "Not applicable"
+  if (d.suppression_status !== "none") return "*"
+  if (!Number.isFinite(d.linkage_lower_value) || !Number.isFinite(d.linkage_upper_value)) return "—"
+  return `${rateCardIntervalNumber(d.linkage_lower_value)}–${rateCardIntervalNumber(d.linkage_upper_value)}`
+}
+
+rateTooltip = (d, seriesKey) => {
+  const lines = [
+    seriesLabel(seriesKey),
+    String(d.period_year),
+    `${publishedValue(d)} per 100,000`
+  ]
+  if (Number.isFinite(d.ci_lower_value) && Number.isFinite(d.ci_upper_value)) {
+    lines.push(`95% statistical CI: ${statisticalCiText(d)}`)
+  }
+  if (
+    d.ascertainment_scope === "hospital_plus_dco" &&
+    Number.isFinite(d.linkage_lower_value) &&
+    Number.isFinite(d.linkage_upper_value)
+  ) {
+    lines.push(`Linkage uncertainty: ${linkageUncertaintyText(d)}`)
+  }
+  return lines.join("\n")
+}
 ```
 
 ```{ojs}
@@ -287,7 +356,6 @@ viewof selected_series = (() => {
     const wrapper = html`<div>
       <label>Event ascertainment</label>
       <div class="bnr-period-fixed">Hospital-recorded</div>
-      <div class="bnr-period-note">Published event distributions are hospital-recorded.</div>
     </div>`
     wrapper.value = ["hospital"]
     return wrapper
@@ -297,7 +365,6 @@ viewof selected_series = (() => {
     const wrapper = html`<div>
       <label>Event ascertainment</label>
       <div class="bnr-period-fixed">Hospital-recorded</div>
-      <div class="bnr-period-note">DCO-inclusive event counts are published annually.</div>
     </div>`
     wrapper.value = ["hospital"]
     return wrapper
@@ -322,20 +389,11 @@ viewof selected_series = (() => {
 
 ```{ojs}
 //| echo: false
-html`<div class="bnr-period-note" style="margin-top:-.25rem;margin-bottom:.55rem">
-  <strong>Hospital-recorded:</strong> eligible events identified from hospital records.<br>
-  <strong>Hospital + DCO:</strong> also includes approved death-certificate-only events, using the Primary or Inclusive mortality definition.
-</div>`
-```
-
-```{ojs}
-//| echo: false
 viewof selected_period_type = (() => {
   if (selected_indicator === "profile") {
     const wrapper = html`<div>
       <label>Time period</label>
       <div class="bnr-period-fixed">Annual</div>
-      <div class="bnr-period-note">The distribution view is available by year.</div>
     </div>`
     wrapper.value = "annual"
     return wrapper
@@ -344,7 +402,6 @@ viewof selected_period_type = (() => {
     const wrapper = html`<div>
       <label>Time period</label>
       <div class="bnr-period-fixed">Annual</div>
-      <div class="bnr-period-note">Published CVD event rates are annual.</div>
     </div>`
     wrapper.value = "annual"
     return wrapper
@@ -367,6 +424,28 @@ viewof selected_rate_measure = (() => {
   return Inputs.select(
     ["asr", "crude"],
     {label: "Rate measure", value: "asr", format: d => rateMeasureLabel(d)}
+  )
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_rate_uncertainty = (() => {
+  if (selected_indicator !== "rates") {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = []
+    return wrapper
+  }
+  return Inputs.checkbox(
+    ["statistical_ci", "linkage"],
+    {
+      label: "Uncertainty",
+      value: ["statistical_ci", "linkage"],
+      format: d => ({
+        statistical_ci: "95% statistical confidence interval",
+        linkage: "DCO linkage uncertainty"
+      })[d]
+    }
   )
 })()
 ```
@@ -408,6 +487,93 @@ viewof selected_event_type = Inputs.select(
     format: d => eventLabel(d)
   }
 )
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Annual DCO count series are offered as trends only when at least half of
+// the complete annual periods have publishable values. This affects display
+// only: protected rows remain protected in the released dataset.
+{
+  const control = viewof selected_series
+  const boxes = control?.querySelectorAll?.('input[type="checkbox"]') || []
+  const optionKeys = ["hospital", "dco_primary", "dco_inclusive"]
+
+  const completeYears = new Set(
+    metrics
+      .filter(d =>
+        d.metric_id === "CVD-BURDEN-001" &&
+        d.period_type === "annual" &&
+        d.statistic === "annual_count" &&
+        d.event_type === selected_event_type &&
+        d.sex === "all" &&
+        d.age_group === "all" &&
+        seriesMatches(d, "hospital") &&
+        (
+          d.period_complete === 1 ||
+          d.period_complete === "1" ||
+          d.period_complete === true
+        )
+      )
+      .map(d => d.period_year)
+  )
+
+  let changed = false
+
+  Array.from(boxes).forEach((box, i) => {
+    const key = optionKeys[i]
+    if (!key) return
+
+    let disable = false
+    let publishable = 0
+    const total = completeYears.size
+
+    if (
+      selected_indicator === "counts" &&
+      selected_period_type === "annual" &&
+      key !== "hospital" &&
+      total > 0
+    ) {
+      publishable = metrics.filter(d =>
+        d.metric_id === "CVD-BURDEN-001" &&
+        d.period_type === "annual" &&
+        d.statistic === "annual_count" &&
+        d.event_type === selected_event_type &&
+        d.sex === "all" &&
+        d.age_group === "all" &&
+        completeYears.has(d.period_year) &&
+        seriesMatches(d, key) &&
+        d.suppression_status === "none" &&
+        Number.isFinite(d.value)
+      ).length
+
+      disable = publishable / total < 0.5
+    }
+
+    box.disabled = disable
+
+    const label = box.closest("label")
+    if (label) {
+      label.style.opacity = disable ? "0.45" : ""
+      label.style.cursor = disable ? "help" : ""
+      label.title = disable
+        ? `${seriesLabel(key)} is not offered as an annual trend for ${eventLabel(selected_event_type)} because fewer than half of complete annual values can be published after disclosure control (${publishable} of ${total}).`
+        : ""
+    }
+
+    if (disable && box.checked) {
+      box.checked = false
+      changed = true
+    }
+  })
+
+  if (changed) {
+    const remaining = Array.from(boxes).filter(box => box.checked && !box.disabled)
+    if (!remaining.length && boxes[0] && !boxes[0].disabled) boxes[0].checked = true
+    control.dispatchEvent(new Event("input", {bubbles: true}))
+  }
+}
 ```
 
 ```{ojs}
@@ -535,18 +701,9 @@ viewof selected_age_group = (() => {
     })
   }
 
-  const note = selected_indicator === "profile"
-    ? "Age groups are shown within the annual distribution view."
-    : selected_indicator === "rates"
-    ? "Age adjustment is selected using Rate measure."
-    : selected_period_type === "annual" && selected_event_type === "all_cvd"
-    ? "Broad age groups are available for hospital-recorded annual All CVD counts."
-    : "Age groups are available only for hospital-recorded annual All CVD counts."
-
   const wrapper = html`<div>
     <label>Age group</label>
     <div class="bnr-period-fixed">All ages</div>
-    <div class="bnr-period-note">${note}</div>
   </div>`
   wrapper.value = "all"
   return wrapper
@@ -689,6 +846,43 @@ incompleteSegments = rows => {
     ordered,
     (a, b) => adjacentPeriods(a, b) && isSafe(a) && isSafe(b) && (!isComplete(a) || !isComplete(b))
   )
+}
+
+// Graphical bridge across exactly one protected annual observation.
+// The bridge joins only the published values on either side. It does not
+// calculate, impute or plot a value for the protected year.
+isolatedProtectedAnnualBridges = rows => {
+  const ordered = sortedRows(rows)
+  const bridges = []
+
+  for (let i = 1; i < ordered.length - 1; i++) {
+    const before = ordered[i - 1]
+    const hidden = ordered[i]
+    const after = ordered[i + 1]
+
+    const isolatedProtectedYear =
+      hidden.period_type === "annual" &&
+      before.period_type === "annual" &&
+      after.period_type === "annual" &&
+      before.period_year === hidden.period_year - 1 &&
+      after.period_year === hidden.period_year + 1 &&
+      isComplete(before) &&
+      isComplete(hidden) &&
+      isComplete(after) &&
+      isSafe(before) &&
+      isSafe(after) &&
+      hidden.suppression_status !== "none"
+
+    if (isolatedProtectedYear) {
+      const segment = `protected_${hidden.period_year}`
+      bridges.push(
+        {...before, segment, protected_year: hidden.period_year},
+        {...after, segment, protected_year: hidden.period_year}
+      )
+    }
+  }
+
+  return bridges
 }
 ```
 
@@ -953,7 +1147,11 @@ incompleteSegments = rows => {
         completeSegments: contiguousSafeSegments(allRows)
           .map(d => ({...d, chart_x: chartX(d)})),
         dottedSegments: incompleteSegments(allRows)
-          .map(d => ({...d, chart_x: chartX(d)}))
+          .map(d => ({...d, chart_x: chartX(d)})),
+        protectedBridges: selected_period_type === "annual"
+          ? isolatedProtectedAnnualBridges(allRows)
+              .map(d => ({...d, chart_x: chartX(d)}))
+          : []
       }
     })
 
@@ -1024,6 +1222,8 @@ incompleteSegments = rows => {
       ? Math.max(...allAnnualScaleRows.map(d => d.value))
       : null
 
+    const hasProtectedBridge = series.some(s => s.protectedBridges.length)
+
     const marks = series.flatMap(s => {
       const c = seriesColour(s.key)
       return [
@@ -1035,6 +1235,11 @@ incompleteSegments = rows => {
           x: "chart_x", y: "value", z: "segment",
           stroke: c, strokeOpacity: .42, strokeWidth: 2.3,
           strokeDasharray: "2,4"
+        }),
+        Plot.lineY(s.protectedBridges, {
+          x: "chart_x", y: "value", z: "segment",
+          stroke: c, strokeOpacity: .42, strokeWidth: 1.8,
+          strokeDasharray: "5,5"
         }),
         Plot.dot(s.completePoints, {
           x: "chart_x", y: "value",
@@ -1069,6 +1274,7 @@ incompleteSegments = rows => {
       <div class="bnr-chart-legend">
         ${panelSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
         ${hasComparator ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#666;border-top-style:dashed"></span>Previous 5-year average</span>` : ""}
+        ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;border-top-style:dashed;opacity:.55"></span>Single protected year (not estimated)</span>` : ""}
         <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style="border-color:#777"></span>${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}</span>
       </div>
       ${Plot.plot({
@@ -1092,6 +1298,12 @@ incompleteSegments = rows => {
         ${latestCards}
         ${comparatorCards}
       </div>
+      ${selected_period_type === "annual"
+        ? html`<div class="bnr-note-box">
+            <strong>Disclosure and trend display:</strong>
+            A faint dashed bridge may connect published values across a single protected year to help show the longer-term pattern. It does not estimate the protected value, and no value or marker is shown for that year. Hospital + DCO series are not offered as annual trends when fewer than half of complete annual values can be published.
+          </div>`
+        : ""}
     </div>`
   }
 
@@ -1347,6 +1559,8 @@ incompleteSegments = rows => {
 
   const statistic = rateStatistic(selected_rate_measure)
   const ageGroupForRate = rateAgeGroup(selected_rate_measure)
+  const showStatisticalCi = selected_rate_uncertainty.includes("statistical_ci")
+  const showLinkageUncertainty = selected_rate_uncertainty.includes("linkage")
 
   const rateSeries = activeSeries.map(key => {
     const observed = sortedRows(metrics.filter(d =>
@@ -1359,27 +1573,71 @@ incompleteSegments = rows => {
       seriesMatches(d, key) &&
       inRange(d)
     ))
+
     const allRows = observed.filter(d => d.sex === "all")
+    const safeAllRows = allRows.filter(d => isSafe(d) && Number.isFinite(d.value))
+    const linkageRows = safeAllRows.filter(d =>
+      key !== "hospital" &&
+      Number.isFinite(d.value) &&
+      Number.isFinite(d.linkage_lower_value) &&
+      Number.isFinite(d.linkage_upper_value)
+    )
+
     return {
       key,
       observed,
-      points: allRows.filter(isSafe).map(d => ({...d, chart_x: String(d.period_year)})),
-      segments: contiguousSafeSegments(allRows).map(d => ({...d, chart_x: String(d.period_year)}))
+      points: safeAllRows.map(d => ({...d, chart_x: String(d.period_year)})),
+      segments: contiguousSafeSegments(allRows)
+        .map(d => ({...d, chart_x: String(d.period_year)})),
+      ciPoints: safeAllRows
+        .filter(d =>
+          Number.isFinite(d.ci_lower_value) &&
+          Number.isFinite(d.ci_upper_value)
+        )
+        .map(d => ({...d, chart_x: String(d.period_year)})),
+      linkageSegments: contiguousSafeSegments(linkageRows)
+        .map(d => ({...d, chart_x: String(d.period_year)}))
     }
   })
 
   const latestRateItem = (s, sex) => {
     const row = latestRow(s.observed.filter(d => d.sex === sex))
+    if (!row) {
+      return {series: s.key, value: "—", note: "No published value"}
+    }
+
+    const noteParts = [`${periodLabel(row)} · per 100,000`]
+
+    if (
+      showStatisticalCi &&
+      isSafe(row) &&
+      Number.isFinite(row.ci_lower_value) &&
+      Number.isFinite(row.ci_upper_value)
+    ) {
+      noteParts.push(`95% CI ${statisticalCiCardText(row)}`)
+    }
+
+    if (
+      showLinkageUncertainty &&
+      s.key !== "hospital" &&
+      isSafe(row) &&
+      Number.isFinite(row.linkage_lower_value) &&
+      Number.isFinite(row.linkage_upper_value)
+    ) {
+      noteParts.push(`linkage ${linkageUncertaintyCardText(row)}`)
+    }
+
     return {
       series: s.key,
-      value: row ? cardValue(row) : "—",
-      note: row ? `${periodLabel(row)} · per 100,000` : "No published value"
+      value: cardValue(row),
+      note: noteParts.join(" · ")
     }
   }
 
   // Keep the rate y-axis fixed when ascertainment series are toggled.
   // The scale uses all three approved series for the selected rate measure,
-  // CVD type and year range.
+  // CVD type and year range. When uncertainty is displayed, its published
+  // upper bounds are also included so neither interval is clipped.
   const allRateScaleRows = metrics.filter(d =>
     d.metric_id === "CVD-INCIDENCE-001" &&
     d.period_type === "annual" &&
@@ -1391,13 +1649,62 @@ incompleteSegments = rows => {
     isSafe(d) &&
     ["hospital", "dco_primary", "dco_inclusive"].some(key => seriesMatches(d, key))
   )
-  const rateScaleMax = allRateScaleRows.length
-    ? Math.max(...allRateScaleRows.map(d => d.value))
+
+  const rateScaleValues = allRateScaleRows.flatMap(d => [
+    d.value,
+    ...(Number.isFinite(d.ci_upper_value)
+      ? [d.ci_upper_value]
+      : []),
+    ...(d.ascertainment_scope === "hospital_plus_dco" &&
+       Number.isFinite(d.linkage_upper_value)
+      ? [d.linkage_upper_value]
+      : [])
+  ]).filter(Number.isFinite)
+
+  const rateScaleMax = rateScaleValues.length
+    ? Math.max(...rateScaleValues)
     : null
 
   const rateMarks = rateSeries.flatMap(s => {
     const c = seriesColour(s.key)
-    return [
+    const marks = []
+
+    // Linkage/ascertainment uncertainty is a published DCO-specific range.
+    // It is drawn as a light band and is never calculated in the browser.
+    if (
+      showLinkageUncertainty &&
+      s.key !== "hospital" &&
+      s.linkageSegments.length
+    ) {
+      marks.push(
+        Plot.areaY(s.linkageSegments, {
+          x: "chart_x",
+          y1: "linkage_lower_value",
+          y2: "linkage_upper_value",
+          z: "segment",
+          fill: c,
+          fillOpacity: 0.11
+        })
+      )
+    }
+
+    // Statistical 95% CIs are released by the workflow. Vertical whiskers
+    // distinguish them visually from the DCO linkage-uncertainty band.
+    if (showStatisticalCi && s.ciPoints.length) {
+      marks.push(
+        Plot.link(s.ciPoints, {
+          x1: "chart_x",
+          x2: "chart_x",
+          y1: "ci_lower_value",
+          y2: "ci_upper_value",
+          stroke: c,
+          strokeOpacity: 0.48,
+          strokeWidth: 1.4
+        })
+      )
+    }
+
+    marks.push(
       Plot.lineY(s.segments, {
         x: "chart_x", y: "value", z: "segment",
         stroke: c, strokeWidth: 2.4
@@ -1405,33 +1712,43 @@ incompleteSegments = rows => {
       Plot.dot(s.points, {
         x: "chart_x", y: "value",
         fill: c, stroke: c, r: 3.5,
-        title: d => `${seriesLabel(s.key)}\n${d.period_year}\n${publishedValue(d)} per 100,000`
+        title: d => rateTooltip(d, s.key)
       })
-    ]
+    )
+
+    return marks
   })
 
   const rateIntro = selected_rate_measure === "asr"
     ? "Age-standardised rates account for differences in population age structure. The published series uses the WHO World 2000–2025 standard population."
     : "Crude rates describe the number of eligible events relative to the resident population without adjustment for age structure."
 
+  const uncertaintyIntro =
+    "Vertical whiskers show published 95% statistical confidence intervals. For Hospital + DCO series, shaded bands show the separately published DCO linkage/ascertainment uncertainty. These answer different questions and are not combined."
+
   return html`<div>
     ${interpretation(
       "Annual CVD event rates",
       `The published annual ${rateMeasureLabel(selected_rate_measure).toLowerCase()} per 100,000 population for ${eventLabel(selected_event_type)} and the selected event-ascertainment series.`,
-      `Hospital-recorded rates describe eligible events identified through hospital records. Hospital + DCO rates also include approved death-certificate-only events using the Primary or Inclusive mortality definition. ${rateIntro} Protected values are not plotted and are not treated as zero.`
+      `Hospital-recorded rates describe eligible events identified through hospital records. Hospital + DCO rates also include approved death-certificate-only events using the Primary or Inclusive mortality definition. ${rateIntro} ${uncertaintyIntro} Protected values are not plotted and are not treated as zero.`
     )}
     <hr>
     <div class="bnr-definition-panel">
       <div class="bnr-section-title">${rateMeasureLabel(selected_rate_measure)}</div>
       ${seriesSelection(activeSeries)}
       <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)}, both sexes</div>
-      <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Lines break where a published value is protected or unavailable.</p>
+      <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Lines and uncertainty intervals break where a published value is protected or unavailable.</p>
       <div class="bnr-chart-legend">
         ${activeSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
+        ${showStatisticalCi ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-whisker"></span>95% statistical CI</span>` : ""}
+        ${showLinkageUncertainty && activeSeries.some(d => d !== "hospital")
+          ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-uncertainty-band"></span>DCO linkage uncertainty</span>`
+          : ""}
       </div>
       ${Plot.plot({
         height: 470,
-        marginLeft: 90,
+        marginTop: 24,
+        marginLeft: 96,
         marginBottom: 70,
         style: {fontSize: "15px", fontFamily: "inherit"},
         x: {label: "Year"},
@@ -1449,12 +1766,14 @@ incompleteSegments = rows => {
         ${headlineBySeries("Latest: women", rateSeries.map(s => latestRateItem(s, "female")))}
         ${headlineBySeries("Latest: men", rateSeries.map(s => latestRateItem(s, "male")))}
       </div>
+      <div class="bnr-note-box">
+        <strong>Uncertainty:</strong> Statistical 95% confidence intervals describe statistical variation around the central rate. DCO linkage uncertainty describes uncertainty from DCO ascertainment/linkage and is shown only for Hospital + DCO series. The dashboard reads both from the approved public release and does not combine or calculate them.
+      </div>
       <div class="bnr-note-box"><strong>Population:</strong> UN World Population Prospects 2024. ${selected_rate_measure === "asr" ? html`<strong>Standard population:</strong> WHO World 2000–2025.` : ""}</div>
     </div>
   </div>`
 }
 ```
-
 
 ## DCO contribution {height=505}
 
@@ -1533,8 +1852,8 @@ incompleteSegments = rows => {
   const qualityRounded = share => Math.round(share)
   const qualityStyle = share => {
     const rounded = qualityRounded(share)
-    return rounded < 20 ? "background:#d6eddf;color:#235b42;" :
-      rounded < 30 ? "background:#ffe7a8;color:#6b5600;" :
+    return rounded < 10 ? "background:#d6eddf;color:#235b42;" :
+      rounded < 15 ? "background:#ffe7a8;color:#6b5600;" :
       "background:#f3c6cc;color:#842029;"
   }
   const qualityPercent = share => `${qualityRounded(share)}%`
@@ -1543,9 +1862,9 @@ incompleteSegments = rows => {
     <div class="bnr-section-title">How much does the national event estimate rely on DCO events?</div>
     <p class="bnr-trend-note">Each number is the percentage of events in the <strong>Primary hospital + DCO estimate</strong> that come from death-certificate-only events. In simple terms, it shows how much the national estimate depends on DCO ascertainment. Hover over a number to see the event counts behind the percentage.</p>
     <div class="bnr-quality-key">
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20</span>
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20–29</span>
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30+</span>
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;10</span>
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 10–14</span>
+      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 15+</span>
     </div>
     <div class="bnr-coverage-scroll">
       <table class="bnr-coverage-table" aria-label="DCO events as a percentage of the Primary hospital plus DCO annual event estimate by year and CVD type">
@@ -1622,6 +1941,10 @@ incompleteSegments = rows => {
 
   const coverageState = (rows, expectedPeriods = null) => {
     if (!rows.length) return "none"
+
+    const allProtected = rows.every(d => d.suppression_status && d.suppression_status !== "none")
+    if (allProtected) return "protected"
+
     if (expectedPeriods !== null) {
       const periods = new Set(rows.map(d => d.period))
       const allComplete = rows.every(d => isComplete(d))
@@ -1715,16 +2038,20 @@ incompleteSegments = rows => {
     if (state === "partial") {
       return html`<td class="bnr-coverage-cell bnr-coverage-partial" title=${`${row.label}: ${year} · partial or incomplete published coverage`}>●</td>`
     }
-    return html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · no data published`}>–</td>`
+    if (state === "protected") {
+      return html`<td class="bnr-coverage-cell bnr-suppressed" title=${`${row.label}: ${year} · published, but all values are protected`}>*</td>`
+    }
+    return html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · not published in the current release`}>–</td>`
   }
 
   return html`<div class="bnr-definition-panel">
     <div class="bnr-section-title">Data coverage</div>
-    <p class="bnr-trend-note">This shows which years are included in the current published release. For monthly and quarterly data, a partial symbol means that only part of the calendar year is available.</p>
+    <p class="bnr-trend-note">This shows which years are included in the current published release. For monthly and quarterly data, a partial symbol means that only part of the calendar year is available. A star means the year is published, but the displayed values for that row are protected.</p>
     <div class="bnr-coverage-key">
       <span><strong class="bnr-coverage-present">✓</strong> complete year</span>
       <span><strong class="bnr-coverage-partial">●</strong> partial / incomplete year</span>
-      <span><strong class="bnr-coverage-absent">–</strong> no data published</span>
+      <span><strong class="bnr-suppressed">*</strong> published, but all values are protected</span>
+      <span><strong class="bnr-coverage-absent">–</strong> not published in the current release</span>
     </div>
     <div class="bnr-coverage-scroll">
       <table class="bnr-coverage-table" aria-label="Availability of published CVD event data by year and measure">
@@ -1856,23 +2183,47 @@ incompleteSegments = rows => {
     return /[",\r\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s
   }
 
-  const selectedViewHeaders = [
-    "Period", "Series", "CVD type", "Sex", "Age group",
-    "Measure", "Value", "Unit", "Data status", "Protection note"
-  ]
+  const selectedViewHeaders = selected_indicator === "rates"
+    ? [
+        "Period", "Series", "CVD type", "Sex", "Age group",
+        "Measure", "Value", "Statistical 95% CI", "CI method",
+        "Linkage uncertainty", "Unit", "Data status", "Protection note"
+      ]
+    : [
+        "Period", "Series", "CVD type", "Sex", "Age group",
+        "Measure", "Value", "Unit", "Data status", "Protection note"
+      ]
 
-  const selectedViewRows = displayRows.map(d => [
-    periodLabel(d),
-    seriesText(d),
-    eventLabel(d.event_type),
-    sexLabel(d.sex),
-    ageLabel(d.age_group),
-    statisticLabel(d),
-    publishedValue(d),
-    unitLabel(d),
-    isComplete(d) ? "Complete" : "Incomplete",
-    d.disclosure_note || ""
-  ])
+  const selectedViewRows = displayRows.map(d =>
+    selected_indicator === "rates"
+      ? [
+          periodLabel(d),
+          seriesText(d),
+          eventLabel(d.event_type),
+          sexLabel(d.sex),
+          ageLabel(d.age_group),
+          statisticLabel(d),
+          publishedValue(d),
+          statisticalCiText(d),
+          ciMethodLabel(d.ci_method),
+          linkageUncertaintyText(d),
+          unitLabel(d),
+          isComplete(d) ? "Complete" : "Incomplete",
+          d.disclosure_note || ""
+        ]
+      : [
+          periodLabel(d),
+          seriesText(d),
+          eventLabel(d.event_type),
+          sexLabel(d.sex),
+          ageLabel(d.age_group),
+          statisticLabel(d),
+          publishedValue(d),
+          unitLabel(d),
+          isComplete(d) ? "Complete" : "Incomplete",
+          d.disclosure_note || ""
+        ]
+  )
 
   const selectedViewCsv = [selectedViewHeaders, ...selectedViewRows]
     .map(row => row.map(csvEscape).join(","))
@@ -1923,6 +2274,8 @@ incompleteSegments = rows => {
     metaRows.push(
       {item: "Population source", value: "UN World Population Prospects 2024"},
       {item: "Rate unit", value: "Per 100,000 population"},
+      {item: "Statistical uncertainty", value: "Published 95% confidence intervals. Hospital crude rates use exact Poisson/Garwood; hospital age-standardised rates use Fay–Feuer gamma; Hospital + DCO intervals use the corresponding conditional gamma methods based on central pseudo-counts."},
+      {item: "DCO linkage uncertainty", value: "Published separately for Hospital + DCO Primary and Inclusive rates. It is not combined with the statistical confidence interval."},
       ...(selected_rate_measure === "asr"
         ? [{item: "Standard population", value: "WHO World 2000–2025"}]
         : [])
@@ -1939,7 +2292,7 @@ incompleteSegments = rows => {
       </tbody></table>
 
       <h3 style="margin-top:1rem">Event ascertainment</h3>
-      <p><strong>Hospital-recorded</strong> includes eligible events identified through hospital records. <strong>Hospital + DCO — Primary</strong> and <strong>Hospital + DCO — Inclusive</strong> add approved death-certificate-only events using the corresponding BNR mortality definition. These are separate published series; the dashboard does not derive one from another.</p>
+      <p><strong>Hospital-recorded</strong> includes eligible events identified through hospital records. <strong>Hospital + DCO — Primary</strong> and <strong>Hospital + DCO — Inclusive</strong> add approved death-certificate-only events using the corresponding BNR mortality definition. These are separate published series; the dashboard does not derive one from another. For event rates, statistical 95% confidence intervals and DCO linkage uncertainty are also separate published quantities and are never combined by the dashboard.</p>
       <p><strong>Methods:</strong> <a href="../../../../methods/measures/cvd-event-counts.html">CVD event counts</a> · <a href="../../../../methods/measures/incidence.html">CVD incidence and event rates</a> · <a href="../../../../methods/interpretation/confidentiality.html">Protecting confidentiality</a></p>
       <p>An asterisk does not mean zero. It means that the value is protected and is not shown. The dashboard does not infer or reconstruct protected values.</p>
 
@@ -1961,11 +2314,11 @@ incompleteSegments = rows => {
         <span class="bnr-data-tab bnr-data-tab-active">Table</span>
         <a class="bnr-data-tab bnr-data-tab-download" href=${selectedViewUrl} download=${selectedViewFilename}>Download selected view (CSV)</a>
       </div>
-      <p class="bnr-trend-note"><strong>Rows shown:</strong> ${displayRows.length.toLocaleString()}. The selected-view download contains the same rows and released display values as this table. Protected values stay protected.</p>
+      <p class="bnr-trend-note"><strong>Rows shown:</strong> ${displayRows.length.toLocaleString()}. The selected-view download contains the same rows and released display values as this table.${selected_indicator === "rates" ? " Published statistical and linkage uncertainty fields are included for the rate view." : ""} Protected values stay protected.</p>
       <div class="bnr-data-scroll">
         <table class="bnr-data-table">
           <thead>
-            <tr><th>Period</th><th>Series</th><th>CVD type</th><th>Sex</th><th>Age group</th><th>Measure</th><th>Value</th><th>Unit</th><th>Data status</th><th>Protection note</th></tr>
+            <tr>${selectedViewHeaders.map(header => html`<th>${header}</th>`)}</tr>
           </thead>
           <tbody>
             ${displayRows.map(d => html`<tr class=${isComplete(d) ? "" : "bnr-incomplete-row"}>
@@ -1976,6 +2329,13 @@ incompleteSegments = rows => {
               <td>${ageLabel(d.age_group)}</td>
               <td>${statisticLabel(d)}</td>
               <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${publishedValue(d)}</td>
+              ${selected_indicator === "rates"
+                ? html`
+                    <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${statisticalCiText(d)}</td>
+                    <td>${ciMethodLabel(d.ci_method)}</td>
+                    <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${linkageUncertaintyText(d)}</td>
+                  `
+                : ""}
               <td>${unitLabel(d)}</td>
               <td>${isComplete(d) ? "Complete" : "Incomplete"}</td>
               <td>${d.disclosure_note || ""}</td>
