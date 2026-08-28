@@ -55,11 +55,10 @@ execute:
 .bnr-coverage-table { width: 100%; min-width: 980px; border-collapse: separate; border-spacing: .15rem .2rem; table-layout: fixed; margin: 0; }
 .bnr-coverage-table th, .bnr-coverage-table td { border: 0 !important; background: transparent !important; padding: .12rem .18rem !important; text-align: center; vertical-align: middle; }
 .bnr-coverage-table thead th { font-size: .76rem; color: #555; font-weight: 600; }
-.bnr-coverage-table th:first-child { width: 205px; text-align: left; padding-right: .65rem !important; }
+.bnr-coverage-table th:first-child { width: 145px; text-align: left; }
 .bnr-coverage-label { font-weight: 600 !important; color: #2c3e50 !important; white-space: nowrap; text-align: left !important; }
 .bnr-coverage-cell { font-size: 1.05rem; line-height: 1.1; }
 .bnr-coverage-present { color: #045174; font-weight: 800; }
-.bnr-coverage-partial { color: #8a6d1d; font-weight: 800; }
 .bnr-coverage-absent { color: #b7bec3; }
 .bnr-coverage-key { display: flex; gap: 1.2rem; flex-wrap: wrap; margin: .15rem 0 .3rem; font-size: .84rem; color: #555; }
 .bnr-quality-key { display: flex; gap: 1.1rem; flex-wrap: wrap; margin: .15rem 0 .35rem; font-size: .84rem; color: #555; }
@@ -582,23 +581,7 @@ publishedValue = d => {
 publishedValueWithUnit = d => {
   const value = publishedValue(d)
   if (!d || value === "—" || value === "*") return value
-  const numeric = Number(value)
-  if (d.unit === "percent" && Number.isFinite(numeric)) return `${numeric.toFixed(1)}%`
-  return value
-}
-
-// Card formatting is presentation-only. It never changes the released value:
-// counts and rates -> whole numbers; percentages and 5-year means -> 1 decimal.
-cardValue = (d, kind = "estimate") => {
-  const value = publishedValue(d)
-  if (!d || value === "—" || value === "*") return value
-  const numeric = Number(value)
-  if (!Number.isFinite(numeric)) return value
-  if (kind === "comparison") return numeric.toFixed(1)
-  if (d.unit === "percent") return `${numeric.toFixed(1)}%`
-  if (d.unit === "count" || d.unit === "rate_per_100000") {
-    return Math.round(numeric).toLocaleString()
-  }
+  if (d.unit === "percent") return `${value}%`
   return value
 }
 
@@ -831,6 +814,21 @@ incompleteSegments = rows => {
 
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">Monthly CVD events</div>
+      <div class="bnr-card-grid">
+        ${headline(
+          "Latest month",
+          latestMonthly ? publishedValue(latestMonthly) : "—",
+          latestMonthly ? `${periodLabel(latestMonthly)}${isComplete(latestMonthly) ? "" : " · incomplete"}` : "No published value"
+        )}
+        ${headline("Year to date", ytdValue, ytdNote)}
+        ${headline(
+          "2015–2019 reference range",
+          refLatest ? `${referenceValue(refLatest.reference_min)}–${referenceValue(refLatest.reference_max)}` : "—",
+          refLatest && latestMonthly
+            ? `${periodLabel(latestMonthly)} · mean ${referenceValue(refLatest.reference_mean)}`
+            : "Fixed 2015–2019 reference"
+        )}
+      </div>
       <div class="bnr-chart-title">Monthly all-CVD events, both sexes, all ages</div>
       <p class="bnr-trend-note">The shaded band shows the lowest and highest count for the same calendar month during 2015–2019. The orange line shows the 2015–2019 average.</p>
       <div class="bnr-chart-legend">
@@ -882,21 +880,6 @@ incompleteSegments = rows => {
           Plot.ruleY([0])
         ]
       })}
-      <div class="bnr-card-grid" style="margin-top:.75rem">
-        ${headline(
-          "Latest month",
-          latestMonthly ? cardValue(latestMonthly) : "—",
-          latestMonthly ? `${periodLabel(latestMonthly)}${isComplete(latestMonthly) ? "" : " · incomplete"}` : "No published value"
-        )}
-        ${headline("Year to date", ytdValue, ytdNote)}
-        ${headline(
-          "2015–2019 reference range",
-          refLatest ? `${referenceValue(refLatest.reference_min)}–${referenceValue(refLatest.reference_max)}` : "—",
-          refLatest && latestMonthly
-            ? `${periodLabel(latestMonthly)} · mean ${referenceValue(refLatest.reference_mean)}`
-            : "Fixed 2015–2019 reference"
-        )}
-      </div>
     </div>`
   }
 
@@ -961,7 +944,7 @@ incompleteSegments = rows => {
       const row = latestRow(s.observed.filter(d => d.sex === sex))
       return {
         series: s.key,
-        value: row ? cardValue(row) : "—",
+        value: row ? publishedValue(row) : "—",
         note: row
           ? `${periodLabel(row)}${isComplete(row) ? "" : " · incomplete"}`
           : "No published value"
@@ -975,7 +958,7 @@ incompleteSegments = rows => {
         : null
       return {
         series: s.key,
-        value: row ? cardValue(row, "comparison") : "—",
+        value: row ? publishedValue(row) : "—",
         note: row ? periodLabel(row) : "Not available in the published release"
       }
     }
@@ -1003,26 +986,6 @@ incompleteSegments = rows => {
           ${headlineBySeries("5-year average: women", series.map(s => comparatorItem(s, "female")))}
           ${headlineBySeries("5-year average: men", series.map(s => comparatorItem(s, "male")))}
         </div>`
-
-    // Keep the annual y-axis fixed when ascertainment series are toggled.
-    // The domain is based on all three approved annual series for the selected
-    // CVD type, age group and period range, not only on the visible series.
-    const allAnnualScaleRows = selected_period_type === "annual"
-      ? metrics.filter(d =>
-          d.metric_id === "CVD-BURDEN-001" &&
-          d.period_type === "annual" &&
-          d.statistic === "annual_count" &&
-          d.event_type === selected_event_type &&
-          d.age_group === selected_age_group &&
-          d.sex === "all" &&
-          inRange(d) &&
-          isSafe(d) &&
-          ["hospital", "dco_primary", "dco_inclusive"].some(key => seriesMatches(d, key))
-        )
-      : []
-    const annualScaleMax = allAnnualScaleRows.length
-      ? Math.max(...allAnnualScaleRows.map(d => d.value))
-      : null
 
     const marks = series.flatMap(s => {
       const c = seriesColour(s.key)
@@ -1064,6 +1027,8 @@ incompleteSegments = rows => {
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">${selected_period_type === "quarterly" ? "Quarterly detail" : "Annual detail"}</div>
       ${seriesSelection(panelSeries)}
+      ${latestCards}
+      ${comparatorCards}
       <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)}${selected_age_group === "all" ? ", both sexes" : `, ${ageLabel(selected_age_group).toLowerCase()}`}</div>
       <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Published five-year comparisons are shown where they are available.</p>
       <div class="bnr-chart-legend">
@@ -1079,19 +1044,9 @@ incompleteSegments = rows => {
         x: selected_period_type === "annual"
           ? {label: "Year"}
           : {label: "Quarter", type: "time"},
-        y: {
-          label: "Count",
-          grid: true,
-          ...(selected_period_type === "annual" && Number.isFinite(annualScaleMax)
-            ? {domain: [0, annualScaleMax * 1.05], nice: true}
-            : {})
-        },
+        y: {label: "Count", grid: true},
         marks: [...marks, Plot.ruleY([0])]
       })}
-      <div style="margin-top:.75rem">
-        ${latestCards}
-        ${comparatorCards}
-      </div>
     </div>`
   }
 
@@ -1305,24 +1260,24 @@ incompleteSegments = rows => {
     const eventGroup = eventRows.length
       ? html`<div class="bnr-definition-panel">
           <div class="bnr-section-title">Heart and Stroke: All CVD</div>
-          <div class="bnr-distribution-stack">${distributionChart("event")}</div>
           ${distributionSummary("event")}
+          <div class="bnr-distribution-stack">${distributionChart("event")}</div>
         </div>`
       : ""
 
     const ageGroup = ageRows.length
       ? html`<div class="bnr-definition-panel">
           <div class="bnr-section-title">Age groups: All CVD</div>
-          <div class="bnr-distribution-stack">${distributionChart("age")}</div>
           ${distributionSummary("age")}
+          <div class="bnr-distribution-stack">${distributionChart("age")}</div>
         </div>`
       : ""
 
     const sexGroup = sexRows.length
       ? html`<div class="bnr-definition-panel">
           <div class="bnr-section-title">Women and men: ${eventLabel(selected_event_type)}</div>
-          <div class="bnr-distribution-stack">${distributionChart("sex")}</div>
           ${distributionSummary("sex")}
+          <div class="bnr-distribution-stack">${distributionChart("sex")}</div>
         </div>`
       : ""
 
@@ -1372,28 +1327,10 @@ incompleteSegments = rows => {
     const row = latestRow(s.observed.filter(d => d.sex === sex))
     return {
       series: s.key,
-      value: row ? cardValue(row) : "—",
+      value: row ? publishedValue(row) : "—",
       note: row ? `${periodLabel(row)} · per 100,000` : "No published value"
     }
   }
-
-  // Keep the rate y-axis fixed when ascertainment series are toggled.
-  // The scale uses all three approved series for the selected rate measure,
-  // CVD type and year range.
-  const allRateScaleRows = metrics.filter(d =>
-    d.metric_id === "CVD-INCIDENCE-001" &&
-    d.period_type === "annual" &&
-    d.statistic === statistic &&
-    d.age_group === ageGroupForRate &&
-    d.event_type === selected_event_type &&
-    d.sex === "all" &&
-    inRange(d) &&
-    isSafe(d) &&
-    ["hospital", "dco_primary", "dco_inclusive"].some(key => seriesMatches(d, key))
-  )
-  const rateScaleMax = allRateScaleRows.length
-    ? Math.max(...allRateScaleRows.map(d => d.value))
-    : null
 
   const rateMarks = rateSeries.flatMap(s => {
     const c = seriesColour(s.key)
@@ -1424,6 +1361,11 @@ incompleteSegments = rows => {
     <div class="bnr-definition-panel">
       <div class="bnr-section-title">${rateMeasureLabel(selected_rate_measure)}</div>
       ${seriesSelection(activeSeries)}
+      <div class="bnr-card-grid">
+        ${headlineBySeries("Latest: all", rateSeries.map(s => latestRateItem(s, "all")))}
+        ${headlineBySeries("Latest: women", rateSeries.map(s => latestRateItem(s, "female")))}
+        ${headlineBySeries("Latest: men", rateSeries.map(s => latestRateItem(s, "male")))}
+      </div>
       <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)}, both sexes</div>
       <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Lines break where a published value is protected or unavailable.</p>
       <div class="bnr-chart-legend">
@@ -1435,171 +1377,12 @@ incompleteSegments = rows => {
         marginBottom: 70,
         style: {fontSize: "15px", fontFamily: "inherit"},
         x: {label: "Year"},
-        y: {
-          label: "Rate per 100,000",
-          grid: true,
-          ...(Number.isFinite(rateScaleMax)
-            ? {domain: [0, rateScaleMax * 1.05], nice: true}
-            : {})
-        },
+        y: {label: "Rate per 100,000", grid: true},
         marks: [...rateMarks, Plot.ruleY([0])]
       })}
-      <div class="bnr-card-grid" style="margin-top:.75rem">
-        ${headlineBySeries("Latest: all", rateSeries.map(s => latestRateItem(s, "all")))}
-        ${headlineBySeries("Latest: women", rateSeries.map(s => latestRateItem(s, "female")))}
-        ${headlineBySeries("Latest: men", rateSeries.map(s => latestRateItem(s, "male")))}
-      </div>
       <div class="bnr-note-box"><strong>Population:</strong> UN World Population Prospects 2024. ${selected_rate_measure === "asr" ? html`<strong>Standard population:</strong> WHO World 2000–2025.` : ""}</div>
     </div>
   </div>`
-}
-```
-
-
-## DCO contribution {height=505}
-
-```{ojs}
-//| echo: false
-// Deliberately permitted presentation-derived measure, matching the mortality
-// dashboard's quality-matrix pattern.
-//
-// For each year and CVD type, this expresses the published additional-DCO estimate
-// as a percentage of the published Primary hospital-plus-DCO total:
-//
-//      additional DCO / (hospital + DCO Primary total) * 100
-//
-// Nothing is calculated if either source row is incomplete, protected, missing
-// or non-numeric. This is an ascertainment-dependence indicator, not a judgement
-// about data quality and not a replacement published CVD metric.
-{
-  const annualRows = metrics.filter(d =>
-    d.metric_id === "CVD-BURDEN-001" &&
-    d.period_type === "annual" &&
-    d.statistic === "annual_count" &&
-    d.sex === "all" &&
-    d.age_group === "all" &&
-    ["all_cvd", "heart", "stroke"].includes(d.event_type)
-  )
-
-  const yearsPresent = annualRows.map(d => d.period_year).filter(Number.isFinite)
-  const lastYear = yearsPresent.length ? Math.max(...yearsPresent) : null
-  const years = lastYear === null || lastYear < 2010
-    ? []
-    : Array.from({length: lastYear - 2010 + 1}, (_, i) => 2010 + i)
-
-  const events = [
-    {key: "all_cvd", label: "All CVD"},
-    {key: "heart", label: "Heart"},
-    {key: "stroke", label: "Stroke"}
-  ]
-
-  const rowFor = (eventType, year, scope, definition) => annualRows.find(d =>
-    d.event_type === eventType &&
-    d.period_year === year &&
-    d.ascertainment_scope === scope &&
-    d.mortality_definition === definition
-  ) || null
-
-  const dcoShare = (eventType, year) => {
-    const dco = rowFor(eventType, year, "additional_dco", "primary")
-    const total = rowFor(eventType, year, "hospital_plus_dco", "primary")
-    const hospital = rowFor(eventType, year, "hospital_only", "not_applicable")
-
-    if (
-      !dco || !total || !hospital ||
-      !isComplete(dco) || !isComplete(total) || !isComplete(hospital) ||
-      !isSafe(dco) || !isSafe(total) || !isSafe(hospital)
-    ) return null
-
-    if (
-      !Number.isFinite(dco.value) ||
-      !Number.isFinite(total.value) ||
-      !Number.isFinite(hospital.value) ||
-      total.value <= 0 ||
-      dco.value < 0
-    ) return null
-
-    const share = 100 * dco.value / total.value
-    if (!Number.isFinite(share)) return null
-
-    return {
-      share,
-      dco: dco.value,
-      hospital: hospital.value,
-      total: total.value
-    }
-  }
-
-  const qualityRounded = share => Math.round(share)
-  const qualityStyle = share => {
-    const rounded = qualityRounded(share)
-    return rounded < 20 ? "background:#d6eddf;color:#235b42;" :
-      rounded < 30 ? "background:#ffe7a8;color:#6b5600;" :
-      "background:#f3c6cc;color:#842029;"
-  }
-  const qualityPercent = share => `${qualityRounded(share)}%`
-
-  const qualityPanel = html`<div class="bnr-definition-panel">
-    <div class="bnr-section-title">How much does the national event estimate rely on DCO events?</div>
-    <p class="bnr-trend-note">Each number is the percentage of events in the <strong>Primary hospital + DCO estimate</strong> that come from death-certificate-only events. In simple terms, it shows how much the national estimate depends on DCO ascertainment. Hover over a number to see the event counts behind the percentage.</p>
-    <div class="bnr-quality-key">
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20</span>
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20–29</span>
-      <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30+</span>
-    </div>
-    <div class="bnr-coverage-scroll">
-      <table class="bnr-coverage-table" aria-label="DCO events as a percentage of the Primary hospital plus DCO annual event estimate by year and CVD type">
-        <thead><tr><th></th>${years.map(year => html`<th scope="col">${year}</th>`)}</tr></thead>
-        <tbody>
-          ${events.map(event => html`<tr>
-            <th scope="row" class="bnr-coverage-label">${event.label}</th>
-            ${years.map(year => {
-              const result = dcoShare(event.key, year)
-              return result
-                ? html`<td class="bnr-coverage-cell bnr-quality-cell"><span class="bnr-quality-value" style=${qualityStyle(result.share)} data-event=${event.key} data-year=${year} tabindex="0">${qualityRounded(result.share)}</span></td>`
-                : html`<td class="bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable">-</td>`
-            })}
-          </tr>`)}
-        </tbody>
-      </table>
-    </div>
-    <div class="bnr-quality-hover-detail">Hover over a number to see the event counts behind that percentage.</div>
-    <div class="bnr-note-box">The colours show lower, moderate and higher percentages only; they are not a judgement of data quality. Protected source values remain unavailable and are not reconstructed.</div>
-  </div>`
-
-  const hoverDetail = qualityPanel.querySelector(".bnr-quality-hover-detail")
-  const resetHoverDetail = () => {
-    hoverDetail.textContent = "Hover over a number to see the event counts behind that percentage."
-    hoverDetail.classList.remove("bnr-quality-hover-active")
-  }
-
-  qualityPanel.querySelectorAll(".bnr-quality-value[data-event][data-year]").forEach(cell => {
-    const showHoverDetail = () => {
-      const eventType = cell.getAttribute("data-event")
-      const year = Number(cell.getAttribute("data-year"))
-      const event = events.find(item => item.key === eventType)
-      const result = dcoShare(eventType, year)
-
-      if (!event || !result) {
-        resetHoverDetail()
-        return
-      }
-
-      hoverDetail.textContent =
-        `${event.label}, ${year} (${qualityPercent(result.share)} from DCOs) · ` +
-        `Hospital events: ${Math.round(result.hospital).toLocaleString()} · ` +
-        `Additional DCO estimate: ${Math.round(result.dco).toLocaleString()} · ` +
-        `Primary hospital + DCO total: ${Math.round(result.total).toLocaleString()}`
-      hoverDetail.classList.add("bnr-quality-hover-active")
-    }
-
-    cell.addEventListener("mouseenter", showHoverDetail)
-    cell.addEventListener("focus", showHoverDetail)
-    cell.addEventListener("mouseleave", resetHoverDetail)
-    cell.addEventListener("blur", resetHoverDetail)
-  })
-
-  return qualityPanel
 }
 ```
 
@@ -1607,8 +1390,6 @@ incompleteSegments = rows => {
 
 ```{ojs}
 //| echo: false
-// Presence/completeness matrix only. "Partial" means the current published
-// release contains some data for that year but not a complete annual set.
 {
   const relevantRows = metrics.filter(d =>
     ["CVD-BURDEN-001", "CVD-BURDEN-002", "CVD-INCIDENCE-001"].includes(d.metric_id)
@@ -1620,110 +1401,68 @@ incompleteSegments = rows => {
     ? []
     : Array.from({length: lastYear - firstYear + 1}, (_, i) => firstYear + i)
 
-  const coverageState = (rows, expectedPeriods = null) => {
-    if (!rows.length) return "none"
-    if (expectedPeriods !== null) {
-      const periods = new Set(rows.map(d => d.period))
-      const allComplete = rows.every(d => isComplete(d))
-      return periods.size >= expectedPeriods && allComplete ? "complete" : "partial"
-    }
-    return rows.every(d => isComplete(d)) ? "complete" : "partial"
-  }
-
   const rows = [
     {
-      label: "Monthly counts",
-      state: year => coverageState(
-        metrics.filter(d =>
-          d.metric_id === "CVD-BURDEN-001" &&
-          d.period_type === "monthly" &&
-          d.statistic === "monthly_count" &&
-          d.period_year === year &&
-          d.event_type === "all_cvd" &&
-          d.sex === "all" &&
-          d.age_group === "all" &&
-          seriesMatches(d, "hospital")
-        ),
-        12
+      label: "Monthly event counts",
+      hasData: year => metrics.some(d =>
+        d.metric_id === "CVD-BURDEN-001" &&
+        d.period_type === "monthly" &&
+        d.statistic === "monthly_count" &&
+        d.period_year === year &&
+        seriesMatches(d, "hospital")
       )
     },
     {
-      label: "Quarterly counts",
-      state: year => {
-        const base = metrics.filter(d =>
-          d.metric_id === "CVD-BURDEN-001" &&
-          d.period_type === "quarterly" &&
-          d.statistic === "quarterly_count" &&
-          d.period_year === year &&
-          d.event_type === "all_cvd" &&
-          d.sex === "all" &&
-          d.age_group === "all" &&
-          seriesMatches(d, "hospital")
-        )
-        return coverageState(base, 4)
-      }
+      label: "Quarterly event counts",
+      hasData: year => metrics.some(d =>
+        d.metric_id === "CVD-BURDEN-001" &&
+        d.period_type === "quarterly" &&
+        d.statistic === "quarterly_count" &&
+        d.period_year === year &&
+        seriesMatches(d, "hospital")
+      )
     },
     {
       label: "Annual hospital counts",
-      state: year => coverageState(metrics.filter(d =>
+      hasData: year => metrics.some(d =>
         d.metric_id === "CVD-BURDEN-001" &&
         d.period_type === "annual" &&
         d.statistic === "annual_count" &&
         d.period_year === year &&
-        d.event_type === "all_cvd" &&
-        d.sex === "all" &&
-        d.age_group === "all" &&
         seriesMatches(d, "hospital")
-      ))
+      )
     },
     {
-      label: "Annual hospital + DCO",
-      state: year => coverageState(metrics.filter(d =>
+      label: "Annual Hospital + DCO counts",
+      hasData: year => metrics.some(d =>
         d.metric_id === "CVD-BURDEN-001" &&
         d.period_type === "annual" &&
         d.statistic === "annual_count" &&
         d.period_year === year &&
-        d.event_type === "all_cvd" &&
-        d.sex === "all" &&
-        d.age_group === "all" &&
         (seriesMatches(d, "dco_primary") || seriesMatches(d, "dco_inclusive"))
-      ))
+      )
     },
     {
-      label: "Event distributions",
-      state: year => coverageState(metrics.filter(d =>
+      label: "Annual event distributions",
+      hasData: year => metrics.some(d =>
         d.metric_id === "CVD-BURDEN-002" &&
-        d.period_year === year &&
-        d.event_type === "all_cvd"
-      ))
+        d.period_year === year
+      )
     },
     {
-      label: "Event rates",
-      state: year => coverageState(metrics.filter(d =>
+      label: "Annual event rates",
+      hasData: year => metrics.some(d =>
         d.metric_id === "CVD-INCIDENCE-001" &&
-        d.period_year === year &&
-        d.event_type === "all_cvd"
-      ))
+        d.period_year === year
+      )
     }
   ]
 
-  const cell = (row, year) => {
-    const state = row.state(year)
-    if (state === "complete") {
-      return html`<td class="bnr-coverage-cell bnr-coverage-present" title=${`${row.label}: ${year} · complete published coverage`}>✓</td>`
-    }
-    if (state === "partial") {
-      return html`<td class="bnr-coverage-cell bnr-coverage-partial" title=${`${row.label}: ${year} · partial or incomplete published coverage`}>●</td>`
-    }
-    return html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · no data published`}>–</td>`
-  }
-
   return html`<div class="bnr-definition-panel">
     <div class="bnr-section-title">Data coverage</div>
-    <p class="bnr-trend-note">This shows which years are included in the current published release. For monthly and quarterly data, a partial symbol means that only part of the calendar year is available.</p>
+    <p class="bnr-trend-note">This shows which years are included in the current published release. New years will appear automatically as future releases are added.</p>
     <div class="bnr-coverage-key">
-      <span><strong class="bnr-coverage-present">✓</strong> complete year</span>
-      <span><strong class="bnr-coverage-partial">●</strong> partial / incomplete year</span>
+      <span><strong class="bnr-coverage-present">✓</strong> data available</span>
       <span><strong class="bnr-coverage-absent">–</strong> no data published</span>
     </div>
     <div class="bnr-coverage-scroll">
@@ -1732,12 +1471,14 @@ incompleteSegments = rows => {
         <tbody>
           ${rows.map(row => html`<tr>
             <th scope="row" class="bnr-coverage-label">${row.label}</th>
-            ${years.map(year => cell(row, year))}
+            ${years.map(year => row.hasData(year)
+              ? html`<td class="bnr-coverage-cell bnr-coverage-present" title=${`${row.label}: ${year} · data available`}>✓</td>`
+              : html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · no data published`}>–</td>`)}
           </tr>`)}
         </tbody>
       </table>
     </div>
-    <div class="bnr-note-box"><strong>Scope:</strong> Monthly and quarterly counts and event distributions are hospital-recorded. Hospital + DCO counts and event rates are annual. Monthly counts are All CVD, both sexes and all ages.</div>
+    <div class="bnr-note-box"><strong>Scope:</strong> Monthly and quarterly event counts and event distributions are hospital-recorded. Hospital + DCO counts and event rates are published annually where available. Monthly counts are All CVD, both sexes and all ages.</div>
   </div>`
 }
 ```
