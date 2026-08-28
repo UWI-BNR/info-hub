@@ -6,7 +6,7 @@ surveillance_area: CVD
 domain: cvd
 metric_family: combined_cvd_metrics
 period: cvd_2024_04
-release_date: 2026-08-27
+release_date: 2026-08-28
 
 title: |-
   Combined CVD metrics

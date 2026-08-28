@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd_stage1_combine.do
-VERSION: 0.2.0 (26 August 2026)
+VERSION: 1.1.2 (27 August 2026)
 PURPOSE: Build the private combined CVD disclosure-review lattice.
 
 This helper does not suppress, approve, publish or create a public candidate.
@@ -10,7 +10,7 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 Stage 1 combine helper v0.2.0"
+display as result "Running expanded CVD Step 5 Stage 1 combine helper v1.1.2"
 
 args burden_dta rates_dta combined_private_dta qa_dta release_id
 
@@ -58,16 +58,21 @@ assert schema_version == "bnr_cvd_public_metric_v2"
 assert release_id == "`release_id'"
 assert period_type == "annual"
 assert inlist(age_group, "all", "age_standardised")
-assert inlist(ascertainment_scope, "hospital_only", "hospital_plus_dco")
+assert inlist(ascertainment_scope, "hospital_only", "hospital_plus_dco", "additional_dco")
 assert inlist(mortality_definition, "not_applicable", "primary", "inclusive")
 assert inlist(estimate_basis, "observed", "estimated")
+assert metric_id == "CVD-INCIDENCE-001" | ///
+    (metric_id == "CVD-BURDEN-001" & age_group == "all" & ///
+    inlist(ascertainment_scope, "hospital_plus_dco", "additional_dco"))
 
 generate int period_year = dth_year
 generate str20 period = string(dth_year)
 generate str10 period_start = string(dth_year) + "-01-01"
 generate byte period_quarter = .
 generate str30 source_status = cond(ascertainment_scope == "hospital_only", "hospital_registered", "national_estimate")
-generate str45 statistic = cond(age_group == "all", "annual_crude_rate", "annual_age_standardised_rate")
+generate str45 statistic = "annual_count" if metric_id == "CVD-BURDEN-001"
+replace statistic = "annual_crude_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "all"
+replace statistic = "annual_age_standardised_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "age_standardised"
 generate int comparison_n = .
 generate str12 sdc_policy = "bnr_sdc_v1"
 generate byte primary_suppression_threshold = 6
@@ -86,7 +91,21 @@ use "`burden_dta'", clear
 append using "`normalised_rates'"
 quietly count
 local combined_rows = r(N)
-isid metric_id period_type period_year period_month event_type sex age_group statistic mortality_definition, missok
+local stage1_key metric_id period_type period_year period_month event_type sex ///
+    age_group ascertainment_scope statistic mortality_definition
+duplicates tag `stage1_key', generate(stage1_duplicate_key)
+quietly count if stage1_duplicate_key > 0
+if r(N) > 0 {
+    display as error "Expanded Step 5 combined lattice contains duplicate public rows."
+    display as error "The duplicate worklist follows; do not continue to suppression."
+    sort `stage1_key' source_status estimate_basis release_id
+    list `stage1_key' source_status estimate_basis release_id value numerator ///
+        denominator linkage_lower_value linkage_upper_value ///
+        if stage1_duplicate_key > 0, noobs abbreviate(32)
+    exit 459
+}
+drop stage1_duplicate_key
+isid `stage1_key', missok
 save "`combined_private_dta'", replace
 
 clear
@@ -100,8 +119,8 @@ replace check = "Rate source normalised" in 2
 replace detail = "`rate_rows' v1.0.7 rate rows normalised." in 2
 replace check = "Combined private lattice written" in 3
 replace detail = "`combined_rows' rows written; no public candidate created." in 3
-replace check = "Rate statistic derived from age_group" in 4
-replace detail = "all -> annual_crude_rate; age_standardised -> annual_age_standardised_rate." in 4
+replace check = "Rate and count statistics normalised" in 4
+replace detail = "DCO counts -> annual_count; rate rows -> crude or age-standardised rate." in 4
 save "`qa_dta'", replace
 
 display as result "Expanded CVD Step 5 Stage 1 combine helper passed."

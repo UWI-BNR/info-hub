@@ -1,8 +1,9 @@
 /*******************************************************************************
 DO-FILE:     bnr_cvd_construct_incidence_rates_core.do
-VERSION:     1.0.7 (26 August 2026)
-RELEASE:     Stage 3 rate-construction integrated release 1.0.7
-PURPOSE:     Private annual CVD rate-construction core with embedded QA.
+VERSION:     1.1.4 (28 August 2026)
+RELEASE:     Annual DCO-count amendment 1.2.0
+PURPOSE:     Private annual CVD rate and DCO-count construction core with
+             embedded QA.
 
              Uses the completed aggregate joint All-CVD DCO anchor, then
              allocates its unresolved component over mutually exclusive
@@ -15,7 +16,8 @@ INPUTS:      hospital-event DTA       : eid, doe, etype, dco, sex, agey
              WPP population DTA       : prepared private reference asset
              WHO standard DTA         : prepared private reference asset
 
-OUTPUTS:     private public-shaped rate candidate DTA, private component DTA,
+OUTPUTS:     private public-shaped annual rate-and-DCO-count candidate DTA,
+             private component DTA,
              aggregate QA CSV. No public output is created.
 *******************************************************************************/
 version 19
@@ -60,7 +62,8 @@ foreach f in events_input linkage_input joint_input population_input standard_in
 
 tempfile population standard hospital linkage_rows ///
     anchor atomic_grid grid source_a components_atomic components rates_crude ///
-    rates_asr qa_dta all_age_population rates_candidate
+    rates_asr qa_dta all_age_population rates_candidate dco_total_counts ///
+    dco_additional_counts
 tempname qa_handle category_handle
 
 * ---------------------------------------------------------------------------
@@ -503,9 +506,81 @@ assert dco_lower_rate <= dco_central_rate & dco_central_rate <= dco_upper_rate
 save `"`rates_asr'"', replace
 
 * ---------------------------------------------------------------------------
-* 8. Shape private candidate rate rows. Lower and upper are fields on the same
-*    row as the central estimate; they are not duplicate public rows.
+* 8. Shape private candidate rows.  In addition to the annual rate lattice,
+*    construct annual/all-age hospital-plus-DCO and additional-DCO counts.
+*    Hospital-only counts remain in the established burden lattice and are not
+*    duplicated here.  Lower and upper are fields on the same row as the
+*    central estimate; they are not duplicate public rows.
 * ---------------------------------------------------------------------------
+use `"`rates_crude'"', clear
+keep dth_year event_type sex mortality_definition hospital_n ///
+    dco_lower_component_n dco_central_component_n dco_upper_component_n
+generate str20 age_group = "all"
+generate str24 metric_id = "CVD-BURDEN-001"
+generate str12 period_type = "annual"
+generate byte period_month = .
+generate str22 ascertainment_scope = "hospital_plus_dco"
+generate str12 estimate_basis = "estimated"
+generate str18 unit = "count"
+generate double value = hospital_n + dco_central_component_n
+generate double numerator = value
+generate double denominator = .
+generate double linkage_lower_value = hospital_n + dco_lower_component_n
+generate double linkage_upper_value = hospital_n + dco_upper_component_n
+generate byte period_complete = 1
+generate str24 schema_version = "bnr_cvd_public_metric_v2"
+generate str16 release_id = "`release_id'"
+generate str12 status_flag = "final"
+generate str18 method_version = "cvd_rates_v1_1_0"
+generate str16 population_source = "not_applicable"
+generate str3 country_iso3 = "BRB"
+generate str16 population_unit = "not_applicable"
+generate str16 population_extraction_date = "not_applicable"
+generate str28 population_basis = "not_applicable"
+generate str28 standard_population = "not_applicable"
+keep schema_version release_id metric_id period_type dth_year period_month ///
+    event_type sex age_group ascertainment_scope mortality_definition ///
+    estimate_basis unit value numerator denominator linkage_lower_value ///
+    linkage_upper_value period_complete status_flag method_version ///
+    population_source country_iso3 population_unit population_extraction_date ///
+    population_basis standard_population
+save `"`dco_total_counts'"', replace
+
+* Reopen the annual aggregate source for the direct additional-DCO count rows.
+use `"`rates_crude'"', clear
+keep dth_year event_type sex mortality_definition dco_lower_component_n ///
+    dco_central_component_n dco_upper_component_n
+generate str20 age_group = "all"
+generate str24 metric_id = "CVD-BURDEN-001"
+generate str12 period_type = "annual"
+generate byte period_month = .
+generate str22 ascertainment_scope = "additional_dco"
+generate str12 estimate_basis = "estimated"
+generate str18 unit = "count"
+generate double value = dco_central_component_n
+generate double numerator = value
+generate double denominator = .
+generate double linkage_lower_value = dco_lower_component_n
+generate double linkage_upper_value = dco_upper_component_n
+generate byte period_complete = 1
+generate str24 schema_version = "bnr_cvd_public_metric_v2"
+generate str16 release_id = "`release_id'"
+generate str12 status_flag = "final"
+generate str18 method_version = "cvd_rates_v1_1_0"
+generate str16 population_source = "not_applicable"
+generate str3 country_iso3 = "BRB"
+generate str16 population_unit = "not_applicable"
+generate str16 population_extraction_date = "not_applicable"
+generate str28 population_basis = "not_applicable"
+generate str28 standard_population = "not_applicable"
+keep schema_version release_id metric_id period_type dth_year period_month ///
+    event_type sex age_group ascertainment_scope mortality_definition ///
+    estimate_basis unit value numerator denominator linkage_lower_value ///
+    linkage_upper_value period_complete status_flag method_version ///
+    population_source country_iso3 population_unit population_extraction_date ///
+    population_basis standard_population
+save `"`dco_additional_counts'"', replace
+
 use `"`rates_crude'"', clear
 generate str20 age_group = "all"
 tempfile crude_rows
@@ -534,7 +609,7 @@ preserve
     generate str24 schema_version = "bnr_cvd_public_metric_v2"
     generate str16 release_id = "`release_id'"
     generate str12 status_flag = "final"
-    generate str18 method_version = "cvd_rates_v1_0_7"
+    generate str18 method_version = "cvd_rates_v1_1_0"
     generate str12 population_source = "UN_WPP_2024"
     generate str3 country_iso3 = "BRB"
     generate str10 population_unit = "persons"
@@ -570,7 +645,7 @@ generate byte period_complete = 1
 generate str24 schema_version = "bnr_cvd_public_metric_v2"
 generate str16 release_id = "`release_id'"
 generate str12 status_flag = "final"
-generate str18 method_version = "cvd_rates_v1_0_7"
+generate str18 method_version = "cvd_rates_v1_1_0"
 generate str12 population_source = "UN_WPP_2024"
 generate str3 country_iso3 = "BRB"
 generate str10 population_unit = "persons"
@@ -585,6 +660,8 @@ keep schema_version release_id metric_id period_type dth_year period_month ///
     period_complete status_flag method_version population_source country_iso3 ///
     population_unit population_extraction_date population_basis standard_population
 append using `"`hospital_rows'"'
+append using `"`dco_total_counts'"'
+append using `"`dco_additional_counts'"'
 sort release_id metric_id period_type dth_year event_type sex age_group ///
     ascertainment_scope mortality_definition
 isid release_id metric_id period_type dth_year event_type sex age_group ///
@@ -629,11 +706,11 @@ post `qa_handle' ("Private component-lattice row difference") ///
     ("Expected 704 rows per year including unknown sex/age and mixed/unallocated")
 
 use `"`rates_candidate'"', clear
-quietly count if ascertainment_scope == "hospital_plus_dco" & ///
+quietly count if inlist(ascertainment_scope, "hospital_plus_dco", "additional_dco") & ///
     (value < linkage_lower_value | value > linkage_upper_value)
 local bound_failures = r(N)
-post `qa_handle' ("Published DCO rate-bound failures") (`bound_failures') ///
-    ("Lower <= central <= upper for every DCO-enhanced crude and ASR row")
+post `qa_handle' ("Published DCO count-or-rate bound failures") (`bound_failures') ///
+    ("Lower <= central <= upper for every DCO-enhanced count, crude-rate and ASR row")
 
 quietly count if age_group == "age_standardised" & missing(value)
 local missing_asr = r(N)
@@ -642,23 +719,32 @@ post `qa_handle' ("Missing age-standardised rate rows") (`missing_asr') ///
 
 quietly count if !inlist(sex, "all", "female", "male") | ///
     !inlist(event_type, "all_cvd", "heart", "stroke") | ///
-    !inlist(age_group, "all", "age_standardised")
+    !inlist(age_group, "all", "age_standardised") | ///
+    !inlist(ascertainment_scope, "hospital_only", "hospital_plus_dco", "additional_dco")
 local invalid_public_dimension = r(N)
 post `qa_handle' ("Invalid public rate dimensions") (`invalid_public_dimension') ///
     ("Unknown sex and mixed/unallocated are private only")
 
 quietly count if schema_version != "bnr_cvd_public_metric_v2" | ///
-    release_id != "`release_id'" | method_version != "cvd_rates_v1_0_7" | ///
-    population_source != "UN_WPP_2024" | country_iso3 != "BRB" | ///
-    population_unit != "persons" | standard_population != "WHO_WORLD_2000_2025"
+    release_id != "`release_id'" | method_version != "cvd_rates_v1_1_0" | ///
+    country_iso3 != "BRB"
 local metadata_failures = r(N)
 post `qa_handle' ("Rate-method metadata failures") (`metadata_failures') ///
     ("Schema, release, method, denominator and standard identifiers are fixed")
 
-quietly count if (age_group == "all" & ///
+quietly count if metric_id == "CVD-INCIDENCE-001" & ///
+    (population_source != "UN_WPP_2024" | population_unit != "persons" | ///
+    standard_population != "WHO_WORLD_2000_2025")
+local rate_metadata_failures = r(N)
+post `qa_handle' ("Rate denominator metadata failures") (`rate_metadata_failures') ///
+    ("Rate rows retain their population and WHO-standard identifiers; count rows are not applicable")
+
+quietly count if (metric_id == "CVD-INCIDENCE-001" & age_group == "all" & ///
         (missing(numerator) | missing(denominator))) | ///
-    (age_group == "age_standardised" & ///
-        (!missing(numerator) | !missing(denominator)))
+    (metric_id == "CVD-INCIDENCE-001" & age_group == "age_standardised" & ///
+        (!missing(numerator) | !missing(denominator))) | ///
+    (metric_id == "CVD-BURDEN-001" & ///
+        (missing(numerator) | !missing(denominator)))
 local numerator_denominator_failures = r(N)
 post `qa_handle' ("Rate numerator/denominator field failures") ///
     (`numerator_denominator_failures') ///
@@ -673,23 +759,30 @@ post `qa_handle' ("Incomplete or out-of-range annual rate rows") (`period_failur
 quietly levelsof dth_year, local(rate_years)
 local rate_year_n : word count `rate_years'
 local expected_year_n = `last_complete_year' - 2009
-local expected_rate_rows = 54 * `expected_year_n'
+local expected_rate_rows = 90 * `expected_year_n'
 quietly count
 local lattice_failures = abs(r(N) - `expected_rate_rows') + ///
     abs(`rate_year_n' - `expected_year_n')
-post `qa_handle' ("Annual public-shaped rate-lattice row difference") (`lattice_failures') ///
-    ("Expected 54 rows per complete year: 18 hospital-only and 36 DCO-enhanced")
+post `qa_handle' ("Annual public-shaped rate-and-count lattice row difference") (`lattice_failures') ///
+    ("Expected 90 rows per complete year: 54 rates and 36 DCO count rows")
 
 preserve
     keep if ascertainment_scope == "hospital_plus_dco"
-    keep dth_year event_type sex age_group mortality_definition value ///
+    keep metric_id dth_year event_type sex age_group mortality_definition value ///
         linkage_lower_value linkage_upper_value
+    generate str32 statistic = "annual_count"
+    replace statistic = "annual_crude_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "all"
+    replace statistic = "annual_age_standardised_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "age_standardised"
+    drop metric_id
     generate str10 definition = mortality_definition
     drop mortality_definition
     rename value estimate
     rename linkage_lower_value lower
     rename linkage_upper_value upper
-    reshape wide estimate lower upper, i(dth_year event_type sex age_group) ///
+    * Count rows and rate rows share the same event/sex/age/definition keys.
+    * Keep statistic in the reshape identity so each representation is audited
+    * against its Primary/Inclusive counterpart separately.
+    reshape wide estimate lower upper, i(dth_year event_type sex age_group statistic) ///
         j(definition) string
     quietly count if estimateinclusive + 0.000001 < estimateprimary | ///
         lowerinclusive + 0.000001 < lowerprimary | ///
@@ -711,14 +804,18 @@ post `qa_handle' ("Subtype Primary/Inclusive ordering diagnostics") ///
 
 preserve
     keep if ascertainment_scope == "hospital_plus_dco" & event_type == "all_cvd"
-    keep dth_year event_type sex age_group mortality_definition value ///
+    keep metric_id dth_year event_type sex age_group mortality_definition value ///
         linkage_lower_value linkage_upper_value
+    generate str32 statistic = "annual_count"
+    replace statistic = "annual_crude_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "all"
+    replace statistic = "annual_age_standardised_rate" if metric_id == "CVD-INCIDENCE-001" & age_group == "age_standardised"
+    drop metric_id
     generate str10 definition = mortality_definition
     drop mortality_definition
     rename value estimate
     rename linkage_lower_value lower
     rename linkage_upper_value upper
-    reshape wide estimate lower upper, i(dth_year event_type sex age_group) ///
+    reshape wide estimate lower upper, i(dth_year event_type sex age_group statistic) ///
         j(definition) string
     quietly count if estimateinclusive + 0.000001 < estimateprimary | ///
         lowerinclusive + 0.000001 < lowerprimary | ///
@@ -730,7 +827,7 @@ post `qa_handle' ("All-CVD Primary/Inclusive ordering failures") ///
     ("Pooled All-CVD Inclusive lower, central and upper values must not be below Primary")
 
 preserve
-    keep if age_group == "all"
+    keep if metric_id == "CVD-INCIDENCE-001" & age_group == "all"
     keep dth_year event_type ascertainment_scope mortality_definition sex numerator
     reshape wide numerator, i(dth_year event_type ascertainment_scope ///
         mortality_definition) j(sex) string
@@ -753,6 +850,7 @@ assert `bound_failures' == 0
 assert `missing_asr' == 0
 assert `invalid_public_dimension' == 0
 assert `metadata_failures' == 0
+assert `rate_metadata_failures' == 0
 assert `numerator_denominator_failures' == 0
 assert `period_failures' == 0
 assert `lattice_failures' == 0

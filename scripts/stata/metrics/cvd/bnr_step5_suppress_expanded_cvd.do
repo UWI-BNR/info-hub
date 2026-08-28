@@ -1,19 +1,19 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd.do
-VERSION: 2.0.0 (27 August 2026)
+VERSION: 2.1.0 (27 August 2026)
 PURPOSE: Run the tested expanded CVD Step 5 private disclosure-control chain.
 
-Inputs are the existing burden lattice, v1.0.7 annual rate lattice, and private
-DCO component sidecar. Outputs are a private candidate, combined QA, rate-
-equation audit and candidate row audit. This helper does not approve, promote or
-publish a dataset and does not change the established Step 5 controller.
+Inputs are the existing burden lattice, annual rate-and-DCO-count lattice, and
+private DCO component sidecar. Outputs are a private candidate, combined QA,
+representation-equation audit and candidate row audit. This helper does not
+approve, promote or publish a dataset and does not change the Step 5 controller.
 *******************************************************************************/
 
 version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 helper v2.0.0"
+display as result "Running expanded CVD Step 5 helper v2.1.0"
 
 args burden_dta rates_dta components_dta candidate_dta qa_dta equation_audit_dta row_audit_dta release_id
 

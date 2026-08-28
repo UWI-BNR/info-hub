@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do
-VERSION: 1.0.1 (27 August 2026)
+VERSION: 1.1.2 (27 August 2026)
 PURPOSE: Audit the provisional combined candidate against its private
          protection register before integration into the Step 5 controller.
 
@@ -13,7 +13,7 @@ version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 Stage 9 candidate-audit helper v1.0.1"
+display as result "Running expanded CVD Step 5 Stage 9 candidate-audit helper v1.1.2"
 
 args audited_private_dta candidate_dta row_audit_dta qa_dta release_id
 
@@ -26,7 +26,7 @@ assert _rc == 0
 capture confirm file "`candidate_dta'"
 assert _rc == 0
 
-local key_variables metric_id period_type period_year period_month event_type sex age_group statistic mortality_definition
+local key_variables metric_id period_type period_year period_month event_type sex age_group ascertainment_scope statistic mortality_definition
 tempfile expected_protection
 
 use "`audited_private_dta'", clear
@@ -53,7 +53,7 @@ assert release_id == "`release_id'"
 isid `key_variables', missok
 
 local private_field_count = 0
-foreach variable in sdc_policy primary_suppression_threshold primary_suppression related_primary_cells related_suppression_review suppression_review suppression_reason stage3_original_primary stage3_hospital_primary stage3_dco_primary stage5_unknown_support_present stage5_mixed_support_present stage5_structural_secondary stage6_existing_secondary stage6_protection_status stage7_rate_protected {
+foreach variable in sdc_policy primary_suppression_threshold primary_suppression related_primary_cells related_suppression_review suppression_review suppression_reason stage3_original_primary stage3_hospital_primary stage3_dco_primary stage5_unknown_support_present stage5_mixed_support_present stage5_structural_secondary stage6_existing_secondary stage6_hosp_existing stage6_protection_status stage7_protected {
     capture confirm variable `variable'
     if !_rc local private_field_count = `private_field_count' + 1
 }
