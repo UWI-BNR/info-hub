@@ -361,15 +361,6 @@ viewof selected_series = (() => {
     return wrapper
   }
 
-  if (selected_indicator === "counts" && selected_period_type !== "annual") {
-    const wrapper = html`<div>
-      <label>Event ascertainment</label>
-      <div class="bnr-period-fixed">Hospital-recorded</div>
-    </div>`
-    wrapper.value = ["hospital"]
-    return wrapper
-  }
-
   const input = Inputs.checkbox(
     ["hospital", "dco_primary", "dco_inclusive"],
     {
@@ -453,6 +444,42 @@ viewof selected_rate_uncertainty = (() => {
 ```{ojs}
 //| echo: false
 //| output: false
+// DCO linkage uncertainty applies only to Hospital + DCO rates.
+// When Hospital-recorded is the only selected series, keep the option visible
+// but disabled, with a short hover explanation.
+{
+  const control = viewof selected_rate_uncertainty
+
+  if (selected_indicator === "rates" && control?.querySelectorAll) {
+    const boxes = control.querySelectorAll('input[type="checkbox"]')
+    const linkageBox = boxes.length > 1 ? boxes[1] : null
+    const activeSeries = Array.isArray(selected_series) ? selected_series : ["hospital"]
+    const linkageAvailable = activeSeries.some(key => key !== "hospital")
+
+    if (linkageBox) {
+      linkageBox.disabled = !linkageAvailable
+
+      const label = linkageBox.closest("label")
+      if (label) {
+        label.style.opacity = linkageAvailable ? "" : "0.45"
+        label.style.cursor = linkageAvailable ? "" : "help"
+        label.title = linkageAvailable
+          ? ""
+          : "DCO linkage uncertainty applies only to Hospital + DCO event-rate estimates."
+      }
+
+      if (!linkageAvailable && linkageBox.checked) {
+        linkageBox.checked = false
+        control.dispatchEvent(new Event("input", {bubbles: true}))
+      }
+    }
+  }
+}
+```
+
+```{ojs}
+//| echo: false
+//| output: false
 effective_period_type = selected_indicator === "counts" ? selected_period_type : "annual"
 effective_metric_id = selected_indicator === "counts"
   ? "CVD-BURDEN-001"
@@ -492,31 +519,52 @@ viewof selected_event_type = Inputs.select(
 ```{ojs}
 //| echo: false
 //| output: false
-// Annual DCO count series are offered as trends only when at least half of
-// the complete annual periods have publishable values. This affects display
-// only: protected rows remain protected in the released dataset.
+// Event-ascertainment availability is controlled here so every sidebar
+// checkbox uses the same Inputs.checkbox styling.
+// - Monthly/quarterly counts: Hospital + DCO is not published, so both DCO
+//   options are disabled with an explanatory hover message.
+// - Annual counts/rates: DCO trend series are offered only when at least half
+//   of complete annual periods have publishable values.
+// This affects display only: protected rows remain protected in the release.
 {
   const control = viewof selected_series
   const boxes = control?.querySelectorAll?.('input[type="checkbox"]') || []
   const optionKeys = ["hospital", "dco_primary", "dco_inclusive"]
 
+  const nonAnnualCountContext =
+    selected_indicator === "counts" && selected_period_type !== "annual"
+
+  const annualContext =
+    (selected_indicator === "counts" && selected_period_type === "annual") ||
+    selected_indicator === "rates"
+
+  const metricId = selected_indicator === "rates" ? "CVD-INCIDENCE-001" : "CVD-BURDEN-001"
+  const statistic = selected_indicator === "rates"
+    ? rateStatistic(selected_rate_measure)
+    : "annual_count"
+  const ageGroup = selected_indicator === "rates"
+    ? rateAgeGroup(selected_rate_measure)
+    : "all"
+
   const completeYears = new Set(
-    metrics
-      .filter(d =>
-        d.metric_id === "CVD-BURDEN-001" &&
-        d.period_type === "annual" &&
-        d.statistic === "annual_count" &&
-        d.event_type === selected_event_type &&
-        d.sex === "all" &&
-        d.age_group === "all" &&
-        seriesMatches(d, "hospital") &&
-        (
-          d.period_complete === 1 ||
-          d.period_complete === "1" ||
-          d.period_complete === true
-        )
-      )
-      .map(d => d.period_year)
+    annualContext
+      ? metrics
+          .filter(d =>
+            d.metric_id === metricId &&
+            d.period_type === "annual" &&
+            d.statistic === statistic &&
+            d.event_type === selected_event_type &&
+            d.sex === "all" &&
+            d.age_group === ageGroup &&
+            seriesMatches(d, "hospital") &&
+            (
+              d.period_complete === 1 ||
+              d.period_complete === "1" ||
+              d.period_complete === true
+            )
+          )
+          .map(d => d.period_year)
+      : []
   )
 
   let changed = false
@@ -526,29 +574,30 @@ viewof selected_event_type = Inputs.select(
     if (!key) return
 
     let disable = false
-    let publishable = 0
-    const total = completeYears.size
+    let disabledReason = ""
 
-    if (
-      selected_indicator === "counts" &&
-      selected_period_type === "annual" &&
-      key !== "hospital" &&
-      total > 0
-    ) {
-      publishable = metrics.filter(d =>
-        d.metric_id === "CVD-BURDEN-001" &&
+    if (nonAnnualCountContext && key !== "hospital") {
+      disable = true
+      disabledReason = "Hospital + DCO event counts are published annually only."
+    } else if (annualContext && key !== "hospital" && completeYears.size > 0) {
+      const publishable = metrics.filter(d =>
+        d.metric_id === metricId &&
         d.period_type === "annual" &&
-        d.statistic === "annual_count" &&
+        d.statistic === statistic &&
         d.event_type === selected_event_type &&
         d.sex === "all" &&
-        d.age_group === "all" &&
+        d.age_group === ageGroup &&
         completeYears.has(d.period_year) &&
         seriesMatches(d, key) &&
         d.suppression_status === "none" &&
         Number.isFinite(d.value)
       ).length
 
-      disable = publishable / total < 0.5
+      disable = publishable / completeYears.size < 0.5
+      if (disable) {
+        disabledReason =
+          `${seriesLabel(key)} is not offered as a trend for ${eventLabel(selected_event_type)} because too few annual values can be published after disclosure control.`
+      }
     }
 
     box.disabled = disable
@@ -557,9 +606,7 @@ viewof selected_event_type = Inputs.select(
     if (label) {
       label.style.opacity = disable ? "0.45" : ""
       label.style.cursor = disable ? "help" : ""
-      label.title = disable
-        ? `${seriesLabel(key)} is not offered as an annual trend for ${eventLabel(selected_event_type)} because fewer than half of complete annual values can be published after disclosure control (${publishable} of ${total}).`
-        : ""
+      label.title = disabledReason
     }
 
     if (disable && box.checked) {
@@ -574,6 +621,7 @@ viewof selected_event_type = Inputs.select(
     control.dispatchEvent(new Event("input", {bubbles: true}))
   }
 }
+
 ```
 
 ```{ojs}
@@ -1033,13 +1081,14 @@ isolatedProtectedAnnualBridges = rows => {
         <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style=${`background:${colour("referenceBand")}`}></span>2015–2019 range</span>
         <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${colour("referenceMean")}`}></span>2015–2019 average</span>
       </div>
+      <div class="bnr-axis-title">↑ Count</div>
       ${Plot.plot({
         height: 410,
         marginLeft: 80,
         marginBottom: 70,
         style: {fontSize: "15px", fontFamily: "inherit"},
         x: {label: "Month", type: "time"},
-        y: {label: "Count", grid: true, domain: [0, yMax * 1.05], nice: true},
+        y: {label: null, grid: true, domain: [0, yMax * 1.05], nice: true},
         marks: [
           Plot.areaY(referenceForChart, {
             x: d => new Date(d.period_start),
@@ -1106,7 +1155,7 @@ isolatedProtectedAnnualBridges = rows => {
     }
 
     const chartX = d => selected_period_type === "annual"
-      ? String(d.period_year)
+      ? Number(d.period_year)
       : new Date(d.period_start)
 
     const series = panelSeries.map(key => {
@@ -1238,8 +1287,7 @@ isolatedProtectedAnnualBridges = rows => {
         }),
         Plot.lineY(s.protectedBridges, {
           x: "chart_x", y: "value", z: "segment",
-          stroke: c, strokeOpacity: .42, strokeWidth: 1.8,
-          strokeDasharray: "5,5"
+          stroke: c, strokeOpacity: .28, strokeWidth: 2
         }),
         Plot.dot(s.completePoints, {
           x: "chart_x", y: "value",
@@ -1274,19 +1322,20 @@ isolatedProtectedAnnualBridges = rows => {
       <div class="bnr-chart-legend">
         ${panelSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
         ${hasComparator ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#666;border-top-style:dashed"></span>Previous 5-year average</span>` : ""}
-        ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;border-top-style:dashed;opacity:.55"></span>Single protected year (not estimated)</span>` : ""}
+        ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;opacity:.4"></span>Bridge over single protected year (not estimated)</span>` : ""}
         <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style="border-color:#777"></span>${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}</span>
       </div>
+      <div class="bnr-axis-title">↑ Count</div>
       ${Plot.plot({
         height: 470,
         marginLeft: 80,
         marginBottom: 76,
         style: {fontSize: "15px", fontFamily: "inherit"},
         x: selected_period_type === "annual"
-          ? {label: "Year"}
+          ? {label: "Year", type: "linear", tickFormat: "d"}
           : {label: "Quarter", type: "time"},
         y: {
-          label: "Count",
+          label: null,
           grid: true,
           ...(selected_period_type === "annual" && Number.isFinite(annualScaleMax)
             ? {domain: [0, annualScaleMax * 1.05], nice: true}
@@ -1301,7 +1350,7 @@ isolatedProtectedAnnualBridges = rows => {
       ${selected_period_type === "annual"
         ? html`<div class="bnr-note-box">
             <strong>Disclosure and trend display:</strong>
-            A faint dashed bridge may connect published values across a single protected year to help show the longer-term pattern. It does not estimate the protected value, and no value or marker is shown for that year. Hospital + DCO series are not offered as annual trends when fewer than half of complete annual values can be published.
+            A faint bridge may connect published values across a single protected year to help show the longer-term pattern. It does not estimate the protected value, and no value or marker is shown for that year. Hospital + DCO series are not offered as annual trends when fewer than half of complete annual values can be published.
           </div>`
         : ""}
     </div>`
@@ -1559,8 +1608,9 @@ isolatedProtectedAnnualBridges = rows => {
 
   const statistic = rateStatistic(selected_rate_measure)
   const ageGroupForRate = rateAgeGroup(selected_rate_measure)
-  const showStatisticalCi = selected_rate_uncertainty.includes("statistical_ci")
-  const showLinkageUncertainty = selected_rate_uncertainty.includes("linkage")
+  const activeUncertainty = Array.isArray(selected_rate_uncertainty) ? selected_rate_uncertainty : []
+  const showStatisticalCi = activeUncertainty.includes("statistical_ci")
+  const showLinkageUncertainty = activeUncertainty.includes("linkage")
 
   const rateSeries = activeSeries.map(key => {
     const observed = sortedRows(metrics.filter(d =>
@@ -1586,17 +1636,19 @@ isolatedProtectedAnnualBridges = rows => {
     return {
       key,
       observed,
-      points: safeAllRows.map(d => ({...d, chart_x: String(d.period_year)})),
+      points: safeAllRows.map(d => ({...d, chart_x: Number(d.period_year)})),
       segments: contiguousSafeSegments(allRows)
-        .map(d => ({...d, chart_x: String(d.period_year)})),
+        .map(d => ({...d, chart_x: Number(d.period_year)})),
       ciPoints: safeAllRows
         .filter(d =>
           Number.isFinite(d.ci_lower_value) &&
           Number.isFinite(d.ci_upper_value)
         )
-        .map(d => ({...d, chart_x: String(d.period_year)})),
+        .map(d => ({...d, chart_x: Number(d.period_year)})),
       linkageSegments: contiguousSafeSegments(linkageRows)
-        .map(d => ({...d, chart_x: String(d.period_year)}))
+        .map(d => ({...d, chart_x: Number(d.period_year)})),
+      protectedBridges: isolatedProtectedAnnualBridges(allRows)
+        .map(d => ({...d, chart_x: Number(d.period_year)}))
     }
   })
 
@@ -1665,6 +1717,8 @@ isolatedProtectedAnnualBridges = rows => {
     ? Math.max(...rateScaleValues)
     : null
 
+  const hasProtectedBridge = rateSeries.some(s => s.protectedBridges.length)
+
   const rateMarks = rateSeries.flatMap(s => {
     const c = seriesColour(s.key)
     const marks = []
@@ -1709,6 +1763,10 @@ isolatedProtectedAnnualBridges = rows => {
         x: "chart_x", y: "value", z: "segment",
         stroke: c, strokeWidth: 2.4
       }),
+      Plot.lineY(s.protectedBridges, {
+        x: "chart_x", y: "value", z: "segment",
+        stroke: c, strokeOpacity: .28, strokeWidth: 2
+      }),
       Plot.dot(s.points, {
         x: "chart_x", y: "value",
         fill: c, stroke: c, r: 3.5,
@@ -1719,18 +1777,17 @@ isolatedProtectedAnnualBridges = rows => {
     return marks
   })
 
-  const rateIntro = selected_rate_measure === "asr"
-    ? "Age-standardised rates account for differences in population age structure. The published series uses the WHO World 2000–2025 standard population."
-    : "Crude rates describe the number of eligible events relative to the resident population without adjustment for age structure."
-
-  const uncertaintyIntro =
-    "Vertical whiskers show published 95% statistical confidence intervals. For Hospital + DCO series, shaded bands show the separately published DCO linkage/ascertainment uncertainty. These answer different questions and are not combined."
+  const rateHowToRead = html`
+    Compare like with like: use the same rate measure and event-ascertainment series.
+    Gaps are protected or unavailable values.
+    <a href="../../../../methods/measures/incidence.html">Read the CVD event-rate methods.</a>
+  `
 
   return html`<div>
     ${interpretation(
       "Annual CVD event rates",
       `The published annual ${rateMeasureLabel(selected_rate_measure).toLowerCase()} per 100,000 population for ${eventLabel(selected_event_type)} and the selected event-ascertainment series.`,
-      `Hospital-recorded rates describe eligible events identified through hospital records. Hospital + DCO rates also include approved death-certificate-only events using the Primary or Inclusive mortality definition. ${rateIntro} ${uncertaintyIntro} Protected values are not plotted and are not treated as zero.`
+      rateHowToRead
     )}
     <hr>
     <div class="bnr-definition-panel">
@@ -1740,20 +1797,22 @@ isolatedProtectedAnnualBridges = rows => {
       <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Lines and uncertainty intervals break where a published value is protected or unavailable.</p>
       <div class="bnr-chart-legend">
         ${activeSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
+        ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;opacity:.4"></span>Bridge over single protected year (not estimated)</span>` : ""}
         ${showStatisticalCi ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-whisker"></span>95% statistical CI</span>` : ""}
         ${showLinkageUncertainty && activeSeries.some(d => d !== "hospital")
           ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-uncertainty-band"></span>DCO linkage uncertainty</span>`
           : ""}
       </div>
+      <div class="bnr-axis-title">↑ Rate per 100,000</div>
       ${Plot.plot({
         height: 470,
-        marginTop: 24,
+        marginTop: 20,
         marginLeft: 96,
         marginBottom: 70,
         style: {fontSize: "15px", fontFamily: "inherit"},
-        x: {label: "Year"},
+        x: {label: "Year", type: "linear", tickFormat: "d"},
         y: {
-          label: "Rate per 100,000",
+          label: null,
           grid: true,
           ...(Number.isFinite(rateScaleMax)
             ? {domain: [0, rateScaleMax * 1.05], nice: true}
@@ -1922,7 +1981,7 @@ isolatedProtectedAnnualBridges = rows => {
 }
 ```
 
-## Coverage {height=430}
+## Coverage {height=470}
 
 ```{ojs}
 //| echo: false
