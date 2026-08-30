@@ -40,6 +40,37 @@ Secondary protection is deterministic, automatic and documented. It prevents
 reconstruction through totals, related categories, derived measures, temporal
 comparisons and five-year comparators where relevant.
 
+### Annual mortality-rate companion rule
+
+`MORT-RATE-001` is an annual derived measure, not a new count lattice. It
+contains crude and directly age-standardised CVD mortality rates per 100,000
+population for the existing two mortality definitions, three CVD types and
+three sex strata.
+
+- A rate never receives primary suppression in its own right.
+- If its matching annual observed death count is protected (primary or
+  complementary secondary), the rate and its numeric statistical confidence
+  limits receive **secondary** suppression.
+- The rate must not initiate a new complementary, temporal or definition-based
+  suppression decision. Consequently, the rate extension must not protect more
+  annual count strata than the established annual count and percentage release.
+- A protected rate has blank `value`, `numerator`, `denominator`,
+  `ci_lower_value` and `ci_upper_value`, with the existing safe display and
+  disclosure fields retained. `ci_level` and `ci_method` may remain as
+  non-disclosive method metadata.
+
+Mortality rates use the approved private UN WPP 2024 Barbados population asset.
+Crude rates use the exact annual numerator and denominator. Directly
+age-standardised rates use five-year age groups and the fixed WHO World
+Standard Population (2000-2025); they do not expose a misleading single
+numerator or denominator. Deaths with unusable age remain in crude rates but
+are excluded from direct standardisation and reported in private QA.
+
+The 95% statistical confidence intervals are exact Poisson (Garwood) for
+crude rates and Fay-Feuer gamma intervals for directly age-standardised rates.
+They describe sampling variation conditional on the classified death counts;
+they are not a classification, linkage or population uncertainty interval.
+
 Technical QA checks verify this contract. Under the fixed routine structure
 they are expected to pass automatically; they must not create a normal analyst
 decision or repair pathway.

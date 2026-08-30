@@ -214,6 +214,7 @@ local required_variables metric_id release_id period_type period period_start //
     period_year period_month period_quarter period_complete ///
     event_type sex age_group case_definition ///
     source_status statistic value unit numerator denominator comparison_n ///
+    ci_lower_value ci_upper_value ci_level ci_method ///
     status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells ///
     related_suppression_review suppression_review suppression_reason
@@ -244,6 +245,17 @@ quietly count if release_id != "`release_id'"
 if r(N) {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
         "A metric row has the wrong release identifier."
+}
+
+quietly count if metric_id == "MORT-RATE-001" & ///
+    ((age_group == "all" & (missing(numerator, denominator) | denominator <= 0 | ///
+        abs(value - (100000 * numerator / denominator)) > 0.0000001 | ///
+        ci_method != "poisson_exact_garwood")) | ///
+     (age_group == "age_standardised" & (!missing(numerator) | !missing(denominator) | ///
+        ci_method != "fay_feuer_gamma")))
+if r(N) {
+    _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'" ///
+        "Mortality rate numerators, denominators or method labels are inconsistent."
 }
 
 quietly count if !inlist(case_definition, "primary_clear_likely", ///
@@ -278,7 +290,7 @@ if r(N) {
         "A metric row is missing a required reporting value."
 }
 
-quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002")
+quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002", "MORT-RATE-001")
 if r(N) {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
         "The package contains an unrecognised mortality metric identifier."
@@ -286,7 +298,7 @@ if r(N) {
 
 quietly count if !inlist(event_type, "all_cvd", "heart", "stroke") | ///
     !inlist(sex, "all", "female", "male") | ///
-    !inlist(age_group, "all", "under_70", "age_70_plus")
+    !inlist(age_group, "all", "under_70", "age_70_plus", "age_standardised")
 if r(N) {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
         "The package contains an unrecognised reporting dimension."
@@ -318,6 +330,8 @@ quietly count if metric_id == "MORT-BURDEN-001"
 local count_rows = r(N)
 quietly count if metric_id == "MORT-BURDEN-002"
 local distribution_rows = r(N)
+quietly count if metric_id == "MORT-RATE-001"
+local rate_rows = r(N)
 quietly count if period_type == "annual"
 local annual_rows = r(N)
 quietly count if period_type == "quarterly"
@@ -332,8 +346,10 @@ local expected_count_rows = ///
 local expected_distribution_rows = `expected_years' * 10
 local expected_count_rows = 2 * `expected_count_rows'
 local expected_distribution_rows = 2 * `expected_distribution_rows'
+local expected_rate_rows = `expected_years' * 36
 if `count_rows' != `expected_count_rows' | ///
-        `distribution_rows' != `expected_distribution_rows' {
+        `distribution_rows' != `expected_distribution_rows' | ///
+        `rate_rows' != `expected_rate_rows' {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
         "The metric row counts do not match the CVD dashboard reporting lattice."
 }
@@ -365,6 +381,7 @@ forvalues yy = `analysis_start_year'/`analysis_end_year' {
     local upper_rows_in_year = r(N)
     local expected_rows_in_year = 140
     if `yy' == `analysis_start_year' local expected_rows_in_year = 93
+    local expected_rows_in_year = `expected_rows_in_year' + 18
     if `primary_rows_in_year' != `expected_rows_in_year' | ///
             `upper_rows_in_year' != `expected_rows_in_year' {
         _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
@@ -373,10 +390,22 @@ forvalues yy = `analysis_start_year'/`analysis_end_year' {
 }
 
 quietly count if age_group != "all" & ///
+    metric_id == "MORT-BURDEN-001" & ///
     (period_type != "annual" | event_type != "all_cvd" | sex != "all")
 if r(N) {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
         "An age-specific row falls outside the agreed annual all-CVD boundary."
+}
+
+quietly count if metric_id == "MORT-RATE-001" & ///
+    (period_type != "annual" | !inlist(age_group, "all", "age_standardised") | ///
+     !inlist(statistic, "annual_crude_rate", "annual_age_standardised_rate") | ///
+     unit != "rate_per_100000" | missing(value, ci_lower_value, ci_upper_value, ci_level) | ci_level != 95 | ///
+     ci_method == "" | ci_lower_value < 0 | ci_lower_value > value | ///
+     ci_upper_value < value | ci_upper_value < ci_lower_value)
+if r(N) {
+    _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'" ///
+        "A mortality rate or its statistical confidence interval is invalid."
 }
 
 quietly count if period_type == "monthly" & ///
@@ -567,7 +596,7 @@ local required_step3_checks required_step2_variables source_and_cohort_rows ///
     component_definition_comparison resolved_family cvd_dashboard_lattice ///
     metric_grain_and_rows metric_reconciliation ///
     sex_and_event_reconciliation cross_frequency_reconciliation ///
-    comparator_history suppression_worklist rates_out_of_scope
+    comparator_history suppression_worklist annual_mortality_rates
 foreach required_step3_check of local required_step3_checks {
     quietly count if check == "`required_step3_check'"
     if r(N) != 1 {
@@ -682,9 +711,11 @@ local meta_monthly_reference = 0
 local meta_reporting_scope = 0
 local meta_metric_1 = 0
 local meta_metric_2 = 0
+local meta_metric_3 = 0
 local meta_rows = 0
 local meta_count_rows = 0
 local meta_distribution_rows = 0
+local meta_rate_rows = 0
 local meta_qa_rows = 0
 local meta_byte_identical = 0
 local meta_rates = 0
@@ -738,12 +769,14 @@ while r(eof) == 0 {
     if "`cleaned_line'" == "cvd_dashboard_reporting_scope_aligned: true" local meta_reporting_scope = 1
     if "`cleaned_line'" == "- MORT-BURDEN-001" local meta_metric_1 = 1
     if "`cleaned_line'" == "- MORT-BURDEN-002" local meta_metric_2 = 1
+    if "`cleaned_line'" == "- MORT-RATE-001" local meta_metric_3 = 1
     if "`cleaned_line'" == "metric_rows: `metric_rows'" local meta_rows = 1
     if "`cleaned_line'" == "count_rows: `count_rows'" local meta_count_rows = 1
     if "`cleaned_line'" == "distribution_rows: `distribution_rows'" local meta_distribution_rows = 1
+    if "`cleaned_line'" == "rate_rows: `rate_rows'" local meta_rate_rows = 1
     if "`cleaned_line'" == "qa_checks: `step3_qa_rows'" local meta_qa_rows = 1
     if "`cleaned_line'" == "release_and_current_files_byte_identical: true" local meta_byte_identical = 1
-    if "`cleaned_line'" == "rates_included: false" local meta_rates = 1
+    if "`cleaned_line'" == "rates_included: true" local meta_rates = 1
     if "`cleaned_line'" == "dco_linkage_included: false" local meta_dco = 1
     if "`cleaned_line'" == "primary_suppression_rows: `primary_suppression_rows'" local meta_primary_rows = 1
     if "`cleaned_line'" == "suppression_review_rows: `suppression_review_rows'" local meta_review_rows = 1
@@ -764,7 +797,7 @@ foreach metadata_check in meta_schema meta_package meta_status meta_step meta_re
         meta_resolved_upper meta_annual meta_quarterly meta_monthly ///
         meta_monthly_no_rolling meta_quarterly_annual_rolling ///
         meta_monthly_public_scope meta_monthly_reference meta_reporting_scope meta_metric_1 ///
-        meta_metric_2 meta_rows meta_count_rows meta_distribution_rows ///
+        meta_metric_2 meta_metric_3 meta_rows meta_count_rows meta_distribution_rows meta_rate_rows ///
         meta_qa_rows meta_byte_identical meta_rates meta_dco ///
         meta_primary_rows meta_review_rows meta_approved meta_public_ready ///
         meta_boundary {
@@ -1175,6 +1208,38 @@ if `protected_count_rows' > 0 {
 replace secondary_protection = 1 if comp_has_protected_component == 1 & ///
     !primary_protection
 
+* ------------------------------------------------------------------------------
+* ANNUAL RATE COMPANIONS
+* ------------------------------------------------------------------------------
+* A released rate can reveal its underlying annual count.  Rates therefore
+* inherit protection from the matching already-decided annual observed count.
+* This is deliberately one-way: rate rows never create new primary,
+* complementary or temporal protection decisions for counts.
+generate byte rate_parent_protected = 0
+preserve
+    keep if metric_id == "MORT-BURDEN-001" & period_type == "annual" & ///
+        statistic == "annual_count" & age_group == "all" & ///
+        (primary_protection | secondary_protection)
+    quietly count
+    local protected_rate_parent_rows = r(N)
+    if `protected_rate_parent_rows' > 0 {
+        keep case_definition period_year event_type sex
+        duplicates drop
+        generate byte parent_protected = 1
+        tempfile protected_annual_rate_parents
+        save `protected_annual_rate_parents', replace
+    }
+restore
+if `protected_rate_parent_rows' > 0 {
+    merge m:1 case_definition period_year event_type sex ///
+        using `protected_annual_rate_parents', keep(master match) nogen
+    replace rate_parent_protected = parent_protected == 1 if ///
+        metric_id == "MORT-RATE-001"
+    drop parent_protected
+}
+replace secondary_protection = 1 if metric_id == "MORT-RATE-001" & ///
+    rate_parent_protected == 1 & !primary_protection
+
 generate str12 suppression_status = "none"
 replace suppression_status = "primary" if primary_protection
 replace suppression_status = "secondary" if ///
@@ -1320,6 +1385,8 @@ replace protection_route = "Annual percentage derived from protected count" if /
     suppression_status == "secondary" & ///
     inlist(statistic, "sex_distribution", "event_type_distribution", ///
         "age_distribution")
+replace protection_route = "Annual rate derived from protected death count" if ///
+    suppression_status == "secondary" & metric_id == "MORT-RATE-001"
 replace protection_route = "Sex-total reconstruction protection" if ///
     suppression_status == "secondary" & protection_route == "" & ///
     observed_count & inlist(sex, "female", "male")
@@ -1332,11 +1399,13 @@ preserve
     keep release_id metric_id period_type period period_year period_month ///
         period_quarter case_definition event_type sex age_group statistic ///
         value unit numerator denominator comparison_n primary_suppression ///
+        ci_lower_value ci_upper_value ci_level ci_method ///
         related_primary_cells related_suppression_review suppression_reason ///
         suppression_status protection_route disclosure_note
     order release_id metric_id period_type period period_year period_month ///
         period_quarter case_definition event_type sex age_group statistic ///
         value unit numerator denominator comparison_n primary_suppression ///
+        ci_lower_value ci_upper_value ci_level ci_method ///
         related_primary_cells related_suppression_review suppression_reason ///
         suppression_status protection_route disclosure_note
     sort period_year period_type period_month period_quarter case_definition ///
@@ -1380,6 +1449,24 @@ replace value = . if suppression_status != "none"
 replace numerator = . if suppression_status != "none"
 replace denominator = . if suppression_status != "none"
 replace comparison_n = . if suppression_status != "none"
+replace ci_lower_value = . if suppression_status != "none"
+replace ci_upper_value = . if suppression_status != "none"
+
+quietly count if metric_id == "MORT-RATE-001" & ///
+    ((rate_parent_protected == 1 & suppression_status != "secondary") | ///
+     (rate_parent_protected == 0 & suppression_status != "none") | ///
+     suppression_status == "primary")
+if r(N) {
+    _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'" ///
+        "A mortality rate is not using the required one-way secondary companion protection."
+}
+quietly count if metric_id == "MORT-RATE-001" & suppression_status != "none" & ///
+    (!missing(value) | !missing(numerator) | !missing(denominator) | ///
+     !missing(ci_lower_value) | !missing(ci_upper_value))
+if r(N) {
+    _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'" ///
+        "A protected mortality rate retains a numeric value or confidence limit."
+}
 
 * Helper fields above are deliberately private calculation scaffolding. They
 * are removed before the review candidate is saved so the public payload keeps
@@ -1392,7 +1479,7 @@ drop candidate_row primary_protection secondary_protection observed_count ///
     protected_annual_count event_has_protected_annual_count ///
     event_distribution_protected age_distribution_protected audit_hidden ///
     comp_has_protected_component temporal_panel allsex_temporal_panel ///
-    protection_route
+    rate_parent_protected protection_route
 
 order value display_value unit numerator denominator comparison_n, after(statistic)
 sort metric_id period_type period_year period_month period_quarter ///
@@ -1408,7 +1495,7 @@ label data "BNR mortality burden: disclosure-controlled Step 4 review candidate"
 
 notes _dta: private_review_candidate: not approved and not published
 notes _dta: observable_contract: use suppression_status; do not infer suppression from missing value
-notes _dta: suppressed_fields: value numerator denominator comparison_n
+notes _dta: suppressed_fields: value numerator denominator comparison_n ci_lower_value ci_upper_value
 
 quietly count
 local candidate_rows = r(N)
@@ -1448,10 +1535,10 @@ if r(N) {
 
 quietly count if suppression_status != "none" & ///
     (!missing(value) | !missing(numerator) | !missing(denominator) | ///
-    !missing(comparison_n))
+    !missing(comparison_n) | !missing(ci_lower_value) | !missing(ci_upper_value))
 if r(N) {
     _bnr_mort_s4_fail 459 "`release_id'" `"`private_log'"' ///
-        "A suppressed candidate row retains an exact numeric result or supporting count."
+        "A suppressed candidate row retains an exact numeric result, confidence limit or supporting count."
 }
 
 quietly count if suppression_status != "none" & display_value != "*"
@@ -1502,11 +1589,13 @@ post `qa_handle' ("release_period") ("PASS") ///
 post `qa_handle' ("definitions") ("PASS") ///
     ("Primary uses cvd_prim/cvd_sub_p; Upper uses cvd_incl/cvd_sub_i; the lower bound is not included.")
 post `qa_handle' ("dashboard_lattice") ("PASS") ///
-    ("Each definition has 93 rows in 2010 and 140 in later years; monthly rolling means are intentionally absent; total rows: `metric_rows'.")
+    ("Each definition has 111 rows in 2010 and 158 in later years, including annual rates; monthly rolling means are intentionally absent; total rows: `metric_rows'.")
 post `qa_handle' ("count_reconciliation") ("PASS") ///
     ("`count_rows' count/comparator rows; sex, event and subannual totals reconcile.")
 post `qa_handle' ("distribution_reconciliation") ("PASS") ///
     ("`distribution_rows' annual event-type, sex and age distribution rows reconcile.")
+post `qa_handle' ("mortality_rate_contract") ("PASS") ///
+    ("`rate_rows' annual crude/age-standardised rate rows have valid WPP/WHO methods and statistical confidence intervals.")
 post `qa_handle' ("step3_qa_receipt") ("PASS") ///
     ("All `step3_qa_rows' Step 3 QA checks passed.")
 post `qa_handle' ("metadata_contract") ("PASS") ///
@@ -1520,7 +1609,7 @@ post `qa_handle' ("temporal_differencing") ("PASS") ///
 post `qa_handle' ("review_candidate_structure") ("PASS") ///
     ("Candidate has `candidate_rows' rows at the required unique grain; monthly rows are all-CVD, both sexes and all ages only.")
 post `qa_handle' ("review_candidate_suppression") ("PASS") ///
-    ("Protected rows: `candidate_suppressed_rows' (`candidate_primary_rows' primary; `candidate_secondary_rows' secondary); exact numeric fields removed and display marker applied.")
+    ("Protected rows: `candidate_suppressed_rows' (`candidate_primary_rows' primary; `candidate_secondary_rows' secondary); rate companions and their CI limits are blanked with their protected annual count.")
 post `qa_handle' ("publication_boundary") ("PASS") ///
     ("Step 4 creates a private review candidate and review materials only; no approval, public_ready package or public output.")
 postclose `qa_handle'
@@ -1614,7 +1703,7 @@ replace detail = "Primary: `stroke_deaths'; Upper: `upper_stroke_deaths' across 
 replace review_item = "Reporting lattice" in 10
 replace detail = "Private Step 3: `annual_rows' annual; `quarterly_rows' quarterly; `monthly_rows' monthly rows. Public monthly candidate: all-CVD, both sexes, all ages only." in 10
 replace review_item = "Metric rows" in 11
-replace detail = "`metric_rows' (`count_rows' count/comparator; `distribution_rows' distribution)" in 11
+replace detail = "`metric_rows' (`count_rows' count/comparator; `distribution_rows' distribution; `rate_rows' rate)" in 11
 replace review_item = "Primary suppression flags" in 12
 replace detail = "`primary_suppression_rows'" in 12
 replace review_item = "Step 3 worklist rows" in 13
@@ -1630,7 +1719,7 @@ replace detail = "Use Suppression review for exact private values and plain-lang
 replace review_item = "Public candidate check" in 18
 replace detail = "Compare protected rows with Public candidate: exact numeric fields are blank and display_value is *. insufficient_history is not suppression." in 18
 replace review_item = "Workflow boundary" in 19
-replace detail = "Private review only: no approval, public_ready, promotion, publication or mortality rates." in 19
+replace detail = "Private review only: no approval, public_ready, promotion or publication. Annual rates are private candidate rows pending review." in 19
 replace review_item = "If review finds a problem" in 20
 replace detail = "Do not edit generated files. Correct the source or code, rerun Step 3, then rerun Step 4." in 20
 replace review_item = "Approval status" in 21
@@ -1665,7 +1754,7 @@ replace definition = "Annual and quarterly: all-CVD, Heart and Stroke. Public mo
 replace definition_item = "Disclosure control" in 10
 replace definition = "Counts 1 to 5 receive primary suppression; sex-total and additive reconstruction protection, plus linked derived values, receive secondary suppression." in 10
 replace definition_item = "Rates" in 11
-replace definition = "Population denominators and mortality rates are outside this package." in 11
+replace definition = "Annual crude and directly age-standardised mortality rates per 100,000, using approved WPP 2024 Barbados denominators and WHO World Standard weights; 95% statistical confidence intervals are retained for review." in 11
 export excel using `"`review_workbook'"', ///
     sheet("Definitions") firstrow(variables) sheetmodify
 

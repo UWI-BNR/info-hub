@@ -2,7 +2,7 @@
 title: "Review the mortality release"
 description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
 date: 2026-08-21
-date-modified: 2026-08-21
+date-modified: 2026-08-30
 ---
 
 ---
@@ -12,6 +12,12 @@ date-modified: 2026-08-21
 Mortality Step 4 revalidates the complete Step 3 burden package, applies the approved deterministic disclosure-control rules and creates the exact public candidate plus private review evidence.
 
 It does **not** approve the release, create `public_ready`, publish files or calculate mortality rates.
+
+For annual mortality-rate rows, it applies a one-way companion rule: if the
+matching annual observed count is protected (primary or secondary), its crude
+and age-standardised rates are marked **secondary** and their exact values,
+denominators and confidence limits are removed from the candidate. Rates never
+create a new primary or complementary suppression decision.
 
 ## Input
 
@@ -38,6 +44,8 @@ Check:
 
 - the release identity and analysis period;
 - the expected count/distribution structure for both Primary and Inclusive definitions;
+- the annual crude and age-standardised rate lattice, including its WPP/WHO
+  metadata and confidence-interval methods;
 - the automated QA results;
 - private exact values for plausibility;
 - every protected row and its suppression reason;

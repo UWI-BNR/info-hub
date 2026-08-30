@@ -1,9 +1,9 @@
 # BNR mortality synthetic suppression test
 
-**Status:** Regression test implemented and passed  
+**Status:** Suppression regression test; run after a Step 3/4 change
 **Test script:** `bnr_mort_test_suppression.do`  
 **Synthetic release:** `mort_2099_01`  
-**Last validated:** 20 August 2026
+**Historical validation:** 20 August 2026 (before annual rates were added)
 
 ## Purpose
 
@@ -24,14 +24,44 @@ detect accidental changes to:
 This is a development and regression test. It is not part of the routine BNR
 operator menu.
 
+## Annual mortality-rate unit test
+
+The rate calculation has a separate, bounded synthetic unit test:
+
+```text
+test_bnr_mort_construct_rates.do
+```
+
+It creates temporary classified deaths, a minimal WPP-shaped population input
+and WHO-shaped standard weights, then calls only `bnr_mort_construct_rates.do`.
+It verifies the full annual lattice (two definitions, three CVD types, three
+sex strata and crude/age-standardised forms), numerical confidence intervals,
+and the crude/ASR numerator policy. It creates no release package or public
+output.
+
+Run it before the end-to-end suppression test:
+
+```stata
+do "$BNR_STATA/mortality/tests/test_bnr_mort_construct_rates.do"
+```
+
+The present end-to-end harness deliberately uses synthetic year 2098, outside
+the approved WPP 2024 reference window. It is therefore a historical
+count/percentage regression harness and must be refreshed with a 2010--2035
+synthetic fixture before it can be rerun against the rate-enabled Step 3.
+That refresh must assert the Step 4 companion rule: a protected annual count
+leaves each matching rate protected as a secondary companion, without letting
+a rate create a primary or additional complementary suppression decision.
+
 ## Repository location
 
 Keep this README and the test script together:
 
 ```text
 scripts/stata/mortality/tests/
-├── README.md
-└── bnr_mort_test_suppression.do
+├── README-suppression-test.md
+├── bnr_mort_test_suppression.do
+└── test_bnr_mort_construct_rates.do
 ```
 
 The operational Step 3 and Step 4 files remain in:

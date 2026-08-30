@@ -1,6 +1,6 @@
 ---
 title: "Build mortality burden data"
-description: "Mortality Step 3: calculate the private mortality count/distribution lattice and create the staging package."
+description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the staging package."
 date: 2026-08-21
 date-modified: 2026-08-21
 ---
@@ -11,7 +11,7 @@ date-modified: 2026-08-21
 
 Mortality Step 3 reads the classified Step 2 dataset, calculates the approved mortality burden measures and creates the private staging package.
 
-It creates exact private values. It does not apply the final public disclosure-control candidate, approve a release, copy files to the public repository, calculate population mortality rates or link DCO events.
+It creates exact private values. It does not apply the final public disclosure-control candidate, approve a release, copy files to the public repository or link DCO events.
 
 ## Input
 
@@ -21,14 +21,22 @@ The selected year/month identifies the **data freeze**. Step 3 derives the analy
 
 ## Published reporting structure prepared by Step 3
 
-The burden family contains two metric IDs:
+The staged release contains three metric IDs:
 
 | Metric | Purpose |
 |---|---|
 | `MORT-BURDEN-001` | Mortality counts and approved rolling-comparator rows |
 | `MORT-BURDEN-002` | Annual percentage distributions |
+| `MORT-RATE-001` | Annual crude and directly age-standardised mortality rates per 100,000 |
 
 Both Primary and Inclusive mortality definitions are carried through the reporting lattice.
+
+`MORT-RATE-001` is annual only: All CVD, Heart and Stroke; both sexes, women
+and men; and crude/all-age plus directly age-standardised forms. It uses the
+approved private UN WPP 2024 Barbados denominator asset and fixed WHO World
+Standard Population. Step 3 also supplies 95% statistical CIs (Garwood for
+crude rates; Fay-Feuer gamma for ASRs). The dashboard must display supplied
+rows only; it must never calculate a rate or CI.
 
 The public monthly scope is deliberately restricted to All CVD, both sexes, all ages and monthly count. Quarterly and annual rows contain the additional approved event-type and sex detail; annual All-CVD rows also contain the approved broad age groups.
 
@@ -60,6 +68,10 @@ The package is staged under:
 | Step 3 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
 
 Do not edit any generated package file.
+
+Step 4 applies rate protection only as a secondary companion to a protected
+matching annual death count. Rate rows do not create additional count
+suppression decisions.
 
 ## Command-line equivalent
 

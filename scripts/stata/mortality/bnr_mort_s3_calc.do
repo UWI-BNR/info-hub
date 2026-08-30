@@ -35,7 +35,8 @@
 
  WORKFLOW BOUNDARY:
    Called only by bnr_mort_s3_burden.do. This file never creates folders,
-   approval files, public outputs, website files or mortality rates.
+   approval files, public outputs or website files. It calculates private
+   annual mortality-rate rows for the established Step 3 staging package.
 ===============================================================================
 */
 
@@ -422,6 +423,36 @@ generate byte death = 1
 
 tempfile base
 save `base', replace
+
+
+* ==============================================================================
+* DO NOT EDIT: PRIVATE ANNUAL MORTALITY RATES
+* ==============================================================================
+* The shared WPP/WHO assets are private, validated reference inputs. The helper
+* uses the already-classified Step 3 cohort; it does not introduce DCO linkage,
+* a separate release process or a parallel public dataset.
+if "$BNR_PRIVATE" == "" {
+    display as error "BNR_PRIVATE is required for the annual mortality-rate reference assets."
+    exit 198
+}
+local population_input "$BNR_PRIVATE/data/reference/population/wpp2024_brb_population_2010_2035_5y.dta"
+local standard_input "$BNR_PRIVATE/data/reference/population/who_world_standard_2000_2025.dta"
+foreach rate_reference in `"`population_input'"' `"`standard_input'"' {
+    capture confirm file `"`rate_reference'"'
+    if _rc {
+        display as error "Required private mortality-rate reference asset was not found: `rate_reference'"
+        exit 601
+    }
+}
+tempfile mortality_rates mortality_rate_qa
+quietly do "$BNR_STATA/mortality/bnr_mort_construct_rates.do" ///
+    `"`base'"' `"`population_input'"' `"`standard_input'"' ///
+    `"`mortality_rates'"' `"`mortality_rate_qa'"' `"`release_id'"' ///
+    `start_year' `end_year'
+if _rc {
+    display as error "Private annual mortality-rate construction failed."
+    exit _rc
+}
 
 
 * ==============================================================================
@@ -883,27 +914,30 @@ append using `quarterly_previous_5yr'
 append using `event_distribution'
 append using `sex_distribution'
 append using `age_distribution'
+append using `mortality_rates'
 
 rename metric_sex sex
-generate byte period_complete = 1
-generate str30 source_status = "death_certificate"
-generate str20 sdc_policy = "bnr_sdc_v1"
-generate byte primary_suppression_threshold = `primary_suppression_threshold'
+replace period_complete = 1 if missing(period_complete)
+replace source_status = "death_certificate" if missing(source_status)
+replace sdc_policy = "bnr_sdc_v1" if missing(sdc_policy)
+replace primary_suppression_threshold = `primary_suppression_threshold' ///
+    if missing(primary_suppression_threshold)
 
 replace related_primary_cells = 0 if missing(related_primary_cells)
 
-generate byte primary_suppression = 0
+replace primary_suppression = 0 if missing(primary_suppression)
 replace primary_suppression = 1 ///
     if inlist(statistic, "annual_count", "monthly_count", "quarterly_count", ///
         "event_type_distribution", "sex_distribution", "age_distribution") & ///
        (inrange(numerator, 1, `primary_suppression_threshold' - 1) | ///
         inrange(denominator, 1, `primary_suppression_threshold' - 1))
 
-generate byte related_suppression_review = related_primary_cells > 0
-generate byte suppression_review = ///
-    primary_suppression | related_suppression_review
+replace related_suppression_review = related_primary_cells > 0 ///
+    if missing(related_suppression_review)
+replace suppression_review = primary_suppression | related_suppression_review ///
+    if missing(suppression_review)
 
-generate str60 suppression_reason = ""
+replace suppression_reason = "" if missing(suppression_reason)
 replace suppression_reason = "numerator_1_to_5" ///
     if primary_suppression & ///
        inrange(numerator, 1, `primary_suppression_threshold' - 1) & ///
@@ -924,6 +958,7 @@ order ///
     period_year period_month period_quarter period_complete ///
     event_type sex age_group case_definition source_status ///
     statistic value unit numerator denominator comparison_n status_flag ///
+    ci_lower_value ci_upper_value ci_level ci_method ///
     sdc_policy primary_suppression_threshold primary_suppression ///
     related_primary_cells related_suppression_review suppression_review ///
     suppression_reason
@@ -941,6 +976,7 @@ local required_output_variables ///
     period_year period_month period_quarter period_complete ///
     event_type sex age_group case_definition source_status ///
     statistic value unit numerator denominator comparison_n status_flag ///
+    ci_lower_value ci_upper_value ci_level ci_method ///
     sdc_policy primary_suppression_threshold primary_suppression ///
     related_primary_cells related_suppression_review suppression_review ///
     suppression_reason
@@ -952,6 +988,17 @@ foreach variable of local required_output_variables {
 capture isid metric_id period_type period_year period_month period_quarter ///
     case_definition event_type sex age_group statistic, missok
 if _rc {
+    duplicates tag metric_id period_type period_year period_month period_quarter ///
+        case_definition event_type sex age_group statistic, generate(__duplicate_key)
+    quietly count if __duplicate_key > 0
+    local duplicate_key_rows = r(N)
+    if `duplicate_key_rows' > 0 {
+        noisily display as error "Duplicated metric-key rows: `duplicate_key_rows'"
+        noisily list metric_id period_type period_year period_month period_quarter ///
+            case_definition event_type sex age_group statistic value unit ///
+            if __duplicate_key > 0, noobs abbreviate(24)
+    }
+    drop __duplicate_key
     display as error "Metric rows are not unique at the CVD-compatible reporting grain."
     exit 459
 }
@@ -972,16 +1019,26 @@ if r(N) {
 
 quietly count if !inlist(event_type, "all_cvd", "heart", "stroke") | ///
     !inlist(sex, "all", "female", "male") | ///
-    !inlist(age_group, "all", "under_70", "age_70_plus")
+    !inlist(age_group, "all", "under_70", "age_70_plus", "age_standardised")
 if r(N) {
     display as error "A metric row contains an unrecognised reporting dimension."
     exit 459
 }
 
 quietly count if age_group != "all" & ///
+    metric_id == "MORT-BURDEN-001" & ///
     (period_type != "annual" | event_type != "all_cvd" | sex != "all")
 if r(N) {
     display as error "An age-specific row falls outside the agreed annual all-CVD boundary."
+    exit 459
+}
+
+quietly count if metric_id == "MORT-RATE-001" & ///
+    (period_type != "annual" | !inlist(age_group, "all", "age_standardised") | ///
+     !inlist(statistic, "annual_crude_rate", "annual_age_standardised_rate") | ///
+     unit != "rate_per_100000")
+if r(N) {
+    display as error "A mortality rate row falls outside the fixed annual rate lattice."
     exit 459
 }
 
@@ -1004,6 +1061,7 @@ forvalues yy = `start_year'/`end_year' {
     local upper_rows_in_year = r(N)
     local expected_rows_in_year = 140
     if `yy' == `start_year' local expected_rows_in_year = 93
+    local expected_rows_in_year = `expected_rows_in_year' + 18
     if `primary_rows_in_year' != `expected_rows_in_year' | ///
             `upper_rows_in_year' != `expected_rows_in_year' {
         display as error "Year `yy' does not contain the expected rows for both case definitions."
@@ -1017,7 +1075,8 @@ local expected_count_metric_rows = ///
     (`expected_years' * 4 * 9) + ((`expected_years' - 1) * 4 * 9)
 local expected_distribution_rows = `expected_years' * 10
 local expected_metric_rows = ///
-    2 * (`expected_count_metric_rows' + `expected_distribution_rows')
+    2 * (`expected_count_metric_rows' + `expected_distribution_rows') + ///
+    (`expected_years' * 36)
 local expected_count_metric_rows = 2 * `expected_count_metric_rows'
 local expected_distribution_rows = 2 * `expected_distribution_rows'
 
@@ -1027,10 +1086,13 @@ quietly count if metric_id == "MORT-BURDEN-001"
 local count_metric_rows = r(N)
 quietly count if metric_id == "MORT-BURDEN-002"
 local distribution_metric_rows = r(N)
+quietly count if metric_id == "MORT-RATE-001"
+local rate_metric_rows = r(N)
 
 if `metric_rows' != `expected_metric_rows' | ///
-        `count_metric_rows' != `expected_count_metric_rows' | ///
-        `distribution_metric_rows' != `expected_distribution_rows' {
+    `count_metric_rows' != `expected_count_metric_rows' | ///
+    `distribution_metric_rows' != `expected_distribution_rows' | ///
+    `rate_metric_rows' != (`expected_years' * 36) {
     display as error "The metric dataset does not match the expected CVD dashboard row lattice."
     exit 459
 }
@@ -1224,6 +1286,10 @@ label variable numerator "Metric numerator"
 label variable denominator "Metric denominator"
 label variable comparison_n "Previous years contributing to comparator"
 label variable status_flag "Analytical status flag"
+label variable ci_lower_value "Lower 95 percent statistical confidence limit"
+label variable ci_upper_value "Upper 95 percent statistical confidence limit"
+label variable ci_level "Statistical confidence level (percent)"
+label variable ci_method "Statistical confidence-interval method"
 label variable sdc_policy "Statistical disclosure-control policy"
 label variable primary_suppression_threshold "Minimum publishable cell frequency"
 label variable primary_suppression "Primary suppression required before publication"
@@ -1246,6 +1312,7 @@ notes _dta: age_dimension: Annual all-CVD only; under_70 and age_70_plus; known 
 notes _dta: monthly_dimension: Monthly all-CVD by all, female and male only
 notes _dta: quarterly_dimension: Quarterly all-CVD, Heart and Stroke by all, female and male
 notes _dta: comparators: Annual and quarterly previous-five-year same-period means only; insufficient history retained with missing value
+notes _dta: mortality_rates: MORT-RATE-001 annual crude and directly age-standardised rates per 100000; WPP 2024 Barbados denominators and WHO World Standard; statistical CIs only
 notes _dta: sdc_policy: Exact frequencies 1 to 5 require primary suppression before publication
 notes _dta: workflow_status: Private staging candidate; not approved or public
 
@@ -1275,9 +1342,9 @@ post `qa_handle' ("component_definition_comparison") ("PASS") ///
 post `qa_handle' ("resolved_family") ("PASS") ///
     ("Every Primary and Upper death has one matching resolved Heart or Stroke reporting family; no resolved family occurs outside its combined definition.")
 post `qa_handle' ("cvd_dashboard_lattice") ("PASS") ///
-    ("Each definition has 93 rows in 2010 and 140 rows in every later complete year; monthly rolling means are intentionally excluded.")
+    ("Each definition has 111 rows in 2010 and 158 rows in every later complete year, including 18 annual rate rows; monthly rolling means are intentionally excluded.")
 post `qa_handle' ("metric_grain_and_rows") ("PASS") ///
-    ("Unique reporting grain; total rows: `metric_rows'; count/comparator rows: `count_metric_rows'; distribution rows: `distribution_metric_rows'.")
+    ("Unique reporting grain; total rows: `metric_rows'; count/comparator rows: `count_metric_rows'; distribution rows: `distribution_metric_rows'; rate rows: `rate_metric_rows'.")
 post `qa_handle' ("metric_reconciliation") ("PASS") ///
     ("Counts and annual distributions reconcile; every Primary dashboard count is no larger than its Upper-bound counterpart.")
 post `qa_handle' ("sex_and_event_reconciliation") ("PASS") ///
@@ -1288,7 +1355,7 @@ post `qa_handle' ("comparator_history") ("PASS") ///
     ("Previous-five-year means use the expected history and correctly mark incomplete history.")
 post `qa_handle' ("suppression_worklist") ("PASS") ///
     ("Primary rows: `primary_suppression_rows'; linked derived rows: `related_suppression_rows'; total review rows: `suppression_review_rows'.")
-post `qa_handle' ("rates_out_of_scope") ("PASS") ///
-    ("No population denominator or mortality rate was calculated in Step 3.")
+post `qa_handle' ("annual_mortality_rates") ("PASS") ///
+    ("Annual crude and age-standardised rate rows passed the bounded private constructor and its WPP/WHO reference checks.")
 
 postclose `qa_handle'

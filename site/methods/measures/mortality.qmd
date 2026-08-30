@@ -3,7 +3,7 @@ title: "CVD mortality"
 description: "How BNR counts and describes deaths classified as cardiovascular disease."
 ---
 
-BNR mortality statistics describe deaths that meet the Registry's practical cardiovascular mortality classification. The current dashboard reports **numbers of deaths** and **percentage distributions** using two related definitions: **Primary** and **Inclusive**.
+BNR mortality statistics describe deaths that meet the Registry's practical cardiovascular mortality classification. The dashboard reports **numbers of deaths**, **percentage distributions** and annual **mortality rates** using two related definitions: **Primary** and **Inclusive**.
 
 ## At a glance
 
@@ -13,7 +13,7 @@ BNR mortality statistics describe deaths that meet the Registry's practical card
 | **Source** | Death-certificate information recorded for BNR mortality surveillance |
 | **Primary definition** | Clear + Likely BNR cardiovascular mortality classifications |
 | **Inclusive definition** | Clear + Likely + Possible BNR cardiovascular mortality classifications |
-| **Reported as** | Counts and percentage distributions |
+| **Reported as** | Counts, percentage distributions, and annual rates per 100,000 population |
 | **Current dashboard period** | Published calendar periods from 2010 onwards, according to the current approved release |
 
 [Open the CVD mortality dashboard](../../surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-primary}
@@ -27,6 +27,34 @@ The dashboard has two main views.
 **Distribution of deaths** shows how the published deaths are divided between categories such as Heart and Stroke, women and men, or the broad age groups used for annual reporting.
 
 These two views answer different questions. A count describes **how many deaths were classified**. A percentage describes **how those classified deaths were divided between categories**.
+
+## Annual mortality rates
+
+The mortality-rate view reports the number of classified deaths per 100,000
+Barbados population for each complete calendar year. It is available for
+All CVD, Heart and Stroke; both sexes, women and men; and the Primary and
+Inclusive definitions.
+
+Two forms are published:
+
+- **Crude rate:** classified deaths divided by the matching annual population.
+- **Age-standardised rate (ASR):** age-specific rates combined using the fixed
+  WHO World Standard Population (2000-2025), so comparisons over time or
+  between sex groups are less affected by differences in age structure.
+
+Population denominators use the approved UN World Population Prospects 2024
+Barbados series. The rate and its 95% statistical confidence interval are
+calculated in Stata and supplied to the dashboard; the dashboard does not
+calculate, combine or reconstruct them. Crude-rate intervals use the exact
+Poisson (Garwood) method and ASR intervals use the Fay-Feuer gamma method.
+
+The intervals describe statistical variation conditional on the classified
+deaths and population denominator. They do not quantify uncertainty from death
+classification or changes in death-certificate completeness.
+
+Where an annual death count is protected for confidentiality, its matching
+rate and CI are also unavailable. A protected rate is not zero and must not be
+inferred from another published measure.
 
 ## Primary and Inclusive definitions
 

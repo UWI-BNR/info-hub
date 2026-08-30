@@ -52,7 +52,7 @@ BEGIN
   COMBOBOX cb_month 365 95 70 ., dropdownlist contents(release_months) nomemory
   TEXTBOX tx_path 30 128 420 30, label("Example: 2026 and 7 selects mortality/y2026/m07/bnr_mort_s2_202607.dta")
   CHECKBOX ck_replace 20 195 450 ., default(0) nomemory label("Authorise replacement of an existing Step 3 staging package")
-  TEXTBOX tx_boundary 20 235 450 48, label("This step calculates private annual, quarterly and monthly burden metrics from January 2010. It does not approve, publish or calculate rates.")
+  TEXTBOX tx_boundary 20 235 450 48, label("This step calculates private counts, percentages and annual mortality rates from January 2010. It does not approve or publish.")
 END
 
 OK ok1, label("Run Step 3")

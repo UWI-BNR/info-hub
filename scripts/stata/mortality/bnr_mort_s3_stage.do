@@ -94,6 +94,7 @@ local required_variables metric_id release_id period_type period period_start //
     period_year period_month period_quarter period_complete ///
     event_type sex age_group case_definition ///
     source_status statistic value unit numerator denominator comparison_n ///
+    ci_lower_value ci_upper_value ci_level ci_method ///
     status_flag sdc_policy primary_suppression_threshold ///
     primary_suppression related_primary_cells ///
     related_suppression_review suppression_review suppression_reason
@@ -163,7 +164,9 @@ quietly count if metric_id == "MORT-BURDEN-001"
 local count_rows = r(N)
 quietly count if metric_id == "MORT-BURDEN-002"
 local distribution_rows = r(N)
-quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002")
+quietly count if metric_id == "MORT-RATE-001"
+local rate_rows = r(N)
+quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002", "MORT-RATE-001")
 if r(N) {
     display as error "The calculated dataset contains an unrecognised metric ID."
     exit 459
@@ -178,9 +181,11 @@ local expected_count_rows = ///
 local expected_distribution_rows = `expected_years' * 10
 local expected_count_rows = 2 * `expected_count_rows'
 local expected_distribution_rows = 2 * `expected_distribution_rows'
+local expected_rate_rows = `expected_years' * 36
 
 if `count_rows' != `expected_count_rows' | ///
-        `distribution_rows' != `expected_distribution_rows' {
+        `distribution_rows' != `expected_distribution_rows' | ///
+        `rate_rows' != `expected_rate_rows' {
     display as error "Calculated rows do not match the CVD dashboard reporting lattice."
     exit 459
 }
@@ -193,7 +198,7 @@ if r(N) {
 
 quietly count if !inlist(event_type, "all_cvd", "heart", "stroke") | ///
     !inlist(sex, "all", "female", "male") | ///
-    !inlist(age_group, "all", "under_70", "age_70_plus")
+    !inlist(age_group, "all", "under_70", "age_70_plus", "age_standardised")
 if r(N) {
     display as error "The calculated dataset contains an invalid reporting dimension."
     exit 459
@@ -252,7 +257,7 @@ preserve
         resolved_family cvd_dashboard_lattice metric_grain_and_rows ///
         metric_reconciliation sex_and_event_reconciliation ///
         cross_frequency_reconciliation comparator_history ///
-        suppression_worklist rates_out_of_scope
+        suppression_worklist annual_mortality_rates
     foreach required_qa_check of local required_qa_checks {
         quietly count if check == "`required_qa_check'"
         if r(N) != 1 {
@@ -401,12 +406,19 @@ file write `meta_handle' "cvd_dashboard_reporting_scope_aligned: true" _n
 file write `meta_handle' "metrics:" _n
 file write `meta_handle' "  - MORT-BURDEN-001" _n
 file write `meta_handle' "  - MORT-BURDEN-002" _n
+file write `meta_handle' "  - MORT-RATE-001" _n
 file write `meta_handle' "metric_rows: `metric_rows'" _n
 file write `meta_handle' "count_rows: `count_rows'" _n
 file write `meta_handle' "distribution_rows: `distribution_rows'" _n
+file write `meta_handle' "rate_rows: `rate_rows'" _n
 file write `meta_handle' "qa_checks: `qa_rows'" _n
 file write `meta_handle' "release_and_current_files_byte_identical: true" _n
-file write `meta_handle' "rates_included: false" _n
+file write `meta_handle' "rates_included: true" _n
+file write `meta_handle' "rate_unit: rate_per_100000" _n
+file write `meta_handle' "rate_forms: crude_and_directly_age_standardised" _n
+file write `meta_handle' "rate_population_source: UN_WPP_2024" _n
+file write `meta_handle' "rate_standard_population: WHO_WORLD_2000_2025" _n
+file write `meta_handle' "rate_ci_methods: poisson_exact_garwood_and_fay_feuer_gamma" _n
 file write `meta_handle' "dco_linkage_included: false" _n
 file write `meta_handle' "source_dataset: `source_dataset'" _n
 file write `meta_handle' "primary_suppression_threshold: 6" _n
@@ -434,7 +446,8 @@ file write `readme_handle' "It follows the CVD dashboard's selective annual, qua
 file write `readme_handle' "Annual and quarterly count output includes same-period previous-five-year means. Monthly rolling means are deliberately excluded." _n
 file write `readme_handle' "Private monthly output retains combined BNR-CVD all/female/male counts for calculation and QA. Step 4 restricts the public monthly candidate to all-CVD, both sexes and all ages." _n
 file write `readme_handle' "Step 4 creates the initial reviewed 2015-2019 monthly historical-reference candidate for the public monthly view." _n
-file write `readme_handle' "No rates, population denominators, DCO linkage, approval, website or Quarto files are included." _n
+file write `readme_handle' "Annual crude and directly age-standardised mortality-rate rows are included for private Step 4 review. They use the approved private WPP 2024 Barbados population and WHO World Standard assets." _n
+file write `readme_handle' "Rates are not approved, public, DCO-linked or calculated by the dashboard." _n
 file write `readme_handle' "Exact small values remain visible only inside this private staging package." _n
 file write `readme_handle' "Review the QA CSV and suppression worklist before Step 4." _n
 file write `readme_handle' "Do not edit generated files manually; correct source or code and rerun." _n
