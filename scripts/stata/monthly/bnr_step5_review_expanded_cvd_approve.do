@@ -1,10 +1,20 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_review_expanded_cvd_approve.do
-VERSION: 3.2.0 (27 August 2026)
+VERSION: 3.3.1 (29 August 2026)
 PURPOSE: Verify the reviewed combined CVD candidate and create public_ready.
-USAGE:   do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_approve.do" 2024 4 "Full name" "BNR Analyst"
+USAGE:   do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_approve.do" 2026 1 "<actual authorised name>" "BNR Analyst"
 
 This controller never promotes files to outputs/public or the website.
+
+CHANGE 3.3.1:
+  Wrap the operational run-summary display block in quietly { } so Stata
+  shows the summary itself without echoing each display command.
+
+CHANGE 3.3.0:
+  - Reject common placeholder approver names before approval can be recorded.
+  - Write distinct release-stamped and current metadata identifiers while
+    retaining the source release identifier in current metadata.
+  - Add a concise operational run summary after successful approval.
 *******************************************************************************/
 version 19
 clear all
@@ -18,7 +28,16 @@ local year = real("`release_year'")
 local month = real("`release_month'")
 if missing(`year') | `year' != floor(`year') | `year' < 2024 exit 198
 if missing(`month') | `month' != floor(`month') | !inrange(`month', 1, 12) exit 198
-local role_lower = lower(strtrim("`approver_role'"))
+
+local approver_name_clean = strtrim("`approver_name'")
+local approver_name_lower = lower("`approver_name_clean'")
+if inlist("`approver_name_lower'", "full name", "actual approver name", "approver name", "your name", "<actual authorised name>") {
+    display as error "APPROVE requires the actual authorised approver name, not a placeholder."
+    exit 198
+}
+
+local approver_role_clean = strtrim("`approver_role'")
+local role_lower = lower("`approver_role_clean'")
 if !inlist("`role_lower'", "bnr lead", "bnr analyst", "bnr developer") exit 198
 if "$BNR_STATA" == "" capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
 foreach path_name in BNR_STAGING BNR_PRIVATE_LOGS {
@@ -52,7 +71,8 @@ foreach input_file in candidate_dta qa_csv equation_csv rows_dta basis_csv workb
     capture confirm file "``input_file''"
     if _rc exit 601
 }
-* A prior approved package is immutable.  Files without approval.yml are an
+
+* A prior approved package is immutable. Files without approval.yml are an
 * incomplete local attempt and are safely rebuilt from the reviewed candidate.
 capture confirm file "`approval'"
 local approval_exists = (_rc == 0)
@@ -85,9 +105,12 @@ forvalues row = 1/`evidence_rows' {
     quietly checksum "`file_to_check'"
     if r(filelen) != file_size[`row'] | r(checksum) != checksum[`row'] exit 459
 }
+
 import delimited using "`qa_csv'", varnames(1) clear
 capture confirm variable result
 if _rc exit 111
+quietly count
+local qa_checks = r(N)
 quietly count if result != "PASS"
 assert r(N) == 0
 
@@ -95,6 +118,10 @@ capture mkdir "`ready_dir'"
 capture mkdir "`ready_data'"
 capture mkdir "`ready_meta'"
 use "`candidate_dta'", clear
+quietly count
+local candidate_rows = r(N)
+quietly count if suppression_status != "none"
+local protected_rows = r(N)
 label data "BNR combined CVD metrics"
 export delimited using "`public_csv'", replace
 save "`public_dta'", replace
@@ -108,7 +135,15 @@ file write `metadata_handle' "release_id: `release_id'" _n
 file write `metadata_handle' "status: approved" _n
 file write `metadata_handle' "dataset: cvd_metrics_`release_id'" _n
 file close `metadata_handle'
-copy "`release_yml'" "`current_yml'", replace
+
+file open `metadata_handle' using "`current_yml'", write text replace
+file write `metadata_handle' "schema: bnr_cvd_public_metric_v2" _n
+file write `metadata_handle' "release_id: `release_id'" _n
+file write `metadata_handle' "status: approved" _n
+file write `metadata_handle' "dataset: cvd_metrics_current" _n
+file write `metadata_handle' "source_release_dataset: cvd_metrics_`release_id'" _n
+file close `metadata_handle'
+
 file open `metadata_handle' using "`package_yml'", write text replace
 file write `metadata_handle' "package_id: `package_id'" _n
 file write `metadata_handle' "release_id: `release_id'" _n
@@ -148,6 +183,7 @@ local package_yml_size = r(filelen)
 local package_yml_checksum = r(checksum)
 file write `manifest_handle' "metadata/metric_package.yml,`package_yml_size',`package_yml_checksum'" _n
 file close `manifest_handle'
+
 quietly checksum "`manifest'"
 local manifest_size = r(filelen)
 local manifest_checksum = r(checksum)
@@ -159,8 +195,8 @@ file write `approval_handle' "status: approved" _n
 file write `approval_handle' "package_id: `package_id'" _n
 file write `approval_handle' "release_id: `release_id'" _n
 file write `approval_handle' "metric_family: combined_cvd_metrics" _n
-file write `approval_handle' "approved_by: `approver_name'" _n
-file write `approval_handle' "approved_role: `approver_role'" _n
+file write `approval_handle' "approved_by: `approver_name_clean'" _n
+file write `approval_handle' "approved_role: `approver_role_clean'" _n
 file write `approval_handle' "approved_date: `approved_date'" _n
 file write `approval_handle' "review_standard: bnr_metric_review_v1" _n
 file write `approval_handle' "disclosure_policy: bnr_sdc_v1" _n
@@ -170,4 +206,30 @@ file write `approval_handle' "manifest_size: `manifest_size'" _n
 file write `approval_handle' "manifest_checksum: `manifest_checksum'" _n
 file write `approval_handle' "promotion_status: pending_step_6" _n
 file close `approval_handle'
+
+local candidate_display : display %12.0fc `candidate_rows'
+local protected_display : display %12.0fc `protected_rows'
+local qa_display : display %12.0fc `qa_checks'
+local manifest_files 7
+
 display as result "Expanded CVD Step 5 APPROVE passed."
+
+quietly {
+noisily display as result ""
+noisily display as result "============================================================================="
+noisily display as result "STEP 5 APPROVE: OPERATIONAL RUN SUMMARY"
+noisily display as text   "  Run status:                 Approved successfully"
+noisily display as text   "  Script version:             3.3.1"
+noisily display as text   "  Selected release:           `year4'-`month2'"
+noisily display as text  `"  Approved by:                `approver_name_clean'"'
+noisily display as text  `"  Approved role:              `approver_role_clean'"'
+noisily display as text   "  Candidate rows approved:    `candidate_display'"
+noisily display as text   "  Protected rows approved:    `protected_display'"
+noisily display as text   "  Disclosure QA checks:       `qa_display' PASS"
+noisily display as text   "  Manifest files:             `manifest_files'"
+noisily display as text  `"  Public-ready folder:        `ready_dir'"'
+noisily display as text  `"  Approval receipt:           `approval'"'
+noisily display as text   "  Promotion status:           Pending Step 6"
+noisily display as text   "  Next step:                  Publish approved package (Step 6)."
+noisily display as result "============================================================================="
+}

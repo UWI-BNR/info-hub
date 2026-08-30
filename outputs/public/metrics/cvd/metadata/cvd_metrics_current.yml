@@ -1,4 +1,5 @@
 schema: bnr_cvd_public_metric_v2
-release_id: cvd_2024_05
+release_id: cvd_2026_01
 status: approved
-dataset: cvd_metrics_cvd_2024_05
+dataset: cvd_metrics_current
+source_release_dataset: cvd_metrics_cvd_2026_01

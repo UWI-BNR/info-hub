@@ -114,11 +114,14 @@ execute:
 .bnr-trend-note { margin: 0 0 .4rem; font-size: .95rem; color: #333; }
 .bnr-chart-legend { display: flex; flex-wrap: wrap; gap: .45rem 1.2rem; align-items: center; margin: 0 0 .45rem; font-size: .92rem !important; }
 .bnr-chart-legend-item { display: inline-flex; align-items: center; gap: .35rem; }
+.bnr-plot-downloads { display: flex; justify-content: flex-end; gap: .35rem; margin: .1rem 0 .25rem; }
+.bnr-plot-download-button { border: 1px solid #bdc3c7; border-radius: .25rem; background: #fff; color: #045174; padding: .18rem .45rem; font: inherit; font-size: .78rem; line-height: 1.2; cursor: pointer; }
+.bnr-plot-download-button:hover { background: #f3f6f7; }
 .bnr-legend-line { display: inline-block; width: 28px; height: 0; border-top: 3px solid; }
-.bnr-legend-dotted { border-top-style: dashed; opacity: .5; }
 .bnr-legend-swatch { display: inline-block; width: 16px; height: 16px; border: 1px solid rgba(0,0,0,.25); border-radius: .2rem; }
 .bnr-legend-whisker { display: inline-block; width: 16px; height: 16px; border-left: 2px solid #5f6368; opacity: .7; margin-left: 7px; }
 .bnr-legend-uncertainty-band { display: inline-block; width: 18px; height: 12px; border: 1px solid rgba(0,0,0,.18); border-radius: .2rem; background: rgba(95,99,104,.12); }
+.bnr-legend-incomplete-point { display: inline-block; width: 13px; height: 13px; border-radius: 50%; border: 2px solid #d98b3d; background: rgba(246,201,138,.35); box-sizing: border-box; }
 .bnr-definition-panel { border-top: 1px solid #e9ecef; padding-top: .5rem; margin-top: .65rem; }
 .bnr-release-grid { display: grid; grid-template-columns: repeat(4,minmax(140px,1fr)); gap: .65rem; margin-top: .45rem; }
 .bnr-release-item { border: 1px solid #dee2e6; border-radius: .35rem; padding: .55rem .65rem; background: #fff; }
@@ -249,6 +252,36 @@ rateCardIntervalNumber = value => Number.isFinite(value)
   ? Math.round(Number(value)).toLocaleString()
   : "—"
 
+countIntervalNumber = value => Number.isFinite(value)
+  ? Math.round(Number(value)).toLocaleString()
+  : "—"
+
+countLinkageUncertaintyText = d => {
+  if (!d || d.metric_id !== "CVD-BURDEN-001") return "—"
+  if (d.ascertainment_scope !== "hospital_plus_dco") return "Not applicable"
+  if (d.suppression_status !== "none") return "*"
+  if (!Number.isFinite(d.linkage_lower_value) || !Number.isFinite(d.linkage_upper_value)) return "—"
+  return `${countIntervalNumber(d.linkage_lower_value)}–${countIntervalNumber(d.linkage_upper_value)}`
+}
+
+countTooltip = (d, seriesKey, showLinkageUncertainty = false) => {
+  const lines = [
+    seriesLabel(seriesKey),
+    periodLabel(d),
+    publishedValue(d)
+  ]
+  if (
+    showLinkageUncertainty &&
+    d.ascertainment_scope === "hospital_plus_dco" &&
+    Number.isFinite(d.linkage_lower_value) &&
+    Number.isFinite(d.linkage_upper_value)
+  ) {
+    lines.push(`DCO linkage uncertainty: ${countLinkageUncertaintyText(d)}`)
+  }
+  lines.push(isComplete(d) ? "Complete period" : "Incomplete period")
+  return lines.join("\n")
+}
+
 ciMethodLabel = method => ({
   poisson_exact_garwood: "Exact Poisson / Garwood",
   fay_feuer_gamma: "Fay–Feuer gamma",
@@ -302,7 +335,101 @@ rateTooltip = (d, seriesKey) => {
   ) {
     lines.push(`Linkage uncertainty: ${linkageUncertaintyText(d)}`)
   }
+  lines.push(isComplete(d) ? "Complete period" : "Incomplete period")
   return lines.join("\n")
+}
+
+plotDownloadBase = value => String(value || "bnr-cvd-plot")
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-+|-+$/g, "") || "bnr-cvd-plot"
+
+plotSvgNode = plot => {
+  if (!plot) return null
+  if (plot.tagName && plot.tagName.toLowerCase() === "svg") return plot
+  return plot.querySelector ? plot.querySelector("svg") : null
+}
+
+plotSvgText = plot => {
+  const svg = plotSvgNode(plot)
+  if (!svg) return ""
+  const clone = svg.cloneNode(true)
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+  clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  const computed = getComputedStyle(svg)
+  clone.style.fontFamily = computed.fontFamily || "sans-serif"
+  clone.style.fontSize = computed.fontSize || "15px"
+  const background = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  background.setAttribute("x", "0")
+  background.setAttribute("y", "0")
+  background.setAttribute("width", "100%")
+  background.setAttribute("height", "100%")
+  background.setAttribute("fill", "white")
+  clone.insertBefore(background, clone.firstChild)
+  return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}`
+}
+
+downloadPlotBlob = (blob, filename) => {
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  setTimeout(() => URL.revokeObjectURL(url), 0)
+}
+
+plotDownloadControls = (plot, baseName) => {
+  const root = document.createElement("div")
+  root.className = "bnr-plot-downloads"
+  const safeBase = plotDownloadBase(baseName)
+
+  const svgButton = document.createElement("button")
+  svgButton.type = "button"
+  svgButton.className = "bnr-plot-download-button"
+  svgButton.textContent = "Download SVG"
+  svgButton.addEventListener("click", () => {
+    const svgText = plotSvgText(plot)
+    if (!svgText) return
+    downloadPlotBlob(new Blob([svgText], {type: "image/svg+xml;charset=utf-8"}), `${safeBase}.svg`)
+  })
+
+  const pngButton = document.createElement("button")
+  pngButton.type = "button"
+  pngButton.className = "bnr-plot-download-button"
+  pngButton.textContent = "Download PNG"
+  pngButton.addEventListener("click", () => {
+    const svg = plotSvgNode(plot)
+    const svgText = plotSvgText(plot)
+    if (!svg || !svgText) return
+    const svgBlob = new Blob([svgText], {type: "image/svg+xml;charset=utf-8"})
+    const svgUrl = URL.createObjectURL(svgBlob)
+    const image = new Image()
+    image.onload = () => {
+      const viewBox = svg.viewBox && svg.viewBox.baseVal ? svg.viewBox.baseVal : null
+      const width = Number(svg.getAttribute("width")) || (viewBox && viewBox.width) || 960
+      const height = Number(svg.getAttribute("height")) || (viewBox && viewBox.height) || 500
+      const scale = 2
+      const canvas = document.createElement("canvas")
+      canvas.width = Math.ceil(width * scale)
+      canvas.height = Math.ceil(height * scale)
+      const context = canvas.getContext("2d")
+      context.scale(scale, scale)
+      context.fillStyle = "white"
+      context.fillRect(0, 0, width, height)
+      context.drawImage(image, 0, 0, width, height)
+      canvas.toBlob(blob => {
+        URL.revokeObjectURL(svgUrl)
+        if (blob) downloadPlotBlob(blob, `${safeBase}.png`)
+      }, "image/png")
+    }
+    image.onerror = () => URL.revokeObjectURL(svgUrl)
+    image.src = svgUrl
+  })
+
+  root.append(svgButton, pngButton)
+  return root
 }
 ```
 
@@ -329,6 +456,23 @@ release_date_label = (() => {
     ? release_date_raw
     : dt.toLocaleDateString("en-GB", {day: "numeric", month: "short", year: "numeric"})
 })()
+release_period = (() => {
+  const match = String(release_id || "").match(/_(\d{4})_(\d{2})$/)
+  if (!match) return null
+  const year = Number(match[1])
+  const month = Number(match[2])
+  if (!Number.isInteger(year) || !Number.isInteger(month) || month < 1 || month > 12) return null
+  const dt = new Date(year, month - 1, 1)
+  return {
+    year,
+    month,
+    monthShort: dt.toLocaleString("en-GB", {month: "short"}),
+    monthLong: dt.toLocaleString("en-GB", {month: "long"})
+  }
+})()
+release_period_label = release_period
+  ? `${release_period.year}, ${release_period.monthLong}`
+  : "—"
 ```
 
 # Filters {.sidebar}
@@ -417,6 +561,64 @@ viewof selected_rate_measure = (() => {
     {label: "Rate measure", value: "asr", format: d => rateMeasureLabel(d)}
   )
 })()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_count_uncertainty = (() => {
+  if (!(selected_indicator === "counts" && selected_period_type === "annual")) {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = []
+    return wrapper
+  }
+  return Inputs.checkbox(
+    ["linkage"],
+    {
+      label: "Uncertainty",
+      value: [],
+      format: d => ({linkage: "DCO linkage uncertainty"})[d]
+    }
+  )
+})()
+```
+
+```{ojs}
+//| echo: false
+//| output: false
+// Match the event-rate uncertainty control: DCO linkage uncertainty remains
+// visible but disabled until a Hospital + DCO annual count series is selected.
+{
+  const control = viewof selected_count_uncertainty
+
+  if (
+    selected_indicator === "counts" &&
+    selected_period_type === "annual" &&
+    control?.querySelectorAll
+  ) {
+    const boxes = control.querySelectorAll('input[type="checkbox"]')
+    const linkageBox = boxes.length ? boxes[0] : null
+    const activeSeries = Array.isArray(selected_series) ? selected_series : ["hospital"]
+    const linkageAvailable = activeSeries.some(key => key !== "hospital")
+
+    if (linkageBox) {
+      linkageBox.disabled = !linkageAvailable
+
+      const label = linkageBox.closest("label")
+      if (label) {
+        label.style.opacity = linkageAvailable ? "" : "0.45"
+        label.style.cursor = linkageAvailable ? "" : "help"
+        label.title = linkageAvailable
+          ? ""
+          : "DCO linkage uncertainty applies only to Hospital + DCO annual counts."
+      }
+
+      if (!linkageAvailable && linkageBox.checked) {
+        linkageBox.checked = false
+        control.dispatchEvent(new Event("input", {bubbles: true}))
+      }
+    }
+  }
+}
 ```
 
 ```{ojs}
@@ -821,6 +1023,24 @@ periodLabel = d => {
   return String(d.period_year)
 }
 
+countCardPeriodLabel = d => {
+  if (!d) return "—"
+  if (
+    d.period_type === "annual" &&
+    !isComplete(d) &&
+    release_period &&
+    Number(d.period_year) === release_period.year
+  ) {
+    return `${d.period_year} · through ${release_period.monthShort} · incomplete`
+  }
+  return `${periodLabel(d)}${isComplete(d) ? "" : " · incomplete"}`
+}
+
+annualComparatorPeriodLabel = d => {
+  if (!d || d.period_type !== "annual") return periodLabel(d)
+  return `${Number(d.period_year) - 5}–${Number(d.period_year) - 1}`
+}
+
 sortedRows = rows => [...rows].sort(
   (a, b) => new Date(a.period_start) - new Date(b.period_start)
 )
@@ -836,8 +1056,8 @@ headline = (label, value, note = "") => html`<div class="bnr-headline-card">
   <div class="bnr-headline-note">${note}</div>
 </div>`
 
-headlineBySeries = (label, items) => {
-  if (items.length === 1) return headline(label, items[0].value, items[0].note)
+headlineBySeries = (label, items, showSingleSeriesLabel = false) => {
+  if (items.length === 1 && !showSingleSeriesLabel) return headline(label, items[0].value, items[0].note)
   const notes = Array.from(new Set(items.map(item => item.note).filter(Boolean)))
   const commonNote = notes.length === 1 ? notes[0] : ""
   return html`<div class="bnr-headline-card">
@@ -888,13 +1108,6 @@ contiguousSafeSegments = rows => {
   )
 }
 
-incompleteSegments = rows => {
-  const ordered = sortedRows(rows)
-  return pairSegments(
-    ordered,
-    (a, b) => adjacentPeriods(a, b) && isSafe(a) && isSafe(b) && (!isComplete(a) || !isComplete(b))
-  )
-}
 
 // Graphical bridge across exactly one protected annual observation.
 // The bridge joins only the published values on either side. It does not
@@ -953,6 +1166,11 @@ isolatedProtectedAnnualBridges = rows => {
 
   const latestData = latestRow(rows)
   const earliestData = sortedRows(rows)[0] || null
+  const latestDataLabel = selected_indicator === "counts" && release_period
+    ? release_period_label
+    : latestData
+    ? periodLabel(latestData)
+    : "—"
   const note = selected_indicator === "rates"
     ? "This dashboard shows published BNR annual CVD event rates. The release date is shown separately from the latest data period because rate data may cover a different period from event counts."
     : "This dashboard shows published BNR cardiovascular event measures. The release date is shown separately from the latest data period because different measures can cover different time periods."
@@ -966,10 +1184,10 @@ isolatedProtectedAnnualBridges = rows => {
   return html`<div>
     <div class="bnr-section-title">Latest Data Release</div>
     <div class="bnr-release-grid">
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
       <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestData ? periodLabel(latestData) : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestDataLabel}</div></div>
       <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
     </div>
     <div class="bnr-note-box">${note}</div>
     <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href=${methodsHref}>${methodsText}</a></p>
@@ -1057,8 +1275,6 @@ isolatedProtectedAnnualBridges = rows => {
       .map(d => ({...d, chart_x: new Date(d.period_start)}))
     const completeSegments = contiguousSafeSegments(observed)
       .map(d => ({...d, chart_x: new Date(d.period_start)}))
-    const dottedSegments = incompleteSegments(observed)
-      .map(d => ({...d, chart_x: new Date(d.period_start)}))
 
     const yCandidates = [
       ...observed.filter(isSafe).map(d => d.value),
@@ -1071,60 +1287,62 @@ isolatedProtectedAnnualBridges = rows => {
       ? `${latestMonthly.period_year} to ${periodLabel(latestMonthly)}${ytd === null ? " · unavailable because one or more months are missing, incomplete or protected" : ""}`
       : "No published value"
 
+    const monthlyPlot = Plot.plot({
+      height: 410,
+      marginLeft: 80,
+      marginBottom: 70,
+      style: {fontSize: "15px", fontFamily: "inherit"},
+      x: {label: "Month", type: "time"},
+      y: {label: null, grid: true, domain: [0, yMax * 1.05], nice: true},
+      marks: [
+        Plot.areaY(referenceForChart, {
+          x: d => new Date(d.period_start),
+          y1: "reference_min",
+          y2: "reference_max",
+          fill: colour("referenceBand")
+        }),
+        Plot.lineY(referenceForChart, {
+          x: d => new Date(d.period_start),
+          y: "reference_mean",
+          stroke: colour("referenceMean"),
+          strokeWidth: 2.5
+        }),
+        Plot.lineY(completeSegments, {
+          x: "chart_x", y: "value", z: "segment",
+          stroke: colour("hospital"), strokeWidth: 2
+        }),
+        Plot.dot(completePoints, {
+          x: "chart_x", y: "value",
+          fill: colour("hospital"), stroke: colour("hospital"), r: 3.5,
+          title: d => countTooltip(d, "hospital", false)
+        }),
+        Plot.dot(incompletePoints, {
+          x: "chart_x", y: "value",
+          fill: "#f6c98a", fillOpacity: .32,
+          stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7
+        }),
+        Plot.dot(incompletePoints, {
+          x: "chart_x", y: "value",
+          fill: colour("hospital"), stroke: colour("hospital"), r: 4.2,
+          title: d => countTooltip(d, "hospital", false)
+        }),
+        Plot.ruleY([0])
+      ]
+    })
+
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">Monthly CVD events</div>
       <div class="bnr-chart-title">Monthly all-CVD events, both sexes, all ages</div>
       <p class="bnr-trend-note">The shaded band shows the lowest and highest count for the same calendar month during 2015–2019. The orange line shows the 2015–2019 average.</p>
       <div class="bnr-chart-legend">
         <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${colour("hospital")}`}></span>Monthly count</span>
-        <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style=${`border-color:${colour("hospital")}`}></span>Incomplete month</span>
+        <span class="bnr-chart-legend-item"><span class="bnr-legend-incomplete-point"></span>Incomplete month</span>
         <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style=${`background:${colour("referenceBand")}`}></span>2015–2019 range</span>
         <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${colour("referenceMean")}`}></span>2015–2019 average</span>
       </div>
       <div class="bnr-axis-title">↑ Count</div>
-      ${Plot.plot({
-        height: 410,
-        marginLeft: 80,
-        marginBottom: 70,
-        style: {fontSize: "15px", fontFamily: "inherit"},
-        x: {label: "Month", type: "time"},
-        y: {label: null, grid: true, domain: [0, yMax * 1.05], nice: true},
-        marks: [
-          Plot.areaY(referenceForChart, {
-            x: d => new Date(d.period_start),
-            y1: "reference_min",
-            y2: "reference_max",
-            fill: colour("referenceBand")
-          }),
-          Plot.lineY(referenceForChart, {
-            x: d => new Date(d.period_start),
-            y: "reference_mean",
-            stroke: colour("referenceMean"),
-            strokeWidth: 2.5
-          }),
-          Plot.lineY(completeSegments, {
-            x: "chart_x", y: "value", z: "segment",
-            stroke: colour("hospital"), strokeWidth: 2
-          }),
-          Plot.lineY(dottedSegments, {
-            x: "chart_x", y: "value", z: "segment",
-            stroke: colour("hospital"), strokeOpacity: .45,
-            strokeWidth: 2, strokeDasharray: "5,4"
-          }),
-          Plot.dot(completePoints, {
-            x: "chart_x", y: "value",
-            fill: colour("hospital"), stroke: colour("hospital"), r: 3.5,
-            title: d => `${periodLabel(d)}\n${publishedValue(d)}\nComplete month`
-          }),
-          Plot.dot(incompletePoints, {
-            x: "chart_x", y: "value",
-            fill: colour("hospital"), fillOpacity: .4,
-            stroke: colour("hospital"), strokeOpacity: .5, r: 3.5,
-            title: d => `${periodLabel(d)}\n${publishedValue(d)}\nIncomplete month`
-          }),
-          Plot.ruleY([0])
-        ]
-      })}
+      ${monthlyPlot}
+      ${plotDownloadControls(monthlyPlot, `${release_id || "cvd-current"}-counts-monthly-all-cvd`)}
       <div class="bnr-card-grid" style="margin-top:.75rem">
         ${headline(
           "Latest month",
@@ -1149,6 +1367,11 @@ isolatedProtectedAnnualBridges = rows => {
       ? "quarterly_same_quarter_previous_5yr_mean"
       : "annual_previous_5yr_mean"
     const panelSeries = selected_period_type === "annual" ? activeSeries : ["hospital"]
+    const activeCountUncertainty = Array.isArray(selected_count_uncertainty)
+      ? selected_count_uncertainty
+      : []
+    const showCountLinkageUncertainty = selected_period_type === "annual" &&
+      activeCountUncertainty.includes("linkage")
 
     if (!panelSeries.length) {
       return html`<div class="bnr-note-box">Select at least one event-ascertainment series.</div>`
@@ -1185,6 +1408,14 @@ isolatedProtectedAnnualBridges = rows => {
         : []
 
       const allRows = observed.filter(d => d.sex === "all")
+      const linkageRows = selected_period_type === "annual" && key !== "hospital"
+        ? allRows.filter(d =>
+            isSafe(d) &&
+            Number.isFinite(d.value) &&
+            Number.isFinite(d.linkage_lower_value) &&
+            Number.isFinite(d.linkage_upper_value)
+          )
+        : []
       return {
         key,
         observed,
@@ -1195,7 +1426,7 @@ isolatedProtectedAnnualBridges = rows => {
           .map(d => ({...d, chart_x: chartX(d)})),
         completeSegments: contiguousSafeSegments(allRows)
           .map(d => ({...d, chart_x: chartX(d)})),
-        dottedSegments: incompleteSegments(allRows)
+        linkageSegments: contiguousSafeSegments(linkageRows)
           .map(d => ({...d, chart_x: chartX(d)})),
         protectedBridges: selected_period_type === "annual"
           ? isolatedProtectedAnnualBridges(allRows)
@@ -1204,51 +1435,73 @@ isolatedProtectedAnnualBridges = rows => {
       }
     })
 
+    // Quarterly and annual headline cards use the latest complete published
+    // period. This keeps the observed count directly comparable with the
+    // published previous-five-year comparator shown alongside it. Incomplete
+    // current periods remain visible in the chart itself.
+    const latestCompleteObserved = (s, sex) =>
+      latestRow(s.observed.filter(d => d.sex === sex && isComplete(d)))
+
     const latestItem = (s, sex) => {
-      const row = latestRow(s.observed.filter(d => d.sex === sex))
+      const row = latestCompleteObserved(s, sex)
+      if (!row) return {series: s.key, value: "—", note: "No complete published value"}
+
+      const periodNote = countCardPeriodLabel(row)
+      const showRange = showCountLinkageUncertainty &&
+        selected_period_type === "annual" &&
+        s.key !== "hospital" &&
+        isSafe(row) &&
+        Number.isFinite(row.linkage_lower_value) &&
+        Number.isFinite(row.linkage_upper_value)
+
       return {
         series: s.key,
-        value: row ? cardValue(row) : "—",
-        note: row
-          ? `${periodLabel(row)}${isComplete(row) ? "" : " · incomplete"}`
-          : "No published value"
+        value: cardValue(row),
+        note: showRange
+          ? html`<span>${periodNote}<br>DCO range ${countLinkageUncertaintyText(row)}</span>`
+          : periodNote
       }
     }
 
     const comparatorItem = (s, sex) => {
-      const observedLatest = latestRow(s.observed.filter(d => d.sex === sex))
+      const observedLatest = latestCompleteObserved(s, sex)
       const row = observedLatest
         ? s.comparator.find(d => d.sex === sex && d.period === observedLatest.period) || null
         : null
       return {
         series: s.key,
         value: row ? cardValue(row, "comparison") : "—",
-        note: row ? periodLabel(row) : "Not available in the published release"
+        note: row
+          ? selected_period_type === "annual"
+            ? annualComparatorPeriodLabel(row)
+            : periodLabel(row)
+          : "Not available in the published release"
       }
     }
 
     const ageSpecific = selected_age_group !== "all"
     const latestCards = ageSpecific
       ? html`<div class="bnr-card-grid">
-          ${headlineBySeries(`Latest: ${ageLabel(selected_age_group)}`, series.map(s => latestItem(s, "all")))}
+          ${headlineBySeries(`Latest complete: ${ageLabel(selected_age_group)}`, series.map(s => latestItem(s, "all")), true)}
         </div>`
       : html`<div class="bnr-card-grid">
-          ${headlineBySeries("Latest: all", series.map(s => latestItem(s, "all")))}
-          ${headlineBySeries("Latest: women", series.map(s => latestItem(s, "female")))}
-          ${headlineBySeries("Latest: men", series.map(s => latestItem(s, "male")))}
+          ${headlineBySeries("Latest complete: all", series.map(s => latestItem(s, "all")), true)}
+          ${headlineBySeries("Latest complete: women", series.map(s => latestItem(s, "female")), true)}
+          ${headlineBySeries("Latest complete: men", series.map(s => latestItem(s, "male")), true)}
         </div>`
 
-    const hasComparator = series.some(s => s.comparator.length)
+    const hospitalSeries = series.find(s => s.key === "hospital") || null
+    const hasComparator = hospitalSeries ? hospitalSeries.comparator.length > 0 : false
     const comparatorCards = !hasComparator
       ? ""
       : ageSpecific
       ? html`<div class="bnr-card-grid">
-          ${headlineBySeries(`5-year average: ${ageLabel(selected_age_group)}`, series.map(s => comparatorItem(s, "all")))}
+          ${headlineBySeries(`5-year average: ${ageLabel(selected_age_group)}`, [comparatorItem(hospitalSeries, "all")], true)}
         </div>`
       : html`<div class="bnr-card-grid">
-          ${headlineBySeries("5-year average: all", series.map(s => comparatorItem(s, "all")))}
-          ${headlineBySeries("5-year average: women", series.map(s => comparatorItem(s, "female")))}
-          ${headlineBySeries("5-year average: men", series.map(s => comparatorItem(s, "male")))}
+          ${headlineBySeries("5-year average: all", [comparatorItem(hospitalSeries, "all")], true)}
+          ${headlineBySeries("5-year average: women", [comparatorItem(hospitalSeries, "female")], true)}
+          ${headlineBySeries("5-year average: men", [comparatorItem(hospitalSeries, "male")], true)}
         </div>`
 
     // Keep the annual y-axis fixed when ascertainment series are toggled.
@@ -1267,8 +1520,37 @@ isolatedProtectedAnnualBridges = rows => {
           ["hospital", "dco_primary", "dco_inclusive"].some(key => seriesMatches(d, key))
         )
       : []
-    const annualScaleMax = allAnnualScaleRows.length
-      ? Math.max(...allAnnualScaleRows.map(d => d.value))
+    // Keep the annual count y-axis stable across series and uncertainty toggles.
+    // The domain always includes all approved central estimates and released DCO
+    // linkage upper bounds for the selected CVD type, age group and year range.
+    // Because it is derived from cvd_metrics_current.csv, a future release can
+    // automatically expand or contract the axis without editing this dashboard.
+    const annualComparatorScaleRows = selected_period_type === "annual"
+      ? metrics.filter(d =>
+          d.metric_id === "CVD-BURDEN-001" &&
+          d.period_type === "annual" &&
+          d.statistic === "annual_previous_5yr_mean" &&
+          d.event_type === selected_event_type &&
+          d.age_group === selected_age_group &&
+          d.sex === "all" &&
+          inRange(d) &&
+          isSafe(d) &&
+          seriesMatches(d, "hospital")
+        )
+      : []
+
+    const annualScaleValues = [
+      ...allAnnualScaleRows.flatMap(d => [
+        d.value,
+        ...(d.ascertainment_scope === "hospital_plus_dco" &&
+           Number.isFinite(d.linkage_upper_value)
+          ? [d.linkage_upper_value]
+          : [])
+      ]),
+      ...annualComparatorScaleRows.map(d => d.value)
+    ].filter(Number.isFinite)
+    const annualScaleMax = annualScaleValues.length
+      ? Math.max(...annualScaleValues)
       : null
 
     const hasProtectedBridge = series.some(s => s.protectedBridges.length)
@@ -1276,14 +1558,19 @@ isolatedProtectedAnnualBridges = rows => {
     const marks = series.flatMap(s => {
       const c = seriesColour(s.key)
       return [
+        ...(showCountLinkageUncertainty && s.key !== "hospital" && s.linkageSegments.length
+          ? [Plot.areaY(s.linkageSegments, {
+              x: "chart_x",
+              y1: "linkage_lower_value",
+              y2: "linkage_upper_value",
+              z: "segment",
+              fill: c,
+              fillOpacity: 0.11
+            })]
+          : []),
         Plot.lineY(s.completeSegments, {
           x: "chart_x", y: "value", z: "segment",
           stroke: c, strokeWidth: 2.3
-        }),
-        Plot.lineY(s.dottedSegments, {
-          x: "chart_x", y: "value", z: "segment",
-          stroke: c, strokeOpacity: .42, strokeWidth: 2.3,
-          strokeDasharray: "2,4"
         }),
         Plot.lineY(s.protectedBridges, {
           x: "chart_x", y: "value", z: "segment",
@@ -1292,13 +1579,17 @@ isolatedProtectedAnnualBridges = rows => {
         Plot.dot(s.completePoints, {
           x: "chart_x", y: "value",
           fill: c, stroke: c, r: 3.3,
-          title: d => `${seriesLabel(s.key)}\n${periodLabel(d)}\n${publishedValue(d)}\n${selected_period_type === "quarterly" ? "Complete quarter" : "Complete year"}`
+          title: d => countTooltip(d, s.key, showCountLinkageUncertainty)
         }),
         Plot.dot(s.incompletePoints, {
           x: "chart_x", y: "value",
-          fill: c, fillOpacity: .35,
-          stroke: c, strokeOpacity: .5, r: 3.3,
-          title: d => `${seriesLabel(s.key)}\n${periodLabel(d)}\n${publishedValue(d)}\n${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}`
+          fill: "#f6c98a", fillOpacity: .32,
+          stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7
+        }),
+        Plot.dot(s.incompletePoints, {
+          x: "chart_x", y: "value",
+          fill: c, stroke: c, r: 4.2,
+          title: d => countTooltip(d, s.key, showCountLinkageUncertainty)
         }),
         ...s.comparator.length
           ? [Plot.lineY(
@@ -1314,6 +1605,24 @@ isolatedProtectedAnnualBridges = rows => {
       ]
     })
 
+    const countPlot = Plot.plot({
+      height: 470,
+      marginLeft: 80,
+      marginBottom: 76,
+      style: {fontSize: "15px", fontFamily: "inherit"},
+      x: selected_period_type === "annual"
+        ? {label: "Year", type: "linear", tickFormat: "d"}
+        : {label: "Quarter", type: "time"},
+      y: {
+        label: null,
+        grid: true,
+        ...(selected_period_type === "annual" && Number.isFinite(annualScaleMax)
+          ? {domain: [0, annualScaleMax * 1.05], nice: true}
+          : {})
+      },
+      marks: [...marks, Plot.ruleY([0])]
+    })
+
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">${selected_period_type === "quarterly" ? "Quarterly detail" : "Annual detail"}</div>
       ${seriesSelection(panelSeries)}
@@ -1323,30 +1632,23 @@ isolatedProtectedAnnualBridges = rows => {
         ${panelSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
         ${hasComparator ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#666;border-top-style:dashed"></span>Previous 5-year average</span>` : ""}
         ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;opacity:.4"></span>Bridge over single protected year (not estimated)</span>` : ""}
-        <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style="border-color:#777"></span>${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}</span>
+        ${showCountLinkageUncertainty && panelSeries.some(d => d !== "hospital")
+          ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-uncertainty-band"></span>DCO linkage uncertainty</span>`
+          : ""}
+        <span class="bnr-chart-legend-item"><span class="bnr-legend-incomplete-point"></span>${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}</span>
       </div>
       <div class="bnr-axis-title">↑ Count</div>
-      ${Plot.plot({
-        height: 470,
-        marginLeft: 80,
-        marginBottom: 76,
-        style: {fontSize: "15px", fontFamily: "inherit"},
-        x: selected_period_type === "annual"
-          ? {label: "Year", type: "linear", tickFormat: "d"}
-          : {label: "Quarter", type: "time"},
-        y: {
-          label: null,
-          grid: true,
-          ...(selected_period_type === "annual" && Number.isFinite(annualScaleMax)
-            ? {domain: [0, annualScaleMax * 1.05], nice: true}
-            : {})
-        },
-        marks: [...marks, Plot.ruleY([0])]
-      })}
+      ${countPlot}
+      ${plotDownloadControls(countPlot, `${release_id || "cvd-current"}-counts-${selected_period_type}-${selected_event_type}-${selected_age_group}`)}
       <div style="margin-top:.75rem">
         ${latestCards}
         ${comparatorCards}
       </div>
+      ${showCountLinkageUncertainty && panelSeries.some(d => d !== "hospital")
+        ? html`<div class="bnr-note-box">
+            <strong>Uncertainty:</strong> DCO linkage uncertainty is shown as a light band for Hospital + DCO annual counts. It reflects uncertainty in DCO ascertainment/linkage and is read directly from the approved public release. Counts are registry enumeration and are not shown with statistical confidence intervals.
+          </div>`
+        : ""}
       ${selected_period_type === "annual"
         ? html`<div class="bnr-note-box">
             <strong>Disclosure and trend display:</strong>
@@ -1361,18 +1663,18 @@ isolatedProtectedAnnualBridges = rows => {
       ? interpretation(
           "Monthly CVD events",
           "The number of hospital-recorded CVD events each month. Monthly data are published only for All CVD, both sexes and all ages.",
-          "The shaded band shows the range seen in the same calendar month during 2015–2019, and the orange line shows the average for that month. This is a fixed historical reference. Protected values are not plotted and are not treated as zero."
+          "The shaded band shows the range seen in the same calendar month during 2015–2019, and the orange line shows the average for that month. This is a fixed historical reference. An incomplete month is shown as a larger point with a soft orange ring and is not joined to the completed series. Protected values are not plotted and are not treated as zero."
         )
       : selected_period_type === "quarterly"
       ? interpretation(
           "Quarterly CVD events",
           `The number of hospital-recorded ${eventLabel(selected_event_type)} events in each quarter. The cards show the latest published counts, and the chart shows the trend for both sexes.`,
-          "The dashed line shows the published average for the same quarter in the previous five years where available. An incomplete quarter is shown with a lighter dotted line. Protected values are not plotted and are not treated as zero."
+          "The dashed line shows the published average for the same quarter in the previous five years where available. An incomplete quarter is shown as a larger point with a soft orange ring and is not joined to the completed series. Protected values are not plotted and are not treated as zero."
         )
       : interpretation(
           "Annual CVD events",
           `The published annual number of ${eventLabel(selected_event_type)} events for the selected event-ascertainment series.`,
-          "Hospital-recorded and Hospital + DCO counts are separate published series. DCO-inclusive counts use the approved Primary or Inclusive mortality definition. Five-year comparisons are shown only where they exist in the published release. Protected values are not plotted and are not treated as zero."
+          "Hospital-recorded and Hospital + DCO counts are separate published series. DCO-inclusive counts use the approved Primary or Inclusive mortality definition. Five-year comparisons are shown only where they exist in the published release. An incomplete year, if present, is shown as a larger point with a soft orange ring and is not joined to the completed series. Protected values are not plotted and are not treated as zero."
         )
 
     return html`<div>
@@ -1524,6 +1826,36 @@ isolatedProtectedAnnualBridges = rows => {
         ? ageLabel(d[parts.key])
         : sexLabel(d[parts.key])
 
+      const distributionPlot = Plot.plot({
+        height: 330,
+        marginLeft: 70,
+        marginBottom: 60,
+        style: {fontSize: "15px", fontFamily: "inherit"},
+        x: {
+          label: "Year",
+          domain: years,
+          tickFormat: d => years.indexOf(d) % showEvery === 0 ? d : ""
+        },
+        y: {label: null, domain: [0,100], grid: true},
+        color: {
+          domain: parts.order,
+          range: [parts.firstColour, parts.secondColour],
+          legend: false
+        },
+        marks: [
+          Plot.barY(stack, {
+            x: "year_label",
+            y1: "x1",
+            y2: "x2",
+            fill: parts.key,
+            insetLeft: 3,
+            insetRight: 3,
+            title: d => `${d.period_year}\n${labelFor(d)}\n${publishedValueWithUnit(d)}`
+          }),
+          Plot.ruleY([0])
+        ]
+      })
+
       return html`<div class="bnr-distribution-card" style=${`border-left-color:${colour("hospital")}`}>
         <div class="bnr-distribution-definition" style=${`color:${colour("hospital")}`}>Hospital-recorded</div>
         <div class="bnr-chart-legend">
@@ -1531,35 +1863,8 @@ isolatedProtectedAnnualBridges = rows => {
           <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style=${`background:${parts.secondColour}`}></span>${parts.secondLabel}</span>
         </div>
         <div class="bnr-axis-title">Percent of events</div>
-        ${Plot.plot({
-          height: 330,
-          marginLeft: 70,
-          marginBottom: 60,
-          style: {fontSize: "15px", fontFamily: "inherit"},
-          x: {
-            label: "Year",
-            domain: years,
-            tickFormat: d => years.indexOf(d) % showEvery === 0 ? d : ""
-          },
-          y: {label: null, domain: [0,100], grid: true},
-          color: {
-            domain: parts.order,
-            range: [parts.firstColour, parts.secondColour],
-            legend: false
-          },
-          marks: [
-            Plot.barY(stack, {
-              x: "year_label",
-              y1: "x1",
-              y2: "x2",
-              fill: parts.key,
-              insetLeft: 3,
-              insetRight: 3,
-              title: d => `${d.period_year}\n${labelFor(d)}\n${publishedValueWithUnit(d)}`
-            }),
-            Plot.ruleY([0])
-          ]
-        })}
+        ${distributionPlot}
+        ${plotDownloadControls(distributionPlot, `${release_id || "cvd-current"}-profile-${kind}`)}
       </div>`
     }
 
@@ -1636,7 +1941,10 @@ isolatedProtectedAnnualBridges = rows => {
     return {
       key,
       observed,
-      points: safeAllRows.map(d => ({...d, chart_x: Number(d.period_year)})),
+      completePoints: safeAllRows.filter(d => isComplete(d))
+        .map(d => ({...d, chart_x: Number(d.period_year)})),
+      incompletePoints: safeAllRows.filter(d => !isComplete(d))
+        .map(d => ({...d, chart_x: Number(d.period_year)})),
       segments: contiguousSafeSegments(allRows)
         .map(d => ({...d, chart_x: Number(d.period_year)})),
       ciPoints: safeAllRows
@@ -1686,10 +1994,11 @@ isolatedProtectedAnnualBridges = rows => {
     }
   }
 
-  // Keep the rate y-axis fixed when ascertainment series are toggled.
-  // The scale uses all three approved series for the selected rate measure,
-  // CVD type and year range. When uncertainty is displayed, its published
-  // upper bounds are also included so neither interval is clipped.
+  // Keep the rate y-axis fixed when ascertainment series or uncertainty are toggled.
+  // The scale uses all three approved series and all released uncertainty upper
+  // bounds for the selected rate measure, CVD type and year range. Because this
+  // is derived from cvd_metrics_current.csv, a future release can automatically
+  // expand or contract the axis without editing this dashboard.
   const allRateScaleRows = metrics.filter(d =>
     d.metric_id === "CVD-INCIDENCE-001" &&
     d.period_type === "annual" &&
@@ -1718,6 +2027,7 @@ isolatedProtectedAnnualBridges = rows => {
     : null
 
   const hasProtectedBridge = rateSeries.some(s => s.protectedBridges.length)
+  const hasIncompleteRatePoint = rateSeries.some(s => s.incompletePoints.length)
 
   const rateMarks = rateSeries.flatMap(s => {
     const c = seriesColour(s.key)
@@ -1767,9 +2077,19 @@ isolatedProtectedAnnualBridges = rows => {
         x: "chart_x", y: "value", z: "segment",
         stroke: c, strokeOpacity: .28, strokeWidth: 2
       }),
-      Plot.dot(s.points, {
+      Plot.dot(s.completePoints, {
         x: "chart_x", y: "value",
         fill: c, stroke: c, r: 3.5,
+        title: d => rateTooltip(d, s.key)
+      }),
+      Plot.dot(s.incompletePoints, {
+        x: "chart_x", y: "value",
+        fill: "#f6c98a", fillOpacity: .32,
+        stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7
+      }),
+      Plot.dot(s.incompletePoints, {
+        x: "chart_x", y: "value",
+        fill: c, stroke: c, r: 4.2,
         title: d => rateTooltip(d, s.key)
       })
     )
@@ -1779,9 +2099,26 @@ isolatedProtectedAnnualBridges = rows => {
 
   const rateHowToRead = html`
     Compare like with like: use the same rate measure and event-ascertainment series.
-    Gaps are protected or unavailable values.
+    Gaps are protected or unavailable values. If an incomplete annual rate is ever published, it is shown as a larger point with a soft orange ring and is not joined to the completed series.
     <a href="../../../../methods/measures/incidence.html">Read the CVD event-rate methods.</a>
   `
+
+  const ratePlot = Plot.plot({
+    height: 470,
+    marginTop: 20,
+    marginLeft: 96,
+    marginBottom: 70,
+    style: {fontSize: "15px", fontFamily: "inherit"},
+    x: {label: "Year", type: "linear", tickFormat: "d"},
+    y: {
+      label: null,
+      grid: true,
+      ...(Number.isFinite(rateScaleMax)
+        ? {domain: [0, rateScaleMax * 1.05], nice: true}
+        : {})
+    },
+    marks: [...rateMarks, Plot.ruleY([0])]
+  })
 
   return html`<div>
     ${interpretation(
@@ -1798,28 +2135,15 @@ isolatedProtectedAnnualBridges = rows => {
       <div class="bnr-chart-legend">
         ${activeSeries.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour(d)}`}></span>${seriesLabel(d)}</span>`)}
         ${hasProtectedBridge ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#777;opacity:.4"></span>Bridge over single protected year (not estimated)</span>` : ""}
+        ${hasIncompleteRatePoint ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-incomplete-point"></span>Incomplete year</span>` : ""}
         ${showStatisticalCi ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-whisker"></span>95% statistical CI</span>` : ""}
         ${showLinkageUncertainty && activeSeries.some(d => d !== "hospital")
           ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-uncertainty-band"></span>DCO linkage uncertainty</span>`
           : ""}
       </div>
       <div class="bnr-axis-title">↑ Rate per 100,000</div>
-      ${Plot.plot({
-        height: 470,
-        marginTop: 20,
-        marginLeft: 96,
-        marginBottom: 70,
-        style: {fontSize: "15px", fontFamily: "inherit"},
-        x: {label: "Year", type: "linear", tickFormat: "d"},
-        y: {
-          label: null,
-          grid: true,
-          ...(Number.isFinite(rateScaleMax)
-            ? {domain: [0, rateScaleMax * 1.05], nice: true}
-            : {})
-        },
-        marks: [...rateMarks, Plot.ruleY([0])]
-      })}
+      ${ratePlot}
+      ${plotDownloadControls(ratePlot, `${release_id || "cvd-current"}-rate-${selected_rate_measure}-${selected_event_type}`)}
       <div class="bnr-card-grid" style="margin-top:.75rem">
         ${headlineBySeries("Latest: all", rateSeries.map(s => latestRateItem(s, "all")))}
         ${headlineBySeries("Latest: women", rateSeries.map(s => latestRateItem(s, "female")))}
@@ -2100,7 +2424,7 @@ isolatedProtectedAnnualBridges = rows => {
     if (state === "protected") {
       return html`<td class="bnr-coverage-cell bnr-suppressed" title=${`${row.label}: ${year} · published, but all values are protected`}>*</td>`
     }
-    return html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · not published in the current release`}>–</td>`
+    return html`<td class="bnr-coverage-cell bnr-coverage-absent" title=${`${row.label}: ${year} · not published until the year is complete`}>–</td>`
   }
 
   return html`<div class="bnr-definition-panel">
@@ -2110,7 +2434,7 @@ isolatedProtectedAnnualBridges = rows => {
       <span><strong class="bnr-coverage-present">✓</strong> complete year</span>
       <span><strong class="bnr-coverage-partial">●</strong> partial / incomplete year</span>
       <span><strong class="bnr-suppressed">*</strong> published, but all values are protected</span>
-      <span><strong class="bnr-coverage-absent">–</strong> not published in the current release</span>
+      <span><strong class="bnr-coverage-absent">–</strong> not published until year completed</span>
     </div>
     <div class="bnr-coverage-scroll">
       <table class="bnr-coverage-table" aria-label="Availability of published CVD event data by year and measure">
@@ -2248,6 +2572,11 @@ isolatedProtectedAnnualBridges = rows => {
         "Measure", "Value", "Statistical 95% CI", "CI method",
         "Linkage uncertainty", "Unit", "Data status", "Protection note"
       ]
+    : selected_indicator === "counts"
+    ? [
+        "Period", "Series", "CVD type", "Sex", "Age group",
+        "Measure", "Value", "DCO linkage uncertainty", "Unit", "Data status", "Protection note"
+      ]
     : [
         "Period", "Series", "CVD type", "Sex", "Age group",
         "Measure", "Value", "Unit", "Data status", "Protection note"
@@ -2266,6 +2595,20 @@ isolatedProtectedAnnualBridges = rows => {
           statisticalCiText(d),
           ciMethodLabel(d.ci_method),
           linkageUncertaintyText(d),
+          unitLabel(d),
+          isComplete(d) ? "Complete" : "Incomplete",
+          d.disclosure_note || ""
+        ]
+      : selected_indicator === "counts"
+      ? [
+          periodLabel(d),
+          seriesText(d),
+          eventLabel(d.event_type),
+          sexLabel(d.sex),
+          ageLabel(d.age_group),
+          statisticLabel(d),
+          publishedValue(d),
+          countLinkageUncertaintyText(d),
           unitLabel(d),
           isComplete(d) ? "Complete" : "Incomplete",
           d.disclosure_note || ""
@@ -2318,16 +2661,28 @@ isolatedProtectedAnnualBridges = rows => {
       : metrics.filter(d => d.metric_id === "CVD-INCIDENCE-001")
   )
 
+  const latestIndicatorLabel = selected_indicator === "counts" && release_period
+    ? release_period_label
+    : latestIndicatorRow
+    ? periodLabel(latestIndicatorRow)
+    : "—"
+
   const metaRows = [
     {item: "Source", value: "Published BNR CVD data"},
     {item: "Data file", value: "cvd_metrics_current.csv"},
-    {item: "Release", value: release_id || "—"},
+    {item: "Release ID", value: release_id || "—"},
     {item: "Release date", value: release_date_label},
-    {item: "Latest data period", value: latestIndicatorRow ? periodLabel(latestIndicatorRow) : "—"},
+    {item: "Latest data period", value: latestIndicatorLabel},
     {item: "Status", value: "Published public release"},
     {item: "Protected values", value: "Protected values are shown exactly as published. The dashboard never tries to work them out."},
     {item: "Monthly comparison", value: "Fixed 2015–2019 historical reference; it does not change with each new release."}
   ]
+
+  if (selected_indicator === "counts") {
+    metaRows.push(
+      {item: "DCO linkage uncertainty", value: "Published separately for Hospital + DCO Primary and Inclusive annual counts. Counts are registry enumeration and do not have statistical confidence intervals."}
+    )
+  }
 
   if (selected_indicator === "rates") {
     metaRows.push(
@@ -2351,7 +2706,7 @@ isolatedProtectedAnnualBridges = rows => {
       </tbody></table>
 
       <h3 style="margin-top:1rem">Event ascertainment</h3>
-      <p><strong>Hospital-recorded</strong> includes eligible events identified through hospital records. <strong>Hospital + DCO — Primary</strong> and <strong>Hospital + DCO — Inclusive</strong> add approved death-certificate-only events using the corresponding BNR mortality definition. These are separate published series; the dashboard does not derive one from another. For event rates, statistical 95% confidence intervals and DCO linkage uncertainty are also separate published quantities and are never combined by the dashboard.</p>
+      <p><strong>Hospital-recorded</strong> includes eligible events identified through hospital records. <strong>Hospital + DCO — Primary</strong> and <strong>Hospital + DCO — Inclusive</strong> add approved death-certificate-only events using the corresponding BNR mortality definition. These are separate published series; the dashboard does not derive one from another. For Hospital + DCO annual counts, DCO linkage uncertainty is published as a separate range and counts do not have statistical confidence intervals. For event rates, statistical 95% confidence intervals and DCO linkage uncertainty are separate published quantities and are never combined by the dashboard.</p>
       <p><strong>Methods:</strong> <a href="../../../../methods/measures/cvd-event-counts.html">CVD event counts</a> · <a href="../../../../methods/measures/incidence.html">CVD incidence and event rates</a> · <a href="../../../../methods/interpretation/confidentiality.html">Protecting confidentiality</a></p>
       <p>An asterisk does not mean zero. It means that the value is protected and is not shown. The dashboard does not infer or reconstruct protected values.</p>
 

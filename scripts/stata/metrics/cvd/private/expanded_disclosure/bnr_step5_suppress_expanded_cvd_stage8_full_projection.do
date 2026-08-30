@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_suppress_expanded_cvd_stage8_full_projection.do
-VERSION: 1.2.0 (28 August 2026)
+VERSION: 1.3.1 (29 August 2026)
 PURPOSE: Create a provisional combined candidate after all currently registered
          primary and secondary protection decisions.
 
@@ -8,13 +8,17 @@ The output is still private review material. It is not approved or public.
 Every protected row has its estimate, numerator, denominator, linkage bounds
 and statistical-CI numeric bounds blanked together. CI level and method remain
 as non-disclosive metadata. All private decision and support fields are removed.
+
+Approved national aggregate DCO rows receive a generic public disclosure note.
+The note is applied to the whole approved lattice, not only rows where a small
+private component was present, so it does not reveal small-cell evidence.
 *******************************************************************************/
 
 version 19
 clear all
 set more off
 
-display as result "Running expanded CVD Step 5 Stage 8 full-projection helper v1.2.0"
+display as result "Running expanded CVD Step 5 Stage 8 full-projection helper v1.3.0"
 
 args audited_private_dta candidate_dta qa_dta release_id
 
@@ -28,7 +32,7 @@ assert _rc == 0
 use "`audited_private_dta'", clear
 local required_variables release_id metric_id value numerator denominator ///
     linkage_lower_value linkage_upper_value ci_lower_value ci_upper_value ///
-    ci_level ci_method stage6_protection_status
+    ci_level ci_method stage6_protection_status national_dco_release_exception
 foreach variable of local required_variables {
     capture confirm variable `variable'
     if _rc exit 111
@@ -37,11 +41,14 @@ foreach variable of local required_variables {
 assert release_id == "`release_id'"
 assert inlist(stage6_protection_status, "none", "primary", ///
     "secondary_structural", "secondary_existing")
+assert inlist(national_dco_release_exception, 0, 1)
 
 quietly count
 local candidate_rows = r(N)
 quietly count if stage6_protection_status != "none"
 local protected_rows = r(N)
+quietly count if national_dco_release_exception == 1
+local exception_lattice_rows = r(N)
 
 generate str12 suppression_status = "none"
 replace suppression_status = "primary" if stage6_protection_status == "primary"
@@ -49,6 +56,9 @@ replace suppression_status = "secondary" if ///
     inlist(stage6_protection_status, "secondary_structural", "secondary_existing")
 
 generate str244 disclosure_note = "No disclosure restriction identified."
+replace disclosure_note = ///
+    "Approved national aggregate DCO estimate; individual linkage information remains protected." ///
+    if suppression_status == "none" & national_dco_release_exception == 1
 replace disclosure_note = "Primary suppression: supporting frequency 1-5." ///
     if suppression_status == "primary"
 replace disclosure_note = ///
@@ -81,8 +91,11 @@ assert r(N) == 0
 foreach private_variable in sdc_policy primary_suppression_threshold ///
         primary_suppression related_primary_cells related_suppression_review ///
         suppression_review suppression_reason stage3_original_primary ///
-        stage3_hospital_primary stage3_dco_primary stage5_unknown_support_present ///
+        stage3_hospital_primary stage3_dco_primary ///
+        national_dco_release_exception stage4_primary_before_exception ///
+        stage4_dco_primary_relaxed stage5_unknown_support_present ///
         stage5_mixed_support_present stage5_structural_secondary ///
+        stage5_structural_exception ///
         stage6_existing_secondary stage6_hosp_existing stage6_protection_status ///
         stage7_protected {
     capture drop `private_variable'
@@ -91,7 +104,7 @@ foreach private_variable in sdc_policy primary_suppression_threshold ///
 save "`candidate_dta'", replace
 
 clear
-set obs 4
+set obs 5
 generate str64 check = ""
 generate str8 result = "PASS"
 generate str244 detail = ""
@@ -105,8 +118,11 @@ replace detail = "Estimate, numerator, denominator, linkage bounds and CI bounds
 replace check = "Protected display symbols written" in 3
 replace detail = "Protected rows use display_value = *; CI method metadata remain non-disclosive." in 3
 
-replace check = "Private decision fields removed" in 4
-replace detail = "The candidate remains private pending the remaining whole-release checks." in 4
+replace check = "National aggregate DCO note projected" in 4
+replace detail = "`exception_lattice_rows' approved national DCO lattice rows were processed with the generic aggregate-release note when unprotected." in 4
+
+replace check = "Private decision fields removed" in 5
+replace detail = "The candidate remains private pending the remaining whole-release checks." in 5
 
 save "`qa_dta'", replace
 

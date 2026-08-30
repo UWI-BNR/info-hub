@@ -1,16 +1,20 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_review.do
-VERSION: 4.0.1 (28 August 2026)
+VERSION: 4.0.2 (29 August 2026)
 PURPOSE: Canonical Step 5 controller for the combined CVD release package.
 
 USAGE:
-  do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 5 prepare
-  do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 5 prepare replace
-  do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 5 approve "Full name" "BNR Analyst"
-  do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 5 approve "Full name" "BNR Analyst" replace
+  do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 prepare
+  do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 prepare replace
+  do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 approve "<actual authorised name>" "BNR Analyst"
+  do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 approve "<actual authorised name>" "BNR Analyst" replace
 
 PREPARE creates private review evidence only. APPROVE verifies that evidence
 and creates public_ready. Neither action publishes to outputs/public or site.
+
+CHANGE 4.0.2:
+  Make the APPROVE usage example explicitly require the actual authorised name.
+  The approval helper now rejects common placeholder values.
 
 CHANGE 4.0.1:
   Parse PREPARE and APPROVE arguments explicitly from `0'. This preserves the
@@ -54,7 +58,7 @@ else {
     local remainder : list retokenize remainder
 
     if `"`approver_name'"' == "" | `"`approver_role'"' == "" {
-        display as error "APPROVE requires a full name and an authorised BNR role."
+        display as error "APPROVE requires the actual full name and an authorised BNR role."
         exit 198
     }
 
