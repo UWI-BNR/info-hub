@@ -14,9 +14,16 @@ STATA_SUFFIXES = {".ado", ".dlg", ".do", ".qmd", ".sthlp"}
 DEFINITION = re.compile(r"^\s*global\s+(BNR_[A-Z0-9_]+)\b", re.MULTILINE)
 REFERENCE = re.compile(r"\$(?:\{)?(BNR_[A-Z0-9_]+)")
 WINDOWS_PATH = re.compile(r'''["'][A-Z]:[\\/]''', re.IGNORECASE)
-LEGACY_PATH_EXCEPTIONS = {
-    Path("scripts/stata/refit/bnrcvd-2023-forensics1.do"),
+# Historical refit scripts are retained as non-operational reference files.
+# They are deliberately excluded from the current path-contract scan.
+HISTORICAL_PATH_ROOTS = {
+    Path("scripts/stata/refit"),
 }
+
+# Retained historical exception; no longer active.
+# LEGACY_PATH_EXCEPTIONS = {
+#     Path("scripts/stata/refit/bnrcvd-2023-forensics1.do"),
+# }
 
 LOCAL_PATH_CONFIGURATION = Path(
     "scripts/stata/config/bnr_paths_LOCAL.do"
@@ -36,10 +43,14 @@ def main() -> int:
         relative_path = path.relative_to(REPOSITORY_ROOT)
         for name in REFERENCE.findall(text):
             references.setdefault(name, set()).add(relative_path)
+        is_historical_reference = any(
+            relative_path == root or root in relative_path.parents
+            for root in HISTORICAL_PATH_ROOTS
+        )
         if (
             path != PATH_TEMPLATE
             and relative_path != LOCAL_PATH_CONFIGURATION
-            and relative_path not in LEGACY_PATH_EXCEPTIONS
+            and not is_historical_reference
         ):
             for line_number, line in enumerate(text.splitlines(), 1):
                 stripped = line.lstrip()
