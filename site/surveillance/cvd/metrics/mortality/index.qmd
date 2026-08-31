@@ -627,8 +627,6 @@ viewof selected_end_period_index = periodSlider(
 <div class="bnr-dashboard-switch"><a href="../burden/index.html" target="_blank" rel="noopener noreferrer">View the CVD events dashboard →</a></div>
 ```
 
-## Release {height=235}
-
 ```{ojs}
 //| echo: false
 //| output: false
@@ -733,30 +731,6 @@ definitionColour = d => d === "primary_clear_likely" ? colour("primary") : colou
 definitionSelection = definitions => html`<div class="bnr-definition-choice">
   ${definitions.map((d, i) => html`${i ? html`<span class="bnr-definition-join">&nbsp;and&nbsp;</span>` : ""}<strong style=${`color:${definitionColour(d)}`}>${definitionLabel(d)}</strong>`)}
 </div>`
-```
-
-```{ojs}
-//| echo: false
-// Latest release information is deliberately separate from the latest data period.
-{
-  const countRows = burden.filter(d =>
-    d.metric_id === "MORT-BURDEN-001" &&
-    ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic)
-  )
-  const latestData = latestRow(countRows)
-  const earliestData = sortedRows(countRows)[0] || null
-  return html`<div>
-    <div class="bnr-section-title">Latest Data Release</div>
-    <div class="bnr-release-grid">
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestData ? periodLabel(latestData) : "—"}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
-    </div>
-    <div class="bnr-note-box">This dashboard shows deaths classified as cardiovascular disease using the BNR mortality method. The release date is shown separately from the latest data period because the most recent data may be older than the date the release was published.</div>
-    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href="../../../../methods/measures/mortality.html">Learn how BNR defines and reports CVD mortality.</a></p>
-  </div>`
-}
 ```
 
 ## Indicator detail {.flow}
@@ -1564,6 +1538,32 @@ Incomplete year`
   })
 
   return qualityPanel
+}
+```
+
+## Release {height=235}
+
+```{ojs}
+//| echo: false
+// Latest release information is deliberately separate from the latest data period.
+{
+  const countRows = burden.filter(d =>
+    d.metric_id === "MORT-BURDEN-001" &&
+    ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic)
+  )
+  const latestData = latestRow(countRows)
+  const earliestData = sortedRows(countRows)[0] || null
+  return html`<div>
+    <div class="bnr-section-title">Latest Data Release</div>
+    <div class="bnr-release-grid">
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestData ? periodLabel(latestData) : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
+    </div>
+    <div class="bnr-note-box">This dashboard shows deaths classified as cardiovascular disease using the BNR mortality method. The release date is shown separately from the latest data period because the most recent data may be older than the date the release was published.</div>
+    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href="../../../../methods/measures/mortality.html">Learn how BNR defines and reports CVD mortality.</a></p>
+  </div>`
 }
 ```
 

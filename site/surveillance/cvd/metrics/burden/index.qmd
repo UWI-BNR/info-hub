@@ -896,8 +896,6 @@ viewof selected_end_period_index = periodSlider(
 <div class="bnr-dashboard-switch"><a href="../mortality/index.html" target="_blank" rel="noopener noreferrer">View the CVD mortality dashboard →</a></div>
 ```
 
-## Release {height=235}
-
 ```{ojs}
 //| echo: false
 //| output: false
@@ -1086,54 +1084,6 @@ isolatedProtectedAnnualBridges = rows => {
   }
 
   return bridges
-}
-```
-
-```{ojs}
-//| echo: false
-{
-  const rows = selected_indicator === "counts"
-    ? metrics.filter(d =>
-        d.metric_id === "CVD-BURDEN-001" &&
-        ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic) &&
-        (
-          seriesMatches(d, "hospital") ||
-          seriesMatches(d, "dco_primary") ||
-          seriesMatches(d, "dco_inclusive")
-        )
-      )
-    : selected_indicator === "profile"
-    ? metrics.filter(d => d.metric_id === "CVD-BURDEN-002")
-    : metrics.filter(d => d.metric_id === "CVD-INCIDENCE-001")
-
-  const latestData = latestRow(rows)
-  const earliestData = sortedRows(rows)[0] || null
-  const latestDataLabel = selected_indicator === "counts" && release_period
-    ? release_period_label
-    : latestData
-    ? periodLabel(latestData)
-    : "—"
-  const note = selected_indicator === "rates"
-    ? "This dashboard shows published BNR annual CVD event rates. The release date is shown separately from the latest data period because rate data may cover a different period from event counts."
-    : "This dashboard shows published BNR cardiovascular event measures. The release date is shown separately from the latest data period because different measures can cover different time periods."
-  const methodsHref = selected_indicator === "rates"
-    ? "../../../../methods/measures/incidence.html"
-    : "../../../../methods/measures/cvd-event-counts.html"
-  const methodsText = selected_indicator === "rates"
-    ? "Learn how BNR reports CVD incidence and event rates."
-    : "Learn how BNR defines and reports CVD events."
-
-  return html`<div>
-    <div class="bnr-section-title">Latest Data Release</div>
-    <div class="bnr-release-grid">
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestDataLabel}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
-    </div>
-    <div class="bnr-note-box">${note}</div>
-    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href=${methodsHref}>${methodsText}</a></p>
-  </div>`
 }
 ```
 
@@ -1936,6 +1886,54 @@ isolatedProtectedAnnualBridges = rows => {
   })
 
   return qualityPanel
+}
+```
+
+## Release {height=235}
+
+```{ojs}
+//| echo: false
+{
+  const rows = selected_indicator === "counts"
+    ? metrics.filter(d =>
+        d.metric_id === "CVD-BURDEN-001" &&
+        ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic) &&
+        (
+          seriesMatches(d, "hospital") ||
+          seriesMatches(d, "dco_primary") ||
+          seriesMatches(d, "dco_inclusive")
+        )
+      )
+    : selected_indicator === "profile"
+    ? metrics.filter(d => d.metric_id === "CVD-BURDEN-002")
+    : metrics.filter(d => d.metric_id === "CVD-INCIDENCE-001")
+  const latestData = latestRow(rows)
+  const earliestData = sortedRows(rows)[0] || null
+  const latestDataLabel = selected_indicator === "counts" && release_period
+    ? release_period_label
+    : latestData
+    ? periodLabel(latestData)
+    : "—"
+  const note = selected_indicator === "rates"
+    ? "This dashboard shows published BNR annual CVD event rates. The release date is shown separately from the latest data period because rate data may cover a different period from event counts."
+    : "This dashboard shows published BNR cardiovascular event measures. The release date is shown separately from the latest data period because different measures can cover different time periods."
+  const methodsHref = selected_indicator === "rates"
+    ? "../../../../methods/measures/incidence.html"
+    : "../../../../methods/measures/cvd-event-counts.html"
+  const methodsText = selected_indicator === "rates"
+    ? "Learn how BNR reports CVD incidence and event rates."
+    : "Learn how BNR defines and reports CVD events."
+  return html`<div>
+    <div class="bnr-section-title">Latest Data Release</div>
+    <div class="bnr-release-grid">
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestDataLabel}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
+    </div>
+    <div class="bnr-note-box">${note}</div>
+    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href=${methodsHref}>${methodsText}</a></p>
+  </div>`
 }
 ```
 
