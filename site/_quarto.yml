@@ -107,24 +107,16 @@ website:
         # - text: "CVD home"
         #   href: surveillance/cvd/listing.qmd
 
-        - section: "Current indicators"
+        - section: "CVD indicators"
           contents:
-            - text: "CVD burden"
+            - text: "CVD events"
               href: surveillance/cvd/metrics/burden/
             - text: "CVD mortality"
               href: surveillance/cvd/metrics/mortality/
- 
-        - section: "Briefings"
-          contents:
-            - text: "CVD incidence, 2023"
-              href: surveillance/cvd/briefings/case-incidence.qmd
-            - text: "CVD case fatality, 2023"
-              href: surveillance/cvd/briefings/case-fatality.qmd
-            - text: "CVD hospital stay, 2023"
-              href: surveillance/cvd/briefings/hospital-los.qmd
-        - text: "Annual tabulations"
-          href: surveillance/cvd/tabulations/
-        - section: "Downloads"
+            - text: "CVD tables"
+              href: surveillance/cvd/tables/
+
+        - section: "Download data"
           contents:
             - text: "Data Downloads"
               href: downloads/index.qmd
