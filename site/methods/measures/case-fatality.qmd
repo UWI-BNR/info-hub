@@ -58,5 +58,4 @@ A lower percentage can indicate improved survival, but comparisons also depend o
 
 - [Mortality](mortality.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
-- [CVD case-fatality briefing](../../surveillance/cvd/briefings/case-fatality.qmd)
-
+- [CVD reference tables](../../surveillance/cvd/tables/index.qmd)

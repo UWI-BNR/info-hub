@@ -2,7 +2,7 @@
 
 The **BNR info-hub** is the implementation repository for BNR Refit Phase 2. It combines the Stata analytical workflows, approved public output packages, Quarto website, and the documentation needed to operate and hand over the system.
 
-The design is deliberately simple: a small Stata-skilled team should be able to prepare, review, approve, publish and maintain BNR surveillance outputs without a live public database or server-side application.
+The design is deliberately simple: a small Stata-skilled team should be able to prepare, review, approve, publish and maintain BNR surveillance datasets without a live public database or server-side application. Quarto and Observable JS turn those approved datasets into the static public website.
 
 ## Operating model
 
@@ -19,10 +19,10 @@ Private source data
 
 The core rules are:
 
-- **Stata computes:** cleaning, derivation, metrics, tables and figures remain in readable Stata code.
+- **Stata computes:** cleaning, derivation and authoritative surveillance metrics remain in readable Stata code.
 - **People review and approve:** a successful calculation never implies approval.
 - **Controlled Stata steps publish:** only the exact approved files are promoted.
-- **Quarto presents:** the website consumes approved public products and does not recalculate them.
+- **Quarto presents:** the website consumes approved public metric datasets and may reshape them into tables and visual displays without creating a second authoritative analytical dataset.
 - **GitHub deploys:** the public site is static and contains no confidential data.
 - Generated outputs are corrected by changing the source data or code and rerunning, never by manual editing.
 - Confidential data, tokens, logs and private review material remain outside this repository.
@@ -31,13 +31,13 @@ The core rules are:
 
 | Product | Implemented route | Current scope |
 |---|---|---|
-| Dashboard metrics | CVD Steps 1-6 | CVD burden, including registered event counts and distributions |
-| Tabulations | Table Steps 1, 2A, 2B and 3 | Seven disclosure-controlled CVD table families plus workbook and ZIP |
-| Briefings | Briefing Steps 1-3 | CVD incidence, case fatality and hospital length of stay |
-| Mortality | Structure reserved | Workflow and public products still in development |
+| CVD event metrics | CVD Steps 1-6 | Approved event counts, distributions, incidence estimates and related surveillance measures |
+| CVD mortality metrics | Mortality Steps 1-6 | Approved mortality counts, distributions and rates |
+| CVD reference tables | Quarto page using approved public metric datasets | Web tables derived directly from the CVD event and mortality releases |
+| Reports and one-off analyses | Redesign pending | The former briefing workflow has been retired |
 | Hypertension and diabetes | First-class site and Methods sections | Analytical workflows and approved measure definitions still in development |
 
-CVD event counts are a dashboard and tabulation product. They are not duplicated as a case-count briefing.
+CVD event counts and mortality statistics are calculated once in their respective release workflows and reused by dashboards, tables and future reports.
 
 ## Repository structure
 
@@ -78,9 +78,14 @@ Technical Manual workstation setup or the controlled analytical workflows.
 
 Routine operators use **Stata > User > BNR**:
 
-- **Update dashboard:** Steps 1-6;
-- **Produce briefing:** Steps 1-3; and
-- **Produce tables:** Steps 1, 2A, 2B and 3.
+- **Update CVD dashboard:** Steps 1-6;
+- **Update mortality dashboard:** Steps 1-6; and
+- **BNR utilities:** supporting workstation commands.
+
+The former Stata tabulations and briefing workflows have been retired. Public
+CVD tables are now generated directly from approved public metric datasets in
+Quarto. The replacement route for annual, quarterly and one-off reports will
+be designed separately.
 
 The active DO and ADO files, their responsibilities and dependencies are documented in [`scripts/stata/README.qmd`](scripts/stata/README.qmd).
 
@@ -127,4 +132,4 @@ If a released result is wrong, correct the authoritative REDCap record, referenc
 
 ## Current development boundary
 
-The CVD dashboard, tabulation and three routine briefing pathways are implemented. Remaining development includes the mortality workflow, hypertension and diabetes analytical modules, and final operational testing and handover. The repository history records implementation detail; these summary documents should change only when the operating model, methods, controls or responsibilities materially change.
+The CVD event and mortality release workflows and their public dashboards are operational. The CVD reference-tables page consumes their approved public datasets directly. The former Stata tabulations and briefing workflows have been retired; annual, quarterly and one-off reporting will be redesigned separately. Remaining development also includes hypertension and diabetes analytical modules and final operational testing and handover. The repository history records implementation detail; these summary documents should change only when the operating model, methods, controls or responsibilities materially change.

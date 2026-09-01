@@ -1730,7 +1730,6 @@ Incomplete year`
       <h3 style="margin-top:1rem">Downloads</h3>
       <table class="bnr-download-table"><thead><tr><th>Resource</th><th>Description</th><th>Link</th></tr></thead><tbody>
         <tr><td>Current CSV</td><td>Current published mortality dataset in CSV format.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv" download>Download CSV</a></td></tr>
-        <tr><td>Current Stata dataset</td><td>Current published mortality dataset in Stata format.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.dta" download>Download DTA</a></td></tr>
         <tr><td>Monthly reference CSV</td><td>Fixed 2015–2019 monthly historical reference.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv" download>Download reference CSV</a></td></tr>
         <tr><td>Dataset information</td><td>Definitions and technical details for the current mortality dataset.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/metadata/mort_burden_metrics_current.yml" download>Download metadata</a></td></tr>
         <tr><td>Reference information</td><td>Definitions and technical details for the monthly historical reference.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/metadata/mort_monthly_reference_2015_2019.yml" download>Download metadata</a></td></tr>

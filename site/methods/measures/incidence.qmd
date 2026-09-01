@@ -74,4 +74,4 @@ BNR publications have historically used the familiar term *incidence*. Because t
 
 - [Number of CVD events](cvd-event-counts.qmd)
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
-- [CVD incidence briefing](../../surveillance/cvd/briefings/case-incidence.qmd)
+- [CVD reference tables](../../surveillance/cvd/tables/index.qmd)

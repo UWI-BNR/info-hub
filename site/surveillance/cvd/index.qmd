@@ -5,21 +5,6 @@ title-block-style: none
 
 sidebar: cvd
 
-listing:
-  - id: cvd-outputs
-    contents:
-      - "briefings/*.qmd"
-    type: table
-    sort: "date desc"
-    categories: true
-    sort-ui: true
-    filter-ui: true
-    page-size: 10
-    field-display-names:
-      title: "Report"
-    date-format: medium
-    table-hover: true
-
 format:
   html:
     toc: true
@@ -62,11 +47,4 @@ Explore the latest CVD summary statistics.
 
 :::
 
-:::
-
-<br>
-
-## Latest CVD outputs
-
-::: {#cvd-outputs}
 :::

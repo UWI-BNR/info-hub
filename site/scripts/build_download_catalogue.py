@@ -8,8 +8,8 @@ import sys
 # BNR download catalogue builder
 #
 # Purpose:
-#   Combine approved briefing, metric and tabulation download records into one
-#   site-wide downloads/downloads.yml file for the Quarto downloads page.
+#   Combine approved metric-package download records into one site-wide
+#   downloads/downloads.yml file for the Quarto downloads page.
 #
 # Scope:
 #   Publication-layer indexing only.
@@ -20,9 +20,7 @@ import sys
 #   Standard-library Python only. No PyYAML dependency.
 #
 # Expected inputs:
-#   site/downloads/files/briefings/{briefing_id}/downloads.yml
 #   site/downloads/files/metrics/**/catalogue/{release_id}.yml
-#   site/downloads/annual/**/latest/downloads.yml
 #
 # Output:
 #   site/downloads/downloads.yml
@@ -49,19 +47,15 @@ SCRIPT_PATH = Path(__file__).resolve()
 SITE_ROOT = SCRIPT_PATH.parent.parent
 
 DOWNLOADS_ROOT = SITE_ROOT / "downloads"
-BRIEFINGS_DIR = DOWNLOADS_ROOT / "files" / "briefings"
 METRICS_DIR = DOWNLOADS_ROOT / "files" / "metrics"
-TABULATIONS_DIR = DOWNLOADS_ROOT / "annual"
 OUTPUT_FILE = DOWNLOADS_ROOT / "downloads.yml"
 
 SUPPORTED_PACKAGE_TYPES = {
-    "briefing": "Briefing",
     "metric": "Metric dataset",
-    "tabulation": "Tabulations",
 }
 
 SUPPORTED_SCHEMA = "bnr_download_manifest_v1"
-ALLOWED_HREF_PREFIXES = ("files/", "annual/")
+ALLOWED_HREF_PREFIXES = ("files/",)
 
 
 class CatalogueError(Exception):
@@ -272,20 +266,16 @@ def package_type_from_manifest(manifest, source_path):
     if package_type not in SUPPORTED_PACKAGE_TYPES:
         raise CatalogueError(
             f"Unsupported package type '{raw_value}' in {source_path}. "
-            "Expected briefing, metric or tabulation."
+            "Expected metric."
         )
 
     return package_type
 
 
-def package_id_from_manifest(manifest, package_type, source_path):
+def package_id_from_manifest(manifest, source_path):
     """Read the stable public output ID."""
-    if package_type == "briefing":
-        value = manifest.get("briefing_id", manifest.get("package_id", ""))
-        expected_field = "briefing_id"
-    else:
-        value = manifest.get("package_id", "")
-        expected_field = "package_id"
+    value = manifest.get("package_id", "")
+    expected_field = "package_id"
 
     package_id = str(value).strip()
 
@@ -295,28 +285,6 @@ def package_id_from_manifest(manifest, package_type, source_path):
         )
 
     return package_id
-
-
-def version_label_from_manifest(manifest, package_type, output_id, source_path):
-    """Return the public version label used only by briefing packages.
-
-    Briefings retain a visible version because successive publications can
-    share the same coverage period. Metric and tabulation releases already
-    express their release in the period column, so their version cell is an
-    em dash rather than a duplicate identifier.
-    """
-    if package_type == "briefing":
-        match = re.search(r"_v([1-9][0-9]*)$", output_id)
-
-        if match:
-            return f"v{match.group(1)}"
-
-        raise CatalogueError(
-            f"Briefing ID must end in '_v<integer>' to create its version "
-            f"label in {source_path}: {output_id}"
-        )
-
-    return "—"
 
 
 def validated_iso_date(value, source_path):
@@ -433,15 +401,8 @@ def sort_order_value(value):
 
 
 def discover_source_records():
-    """Return every supported package-level catalogue manifest."""
+    """Return every metric package-level catalogue manifest."""
     source_paths = []
-
-    if BRIEFINGS_DIR.exists():
-        briefing_paths = sorted(BRIEFINGS_DIR.glob("*/downloads.yml"))
-        source_paths.extend(briefing_paths)
-        print(f"Briefing records found: {len(briefing_paths)}")
-    else:
-        print("WARNING: Briefings catalogue folder was not found.")
 
     if METRICS_DIR.exists():
         metric_paths = sorted(METRICS_DIR.glob("**/catalogue/*.yml"))
@@ -449,15 +410,6 @@ def discover_source_records():
         print(f"Metric records found:   {len(metric_paths)}")
     else:
         print("WARNING: Metrics catalogue folder was not found.")
-
-    if TABULATIONS_DIR.exists():
-        tabulation_paths = sorted(
-            TABULATIONS_DIR.glob("**/latest/downloads.yml")
-        )
-        source_paths.extend(tabulation_paths)
-        print(f"Tabulation records found: {len(tabulation_paths)}")
-    else:
-        print("WARNING: Tabulations catalogue folder was not found.")
 
     return source_paths
 
@@ -485,7 +437,7 @@ def rows_from_manifest(manifest, source_path):
     # downloadable ZIP package.
     #
     # Determine whether the manifest has an eligible ZIP before validating
-    # briefing- or metric-specific fields. An unsupported package type is
+    # metric-specific fields. An unsupported package type is
     # therefore harmless when it requests no catalogue listing, but it still
     # fails closed if it attempts to list a ZIP.
     listed_zip_items = []
@@ -507,10 +459,8 @@ def rows_from_manifest(manifest, source_path):
 
     package_type = package_type_from_manifest(manifest, source_path)
     output_type = SUPPORTED_PACKAGE_TYPES[package_type]
-    output_id = package_id_from_manifest(manifest, package_type, source_path)
-    version = version_label_from_manifest(
-        manifest, package_type, output_id, source_path
-    )
+    output_id = package_id_from_manifest(manifest, source_path)
+    version = "—"
     output_title = required_text(manifest, "title", source_path)
     surveillance_area = required_text(manifest, "surveillance_area", source_path)
     domain = required_text(manifest, "domain", source_path)
@@ -519,9 +469,8 @@ def rows_from_manifest(manifest, source_path):
         required_text(manifest, "release_date", source_path), source_path
     )
 
-    if package_type == "metric":
-        required_text(manifest, "release_id", source_path)
-        required_text(manifest, "metric_family", source_path)
+    required_text(manifest, "release_id", source_path)
+    required_text(manifest, "metric_family", source_path)
 
     rows = []
 
@@ -637,9 +586,7 @@ def build_catalogue():
     """Build the site-wide download catalogue."""
     print("BNR download catalogue builder")
     print(f"Site root:        {SITE_ROOT}")
-    print(f"Briefings folder: {BRIEFINGS_DIR}")
     print(f"Metrics folder:   {METRICS_DIR}")
-    print(f"Tabulations folder: {TABULATIONS_DIR}")
     print(f"Output file:      {OUTPUT_FILE}")
     print("")
 

@@ -60,4 +60,4 @@ A change in length of stay can reflect clinical need, pathways of care, discharg
 
 - [CVD case fatality](case-fatality.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
-- [Hospital length-of-stay briefing](../../surveillance/cvd/briefings/hospital-los.qmd)
+- [CVD reference tables](../../surveillance/cvd/tables/index.qmd)
