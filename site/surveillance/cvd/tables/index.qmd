@@ -1,0 +1,1847 @@
+---
+title: "Cardiovascular disease tables"
+subtitle: "Reference tables for cardiovascular disease events and mortality"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    page-layout: article
+    smooth-scroll: true
+execute:
+  echo: false
+---
+
+```{=html}
+<style>
+.bnr-table-intro {
+  margin: .25rem 0 1rem;
+  color: #44515a;
+  font-size: .96rem;
+  line-height: 1.45;
+}
+.bnr-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: .75rem;
+  margin: .55rem 0 1rem;
+}
+.bnr-source-card {
+  border: 1px solid #dfe6e9;
+  border-radius: .4rem;
+  background: #fff;
+  padding: .7rem .8rem;
+}
+.bnr-source-title {
+  color: #2c3e50;
+  font-weight: 700;
+  margin-bottom: .35rem;
+}
+.bnr-source-row {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: .25rem .55rem;
+  font-size: .9rem;
+  margin: .12rem 0;
+}
+.bnr-source-label {
+  color: #66737c;
+  font-weight: 600;
+}
+.bnr-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  margin: .55rem 0 .45rem;
+}
+.bnr-downloads a {
+  display: inline-block;
+  margin: 0 .55rem .65rem 0;
+  border: 1px solid #c7dce5;
+  border-radius: .3rem;
+  background: #eef6f8;
+  color: #045174;
+  padding: .38rem .62rem;
+  font-weight: 650;
+  text-decoration: none !important;
+}
+.bnr-downloads a:hover { background: #e3f0f4; }
+.bnr-dashboard-links {
+  display: flex;
+  flex-wrap: wrap;
+  margin: .2rem 0 .15rem;
+}
+.bnr-dashboard-links a {
+  display: inline-block;
+  margin: 0 .55rem .65rem 0;
+  border: 1px solid #c7dce5;
+  border-radius: .3rem;
+  background: #eef6f8;
+  color: #045174;
+  padding: .38rem .62rem;
+  font-weight: 650;
+  text-decoration: none !important;
+}
+.bnr-dashboard-links a:hover { background: #e3f0f4; }
+.bnr-table-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: .25rem 0 .35rem;
+}
+.bnr-table-group-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: .15rem 0 .4rem;
+}
+.bnr-table-download-all {
+  display: inline-block;
+  border: 1px solid #9fbfcd;
+  border-radius: .3rem;
+  background: #e7f2f6;
+  color: #045174;
+  padding: .32rem .58rem;
+  font-size: .84rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.bnr-table-download-all:hover { background: #dbeaf0; }
+.bnr-table-download {
+  display: inline-block;
+  border: 1px solid #c7dce5;
+  border-radius: .3rem;
+  background: #eef6f8;
+  color: #045174;
+  padding: .3rem .55rem;
+  font-size: .84rem;
+  font-weight: 650;
+  text-decoration: none !important;
+}
+.bnr-table-download:hover { background: #e3f0f4; }
+.observablehq--undefined { display: none !important; }
+.bnr-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: .45rem 0 .35rem;
+  border: 1px solid #e1e6e9;
+  border-radius: .35rem;
+}
+.bnr-reference-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  margin: 0;
+  font-size: .91rem;
+}
+.bnr-reference-table th,
+.bnr-reference-table td {
+  padding: .42rem .55rem;
+  border-bottom: 1px solid #e8ecef;
+  vertical-align: middle;
+}
+.bnr-reference-table thead th {
+  background: #f4f7f8;
+  color: #2c3e50;
+  font-weight: 700;
+  border-bottom: 2px solid #cad5da;
+  white-space: nowrap;
+}
+.bnr-reference-table tbody tr:last-child td { border-bottom: 0; }
+.bnr-reference-table tbody tr:hover td { background: #fafcfd; }
+.bnr-reference-table th:first-child,
+.bnr-reference-table td:first-child {
+  text-align: left;
+  font-weight: 650;
+}
+.bnr-reference-table .bnr-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.bnr-reference-table .bnr-incomplete-row td {
+  background: #fff8e8;
+}
+.bnr-reference-table .bnr-incomplete-row:hover td {
+  background: #fff4d6;
+}
+.bnr-table-note {
+  color: #5f6c74;
+  font-size: .84rem;
+  line-height: 1.4;
+  margin: .25rem 0 .8rem;
+}
+.bnr-table-note strong { color: #3f4c54; }
+.bnr-quality-value {
+  display: block;
+  width: 100%;
+  padding: .18rem .08rem;
+  border-radius: .22rem;
+  font-weight: 750;
+  line-height: 1.1;
+  cursor: help;
+  box-sizing: border-box;
+}
+.bnr-quality-low { background: #d6eddf; color: #235b42; }
+.bnr-quality-medium { background: #ffe7a8; color: #6b5600; }
+.bnr-quality-high { background: #f3c6cc; color: #842029; }
+.bnr-quality-unavailable { color: #b7bec3; }
+.bnr-quality-key {
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+  margin: .25rem 0 .45rem;
+  font-size: .84rem;
+  color: #555;
+}
+.bnr-quality-key-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+}
+.bnr-quality-swatch {
+  width: .9rem;
+  height: .9rem;
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: .18rem;
+  display: inline-block;
+}
+.bnr-quality-swatch-low { background: #d6eddf; }
+.bnr-quality-swatch-medium { background: #ffe7a8; }
+.bnr-quality-swatch-high { background: #f3c6cc; }
+.bnr-year-toggle-row td {
+  padding: .34rem .5rem;
+  background: #f6f8f9;
+  border-top: 1px solid #e1e7ea;
+  border-bottom: 1px solid #e1e7ea;
+}
+.bnr-year-toggle-row.bnr-year-open td { background: #edf2f4; }
+.bnr-year-toggle-row:hover td { background: #eef3f5 !important; }
+.bnr-year-toggle {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #2c3e50;
+  padding: .08rem 0;
+  text-align: left;
+  font-weight: 750;
+  cursor: pointer;
+}
+.bnr-year-toggle:focus-visible {
+  outline: 2px solid #045174;
+  outline-offset: 2px;
+}
+.bnr-definition-note {
+  border-left: 4px solid #045174;
+  background: #f7f9fa;
+  padding: .55rem .7rem;
+  margin: .6rem 0 .9rem;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+.bnr-missing { color: #8b959b; }
+@media (max-width: 700px) {
+  .bnr-source-grid { grid-template-columns: 1fr; }
+  .bnr-source-row { grid-template-columns: 92px 1fr; }
+  .bnr-downloads a,
+  .bnr-dashboard-links a { margin-bottom: .8rem; }
+}
+</style>
+```
+
+## About the tables
+
+These tables provide a single reference point for **cardiovascular disease (CVD) statistics in Barbados**. They bring together annual, quarterly and monthly counts of registered CVD events and CVD deaths, together with distributions, population rates and two simple indicators that help explain how the national estimates are constructed.
+
+The tables update when new approved event or mortality data are released. Event and mortality releases may cover different periods, so the latest period available can differ between sections. Where a period is incomplete, it is clearly identified rather than treated as a complete year, quarter or month.
+
+Use the tabs within each table to move between CVD groups or definitions. Every tab has its own **Download table** button, and tables with several tabs also have a **Download all tabs** button that saves the whole tab set as one CSV file. Quarterly and monthly tables are grouped under collapsible year headings rather than adding another layer of year tabs; the two most recent years are open by default.
+
+<!-- ====================================================================== -->
+<!-- DATA INPUT: approved public CVD event metrics                            -->
+<!-- All event tables below are derived from this already-approved public CSV. -->
+<!-- ====================================================================== -->
+
+```{ojs}
+//| output: false
+// DATA INPUT: approved public CVD event metrics.
+eventMetrics = FileAttachment("../../../downloads/files/metrics/cvd/cvd_metrics_current.csv")
+  .csv({typed: true})
+```
+
+<!-- ====================================================================== -->
+<!-- DATA INPUT: approved fixed CVD monthly reference (2015-2019)           -->
+<!-- All CVD, both sexes, hospital-only; min/mean/max by calendar month.   -->
+<!-- ====================================================================== -->
+
+```{ojs}
+//| output: false
+// DATA INPUT: approved fixed 2015-2019 CVD event monthly reference.
+eventMonthlyReference = FileAttachment("../../../downloads/files/metrics/cvd/cvd_monthly_reference_2015_2019.csv")
+  .csv({typed: true})
+```
+
+<!-- ====================================================================== -->
+<!-- DATA INPUT: approved public CVD mortality metrics                        -->
+<!-- All mortality tables below are derived from this approved public CSV.    -->
+<!-- ====================================================================== -->
+
+```{ojs}
+//| output: false
+// DATA INPUT: approved public CVD mortality metrics.
+mortalityMetrics = FileAttachment("../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv")
+  .csv({typed: true})
+```
+
+<!-- ====================================================================== -->
+<!-- DATA INPUT: approved fixed mortality monthly reference (2015-2019)     -->
+<!-- Used only where that reference asset actually supports a table cell.    -->
+<!-- ====================================================================== -->
+
+```{ojs}
+//| output: false
+// DATA INPUT: approved fixed 2015-2019 mortality monthly reference.
+mortalityMonthlyReference = FileAttachment("../../../downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv")
+  .csv({typed: true})
+```
+
+```{ojs}
+//| output: false
+schemaCheck = {
+  const requiredEvent = [
+    "metric_id", "release_id", "period_type", "period_year", "period_month", "period_quarter", "period_complete",
+    "event_type", "sex", "age_group", "source_status", "ascertainment_scope",
+    "mortality_definition", "estimate_basis", "statistic", "value", "display_value",
+    "ci_lower_value", "ci_upper_value", "suppression_status"
+  ];
+  const requiredMortality = [
+    "metric_id", "release_id", "period_type", "period_year", "period_month", "period_quarter", "period_complete",
+    "event_type", "sex", "age_group", "case_definition", "source_status",
+    "statistic", "value", "display_value", "ci_lower_value", "ci_upper_value",
+    "suppression_status"
+  ];
+
+  function requireColumns(data, columns, label) {
+    if (!data.length) throw new Error(`${label}: public dataset is empty.`);
+    const available = new Set(Object.keys(data[0]));
+    const missing = columns.filter(d => !available.has(d));
+    if (missing.length) throw new Error(`${label}: missing required columns: ${missing.join(", ")}`);
+  }
+
+  function requireMetrics(data, ids, label) {
+    const available = new Set(data.map(d => d.metric_id));
+    const missing = ids.filter(d => !available.has(d));
+    if (missing.length) throw new Error(`${label}: missing required metric families: ${missing.join(", ")}`);
+  }
+
+  requireColumns(eventMetrics, requiredEvent, "CVD event tables");
+  requireColumns(eventMonthlyReference, [
+    "schema_version", "ascertainment_scope", "event_type", "sex", "age_group", "period_month",
+    "reference_start_year", "reference_end_year", "reference_min", "reference_mean", "reference_max"
+  ], "CVD event monthly reference");
+  requireColumns(mortalityMetrics, requiredMortality, "CVD mortality tables");
+  requireColumns(mortalityMonthlyReference, [
+    "case_definition", "event_type", "sex", "age_group", "period_month",
+    "reference_start_year", "reference_end_year", "reference_n",
+    "reference_min", "reference_mean", "reference_max"
+  ], "CVD mortality monthly reference");
+  requireMetrics(eventMetrics, ["CVD-BURDEN-001", "CVD-BURDEN-002", "CVD-INCIDENCE-001"], "CVD event tables");
+  requireMetrics(mortalityMetrics, ["MORT-BURDEN-001", "MORT-BURDEN-002", "MORT-RATE-001"], "CVD mortality tables");
+  return true;
+}
+```
+
+```{ojs}
+//| output: false
+// SHARED TABLE HELPERS
+// These helpers format already-published values and construct HTML tables.
+// The only calculations performed here are the two explicitly approved
+// dashboard-aligned quality indicators defined later in eventViews/mortalityViews.
+tableUtils = {
+  const missingValues = new Set(["", ".", "NA", "N/A", "null", "undefined"]);
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  function isMissing(value) {
+    return value === null || value === undefined || missingValues.has(String(value).trim());
+  }
+
+  function isSuppressed(row) {
+    if (!row) return false;
+    const status = String(row.suppression_status ?? "none").trim().toLowerCase();
+    return status !== "" && status !== "none" && status !== "not_applicable";
+  }
+
+  function publishedDisplay(row, digits = 1, integer = false) {
+    if (!row) return "—";
+    if (isSuppressed(row)) {
+      if (!isMissing(row.display_value)) return String(row.display_value);
+      return "Suppressed";
+    }
+    if (isMissing(row.display_value)) return "—";
+    const value = Number(row.display_value);
+    if (!Number.isFinite(value)) return String(row.display_value);
+    if (integer) return Math.round(value).toLocaleString("en-GB");
+    return value.toFixed(digits);
+  }
+
+  function rateWithCI(row) {
+    if (!row) return "—";
+    const estimate = publishedDisplay(row, 1, false);
+    if (estimate === "—" || estimate === "Suppressed" || isSuppressed(row)) return estimate;
+    if (isMissing(row.ci_lower_value) || isMissing(row.ci_upper_value)) return estimate;
+    const lower = Number(row.ci_lower_value);
+    const upper = Number(row.ci_upper_value);
+    if (!Number.isFinite(lower) || !Number.isFinite(upper)) return estimate;
+    return `${estimate} (${lower.toFixed(1)}–${upper.toFixed(1)})`;
+  }
+
+  function percent(row) {
+    const value = publishedDisplay(row, 1, false);
+    if (value === "—" || value === "Suppressed" || isSuppressed(row)) return value;
+    return `${value}%`;
+  }
+
+  // Display a current count followed by its matching previous-five-year mean.
+  // The comparator is already published upstream; this helper does not calculate it.
+  function countWithComparator(countRow, comparatorRow, integer = true) {
+    const count = publishedDisplay(countRow, 0, integer);
+    if (count === "—" || count === "Suppressed" || isSuppressed(countRow)) return count;
+    const comparator = publishedDisplay(comparatorRow, 1, false);
+    if (comparator === "—") return count;
+    return `${count} (${comparator})`;
+  }
+
+  // Format a value taken directly from an approved fixed reference asset.
+  // No reference statistic is calculated in the publication layer.
+  function referenceDisplay(value, digits = 1, integer = false) {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "—";
+    if (integer) return Math.round(number).toLocaleString("en-GB");
+    return number.toFixed(digits);
+  }
+
+  function exact(data, where, label = "table cell") {
+    const matches = data.filter(row =>
+      Object.entries(where).every(([key, value]) => row[key] === value)
+    );
+    if (matches.length > 1) {
+      throw new Error(`${label}: expected at most one published row but found ${matches.length}.`);
+    }
+    return matches.length === 1 ? matches[0] : null;
+  }
+
+  function uniqueYears(rows) {
+    return [...new Set(rows.map(d => Number(d.period_year)).filter(Number.isFinite))]
+      .sort((a, b) => a - b);
+  }
+
+  function yearLabel(year, rows) {
+    const incomplete = rows.some(d => Number(d.period_year) === Number(year) && Number(d.period_complete) === 0);
+    return incomplete ? `${year} YTD` : String(year);
+  }
+
+  function periodLabel(row, periodType) {
+    const year = Number(row.period_year);
+    if (periodType === "quarterly") {
+      const quarter = Number(row.period_quarter);
+      return `${year} Q${quarter}${Number(row.period_complete) === 0 ? " (incomplete)" : ""}`;
+    }
+    if (periodType === "monthly") {
+      const month = Number(row.period_month);
+      const monthLabel = month >= 1 && month <= 12 ? monthNames[month - 1] : `M${month}`;
+      return `${year} ${monthLabel}${Number(row.period_complete) === 0 ? " (incomplete)" : ""}`;
+    }
+    return yearLabel(year, [row]);
+  }
+
+  function periodKeys(rows, periodType) {
+    const countRows = rows.filter(d => d.statistic === (periodType === "quarterly" ? "quarterly_count" : "monthly_count"));
+    const seen = new Map();
+    countRows.forEach(row => {
+      const key = periodType === "quarterly"
+        ? `${Number(row.period_year)}|${Number(row.period_quarter)}`
+        : `${Number(row.period_year)}|${Number(row.period_month)}`;
+      if (!seen.has(key)) seen.set(key, row);
+    });
+    return [...seen.values()].sort((a, b) => {
+      const y = Number(a.period_year) - Number(b.period_year);
+      if (y !== 0) return y;
+      return periodType === "quarterly"
+        ? Number(a.period_quarter) - Number(b.period_quarter)
+        : Number(a.period_month) - Number(b.period_month);
+    });
+  }
+
+  function makeTable(columns, rows, options = {}) {
+    const container = document.createElement("div");
+
+    const cellText = value => {
+      if (value && typeof value === "object" && "text" in value) return value.text;
+      return value === null || value === undefined || value === "" ? "—" : String(value);
+    };
+
+    if (options.downloadName) {
+      const actions = document.createElement("div");
+      actions.className = "bnr-table-actions";
+      const download = document.createElement("a");
+      download.className = "bnr-table-download";
+      download.textContent = "Download table";
+      download.setAttribute("download", options.downloadName);
+
+      const escapeCsv = value => {
+        const text = value === null || value === undefined ? "" : String(value);
+        return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+      };
+      const csvRows = [
+        columns.map(column => escapeCsv(column.label)).join(","),
+        ...rows.map(row => columns.map(column => escapeCsv(cellText(row[column.key]))).join(","))
+      ];
+      const blob = new Blob(["\ufeff" + csvRows.join("\n")], {type: "text/csv;charset=utf-8"});
+      download.href = URL.createObjectURL(blob);
+      actions.appendChild(download);
+      container.appendChild(actions);
+    }
+
+    const wrap = document.createElement("div");
+    wrap.className = "bnr-table-wrap";
+    const table = document.createElement("table");
+    table.className = "bnr-reference-table";
+    if (options.ariaLabel) table.setAttribute("aria-label", options.ariaLabel);
+    if (options.downloadGroup) table.dataset.downloadGroup = options.downloadGroup;
+    if (options.downloadTab) table.dataset.downloadTab = options.downloadTab;
+
+    const thead = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    columns.forEach(column => {
+      const th = document.createElement("th");
+      th.textContent = column.label;
+      if (column.numeric) th.classList.add("bnr-num");
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+
+    function appendDataRow(row, hidden = false) {
+      const tr = document.createElement("tr");
+      if (row._incomplete) tr.classList.add("bnr-incomplete-row");
+      if (hidden) tr.hidden = true;
+      columns.forEach(column => {
+        const td = document.createElement("td");
+        const value = row[column.key];
+        const display = cellText(value);
+        if (value && typeof value === "object" && "text" in value) {
+          const span = document.createElement("span");
+          span.textContent = display;
+          if (value.className) span.className = value.className;
+          if (value.title) span.title = value.title;
+          td.appendChild(span);
+        } else {
+          td.textContent = display;
+        }
+        if (column.numeric) td.classList.add("bnr-num");
+        if (display === "—") td.classList.add("bnr-missing");
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+      return tr;
+    }
+
+    if (options.collapseByYear) {
+      const years = [...new Set(rows.map(row => Number(row._year)).filter(Number.isFinite))]
+        .sort((a, b) => a - b);
+      // Open the two most recent years by default. This keeps recent periods
+      // visible while older years remain compact and easy to expand.
+      const defaultOpenYears = new Set(years.slice(-2));
+
+      years.forEach(year => {
+        const yearRows = rows.filter(row => Number(row._year) === year);
+        const toggleRow = document.createElement("tr");
+        toggleRow.className = "bnr-year-toggle-row";
+        const toggleCell = document.createElement("td");
+        toggleCell.colSpan = columns.length;
+        const toggle = document.createElement("button");
+        toggle.type = "button";
+        toggle.className = "bnr-year-toggle";
+        const renderedRows = [];
+        let expanded = defaultOpenYears.has(year);
+
+        function updateToggle() {
+          toggle.textContent = `${expanded ? "▾" : "▸"} ${year}`;
+          toggle.setAttribute("aria-expanded", String(expanded));
+          toggleRow.classList.toggle("bnr-year-open", expanded);
+          renderedRows.forEach(tr => { tr.hidden = !expanded; });
+        }
+
+        toggle.addEventListener("click", () => {
+          expanded = !expanded;
+          updateToggle();
+        });
+        toggleCell.appendChild(toggle);
+        toggleRow.appendChild(toggleCell);
+        tbody.appendChild(toggleRow);
+        yearRows.forEach(row => renderedRows.push(appendDataRow(row, !expanded)));
+        updateToggle();
+      });
+    } else {
+      rows.forEach(row => appendDataRow(row));
+    }
+
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    container.appendChild(wrap);
+    return container;
+  }
+
+  // One-click download for a complete panel-tabset. The result is a single
+  // long-format CSV (Tab, Row, Measure, Value), so it also works when tabs have
+  // different column headings. This avoids a ZIP-library dependency.
+  function makeDownloadAllButton(group, downloadName) {
+    const actions = document.createElement("div");
+    actions.className = "bnr-table-group-actions";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "bnr-table-download-all";
+    button.textContent = "Download all tabs (CSV)";
+
+    button.addEventListener("click", () => {
+      const selector = `table.bnr-reference-table[data-download-group="${group}"]`;
+      const tables = [...document.querySelectorAll(selector)];
+      if (!tables.length) {
+        window.alert("The tab tables are not available yet. Please try again after the page has finished loading.");
+        return;
+      }
+
+      const escapeCsv = value => {
+        const text = value === null || value === undefined ? "" : String(value);
+        return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
+      };
+      const records = [["Tab", "Row", "Measure", "Value"]];
+      tables.forEach(table => {
+        const tab = table.dataset.downloadTab || table.getAttribute("aria-label") || "Table";
+        const headers = [...table.querySelectorAll("thead th")].map(th => th.textContent.trim());
+        [...table.querySelectorAll("tbody tr:not(.bnr-year-toggle-row)")].forEach(tr => {
+          const cells = [...tr.querySelectorAll("td")].map(td => td.textContent.trim());
+          const rowLabel = cells[0] ?? "";
+          for (let i = 1; i < cells.length; i++) {
+            records.push([tab, rowLabel, headers[i] ?? `Column ${i + 1}`, cells[i] ?? ""]);
+          }
+        });
+      });
+
+      const csv = records.map(record => record.map(escapeCsv).join(",")).join("\n");
+      const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8"});
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = downloadName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    });
+
+    actions.appendChild(button);
+    return actions;
+  }
+
+  function releaseId(data) {
+    const ids = [...new Set(data.map(d => d.release_id).filter(d => !isMissing(d)))];
+    if (ids.length !== 1) throw new Error(`Expected one release_id in current public dataset; found ${ids.length}.`);
+    return ids[0];
+  }
+
+  function coverageText(rows) {
+    const years = uniqueYears(rows);
+    if (!years.length) return "Not available";
+    const first = years[0];
+    const last = years[years.length - 1];
+    const incomplete = rows.some(d => Number(d.period_year) === last && Number(d.period_complete) === 0);
+    return incomplete ? `${first}–${last} (${last} YTD)` : `${first}–${last}`;
+  }
+
+  // Helpers used only by the two dashboard-aligned quality calculations.
+  function completeSafeNumber(row) {
+    if (!row || Number(row.period_complete) !== 1 || isSuppressed(row) || isMissing(row.value)) return null;
+    const value = Number(row.value);
+    return Number.isFinite(value) ? value : null;
+  }
+
+  function qualityCell(share, thresholds, title) {
+    if (!Number.isFinite(share)) return {text: "—", className: "bnr-quality-unavailable"};
+    const rounded = Math.round(share);
+    const level = rounded < thresholds.lowMax ? "low" : rounded < thresholds.mediumMax ? "medium" : "high";
+    return {text: `${rounded}%`, className: `bnr-quality-value bnr-quality-${level}`, title};
+  }
+
+  function sourceCard(title, release, countCoverage, rateCoverage) {
+    const card = document.createElement("div");
+    card.className = "bnr-source-card";
+    const heading = document.createElement("div");
+    heading.className = "bnr-source-title";
+    heading.textContent = title;
+    card.appendChild(heading);
+    [["Release", release], ["Counts / %", countCoverage], ["Annual rates", rateCoverage]].forEach(([label, value]) => {
+      const row = document.createElement("div");
+      row.className = "bnr-source-row";
+      const l = document.createElement("div");
+      l.className = "bnr-source-label";
+      l.textContent = label;
+      const v = document.createElement("div");
+      v.textContent = value;
+      row.append(l, v);
+      card.appendChild(row);
+    });
+    return card;
+  }
+
+  return {
+    exact,
+    uniqueYears,
+    yearLabel,
+    periodLabel,
+    periodKeys,
+    publishedDisplay,
+    rateWithCI,
+    percent,
+    countWithComparator,
+    referenceDisplay,
+    makeTable,
+    makeDownloadAllButton,
+    releaseId,
+    coverageText,
+    completeSafeNumber,
+    qualityCell,
+    sourceCard
+  };
+}
+```
+
+```{ojs}
+//| output: false
+// EVENT TABLE DEFINITIONS (E1-E8)
+// E1 annual hospital-only counts
+// E2 annual national hospital + DCO counts
+// E3 quarterly hospital-only counts + published rolling 5-year comparator
+// E4 monthly All-CVD hospital-only counts + fixed 2015-2019 min/mean/max reference
+// E5 distributions
+// E6 crude national event rates
+// E7 age-standardised national event rates
+// E8 DCO-dependence quality table
+eventViews = {
+  const definitions = {primary: "primary", inclusive: "inclusive"};
+  const sexes = [["all", "both"], ["female", "women"], ["male", "men"]];
+
+  const hospitalRows = eventMetrics.filter(d =>
+    d.source_status === "hospital_registered" &&
+    d.ascertainment_scope === "hospital_only" &&
+    d.mortality_definition === "not_applicable" &&
+    d.estimate_basis === "observed"
+  );
+
+  const annualHospitalCounts = hospitalRows.filter(d =>
+    d.metric_id === "CVD-BURDEN-001" && d.period_type === "annual" &&
+    d.statistic === "annual_count" && d.age_group === "all"
+  );
+
+  const distributionRows = hospitalRows.filter(d =>
+    d.metric_id === "CVD-BURDEN-002" && d.period_type === "annual"
+  );
+
+  const nationalAnnualCounts = eventMetrics.filter(d =>
+    d.metric_id === "CVD-BURDEN-001" && d.period_type === "annual" &&
+    d.statistic === "annual_count" && d.age_group === "all" && d.sex === "all" &&
+    d.source_status === "national_estimate" && d.ascertainment_scope === "hospital_plus_dco" &&
+    d.estimate_basis === "estimated"
+  );
+
+  const nationalRateRows = eventMetrics.filter(d =>
+    d.metric_id === "CVD-INCIDENCE-001" && d.period_type === "annual" &&
+    d.source_status === "national_estimate" && d.ascertainment_scope === "hospital_plus_dco" &&
+    d.estimate_basis === "estimated"
+  );
+
+  // TABLE E1: Annual hospital-recorded event counts (hospital only).
+  function annualHospitalCountTable(eventType) {
+    const source = annualHospitalCounts.filter(d => d.event_type === eventType);
+    const years = tableUtils.uniqueYears(source);
+    const rows = years.map(year => {
+      const row = {
+        year: tableUtils.yearLabel(year, source),
+        _incomplete: source.some(d => Number(d.period_year) === year && Number(d.period_complete) === 0)
+      };
+      sexes.forEach(([sex, key]) => {
+        row[key] = tableUtils.publishedDisplay(
+          tableUtils.exact(source, {period_year: year, sex}, `annual hospital event count: ${eventType}, ${sex}`),
+          0, true
+        );
+      });
+      return row;
+    });
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "both", label: "Both sexes", numeric: true},
+      {key: "women", label: "Women", numeric: true},
+      {key: "men", label: "Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${eventType} annual hospital-only event counts`,
+      downloadName: `cvd_event_annual_hospital_only_${eventType}.csv`,
+      downloadGroup: "event-annual-hospital",
+      downloadTab: eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke"
+    });
+  }
+
+  // TABLE E2: Annual national event estimates including hospital + DCO events.
+  // The two tabs are the approved Primary and Inclusive national estimates.
+  function annualNationalCountTable(definitionKey) {
+    const definition = definitions[definitionKey];
+    if (!definition) throw new Error(`Unknown event definition: ${definitionKey}`);
+    const source = nationalAnnualCounts.filter(d => d.mortality_definition === definition);
+    const years = tableUtils.uniqueYears(source);
+    const eventTypes = [["all_cvd", "All CVD"], ["heart", "Heart"], ["stroke", "Stroke"]];
+    const rows = years.map(year => {
+      const row = {
+        year: tableUtils.yearLabel(year, source),
+        _incomplete: source.some(d => Number(d.period_year) === year && Number(d.period_complete) === 0)
+      };
+      eventTypes.forEach(([eventType]) => {
+        row[eventType] = tableUtils.publishedDisplay(
+          tableUtils.exact(source, {period_year: year, event_type: eventType}, `annual national event count: ${definitionKey}, ${eventType}`),
+          1, false
+        );
+      });
+      return row;
+    });
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "all_cvd", label: "All CVD", numeric: true},
+      {key: "heart", label: "Heart", numeric: true},
+      {key: "stroke", label: "Stroke", numeric: true}
+    ], rows, {
+      ariaLabel: `Annual national event estimates, hospital plus DCO, ${definitionKey}`,
+      downloadName: `cvd_event_annual_national_hospital_plus_dco_${definitionKey}.csv`,
+      downloadGroup: "event-annual-national",
+      downloadTab: definitionKey === "primary" ? "Primary" : "Inclusive"
+    });
+  }
+
+  // TABLE E3: Quarterly hospital counts with the matching published rolling
+  // previous-five-year mean in brackets. No comparator is calculated here.
+  function periodHospitalCountTable(eventType, periodType) {
+    if (periodType !== "quarterly") {
+      throw new Error("periodHospitalCountTable is restricted to quarterly event tables.");
+    }
+    const countStatistic = "quarterly_count";
+    const comparatorStatistic = "quarterly_same_quarter_previous_5yr_mean";
+
+    const source = hospitalRows.filter(d =>
+      d.metric_id === "CVD-BURDEN-001" && d.period_type === "quarterly" &&
+      d.event_type === eventType && d.age_group === "all" &&
+      [countStatistic, comparatorStatistic].includes(d.statistic)
+    );
+    const periods = tableUtils.periodKeys(source, "quarterly");
+
+    const rows = periods.map(period => {
+      const keyWhere = {period_year: period.period_year, period_quarter: period.period_quarter};
+      const row = {
+        period: tableUtils.periodLabel(period, "quarterly"),
+        _year: Number(period.period_year),
+        _incomplete: Number(period.period_complete) === 0
+      };
+      sexes.forEach(([sex, key]) => {
+        const count = tableUtils.exact(source, {...keyWhere, sex, statistic: countStatistic}, `quarterly event count: ${eventType}, ${sex}`);
+        const comparator = tableUtils.exact(source, {...keyWhere, sex, statistic: comparatorStatistic}, `quarterly event comparator: ${eventType}, ${sex}`);
+        row[key] = tableUtils.countWithComparator(count, comparator, true);
+      });
+      return row;
+    });
+
+    const label = eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke";
+    return tableUtils.makeTable([
+      {key: "period", label: "Quarter"},
+      {key: "both", label: "Both sexes", numeric: true},
+      {key: "women", label: "Women", numeric: true},
+      {key: "men", label: "Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${label} quarterly hospital-only event counts with five-year comparator`,
+      downloadName: `cvd_event_quarterly_hospital_only_${eventType}.csv`,
+      downloadGroup: "event-quarterly-hospital",
+      downloadTab: label,
+      collapseByYear: true
+    });
+  }
+
+  // TABLE E4: Monthly public event lattice. The approved workflow deliberately
+  // publishes only All CVD, both sexes, all ages at monthly resolution.
+  // The fixed 2015-2019 monthly reference is also already approved upstream.
+  function monthlyHospitalCountTable() {
+    const source = hospitalRows.filter(d =>
+      d.metric_id === "CVD-BURDEN-001" && d.period_type === "monthly" &&
+      d.statistic === "monthly_count" && d.event_type === "all_cvd" &&
+      d.sex === "all" && d.age_group === "all"
+    );
+    const periods = tableUtils.periodKeys(source, "monthly");
+
+    const rows = periods.map(period => {
+      const count = tableUtils.exact(source, {
+        period_year: period.period_year,
+        period_month: period.period_month,
+        sex: "all",
+        statistic: "monthly_count"
+      }, `monthly event count: ${period.period_year}-${period.period_month}`);
+      const reference = tableUtils.exact(eventMonthlyReference, {
+        ascertainment_scope: "hospital_only",
+        event_type: "all_cvd",
+        sex: "all",
+        age_group: "all",
+        period_month: Number(period.period_month)
+      }, `event monthly 2015-2019 reference: month ${period.period_month}`);
+
+      return {
+        period: tableUtils.periodLabel(period, "monthly"),
+        count: tableUtils.publishedDisplay(count, 0, true),
+        reference_min: tableUtils.referenceDisplay(reference?.reference_min, 0, true),
+        reference_mean: tableUtils.referenceDisplay(reference?.reference_mean, 1, false),
+        reference_max: tableUtils.referenceDisplay(reference?.reference_max, 0, true),
+        _year: Number(period.period_year),
+        _incomplete: Number(period.period_complete) === 0
+      };
+    });
+
+    return tableUtils.makeTable([
+      {key: "period", label: "Month"},
+      {key: "count", label: "All CVD, both sexes", numeric: true},
+      {key: "reference_min", label: "2015-2019 min", numeric: true},
+      {key: "reference_mean", label: "2015-2019 average", numeric: true},
+      {key: "reference_max", label: "2015-2019 max", numeric: true}
+    ], rows, {
+      ariaLabel: "Monthly All CVD hospital-only event counts with fixed 2015-2019 reference",
+      downloadName: "cvd_event_monthly_hospital_only_all_cvd.csv",
+      collapseByYear: true
+    });
+  }
+
+  // TABLE E5: Distribution of hospital-recorded CVD events.
+  function distributionTable(kind) {
+    let specification;
+    if (kind === "event_type") {
+      specification = {statistic: "event_type_distribution", columns: [["heart", "Heart"], ["stroke", "Stroke"]], where: {sex: "all", age_group: "all"}, dimension: "event_type"};
+    } else if (kind === "age") {
+      specification = {statistic: "age_distribution", columns: [["under_70", "Under 70"], ["age_70_plus", "70 and over"]], where: {event_type: "all_cvd", sex: "all"}, dimension: "age_group"};
+    } else {
+      specification = {statistic: "sex_distribution", columns: [["female", "Women"], ["male", "Men"]], where: {event_type: "all_cvd", age_group: "all"}, dimension: "sex"};
+    }
+    const source = distributionRows.filter(d =>
+      d.statistic === specification.statistic &&
+      Object.entries(specification.where).every(([key, value]) => d[key] === value)
+    );
+    const years = tableUtils.uniqueYears(source);
+    const rows = years.map(year => {
+      const row = {year: tableUtils.yearLabel(year, source), _incomplete: source.some(d => Number(d.period_year) === year && Number(d.period_complete) === 0)};
+      specification.columns.forEach(([value, label], index) => {
+        const match = tableUtils.exact(source, {period_year: year, [specification.dimension]: value}, `event distribution: ${label}`);
+        row[`v${index}`] = tableUtils.percent(match);
+      });
+      return row;
+    });
+    const tabLabel = kind === "event_type" ? "Event type" : kind === "age" ? "Age" : "Sex";
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      ...specification.columns.map(([, label], index) => ({key: `v${index}`, label, numeric: true}))
+    ], rows, {
+      ariaLabel: `CVD event ${kind} distribution`,
+      downloadName: `cvd_event_distribution_${kind}.csv`,
+      downloadGroup: "event-distribution",
+      downloadTab: tabLabel
+    });
+  }
+
+  // TABLES E6-E7: National event rates including hospital + DCO estimates.
+  // Tabs select event type and Primary/Inclusive definition; columns remain sex only.
+  function rateTable(eventType, rateType, definitionKey) {
+    const definition = definitions[definitionKey];
+    if (!definition) throw new Error(`Unknown event definition: ${definitionKey}`);
+    const source = nationalRateRows.filter(d => d.event_type === eventType && d.mortality_definition === definition);
+    const years = tableUtils.uniqueYears(source);
+    const ageGroup = rateType === "crude" ? "all" : "age_standardised";
+    const statistic = rateType === "crude" ? "annual_crude_rate" : "annual_age_standardised_rate";
+    const rows = years.map(year => {
+      const row = {year: String(year), _incomplete: false};
+      sexes.forEach(([sex, key]) => {
+        row[key] = tableUtils.rateWithCI(tableUtils.exact(source, {period_year: year, sex, age_group: ageGroup, statistic}, `event ${rateType} national rate: ${definitionKey}, ${sex}`));
+      });
+      return row;
+    });
+    const eventLabel = eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke";
+    const definitionLabel = definitionKey === "primary" ? "Primary" : "Inclusive";
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "both", label: "Both sexes", numeric: true},
+      {key: "women", label: "Women", numeric: true},
+      {key: "men", label: "Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${eventLabel} annual ${rateType} national event rates, ${definitionLabel}`,
+      downloadName: `cvd_event_${rateType}_national_rates_${eventType}_${definitionKey}.csv`,
+      downloadGroup: `event-rate-${rateType}`,
+      downloadTab: `${eventLabel} - ${definitionLabel}`
+    });
+  }
+
+  // TABLE E8: How much does the national event estimate rely on DCO events?
+  // Approved dashboard-aligned calculation:
+  //   DCO share = 100 * additional DCO / Primary hospital + DCO estimate.
+  function dcoQualityTable() {
+    const source = eventMetrics.filter(d =>
+      d.metric_id === "CVD-BURDEN-001" && d.period_type === "annual" &&
+      d.statistic === "annual_count" && d.sex === "all" && d.age_group === "all"
+    );
+    const eventTypes = [["all_cvd", "All CVD"], ["heart", "Heart"], ["stroke", "Stroke"]];
+    const years = tableUtils.uniqueYears(source);
+    const thresholds = {lowMax: 10, mediumMax: 15};
+    const rows = years.map(year => {
+      const row = {year: String(year), _incomplete: false};
+      eventTypes.forEach(([eventType, label]) => {
+        const dcoRow = tableUtils.exact(source, {period_year: year, event_type: eventType, ascertainment_scope: "additional_dco", mortality_definition: "primary"}, `DCO dependence: ${eventType}, additional DCO`);
+        const totalRow = tableUtils.exact(source, {period_year: year, event_type: eventType, ascertainment_scope: "hospital_plus_dco", mortality_definition: "primary"}, `DCO dependence: ${eventType}, hospital plus DCO`);
+        const hospitalRow = tableUtils.exact(source, {period_year: year, event_type: eventType, ascertainment_scope: "hospital_only", mortality_definition: "not_applicable"}, `DCO dependence: ${eventType}, hospital only`);
+        const dco = tableUtils.completeSafeNumber(dcoRow);
+        const total = tableUtils.completeSafeNumber(totalRow);
+        const hospital = tableUtils.completeSafeNumber(hospitalRow);
+        if (dco === null || total === null || hospital === null || total <= 0 || dco < 0) {
+          row[eventType] = {text: "—", className: "bnr-quality-unavailable"};
+          return;
+        }
+        const share = 100 * dco / total;
+        row[eventType] = tableUtils.qualityCell(share, thresholds, `${label}, ${year}: DCO ${dco.toFixed(1)}; hospital ${hospital.toFixed(1)}; Primary hospital + DCO estimate ${total.toFixed(1)}.`);
+      });
+      return row;
+    }).filter(row => eventTypes.some(([eventType]) => row[eventType]?.text !== "—"));
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "all_cvd", label: "All CVD", numeric: true},
+      {key: "heart", label: "Heart", numeric: true},
+      {key: "stroke", label: "Stroke", numeric: true}
+    ], rows, {
+      ariaLabel: "DCO events as a percentage of the Primary national event estimate",
+      downloadName: "cvd_event_dco_dependence.csv"
+    });
+  }
+
+  return {
+    annualHospitalCountTable,
+    annualNationalCountTable,
+    periodHospitalCountTable,
+    monthlyHospitalCountTable,
+    distributionTable,
+    rateTable,
+    dcoQualityTable,
+    release: tableUtils.releaseId(eventMetrics),
+    countCoverage: tableUtils.coverageText(annualHospitalCounts),
+    rateCoverage: tableUtils.coverageText(nationalRateRows)
+  };
+}
+```
+
+```{ojs}
+//| output: false
+// MORTALITY TABLE DEFINITIONS (M1-M7)
+// M1 annual death counts
+// M2 quarterly death counts + published rolling 5-year comparator
+// M3 monthly All-CVD death counts + fixed 2015-2019 min/mean/max reference
+// M4 distributions
+// M5 crude mortality rates
+// M6 age-standardised mortality rates
+// M7 Possible-death dependence quality table
+mortalityViews = {
+  const definitions = {primary: "primary_clear_likely", inclusive: "upper_clear_likely_possible"};
+  const sexes = [["all", "both"], ["female", "women"], ["male", "men"]];
+  const publicRows = mortalityMetrics.filter(d => d.source_status === "death_certificate");
+  const publicAnnual = publicRows.filter(d => d.period_type === "annual");
+  const countRows = publicAnnual.filter(d => d.metric_id === "MORT-BURDEN-001" && d.statistic === "annual_count" && d.age_group === "all");
+  const distributionRows = publicAnnual.filter(d => d.metric_id === "MORT-BURDEN-002");
+  const rateRows = publicAnnual.filter(d => d.metric_id === "MORT-RATE-001");
+
+  // TABLE M1: Annual CVD death counts.
+  function countTable(eventType) {
+    const source = countRows.filter(d => d.event_type === eventType);
+    const years = tableUtils.uniqueYears(source);
+    const rows = years.map(year => {
+      const row = {year: tableUtils.yearLabel(year, source), _incomplete: source.some(d => Number(d.period_year) === year && Number(d.period_complete) === 0)};
+      Object.entries(definitions).forEach(([definitionKey, definitionValue]) => {
+        sexes.forEach(([sex, sexKey]) => {
+          const match = tableUtils.exact(source, {period_year: year, case_definition: definitionValue, sex}, `mortality count: ${definitionKey}, ${sex}`);
+          row[`${definitionKey}_${sexKey}`] = tableUtils.publishedDisplay(match, 0, true);
+        });
+      });
+      return row;
+    });
+    const eventLabel = eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke";
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "primary_both", label: "Primary: Both sexes", numeric: true},
+      {key: "primary_women", label: "Primary: Women", numeric: true},
+      {key: "primary_men", label: "Primary: Men", numeric: true},
+      {key: "inclusive_both", label: "Inclusive: Both sexes", numeric: true},
+      {key: "inclusive_women", label: "Inclusive: Women", numeric: true},
+      {key: "inclusive_men", label: "Inclusive: Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${eventLabel} annual CVD death counts`,
+      downloadName: `cvd_mortality_counts_${eventType}.csv`,
+      downloadGroup: "mortality-annual-counts",
+      downloadTab: eventLabel
+    });
+  }
+
+  // TABLE M2: Quarterly death counts with the matching published rolling
+  // previous-five-year mean in brackets. Tabs select event type + definition.
+  function periodCountTable(eventType, periodType, definitionKey) {
+    if (periodType !== "quarterly") {
+      throw new Error("periodCountTable is restricted to quarterly mortality tables.");
+    }
+    const definition = definitions[definitionKey];
+    if (!definition) throw new Error(`Unknown mortality definition: ${definitionKey}`);
+    const countStatistic = "quarterly_count";
+    const comparatorStatistic = "quarterly_same_quarter_previous_5yr_mean";
+
+    const source = publicRows.filter(d =>
+      d.metric_id === "MORT-BURDEN-001" && d.period_type === "quarterly" &&
+      d.event_type === eventType && d.age_group === "all" && d.case_definition === definition &&
+      [countStatistic, comparatorStatistic].includes(d.statistic)
+    );
+    const periods = tableUtils.periodKeys(source, "quarterly");
+
+    const rows = periods.map(period => {
+      const keyWhere = {period_year: period.period_year, period_quarter: period.period_quarter};
+      const row = {
+        period: tableUtils.periodLabel(period, "quarterly"),
+        _year: Number(period.period_year),
+        _incomplete: Number(period.period_complete) === 0
+      };
+
+      sexes.forEach(([sex, key]) => {
+        const count = tableUtils.exact(source, {...keyWhere, sex, statistic: countStatistic}, `quarterly mortality count: ${eventType}, ${definitionKey}, ${sex}`);
+        const comparator = tableUtils.exact(source, {...keyWhere, sex, statistic: comparatorStatistic}, `quarterly mortality comparator: ${eventType}, ${definitionKey}, ${sex}`);
+        row[key] = tableUtils.countWithComparator(count, comparator, true);
+      });
+      return row;
+    });
+
+    const eventLabel = eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke";
+    const definitionLabel = definitionKey === "primary" ? "Primary" : "Inclusive";
+    return tableUtils.makeTable([
+      {key: "period", label: "Quarter"},
+      {key: "both", label: "Both sexes", numeric: true},
+      {key: "women", label: "Women", numeric: true},
+      {key: "men", label: "Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${eventLabel} quarterly CVD death counts, ${definitionLabel}`,
+      downloadName: `cvd_mortality_quarterly_${eventType}_${definitionKey}.csv`,
+      downloadGroup: "mortality-quarterly-counts",
+      downloadTab: `${eventLabel} - ${definitionLabel}`,
+      collapseByYear: true
+    });
+  }
+
+  // TABLE M3: Monthly mortality publication is deliberately restricted to
+  // All CVD, both sexes, all ages. The approved reference contains definition-
+  // specific fixed 2015-2019 minimum, mean and maximum values by calendar month.
+  function monthlyCountTable(definitionKey) {
+    const definition = definitions[definitionKey];
+    if (!definition) throw new Error(`Unknown mortality definition: ${definitionKey}`);
+    const source = publicRows.filter(d =>
+      d.metric_id === "MORT-BURDEN-001" && d.period_type === "monthly" &&
+      d.event_type === "all_cvd" && d.sex === "all" && d.age_group === "all" &&
+      d.case_definition === definition && d.statistic === "monthly_count"
+    );
+    const periods = tableUtils.periodKeys(source, "monthly");
+
+    const rows = periods.map(period => {
+      const count = tableUtils.exact(source, {
+        period_year: period.period_year,
+        period_month: period.period_month,
+        sex: "all",
+        statistic: "monthly_count"
+      }, `monthly mortality count: ${definitionKey}, ${period.period_year}-${period.period_month}`);
+      const reference = tableUtils.exact(mortalityMonthlyReference, {
+        case_definition: definition,
+        event_type: "all_cvd",
+        sex: "all",
+        age_group: "all",
+        period_month: Number(period.period_month)
+      }, `mortality monthly 2015-2019 reference: ${definitionKey}, month ${period.period_month}`);
+
+      return {
+        period: tableUtils.periodLabel(period, "monthly"),
+        count: tableUtils.publishedDisplay(count, 0, true),
+        reference_min: tableUtils.referenceDisplay(reference?.reference_min, 0, true),
+        reference_mean: tableUtils.referenceDisplay(reference?.reference_mean, 1, false),
+        reference_max: tableUtils.referenceDisplay(reference?.reference_max, 0, true),
+        _year: Number(period.period_year),
+        _incomplete: Number(period.period_complete) === 0
+      };
+    });
+
+    const definitionLabel = definitionKey === "primary" ? "Primary" : "Inclusive";
+    return tableUtils.makeTable([
+      {key: "period", label: "Month"},
+      {key: "count", label: "All CVD, both sexes", numeric: true},
+      {key: "reference_min", label: "2015-2019 min", numeric: true},
+      {key: "reference_mean", label: "2015-2019 average", numeric: true},
+      {key: "reference_max", label: "2015-2019 max", numeric: true}
+    ], rows, {
+      ariaLabel: `Monthly All CVD death counts, both sexes, ${definitionLabel}`,
+      downloadName: `cvd_mortality_monthly_all_cvd_${definitionKey}.csv`,
+      downloadGroup: "mortality-monthly-counts",
+      downloadTab: definitionLabel,
+      collapseByYear: true
+    });
+  }
+
+  // TABLE M4: Distribution of CVD deaths.
+  function distributionTable(kind) {
+    let specification;
+    if (kind === "event_type") {
+      specification = {statistic: "event_type_distribution", columns: [["heart", "Heart"], ["stroke", "Stroke"]], where: {sex: "all", age_group: "all"}, dimension: "event_type"};
+    } else if (kind === "age") {
+      specification = {statistic: "age_distribution", columns: [["under_70", "Under 70"], ["age_70_plus", "70 and over"]], where: {event_type: "all_cvd", sex: "all"}, dimension: "age_group"};
+    } else {
+      specification = {statistic: "sex_distribution", columns: [["female", "Women"], ["male", "Men"]], where: {event_type: "all_cvd", age_group: "all"}, dimension: "sex"};
+    }
+    const source = distributionRows.filter(d => d.statistic === specification.statistic && Object.entries(specification.where).every(([key, value]) => d[key] === value));
+    const years = tableUtils.uniqueYears(source);
+    const rows = years.map(year => {
+      const row = {year: tableUtils.yearLabel(year, source), _incomplete: source.some(d => Number(d.period_year) === year && Number(d.period_complete) === 0)};
+      Object.entries(definitions).forEach(([definitionKey, definitionValue]) => {
+        specification.columns.forEach(([value, label], index) => {
+          const match = tableUtils.exact(source, {period_year: year, case_definition: definitionValue, [specification.dimension]: value}, `mortality distribution: ${definitionKey}, ${label}`);
+          row[`${definitionKey}_${index}`] = tableUtils.percent(match);
+        });
+      });
+      return row;
+    });
+    const tabLabel = kind === "event_type" ? "Event type" : kind === "age" ? "Age" : "Sex";
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "primary_0", label: `Primary: ${specification.columns[0][1]}`, numeric: true},
+      {key: "primary_1", label: `Primary: ${specification.columns[1][1]}`, numeric: true},
+      {key: "inclusive_0", label: `Inclusive: ${specification.columns[0][1]}`, numeric: true},
+      {key: "inclusive_1", label: `Inclusive: ${specification.columns[1][1]}`, numeric: true}
+    ], rows, {
+      ariaLabel: `CVD mortality ${kind} distribution`,
+      downloadName: `cvd_mortality_distribution_${kind}.csv`,
+      downloadGroup: "mortality-distribution",
+      downloadTab: tabLabel
+    });
+  }
+
+  // TABLES M5-M6: Annual crude and age-standardised mortality rates.
+  function rateTable(eventType, rateType, definitionKey) {
+    const definitionValue = definitions[definitionKey];
+    if (!definitionValue) throw new Error(`Unknown mortality definition: ${definitionKey}`);
+    const source = rateRows.filter(d => d.event_type === eventType);
+    const years = tableUtils.uniqueYears(source);
+    const ageGroup = rateType === "crude" ? "all" : "age_standardised";
+    const statistic = rateType === "crude" ? "annual_crude_rate" : "annual_age_standardised_rate";
+    const rows = years.map(year => {
+      const row = {year: String(year), _incomplete: false};
+      sexes.forEach(([sex, sexKey]) => {
+        row[sexKey] = tableUtils.rateWithCI(tableUtils.exact(source, {period_year: year, sex, case_definition: definitionValue, age_group: ageGroup, statistic}, `mortality ${rateType} rate: ${definitionKey}, ${sex}`));
+      });
+      return row;
+    });
+    const eventLabel = eventType === "all_cvd" ? "All CVD" : eventType === "heart" ? "Heart" : "Stroke";
+    const definitionLabel = definitionKey === "primary" ? "Primary" : "Inclusive";
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "both", label: "Both sexes", numeric: true},
+      {key: "women", label: "Women", numeric: true},
+      {key: "men", label: "Men", numeric: true}
+    ], rows, {
+      ariaLabel: `${eventLabel} annual ${rateType} CVD mortality rates, ${definitionLabel}`,
+      downloadName: `cvd_mortality_${rateType}_rates_${eventType}_${definitionKey}.csv`,
+      downloadGroup: `mortality-rate-${rateType}`,
+      downloadTab: `${eventLabel} - ${definitionLabel}`
+    });
+  }
+
+  // TABLE M7: How much does the estimate rely on Possible deaths?
+  // Approved dashboard-aligned calculation:
+  //   Possible share = 100 * (Inclusive - Primary) / Inclusive.
+  function possibleQualityTable() {
+    const source = mortalityMetrics.filter(d =>
+      d.metric_id === "MORT-BURDEN-001" && d.period_type === "annual" &&
+      d.statistic === "annual_count" && d.sex === "all" && d.age_group === "all" &&
+      d.source_status === "death_certificate"
+    );
+    const eventTypes = [["all_cvd", "All CVD"], ["heart", "Heart"], ["stroke", "Stroke"]];
+    const years = tableUtils.uniqueYears(source);
+    const thresholds = {lowMax: 20, mediumMax: 30};
+    const rows = years.map(year => {
+      const row = {year: String(year), _incomplete: false};
+      eventTypes.forEach(([eventType, label]) => {
+        const primaryRow = tableUtils.exact(source, {period_year: year, event_type: eventType, case_definition: definitions.primary}, `Possible-death dependence: ${eventType}, Primary`);
+        const inclusiveRow = tableUtils.exact(source, {period_year: year, event_type: eventType, case_definition: definitions.inclusive}, `Possible-death dependence: ${eventType}, Inclusive`);
+        const primary = tableUtils.completeSafeNumber(primaryRow);
+        const inclusive = tableUtils.completeSafeNumber(inclusiveRow);
+        if (primary === null || inclusive === null || inclusive <= 0) {
+          row[eventType] = {text: "—", className: "bnr-quality-unavailable"};
+          return;
+        }
+        const possible = inclusive - primary;
+        if (!Number.isFinite(possible) || possible < 0) {
+          row[eventType] = {text: "—", className: "bnr-quality-unavailable"};
+          return;
+        }
+        const share = 100 * possible / inclusive;
+        row[eventType] = tableUtils.qualityCell(share, thresholds, `${label}, ${year}: Inclusive ${inclusive.toFixed(1)}; Primary ${primary.toFixed(1)}; Possible ${possible.toFixed(1)}.`);
+      });
+      return row;
+    }).filter(row => eventTypes.some(([eventType]) => row[eventType]?.text !== "—"));
+    return tableUtils.makeTable([
+      {key: "year", label: "Year"},
+      {key: "all_cvd", label: "All CVD", numeric: true},
+      {key: "heart", label: "Heart", numeric: true},
+      {key: "stroke", label: "Stroke", numeric: true}
+    ], rows, {
+      ariaLabel: "Possible deaths as a percentage of the Inclusive annual CVD death estimate",
+      downloadName: "cvd_mortality_possible_dependence.csv"
+    });
+  }
+
+  return {
+    countTable,
+    periodCountTable,
+    monthlyCountTable,
+    distributionTable,
+    rateTable,
+    possibleQualityTable,
+    release: tableUtils.releaseId(mortalityMetrics),
+    countCoverage: tableUtils.coverageText(countRows),
+    rateCoverage: tableUtils.coverageText(rateRows)
+  };
+}
+```
+
+## Data coverage
+
+```{ojs}
+{
+  const grid = document.createElement("div");
+  grid.className = "bnr-source-grid";
+  grid.append(
+    tableUtils.sourceCard("CVD events", eventViews.release, eventViews.countCoverage, eventViews.rateCoverage),
+    tableUtils.sourceCard("CVD mortality", mortalityViews.release, mortalityViews.countCoverage, mortalityViews.rateCoverage)
+  );
+  grid
+}
+```
+
+<div class="bnr-downloads">
+<a href="../../../downloads/files/metrics/cvd/cvd_metrics_current.csv" download>Download CVD event metrics (CSV)</a>
+<a href="../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv" download>Download CVD mortality metrics (CSV)</a>
+<a href="../../../downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv" download>Download 2015-2019 monthly reference (CSV)</a>
+</div>
+
+## Related dashboards
+
+Use the interactive dashboards for charts, filters and more detailed interpretation of the same approved public releases.
+
+<div class="bnr-dashboard-links">
+<a href="../metrics/burden/">Open CVD events dashboard</a>
+<a href="../metrics/mortality/">Open CVD mortality dashboard</a>
+</div>
+
+## CVD events
+
+The event tables distinguish between **hospital-recorded events** and the **national event estimate**, which adds approved death-certificate-only (DCO) estimates where appropriate.
+
+<!-- ====================================================================== -->
+<!-- TABLE E1: ANNUAL HOSPITAL-ONLY EVENT COUNTS                            -->
+<!-- Code: eventViews.annualHospitalCountTable()                            -->
+<!-- ====================================================================== -->
+
+### Annual hospital-recorded event counts (hospital only)
+
+This table shows the number of CVD events recorded through hospital ascertainment only; DCO events are not included.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-annual-hospital", "cvd_event_annual_hospital_only_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD
+
+```{ojs}
+eventViews.annualHospitalCountTable("all_cvd")
+```
+
+#### Heart
+
+```{ojs}
+eventViews.annualHospitalCountTable("heart")
+```
+
+#### Stroke
+
+```{ojs}
+eventViews.annualHospitalCountTable("stroke")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> These are approved hospital-recorded annual counts only. An incomplete latest year is labelled YTD; unavailable values are not treated as zero.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E2: ANNUAL NATIONAL EVENT ESTIMATES (HOSPITAL + DCO)             -->
+<!-- Code: eventViews.annualNationalCountTable()                            -->
+<!-- ====================================================================== -->
+
+### Annual national event estimates (hospital + DCO)
+
+This table shows the annual national estimate after adding the approved DCO component to hospital-recorded events.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-annual-national", "cvd_event_annual_national_hospital_plus_dco_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### Primary
+
+```{ojs}
+eventViews.annualNationalCountTable("primary")
+```
+
+#### Inclusive
+
+```{ojs}
+eventViews.annualNationalCountTable("inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> These are approved national estimates rather than simple case counts, so some values can be non-integers. Primary and Inclusive use the two approved DCO definitions in the event workflow.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E3: QUARTERLY HOSPITAL-ONLY EVENT COUNTS                         -->
+<!-- Code: eventViews.periodHospitalCountTable(eventType, "quarterly")     -->
+<!-- ====================================================================== -->
+
+### Quarterly hospital-recorded event counts
+
+This table shows hospital-recorded CVD events for each calendar quarter, with the usual level for the same quarter in the previous five years shown in brackets.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-quarterly-hospital", "cvd_event_quarterly_hospital_only_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD
+
+```{ojs}
+eventViews.periodHospitalCountTable("all_cvd", "quarterly")
+```
+
+#### Heart
+
+```{ojs}
+eventViews.periodHospitalCountTable("heart", "quarterly")
+```
+
+#### Stroke
+
+```{ojs}
+eventViews.periodHospitalCountTable("stroke", "quarterly")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Each cell is <strong>count (5-year comparison average)</strong>. The comparator is the published mean for the same calendar quarter and sex in the previous five years. It is unavailable until five prior years exist. DCO national estimates are annual and are therefore not added to quarterly counts. Years can be expanded or collapsed within each tab; the latest year opens by default.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E4: MONTHLY HOSPITAL-ONLY ALL-CVD EVENT COUNTS                    -->
+<!-- Code: eventViews.monthlyHospitalCountTable()                           -->
+<!-- ====================================================================== -->
+
+### Monthly hospital-recorded event counts
+
+This table shows monthly **All CVD** hospital-recorded events for **both sexes**. The fixed 2015-2019 minimum, average and maximum for each calendar month are shown alongside the observed count.
+
+```{ojs}
+eventViews.monthlyHospitalCountTable()
+```
+
+<div class="bnr-table-note"><strong>Technical note:</strong> The approved monthly event lattice is intentionally limited to All CVD, both sexes and all ages, so there are no Heart, Stroke, Women or Men monthly cells to display. The reference columns are the already-approved 2015-2019 same-calendar-month minimum, mean and maximum from the fixed CVD monthly reference asset; they are not recalculated here. DCO national estimates are annual and are therefore not added to monthly counts. Years can be expanded or collapsed; the latest year opens by default.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E5: DISTRIBUTION OF CVD EVENTS                                   -->
+<!-- Code: eventViews.distributionTable()                                   -->
+<!-- ====================================================================== -->
+
+### Distribution of CVD events
+
+This table shows how hospital-recorded CVD events are divided by event type, age group and sex.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-distribution", "cvd_event_distribution_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### Event type
+
+```{ojs}
+eventViews.distributionTable("event_type")
+```
+
+#### Age
+
+```{ojs}
+eventViews.distributionTable("age")
+```
+
+#### Sex
+
+```{ojs}
+eventViews.distributionTable("sex")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Percentages are approved public distribution measures from the event dataset; they are not recalculated from the displayed count tables.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E6: ANNUAL CRUDE NATIONAL EVENT RATES                            -->
+<!-- Code: eventViews.rateTable(eventType, "crude", definition)            -->
+<!-- ====================================================================== -->
+
+### Annual crude national event rates
+
+This table shows the annual national event estimate per 100,000 people, without adjusting for age.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-rate-crude", "cvd_event_crude_national_rates_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD - Primary
+```{ojs}
+eventViews.rateTable("all_cvd", "crude", "primary")
+```
+#### All CVD - Inclusive
+```{ojs}
+eventViews.rateTable("all_cvd", "crude", "inclusive")
+```
+#### Heart - Primary
+```{ojs}
+eventViews.rateTable("heart", "crude", "primary")
+```
+#### Heart - Inclusive
+```{ojs}
+eventViews.rateTable("heart", "crude", "inclusive")
+```
+#### Stroke - Primary
+```{ojs}
+eventViews.rateTable("stroke", "crude", "primary")
+```
+#### Stroke - Inclusive
+```{ojs}
+eventViews.rateTable("stroke", "crude", "inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Rates are approved national hospital + DCO estimates per 100,000 population. Each cell shows the estimate followed by its published 95% confidence interval. Primary and Inclusive use the approved DCO definitions.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E7: ANNUAL AGE-STANDARDISED NATIONAL EVENT RATES                 -->
+<!-- Code: eventViews.rateTable(eventType, "age_standardised", definition) -->
+<!-- ====================================================================== -->
+
+### Annual age-standardised national event rates
+
+This table shows national event rates adjusted so that differences in population age structure do not distort comparisons.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("event-rate-age_standardised", "cvd_event_age_standardised_national_rates_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD - Primary
+```{ojs}
+eventViews.rateTable("all_cvd", "age_standardised", "primary")
+```
+#### All CVD - Inclusive
+```{ojs}
+eventViews.rateTable("all_cvd", "age_standardised", "inclusive")
+```
+#### Heart - Primary
+```{ojs}
+eventViews.rateTable("heart", "age_standardised", "primary")
+```
+#### Heart - Inclusive
+```{ojs}
+eventViews.rateTable("heart", "age_standardised", "inclusive")
+```
+#### Stroke - Primary
+```{ojs}
+eventViews.rateTable("stroke", "age_standardised", "primary")
+```
+#### Stroke - Inclusive
+```{ojs}
+eventViews.rateTable("stroke", "age_standardised", "inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Rates are approved national hospital + DCO estimates directly age-standardised per 100,000 population. Each cell includes the published 95% confidence interval.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE E8: DCO DEPENDENCE OF THE NATIONAL EVENT ESTIMATE                -->
+<!-- Code: eventViews.dcoQualityTable()                                     -->
+<!-- This quality table intentionally appears last in the CVD event block.  -->
+<!-- ====================================================================== -->
+
+### How much does the national event estimate rely on DCO events?
+
+This table shows how much the national estimate depends on events identified only from death certificates.
+
+```{ojs}
+eventViews.dcoQualityTable()
+```
+
+<div class="bnr-quality-key">
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;10%</span>
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 10–14%</span>
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 15%+</span>
+</div>
+
+<div class="bnr-table-note"><strong>Technical note:</strong> This reproduces the events-dashboard calculation: additional DCO events divided by the Primary hospital + DCO estimate, multiplied by 100. Values are calculated only when the DCO, hospital-only and total source rows are complete, unsuppressed and numeric. It is an ascertainment-dependence indicator, not a separate published CVD metric.</div>
+
+## CVD mortality
+
+The mortality tables describe deaths classified as cardiovascular disease using the BNR mortality method.
+
+<!-- ====================================================================== -->
+<!-- TABLE M1: ANNUAL CVD DEATH COUNTS                                     -->
+<!-- Code: mortalityViews.countTable()                                     -->
+<!-- ====================================================================== -->
+
+### Annual CVD death counts
+
+This table shows how many CVD deaths were identified each year using the Primary and Inclusive definitions.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-annual-counts", "cvd_mortality_annual_counts_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD
+```{ojs}
+mortalityViews.countTable("all_cvd")
+```
+#### Heart
+```{ojs}
+mortalityViews.countTable("heart")
+```
+#### Stroke
+```{ojs}
+mortalityViews.countTable("stroke")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Primary includes deaths classified as Clear or Likely CVD. Inclusive includes Primary deaths plus deaths classified as Possible CVD.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M2: QUARTERLY CVD DEATH COUNTS                                  -->
+<!-- Code: mortalityViews.periodCountTable(eventType, "quarterly", def)   -->
+<!-- ====================================================================== -->
+
+### Quarterly CVD death counts
+
+This table shows CVD deaths for each calendar quarter, with the usual level for the same quarter in the previous five years shown in brackets.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-quarterly-counts", "cvd_mortality_quarterly_counts_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD - Primary
+```{ojs}
+mortalityViews.periodCountTable("all_cvd", "quarterly", "primary")
+```
+#### All CVD - Inclusive
+```{ojs}
+mortalityViews.periodCountTable("all_cvd", "quarterly", "inclusive")
+```
+#### Heart - Primary
+```{ojs}
+mortalityViews.periodCountTable("heart", "quarterly", "primary")
+```
+#### Heart - Inclusive
+```{ojs}
+mortalityViews.periodCountTable("heart", "quarterly", "inclusive")
+```
+#### Stroke - Primary
+```{ojs}
+mortalityViews.periodCountTable("stroke", "quarterly", "primary")
+```
+#### Stroke - Inclusive
+```{ojs}
+mortalityViews.periodCountTable("stroke", "quarterly", "inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Each cell is <strong>count (5-year comparison average)</strong>. The comparator is the published mean for the same calendar quarter, sex, CVD group and mortality definition in the previous five years. Primary includes Clear or Likely CVD deaths; Inclusive additionally includes Possible deaths. Years can be expanded or collapsed within each tab; the latest year opens by default.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M3: MONTHLY ALL-CVD DEATH COUNTS                                 -->
+<!-- Code: mortalityViews.monthlyCountTable(definition)                    -->
+<!-- ====================================================================== -->
+
+### Monthly CVD death counts
+
+This table shows monthly **All CVD** deaths for **both sexes**, with the fixed 2015-2019 same-calendar-month minimum, average and maximum shown alongside each count.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-monthly-counts", "cvd_mortality_monthly_counts_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### Primary
+```{ojs}
+mortalityViews.monthlyCountTable("primary")
+```
+#### Inclusive
+```{ojs}
+mortalityViews.monthlyCountTable("inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> The approved monthly mortality lattice is intentionally limited to All CVD, both sexes and all ages. The reference columns are the approved definition-specific 2015-2019 same-calendar-month minimum, mean and maximum; they are fixed reference values rather than rolling five-year comparators. Primary includes Clear or Likely CVD deaths; Inclusive additionally includes Possible deaths. Years can be expanded or collapsed within each tab; the latest year opens by default.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M4: DISTRIBUTION OF CVD DEATHS                                  -->
+<!-- Code: mortalityViews.distributionTable()                              -->
+<!-- ====================================================================== -->
+
+### Distribution of CVD deaths
+
+This table shows how CVD deaths are divided by event type, age group and sex.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-distribution", "cvd_mortality_distribution_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### Event type
+```{ojs}
+mortalityViews.distributionTable("event_type")
+```
+#### Age
+```{ojs}
+mortalityViews.distributionTable("age")
+```
+#### Sex
+```{ojs}
+mortalityViews.distributionTable("sex")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Percentages are approved public mortality distribution measures. Primary includes Clear or Likely CVD deaths; Inclusive additionally includes Possible CVD deaths.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M5: ANNUAL CRUDE MORTALITY RATES                                -->
+<!-- Code: mortalityViews.rateTable(eventType, "crude", definition)       -->
+<!-- ====================================================================== -->
+
+### Annual crude mortality rates
+
+This table shows the number of CVD deaths per 100,000 people each year, without adjusting for age.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-rate-crude", "cvd_mortality_crude_rates_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD - Primary
+```{ojs}
+mortalityViews.rateTable("all_cvd", "crude", "primary")
+```
+#### All CVD - Inclusive
+```{ojs}
+mortalityViews.rateTable("all_cvd", "crude", "inclusive")
+```
+#### Heart - Primary
+```{ojs}
+mortalityViews.rateTable("heart", "crude", "primary")
+```
+#### Heart - Inclusive
+```{ojs}
+mortalityViews.rateTable("heart", "crude", "inclusive")
+```
+#### Stroke - Primary
+```{ojs}
+mortalityViews.rateTable("stroke", "crude", "primary")
+```
+#### Stroke - Inclusive
+```{ojs}
+mortalityViews.rateTable("stroke", "crude", "inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Rates are per 100,000 population and each cell includes the published 95% confidence interval. Primary includes Clear or Likely CVD deaths; Inclusive additionally includes Possible CVD deaths.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M6: ANNUAL AGE-STANDARDISED MORTALITY RATES                     -->
+<!-- Code: mortalityViews.rateTable(eventType, "age_standardised", def)   -->
+<!-- ====================================================================== -->
+
+### Annual age-standardised mortality rates
+
+This table shows annual CVD death rates adjusted so that differences in population age structure do not distort comparisons.
+
+```{ojs}
+tableUtils.makeDownloadAllButton("mortality-rate-age_standardised", "cvd_mortality_age_standardised_rates_all_tabs.csv")
+```
+
+::: {.panel-tabset}
+#### All CVD - Primary
+```{ojs}
+mortalityViews.rateTable("all_cvd", "age_standardised", "primary")
+```
+#### All CVD - Inclusive
+```{ojs}
+mortalityViews.rateTable("all_cvd", "age_standardised", "inclusive")
+```
+#### Heart - Primary
+```{ojs}
+mortalityViews.rateTable("heart", "age_standardised", "primary")
+```
+#### Heart - Inclusive
+```{ojs}
+mortalityViews.rateTable("heart", "age_standardised", "inclusive")
+```
+#### Stroke - Primary
+```{ojs}
+mortalityViews.rateTable("stroke", "age_standardised", "primary")
+```
+#### Stroke - Inclusive
+```{ojs}
+mortalityViews.rateTable("stroke", "age_standardised", "inclusive")
+```
+:::
+
+<div class="bnr-table-note"><strong>Technical note:</strong> Rates are directly age-standardised per 100,000 population and each cell includes the published 95% confidence interval. Primary includes Clear or Likely CVD deaths; Inclusive additionally includes Possible CVD deaths.</div>
+
+<!-- ====================================================================== -->
+<!-- TABLE M7: POSSIBLE-DEATH DEPENDENCE OF THE MORTALITY ESTIMATE         -->
+<!-- Code: mortalityViews.possibleQualityTable()                           -->
+<!-- This quality table intentionally appears last in the mortality block. -->
+<!-- ====================================================================== -->
+
+### How much does the estimate rely on Possible deaths?
+
+This table shows how much the Inclusive mortality estimate depends on deaths classified as Possible CVD.
+
+```{ojs}
+mortalityViews.possibleQualityTable()
+```
+
+<div class="bnr-quality-key">
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20%</span>
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20–29%</span>
+  <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30%+</span>
+</div>
+
+<div class="bnr-table-note"><strong>Technical note:</strong> This reproduces the mortality-dashboard calculation: (Inclusive deaths − Primary deaths) divided by Inclusive deaths, multiplied by 100. Values are calculated only from complete, unsuppressed annual counts. Mortality cause information was stored together for 2010–2017 and certificate lines are stored separately from 2018 onward.</div>
+
