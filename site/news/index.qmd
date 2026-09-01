@@ -55,7 +55,7 @@ Explore the latest BNR CVD dashboard, updated weekly.
 Explore the latest CVD summary statistics.
 
 ::: {.bnr-utility-links}
-[Latest CVD tables](../surveillance/cvd/tabulations/index.qmd){.btn .btn-outline-primary}
+[Latest CVD tables](../surveillance/cvd/tables/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::
