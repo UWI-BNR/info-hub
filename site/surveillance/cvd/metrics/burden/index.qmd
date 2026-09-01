@@ -1907,6 +1907,7 @@ isolatedProtectedAnnualBridges = rows => {
     : selected_indicator === "profile"
     ? metrics.filter(d => d.metric_id === "CVD-BURDEN-002")
     : metrics.filter(d => d.metric_id === "CVD-INCIDENCE-001")
+
   const latestData = latestRow(rows)
   const earliestData = sortedRows(rows)[0] || null
   const latestDataLabel = selected_indicator === "counts" && release_period
@@ -1923,6 +1924,7 @@ isolatedProtectedAnnualBridges = rows => {
   const methodsText = selected_indicator === "rates"
     ? "Learn how BNR reports CVD incidence and event rates."
     : "Learn how BNR defines and reports CVD events."
+
   return html`<div>
     <div class="bnr-section-title">Latest Data Release</div>
     <div class="bnr-release-grid">
@@ -2085,10 +2087,6 @@ isolatedProtectedAnnualBridges = rows => {
 ```
 
 # Data
-
-```{=html}
-<div class="bnr-dashboard-switch"><a href="../mortality/index.html" target="_blank" rel="noopener noreferrer">View the CVD mortality dashboard →</a></div>
-```
 
 ```{ojs}
 //| echo: false
@@ -2324,6 +2322,7 @@ isolatedProtectedAnnualBridges = rows => {
   const zipName = release_id ? `cvd_metrics_${release_id}.zip` : ""
 
   return html`<div class="bnr-data-page-stack">
+    <div class="bnr-dashboard-switch"><a href="../mortality/index.html" target="_blank" rel="noopener noreferrer">View the CVD mortality dashboard →</a></div>
     <section class="bnr-data-display-card">
       <h3>Latest Data Release</h3>
       <table class="bnr-metadata-table"><tbody>
