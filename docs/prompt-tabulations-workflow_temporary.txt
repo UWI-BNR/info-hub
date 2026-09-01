@@ -1,0 +1,13 @@
+﻿My next workflow hardening tasks is the tabulations workflow.
+
+Currently, the workflow takes data from step3 of the CVD event workflow , applies analytics in Stata, then performs disclosure control, review and approval before publication to a product group in public/ and site/downloads/. The attached files show the current table analytics and the QMD file that creates the tabulations. These are in the relative locations (scripts\stata\tables\bnr_step1_cvd_tables.do) and (site\surveillance\cvd\tabulations\index.qmd). 
+
+I want to simplify this process considerably in the following ways:
+
+(A) I want to use the latest public release event and mortality dashboard datasets to create tables
+(B) I want the tables to always be cumulative, so that table outputs do not need to be frozen for (eg) 2023-tables, 2024-tables, and so on. 
+(C) The tables ideally should use the latest public releases, then do all table creation in  a Quarto file if possible. If this is not possible, then as a second-rate fallback, we will have a single Stata file to create tables (in a much simplified stata-dialog box guided system), then quarto to render.
+(D) Table design should follow, or improve upon the current design
+(E) We will restrict to only tables that can be created from the two public datasets - so based on event counts, percentages, rates and death counts, percentages, rates. Please suggest a set of sensible tables tobe the definitive online tabular reference for this online surveillance website.
+
+Let's design the changes before beginning any implementation. The implementation we may start in the next session.
