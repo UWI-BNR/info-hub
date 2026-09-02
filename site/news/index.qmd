@@ -3,6 +3,20 @@ title: "Latest Surveillance Outputs"
 description: "Latest public outputs from the Barbados National Registry Information Hub."
 title-block-style: none
 
+listing:
+  - id: latest-reports
+    contents:
+      - "../surveillance/*/reports/*/*.qmd"
+    type: grid
+    sort: "date desc"
+    categories: true
+    sort-ui: true
+    filter-ui: true
+    page-size: 12
+    image-height: "180px"
+    date-format: medium
+    max-description-length: 180
+
 format:
   html:
     toc: false
@@ -20,13 +34,11 @@ format:
 
 ### Live surveillance
 
-Explore the latest BNR CVD dashboard, updated weekly.
+Explore the latest BNR CVD interactive dashboards.
 
 ::: {.bnr-utility-links}
 [Latest CVD events](../surveillance/cvd/metrics/burden/index.qmd){.btn .btn-outline-primary} [Latest CVD deaths](../surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-outline-primary}
 :::
-
-
 
 :::
 
@@ -44,3 +56,12 @@ Explore the latest CVD summary statistics.
 
 :::
 
+<br>
+
+## Latest reports
+
+New annual reports, quarterly reports and one-off analytical studies from the
+Barbados National Registry are listed here as they are published.
+
+::: {#latest-reports}
+:::

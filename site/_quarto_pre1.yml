@@ -10,6 +10,8 @@ project:
   render:
     - "*.qmd"
     - "**/*.qmd"
+    - "!downloads/annual/cvd/latest/tables/*.md"
+    - "!downloads/annual/cvd/**/*.md"
   output-dir: _site
   preview:
     port: 4200
@@ -224,9 +226,13 @@ website:
               href: operations/post-redcap/dashboard-workflow.qmd
             - text: "11. CVD mortality workflow"
               href: operations/post-redcap/mortality-workflow.qmd
-            - text: "12. Review, approve and publish"
+            - text: "12. Tabulations workflow"
+              href: operations/post-redcap/tabulations-workflow.qmd
+            - text: "13. Briefings workflow"
+              href: operations/post-redcap/briefings-workflow.qmd
+            - text: "14. Review, approve and publish"
               href: operations/release/review-approve-publish.qmd
-            - text: "13. Correct a release"
+            - text: "15. Correct a release"
               href: operations/release/correct-release.qmd
 
         - section: "BNR analysis framework"
@@ -310,7 +316,31 @@ website:
                 - text: "Step 6: Publish CVD event metrics"
                   href: technical/workflows/dashboards/publish-metrics.qmd
 
-            - section: "4. CVD mortality workflow"
+            - section: "4. Tabulations"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/tabulations/overview.qmd
+                - text: "Step 1: Generate tabulations"
+                  href: technical/workflows/tabulations/generate.qmd
+                - text: "Step 2A: Disclosure control and review"
+                  href: technical/workflows/tabulations/disclosure-control.qmd
+                - text: "Step 2B: Approve tabulations"
+                  href: technical/workflows/tabulations/approve.qmd
+                - text: "Step 3: Publish tabulations"
+                  href: technical/workflows/tabulations/publish.qmd
+
+            - section: "5. Briefings"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/briefings/overview.qmd
+                - text: "Step 1: Create a routine briefing"
+                  href: technical/workflows/briefings/create.qmd
+                - text: "Step 2: Review and approve"
+                  href: technical/workflows/briefings/approve.qmd
+                - text: "Step 3: Publish a briefing"
+                  href: technical/workflows/briefings/publish.qmd
+
+            - section: "6. CVD mortality workflow"
               contents:
                 - text: "Overview"
                   href: technical/workflows/mortality/overview.qmd
@@ -329,18 +359,18 @@ website:
 
         - section: "Review and publication controls"
           contents:
-            - text: "5. Review an analytical release"
+            - text: "7. Review an analytical release"
               href: technical/controls/review-release.qmd
-            - text: "6. Disclosure control"
+            - text: "8. Disclosure control"
               href: technical/controls/disclosure-control.qmd
-            - text: "7. Approve and publish a release"
+            - text: "9. Approve and publish a release"
               href: technical/controls/approve-publish.qmd
 
         - section: "Operate the Info-Hub"
           contents:
-            - text: "8. Render and publish website"
+            - text: "10. Render and publish website"
               href: technical/website/render-publish.qmd
-            - section: "9. Update website content"
+            - section: "11. Update website content"
               contents:
                 - text: "Overview"
                   href: technical/website/update-content.qmd
@@ -348,17 +378,19 @@ website:
                   href: technical/website/cvd-events-dashboard.qmd
                 - text: "Maintain the CVD mortality dashboard"
                   href: technical/website/cvd-mortality-dashboard.qmd
+                - text: "Update an existing briefing"
+                  href: technical/website/update-briefing.qmd
 
         - section: "Maintain and recover"
           contents:
-            - text: "10. Make a safe code change"
+            - text: "12. Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
-            - text: "11. Files, releases and versions"
+            - text: "13. Files, releases and versions"
               href: technical/maintenance/files-releases-versions.qmd
-            - text: "12. Fix common problems"
+            - text: "14. Fix common problems"
               href: technical/maintenance/troubleshooting.qmd
 
         - section: "Quick reference"
           contents:
-            - text: "13. System reference"
+            - text: "15. System reference"
               href: technical/reference/index.qmd

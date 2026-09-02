@@ -5,6 +5,32 @@ title-block-style: none
 
 sidebar: cvd
 
+listing:
+  - id: cvd-reports
+    contents:
+      - "reports/annual/*.qmd"
+      - "reports/quarterly/*.qmd"
+      - "reports/studies/*.qmd"
+    type: table
+    sort: "date desc"
+    sort-ui:
+      - date
+      - title
+    filter-ui: true
+    page-size: 10
+    fields:
+      - date
+      - title
+      - categories
+      - description
+    field-display-names:
+      date: "Published"
+      title: "Report"
+      categories: "Type"
+      description: "Description"
+    date-format: medium
+    table-hover: true
+
 format:
   html:
     toc: true
@@ -27,7 +53,7 @@ The Barbados National Registry monitors major cardiovascular events, including s
 
 ### Live surveillance
 
-Explore the latest BNR CVD dashboard, updated weekly.
+Explore the latest BNR CVD interactive dashboards.
 
 ::: {.bnr-utility-links}
 [Latest CVD events](./metrics/burden/index.qmd){.btn .btn-outline-primary} [Latest CVD deaths](./metrics/mortality/index.qmd){.btn .btn-outline-primary}
@@ -47,4 +73,14 @@ Explore the latest CVD summary statistics.
 
 :::
 
+:::
+
+<br>
+
+## Reports and studies
+
+Annual reports, quarterly reports and one-off analytical studies will appear
+here as they are published.
+
+::: {#cvd-reports}
 :::

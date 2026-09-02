@@ -1,0 +1,27 @@
+---
+title: "Example CVD reporting product"
+description: "Temporary placeholder used to verify the new dynamic report listings."
+date: 2026-09-01
+date-modified: 2026-09-01
+image: "/assets/images/listings/listing_reef_shallows.webp"
+image-alt: "Sunlit shallow reef water in Barbados."
+categories:
+  - CVD
+  - Study
+  - Mock report
+report-type: "Study"
+coverage-period: "Demonstration only"
+format:
+  html:
+    toc: false
+    page-layout: article
+---
+
+::: {.callout-note}
+## Temporary listing test
+
+This empty mock report exists only to demonstrate the annual, quarterly and
+study publication structure and to populate the two dynamic report listings.
+It contains no analytical results and should be removed when the first real
+reporting product is added.
+:::

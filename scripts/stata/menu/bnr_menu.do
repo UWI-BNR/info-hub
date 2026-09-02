@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.13.0, 1 September 2026
+*! version 1.14.0, 1 September 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -60,6 +60,10 @@ window menu append item "Update CVD mortality dashboard" ///
 window menu append item "Update CVD mortality dashboard" ///
     "Step 5: Approve reviewed mortality release" ///
     "db bnr_mort_s5_approve"
+
+window menu append item "Update CVD mortality dashboard" ///
+    "Step 6: Publish approved mortality outputs" ///
+    "db bnr_mort_s6_publish"
 
 window menu append submenu "BNR" "BNR utilities"
 
