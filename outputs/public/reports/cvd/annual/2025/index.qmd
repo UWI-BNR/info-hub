@@ -1,0 +1,25 @@
+---
+title: "Annual CVD report: 2025"
+description: "Annual CVD report for Barbados, including the standard surveillance section and annual Focus On chapter."
+date: 2026-09-02
+date-modified: 2026-09-02
+report-id: bnr_cvd_annual_report_2025_v1
+report-type: Annual report
+report-version: v1
+coverage-period: 2025
+event-release-id: cvd_2026_01
+mortality-release-id: mort_2026_07
+image: /assets/images/listings/listing_mountain_coast.webp
+image-alt: Barbados mountain coast.
+categories:
+  - CVD
+  - Annual report
+format:
+  html:
+    toc: false
+    page-layout: article
+---
+
+[Open or download the PDF report](../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf){.btn .btn-primary}
+
+<iframe src="../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf" title="Annual CVD report: 2025" width="100%" height="900"></iframe>

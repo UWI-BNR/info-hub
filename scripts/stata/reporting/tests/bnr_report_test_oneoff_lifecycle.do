@@ -1,27 +1,26 @@
 /*******************************************************************************
-DO-FILE: bnr_report_test_annual_lifecycle.do
-VERSION: 1.0.0 (2 September 2026)
-PURPOSE: Read-only verification of the canonical annual-report lifecycle.
+DO-FILE: bnr_report_test_oneoff_lifecycle.do
+VERSION: 0.1.0 (2 September 2026)
+PURPOSE: Read-only verification of a published one-off CVD report lifecycle.
 
 USAGE:
-  do "$BNR_STATA/reporting/tests/bnr_report_test_annual_lifecycle.do" 2025 1
+  do "$BNR_STATA/reporting/tests/bnr_report_test_oneoff_lifecycle.do" workflow_test 1
 *******************************************************************************/
 
 version 19
 clear all
 set more off
 
-args report_year report_version
-if "`report_year'" == "" | "`report_version'" == "" {
-    display as error "Enter report year and version."
+args study_id report_version
+if "`study_id'" == "" | "`report_version'" == "" {
+    display as error "Enter study ID and report version."
     exit 198
 }
-local year_num = real("`report_year'")
+if !regexm("`study_id'", "^[a-z][a-z0-9_]*$") {
+    display as error "Study ID must use lowercase letters, numbers and underscores."
+    exit 198
+}
 local version_num = real("`report_version'")
-if missing(`year_num') | `year_num' != floor(`year_num') | `year_num' < 2024 {
-    display as error "Report year must be an integer of 2024 or later."
-    exit 198
-}
 if missing(`version_num') | `version_num' != floor(`version_num') | ///
         `version_num' < 1 {
     display as error "Report version must be a positive integer."
@@ -36,15 +35,14 @@ foreach required_global in BNR_REPO BNR_STAGING BNR_PUBLIC {
     }
 }
 
-local year4 : display %04.0f `year_num'
-local report_id "bnr_cvd_annual_report_`year4'_v`version_num'"
-local stable_name "bnr_cvd_annual_report_`year4'"
-local package_dir "$BNR_STAGING/reports/cvd/annual/`report_id'"
+local report_id "bnr_cvd_oneoff_`study_id'_v`version_num'"
+local stable_name "bnr_cvd_oneoff_`study_id'"
+local package_dir "$BNR_STAGING/reports/cvd/studies/`report_id'"
 local candidate_dir "`package_dir'/candidate"
 local ready_dir "`package_dir'/public_ready"
-local public_dir "$BNR_PUBLIC/reports/cvd/annual/`year4'"
-local site_download_dir "$BNR_REPO/site/downloads/files/reports/cvd/annual/`year4'"
-local site_page_dir "$BNR_REPO/site/surveillance/cvd/reports/annual/`year4'"
+local public_dir "$BNR_PUBLIC/reports/cvd/studies/`study_id'"
+local site_download_dir "$BNR_REPO/site/downloads/files/reports/cvd/studies/`study_id'"
+local site_page_dir "$BNR_REPO/site/surveillance/cvd/reports/studies/`study_id'"
 
 local candidate_pdf "`candidate_dir'/`report_id'.pdf"
 local candidate_qmd "`candidate_dir'/index.qmd"
@@ -61,15 +59,34 @@ local site_pdf "`site_download_dir'/`stable_name'.pdf"
 local site_metadata "`site_download_dir'/report.yml"
 local site_qmd "`site_page_dir'/index.qmd"
 
-foreach required_file in candidate_pdf candidate_qmd candidate_metadata ///
-        ready_pdf ready_qmd ready_metadata manifest approval public_pdf ///
-        public_qmd public_metadata site_pdf site_metadata site_qmd {
-    capture confirm file "``required_file''"
-    if _rc {
-        display as error "Annual lifecycle test requires: ``required_file''"
-        exit 601
-    }
-}
+capture confirm file "`candidate_pdf'"
+if _rc exit 601
+capture confirm file "`candidate_qmd'"
+if _rc exit 601
+capture confirm file "`candidate_metadata'"
+if _rc exit 601
+capture confirm file "`ready_pdf'"
+if _rc exit 601
+capture confirm file "`ready_qmd'"
+if _rc exit 601
+capture confirm file "`ready_metadata'"
+if _rc exit 601
+capture confirm file "`manifest'"
+if _rc exit 601
+capture confirm file "`approval'"
+if _rc exit 601
+capture confirm file "`public_pdf'"
+if _rc exit 601
+capture confirm file "`public_qmd'"
+if _rc exit 601
+capture confirm file "`public_metadata'"
+if _rc exit 601
+capture confirm file "`site_pdf'"
+if _rc exit 601
+capture confirm file "`site_metadata'"
+if _rc exit 601
+capture confirm file "`site_qmd'"
+if _rc exit 601
 
 quietly checksum "`candidate_pdf'"
 local pdf_size = r(filelen)
@@ -110,82 +127,34 @@ quietly checksum "`site_metadata'"
 assert r(filelen) == `metadata_size'
 assert r(checksum) == `metadata_checksum'
 
-quietly checksum "`manifest'"
-local manifest_size = r(filelen)
-local manifest_checksum = r(checksum)
-local approval_ok 0
-local report_ok 0
-local version_ok 0
-local manifest_size_ok 0
-local manifest_checksum_ok 0
-local approved_by ""
-tempname approval_handle
-file open `approval_handle' using "`approval'", read text
-file read `approval_handle' line
-while r(eof) == 0 {
-    local line = strtrim(`"`line'"')
-    local line = subinstr(`"`line'"', char(34), "", .)
-    if "`line'" == "status: approved" local approval_ok 1
-    if "`line'" == "report_id: `report_id'" local report_ok 1
-    if "`line'" == "report_version: v`version_num'" local version_ok 1
-    if "`line'" == "manifest_size: `manifest_size'" local manifest_size_ok 1
-    if "`line'" == "manifest_checksum: `manifest_checksum'" local manifest_checksum_ok 1
-    if strpos("`line'", "approved_by:") == 1 local approved_by = strtrim(substr("`line'", 13, .))
-    file read `approval_handle' line
-}
-file close `approval_handle'
-assert `approval_ok' == 1
-assert `report_ok' == 1
-assert `version_ok' == 1
-assert `manifest_size_ok' == 1
-assert `manifest_checksum_ok' == 1
-assert "`approved_by'" != ""
-
-local qmd_report_ok 0
-local qmd_version_ok 0
-local qmd_type_ok 0
-tempname qmd_handle
-file open `qmd_handle' using "`site_qmd'", read text
-file read `qmd_handle' line
-while r(eof) == 0 {
-    local line = strtrim(`"`line'"')
-    local line = subinstr(`"`line'"', char(34), "", .)
-    if "`line'" == "report-id: `report_id'" local qmd_report_ok 1
-    if "`line'" == "report-version: v`version_num'" local qmd_version_ok 1
-    if "`line'" == "report-type: Annual report" local qmd_type_ok 1
-    file read `qmd_handle' line
-}
-file close `qmd_handle'
-assert `qmd_report_ok' == 1
-assert `qmd_version_ok' == 1
-assert `qmd_type_ok' == 1
-
 local metadata_report_ok 0
+local metadata_study_ok 0
 local metadata_version_ok 0
 local metadata_pdf_ok 0
 tempname metadata_handle
-file open `metadata_handle' using "`site_metadata'", read text
+file open `metadata_handle' using "`public_metadata'", read text
 file read `metadata_handle' line
 while r(eof) == 0 {
     local line = strtrim(`"`line'"')
     local line = subinstr(`"`line'"', char(34), "", .)
     if "`line'" == "report_id: `report_id'" local metadata_report_ok 1
+    if "`line'" == "study_id: `study_id'" local metadata_study_ok 1
     if "`line'" == "report_version: v`version_num'" local metadata_version_ok 1
     if "`line'" == "pdf_file: `stable_name'.pdf" local metadata_pdf_ok 1
     file read `metadata_handle' line
 }
 file close `metadata_handle'
 assert `metadata_report_ok' == 1
+assert `metadata_study_ok' == 1
 assert `metadata_version_ok' == 1
 assert `metadata_pdf_ok' == 1
 
 quietly {
 noisily display as result ""
 noisily display as result "============================================================================="
-noisily display as result "ANNUAL CVD REPORT: LIFECYCLE TEST SUMMARY"
+noisily display as result "ONE-OFF CVD REPORT: LIFECYCLE TEST SUMMARY"
 noisily display as text   "  Run status:              All lifecycle checks passed"
 noisily display as text   "  Report identifier:       `report_id'"
-noisily display as text  `"  Approved by:             `approved_by'"'
 noisily display as text   "  Candidate/public_ready:  Exact three-file payload verified"
 noisily display as text   "  Authoritative/site:      PDF, QMD and metadata fingerprints match"
 noisily display as result "============================================================================="

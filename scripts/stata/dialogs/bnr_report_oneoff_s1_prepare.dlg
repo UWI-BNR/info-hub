@@ -1,0 +1,63 @@
+*! BNR one-off CVD report Step 1: prepare candidate
+*! version 0.1.0, 2 September 2026
+VERSION 19.0
+POSITION . . 620 570
+
+DIALOG main, label("BNR: One-off report Step 1 - prepare candidate")
+BEGIN
+  TEXTBOX tx_intro 15 15 590 50, label("Package a finished analyst-produced PDF. This step creates private candidate files only; it does not run the analysis, approve or publish.")
+  GROUPBOX gb_identity 15 80 590 105, label("Report identity")
+  TEXT tx_study 30 108 100 ., label("Study ID:")
+  EDIT ed_study 140 105 250 ., nomemory error("Study ID")
+  TEXT tx_version 420 108 65 ., label("Version:")
+  SPINNER ed_version 490 105 55 ., default(1) min(1) max(99) nomemory error("Report version")
+  TEXT tx_date 30 148 100 ., label("Report date:")
+  EDIT ed_date 140 145 150 ., default("2026-09-02") nomemory error("Report date")
+
+  GROUPBOX gb_pdf 15 201 590 72, label("Finished PDF")
+  TEXT tx_pdf 30 231 100 ., label("PDF path:")
+  EDIT ed_pdf 140 228 440 ., nomemory error("Finished PDF path")
+
+  GROUPBOX gb_listing 15 289 590 135, label("Website listing metadata")
+  TEXT tx_title 30 319 100 ., label("Title:")
+  EDIT ed_title 140 316 440 ., nomemory error("Report title")
+  TEXT tx_description 30 359 100 ., label("Description:")
+  EDIT ed_description 140 356 440 ., nomemory error("Report description")
+  CHECKBOX ck_replace 30 396 540 ., default(0) nomemory label("Replace this unapproved candidate version")
+
+  TEXTBOX tx_rules 20 445 580 56, label("Study ID uses lowercase letters, numbers and underscores and begins with a letter. Date uses YYYY-MM-DD. Approved versions cannot be rebuilt.")
+END
+
+OK ok1, label("Prepare candidate")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.ed_study
+  require main.ed_pdf
+  require main.ed_title
+  require main.ed_description
+  require main.ed_date
+  put "do $BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do "
+  put main.ed_study
+  put " "
+  put main.ed_version
+  put " "
+  put `"""'
+  put main.ed_pdf
+  put `"""'
+  put " "
+  put `"""'
+  put main.ed_title
+  put `"""'
+  put " "
+  put `"""'
+  put main.ed_description
+  put `"""'
+  put " "
+  put main.ed_date
+  if main.ck_replace {
+    put " replace"
+  }
+END

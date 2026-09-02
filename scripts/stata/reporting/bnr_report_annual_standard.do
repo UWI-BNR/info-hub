@@ -1,7 +1,7 @@
 /*******************************************************************************
 Annual CVD report: standard section
 
-This small shared section is included only by bnr_report_annual_build.do.
+This small shared section is included only by bnr_report_annual_s1_build.do.
 It relies on that master DO file's local release identifiers. The first pass
 deliberately establishes the PDF composition and immutable-source boundary
 before tables, figures and final design are added.

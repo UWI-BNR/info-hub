@@ -1,0 +1,33 @@
+*! BNR one-off CVD report Step 3: publish approved payload
+*! version 0.1.0, 2 September 2026
+VERSION 19.0
+POSITION . . 530 380
+
+DIALOG main, label("BNR: One-off report Step 3 - publish")
+BEGIN
+  TEXTBOX tx_intro 15 15 500 52, label("Publish only the exact manifested files in public_ready. Candidate files are never used during publication.")
+  GROUPBOX gb_report 15 82 500 70, label("Approved report")
+  TEXT tx_study 30 111 90 ., label("Study ID:")
+  EDIT ed_study 130 108 235 ., nomemory error("Study ID")
+  TEXT tx_version 390 111 65 ., label("Version:")
+  SPINNER ed_version 460 108 45 ., default(1) min(1) max(99) nomemory error("Report version")
+  GROUPBOX gb_protection 15 168 500 62, label("Publication protection")
+  CHECKBOX ck_replace 30 194 460 ., default(0) nomemory label("Replace the current public report with this approved version")
+  TEXTBOX tx_boundary 20 250 490 58, label("Stable public filenames expose one version. Git retains earlier versions. This step does not render, commit, push or deploy the site.")
+END
+
+OK ok1, label("Publish one-off report")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.ed_study
+  put "do $BNR_STATA/reporting/bnr_report_oneoff_s3_publish.do "
+  put main.ed_study
+  put " "
+  put main.ed_version
+  if main.ck_replace {
+    put " replace"
+  }
+END

@@ -1,0 +1,32 @@
+*! BNR annual CVD report Step 3: publish approved payload
+*! version 1.0.0, 2 September 2026
+VERSION 19.0
+POSITION . . 520 370
+
+DIALOG main, label("BNR: Annual report Step 3 - publish")
+BEGIN
+  TEXTBOX tx_intro 15 15 490 54, label("Publish only the exact manifested files in public_ready. Candidate files are never used during publication.")
+  GROUPBOX gb_report 15 84 490 68, label("Approved report")
+  TEXT tx_year 30 112 95 ., label("Report year:")
+  SPINNER ed_year 135 109 75 ., default(2025) min(2024) max(2100) nomemory error("Report year")
+  TEXT tx_version 270 112 65 ., label("Version:")
+  SPINNER ed_version 340 109 55 ., default(1) min(1) max(99) nomemory error("Report version")
+  GROUPBOX gb_protection 15 168 490 62, label("Publication protection")
+  CHECKBOX ck_replace 30 194 450 ., default(0) nomemory label("Replace this year's current public report with this approved version")
+  TEXTBOX tx_boundary 20 250 470 58, label("Stable public filenames expose only one version per report year. Git retains earlier versions. This step does not render, commit, push or deploy the site.")
+END
+
+OK ok1, label("Publish annual report")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/reporting/bnr_report_annual_s3_publish.do "
+  put main.ed_year
+  put " "
+  put main.ed_version
+  if main.ck_replace {
+    put " replace"
+  }
+END

@@ -1,0 +1,126 @@
+/*******************************************************************************
+DO-FILE: bnr_report_annual_s3_publish.do
+VERSION: 1.0.0 (2 September 2026)
+PURPOSE: Publish an approved annual CVD report payload.
+
+USAGE:
+  do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 1
+  do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 2 replace
+*******************************************************************************/
+
+version 19
+clear all
+set more off
+
+args report_year report_version option
+if "`report_year'" == "" | "`report_version'" == "" {
+    display as error "Enter report year and approved report version."
+    exit 198
+}
+if "`option'" != "" & lower("`option'") != "replace" {
+    display as error "The only optional Step 3 argument is replace."
+    exit 198
+}
+local year_num = real("`report_year'")
+local version_num = real("`report_version'")
+if missing(`year_num') | `year_num' != floor(`year_num') | `year_num' < 2024 {
+    display as error "Report year must be an integer of 2024 or later."
+    exit 198
+}
+if missing(`version_num') | `version_num' != floor(`version_num') | ///
+        `version_num' < 1 {
+    display as error "Report version must be a positive integer."
+    exit 198
+}
+
+if "$BNR_STATA" == "" {
+    capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
+    if _rc {
+        local config_rc = _rc
+        display as error "The BNR local path configuration could not be loaded."
+        exit `config_rc'
+    }
+}
+foreach required_global in BNR_REPO BNR_STATA BNR_STAGING BNR_PUBLIC ///
+        BNR_PRIVATE_LOGS {
+    if "$`required_global'" == "" {
+        display as error "Required path is not configured: `required_global'"
+        exit 198
+    }
+}
+
+local year4 : display %04.0f `year_num'
+local report_id "bnr_cvd_annual_report_`year4'_v`version_num'"
+local public_name "bnr_cvd_annual_report_`year4'"
+local ready_dir "$BNR_STAGING/reports/cvd/annual/`report_id'/public_ready"
+
+local public_reports "$BNR_PUBLIC/reports"
+local public_cvd "`public_reports'/cvd"
+local public_annual "`public_cvd'/annual"
+local public_dir "`public_annual'/`year4'"
+local public_pdf "`public_dir'/`public_name'.pdf"
+local public_qmd "`public_dir'/index.qmd"
+local public_metadata "`public_dir'/report.yml"
+
+local site_files "$BNR_REPO/site/downloads/files/reports"
+local site_cvd "`site_files'/cvd"
+local site_annual "`site_cvd'/annual"
+local site_pdf_dir "`site_annual'/`year4'"
+local site_pdf "`site_pdf_dir'/`public_name'.pdf"
+local site_metadata "`site_pdf_dir'/report.yml"
+local site_reports "$BNR_REPO/site/surveillance/cvd/reports/annual"
+local site_report_dir "`site_reports'/`year4'"
+local site_qmd "`site_report_dir'/index.qmd"
+local private_log "$BNR_PRIVATE_LOGS/bnr_report_annual_s3_`report_id'.log"
+
+foreach required_dir in public_reports public_cvd public_annual public_dir ///
+        site_files site_cvd site_annual site_pdf_dir site_reports ///
+        site_report_dir {
+    quietly mata: st_local("dir_exists", strofreal(direxists("``required_dir''")))
+    if "`dir_exists'" != "1" {
+        capture mkdir "``required_dir''"
+        if _rc {
+            display as error "Could not create annual-report publication directory: ``required_dir''"
+            exit 603
+        }
+    }
+}
+
+capture log close bnr_report_annual_s3
+log using "`private_log'", text replace name(bnr_report_annual_s3)
+capture noisily do "$BNR_STATA/reporting/bnr_report_publish_candidate.do" ///
+    "`ready_dir'" "`report_id'" "annual_cvd_report" ///
+    "report_year" "`year4'" "`version_num'" ///
+    "`public_pdf'" "`public_qmd'" "`public_metadata'" ///
+    "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'"
+local publication_rc = _rc
+if `publication_rc' {
+    capture log close bnr_report_annual_s3
+    quietly {
+    noisily display as error ""
+    noisily display as error "============================================================================="
+    noisily display as error "ANNUAL CVD REPORT STEP 3: FAILURE SUMMARY"
+    noisily display as error "  Run status:              Failed safely"
+    noisily display as error "  Report identifier:       `report_id'"
+    noisily display as error "  Return code:             `publication_rc'"
+    noisily display as error "  Recovery:                Resolve the error above; public_ready is unchanged."
+    noisily display as error "============================================================================="
+    }
+    exit `publication_rc'
+}
+
+quietly {
+noisily display as result ""
+noisily display as result "============================================================================="
+noisily display as result "ANNUAL CVD REPORT STEP 3: OPERATIONAL RUN SUMMARY"
+noisily display as text   "  Run status:              Published successfully"
+noisily display as text   "  Script version:          1.0.0"
+noisily display as text   "  Report identifier:       `report_id'"
+noisily display as text  `"  Public report package:   `public_dir'"'
+noisily display as text  `"  Website PDF:             `site_pdf'"'
+noisily display as text  `"  Website landing page:    `site_qmd'"'
+noisily display as text  `"  Private publication log: `private_log'"'
+noisily display as text   "  Next step:               Render and review the Quarto site."
+noisily display as result "============================================================================="
+}
+capture log close bnr_report_annual_s3

@@ -61,7 +61,7 @@ flagged. It is never inferred.
 Machine identifiers are lowercase with underscores:
 
 ```text
-cvd_update_2026_04_v1
+bnr_cvd_update_2026_04_v1
 bnr_cvd_annual_report_2025_v1
 ```
 
@@ -82,7 +82,7 @@ version.
 The annual report uses a small Stata composition model:
 
 ```text
-bnr_report_annual_build.do
+bnr_report_annual_s1_build.do
     -> bnr_report_annual_standard.do
     -> include year-specific interpretation file
     -> include year-specific Focus On module
@@ -93,17 +93,46 @@ included by the master DO file so the macros remain in the master scope. The
 Focus On module is analyst-owned and may differ each year, while retaining the
 common report style.
 
-The annual builder creates a non-public candidate PDF and landing-page source
-under `outputs/staging/reports/.../<report-id>/candidate/`. Its explicit
-approval receipt is written to the same package's `public_ready/approval.yml`,
-binding both candidate files by checksum. Only the annual publisher may then
-promote the verified PDF to `outputs/public/` and copy the PDF and landing-page
-source to the website locations.
+The annual builder creates exactly three private candidate files under
+`$BNR_STAGING/reports/cvd/annual/<report-id>/candidate/`: the versioned PDF,
+`index.qmd` and `report.yml`. `$BNR_STAGING` is the configured private staging
+root; no report staging files belong under the public repository's
+`outputs/staging/` tree.
+
+Step 2 copies those exact three files into the package's `public_ready/`
+directory, writes `public_manifest.csv`, and writes `approval.yml` last. The
+receipt is a workflow-control record beside the approved payload, not a log.
+Step 3 reads only `public_ready/`; it never publishes from `candidate/`.
+
+Published filenames are stable per reporting period. The authoritative annual
+package is held under `$BNR_PUBLIC/reports/cvd/annual/<year>/` and is mirrored
+to the matching website PDF and landing-page locations. A higher version
+replaces the stable working-tree files; Git retains the superseded version.
+
+## One-off report publication
+
+The one-off workflow begins with a finished PDF. It does not run or attempt to
+standardise the bespoke analysis that produced that PDF. The three publication
+steps prepare a private candidate, approve an exact manifested payload and
+publish that payload using the same shared controls as the annual report.
+
+Private packages are held under
+`$BNR_STAGING/reports/cvd/studies/<report-id>/`. Authoritative published files
+are held under `$BNR_PUBLIC/reports/cvd/studies/<study-id>/` and mirrored to
+the corresponding website PDF and landing-page locations. The public filename
+is stable for each study ID; corrections require a higher approved version.
+
+The disclosure screen accepts a private Stata dataset containing `output_id`,
+`cell_id` and numeric `cell_count`. It flags counts from zero to five, missing,
+negative or non-integer counts and duplicate cell identifiers. It neither
+changes the source dataset nor assesses secondary suppression. Its output is
+review evidence only; human disclosure review remains required.
 
 ## Naming and menu rules
 
 All new reporting infrastructure begins `bnr_report_`, including DO, dialog,
-help and test files. Use step numbers only for a true fixed sequence.
+help and test files. Fixed analyst sequences use the mortality-style `_s1_`,
+`_s2_`, `_s3_` filename grammar. Shared helpers and tests are not menu steps.
 
 The two repeatable builders may have menu entries:
 
@@ -115,9 +144,12 @@ User > BNR
         Step 1: Build annual report candidate
         Step 2: Approve annual report candidate
         Step 3: Publish approved annual report
+    One-off CVD report publication
+        Step 1: Prepare one-off report candidate
+        Step 2: Approve one-off report candidate
+        Step 3: Publish approved one-off report
     Report utilities
-        Validate report assets and metadata
-        Create disclosure-review report
+        Screen report counts for disclosure review
 ```
 
 Shared approval, publication, metadata validation and disclosure-review helpers

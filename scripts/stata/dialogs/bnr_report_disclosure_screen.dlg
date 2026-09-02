@@ -1,0 +1,36 @@
+*! BNR report disclosure screen
+*! version 0.1.0, 2 September 2026
+VERSION 19.0
+POSITION . . 550 390
+
+DIALOG main, label("BNR: Screen report counts for disclosure review")
+BEGIN
+  TEXTBOX tx_intro 15 15 520 64, label("Screen a Stata dataset containing output_id, cell_id and numeric cell_count. The utility flags obvious issues but does not suppress, approve or publish anything.")
+  GROUPBOX gb_input 15 96 520 110, label("Screening input")
+  TEXT tx_path 30 126 105 ., label("Dataset path:")
+  EDIT ed_path 145 123 365 ., nomemory error("Input dataset path")
+  TEXT tx_review 30 166 105 ., label("Review ID:")
+  EDIT ed_review 145 163 250 ., nomemory error("Review ID")
+  GROUPBOX gb_protection 15 222 520 62, label("Output protection")
+  CHECKBOX ck_replace 30 248 480 ., default(0) nomemory label("Replace the existing private screen for this review ID")
+  TEXTBOX tx_boundary 20 305 510 42, label("Counts from 0 to 5 are flagged. Secondary suppression and final disclosure decisions always require human review.")
+END
+
+OK ok1, label("Screen counts")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.ed_path
+  require main.ed_review
+  put "do $BNR_STATA/reporting/bnr_report_disclosure_screen.do "
+  put `"""'
+  put main.ed_path
+  put `"""'
+  put " "
+  put main.ed_review
+  if main.ck_replace {
+    put " replace"
+  }
+END

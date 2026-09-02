@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.15.0, 2 September 2026
+*! version 1.17.0, 2 September 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -75,25 +75,35 @@ window menu append submenu "BNR" "Annual CVD report"
 
 window menu append item "Annual CVD report" ///
     "Step 1: Build annual report candidate" ///
-    "db bnr_report_annual_build"
+    "db bnr_report_annual_s1_build"
 
 window menu append item "Annual CVD report" ///
     "Step 2: Approve annual report candidate" ///
-    "db bnr_report_annual_approve"
+    "db bnr_report_annual_s2_approve"
 
 window menu append item "Annual CVD report" ///
     "Step 3: Publish approved annual report" ///
-    "db bnr_report_annual_publish"
+    "db bnr_report_annual_s3_publish"
+
+window menu append submenu "BNR" "One-off CVD report publication"
+
+window menu append item "One-off CVD report publication" ///
+    "Step 1: Prepare one-off report candidate" ///
+    "db bnr_report_oneoff_s1_prepare"
+
+window menu append item "One-off CVD report publication" ///
+    "Step 2: Approve one-off report candidate" ///
+    "db bnr_report_oneoff_s2_approve"
+
+window menu append item "One-off CVD report publication" ///
+    "Step 3: Publish approved one-off report" ///
+    "db bnr_report_oneoff_s3_publish"
 
 window menu append submenu "BNR" "Report utilities"
 
 window menu append item "Report utilities" ///
-    "Validate report assets and metadata" ///
-    "db bnr_report_validate_package"
-
-window menu append item "Report utilities" ///
-    "Create disclosure-review report" ///
-    "db bnr_report_disclosure_review"
+    "Screen report counts for disclosure review" ///
+    "db bnr_report_disclosure_screen"
 
 
 window menu refresh

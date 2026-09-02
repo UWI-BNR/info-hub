@@ -1,11 +1,11 @@
-*! BNR annual CVD report candidate builder
-*! version 0.1.0, 2 September 2026
+*! BNR annual CVD report Step 1: build candidate
+*! version 1.0.0, 2 September 2026
 VERSION 19.0
 POSITION . . 540 500
 
-DIALOG main, label("BNR: Build annual CVD report candidate")
+DIALOG main, label("BNR: Annual report Step 1 - build candidate")
 BEGIN
-  TEXTBOX tx_intro 15 15 510 52, label("Build a staged PDF and Quarto landing-page candidate from exact approved public releases. This action does not publish, render, commit or deploy the report.")
+  TEXTBOX tx_intro 15 15 510 52, label("Build a private PDF, landing page and metadata candidate from exact approved public releases. This step does not approve or publish anything.")
 
   GROUPBOX gb_report 15 84 510 70, label("Annual report")
   TEXT tx_report_year 30 112 100 ., label("Report year:")
@@ -26,9 +26,9 @@ BEGIN
   SPINNER ed_mortality_month 380 281 65 ., default(7) min(1) max(12) nomemory error("Mortality release month")
 
   GROUPBOX gb_protection 15 342 510 62, label("Candidate protection")
-  CHECKBOX ck_replace 30 368 470 ., default(0) nomemory label("Replace this existing candidate version")
+  CHECKBOX ck_replace 30 368 470 ., default(0) nomemory label("Replace this unapproved candidate version")
 
-  TEXTBOX tx_boundary 20 424 500 44, label("The staged candidate contains a PDF and landing-page source only. It must be reviewed and explicitly approved before publication promotes it to public and website locations.")
+  TEXTBOX tx_boundary 20 424 500 44, label("Candidate files are written only to private staging. An approved version cannot be rebuilt; create a higher version instead.")
 END
 
 OK ok1, label("Build candidate")
@@ -37,7 +37,7 @@ RESET reset1
 
 PROGRAM command
 BEGIN
-  put "do $BNR_STATA/reporting/bnr_report_annual_build.do "
+  put "do $BNR_STATA/reporting/bnr_report_annual_s1_build.do "
   put main.ed_report_year
   put " "
   put main.ed_event_year
