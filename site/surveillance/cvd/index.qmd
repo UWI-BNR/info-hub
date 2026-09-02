@@ -8,9 +8,9 @@ sidebar: cvd
 listing:
   - id: cvd-reports
     contents:
-      - "reports/annual/*.qmd"
-      - "reports/quarterly/*.qmd"
-      - "reports/studies/*.qmd"
+      - "reports/updates/*/index.qmd"
+      - "reports/annual/*/index.qmd"
+      - "reports/studies/*/index.qmd"
     type: table
     sort: "date desc"
     sort-ui:
@@ -21,12 +21,12 @@ listing:
     fields:
       - date
       - title
-      - categories
+      - report-type
       - description
     field-display-names:
       date: "Published"
       title: "Report"
-      categories: "Type"
+      report-type: "Type"
       description: "Description"
     date-format: medium
     table-hover: true
@@ -79,8 +79,8 @@ Explore the latest CVD summary statistics.
 
 ## Reports and studies
 
-Annual reports, quarterly reports and one-off analytical studies will appear
-here as they are published.
+Rolling three-month CVD surveillance updates, annual reports and one-off
+analytical studies will appear here as they are published.
 
 ::: {#cvd-reports}
 :::

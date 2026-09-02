@@ -1,0 +1,107 @@
+---
+title: "Rolling three-month CVD surveillance update:   January 2026"
+description: "Objective CVD event and mortality counts for the latest three complete common months in the declared public releases."
+date: 2026-09-02
+date-modified: 2026-09-02
+image: /assets/images/listings/listing_reef_shallows.webp
+image-alt: Sunlit shallow reef water in Barbados.
+report-id: cvd_update_2026_01_v2
+report-type: Rolling three-month update
+report-version: v2
+event-release-id: cvd_2026_01
+mortality-release-id: mort_2026_07
+categories:
+  - CVD
+  - Rolling three-month update
+format:
+  html:
+    toc: true
+    toc-title: On this page
+    page-layout: article
+---
+
+This online update presents the latest three complete months that are common to
+the declared CVD-event and mortality releases. It uses published counts only.
+
+```{ojs}
+//| output: false
+eventMetrics = FileAttachment("../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv").csv({typed: true})
+mortalityMetrics = FileAttachment("../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv").csv({typed: true})
+```
+
+```{ojs}
+//| output: false
+isPublishedNumber = row => {
+  const status = String(row?.suppression_status ?? '').trim().toLowerCase();
+  const value = Number(row?.display_value);
+  return (status === '' || status === 'none' || status === 'not_applicable') && Number.isFinite(value);
+}
+monthKey = row => String(row.period_year).padStart(4, '0') + '-' + String(row.period_month).padStart(2, '0')
+monthSerial = key => { const [year, month] = key.split('-').map(Number); return year * 12 + month; }
+complete = row => String(row.period_complete) === '1'
+onlyOne = (rows, label) => {
+  if (rows.length !== 1) throw new Error(label + ': expected one public row per month.');
+  return rows[0];
+}
+```
+
+```{ojs}
+//| output: false
+eventRows = eventMetrics.filter(row =>
+  row.metric_id === 'CVD-BURDEN-001' && row.period_type === 'monthly' &&
+  row.event_type === 'all_cvd' && row.sex === 'all' && row.age_group === 'all' &&
+  row.ascertainment_scope === 'hospital_only' && row.statistic === 'monthly_count'
+)
+mortalityRows = mortalityMetrics.filter(row =>
+  row.metric_id === 'MORT-BURDEN-001' && row.period_type === 'monthly' &&
+  row.event_type === 'all_cvd' && row.sex === 'all' && row.age_group === 'all' &&
+  row.case_definition === 'primary_clear_likely' && row.statistic === 'monthly_count'
+)
+eventByMonth = d3.rollup(eventRows, rows => onlyOne(rows, 'Events'), monthKey)
+mortalityByMonth = d3.rollup(mortalityRows, rows => onlyOne(rows, 'Mortality'), monthKey)
+commonMonths = Array.from(eventByMonth.keys()).filter(key => mortalityByMonth.has(key)).sort()
+eligibleMonths = commonMonths.filter(key => isPublishedNumber(eventByMonth.get(key)) &&
+  isPublishedNumber(mortalityByMonth.get(key)) && complete(eventByMonth.get(key)) && complete(mortalityByMonth.get(key)))
+windowMonths = eligibleMonths.slice(-3)
+windowIsConsecutive = windowMonths.length === 3 &&
+  monthSerial(windowMonths[1]) === monthSerial(windowMonths[0]) + 1 &&
+  monthSerial(windowMonths[2]) === monthSerial(windowMonths[1]) + 1
+updateRows = windowIsConsecutive ? windowMonths.map(month => ({
+  month,
+  events: Number(eventByMonth.get(month).display_value),
+  deaths: Number(mortalityByMonth.get(month).display_value)
+})) : []
+```
+
+## Headline
+
+```{ojs}
+//| echo: false
+{
+  if (!windowIsConsecutive) return html`<p>The declared releases do not contain three complete, non-suppressed consecutive months in common for this update.</p>`;
+  const events = d3.sum(updateRows, d => d.events);
+  const deaths = d3.sum(updateRows, d => d.deaths);
+  const start = d3.utcFormat('%B %Y')(new Date(updateRows[0].month + '-01T00:00:00Z'));
+  const end = d3.utcFormat('%B %Y')(new Date(updateRows[2].month + '-01T00:00:00Z'));
+  const result = document.createElement('p');
+  result.textContent = events.toLocaleString('en-GB') + ' hospital-recorded CVD events and ' + deaths.toLocaleString('en-GB') + ' CVD deaths were published for the three-month period from ' + start + ' to ' + end + '.';
+  return result;
+}
+```
+
+## Published monthly counts
+
+```{ojs}
+//| echo: false
+updateRows.length ? Inputs.table(updateRows.map(row => ({
+  Month: d3.utcFormat('%B %Y')(new Date(row.month + '-01T00:00:00Z')),
+  'Hospital-recorded CVD events': row.events,
+  'CVD deaths (primary definition)': row.deaths
+}))) : 'No comparable three-month table is available.'
+```
+
+## Data sources
+
+- CVD-event release: [cvd_2026_01](../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv)
+- Mortality release: [mort_2026_07](../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv)
+- Report version: cvd_update_2026_01_v2

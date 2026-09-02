@@ -20,8 +20,8 @@ format:
 ::: {.callout-note}
 ## Temporary listing test
 
-This empty mock report exists only to demonstrate the annual, quarterly and
-study publication structure and to populate the two dynamic report listings.
-It contains no analytical results and should be removed when the first real
-reporting product is added.
+This empty mock report exists only to demonstrate the dated report publication
+structure and to populate the two dynamic report listings. It contains no
+analytical results and should be removed when the first real reporting product
+is added.
 :::

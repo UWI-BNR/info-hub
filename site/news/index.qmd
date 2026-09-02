@@ -6,7 +6,7 @@ title-block-style: none
 listing:
   - id: latest-reports
     contents:
-      - "../surveillance/*/reports/*/*.qmd"
+      - "../surveillance/*/reports/*/*/index.qmd"
     type: grid
     sort: "date desc"
     categories: true
@@ -60,8 +60,9 @@ Explore the latest CVD summary statistics.
 
 ## Latest reports
 
-New annual reports, quarterly reports and one-off analytical studies from the
-Barbados National Registry are listed here as they are published.
+New rolling three-month CVD surveillance updates, annual reports and one-off
+analytical studies from the Barbados National Registry are listed here as they
+are published.
 
 ::: {#latest-reports}
 :::

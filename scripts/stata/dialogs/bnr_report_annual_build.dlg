@@ -1,0 +1,55 @@
+*! BNR annual CVD report candidate builder
+*! version 0.1.0, 2 September 2026
+VERSION 19.0
+POSITION . . 540 500
+
+DIALOG main, label("BNR: Build annual CVD report candidate")
+BEGIN
+  TEXTBOX tx_intro 15 15 510 52, label("Build a staged PDF and Quarto landing-page candidate from exact approved public releases. This action does not publish, render, commit or deploy the report.")
+
+  GROUPBOX gb_report 15 84 510 70, label("Annual report")
+  TEXT tx_report_year 30 112 100 ., label("Report year:")
+  SPINNER ed_report_year 140 109 80 ., default(2025) min(2024) max(2100) nomemory error("Report year")
+  TEXT tx_version 285 112 65 ., label("Version:")
+  SPINNER ed_version 355 109 55 ., default(1) min(1) max(99) nomemory error("Report version")
+
+  GROUPBOX gb_event 15 170 510 70, label("Approved public CVD-event release")
+  TEXT tx_event_year 30 198 100 ., label("Release year:")
+  SPINNER ed_event_year 140 195 80 ., default(2026) min(2024) max(2100) nomemory error("Event release year")
+  TEXT tx_event_month 270 198 100 ., label("Release month:")
+  SPINNER ed_event_month 380 195 65 ., default(1) min(1) max(12) nomemory error("Event release month")
+
+  GROUPBOX gb_mortality 15 256 510 70, label("Approved public mortality release")
+  TEXT tx_mortality_year 30 284 100 ., label("Release year:")
+  SPINNER ed_mortality_year 140 281 80 ., default(2026) min(2024) max(2100) nomemory error("Mortality release year")
+  TEXT tx_mortality_month 270 284 100 ., label("Release month:")
+  SPINNER ed_mortality_month 380 281 65 ., default(7) min(1) max(12) nomemory error("Mortality release month")
+
+  GROUPBOX gb_protection 15 342 510 62, label("Candidate protection")
+  CHECKBOX ck_replace 30 368 470 ., default(0) nomemory label("Replace this existing candidate version")
+
+  TEXTBOX tx_boundary 20 424 500 44, label("The staged candidate contains a PDF and landing-page source only. It must be reviewed and explicitly approved before publication promotes it to public and website locations.")
+END
+
+OK ok1, label("Build candidate")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  put "do $BNR_STATA/reporting/bnr_report_annual_build.do "
+  put main.ed_report_year
+  put " "
+  put main.ed_event_year
+  put " "
+  put main.ed_event_month
+  put " "
+  put main.ed_mortality_year
+  put " "
+  put main.ed_mortality_month
+  put " "
+  put main.ed_version
+  if main.ck_replace {
+    put " replace"
+  }
+END

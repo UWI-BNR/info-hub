@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.14.0, 1 September 2026
+*! version 1.15.0, 2 September 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -65,13 +65,35 @@ window menu append item "Update CVD mortality dashboard" ///
     "Step 6: Publish approved mortality outputs" ///
     "db bnr_mort_s6_publish"
 
-window menu append submenu "BNR" "BNR utilities"
+window menu append submenu "BNR" "Rolling three-month CVD update"
 
-window menu append submenu "BNR utilities" "Create metadata for dta"
+window menu append item "Rolling three-month CVD update" ///
+    "Build dated online update" ///
+    "db bnr_report_update_build"
 
-window menu append submenu "BNR utilities" "Create workbook from dta"
+window menu append submenu "BNR" "Annual CVD report"
 
-window menu append submenu "BNR utilities" "Check latest data release"
+window menu append item "Annual CVD report" ///
+    "Step 1: Build annual report candidate" ///
+    "db bnr_report_annual_build"
+
+window menu append item "Annual CVD report" ///
+    "Step 2: Approve annual report candidate" ///
+    "db bnr_report_annual_approve"
+
+window menu append item "Annual CVD report" ///
+    "Step 3: Publish approved annual report" ///
+    "db bnr_report_annual_publish"
+
+window menu append submenu "BNR" "Report utilities"
+
+window menu append item "Report utilities" ///
+    "Validate report assets and metadata" ///
+    "db bnr_report_validate_package"
+
+window menu append item "Report utilities" ///
+    "Create disclosure-review report" ///
+    "db bnr_report_disclosure_review"
 
 
 window menu refresh

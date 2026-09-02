@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_step6_publish_expanded_cvd.do
-VERSION: 3.2.1 (29 August 2026)
+VERSION: 3.3.0 (2 September 2026)
 PURPOSE: Verify and publish an approved combined CVD package.
 USAGE:   do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2026 1
          do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2026 1 replace
@@ -8,6 +8,10 @@ USAGE:   do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2026 1
 CHANGE 3.2.1:
   Wrap the operational run-summary display block in quietly { } so Stata
   shows the summary itself without echoing each display command.
+
+CHANGE 3.3.0:
+  - Publish a verified, release-stamped CSV under site/downloads/ for dated
+    browser reports. Historical reports must not depend on a current dataset.
 
 CHANGE 3.2.0:
   - Add a concise operational run summary after successful promotion.
@@ -47,6 +51,7 @@ local public_meta "`public'/metadata"
 local public_releases "`public'/releases"
 local public_catalogue "`public'/catalogue"
 local site "$BNR_REPO/site/downloads/files/metrics/cvd"
+local site_datasets "`site'/datasets"
 local site_releases "`site'/releases"
 local site_catalogue "`site'/catalogue"
 local release_dta "cvd_metrics_`release_id'.dta"
@@ -60,6 +65,7 @@ local zip_name "cvd_metrics_`release_id'.zip"
 local public_zip "`public_releases'/`zip_name'"
 local catalogue "`public_catalogue'/`release_id'.yml"
 local publication_log "$BNR_PRIVATE_LOGS/bnr_cvd_publish_`year4'`month2'.log"
+local site_release_csv "`site_datasets'/`release_csv'"
 
 foreach required_file in manifest approval {
     capture confirm file "``required_file''"
@@ -123,6 +129,7 @@ capture mkdir "`public_meta'"
 capture mkdir "`public_releases'"
 capture mkdir "`public_catalogue'"
 capture mkdir "`site'"
+capture mkdir "`site_datasets'"
 capture mkdir "`site_releases'"
 capture mkdir "`site_catalogue'"
 foreach output_file in "`public'/`release_dta'" "`public'/`release_csv'" "`public'/`current_dta'" "`public'/`current_csv'" "`public_meta'/`release_yml'" "`public_meta'/`current_yml'" "`public_meta'/`package_yml'" "`public_zip'" "`catalogue'" {
@@ -137,6 +144,10 @@ copy "`source_data'/`current_csv'" "`public'/`current_csv'", replace
 copy "`source_meta'/`release_yml'" "`public_meta'/`release_yml'", replace
 copy "`source_meta'/`current_yml'" "`public_meta'/`current_yml'", replace
 copy "`source_meta'/`package_yml'" "`public_meta'/`package_yml'", replace
+
+quietly checksum "`public'/`release_csv'"
+local release_csv_size = r(filelen)
+local release_csv_checksum = r(checksum)
 
 local original_folder "`c(pwd)'"
 cd "`public'"
@@ -174,6 +185,13 @@ file write `catalogue_handle' "    include_in_listing: true" _n
 file write `catalogue_handle' "    sort_order: 20" _n
 file close `catalogue_handle'
 
+copy "`public'/`release_csv'" "`site_release_csv'", replace
+quietly checksum "`site_release_csv'"
+if r(filelen) != `release_csv_size' | r(checksum) != `release_csv_checksum' {
+    display as error "Website release CSV verification failed: `site_release_csv'"
+    exit 459
+}
+
 copy "`public'/`current_csv'" "`site'/`current_csv'", replace
 copy "`public_zip'" "`site_releases'/`zip_name'", replace
 copy "`catalogue'" "`site_catalogue'/`release_id'.yml", replace
@@ -185,7 +203,7 @@ tempname publish_handle
 file open `publish_handle' using "`publication_log'", write text replace
 file write `publish_handle' "BNR CVD STEP 6 PUBLICATION LOG" _n
 file write `publish_handle' "run_status: published_successfully" _n
-file write `publish_handle' "script_version: 3.2.0" _n
+file write `publish_handle' "script_version: 3.3.0" _n
 file write `publish_handle' "release_id: `release_id'" _n
 file write `publish_handle' "approved_by: `approved_by'" _n
 file write `publish_handle' "approved_role: `approved_role'" _n
@@ -196,6 +214,7 @@ file write `publish_handle' "verified_payload_files: `payload_files'" _n
 file write `publish_handle' `"public_release_dataset: `public'/`release_dta'"' _n
 file write `publish_handle' `"public_current_dataset: `public'/`current_dta'"' _n
 file write `publish_handle' `"release_zip: `public_zip'"' _n
+file write `publish_handle' `"website_release_csv: `site_release_csv'"' _n
 file write `publish_handle' `"website_current_csv: `site'/`current_csv'"' _n
 file write `publish_handle' `"catalogue_entry: `catalogue'"' _n
 file close `publish_handle'
@@ -207,13 +226,14 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:                 Published successfully"
-noisily display as text   "  Script version:             3.2.1"
+noisily display as text   "  Script version:             3.3.0"
 noisily display as text   "  Selected release:           `year4'-`month2'"
 noisily display as text  `"  Approved by:                `approved_by'"'
 noisily display as text   "  Approved payload verified:  `payload_files' files"
 noisily display as text  `"  Public release dataset:     `public'/`release_dta'"'
 noisily display as text  `"  Current public dataset:     `public'/`current_dta'"'
 noisily display as text  `"  Release ZIP:                `public_zip'"'
+noisily display as text  `"  Website release CSV:        `site_release_csv'"'
 noisily display as text  `"  Website current CSV:        `site'/`current_csv'"'
 noisily display as text  `"  Catalogue entry:            `catalogue'"'
 noisily display as text  `"  Private publication log:    `publication_log'"'
