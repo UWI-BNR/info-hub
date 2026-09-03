@@ -1,11 +1,28 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.0.1 (2 September 2026)
+VERSION: 1.1.1 (3 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
 
-USAGE:
-  do "$BNR_STATA/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1
-  do "$BNR_STATA/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1 replace
+CHANGE 1.1.1:
+  - Use a repository-relative CLI entry point so the local path configuration
+    can be loaded by the builder before derived globals are required.
+  - Remove the annual builder's dependency on BNR_STATA; report components are
+    resolved from BNR_REPO/scripts/stata after configuration is loaded.
+
+USAGE (enter each command on one line):
+  do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1
+  do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1 replace
+
+CHANGE 1.1.0:
+  - Keep Step 1 as the workflow controller and final PDF writer.
+  - Load year-specific interpretation before the reusable standard section so
+    analyst text can be inserted at fixed editorial locations.
+  - Move the cover and all standard surveillance composition into
+    bnr_report_annual_standard.do.
+  - Allow the year-specific Special chapter file to compose its own pages.
+  - Rename the generated landing-page description from "Focus On" to
+    "Special chapter". Approval, manifest, versioning and publication controls
+    are unchanged.
 *******************************************************************************/
 
 version 19
@@ -56,7 +73,7 @@ if `version_num' < 1 {
     exit 198
 }
 
-if "$BNR_STATA" == "" {
+if "$BNR_REPO" == "" {
     capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
     if _rc {
         local config_rc = _rc
@@ -64,7 +81,7 @@ if "$BNR_STATA" == "" {
         exit `config_rc'
     }
 }
-foreach required_global in BNR_REPO BNR_STATA BNR_STAGING BNR_PUBLIC ///
+foreach required_global in BNR_REPO BNR_STAGING BNR_PUBLIC ///
         BNR_PRIVATE_LOGS {
     if "$`required_global'" == "" {
         display as error "Required path is not configured: `required_global'"
@@ -86,8 +103,8 @@ local event_csv "$BNR_PUBLIC/metrics/cvd/cvd_metrics_`event_release'.csv"
 local mortality_csv "$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
 local site_event_csv "$BNR_REPO/site/downloads/files/metrics/cvd/datasets/cvd_metrics_`event_release'.csv"
 local site_mortality_csv "$BNR_REPO/site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
-local interpretation "$BNR_STATA/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_interpretation.do"
-local focus "$BNR_STATA/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_focus.do"
+local interpretation "$BNR_REPO/scripts/stata/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_interpretation.do"
+local focus "$BNR_REPO/scripts/stata/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_focus.do"
 
 capture confirm file "`event_csv'"
 if _rc {
@@ -196,38 +213,47 @@ foreach candidate_file in candidate_pdf candidate_qmd candidate_metadata {
 capture log close bnr_report_annual_s1
 log using "`private_log'", text replace name(bnr_report_annual_s1)
 
+* -----------------------------------------------------------------------------
+* PDF composition
+* -----------------------------------------------------------------------------
+* Step 1 owns the document lifecycle and final save. Editorial composition stays
+* in the standard section and year-specific files so this controller does not
+* become an analytical report script.
+
 putpdf clear
-putpdf begin, pagesize(A4) font("Arial", 10)
-putpdf paragraph, halign(center)
-putpdf text ("Barbados National Registry"), bold font("Arial", 18)
-putpdf paragraph, halign(center)
-putpdf text ("Annual cardiovascular disease report: `report_year4'"), bold font("Arial", 16)
-putpdf paragraph, halign(center)
-putpdf text ("Version v`version_num'"), italic
-putpdf pagebreak
+putpdf begin, pagesize(A4) ///
+    margin(top, 0.55) margin(bottom, 0.55) ///
+    margin(left, 0.65) margin(right, 0.65) ///
+    font("Arial", 10)
 
-include "$BNR_STATA/reporting/bnr_report_annual_standard.do"
+* Load analyst-owned interpretation first. The reusable standard section inserts
+* these locals in fixed year-on-year locations.
 include "`interpretation'"
-putpdf paragraph
-putpdf text ("Interpretation"), bold font("Arial", 14)
-putpdf paragraph
-putpdf text ("`annual_interpretation_text'")
 
+* Reusable annual surveillance composition. This file reads only the two
+* declared approved public release datasets validated above.
+include "$BNR_REPO/scripts/stata/reporting/bnr_report_annual_standard.do"
+
+* The year-specific Special chapter owns its analysis, figures, tables and
+* narrative. It remains visually continuous with the standard section but is
+* operationally separate.
 include "`focus'"
-putpdf paragraph
-putpdf text ("`annual_focus_title'"), bold font("Arial", 14)
-putpdf paragraph
-putpdf text ("`annual_focus_text'")
 
+* Generic report identity remains a workflow-controller responsibility.
 putpdf pagebreak
 putpdf paragraph
-putpdf text ("Report metadata"), bold font("Arial", 14)
+putpdf text ("About this report"), bold font("Arial", 14)
 putpdf paragraph
 putpdf text ("Report identifier: `report_id'")
+putpdf paragraph
+putpdf text ("Report version: v`version_num'")
 putpdf paragraph
 putpdf text ("CVD-event release: `event_release'")
 putpdf paragraph
 putpdf text ("Mortality release: `mortality_release'")
+putpdf paragraph
+putpdf text ("The PDF is built from the declared approved public releases. Publication remains subject to the annual report Step 2 review and Step 3 publication controls."), font("Arial", 8)
+
 capture noisily putpdf save "`candidate_pdf'", replace
 if _rc {
     local save_rc = _rc
@@ -244,7 +270,7 @@ tempname qmd_handle
 file open `qmd_handle' using "`candidate_qmd'", write text replace
 file write `qmd_handle' "---" _n
 file write `qmd_handle' `"title: "Annual CVD report: `report_year4'""' _n
-file write `qmd_handle' `"description: "Annual CVD report for Barbados, including the standard surveillance section and annual Focus On chapter.""' _n
+file write `qmd_handle' `"description: "Annual CVD surveillance report for Barbados, including the standard surveillance section and annual Special chapter.""' _n
 file write `qmd_handle' "date: `build_date'" _n
 file write `qmd_handle' "date-modified: `build_date'" _n
 file write `qmd_handle' "report-id: `report_id'" _n
@@ -292,7 +318,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate created"
-noisily display as text   "  Script version:          1.0.1"
+noisily display as text   "  Script version:          1.1.1"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"
