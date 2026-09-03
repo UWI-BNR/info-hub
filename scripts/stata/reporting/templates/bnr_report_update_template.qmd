@@ -20,7 +20,7 @@ format:
     page-layout: article
 ---
 
-<!-- BNR rolling CVD update template design revision: v0.4.0 | 2026-09-03 -->
+<!-- BNR rolling CVD update template design revision: v0.5.0 | source 1c27d2b20d42e3883ffbe2bf4ab2fa6dba2887f4 | 2026-09-03 -->
 
 ```{=html}
 <style>
@@ -158,6 +158,19 @@ format:
   line-height: 1.4;
   color: #5c6b73;
 }
+.bnr-update-chart-control {
+  margin: .65rem 0 .6rem;
+  padding: .58rem .75rem .48rem;
+  border: 1px solid #dce5e9;
+  border-radius: .4rem;
+  background: #f8fafb;
+}
+.bnr-update-chart-control .observablehq {
+  margin: 0;
+}
+.bnr-update-chart-control form {
+  margin-bottom: 0 !important;
+}
 .bnr-update-axis-title {
   margin: .12rem 0 .72rem .1rem;
   font-size: .9rem;
@@ -197,7 +210,8 @@ format:
   gap: .35rem;
 }
 .bnr-update-legend-current,
-.bnr-update-legend-history {
+.bnr-update-legend-history,
+.bnr-update-legend-reference {
   display: inline-block;
   width: 30px;
   height: 0;
@@ -207,6 +221,9 @@ format:
 }
 .bnr-update-legend-history {
   border-top: 2px solid rgba(96, 119, 128, .28);
+}
+.bnr-update-legend-reference {
+  border-top: 2px solid #7f8c93;
 }
 .bnr-update-notes-box {
   margin-top: 1.5rem;
@@ -603,12 +620,44 @@ lastThreeSummary
 
 ## Rolling 12-month trend
 
-Each current line accumulates the latest 12 complete months available for that
-measure. Background lines show the same 12-month sequence shifted back by whole
-years. Only complete published 12-month blocks are included.
+Choose between a cumulative total and the difference from the 2015–2019 average
+for the same calendar month. In the difference view, the horizontal zero line is
+the 2015–2019 monthly average: values above zero are higher than that reference
+and values below zero are lower. Background lines show aligned 12-month periods
+from earlier years. Only complete published values are used.
 
 ```{ojs}
 //| output: false
+referenceYears = d3.range(2015, 2020)
+referencePeriodLabel = "2015–2019"
+
+calendarMonthNumber = key => Number(String(key).slice(5, 7))
+
+monthlyReferenceAverage = byMonth => {
+  const reference = new Map()
+
+  d3.range(1, 13).forEach(month => {
+    const keys = referenceYears.map(year =>
+      String(year) + "-" + String(month).padStart(2, "0")
+    )
+    const rows = keys.map(key => byMonth.get(key))
+
+    // The reference is shown only when all five published reference-year values
+    // are complete and available. Missing or protected values are never filled in.
+    if (!rows.every(rowReady)) {
+      reference.set(month, null)
+      return
+    }
+
+    reference.set(
+      month,
+      d3.mean(rows, row => Number(row.display_value))
+    )
+  })
+
+  return reference
+}
+
 rollingBlock = (byMonth, endMonth, yearsBack = 0) => {
   if (!endMonth) return null
 
@@ -640,6 +689,38 @@ rollingBlock = (byMonth, endMonth, yearsBack = 0) => {
   })
 }
 
+differenceBlock = (byMonth, referenceByCalendarMonth, endMonth, yearsBack = 0) => {
+  if (!endMonth) return null
+
+  const shiftedEnd = shiftMonth(endMonth, -12 * yearsBack)
+  const months = d3.range(-11, 1).map(offset => shiftMonth(shiftedEnd, offset))
+
+  if (!months.every(key => rowReady(byMonth.get(key)))) return null
+  if (!months.every(key => Number.isFinite(referenceByCalendarMonth.get(calendarMonthNumber(key))))) return null
+
+  const series = monthRangeLabel(months)
+  const startYear = months[0].slice(0, 4)
+  const endYear = months[months.length - 1].slice(0, 4)
+  const seriesYearRange = startYear === endYear ? startYear : startYear + "\u2013" + endYear
+
+  return months.map((month, index) => {
+    const monthlyCount = Number(byMonth.get(month).display_value)
+    const referenceAverage = Number(referenceByCalendarMonth.get(calendarMonthNumber(month)))
+    return {
+      axisMonth: monthShortLabel(month),
+      monthlyCount,
+      referenceAverage,
+      difference: monthlyCount - referenceAverage,
+      month,
+      series,
+      seriesYearRange,
+      seriesType: yearsBack === 0 ? "current" : "historical_comparator",
+      yearsBack,
+      step: index + 1
+    }
+  })
+}
+
 rollingComparators = (byMonth, endMonth) => {
   if (!endMonth || !byMonth.size) return []
 
@@ -654,6 +735,20 @@ rollingComparators = (byMonth, endMonth) => {
     .filter(block => block !== null)
 }
 
+differenceComparators = (byMonth, referenceByCalendarMonth, endMonth) => {
+  if (!endMonth || !byMonth.size) return []
+
+  const earliestSerial = d3.min(Array.from(byMonth.keys()), monthSerial)
+  const maximumYearsBack = Math.max(
+    0,
+    Math.floor((monthSerial(endMonth) - earliestSerial) / 12)
+  )
+
+  return d3.range(1, maximumYearsBack + 1)
+    .map(yearsBack => differenceBlock(byMonth, referenceByCalendarMonth, endMonth, yearsBack))
+    .filter(block => block !== null)
+}
+
 eventChartEligibleMonths = Array.from(eventByMonth.keys())
   .filter(key => rowReady(eventByMonth.get(key)))
   .sort()
@@ -662,12 +757,34 @@ eventChartLatestMonth = eventChartEligibleMonths.length
   ? eventChartEligibleMonths[eventChartEligibleMonths.length - 1]
   : null
 
+eventReferenceByMonth = monthlyReferenceAverage(eventByMonth)
 eventRollingCurrent = rollingBlock(eventByMonth, eventChartLatestMonth, 0)
 eventRollingComparators = rollingComparators(eventByMonth, eventChartLatestMonth)
+eventDifferenceCurrent = differenceBlock(
+  eventByMonth,
+  eventReferenceByMonth,
+  eventChartLatestMonth,
+  0
+)
+eventDifferenceComparators = differenceComparators(
+  eventByMonth,
+  eventReferenceByMonth,
+  eventChartLatestMonth
+)
 ```
 
 ```{ojs}
 //| output: false
+formatOneDecimal = value =>
+  Number.isFinite(Number(value)) ? Number(value).toFixed(1) : "Unavailable"
+
+formatSignedOneDecimal = value => {
+  if (!Number.isFinite(Number(value))) return "Unavailable"
+  const number = Number(value)
+  if (Math.abs(number) < 0.05) return "0.0"
+  return (number > 0 ? "+" : "\u2212") + Math.abs(number).toFixed(1)
+}
+
 cumulativeTrendPlot = (current, comparators, plotWidth, yDomainMaximum = null) => {
   if (!current) return null
 
@@ -711,8 +828,6 @@ cumulativeTrendPlot = (current, comparators, plotWidth, yDomainMaximum = null) =
     })
   )
 
-  // One pointer-driven tip mark is shared by current and historical series,
-  // so only one tooltip can be displayed at a time.
   marks.push(
     Plot.tip(
       interactive,
@@ -767,7 +882,118 @@ cumulativeTrendPlot = (current, comparators, plotWidth, yDomainMaximum = null) =
   })
 }
 
+differenceAxisLimit = blocks => {
+  const values = blocks
+    .filter(Boolean)
+    .flat()
+    .map(row => Math.abs(Number(row.difference)))
+    .filter(Number.isFinite)
+  return values.length ? d3.max(values) : null
+}
 
+differenceTrendPlot = (current, comparators, plotWidth, sharedAxisLimit = null) => {
+  if (!current) return null
+
+  const historical = comparators.flat()
+  const interactive = [
+    ...historical.map(row => ({
+      ...row,
+      hoverTitle: row.seriesYearRange
+    })),
+    ...current.map(row => ({
+      ...row,
+      hoverTitle:
+        "Current period\n" +
+        monthLabel(row.month) + "\n" +
+        "Monthly count: " + formatCount(row.monthlyCount) + "\n" +
+        referencePeriodLabel + " average: " + formatOneDecimal(row.referenceAverage) + "\n" +
+        "Difference: " + formatSignedOneDecimal(row.difference)
+    }))
+  ]
+
+  const marks = [
+    Plot.ruleY([0], {stroke: "#7f8c93", strokeWidth: 1.5})
+  ]
+
+  if (historical.length) {
+    marks.push(
+      Plot.line(historical, {
+        x: "axisMonth",
+        y: "difference",
+        z: "series",
+        stroke: "#607780",
+        strokeOpacity: 0.18,
+        strokeWidth: 1.25
+      })
+    )
+  }
+
+  marks.push(
+    Plot.line(current, {
+      x: "axisMonth",
+      y: "difference",
+      stroke: "#045174",
+      strokeWidth: 3
+    })
+  )
+
+  marks.push(
+    Plot.tip(
+      interactive,
+      Plot.pointerX({
+        x: "axisMonth",
+        y: "difference",
+        title: "hoverTitle"
+      })
+    )
+  )
+
+  marks.push(
+    Plot.dot(current.slice(-1), {
+      x: "axisMonth",
+      y: "difference",
+      fill: "#045174",
+      r: 4
+    })
+  )
+
+  const calculatedLimit = differenceAxisLimit([current, ...comparators])
+  const axisLimit =
+    sharedAxisLimit !== null &&
+    sharedAxisLimit !== undefined &&
+    Number.isFinite(Number(sharedAxisLimit)) &&
+    Number(sharedAxisLimit) > 0
+      ? Number(sharedAxisLimit)
+      : calculatedLimit
+
+  const yOptions = {
+    grid: true,
+    label: null,
+    nice: true
+  }
+  if (Number.isFinite(Number(axisLimit)) && Number(axisLimit) > 0) {
+    yOptions.domain = [-Number(axisLimit), Number(axisLimit)]
+  }
+
+  return Plot.plot({
+    width: plotWidth,
+    height: 340,
+    marginLeft: 62,
+    marginRight: 22,
+    marginBottom: 42,
+    style: {
+      fontFamily: "inherit",
+      fontSize: "13px",
+      background: "transparent"
+    },
+    x: {
+      domain: current.map(row => row.axisMonth),
+      label: null
+    },
+    y: yOptions,
+    marks
+  })
+}
 
 rollingSummaryText = (current, subject) => {
   if (!current) {
@@ -778,7 +1004,16 @@ rollingSummaryText = (current, subject) => {
     formatCount(total) + " " + subject + "."
 }
 
-chartExportRows = ({blocks, measure, sourceReleaseId, sourceSnapshot, ascertainmentScope = "", mortalityDefinition = "", mortalityDefinitionCode = ""}) =>
+differenceSummaryText = (current, subject) => {
+  if (!current) {
+    return "A complete 12-month difference series is not available for " + subject + "."
+  }
+  return monthRangeLabel(current.map(row => row.month)) +
+    ": monthly counts compared with the " + referencePeriodLabel +
+    " average for the same calendar month."
+}
+
+chartExportRows = ({blocks, chartView, measure, sourceReleaseId, sourceSnapshot, ascertainmentScope = "", mortalityDefinition = "", mortalityDefinitionCode = ""}) =>
   blocks.filter(Boolean).flat().map(row => ({
     report_id: "@@REPORT_ID@@",
     report_version: "v@@REPORT_VERSION@@",
@@ -786,6 +1021,8 @@ chartExportRows = ({blocks, measure, sourceReleaseId, sourceSnapshot, ascertainm
     report_period: "@@REPORT_MONTH_NAME@@ @@REPORT_YEAR@@",
     source_release_id: sourceReleaseId,
     source_snapshot: sourceSnapshot,
+    chart_view: chartView,
+    reference_period: row.referenceAverage === undefined ? "" : referencePeriodLabel,
     measure,
     ascertainment_scope: ascertainmentScope,
     mortality_definition: mortalityDefinition,
@@ -798,7 +1035,9 @@ chartExportRows = ({blocks, measure, sourceReleaseId, sourceSnapshot, ascertainm
     month_label: monthLabel(row.month),
     month_number_in_series: row.step,
     monthly_count: row.monthlyCount,
-    cumulative_count: row.cumulative
+    reference_monthly_average: row.referenceAverage === undefined ? "" : row.referenceAverage,
+    difference_from_reference: row.difference === undefined ? "" : row.difference,
+    cumulative_count: row.cumulative === undefined ? "" : row.cumulative
   }))
 
 csvEscape = value => {
@@ -864,6 +1103,16 @@ sourceCsvWithMetadata = ({rows, sourceReleaseId, sourceSnapshot, sourceType, pub
 }
 ```
 
+::: {.bnr-update-chart-control}
+```{ojs}
+//| echo: false
+viewof eventChartView = Inputs.radio(
+  ["Cumulative total", "Difference from 2015–2019 average"],
+  {label: "Event chart view", value: "Cumulative total"}
+)
+```
+:::
+
 ::: {.bnr-update-chart-card}
 <div class="bnr-update-chart-title">Hospital-recorded CVD events</div>
 
@@ -872,42 +1121,78 @@ sourceCsvWithMetadata = ({rows, sourceReleaseId, sourceSnapshot, sourceType, pub
 {
   const note = document.createElement("div")
   note.className = "bnr-update-chart-note"
-  note.textContent = rollingSummaryText(
-    eventRollingCurrent,
-    "hospital-recorded CVD events"
-  )
+  note.textContent = eventChartView === "Cumulative total"
+    ? rollingSummaryText(eventRollingCurrent, "hospital-recorded CVD events")
+    : differenceSummaryText(eventDifferenceCurrent, "hospital-recorded CVD events")
   return note
 }
-```
-
-<div class="bnr-update-chart-legend">
-  <span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>
-  <span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>
-</div>
-
-<div class="bnr-update-axis-title">↑ Cumulative count</div>
-
-```{ojs}
-//| echo: false
-eventRollingCurrent
-  ? cumulativeTrendPlot(eventRollingCurrent, eventRollingComparators, width)
-  : availabilityNotice(
-      "The declared CVD-event release does not contain a complete published 12-month block ending at its latest complete month."
-    )
 ```
 
 ```{ojs}
 //| echo: false
 {
+  const legend = document.createElement("div")
+  legend.className = "bnr-update-chart-legend"
+  legend.innerHTML =
+    '<span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>' +
+    '<span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>' +
+    (eventChartView === "Difference from 2015–2019 average"
+      ? '<span class="bnr-update-legend-item"><span class="bnr-update-legend-reference"></span>2015–2019 monthly average (zero)</span>'
+      : '')
+  return legend
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const title = document.createElement("div")
+  title.className = "bnr-update-axis-title"
+  title.textContent = eventChartView === "Cumulative total"
+    ? "↑ Cumulative count"
+    : "↑ Difference in monthly count"
+  return title
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  if (eventChartView === "Cumulative total") {
+    return eventRollingCurrent
+      ? cumulativeTrendPlot(eventRollingCurrent, eventRollingComparators, width)
+      : availabilityNotice(
+          "The declared CVD-event release does not contain a complete published 12-month block ending at its latest complete month."
+        )
+  }
+
+  return eventDifferenceCurrent
+    ? differenceTrendPlot(eventDifferenceCurrent, eventDifferenceComparators, width)
+    : availabilityNotice(
+        "The difference view cannot be shown because a complete current 12-month block or complete 2015–2019 monthly reference is unavailable."
+      )
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const differenceView = eventChartView === "Difference from 2015–2019 average"
   const rows = chartExportRows({
-    blocks: [eventRollingCurrent, ...eventRollingComparators],
+    blocks: differenceView
+      ? [eventDifferenceCurrent, ...eventDifferenceComparators]
+      : [eventRollingCurrent, ...eventRollingComparators],
+    chartView: differenceView ? "difference_from_2015_2019_monthly_average" : "cumulative_12_month",
     measure: "Hospital-recorded CVD events",
     sourceReleaseId: "@@EVENT_RELEASE_ID@@",
     sourceSnapshot: "data/event_release.csv",
     ascertainmentScope: "hospital_only"
   })
   if (!rows.length) return null
-  const download = downloadLink(chartCsv(rows), "@@REPORT_ID@@_events_rolling12.csv")
+  const filename = differenceView
+    ? "@@REPORT_ID@@_events_difference_2015_2019.csv"
+    : "@@REPORT_ID@@_events_rolling12_cumulative.csv"
+  const download = downloadLink(chartCsv(rows), filename)
   invalidation.then(() => URL.revokeObjectURL(download.url))
   const actions = document.createElement("div")
   actions.className = "bnr-update-chart-actions"
@@ -926,8 +1211,16 @@ viewof mortalityChartChoice = Inputs.radio(
 )
 ```
 
+```{ojs}
+//| echo: false
+viewof mortalityChartView = Inputs.radio(
+  ["Cumulative total", "Difference from 2015–2019 average"],
+  {label: "Mortality chart view", value: "Cumulative total"}
+)
+```
+
 <div class="bnr-update-control-note">
-This selector applies only to the mortality trend chart and its CSV download.
+These selectors apply only to the mortality trend chart and its CSV download.
 </div>
 :::
 
@@ -951,6 +1244,8 @@ mortalityChartLatestMonth = mortalityChartEligibleMonths.length
   ? mortalityChartEligibleMonths[mortalityChartEligibleMonths.length - 1]
   : null
 
+mortalityChartReferenceByMonth = monthlyReferenceAverage(mortalityChartByMonth)
+
 mortalityRollingCurrent = rollingBlock(
   mortalityChartByMonth,
   mortalityChartLatestMonth,
@@ -960,10 +1255,21 @@ mortalityRollingComparators = rollingComparators(
   mortalityChartByMonth,
   mortalityChartLatestMonth
 )
+mortalityDifferenceCurrent = differenceBlock(
+  mortalityChartByMonth,
+  mortalityChartReferenceByMonth,
+  mortalityChartLatestMonth,
+  0
+)
+mortalityDifferenceComparators = differenceComparators(
+  mortalityChartByMonth,
+  mortalityChartReferenceByMonth,
+  mortalityChartLatestMonth
+)
 
-// Use one y-axis ceiling for both mortality definitions so switching the
-// selector does not rescale the chart.
-mortalityAxisValues = ["Primary", "Inclusive"].flatMap(choice => {
+// Use common y-axis limits for Primary and Inclusive so switching mortality
+// definition does not rescale either chart view.
+mortalityAxisDefinitions = ["Primary", "Inclusive"].map(choice => {
   const rows = mortalityRows.filter(row =>
     row.case_definition === definitionCode(choice)
   )
@@ -976,15 +1282,36 @@ mortalityAxisValues = ["Primary", "Inclusive"].flatMap(choice => {
     .filter(key => rowReady(byMonth.get(key)))
     .sort()
   const latest = eligible.length ? eligible[eligible.length - 1] : null
-  const blocks = [
+  const reference = monthlyReferenceAverage(byMonth)
+  const cumulativeBlocks = [
     rollingBlock(byMonth, latest, 0),
     ...rollingComparators(byMonth, latest)
   ].filter(Boolean)
-  return blocks.flat().map(row => Number(row.cumulative))
+  const differenceBlocks = [
+    differenceBlock(byMonth, reference, latest, 0),
+    ...differenceComparators(byMonth, reference, latest)
+  ].filter(Boolean)
+  return {cumulativeBlocks, differenceBlocks}
 })
 
-mortalitySharedYMaximum = mortalityAxisValues.length
-  ? d3.max(mortalityAxisValues)
+mortalityCumulativeAxisValues = mortalityAxisDefinitions
+  .flatMap(item => item.cumulativeBlocks)
+  .flat()
+  .map(row => Number(row.cumulative))
+  .filter(Number.isFinite)
+
+mortalitySharedYMaximum = mortalityCumulativeAxisValues.length
+  ? d3.max(mortalityCumulativeAxisValues)
+  : null
+
+mortalityDifferenceAxisValues = mortalityAxisDefinitions
+  .flatMap(item => item.differenceBlocks)
+  .flat()
+  .map(row => Math.abs(Number(row.difference)))
+  .filter(Number.isFinite)
+
+mortalitySharedDifferenceLimit = mortalityDifferenceAxisValues.length
+  ? d3.max(mortalityDifferenceAxisValues)
   : null
 ```
 
@@ -996,40 +1323,84 @@ mortalitySharedYMaximum = mortalityAxisValues.length
 {
   const note = document.createElement("div")
   note.className = "bnr-update-chart-note"
-  note.textContent = rollingSummaryText(
-    mortalityRollingCurrent,
-    mortalityChartChoice.toLowerCase() + "-definition CVD deaths"
-  )
+  note.textContent = mortalityChartView === "Cumulative total"
+    ? rollingSummaryText(
+        mortalityRollingCurrent,
+        mortalityChartChoice.toLowerCase() + "-definition CVD deaths"
+      )
+    : differenceSummaryText(
+        mortalityDifferenceCurrent,
+        mortalityChartChoice.toLowerCase() + "-definition CVD deaths"
+      )
   return note
 }
-```
-
-<div class="bnr-update-chart-legend">
-  <span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>
-  <span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>
-</div>
-
-<div class="bnr-update-axis-title">↑ Cumulative count</div>
-
-```{ojs}
-//| echo: false
-mortalityRollingCurrent
-  ? cumulativeTrendPlot(
-      mortalityRollingCurrent,
-      mortalityRollingComparators,
-      width,
-      mortalitySharedYMaximum
-    )
-  : availabilityNotice(
-      "The declared mortality release does not contain a complete published 12-month block ending at its latest complete month for the selected definition."
-    )
 ```
 
 ```{ojs}
 //| echo: false
 {
+  const legend = document.createElement("div")
+  legend.className = "bnr-update-chart-legend"
+  legend.innerHTML =
+    '<span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>' +
+    '<span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>' +
+    (mortalityChartView === "Difference from 2015–2019 average"
+      ? '<span class="bnr-update-legend-item"><span class="bnr-update-legend-reference"></span>2015–2019 monthly average (zero)</span>'
+      : '')
+  return legend
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const title = document.createElement("div")
+  title.className = "bnr-update-axis-title"
+  title.textContent = mortalityChartView === "Cumulative total"
+    ? "↑ Cumulative count"
+    : "↑ Difference in monthly count"
+  return title
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  if (mortalityChartView === "Cumulative total") {
+    return mortalityRollingCurrent
+      ? cumulativeTrendPlot(
+          mortalityRollingCurrent,
+          mortalityRollingComparators,
+          width,
+          mortalitySharedYMaximum
+        )
+      : availabilityNotice(
+          "The declared mortality release does not contain a complete published 12-month block ending at its latest complete month for the selected definition."
+        )
+  }
+
+  return mortalityDifferenceCurrent
+    ? differenceTrendPlot(
+        mortalityDifferenceCurrent,
+        mortalityDifferenceComparators,
+        width,
+        mortalitySharedDifferenceLimit
+      )
+    : availabilityNotice(
+        "The mortality difference view cannot be shown because a complete current 12-month block or complete 2015–2019 monthly reference is unavailable for the selected definition."
+      )
+}
+```
+
+```{ojs}
+//| echo: false
+{
+  const differenceView = mortalityChartView === "Difference from 2015–2019 average"
   const rows = chartExportRows({
-    blocks: [mortalityRollingCurrent, ...mortalityRollingComparators],
+    blocks: differenceView
+      ? [mortalityDifferenceCurrent, ...mortalityDifferenceComparators]
+      : [mortalityRollingCurrent, ...mortalityRollingComparators],
+    chartView: differenceView ? "difference_from_2015_2019_monthly_average" : "cumulative_12_month",
     measure: "CVD deaths",
     sourceReleaseId: "@@MORTALITY_RELEASE_ID@@",
     sourceSnapshot: "data/mortality_release.csv",
@@ -1038,10 +1409,10 @@ mortalityRollingCurrent
   })
   if (!rows.length) return null
   const slug = mortalityChartChoice.toLowerCase()
-  const download = downloadLink(
-    chartCsv(rows),
-    "@@REPORT_ID@@_mortality_" + slug + "_rolling12.csv"
-  )
+  const filename = differenceView
+    ? "@@REPORT_ID@@_mortality_" + slug + "_difference_2015_2019.csv"
+    : "@@REPORT_ID@@_mortality_" + slug + "_rolling12_cumulative.csv"
+  const download = downloadLink(chartCsv(rows), filename)
   invalidation.then(() => URL.revokeObjectURL(download.url))
   const actions = document.createElement("div")
   actions.className = "bnr-update-chart-actions"
