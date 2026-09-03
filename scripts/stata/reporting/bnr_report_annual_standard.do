@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_standard.do
-VERSION: 2.1.2 (3 September 2026)
+VERSION: 2.2.0 (3 September 2026)
 PURPOSE: Reusable putpdf composition for the standard annual CVD surveillance
          section.
 
@@ -30,13 +30,19 @@ DESIGN CONTRACT:
     file; this composition file does not generate editorial conclusions.
   - Special chapter composition remains outside this file.
 
-DESIGN PASS 2.1.0:
-  - Rebuild the cover as one composed page.
-  - Rebuild Year in Brief as a compact one-page visual summary.
-  - Establish reusable publication styling across results pages: typography,
-    statistic strips, larger figure blocks, borderless five-year tables and
-    consistent interpretation callouts.
-  - Repair age graphics as genuine year-by-year stacked bars.
+DESIGN PASS 2.2.0:
+  - Keep summary-card backgrounds continuous behind labels and values.
+  - Simplify interpretation callouts to one continuous pale panel.
+  - Widen annual graphics, move legends to 12 o'clock, remove axis lines and
+    add same-colour observed-value markers to line charts.
+  - Increase use of published uncertainty without combining distinct sources:
+    DCO linkage ranges are shaded; statistical 95% confidence intervals use
+    whiskers.
+  - Add a concise quarterly hospital-recorded "How the year unfolded" view.
+  - Rebuild completeness graphics as labelled five-year tile matrices.
+  - Expand Methods into a publication-grade technical section covering
+    ascertainment, definitions, equations, uncertainty, disclosure and release
+    governance.
   - Keep analytical definitions, release selection and workflow boundaries
     unchanged.
 *******************************************************************************/
@@ -102,7 +108,7 @@ local annual_figure_dir "`candidate_dir'/figures"
 tempfile annual_event_data annual_mortality_data
 
 import delimited using "`event_csv'", clear varnames(1) stringcols(_all)
-foreach v in period_year period_complete value numerator denominator ///
+foreach v in period_year period_month period_quarter period_complete value numerator denominator ///
         linkage_lower_value linkage_upper_value ci_lower_value ci_upper_value ///
         comparison_n {
     capture destring `v', replace force
@@ -275,11 +281,12 @@ if r(N) >= 2 {
     twoway connected value period_year, sort ///
         lcolor("`bnr_teal'") mcolor("`bnr_teal'") ///
         lwidth(medthick) msymbol(O) msize(tiny) ///
-        graphregion(color(white) margin(zero)) ///
-        plotregion(color(white) margin(vsmall)) ///
+        graphregion(color("`bnr_pale2'") margin(zero)) ///
+        plotregion(color("`bnr_pale2'") margin(vsmall)) ///
         xlabel(`first_table_year' `report_year_num', labsize(tiny) noticks nogrid) ///
         ylabel(, nolabel noticks nogrid) ///
-        xtitle("") ytitle("") legend(off) ///
+        xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(off) ///
         xsize(3.0) ysize(1.0)
     graph export "`yib_event_count_fig'", replace width(1200)
 }
@@ -295,11 +302,12 @@ if r(N) >= 2 {
     twoway connected value period_year, sort ///
         lcolor("`bnr_primary'") mcolor("`bnr_primary'") ///
         lwidth(medthick) msymbol(O) msize(tiny) ///
-        graphregion(color(white) margin(zero)) ///
-        plotregion(color(white) margin(vsmall)) ///
+        graphregion(color("`bnr_pale2'") margin(zero)) ///
+        plotregion(color("`bnr_pale2'") margin(vsmall)) ///
         xlabel(`first_table_year' `report_year_num', labsize(tiny) noticks nogrid) ///
         ylabel(, nolabel noticks nogrid) ///
-        xtitle("") ytitle("") legend(off) ///
+        xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(off) ///
         xsize(3.0) ysize(1.0)
     graph export "`yib_event_rate_fig'", replace width(1200)
 }
@@ -315,11 +323,12 @@ if r(N) >= 2 {
     twoway connected value period_year, sort ///
         lcolor("`bnr_heart'") mcolor("`bnr_heart'") ///
         lwidth(medthick) msymbol(O) msize(tiny) ///
-        graphregion(color(white) margin(zero)) ///
-        plotregion(color(white) margin(vsmall)) ///
+        graphregion(color("`bnr_pale2'") margin(zero)) ///
+        plotregion(color("`bnr_pale2'") margin(vsmall)) ///
         xlabel(`first_table_year' `report_year_num', labsize(tiny) noticks nogrid) ///
         ylabel(, nolabel noticks nogrid) ///
-        xtitle("") ytitle("") legend(off) ///
+        xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(off) ///
         xsize(3.0) ysize(1.0)
     graph export "`yib_death_count_fig'", replace width(1200)
 }
@@ -335,11 +344,12 @@ if r(N) >= 2 {
     twoway connected value period_year, sort ///
         lcolor("`bnr_secondary'") mcolor("`bnr_secondary'") ///
         lwidth(medthick) msymbol(O) msize(tiny) ///
-        graphregion(color(white) margin(zero)) ///
-        plotregion(color(white) margin(vsmall)) ///
+        graphregion(color("`bnr_pale2'") margin(zero)) ///
+        plotregion(color("`bnr_pale2'") margin(vsmall)) ///
         xlabel(`first_table_year' `report_year_num', labsize(tiny) noticks nogrid) ///
         ylabel(, nolabel noticks nogrid) ///
-        xtitle("") ytitle("") legend(off) ///
+        xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(off) ///
         xsize(3.0) ysize(1.0)
     graph export "`yib_death_rate_fig'", replace width(1200)
 }
@@ -415,6 +425,11 @@ else {
         font("`font_body'", 7, "`bnr_muted'")
 }
 
+* Reapply the intended card background after all cell content has been written.
+* This prevents putpdf cell assignments from leaving white strips behind text.
+putpdf table yib_cards(1/3,.), bgcolor("`bnr_pale2'")
+putpdf table yib_cards(5/7,.), bgcolor("`bnr_pale2'")
+
 putpdf paragraph, font("`font_body'", 1)
 putpdf text ("How complete is the picture?"), ///
     bold font("`font_title'", 10.5, "`bnr_ink'")
@@ -433,6 +448,7 @@ putpdf table yib_quality(3,1) = ("of the Primary national event estimate"), ///
     font("`font_body'", 7.2, "`bnr_muted'")
 putpdf table yib_quality(3,2) = ("of the Inclusive mortality estimate"), ///
     font("`font_body'", 7.2, "`bnr_muted'")
+putpdf table yib_quality(.,.), bgcolor("`bnr_pale'")
 
 putpdf paragraph, font("`font_body'", 1)
 putpdf text ("What stood out in `report_year4'?"), ///
@@ -470,25 +486,29 @@ quietly count
 if r(N) > 0 {
     twoway ///
       (rarea linkage_lower_value linkage_upper_value period_year if ///
+          ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", ///
+          sort color("`bnr_primary'%08") lcolor(none)) ///
+      (rarea linkage_lower_value linkage_upper_value period_year if ///
           ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", ///
           sort color("`bnr_teal'%18") lcolor(none)) ///
-      (line value period_year if ascertainment_scope == "hospital_only" & statistic == "annual_count", ///
-          sort lcolor("`bnr_muted'%75") lwidth(medium)) ///
-      (line value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", ///
-          sort lcolor("`bnr_teal'") lwidth(thick)) ///
-      (line value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", ///
-          sort lcolor("`bnr_primary'%85") lpattern(dash) lwidth(medthick)) ///
+      (connected value period_year if ascertainment_scope == "hospital_only" & statistic == "annual_count", ///
+          sort lcolor("`bnr_muted'%75") mcolor("`bnr_muted'%75") msymbol(O) msize(vsmall) lwidth(medium)) ///
+      (connected value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", ///
+          sort lcolor("`bnr_teal'") mcolor("`bnr_teal'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", ///
+          sort lcolor("`bnr_primary'%85") mcolor("`bnr_primary'%85") msymbol(O) msize(vsmall) lpattern(dash) lwidth(medthick)) ///
       (line value period_year if ascertainment_scope == "hospital_only" & statistic == "annual_previous_5yr_mean", ///
           sort lcolor("`bnr_secondary'%70") lpattern(shortdash) lwidth(thin)), ///
       graphregion(color(white) margin(vsmall)) ///
       plotregion(color(white) margin(vsmall)) ///
       xlabel(#4, format(%4.0f) labsize(small) noticks nogrid) ///
       ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
+      xscale(noline) yscale(noline) ///
       xtitle("") ytitle("") ///
-      legend(order(2 "Hospital-recorded" 3 "Primary national" ///
-          4 "Inclusive national" 5 "Previous 5-year mean") ///
-          cols(2) size(vsmall) region(lcolor(none))) ///
-      xsize(7.4) ysize(3.35)
+      legend(order(3 "Hospital-recorded" 4 "Primary national" ///
+          5 "Inclusive national" 6 "Previous 5-year mean") ///
+          cols(4) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.35)
     graph export "`fig_c1'", replace width(2800)
 }
 
@@ -539,6 +559,7 @@ putpdf table c1_cards(1,.), ///
     bold font("`font_title'", 7.4, "`bnr_muted'") bgcolor("`bnr_pale2'")
 putpdf table c1_cards(2,.), ///
     bold font("`font_title'", 15, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c1_cards(.,.), bgcolor("`bnr_pale'")
 
 putpdf paragraph, font("`font_body'", 1)
 putpdf text ("CVD event counts over time"), ///
@@ -546,7 +567,7 @@ putpdf text ("CVD event counts over time"), ///
 
 capture confirm file "`fig_c1'"
 if !_rc {
-    putpdf table c1_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table c1_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table c1_fig(1,1) = image("`fig_c1'")
 }
 putpdf paragraph, font("`font_body'", 1)
@@ -608,20 +629,93 @@ putpdf table c1_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table c1_tab(2/5,6), bold
 
 putpdf paragraph, font("`font_body'", 1)
-putpdf table c1_note = (2,12), width(100%) border(all, nil)
-putpdf table c1_note(1,1)
-putpdf table c1_note(2,1)
-putpdf table c1_note(1,2), colspan(11)
-putpdf table c1_note(2,2), colspan(11)
-putpdf table c1_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c1_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c1_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table c1_note(2,2) = ("`ann_evt_counts_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c1_note = (2,1), width(100%) border(all, nil)
+putpdf table c1_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c1_note(2,1) = ("`ann_evt_counts_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c1_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
-* 7. CVD events - C2 Event rates
+* 7. CVD events - C1b How the year unfolded
+* -----------------------------------------------------------------------------
+
+local fig_c1q "`annual_figure_dir'/event_quarterly_2025.png"
+use "`annual_event_data'", clear
+keep if metric_id == "CVD-BURDEN-001" & period_type == "quarterly" & ///
+    period_year == `report_year_num' & event_type == "all_cvd" & sex == "all" & ///
+    age_group == "all" & ascertainment_scope == "hospital_only" & ///
+    inlist(statistic, "quarterly_count", "quarterly_same_quarter_previous_5yr_mean")
+quietly count
+if r(N) > 0 {
+    twoway ///
+      (connected value period_quarter if statistic == "quarterly_count" & period_complete == 1, ///
+          sort lcolor("`bnr_teal'") mcolor("`bnr_teal'") msymbol(O) msize(small) lwidth(thick)) ///
+      (line value period_quarter if statistic == "quarterly_same_quarter_previous_5yr_mean", ///
+          sort lcolor("`bnr_secondary'%80") lpattern(shortdash) lwidth(medium)), ///
+      graphregion(color(white) margin(vsmall)) plotregion(color(white) margin(vsmall)) ///
+      xlabel(1 "Q1" 2 "Q2" 3 "Q3" 4 "Q4", labsize(small) noticks nogrid) ///
+      ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
+      xscale(noline) yscale(noline) xtitle("") ytitle("") ///
+      legend(order(1 "`report_year4'" 2 "Previous 5-year same-quarter mean") ///
+          cols(2) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.0)
+    graph export "`fig_c1q'", replace width(2800)
+}
+
+putpdf pagebreak
+putpdf paragraph
+putpdf text ("How the year unfolded"), bold font("`font_title'", 14, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Quarterly hospital-recorded All-CVD event counts in `report_year4', compared with the published mean for the same quarter in the previous five years."), ///
+    font("`font_body'", 8, "`bnr_muted'")
+capture confirm file "`fig_c1q'"
+if !_rc {
+    putpdf table c1q_fig = (1,1), width(100%) border(all, nil) halign(center)
+    putpdf table c1q_fig(1,1) = image("`fig_c1q'")
+}
+putpdf table c1q_tab = (3,5), width(100%) border(all, nil)
+putpdf table c1q_tab(1,1) = ("Measure")
+forvalues q = 1/4 {
+    local cc = `q' + 1
+    putpdf table c1q_tab(1,`cc') = ("Q`q'")
+}
+putpdf table c1q_tab(2,1) = ("`report_year4' hospital-recorded")
+putpdf table c1q_tab(3,1) = ("Previous 5-year same-quarter mean")
+forvalues q = 1/4 {
+    local cc = `q' + 1
+    local obs "-"
+    local cmp "-"
+    use "`annual_event_data'", clear
+    keep if metric_id == "CVD-BURDEN-001" & period_type == "quarterly" & ///
+        period_year == `report_year_num' & period_quarter == `q' & event_type == "all_cvd" & ///
+        sex == "all" & age_group == "all" & ascertainment_scope == "hospital_only"
+    quietly summarize value if statistic == "quarterly_count" & period_complete == 1, meanonly
+    if r(N) == 1 {
+        local tmp : display %8.0fc r(mean)
+        local obs = strtrim("`tmp'")
+    }
+    quietly summarize value if statistic == "quarterly_same_quarter_previous_5yr_mean", meanonly
+    if r(N) == 1 {
+        local tmp : display %8.1fc r(mean)
+        local cmp = strtrim("`tmp'")
+    }
+    putpdf table c1q_tab(2,`cc') = ("`obs'")
+    putpdf table c1q_tab(3,`cc') = ("`cmp'")
+}
+putpdf table c1q_tab(.,.), font("`font_body'", 7.6)
+putpdf table c1q_tab(1,.), bold bgcolor("`bnr_pale'")
+putpdf table c1q_tab(.,1), bold
+putpdf paragraph, font("`font_body'", 1)
+putpdf table c1q_note = (2,1), width(100%) border(all, nil)
+putpdf table c1q_note(1,1) = ("HOW TO READ THIS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c1q_note(2,1) = ("This view adds within-year timing to the annual result. It uses hospital-recorded events because DCO-enhanced national event estimates are annual only; it should therefore be read alongside, not substituted for, the annual national estimate."), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c1q_note(.,.), bgcolor("`bnr_pale2'")
+
+* -----------------------------------------------------------------------------
+* 8. CVD events - C2 Event rates
 * -----------------------------------------------------------------------------
 
 local fig_c2 "`annual_figure_dir'/event_rate_trends.png"
@@ -634,18 +728,25 @@ keep if metric_id == "CVD-INCIDENCE-001" & period_type == "annual" & ///
 quietly count
 if r(N) > 0 {
     twoway ///
+      (rarea linkage_lower_value linkage_upper_value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", ///
+          sort color("`bnr_primary'%07") lcolor(none)) ///
       (rarea linkage_lower_value linkage_upper_value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", ///
-          sort color("`bnr_teal'%12") lcolor(none)) ///
+          sort color("`bnr_teal'%13") lcolor(none)) ///
+      (rcap ci_lower_value ci_upper_value period_year if ascertainment_scope == "hospital_only", ///
+          lcolor("`bnr_muted'%35") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", ///
           lcolor("`bnr_teal'%45") lwidth(vthin)) ///
-      (line value period_year if ascertainment_scope == "hospital_only", sort lcolor("`bnr_muted'") lwidth(medthick)) ///
-      (line value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", sort lcolor("`bnr_teal'") lwidth(thick)) ///
-      (line value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", sort lcolor("`bnr_primary'") lpattern(dash) lwidth(medthick)), ///
+      (rcap ci_lower_value ci_upper_value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", ///
+          lcolor("`bnr_primary'%35") lwidth(vthin)) ///
+      (connected value period_year if ascertainment_scope == "hospital_only", sort lcolor("`bnr_muted'") mcolor("`bnr_muted'") msymbol(O) msize(vsmall) lwidth(medthick)) ///
+      (connected value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary", sort lcolor("`bnr_teal'") mcolor("`bnr_teal'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "inclusive", sort lcolor("`bnr_primary'") mcolor("`bnr_primary'") msymbol(O) msize(vsmall) lpattern(dash) lwidth(medthick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
+      xscale(noline) yscale(noline) ///
       xtitle("") ytitle("") ///
-      legend(order(3 "Hospital-recorded" 4 "Primary national" 5 "Inclusive national") cols(3) size(vsmall) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      legend(order(6 "Hospital-recorded" 7 "Primary national" 8 "Inclusive national") cols(3) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_c2'", replace width(2400)
 }
 
@@ -653,7 +754,7 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("CVD event rates"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Age-standardised rates per 100,000. The Primary national series carries both the published DCO linkage range and the published 95% statistical confidence interval."), font("`font_body'", 8, "`bnr_muted'")
+putpdf text ("Age-standardised rates per 100,000. National series show published DCO linkage uncertainty; all rate series show their published 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
 
 local c2_hospital "-"
 local c2_primary "-"
@@ -682,14 +783,15 @@ putpdf table c2_cards(2,2) = ("`c2_primary'")
 putpdf table c2_cards(2,3) = ("`c2_inclusive'")
 putpdf table c2_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table c2_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table c2_cards(.,.), bgcolor("`bnr_pale'")
 
 capture confirm file "`fig_c2'"
 if !_rc {
-    putpdf table c2_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table c2_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table c2_fig(1,1) = image("`fig_c2'")
 }
 putpdf paragraph
-putpdf text ("Figure 2. Annual age-standardised CVD event rates. The shaded region is DCO linkage uncertainty; the thin vertical whiskers are statistical 95% confidence intervals for the Primary national series."), font("`font_body'", 7, "`bnr_muted'")
+putpdf text ("Figure 2. Annual age-standardised CVD event rates. Pale shaded regions show published DCO linkage uncertainty for the national series; thin whiskers show published 95% statistical confidence intervals."), font("`font_body'", 7, "`bnr_muted'")
 
 putpdf table c2_tab = (4,6), width(100%) border(all, nil)
 putpdf table c2_tab(1,1) = ("Rate (95% CI)")
@@ -735,17 +837,12 @@ putpdf table c2_tab(.,1), bold
 putpdf table c2_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table c2_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table c2_note = (2,12), width(100%) border(all, nil)
-putpdf table c2_note(1,1)
-putpdf table c2_note(2,1)
-putpdf table c2_note(1,2), colspan(11)
-putpdf table c2_note(2,2), colspan(11)
-putpdf table c2_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c2_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c2_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table c2_note(2,2) = ("`ann_evt_rates_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c2_note = (2,1), width(100%) border(all, nil)
+putpdf table c2_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c2_note(2,1) = ("`ann_evt_rates_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c2_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 8. CVD events - C3 Heart and Stroke
@@ -763,12 +860,13 @@ if r(N) > 0 {
       (rarea linkage_lower_value linkage_upper_value period_year if event_type == "stroke", sort color("`bnr_stroke'%10") lcolor(none)) ///
       (rcap ci_lower_value ci_upper_value period_year if event_type == "heart", lcolor("`bnr_heart'%45") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if event_type == "stroke", lcolor("`bnr_stroke'%45") lwidth(vthin)) ///
-      (line value period_year if event_type == "heart", sort lcolor("`bnr_heart'") lwidth(thick)) ///
-      (line value period_year if event_type == "stroke", sort lcolor("`bnr_stroke'") lwidth(thick)), ///
+      (connected value period_year if event_type == "heart", sort lcolor("`bnr_heart'") mcolor("`bnr_heart'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if event_type == "stroke", sort lcolor("`bnr_stroke'") mcolor("`bnr_stroke'") msymbol(O) msize(vsmall) lwidth(thick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(5 "Heart" 6 "Stroke") cols(2) size(small) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(5 "Heart" 6 "Stroke") cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_c3'", replace width(2400)
 }
 putpdf pagebreak
@@ -802,9 +900,10 @@ putpdf table c3_cards(2,2) = ("`c3_heart'")
 putpdf table c3_cards(2,3) = ("`c3_stroke'")
 putpdf table c3_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table c3_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table c3_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_c3'"
 if !_rc {
-    putpdf table c3_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table c3_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table c3_fig(1,1) = image("`fig_c3'")
 }
 
@@ -846,17 +945,12 @@ putpdf table c3_tab(.,1), bold
 putpdf table c3_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table c3_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table c3_note = (2,12), width(100%) border(all, nil)
-putpdf table c3_note(1,1)
-putpdf table c3_note(2,1)
-putpdf table c3_note(1,2), colspan(11)
-putpdf table c3_note(2,2), colspan(11)
-putpdf table c3_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c3_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c3_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table c3_note(2,2) = ("`ann_evt_type_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c3_note = (2,1), width(100%) border(all, nil)
+putpdf table c3_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c3_note(2,1) = ("`ann_evt_type_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c3_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 9. CVD events - C4 Women and men
@@ -874,12 +968,13 @@ if r(N) > 0 {
       (rarea linkage_lower_value linkage_upper_value period_year if sex == "male", sort color("`bnr_men'%10") lcolor(none)) ///
       (rcap ci_lower_value ci_upper_value period_year if sex == "female", lcolor("`bnr_women'%45") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if sex == "male", lcolor("`bnr_men'%45") lwidth(vthin)) ///
-      (line value period_year if sex == "female", sort lcolor("`bnr_women'") lwidth(thick)) ///
-      (line value period_year if sex == "male", sort lcolor("`bnr_men'") lwidth(thick)), ///
+      (connected value period_year if sex == "female", sort lcolor("`bnr_women'") mcolor("`bnr_women'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if sex == "male", sort lcolor("`bnr_men'") mcolor("`bnr_men'") msymbol(O) msize(vsmall) lwidth(thick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(5 "Women" 6 "Men") cols(2) size(small) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(5 "Women" 6 "Men") cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_c4'", replace width(2400)
 }
 putpdf pagebreak
@@ -912,9 +1007,10 @@ putpdf table c4_cards(2,2) = ("`c4_female'")
 putpdf table c4_cards(2,3) = ("`c4_male'")
 putpdf table c4_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table c4_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table c4_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_c4'"
 if !_rc {
-    putpdf table c4_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table c4_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table c4_fig(1,1) = image("`fig_c4'")
 }
 
@@ -956,17 +1052,12 @@ putpdf table c4_tab(.,1), bold
 putpdf table c4_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table c4_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table c4_note = (2,12), width(100%) border(all, nil)
-putpdf table c4_note(1,1)
-putpdf table c4_note(2,1)
-putpdf table c4_note(1,2), colspan(11)
-putpdf table c4_note(2,2), colspan(11)
-putpdf table c4_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c4_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c4_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table c4_note(2,2) = ("`ann_evt_sex_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c4_note = (2,1), width(100%) border(all, nil)
+putpdf table c4_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c4_note(2,1) = ("`ann_evt_sex_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c4_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 10. CVD events - C5 Age patterns
@@ -990,8 +1081,9 @@ if r(N) > 0 {
         graphregion(color(white) margin(vsmall)) ///
         plotregion(color(white) margin(vsmall)) ///
         ytitle("") ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-        legend(cols(2) size(small) region(lcolor(none))) ///
-        xsize(7.4) ysize(3.15)
+        yscale(noline) ///
+        legend(cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+        xsize(8.0) ysize(3.15)
     graph export "`fig_c5'", replace width(2800)
 }
 putpdf pagebreak
@@ -1025,9 +1117,10 @@ putpdf table c5_cards(2,2) = ("`c5_under'")
 putpdf table c5_cards(2,3) = ("`c5_old'")
 putpdf table c5_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table c5_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table c5_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_c5'"
 if !_rc {
-    putpdf table c5_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table c5_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table c5_fig(1,1) = image("`fig_c5'")
 }
 
@@ -1066,17 +1159,12 @@ putpdf table c5_tab(.,1), bold
 putpdf table c5_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table c5_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table c5_note = (2,12), width(100%) border(all, nil)
-putpdf table c5_note(1,1)
-putpdf table c5_note(2,1)
-putpdf table c5_note(1,2), colspan(11)
-putpdf table c5_note(2,2), colspan(11)
-putpdf table c5_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c5_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table c5_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table c5_note(2,2) = ("`ann_evt_age_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table c5_note = (2,1), width(100%) border(all, nil)
+putpdf table c5_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table c5_note(2,1) = ("`ann_evt_age_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table c5_note(.,.), bgcolor("`bnr_pale2'")
 putpdf paragraph
 putpdf text ("Source: BNR public CVD-event release `event_release'."), font("`font_body'", 7, "`bnr_muted'")
 
@@ -1093,13 +1181,14 @@ keep if metric_id == "MORT-BURDEN-001" & period_type == "annual" & event_type ==
 quietly count
 if r(N) > 0 {
     twoway ///
-      (line value period_year if case_definition == "primary_clear_likely" & statistic == "annual_count", sort lcolor("`bnr_teal'") lwidth(thick)) ///
-      (line value period_year if case_definition == "upper_clear_likely_possible" & statistic == "annual_count", sort lcolor("`bnr_primary'") lpattern(dash) lwidth(medthick)) ///
+      (connected value period_year if case_definition == "primary_clear_likely" & statistic == "annual_count", sort lcolor("`bnr_teal'") mcolor("`bnr_teal'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if case_definition == "upper_clear_likely_possible" & statistic == "annual_count", sort lcolor("`bnr_primary'") mcolor("`bnr_primary'") msymbol(O) msize(vsmall) lpattern(dash) lwidth(medthick)) ///
       (line value period_year if case_definition == "primary_clear_likely" & statistic == "annual_previous_5yr_mean", sort lcolor("`bnr_secondary'") lpattern(shortdash) lwidth(thin)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(1 "Primary" 2 "Inclusive" 3 "Primary previous 5-year mean") cols(2) size(vsmall) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.3)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(1 "Primary" 2 "Inclusive" 3 "Primary previous 5-year mean") cols(3) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.3)
     graph export "`fig_d1'", replace width(2400)
 }
 putpdf pagebreak
@@ -1136,9 +1225,10 @@ putpdf table d1_cards(2,2) = ("`d1_inclusive'")
 putpdf table d1_cards(2,3) = ("`d1_avg'")
 putpdf table d1_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table d1_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table d1_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_d1'"
 if !_rc {
-    putpdf table d1_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table d1_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table d1_fig(1,1) = image("`fig_d1'")
 }
 
@@ -1180,17 +1270,12 @@ putpdf table d1_tab(.,1), bold
 putpdf table d1_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table d1_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table d1_note = (2,12), width(100%) border(all, nil)
-putpdf table d1_note(1,1)
-putpdf table d1_note(2,1)
-putpdf table d1_note(1,2), colspan(11)
-putpdf table d1_note(2,2), colspan(11)
-putpdf table d1_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d1_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d1_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table d1_note(2,2) = ("`ann_mort_counts_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table d1_note = (2,1), width(100%) border(all, nil)
+putpdf table d1_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table d1_note(2,1) = ("`ann_mort_counts_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table d1_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 12. Mortality - D2 Mortality rates
@@ -1206,12 +1291,13 @@ if r(N) > 0 {
     twoway ///
       (rcap ci_lower_value ci_upper_value period_year if case_definition == "primary_clear_likely", lcolor("`bnr_teal'%45") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if case_definition == "upper_clear_likely_possible", lcolor("`bnr_primary'%35") lwidth(vthin)) ///
-      (line value period_year if case_definition == "primary_clear_likely", sort lcolor("`bnr_teal'") lwidth(thick)) ///
-      (line value period_year if case_definition == "upper_clear_likely_possible", sort lcolor("`bnr_primary'") lpattern(dash) lwidth(medthick)), ///
+      (connected value period_year if case_definition == "primary_clear_likely", sort lcolor("`bnr_teal'") mcolor("`bnr_teal'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if case_definition == "upper_clear_likely_possible", sort lcolor("`bnr_primary'") mcolor("`bnr_primary'") msymbol(O) msize(vsmall) lpattern(dash) lwidth(medthick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(3 "Primary" 4 "Inclusive") cols(2) size(small) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(3 "Primary" 4 "Inclusive") cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_d2'", replace width(2400)
 }
 putpdf pagebreak
@@ -1242,9 +1328,10 @@ putpdf table d2_cards(2,1) = ("`d2_primary'")
 putpdf table d2_cards(2,2) = ("`d2_inclusive'")
 putpdf table d2_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table d2_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table d2_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_d2'"
 if !_rc {
-    putpdf table d2_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table d2_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table d2_fig(1,1) = image("`fig_d2'")
 }
 
@@ -1286,17 +1373,12 @@ putpdf table d2_tab(.,1), bold
 putpdf table d2_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table d2_tab(2/3,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table d2_note = (2,12), width(100%) border(all, nil)
-putpdf table d2_note(1,1)
-putpdf table d2_note(2,1)
-putpdf table d2_note(1,2), colspan(11)
-putpdf table d2_note(2,2), colspan(11)
-putpdf table d2_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d2_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d2_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table d2_note(2,2) = ("`ann_mort_rates_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table d2_note = (2,1), width(100%) border(all, nil)
+putpdf table d2_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table d2_note(2,1) = ("`ann_mort_rates_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table d2_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 13. Mortality - D3 Heart and Stroke
@@ -1312,12 +1394,13 @@ if r(N) > 0 {
     twoway ///
       (rcap ci_lower_value ci_upper_value period_year if event_type == "heart", lcolor("`bnr_heart'%45") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if event_type == "stroke", lcolor("`bnr_stroke'%45") lwidth(vthin)) ///
-      (line value period_year if event_type == "heart", sort lcolor("`bnr_heart'") lwidth(thick)) ///
-      (line value period_year if event_type == "stroke", sort lcolor("`bnr_stroke'") lwidth(thick)), ///
+      (connected value period_year if event_type == "heart", sort lcolor("`bnr_heart'") mcolor("`bnr_heart'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if event_type == "stroke", sort lcolor("`bnr_stroke'") mcolor("`bnr_stroke'") msymbol(O) msize(vsmall) lwidth(thick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(3 "Heart" 4 "Stroke") cols(2) size(small) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(3 "Heart" 4 "Stroke") cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_d3'", replace width(2400)
 }
 putpdf pagebreak
@@ -1350,9 +1433,10 @@ putpdf table d3_cards(2,2) = ("`d3_heart'")
 putpdf table d3_cards(2,3) = ("`d3_stroke'")
 putpdf table d3_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table d3_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table d3_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_d3'"
 if !_rc {
-    putpdf table d3_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table d3_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table d3_fig(1,1) = image("`fig_d3'")
 }
 
@@ -1393,17 +1477,12 @@ putpdf table d3_tab(.,1), bold
 putpdf table d3_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table d3_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table d3_note = (2,12), width(100%) border(all, nil)
-putpdf table d3_note(1,1)
-putpdf table d3_note(2,1)
-putpdf table d3_note(1,2), colspan(11)
-putpdf table d3_note(2,2), colspan(11)
-putpdf table d3_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d3_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d3_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table d3_note(2,2) = ("`ann_mort_type_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table d3_note = (2,1), width(100%) border(all, nil)
+putpdf table d3_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table d3_note(2,1) = ("`ann_mort_type_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table d3_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 14. Mortality - D4 Women and men
@@ -1419,12 +1498,13 @@ if r(N) > 0 {
     twoway ///
       (rcap ci_lower_value ci_upper_value period_year if sex == "female", lcolor("`bnr_women'%45") lwidth(vthin)) ///
       (rcap ci_lower_value ci_upper_value period_year if sex == "male", lcolor("`bnr_men'%45") lwidth(vthin)) ///
-      (line value period_year if sex == "female", sort lcolor("`bnr_women'") lwidth(thick)) ///
-      (line value period_year if sex == "male", sort lcolor("`bnr_men'") lwidth(thick)), ///
+      (connected value period_year if sex == "female", sort lcolor("`bnr_women'") mcolor("`bnr_women'") msymbol(O) msize(vsmall) lwidth(thick)) ///
+      (connected value period_year if sex == "male", sort lcolor("`bnr_men'") mcolor("`bnr_men'") msymbol(O) msize(vsmall) lwidth(thick)), ///
       graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
       xlabel(#6, format(%4.0f) labsize(small) noticks nogrid) ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-      xtitle("") ytitle("") legend(order(3 "Women" 4 "Men") cols(2) size(small) region(lcolor(none))) ///
-      xsize(7.1) ysize(3.25)
+      xscale(noline) yscale(noline) ///
+      xtitle("") ytitle("") legend(order(3 "Women" 4 "Men") cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(3.25)
     graph export "`fig_d4'", replace width(2400)
 }
 putpdf pagebreak
@@ -1457,9 +1537,10 @@ putpdf table d4_cards(2,2) = ("`d4_female'")
 putpdf table d4_cards(2,3) = ("`d4_male'")
 putpdf table d4_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table d4_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table d4_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_d4'"
 if !_rc {
-    putpdf table d4_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table d4_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table d4_fig(1,1) = image("`fig_d4'")
 }
 
@@ -1500,17 +1581,12 @@ putpdf table d4_tab(.,1), bold
 putpdf table d4_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table d4_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table d4_note = (2,12), width(100%) border(all, nil)
-putpdf table d4_note(1,1)
-putpdf table d4_note(2,1)
-putpdf table d4_note(1,2), colspan(11)
-putpdf table d4_note(2,2), colspan(11)
-putpdf table d4_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d4_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d4_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table d4_note(2,2) = ("`ann_mort_sex_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table d4_note = (2,1), width(100%) border(all, nil)
+putpdf table d4_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table d4_note(2,1) = ("`ann_mort_sex_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table d4_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 15. Mortality - D5 Age patterns
@@ -1534,8 +1610,9 @@ if r(N) > 0 {
         graphregion(color(white) margin(vsmall)) ///
         plotregion(color(white) margin(vsmall)) ///
         ytitle("") ylabel(, angle(horizontal) labsize(small) noticks nogrid) ///
-        legend(cols(2) size(small) region(lcolor(none))) ///
-        xsize(7.4) ysize(3.15)
+        yscale(noline) ///
+        legend(cols(2) size(small) region(lcolor(none)) position(12) ring(1)) ///
+        xsize(8.0) ysize(3.15)
     graph export "`fig_d5'", replace width(2800)
 }
 putpdf pagebreak
@@ -1569,9 +1646,10 @@ putpdf table d5_cards(2,2) = ("`d5_under'")
 putpdf table d5_cards(2,3) = ("`d5_old'")
 putpdf table d5_cards(1,.), bold font("`font_title'", 7.5, "`bnr_muted'") bgcolor("`bnr_pale'")
 putpdf table d5_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'") bgcolor("`bnr_pale'")
+putpdf table d5_cards(.,.), bgcolor("`bnr_pale'")
 capture confirm file "`fig_d5'"
 if !_rc {
-    putpdf table d5_fig = (1,1), width(96%) border(all, nil) halign(center)
+    putpdf table d5_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table d5_fig(1,1) = image("`fig_d5'")
 }
 
@@ -1610,17 +1688,12 @@ putpdf table d5_tab(.,1), bold
 putpdf table d5_tab(.,6), bgcolor("`bnr_pale2'")
 putpdf table d5_tab(2/4,6), bold
 putpdf paragraph, font("`font_body'", 1)
-putpdf table d5_note = (2,12), width(100%) border(all, nil)
-putpdf table d5_note(1,1)
-putpdf table d5_note(2,1)
-putpdf table d5_note(1,2), colspan(11)
-putpdf table d5_note(2,2), colspan(11)
-putpdf table d5_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d5_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table d5_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table d5_note(2,2) = ("`ann_mort_age_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table d5_note = (2,1), width(100%) border(all, nil)
+putpdf table d5_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table d5_note(2,1) = ("`ann_mort_age_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table d5_note(.,.), bgcolor("`bnr_pale2'")
 putpdf paragraph
 putpdf text ("Source: BNR public mortality release `mortality_release'."), font("`font_body'", 7, "`bnr_muted'")
 
@@ -1631,54 +1704,69 @@ putpdf text ("Source: BNR public mortality release `mortality_release'."), font(
 local fig_e1 "`annual_figure_dir'/quality_event_dco.png"
 local fig_e2 "`annual_figure_dir'/quality_possible_deaths.png"
 
-tempfile event_quality mortality_quality
 use "`annual_event_data'", clear
-keep if metric_id == "CVD-BURDEN-001" & period_type == "annual" & sex == "all" & age_group == "all" & ///
-    inlist(event_type, "all_cvd", "heart", "stroke") & mortality_definition == "primary" & ///
-    inlist(ascertainment_scope, "additional_dco", "hospital_plus_dco") & statistic == "annual_count" & period_complete == 1
+keep if metric_id == "CVD-BURDEN-001" & period_type == "annual" & ///
+    inrange(period_year, `first_table_year', `report_year_num') & period_complete == 1 & sex == "all" & ///
+    age_group == "all" & statistic == "annual_count" & ///
+    inlist(event_type, "all_cvd", "heart", "stroke") & ///
+    ((ascertainment_scope == "additional_dco" & mortality_definition == "primary") | ///
+     (ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary"))
 keep period_year event_type ascertainment_scope value
 reshape wide value, i(period_year event_type) j(ascertainment_scope) string
-generate double quality_pct = 100 * valueadditional_dco / valuehospital_plus_dco if valuehospital_plus_dco > 0
-generate byte y = 3 if event_type == "all_cvd"
-replace y = 2 if event_type == "heart"
-replace y = 1 if event_type == "stroke"
-save "`event_quality'", replace
-quietly count if !missing(quality_pct)
-if r(N) > 0 {
-    twoway scatter y period_year [aw=quality_pct], msymbol(square) mcolor("`bnr_teal'%65") msize(large) ///
-        graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
-        ylabel(1 "Stroke" 2 "Heart" 3 "All CVD", angle(horizontal) labsize(small) noticks nogrid) ///
-        xlabel(#8, format(%4.0f) labsize(vsmall) noticks nogrid) xtitle("") ytitle("") legend(off) ///
-        xsize(7.1) ysize(2.35)
-    graph export "`fig_e1'", replace width(2400)
-}
-
-use "`annual_mortality_data'", clear
-keep if metric_id == "MORT-BURDEN-001" & period_type == "annual" & sex == "all" & age_group == "all" & ///
-    inlist(event_type, "all_cvd", "heart", "stroke") & statistic == "annual_count" & ///
-    inlist(case_definition, "primary_clear_likely", "upper_clear_likely_possible") & period_complete == 1
-keep period_year event_type case_definition value
-reshape wide value, i(period_year event_type) j(case_definition) string
-generate double quality_pct = 100 * (valueupper_clear_likely_possible - valueprimary_clear_likely) / valueupper_clear_likely_possible if valueupper_clear_likely_possible > 0
-generate byte quality_band = 1 if quality_pct < 20
-replace quality_band = 2 if inrange(quality_pct,20,29.999999)
-replace quality_band = 3 if quality_pct >= 30 & !missing(quality_pct)
-generate byte y = 3 if event_type == "all_cvd"
-replace y = 2 if event_type == "heart"
-replace y = 1 if event_type == "stroke"
-save "`mortality_quality'", replace
+gen double quality_pct = 100 * valueadditional_dco / valuehospital_plus_dco
+gen byte quality_band = cond(quality_pct < 10, 1, cond(quality_pct < 15, 2, 3))
+gen byte y = cond(event_type == "all_cvd", 3, cond(event_type == "heart", 2, 1))
+gen str8 tile_label = string(quality_pct, "%4.1f") + "%"
 quietly count if !missing(quality_pct)
 if r(N) > 0 {
     twoway ///
-      (scatter y period_year if quality_band == 1, msymbol(square) mcolor("`bnr_green'") msize(large)) ///
-      (scatter y period_year if quality_band == 2, msymbol(square) mcolor("`bnr_amber'") msize(large)) ///
-      (scatter y period_year if quality_band == 3, msymbol(square) mcolor("`bnr_red'") msize(large)), ///
-      graphregion(color(white) margin(small)) plotregion(color(white) margin(small)) ///
+      (scatter y period_year if quality_band == 1, msymbol(square) msize(11) mcolor("`bnr_green'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")) ///
+      (scatter y period_year if quality_band == 2, msymbol(square) msize(11) mcolor("`bnr_amber'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")) ///
+      (scatter y period_year if quality_band == 3, msymbol(square) msize(11) mcolor("`bnr_red'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")), ///
+      graphregion(color(white) margin(vsmall)) plotregion(color(white) margin(vsmall)) ///
+      xlabel(`first_table_year'(1)`report_year_num', format(%4.0f) labsize(small) noticks nogrid) ///
       ylabel(1 "Stroke" 2 "Heart" 3 "All CVD", angle(horizontal) labsize(small) noticks nogrid) ///
-      xlabel(#8, format(%4.0f) labsize(vsmall) noticks nogrid) xtitle("") ytitle("") ///
-      legend(order(1 "Lower: <20%" 2 "Moderate: 20-29%" 3 "Higher: 30%+") cols(3) size(vsmall) region(lcolor(none))) ///
-      xsize(7.1) ysize(2.5)
-    graph export "`fig_e2'", replace width(2400)
+      xscale(noline) yscale(noline) xtitle("") ytitle("") ///
+      legend(order(1 "Lower: <10%" 2 "Moderate: 10-14%" 3 "Higher: 15%+") ///
+          cols(3) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(2.7)
+    graph export "`fig_e1'", replace width(2800)
+}
+
+use "`annual_mortality_data'", clear
+keep if metric_id == "MORT-BURDEN-001" & period_type == "annual" & ///
+    inrange(period_year, `first_table_year', `report_year_num') & period_complete == 1 & sex == "all" & ///
+    age_group == "all" & statistic == "annual_count" & ///
+    inlist(event_type, "all_cvd", "heart", "stroke") & ///
+    inlist(case_definition, "primary_clear_likely", "upper_clear_likely_possible")
+keep period_year event_type case_definition value
+reshape wide value, i(period_year event_type) j(case_definition) string
+gen double quality_pct = 100 * ///
+    (valueupper_clear_likely_possible - valueprimary_clear_likely) / ///
+    valueupper_clear_likely_possible
+gen byte quality_band = cond(quality_pct < 20, 1, cond(quality_pct < 30, 2, 3))
+gen byte y = cond(event_type == "all_cvd", 3, cond(event_type == "heart", 2, 1))
+gen str8 tile_label = string(quality_pct, "%4.1f") + "%"
+quietly count if !missing(quality_pct)
+if r(N) > 0 {
+    twoway ///
+      (scatter y period_year if quality_band == 1, msymbol(square) msize(11) mcolor("`bnr_green'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")) ///
+      (scatter y period_year if quality_band == 2, msymbol(square) msize(11) mcolor("`bnr_amber'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")) ///
+      (scatter y period_year if quality_band == 3, msymbol(square) msize(11) mcolor("`bnr_red'") ///
+          mlabel(tile_label) mlabposition(0) mlabsize(vsmall) mlabcolor("`bnr_ink'")), ///
+      graphregion(color(white) margin(vsmall)) plotregion(color(white) margin(vsmall)) ///
+      xlabel(`first_table_year'(1)`report_year_num', format(%4.0f) labsize(small) noticks nogrid) ///
+      ylabel(1 "Stroke" 2 "Heart" 3 "All CVD", angle(horizontal) labsize(small) noticks nogrid) ///
+      xscale(noline) yscale(noline) xtitle("") ytitle("") ///
+      legend(order(1 "Lower: <20%" 2 "Moderate: 20-29%" 3 "Higher: 30%+") ///
+          cols(3) size(vsmall) region(lcolor(none)) position(12) ring(1)) ///
+      xsize(8.0) ysize(2.7)
+    graph export "`fig_e2'", replace width(2800)
 }
 
 putpdf pagebreak
@@ -1687,24 +1775,19 @@ putpdf text ("3 | How complete is the picture?"), bold font("`font_title'", 18, 
 putpdf paragraph
 putpdf text ("Events identified through death records"), bold font("`font_title'", 13, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Each square represents the estimated additional DCO contribution as a percentage of the Primary national event estimate. Larger/darker visual weight means greater reliance on death-record ascertainment."), font("`font_body'", 8, "`bnr_muted'")
+putpdf text ("Each tile gives the estimated additional DCO contribution as a percentage of the Primary national event estimate. The latest five complete years are shown; colours use the same pragmatic reliance bands as the CVD events dashboard."), font("`font_body'", 8, "`bnr_muted'")
 capture confirm file "`fig_e1'"
 if !_rc {
     putpdf table e1_fig = (1,1), width(100%) border(all, nil) halign(center)
     putpdf table e1_fig(1,1) = image("`fig_e1'")
 }
 putpdf paragraph, font("`font_body'", 1)
-putpdf table e1_note = (2,12), width(100%) border(all, nil)
-putpdf table e1_note(1,1)
-putpdf table e1_note(2,1)
-putpdf table e1_note(1,2), colspan(11)
-putpdf table e1_note(2,2), colspan(11)
-putpdf table e1_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table e1_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table e1_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table e1_note(2,2) = ("`ann_evt_quality_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table e1_note = (2,1), width(100%) border(all, nil)
+putpdf table e1_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table e1_note(2,1) = ("`ann_evt_quality_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table e1_note(.,.), bgcolor("`bnr_pale2'")
 
 putpdf paragraph
 putpdf text ("Reliance on Possible deaths"), bold font("`font_title'", 13, "`bnr_ink'")
@@ -1716,17 +1799,12 @@ if !_rc {
     putpdf table e2_fig(1,1) = image("`fig_e2'")
 }
 putpdf paragraph, font("`font_body'", 1)
-putpdf table e2_note = (2,12), width(100%) border(all, nil)
-putpdf table e2_note(1,1)
-putpdf table e2_note(2,1)
-putpdf table e2_note(1,2), colspan(11)
-putpdf table e2_note(2,2), colspan(11)
-putpdf table e2_note(1,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table e2_note(2,1) = (" "), bgcolor("`bnr_teal'")
-putpdf table e2_note(1,2) = ("WHAT THIS MEANS"), ///
-    bold font("`font_title'", 8.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table e2_note(2,2) = ("`ann_mort_quality_text'"), ///
-    font("`font_body'", 8.1, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table e2_note = (2,1), width(100%) border(all, nil)
+putpdf table e2_note(1,1) = ("WHAT THIS MEANS"), ///
+    bold font("`font_title'", 8.5, "`bnr_teal'")
+putpdf table e2_note(2,1) = ("`ann_mort_quality_text'"), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+putpdf table e2_note(.,.), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
 * 17. E3/E4 Data availability and understanding uncertainty
@@ -1789,80 +1867,155 @@ putpdf paragraph
 putpdf text ("The two intervals answer different questions and should not be combined into a single range. The report therefore gives them different visual forms."), bold font("`font_title'", 8.5, "`bnr_teal'")
 
 * -----------------------------------------------------------------------------
-* 18. Methods - what we did and what the numbers mean
+* 19. Methods - what we did and what the numbers mean
 * -----------------------------------------------------------------------------
 
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("4 | Methods"), bold font("`font_title'", 18, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("What we did and what the numbers mean"), bold font("`font_title'", 14, "`bnr_ink'")
+putpdf text ("Scope, definitions and event ascertainment"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
 putpdf text ("`annual_methods_note'"), font("`font_body'", 8.5)
 
 putpdf paragraph
-putpdf text ("What the BNR measures"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Surveillance population and unit of analysis"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The standard annual section reports All CVD, Heart and Stroke measures already present in the approved public CVD-event and mortality releases. Results are presented for both sexes combined and, where published, for women and men and broad age groups."), font("`font_body'", 8.5)
+putpdf text ("The CVD-event series counts eligible cardiovascular events among Barbados residents, not unique people. A person may contribute more than one eligible event when each event meets the approved event definition. The annual standard section reports All CVD and the two component families Heart and Stroke, together with sex and broad age summaries where those dimensions are present in the approved public release."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("Counting CVD events"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Event classification"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Hospital-recorded events are eligible events identified from the hospital registry source. National event estimates add eligible events identified from death information that are not linked to an eligible hospital event. Primary and Inclusive national event estimates differ in the mortality definition used when identifying the death-record contribution."), font("`font_body'", 8.5)
+putpdf text ("Records enter the event series only after the approved CVD-event, residence, reporting-period and duplicate-resolution rules have been applied. Hospital-recorded statistics use eligible events identified from hospital information. The Queen Elizabeth Hospital is Barbados's only tertiary hospital, so this series provides an important view of serious recognised CVD events, but it is not treated as complete national ascertainment."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("Counting CVD deaths"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Death-certificate-only ascertainment"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The Primary mortality definition includes deaths classified as Clear or Likely CVD. The Inclusive definition additionally includes Possible CVD deaths. Presenting both definitions makes sensitivity to cause-of-death classification visible rather than burying it in a technical note."), font("`font_body'", 8.5)
+putpdf text ("A death-certificate-only (DCO) event is an eligible event identified from death information without a matching eligible hospital-recorded event. The controlled event workflow applies deterministic linkage and approved event-window rules before producing aggregate DCO-enhanced outputs. Hospital + DCO statistics are annual only. Where linkage remains unresolved, the public release carries a central aggregate estimate and separate lower and upper linkage values; this report displays those released quantities and does not reconstruct them."), font("`font_body'", 8.4)
+
+putpdf table event_scope = (3,3), width(100%) border(all, nil)
+putpdf table event_scope(1,1) = ("Published event series")
+putpdf table event_scope(1,2) = ("Source coverage")
+putpdf table event_scope(1,3) = ("Interpretation")
+putpdf table event_scope(2,1) = ("Hospital-recorded")
+putpdf table event_scope(2,2) = ("Eligible hospital events")
+putpdf table event_scope(2,3) = ("Observed serious CVD events recorded through the hospital source")
+putpdf table event_scope(3,1) = ("Hospital + DCO")
+putpdf table event_scope(3,2) = ("Hospital events plus eligible DCO contribution")
+putpdf table event_scope(3,3) = ("Broader annual national estimate, with linkage uncertainty reported separately")
+putpdf table event_scope(.,.), font("`font_body'", 7.8)
+putpdf table event_scope(1,.), bold bgcolor("`bnr_pale'")
+putpdf table event_scope(.,1), bold
+
+putpdf pagebreak
+putpdf paragraph
+putpdf text ("Mortality case ascertainment"), bold font("`font_title'", 14, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("BNR mortality surveillance uses death-certificate information to create a consistent practical cardiovascular classification when a formally assigned national underlying cause of death is not available to the Registry for routine surveillance. The method considers the wording on the certificate, whether information appears in Part I or Part II, the order of lines in Part I, documented mortality-coding principles and the strength of the available cardiovascular evidence."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("Rates"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("Crude rates describe the observed number of events or deaths relative to the population. Age-standardised rates apply the published age-specific rates to the WHO World Standard Population 2000-2025, allowing annual patterns to be compared with less influence from changes in population age structure. This report reads the published rates; it does not calculate them again."), font("`font_body'", 8.5)
+putpdf text ("Evidence classes"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table mort_classes = (6,2), width(100%) border(all, nil)
+putpdf table mort_classes(1,1) = ("Class")
+putpdf table mort_classes(1,2) = ("BNR interpretation")
+putpdf table mort_classes(2,1) = ("Clear")
+putpdf table mort_classes(2,2) = ("Strong evidence that the death belongs in the relevant BNR cardiovascular mortality group.")
+putpdf table mort_classes(3,1) = ("Likely")
+putpdf table mort_classes(3,2) = ("Good evidence, although some uncertainty remains.")
+putpdf table mort_classes(4,1) = ("Possible")
+putpdf table mort_classes(4,2) = ("Cardiovascular attribution is plausible, but uncertainty is material.")
+putpdf table mort_classes(5,1) = ("Mention only")
+putpdf table mort_classes(5,2) = ("Relevant wording is present but does not support approximate underlying-cause attribution.")
+putpdf table mort_classes(6,1) = ("No evidence")
+putpdf table mort_classes(6,2) = ("No qualifying cardiovascular evidence is identified by the approved rules.")
+putpdf table mort_classes(.,.), font("`font_body'", 7.8)
+putpdf table mort_classes(1,.), bold bgcolor("`bnr_pale'")
+putpdf table mort_classes(.,1), bold
 
 putpdf paragraph
-putpdf text ("Statistical uncertainty"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Primary and Inclusive mortality definitions"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Published crude-rate confidence intervals use the method recorded in the release, including exact Poisson (Garwood) intervals where applicable. Published directly age-standardised intervals use the stated gamma-based method. The exact method is retained in the public data metadata."), font("`font_body'", 8.5)
+putpdf text ("Primary includes Clear + Likely classifications. Inclusive includes Clear + Likely + Possible. Inclusive therefore contains Primary. The two are alternative classification-sensitivity definitions and must not be added together. Their difference is not a statistical confidence interval."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("Events identified through death records"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Relation to official cause-of-death statistics"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("A death-certificate-only (DCO) event is an eligible event identified from death information without a matching eligible hospital-recorded event. Deterministic linkage and the approved event-window rules are applied upstream in the controlled event workflow. Where linkage is unresolved, the public release supplies an aggregate estimate and its linkage bounds. The annual report displays those published quantities only."), font("`font_body'", 8.5)
+putpdf text ("The BNR method is a structured surveillance classification. It is not full ICD-10 underlying-cause coding and should not be assumed to be directly equivalent to official national or international cause-of-death series that use formal underlying-cause selection and coding rules."), font("`font_body'", 8.4)
+
+putpdf pagebreak
+putpdf paragraph
+putpdf text ("Measures, rates and uncertainty"), bold font("`font_title'", 14, "`bnr_ink'")
+
+putpdf paragraph
+putpdf text ("Counts and percentages"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Counts are registry enumerations of eligible events or classified deaths. Percentage distributions describe how a published total is divided across groups; they are not population risks. The DCO-reliance and Possible-death percentages used in this report are presentation summaries of already-published aggregate counts."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Crude rate"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table eq_crude = (1,1), width(86%) border(all, nil) halign(center)
+putpdf table eq_crude(1,1) = ("Rate per 100,000 = eligible events or deaths / resident population x 100,000"), ///
+    bold font("`font_body_med'", 9, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf paragraph
+putpdf text ("The matching resident population denominator is taken from the approved UN World Population Prospects 2024 Barbados series carried by the public workflow."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Direct age standardisation"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table eq_asr = (1,1), width(86%) border(all, nil) halign(center)
+putpdf table eq_asr(1,1) = ("Age-standardised rate = sum of age-specific rate x standard-population weight"), ///
+    bold font("`font_body_med'", 9, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf paragraph
+putpdf text ("BNR uses the WHO World Standard Population 2000-2025 where age-standardised rates are specified. Standardisation reduces differences caused only by differing age structures; it does not remove uncertainty from ascertainment, classification or small numbers."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Statistical confidence intervals"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Published crude-rate intervals use the exact Poisson (Garwood) method where specified. Published directly age-standardised mortality intervals use the Fay-Feuer gamma method. Event-rate outputs carry the interval method supplied by the approved release. The annual report reads the released limits rather than recalculating them."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("DCO linkage uncertainty"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Hospital + DCO annual event counts and event rates may carry separate lower and upper linkage values. These describe uncertainty from DCO ascertainment and linkage. They answer a different question from a statistical confidence interval, so the report shows linkage uncertainty as a pale band and statistical uncertainty as whiskers rather than combining them into one range."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Comparators"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Annual count comparators are the published previous-five-year means supplied by the event and mortality releases. They are descriptive reference values, not statistical control limits. The fixed 2015-2019 monthly seasonal reference used elsewhere in the Information Hub is a separate product and is not substituted for the annual rolling comparator."), font("`font_body'", 8.5)
+putpdf text ("Annual counts use the published mean for the same stratum over the previous five calendar years. Quarterly counts may use the published mean for the same quarter in the previous five years. The fixed 2015-2019 monthly historical reference used in dashboard and rolling-update products is a separate seasonal reference and is not a confidence interval or a rolling annual comparator."), font("`font_body'", 8.4)
 
 putpdf pagebreak
 putpdf paragraph
-putpdf text ("Methods continued"), bold font("`font_title'", 14, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("Population and age standardisation"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("Published event rates use the population denominator and standardisation metadata carried in the approved release, including UN World Population Prospects 2024 Barbados denominators and the WHO World Standard Population 2000-2025 where specified. The annual report preserves those released estimates rather than rebuilding denominator inputs."), font("`font_body'", 8.5)
+putpdf text ("Completeness, disclosure and publication governance"), bold font("`font_title'", 14, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("Protecting confidentiality"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Completeness and reporting period"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Public datasets have already passed the BNR disclosure-control process before they reach this report. Suppressed values are not reconstructed from related cells. The annual report therefore inherits the public release as its disclosure boundary."), font("`font_body'", 8.5)
+putpdf text ("The standard annual section uses complete annual observations. Public releases may also contain monthly or quarterly rows, including a current incomplete quarter or year for operational dashboards. Those rows are not treated as complete annual results. Release date and latest observation period are separate concepts and should not be interpreted as the same date."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("From data to published statistics"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Disclosure control"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("BNR publishes aggregate statistics rather than patient-level records. Positive counts below six are normally subject to primary suppression. Secondary suppression is then used when row, column or related totals could otherwise allow a protected value to be inferred. Overly detailed combinations are avoided, and every public release passes disclosure-control review before publication. A protected value is not zero and this annual report never reconstructs it from related cells."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("From source data to this report"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf table workflow = (5,2), width(100%) border(all, nil)
 putpdf table workflow(1,1) = ("1  PREPARE")
 putpdf table workflow(1,2) = ("Versioned source releases and controlled analytical inputs are prepared.")
 putpdf table workflow(2,1) = ("2  CALCULATE")
-putpdf table workflow(2,2) = ("Stata produces the surveillance measures and structured outputs.")
+putpdf table workflow(2,2) = ("Readable Stata programs create the approved surveillance measures and structured outputs.")
 putpdf table workflow(3,1) = ("3  REVIEW")
-putpdf table workflow(3,2) = ("Automated QA and disclosure checks prepare a fixed candidate for human inspection.")
+putpdf table workflow(3,2) = ("Automated QA and disclosure checks prepare a fixed candidate for human review.")
 putpdf table workflow(4,1) = ("4  APPROVE")
 putpdf table workflow(4,2) = ("Authorised reviewers assess analytical plausibility, disclosure safety and publication readiness.")
 putpdf table workflow(5,1) = ("5  PUBLISH")
-putpdf table workflow(5,2) = ("Only approved public products are promoted to the Information Hub; this annual report reads those public products.")
+putpdf table workflow(5,2) = ("Only approved public products are promoted to the Information Hub; the annual report reads those declared public products.")
 putpdf table workflow(.,1), bold font("`font_title'", 8, "`bnr_teal'")
 putpdf table workflow(.,2), font("`font_body'", 8)
+
+putpdf paragraph
+putpdf text ("Reproducibility boundary"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("The standard section does not reopen confidential source data and does not calculate surveillance rates from patient-level records. Step 1 validates the declared public event and mortality releases and their website mirrors, then the report composes already-approved values, intervals and comparators into a fixed candidate. Changes are made in source data, controlled Stata code or analyst-owned interpretation and then rebuilt; public output files are not edited by hand."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Report information"), bold font("`font_title'", 11, "`bnr_ink'")
@@ -1874,6 +2027,6 @@ putpdf table report_info(2,2) = ("`event_release'")
 putpdf table report_info(3,1) = ("Mortality release")
 putpdf table report_info(3,2) = ("`mortality_release'")
 putpdf table report_info(4,1) = ("Standard composition")
-putpdf table report_info(4,2) = ("bnr_report_annual_standard.do v2.1.2")
+putpdf table report_info(4,2) = ("bnr_report_annual_standard.do v2.2.0")
 putpdf table report_info(.,1), bold font("`font_title'", 8, "`bnr_muted'")
 putpdf table report_info(.,2), font("`font_body'", 8)
