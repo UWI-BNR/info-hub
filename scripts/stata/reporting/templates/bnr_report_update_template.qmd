@@ -1,17 +1,17 @@
 ---
-title: "Rolling three-month CVD surveillance update: January 2026"
+title: "Rolling three-month CVD surveillance update: @@REPORT_MONTH_NAME@@ @@REPORT_YEAR@@"
 description: "Objective CVD event and mortality counts from the declared public releases."
-date: "2026-09-03"
-date-modified: "2026-09-03"
+date: "@@REPORT_DATE@@"
+date-modified: "@@REPORT_DATE@@"
 categories:
   - CVD
   - Rolling three-month update
-report-id: "bnr_cvd_update_2026_01_v3"
-report-version: "v3"
+report-id: "@@REPORT_ID@@"
+report-version: "v@@REPORT_VERSION@@"
 report-type: "Rolling three-month update"
 update-template-version: "1.0.0"
-event-release-id: "cvd_2026_01"
-mortality-release-id: "mort_2026_07"
+event-release-id: "@@EVENT_RELEASE_ID@@"
+mortality-release-id: "@@MORTALITY_RELEASE_ID@@"
 image: "/assets/images/listings/listing_reef_shallows.webp"
 image-alt: "Sunlit shallow reef water in Barbados."
 format:
@@ -110,9 +110,9 @@ updateRows.length ? Inputs.table(updateRows.map(row => ({
 
 ## Data sources
 
-- CVD-event release: [cvd_2026_01](../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv)
-- Mortality release: [mort_2026_07](../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv)
-- Report version: bnr_cvd_update_2026_01_v3
+- CVD-event release: [@@EVENT_RELEASE_ID@@](@@EVENT_SOURCE_HREF@@)
+- Mortality release: [@@MORTALITY_RELEASE_ID@@](@@MORTALITY_SOURCE_HREF@@)
+- Report version: @@REPORT_ID@@
 
 The calculations on this page read the complete release snapshots stored with
 this dated report. The links above identify the corresponding published source

@@ -1,5 +1,5 @@
 *! BNR rolling three-month CVD update builder
-*! version 0.1.0, 2 September 2026
+*! version 1.0.0, 2 September 2026
 VERSION 19.0
 POSITION . . 540 510
 
@@ -28,9 +28,9 @@ BEGIN
   SPINNER ed_mortality_month 335 283 65 ., default(7) min(1) max(12) nomemory error("Mortality release month")
 
   GROUPBOX gb_protection 15 344 510 62, label("Version protection")
-  CHECKBOX ck_replace 30 370 470 ., default(0) nomemory label("Replace the currently rendered report for this period")
+  CHECKBOX ck_replace 30 370 470 ., default(0) nomemory label("Publish a strictly higher version at this period's stable address")
 
-  TEXTBOX tx_boundary 20 426 500 48, label("The builder stops if either declared release-stamped CSV is absent. It uses common complete public months only and does not calculate, disclose, publish, render or deploy source data.")
+  TEXTBOX tx_boundary 20 426 500 48, label("The builder uses the central QMD template and freezes complete copies of both declared public releases. It does not render, commit or deploy the website.")
 END
 
 OK ok1, label("Build update page")

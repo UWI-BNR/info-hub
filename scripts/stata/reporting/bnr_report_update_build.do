@@ -1,32 +1,30 @@
 /*******************************************************************************
 DO-FILE: bnr_report_update_build.do
-VERSION: 1.0.0 (2 September 2026)
-PURPOSE: Create one dated rolling three-month CVD surveillance-update page.
+VERSION: 1.1.0 (2 September 2026)
+PURPOSE: Publish one immutable, dated CVD surveillance-update page.
 
 USAGE:
-  do "$BNR_STATA/reporting/bnr_report_update_build.do" ///
-      2026 01 2026 01 2026 07 1
-
-  do "$BNR_STATA/reporting/bnr_report_update_build.do" ///
-      2026 01 2026 01 2026 07 2 replace
+  do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 01 2026 01 2026 07 1
+  do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 01 2026 01 2026 07 2 replace
 
 ARGUMENTS:
   1-2  Report year and month. These identify the stable report location.
   3-4  CVD-event release year and month.
   5-6  Mortality release year and month.
   7    Report version (a positive integer).
-  8    Optional: replace. Required only when replacing the rendered report for
-       the same report period with an explicitly higher version.
+  8    Optional: replace. Required when a later version supersedes an existing
+       report at the same stable website address.
 
 WORKFLOW BOUNDARY:
-  This builder creates a small Quarto/Observable page. It does not calculate
-  or publish surveillance metrics, apply disclosure control, render Quarto,
-  commit to Git, or deploy the website. It reads only release-stamped public
-  CSVs that have already passed their source workflow's controls.
+  The central QMD template owns report design. This builder substitutes report
+  metadata, freezes complete exact copies of both declared public-release CSVs,
+  and publishes the dated package. It does not calculate or publish surveillance
+  metrics, apply disclosure control, render Quarto, commit to Git, or deploy.
 
-  The generated page derives a three-month total only where three consecutive
-  months are present, complete, non-suppressed and numeric in BOTH sources.
-  It never derives, reconstructs or substitutes a suppressed value.
+VERSION RULE:
+  Once any output exists for a report period, the next build must use both an
+  explicitly higher version and the replace argument. The existing version is
+  never silently reused or downgraded.
 *******************************************************************************/
 
 version 19
@@ -40,17 +38,24 @@ if "`report_year'" == "" | "`report_month'" == "" | ///
         "`event_year'" == "" | "`event_month'" == "" | ///
         "`mortality_year'" == "" | "`mortality_month'" == "" | ///
         "`report_version'" == "" {
-    display as error "Enter report period, event release, mortality release and version."
+    display as error "Update build stopped: required arguments are missing."
+    display as error "Supply report YYYY MM, event-release YYYY MM, mortality-release YYYY MM and version."
     exit 198
 }
 
-if "`option'" != "" & lower("`option'") != "replace" exit 198
+if "`option'" != "" & lower("`option'") != "replace" {
+    display as error "Update build stopped: the final argument must be replace or omitted."
+    exit 198
+}
 local replace_existing = (lower("`option'") == "replace")
 
 foreach numeric_input in report_year report_month event_year event_month mortality_year ///
         mortality_month report_version {
     local value = real("``numeric_input''")
-    if missing(`value') | `value' != floor(`value') exit 198
+    if missing(`value') | `value' != floor(`value') {
+        display as error "Update build stopped: ``numeric_input'' must be a whole number."
+        exit 198
+    }
 }
 
 local report_year_num = real("`report_year'")
@@ -61,17 +66,33 @@ local mortality_year_num = real("`mortality_year'")
 local mortality_month_num = real("`mortality_month'")
 local version_num = real("`report_version'")
 
-foreach year_num in report_year_num event_year_num mortality_year_num {
-    if ``year_num'' < 2024 exit 198
+if `report_year_num' < 2024 | `event_year_num' < 2024 | `mortality_year_num' < 2024 {
+    display as error "Update build stopped: all years must be 2024 or later."
+    exit 198
 }
-foreach month_num in report_month_num event_month_num mortality_month_num {
-    if !inrange(``month_num'', 1, 12) exit 198
+if !inrange(`report_month_num', 1, 12) {
+    display as error "Update build stopped: report month must be 1 to 12."
+    exit 198
 }
-if `version_num' < 1 exit 198
+if !inrange(`event_month_num', 1, 12) {
+    display as error "Update build stopped: event-release month must be 1 to 12."
+    exit 198
+}
+if !inrange(`mortality_month_num', 1, 12) {
+    display as error "Update build stopped: mortality-release month must be 1 to 12."
+    exit 198
+}
+if `version_num' < 1 {
+    display as error "Update build stopped: report version must be at least 1."
+    exit 198
+}
 
 if "$BNR_STATA" == "" capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
 foreach path_name in BNR_REPO BNR_STATA BNR_PUBLIC BNR_PRIVATE_LOGS {
-    if "$`path_name'" == "" exit 198
+    if "$`path_name'" == "" {
+        display as error "Update build stopped: global path $`path_name' is not configured."
+        exit 198
+    }
 }
 
 local report_year4 : display %04.0f `report_year_num'
@@ -85,38 +106,60 @@ local report_period "`report_year4'-`report_month2'"
 local event_release "cvd_`event_year4'_`event_month2'"
 local mortality_release "mort_`mortality_year4'_`mortality_month2'"
 local report_id "bnr_cvd_update_`report_year4'_`report_month2'_v`version_num'"
-local public_dir "$BNR_PUBLIC/reports/cvd/updates/`report_period'"
-local public_qmd "`public_dir'/index.qmd"
-local public_metadata "`public_dir'/report.yml"
-local site_dir "$BNR_REPO/site/surveillance/cvd/reports/updates/`report_period'"
-local site_qmd "`site_dir'/index.qmd"
+local template "$BNR_STATA/reporting/templates/bnr_report_update_template.qmd"
+local template_version "1.0.0"
+
 local event_csv "$BNR_PUBLIC/metrics/cvd/cvd_metrics_`event_release'.csv"
 local mortality_csv "$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
 local site_event_csv "$BNR_REPO/site/downloads/files/metrics/cvd/datasets/cvd_metrics_`event_release'.csv"
 local site_mortality_csv "$BNR_REPO/site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
+
+local public_dir "$BNR_PUBLIC/reports/cvd/updates/`report_period'"
+local public_data_dir "`public_dir'/data"
+local public_qmd "`public_dir'/index.qmd"
+local public_metadata "`public_dir'/report.yml"
+local public_event_snapshot "`public_data_dir'/event_release.csv"
+local public_mortality_snapshot "`public_data_dir'/mortality_release.csv"
+
+local site_dir "$BNR_REPO/site/surveillance/cvd/reports/updates/`report_period'"
+local site_data_dir "`site_dir'/data"
+local site_qmd "`site_dir'/index.qmd"
+local site_event_snapshot "`site_data_dir'/event_release.csv"
+local site_mortality_snapshot "`site_data_dir'/mortality_release.csv"
+
 local event_href "../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_`event_release'.csv"
 local mortality_href "../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_update_`report_id'.log"
 
+capture confirm file "`template'"
+if _rc {
+    display as error "Update build stopped: central QMD template is missing."
+    display as error "Expected: `template'"
+    exit 601
+}
 capture confirm file "`event_csv'"
 if _rc {
-    display as error "Authoritative CVD-event release is missing: `event_csv'"
+    display as error "Update build stopped: authoritative CVD-event release is missing."
+    display as error "Expected: `event_csv'"
     exit 601
 }
 capture confirm file "`site_event_csv'"
 if _rc {
-    display as error "Website CVD-event release mirror is missing: `site_event_csv'"
+    display as error "Update build stopped: website CVD-event release mirror is missing."
+    display as error "Expected: `site_event_csv'"
     display as error "Rerun CVD-event workflow Step 6."
     exit 601
 }
 capture confirm file "`mortality_csv'"
 if _rc {
-    display as error "Authoritative mortality release is missing: `mortality_csv'"
+    display as error "Update build stopped: authoritative mortality release is missing."
+    display as error "Expected: `mortality_csv'"
     exit 601
 }
 capture confirm file "`site_mortality_csv'"
 if _rc {
-    display as error "Website mortality release mirror is missing: `site_mortality_csv'"
+    display as error "Update build stopped: website mortality release mirror is missing."
+    display as error "Expected: `site_mortality_csv'"
     display as error "Rerun mortality workflow Step 6."
     exit 601
 }
@@ -126,7 +169,7 @@ local event_size = r(filelen)
 local event_checksum = r(checksum)
 quietly checksum "`site_event_csv'"
 if r(filelen) != `event_size' | r(checksum) != `event_checksum' {
-    display as error "Authoritative and website CVD-event releases differ."
+    display as error "Update build stopped: authoritative and website CVD-event releases differ."
     display as error "Rerun CVD-event workflow Step 6 before creating this update."
     exit 459
 }
@@ -135,160 +178,164 @@ local mortality_size = r(filelen)
 local mortality_checksum = r(checksum)
 quietly checksum "`site_mortality_csv'"
 if r(filelen) != `mortality_size' | r(checksum) != `mortality_checksum' {
-    display as error "Authoritative and website mortality releases differ."
+    display as error "Update build stopped: authoritative and website mortality releases differ."
     display as error "Rerun mortality workflow Step 6 before creating this update."
     exit 459
+}
+quietly checksum "`template'"
+local template_size = r(filelen)
+local template_checksum = r(checksum)
+
+local output_exists 0
+foreach output_file in public_qmd public_metadata public_event_snapshot ///
+        public_mortality_snapshot site_qmd site_event_snapshot site_mortality_snapshot {
+    capture confirm file "``output_file''"
+    if !_rc local output_exists 1
+}
+
+local existing_version .
+local existing_report_ok 0
+local existing_period_ok 0
+if `output_exists' {
+    capture confirm file "`public_metadata'"
+    if _rc {
+        display as error "Update build stopped: existing outputs have no authoritative report.yml."
+        display as error "Do not overwrite an incomplete package manually. Review: `public_dir'"
+        exit 459
+    }
+
+    tempname existing_metadata_handle
+    file open `existing_metadata_handle' using "`public_metadata'", read text
+    file read `existing_metadata_handle' line
+    while r(eof) == 0 {
+        local clean_line = strtrim("`line'")
+        local clean_line = subinstr("`clean_line'", char(34), "", .)
+        if "`clean_line'" == "report_type: rolling_three_month_cvd_update" local existing_report_ok 1
+        if "`clean_line'" == "report_period: `report_period'" local existing_period_ok 1
+        if strpos("`clean_line'", "report_version: v") == 1 {
+            local existing_version = real(substr("`clean_line'", 18, .))
+        }
+        file read `existing_metadata_handle' line
+    }
+    file close `existing_metadata_handle'
+
+    if `existing_report_ok' != 1 | `existing_period_ok' != 1 | missing(`existing_version') {
+        display as error "Update build stopped: existing report.yml is missing or inconsistent."
+        display as error "Review: `public_metadata'"
+        exit 459
+    }
+    if `version_num' <= `existing_version' {
+        display as error "Update build stopped: `report_period' already has version v`existing_version'."
+        display as error "Use a strictly higher version; published version numbers are never reused."
+        exit 459
+    }
+    if !`replace_existing' {
+        display as error "Update build stopped: `report_period' already exists."
+        display as error "Use a strictly higher version and add replace to supersede it."
+        exit 602
+    }
 }
 
 capture mkdir "$BNR_PUBLIC/reports"
 capture mkdir "$BNR_PUBLIC/reports/cvd"
 capture mkdir "$BNR_PUBLIC/reports/cvd/updates"
 capture mkdir "`public_dir'"
+capture mkdir "`public_data_dir'"
 capture mkdir "$BNR_REPO/site/surveillance/cvd/reports"
 capture mkdir "$BNR_REPO/site/surveillance/cvd/reports/updates"
 capture mkdir "`site_dir'"
-
-local existing_version .
-capture confirm file "`public_metadata'"
-if !_rc {
-    tempname existing_metadata_handle
-    file open `existing_metadata_handle' using "`public_metadata'", read text
-    file read `existing_metadata_handle' line
-    while r(eof) == 0 {
-        local line = strtrim(`"`line'"')
-        local line = subinstr(`"`line'"', char(34), "", .)
-        if strpos("`line'", "report_version: v") == 1 {
-            local existing_version = real(substr("`line'", 18, .))
-        }
-        file read `existing_metadata_handle' line
-    }
-    file close `existing_metadata_handle'
-}
-if !missing(`existing_version') & `version_num' < `existing_version' {
-    display as error "This would replace update v`existing_version' with older v`version_num'."
-    exit 459
-}
-local output_exists 0
-capture confirm file "`public_qmd'"
-if !_rc local output_exists 1
-capture confirm file "`public_metadata'"
-if !_rc local output_exists 1
-capture confirm file "`site_qmd'"
-if !_rc local output_exists 1
-if `output_exists' & !`replace_existing' {
-    display as error "A report already exists for `report_period'."
-    display as error "Use replace for an approved correction or higher version."
-    exit 602
-}
+capture mkdir "`site_data_dir'"
 
 local published_date : display %tdCCYY-NN-DD daily("`c(current_date)'", "DMY")
 local report_month_name : display %tmMonth ym(`report_year_num', `report_month_num')
-tempfile staged_qmd staged_metadata
-local report_page "`staged_qmd'"
+local report_month_name = strtrim("`report_month_name'")
 
-capture log close bnr_report_update
-log using "`private_log'", text replace name(bnr_report_update)
+tempfile template_1 template_2 template_3 template_4 template_5
+tempfile template_6 template_7 template_8 staged_qmd staged_metadata
+tempfile staged_event_snapshot staged_mortality_snapshot
 
-tempname report_handle
-file open `report_handle' using "`report_page'", write text replace
-file write `report_handle' "---" _n
-file write `report_handle' `"title: "Rolling three-month CVD surveillance update: `report_month_name' `report_year4'""' _n
-file write `report_handle' `"description: "Objective CVD event and mortality counts for the latest three complete common months in the declared public releases.""' _n
-file write `report_handle' "date: `published_date'" _n
-file write `report_handle' "date-modified: `published_date'" _n
-file write `report_handle' "image: /assets/images/listings/listing_reef_shallows.webp" _n
-file write `report_handle' "image-alt: Sunlit shallow reef water in Barbados." _n
-file write `report_handle' "report-id: `report_id'" _n
-file write `report_handle' "report-type: Rolling three-month update" _n
-file write `report_handle' "report-version: v`version_num'" _n
-file write `report_handle' "event-release-id: `event_release'" _n
-file write `report_handle' "mortality-release-id: `mortality_release'" _n
-file write `report_handle' "categories:" _n
-file write `report_handle' "  - CVD" _n
-file write `report_handle' "  - Rolling three-month update" _n
-file write `report_handle' "format:" _n
-file write `report_handle' "  html:" _n
-file write `report_handle' "    toc: true" _n
-file write `report_handle' "    toc-title: On this page" _n
-file write `report_handle' "    page-layout: article" _n
-file write `report_handle' "---" _n _n
-file write `report_handle' "This online update presents the latest three complete months that are common to" _n
-file write `report_handle' "the declared CVD-event and mortality releases. It uses published counts only." _n _n
-file write `report_handle' "```{ojs}" _n
-file write `report_handle' "//| output: false" _n
-file write `report_handle' `"eventMetrics = FileAttachment("`event_href'").csv({typed: true})"' _n
-file write `report_handle' `"mortalityMetrics = FileAttachment("`mortality_href'").csv({typed: true})"' _n
-file write `report_handle' "```" _n _n
-file write `report_handle' "```{ojs}" _n
-file write `report_handle' "//| output: false" _n
-file write `report_handle' "isPublishedNumber = row => {" _n
-file write `report_handle' "  const status = String(row?.suppression_status ?? '').trim().toLowerCase();" _n
-file write `report_handle' "  const value = Number(row?.display_value);" _n
-file write `report_handle' "  return (status === '' || status === 'none' || status === 'not_applicable') && Number.isFinite(value);" _n
-file write `report_handle' "}" _n
-file write `report_handle' "monthKey = row => String(row.period_year).padStart(4, '0') + '-' + String(row.period_month).padStart(2, '0')" _n
-file write `report_handle' "monthSerial = key => { const [year, month] = key.split('-').map(Number); return year * 12 + month; }" _n
-file write `report_handle' "complete = row => String(row.period_complete) === '1'" _n
-file write `report_handle' "onlyOne = (rows, label) => {" _n
-file write `report_handle' "  if (rows.length !== 1) throw new Error(label + ': expected one public row per month.');" _n
-file write `report_handle' "  return rows[0];" _n
-file write `report_handle' "}" _n
-file write `report_handle' "```" _n _n
-file write `report_handle' "```{ojs}" _n
-file write `report_handle' "//| output: false" _n
-file write `report_handle' "eventRows = eventMetrics.filter(row =>" _n
-file write `report_handle' "  row.metric_id === 'CVD-BURDEN-001' && row.period_type === 'monthly' &&" _n
-file write `report_handle' "  row.event_type === 'all_cvd' && row.sex === 'all' && row.age_group === 'all' &&" _n
-file write `report_handle' "  row.ascertainment_scope === 'hospital_only' && row.statistic === 'monthly_count'" _n
-file write `report_handle' ")" _n
-file write `report_handle' "mortalityRows = mortalityMetrics.filter(row =>" _n
-file write `report_handle' "  row.metric_id === 'MORT-BURDEN-001' && row.period_type === 'monthly' &&" _n
-file write `report_handle' "  row.event_type === 'all_cvd' && row.sex === 'all' && row.age_group === 'all' &&" _n
-file write `report_handle' "  row.case_definition === 'primary_clear_likely' && row.statistic === 'monthly_count'" _n
-file write `report_handle' ")" _n
-file write `report_handle' "eventByMonth = d3.rollup(eventRows, rows => onlyOne(rows, 'Events'), monthKey)" _n
-file write `report_handle' "mortalityByMonth = d3.rollup(mortalityRows, rows => onlyOne(rows, 'Mortality'), monthKey)" _n
-file write `report_handle' "commonMonths = Array.from(eventByMonth.keys()).filter(key => mortalityByMonth.has(key)).sort()" _n
-file write `report_handle' "eligibleMonths = commonMonths.filter(key => isPublishedNumber(eventByMonth.get(key)) &&" _n
-file write `report_handle' "  isPublishedNumber(mortalityByMonth.get(key)) && complete(eventByMonth.get(key)) && complete(mortalityByMonth.get(key)))" _n
-file write `report_handle' "windowMonths = eligibleMonths.slice(-3)" _n
-file write `report_handle' "windowIsConsecutive = windowMonths.length === 3 &&" _n
-file write `report_handle' "  monthSerial(windowMonths[1]) === monthSerial(windowMonths[0]) + 1 &&" _n
-file write `report_handle' "  monthSerial(windowMonths[2]) === monthSerial(windowMonths[1]) + 1" _n
-file write `report_handle' "updateRows = windowIsConsecutive ? windowMonths.map(month => ({" _n
-file write `report_handle' "  month," _n
-file write `report_handle' "  events: Number(eventByMonth.get(month).display_value)," _n
-file write `report_handle' "  deaths: Number(mortalityByMonth.get(month).display_value)" _n
-file write `report_handle' "})) : []" _n
-file write `report_handle' "```" _n _n
-file write `report_handle' "## Headline" _n _n
-file write `report_handle' "```{ojs}" _n
-file write `report_handle' "//| echo: false" _n
-file write `report_handle' "{" _n
-file write `report_handle' "  if (!windowIsConsecutive) return html`<p>The declared releases do not contain three complete, non-suppressed consecutive months in common for this update.</p>`;" _n
-file write `report_handle' "  const events = d3.sum(updateRows, d => d.events);" _n
-file write `report_handle' "  const deaths = d3.sum(updateRows, d => d.deaths);" _n
-file write `report_handle' "  const start = d3.utcFormat('%B %Y')(new Date(updateRows[0].month + '-01T00:00:00Z'));" _n
-file write `report_handle' "  const end = d3.utcFormat('%B %Y')(new Date(updateRows[2].month + '-01T00:00:00Z'));" _n
-file write `report_handle' "  const result = document.createElement('p');" _n
-file write `report_handle' "  result.textContent = events.toLocaleString('en-GB') + ' hospital-recorded CVD events and ' + deaths.toLocaleString('en-GB') + ' CVD deaths were published for the three-month period from ' + start + ' to ' + end + '.';" _n
-file write `report_handle' "  return result;" _n
-file write `report_handle' "}" _n
-file write `report_handle' "```" _n _n
-file write `report_handle' "## Published monthly counts" _n _n
-file write `report_handle' "```{ojs}" _n
-file write `report_handle' "//| echo: false" _n
-file write `report_handle' "updateRows.length ? Inputs.table(updateRows.map(row => ({" _n
-file write `report_handle' "  Month: d3.utcFormat('%B %Y')(new Date(row.month + '-01T00:00:00Z'))," _n
-file write `report_handle' "  'Hospital-recorded CVD events': row.events," _n
-file write `report_handle' "  'CVD deaths (primary definition)': row.deaths" _n
-file write `report_handle' "}))) : 'No comparable three-month table is available.'" _n
-file write `report_handle' "```" _n _n
-file write `report_handle' "## Data sources" _n _n
-file write `report_handle' "- CVD-event release: [`event_release'](`event_href')" _n
-file write `report_handle' "- Mortality release: [`mortality_release'](`mortality_href')" _n
-file write `report_handle' "- Report version: `report_id'" _n
-file close `report_handle'
+capture noisily filefilter "`template'" "`template_1'", from("@@REPORT_MONTH_NAME@@") to("`report_month_name'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: report-month substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_1'" "`template_2'", from("@@REPORT_YEAR@@") to("`report_year4'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: report-year substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_2'" "`template_3'", from("@@REPORT_DATE@@") to("`published_date'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: report-date substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_3'" "`template_4'", from("@@REPORT_ID@@") to("`report_id'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: report-identifier substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_4'" "`template_5'", from("@@REPORT_VERSION@@") to("`version_num'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: report-version substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_5'" "`template_6'", from("@@EVENT_RELEASE_ID@@") to("`event_release'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: event-release substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_6'" "`template_7'", from("@@MORTALITY_RELEASE_ID@@") to("`mortality_release'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: mortality-release substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_7'" "`template_8'", from("@@EVENT_SOURCE_HREF@@") to("`event_href'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: event-source-link substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_8'" "`staged_qmd'", from("@@MORTALITY_SOURCE_HREF@@") to("`mortality_href'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: mortality-source-link substitution failed."
+    exit `filter_rc'
+}
+
+capture noisily copy "`event_csv'" "`staged_event_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Update build stopped: the CVD-event release could not be staged."
+    exit `copy_rc'
+}
+capture noisily copy "`mortality_csv'" "`staged_mortality_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Update build stopped: the mortality release could not be staged."
+    exit `copy_rc'
+}
+
+quietly checksum "`staged_event_snapshot'"
+if r(filelen) != `event_size' | r(checksum) != `event_checksum' {
+    display as error "Update build stopped: staged CVD-event snapshot verification failed."
+    exit 459
+}
+quietly checksum "`staged_mortality_snapshot'"
+if r(filelen) != `mortality_size' | r(checksum) != `mortality_checksum' {
+    display as error "Update build stopped: staged mortality snapshot verification failed."
+    exit 459
+}
+
+quietly checksum "`staged_qmd'"
+local qmd_size = r(filelen)
+local qmd_checksum = r(checksum)
 
 tempname metadata_handle
 file open `metadata_handle' using "`staged_metadata'", write text replace
@@ -297,34 +344,113 @@ file write `metadata_handle' "report_id: `report_id'" _n
 file write `metadata_handle' "report_type: rolling_three_month_cvd_update" _n
 file write `metadata_handle' "report_period: `report_period'" _n
 file write `metadata_handle' "report_version: v`version_num'" _n
+file write `metadata_handle' "update_template_file: bnr_report_update_template.qmd" _n
+file write `metadata_handle' "update_template_version: `template_version'" _n
+file write `metadata_handle' "update_template_size: `template_size'" _n
+file write `metadata_handle' "update_template_checksum: `template_checksum'" _n
+file write `metadata_handle' "snapshot_policy: complete_exact_release_copies" _n
 file write `metadata_handle' "event_release_id: `event_release'" _n
 file write `metadata_handle' "event_source_size: `event_size'" _n
 file write `metadata_handle' "event_source_checksum: `event_checksum'" _n
+file write `metadata_handle' "event_snapshot_file: data/event_release.csv" _n
 file write `metadata_handle' "mortality_release_id: `mortality_release'" _n
 file write `metadata_handle' "mortality_source_size: `mortality_size'" _n
 file write `metadata_handle' "mortality_source_checksum: `mortality_checksum'" _n
+file write `metadata_handle' "mortality_snapshot_file: data/mortality_release.csv" _n
 file write `metadata_handle' "landing_page: index.qmd" _n
+file write `metadata_handle' "landing_page_size: `qmd_size'" _n
+file write `metadata_handle' "landing_page_checksum: `qmd_checksum'" _n
 file write `metadata_handle' "built_date: `published_date'" _n
 file write `metadata_handle' "built_time: `c(current_time)'" _n
 file close `metadata_handle'
 
-copy "`staged_qmd'" "`public_qmd'", replace
-copy "`staged_metadata'" "`public_metadata'", replace
-copy "`staged_qmd'" "`site_qmd'", replace
+capture log close bnr_report_update
+log using "`private_log'", text replace name(bnr_report_update)
 
-quietly checksum "`staged_qmd'"
-local qmd_size = r(filelen)
-local qmd_checksum = r(checksum)
+capture noisily copy "`staged_qmd'" "`public_qmd'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `public_qmd'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_metadata'" "`public_metadata'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `public_metadata'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_event_snapshot'" "`public_event_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `public_event_snapshot'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_mortality_snapshot'" "`public_mortality_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `public_mortality_snapshot'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_qmd'" "`site_qmd'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `site_qmd'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_event_snapshot'" "`site_event_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `site_event_snapshot'"
+    exit `copy_rc'
+}
+capture noisily copy "`staged_mortality_snapshot'" "`site_mortality_snapshot'", replace
+if _rc {
+    local copy_rc = _rc
+    capture log close bnr_report_update
+    display as error "Update publication failed while writing: `site_mortality_snapshot'"
+    exit `copy_rc'
+}
+
 quietly checksum "`public_qmd'"
 if r(filelen) != `qmd_size' | r(checksum) != `qmd_checksum' {
     capture log close bnr_report_update
-    display as error "Public rolling-update QMD verification failed."
+    display as error "Update publication failed: authoritative QMD verification failed."
     exit 459
 }
 quietly checksum "`site_qmd'"
 if r(filelen) != `qmd_size' | r(checksum) != `qmd_checksum' {
     capture log close bnr_report_update
-    display as error "Website rolling-update QMD verification failed."
+    display as error "Update publication failed: website QMD verification failed."
+    exit 459
+}
+quietly checksum "`public_event_snapshot'"
+if r(filelen) != `event_size' | r(checksum) != `event_checksum' {
+    capture log close bnr_report_update
+    display as error "Update publication failed: authoritative CVD-event snapshot verification failed."
+    exit 459
+}
+quietly checksum "`site_event_snapshot'"
+if r(filelen) != `event_size' | r(checksum) != `event_checksum' {
+    capture log close bnr_report_update
+    display as error "Update publication failed: website CVD-event snapshot verification failed."
+    exit 459
+}
+quietly checksum "`public_mortality_snapshot'"
+if r(filelen) != `mortality_size' | r(checksum) != `mortality_checksum' {
+    capture log close bnr_report_update
+    display as error "Update publication failed: authoritative mortality snapshot verification failed."
+    exit 459
+}
+quietly checksum "`site_mortality_snapshot'"
+if r(filelen) != `mortality_size' | r(checksum) != `mortality_checksum' {
+    capture log close bnr_report_update
+    display as error "Update publication failed: website mortality snapshot verification failed."
     exit 459
 }
 
@@ -333,15 +459,18 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ROLLING THREE-MONTH CVD UPDATE: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Published successfully"
-noisily display as text   "  Script version:          1.0.0"
+noisily display as text   "  Script version:          1.1.0"
+noisily display as text   "  Template version:        `template_version'"
 noisily display as text   "  Report period:           `report_period'"
 noisily display as text   "  Report version:          v`version_num'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"
 noisily display as text  `"  Authoritative package:   `public_dir'"'
+noisily display as text  `"  Frozen event source:     `public_event_snapshot'"'
+noisily display as text  `"  Frozen mortality source: `public_mortality_snapshot'"'
 noisily display as text  `"  Website landing page:    `site_qmd'"'
 noisily display as text  `"  Private publication log: `private_log'"'
-noisily display as text   "  Next step:               Render and review the dated page."
+noisily display as text   "  Next step:               Run the lifecycle test, then render and review."
 noisily display as result "============================================================================="
 }
 capture log close bnr_report_update

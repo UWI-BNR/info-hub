@@ -1,7 +1,7 @@
 *! BNR annual CVD report Step 1: build candidate
-*! version 1.0.0, 2 September 2026
+*! version 1.1.0, 2 September 2026
 VERSION 19.0
-POSITION . . 540 500
+POSITION . . 540 590
 
 DIALOG main, label("BNR: Annual report Step 1 - build candidate")
 BEGIN
@@ -25,10 +25,13 @@ BEGIN
   TEXT tx_mortality_month 270 284 100 ., label("Release month:")
   SPINNER ed_mortality_month 380 281 65 ., default(7) min(1) max(12) nomemory error("Mortality release month")
 
-  GROUPBOX gb_protection 15 342 510 62, label("Candidate protection")
-  CHECKBOX ck_replace 30 368 470 ., default(0) nomemory label("Replace this unapproved candidate version")
+  GROUPBOX gb_sources 15 342 510 88, label("Analyst-written files required before Step 1")
+  TEXTBOX tx_sources 30 365 480 52, label("Create both files under scripts/stata/reporting/annual/YYYY/: bnr_report_annual_YYYY_interpretation.do and bnr_report_annual_YYYY_focus.do. Replace YYYY with the report year selected above.")
 
-  TEXTBOX tx_boundary 20 424 500 44, label("Candidate files are written only to private staging. An approved version cannot be rebuilt; create a higher version instead.")
+  GROUPBOX gb_protection 15 446 510 62, label("Candidate protection")
+  CHECKBOX ck_replace 30 472 470 ., default(0) nomemory label("Replace this unapproved candidate version")
+
+  TEXTBOX tx_boundary 20 526 500 44, label("Candidate files are written only to private staging. An approved version cannot be rebuilt; create a higher version instead.")
 END
 
 OK ok1, label("Build candidate")

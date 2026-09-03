@@ -29,8 +29,9 @@ it is not a calendar-quarter report.
    produced in readable Stata code.
 2. **Observable presents the rolling update.** It consumes only approved public
    event and mortality data.
-3. **No moving source files in dated updates.** Every dated update records and
-   loads exact release-stamped public CSVs, never a `*_current.csv` file.
+3. **Freeze dated-update inputs.** Every dated update stores and loads complete,
+   exact snapshots of both declared release-stamped public CSVs. It never loads
+   a `*_current.csv` file or a later-mutated website release copy.
 4. **Simple update arithmetic is permitted.** The approved template may combine
    compatible published, non-suppressed values, including a three-month sum.
    It must not reconstruct suppressed values or use an unapproved formula.
@@ -48,8 +49,17 @@ it is not a calendar-quarter report.
 ## Public data contract for rolling updates
 
 Event Step 6 and mortality Step 6 publish release-stamped browser-readable
-CSVs under `site/downloads/`. A rolling update declares both source release
-identifiers and source paths in its page metadata.
+CSVs under both the authoritative public tree and `site/downloads/`. The update
+builder first verifies those two copies agree, then freezes the complete
+authoritative CSVs as `data/event_release.csv` and
+`data/mortality_release.csv` inside the dated report package. Observable reads
+only those local snapshots. This deliberately leaves the template free to use
+any approved rows needed by a later design, including a year-to-date design.
+
+The single design source is
+`scripts/stata/reporting/templates/bnr_report_update_template.qmd`. Generated
+dated pages are instances, not templates, and must not be copied forward to
+create the next report.
 
 The template must use public display values and disclosure status. If a required
 component is missing, suppressed, incomplete or incompatible with the declared
@@ -77,6 +87,13 @@ Only the current version for a period is rendered and listed. The page metadata,
 PDF title page, publication metadata and manifest must agree on the report
 version.
 
+For the one-step rolling update, an existing period may be superseded only by a
+strictly higher version with the explicit `replace` argument. A published
+version number is never reused. For annual and one-off reports, `replace` may
+also recover the exact same approved version after an interrupted publication;
+it may never downgrade an existing public version. Existing public files
+without complete, consistent authoritative metadata stop publication.
+
 ## Annual-report structure
 
 The annual report uses a small Stata composition model:
@@ -92,6 +109,14 @@ The interpretation file contains analyst-written local text macros. It is
 included by the master DO file so the macros remain in the master scope. The
 Focus On module is analyst-owned and may differ each year, while retaining the
 common report style.
+
+For each new year, the analyst creates both files at the following fixed paths;
+the Step 1 dialog and failure message state this requirement explicitly:
+
+```text
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do
+```
 
 The annual builder creates exactly three private candidate files under
 `$BNR_STAGING/reports/cvd/annual/<report-id>/candidate/`: the versioned PDF,

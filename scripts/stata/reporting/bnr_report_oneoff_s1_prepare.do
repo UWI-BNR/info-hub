@@ -5,7 +5,7 @@ PURPOSE: Prepare a private one-off CVD report candidate from a finished PDF.
 
 USAGE:
   do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
-      workflow_test 1 "C:/path/report.pdf" ///
+      workflow_test 1 "$BNR_STAGING/report_inputs/report.pdf" ///
       "One-off CVD report workflow test" ///
       "Engineering placeholder used to test the publication workflow." ///
       2026-09-02

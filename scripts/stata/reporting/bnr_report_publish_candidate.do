@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_publish_candidate.do
-VERSION: 1.0.0 (2 September 2026)
+VERSION: 1.1.0 (2 September 2026)
 PURPOSE: Promote one exact manifested report payload to public and site paths.
 
 This shared helper reads only public_ready. It never reads or alters candidate
@@ -150,9 +150,23 @@ forvalues row = 1/3 {
     }
 }
 
+local any_output 0
+foreach output_file in public_pdf public_qmd public_metadata site_pdf site_qmd site_metadata {
+    capture confirm file "``output_file''"
+    if !_rc local any_output 1
+}
+
 local existing_version .
-capture confirm file "`public_metadata'"
-if !_rc {
+local existing_type_ok 0
+local existing_period_ok 0
+if `any_output' {
+    capture confirm file "`public_metadata'"
+    if _rc {
+        display as error "Report publication stopped: existing outputs have no authoritative report.yml."
+        display as error "Review the existing public and website package before retrying."
+        exit 459
+    }
+
     tempname existing_handle
     file open `existing_handle' using "`public_metadata'", read text
     file read `existing_handle' line
@@ -162,32 +176,64 @@ if !_rc {
         if strpos("`line'", "report_version: v") == 1 {
             local existing_version = real(substr("`line'", 18, .))
         }
+        if "`line'" == "report_type: `report_type'" local existing_type_ok 1
+        if "`line'" == "`period_key': `period_value'" local existing_period_ok 1
         file read `existing_handle' line
     }
     file close `existing_handle'
-}
-if !missing(`existing_version') & `version_num' < `existing_version' {
-    display as error "Publication would downgrade v`existing_version' to v`version_num'."
-    exit 459
-}
 
-local any_output 0
-foreach output_file in public_pdf public_qmd public_metadata site_pdf site_qmd site_metadata {
-    capture confirm file "``output_file''"
-    if !_rc local any_output 1
+    if missing(`existing_version') | !`existing_type_ok' | !`existing_period_ok' {
+        display as error "Report publication stopped: existing report.yml is missing or inconsistent."
+        display as error "Review: `public_metadata'"
+        exit 459
+    }
+    if `version_num' < `existing_version' {
+        display as error "Report publication stopped: this would downgrade v`existing_version' to v`version_num'."
+        exit 459
+    }
 }
 if `any_output' & !`replace_existing' {
-    display as error "Public output already exists for this report period."
+    display as error "Report publication stopped: public output already exists for this report period."
     display as error "Use replace only for an approved same-version recovery or higher version."
     exit 602
 }
 
-copy "`ready_pdf'" "`public_pdf'", replace
-copy "`ready_qmd'" "`public_qmd'", replace
-copy "`ready_metadata'" "`public_metadata'", replace
-copy "`ready_pdf'" "`site_pdf'", replace
-copy "`ready_qmd'" "`site_qmd'", replace
-copy "`ready_metadata'" "`site_metadata'", replace
+capture noisily copy "`ready_pdf'" "`public_pdf'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `public_pdf'"
+    exit `copy_rc'
+}
+capture noisily copy "`ready_qmd'" "`public_qmd'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `public_qmd'"
+    exit `copy_rc'
+}
+capture noisily copy "`ready_metadata'" "`public_metadata'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `public_metadata'"
+    exit `copy_rc'
+}
+capture noisily copy "`ready_pdf'" "`site_pdf'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `site_pdf'"
+    exit `copy_rc'
+}
+capture noisily copy "`ready_qmd'" "`site_qmd'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `site_qmd'"
+    exit `copy_rc'
+}
+capture noisily copy "`ready_metadata'" "`site_metadata'", replace
+if _rc {
+    local copy_rc = _rc
+    display as error "Report publication failed while writing: `site_metadata'"
+    exit `copy_rc'
+}
 
 quietly checksum "`ready_pdf'"
 local ready_pdf_size = r(filelen)

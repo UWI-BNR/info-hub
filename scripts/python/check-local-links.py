@@ -104,6 +104,11 @@ def main() -> int:
         for number, line in enumerate(lines, start=1):
             links = [*MARKDOWN_LINK.findall(line), *HTML_LINK.findall(line)]
             for raw_link in links:
+                # Tokenised templates are validated after instantiation. Their
+                # placeholders are not repository paths and must not be
+                # reported as broken links.
+                if "@@" in raw_link:
+                    continue
                 target, kind = candidate_targets(root, source, raw_link.strip("<>"))
                 if kind != "local" or target is None:
                     continue

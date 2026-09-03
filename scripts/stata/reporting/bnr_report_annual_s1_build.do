@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.0.0 (2 September 2026)
+VERSION: 1.0.1 (2 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
 
 USAGE:
@@ -111,14 +111,18 @@ if _rc {
     display as error "Rerun the mortality workflow Step 6."
     exit 601
 }
+local interpretation_missing 0
+local focus_missing 0
 capture confirm file "`interpretation'"
-if _rc {
-    display as error "Annual interpretation file not found: `interpretation'"
-    exit 601
-}
+if _rc local interpretation_missing 1
 capture confirm file "`focus'"
-if _rc {
-    display as error "Annual Focus On file not found: `focus'"
+if _rc local focus_missing 1
+if `interpretation_missing' | `focus_missing' {
+    display as error "Annual report Step 1 stopped: analyst-written files are missing."
+    display as error "Create both year-specific files before running Step 1:"
+    display as error "  `interpretation'"
+    display as error "  `focus'"
+    display as error "Use the existing annual-year folder as the structural example."
     exit 601
 }
 
@@ -288,7 +292,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate created"
-noisily display as text   "  Script version:          1.0.0"
+noisily display as text   "  Script version:          1.0.1"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"

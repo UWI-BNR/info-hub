@@ -1,18 +1,17 @@
 ---
 title: "Stata code inventory"
 date: 2026-09-01
-date-modified: 2026-09-01
+date-modified: 2026-09-02
 format: html
 toc: true
 ---
 
 This page describes the Stata code retained after retirement of the former
-tabulations and briefings workflows. Routine Stata production is now limited
-to the CVD event and CVD mortality release workflows and their supporting
-utilities.
+tabulations and briefings workflows. Routine production includes the CVD event
+and mortality release workflows and the replacement report-publication routes.
 
 Detailed run instructions belong in the Operations and Technical Manuals. The
-manuals will be revised separately after the reporting redesign is complete.
+manuals will receive a separate content pass after report design is complete.
 
 ## Current operational entry points
 
@@ -23,6 +22,7 @@ manuals will be revised separately after the reporting redesign is complete.
 | Shared CVD configuration | [`common/bnrcvd_globals.do`](common/bnrcvd_globals.do) | Defines shared run metadata and CVD display constants. It contains no credentials or machine-specific paths. |
 | Shared metric staging | [`common/bnr_step4_stage_metric.do`](common/bnr_step4_stage_metric.do) | Validates and packages unsuppressed metric outputs and QA evidence in private staging. |
 | Shared disclosure control | [`common/bnr_step5_suppress.do`](common/bnr_step5_suppress.do) | Applies the established disclosure-control contract used by the CVD metric workflow. |
+| Reporting contract | [`reporting/BNR_REPORTING_WORKFLOW_CONTRACT.md`](reporting/BNR_REPORTING_WORKFLOW_CONTRACT.md) | Defines product boundaries, locations, versioning and publication controls for all three report types. |
 
 The machine-specific `config/bnr_paths_LOCAL.do` is required on each
 workstation but must never be committed.
@@ -60,6 +60,32 @@ approved event and mortality metric CSV files through Quarto and Observable JS.
 Supporting mortality calculation, staging, dictionaries, classification rules
 and tests are retained under `mortality/`. The workflow contract is documented
 in `mortality/BNR_MORTALITY_WORKFLOW_CONTRACT.md`.
+
+## CVD reporting workflows
+
+| Product or step | File | Responsibility |
+|:--|:--|:--|
+| Rolling update | [`reporting/bnr_report_update_build.do`](reporting/bnr_report_update_build.do) | Instantiate the central QMD template, freeze complete copies of both declared public-release CSVs and publish one dated online update. |
+| Update template | [`reporting/templates/bnr_report_update_template.qmd`](reporting/templates/bnr_report_update_template.qmd) | Single design source for every rolling-update instance. Generated dated QMD files must not become templates. |
+| Annual Step 1 | [`reporting/bnr_report_annual_s1_build.do`](reporting/bnr_report_annual_s1_build.do) | Build the private PDF, landing-page and metadata candidate from declared public releases and year-specific analyst files. |
+| Annual Step 2 | [`reporting/bnr_report_annual_s2_approve.do`](reporting/bnr_report_annual_s2_approve.do) | Record human review and approve the exact candidate payload. |
+| Annual Step 3 | [`reporting/bnr_report_annual_s3_publish.do`](reporting/bnr_report_annual_s3_publish.do) | Publish only the approved annual payload to authoritative and website paths. |
+| One-off Step 1 | [`reporting/bnr_report_oneoff_s1_prepare.do`](reporting/bnr_report_oneoff_s1_prepare.do) | Wrap a finished analyst PDF in a private candidate package. |
+| One-off Step 2 | [`reporting/bnr_report_oneoff_s2_approve.do`](reporting/bnr_report_oneoff_s2_approve.do) | Record human review and approve the exact one-off payload. |
+| One-off Step 3 | [`reporting/bnr_report_oneoff_s3_publish.do`](reporting/bnr_report_oneoff_s3_publish.do) | Publish only the approved one-off payload to authoritative and website paths. |
+| Disclosure utility | [`reporting/bnr_report_disclosure_screen.do`](reporting/bnr_report_disclosure_screen.do) | Produce private flags for human disclosure review without changing the supplied dataset. |
+
+For a new annual year, create both analyst-owned files before Step 1:
+
+```text
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do
+```
+
+The rolling update reads only the complete frozen CSV copies stored under its
+dated `data/` folder. It therefore remains reproducible even if a source release
+is later corrected. A later update version must be strictly higher and must use
+the explicit `replace` argument; the stable site page shows only that version.
 
 ## Dialogs and Stata help
 

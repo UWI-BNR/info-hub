@@ -5,7 +5,7 @@ PURPOSE: Screen a structured count dataset for obvious disclosure-review issues.
 
 USAGE:
   do "$BNR_STATA/reporting/bnr_report_disclosure_screen.do" ///
-      "C:/path/report_counts.dta" case_fatality_2025
+      "$BNR_STAGING/report_inputs/report_counts.dta" case_fatality_2025
 
 REQUIRED VARIABLES:
   output_id   Table, figure or output identifier
