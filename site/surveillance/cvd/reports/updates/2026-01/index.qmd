@@ -1,14 +1,13 @@
 ---
-title: "Rolling three-month CVD surveillance update: January 2026"
-description: "Objective CVD event and mortality counts from the declared public releases."
+title: "Rolling CVD update: January 2026"
+description: "Recent hospital-recorded CVD events and CVD deaths from the declared public releases."
 date: "2026-09-03"
-date-modified: "2026-09-03"
 categories:
   - CVD
-  - Rolling three-month update
-report-id: "bnr_cvd_update_2026_01_v3"
-report-version: "v3"
-report-type: "Rolling three-month update"
+  - Rolling CVD update
+report-id: "bnr_cvd_update_2026_01_v8"
+report-version: "v8"
+report-type: "Rolling CVD update"
 update-template-version: "1.0.0"
 event-release-id: "cvd_2026_01"
 mortality-release-id: "mort_2026_07"
@@ -21,14 +20,308 @@ format:
     page-layout: article
 ---
 
-This online update presents the latest three complete months that are common to
-the declared CVD-event and mortality releases. It uses complete, frozen copies
-of those two public release datasets only.
+<!-- BNR rolling CVD update template design revision: v0.4.0 | 2026-09-03 -->
+
+```{=html}
+<style>
+.bnr-update-lede {
+  max-width: 78ch;
+  margin: .15rem 0 1rem;
+  font-size: 1.06rem;
+  line-height: 1.55;
+  color: #34444d;
+}
+.bnr-update-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(130px, 1fr));
+  gap: .6rem;
+  margin: .8rem 0 1.35rem;
+}
+.bnr-update-meta-item {
+  min-width: 0;
+  padding: .55rem .65rem;
+  border-top: 3px solid #d5e2e7;
+  background: #f7f9fa;
+}
+.bnr-update-meta-label {
+  display: block;
+  margin-bottom: .08rem;
+  font-size: .78rem;
+  font-weight: 650;
+  letter-spacing: .01em;
+  color: #687780;
+}
+.bnr-update-meta-value {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: .96rem;
+  font-weight: 700;
+  color: #253840;
+}
+.bnr-update-controls {
+  margin: .75rem 0 1.45rem;
+  padding: .7rem .85rem .55rem;
+  border: 1px solid #dce5e9;
+  border-radius: .4rem;
+  background: #f8fafb;
+}
+.bnr-update-controls .observablehq {
+  margin: 0;
+}
+.bnr-update-controls form {
+  margin-bottom: 0 !important;
+}
+.bnr-update-control-note {
+  margin: .15rem 0 0;
+  font-size: .86rem;
+  line-height: 1.35;
+  color: #617079;
+}
+.bnr-update-period {
+  margin: -.15rem 0 .7rem;
+  font-size: .93rem;
+  color: #5d6a72;
+}
+.bnr-update-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: .75rem;
+  margin: .35rem 0 .85rem;
+}
+.bnr-update-summary-card {
+  min-height: 142px;
+  padding: .82rem .9rem .78rem;
+  border: 1px solid #dfe5e8;
+  border-radius: .42rem;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(25, 48, 58, .05);
+}
+.bnr-update-event-card {
+  border-top: 4px solid #045174;
+}
+.bnr-update-death-card {
+  border-top: 4px solid #667f8a;
+}
+.bnr-update-card-label {
+  margin-bottom: .28rem;
+  font-size: .9rem;
+  font-weight: 700;
+  color: #3f5058;
+}
+.bnr-update-card-value {
+  margin: .05rem 0 .2rem;
+  font-size: 2.05rem;
+  font-weight: 750;
+  line-height: 1.05;
+  color: #172c34;
+}
+.bnr-update-card-note {
+  font-size: .84rem;
+  line-height: 1.35;
+  color: #68757b;
+}
+.bnr-update-unavailable {
+  margin: .4rem 0 .9rem;
+  padding: .65rem .8rem;
+  border-left: 4px solid #9aa9b0;
+  background: #f7f8f9;
+  color: #53636b;
+}
+.bnr-update-detail {
+  margin: .45rem 0 1.1rem;
+  padding: .2rem .05rem;
+}
+.bnr-update-detail summary {
+  cursor: pointer;
+  font-weight: 650;
+  color: #045174;
+}
+.bnr-update-detail .observablehq {
+  margin-top: .55rem;
+}
+.bnr-update-chart-card {
+  margin: .8rem 0 1.25rem;
+  padding: .9rem 1rem .8rem;
+  border: 1px solid #dce4e8;
+  border-radius: .45rem;
+  background: #fff;
+}
+.bnr-update-chart-title {
+  margin: 0 0 .18rem;
+  font-size: 1.06rem;
+  font-weight: 750;
+  color: #253840;
+}
+.bnr-update-chart-note {
+  margin: 0 0 .55rem;
+  font-size: .9rem;
+  line-height: 1.4;
+  color: #5c6b73;
+}
+.bnr-update-axis-title {
+  margin: .12rem 0 .72rem .1rem;
+  font-size: .9rem;
+  color: #3f5058;
+}
+.bnr-update-chart-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin: .15rem 0 .1rem;
+}
+.bnr-update-data-download {
+  display: inline-block;
+  padding: .22rem .5rem;
+  border: 1px solid #bdc8cd;
+  border-radius: .25rem;
+  background: #fff;
+  color: #045174 !important;
+  font-size: .8rem;
+  font-weight: 650;
+  text-decoration: none !important;
+}
+.bnr-update-data-download:hover {
+  background: #f3f6f7;
+}
+.bnr-update-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1.1rem;
+  align-items: center;
+  margin: .15rem 0 .45rem;
+  font-size: .84rem;
+  color: #5b6970;
+}
+.bnr-update-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.bnr-update-legend-current,
+.bnr-update-legend-history {
+  display: inline-block;
+  width: 30px;
+  height: 0;
+}
+.bnr-update-legend-current {
+  border-top: 3px solid #045174;
+}
+.bnr-update-legend-history {
+  border-top: 2px solid rgba(96, 119, 128, .28);
+}
+.bnr-update-notes-box {
+  margin-top: 1.5rem;
+  padding: .72rem .85rem;
+  border: 1px solid #e1e6e9;
+  border-radius: .35rem;
+  background: #f6f7f8;
+  font-size: .84rem;
+  line-height: 1.45;
+  color: #68757c;
+}
+.bnr-update-notes-box p {
+  margin: .28rem 0;
+}
+.bnr-update-notes-box strong {
+  color: #59676e;
+}
+.bnr-update-chart-card svg g[aria-label="line"] path {
+  cursor: help;
+  transition: stroke-width .12s ease, stroke-opacity .12s ease;
+}
+.bnr-update-chart-card svg g[aria-label="line"] path:hover {
+  stroke-width: 3px !important;
+  stroke-opacity: .78 !important;
+}
+.bnr-update-chart-card .observablehq {
+  width: 100%;
+  overflow-x: auto;
+}
+.bnr-update-chart-card svg {
+  max-width: 100%;
+  height: auto;
+}
+@media (max-width: 800px) {
+  .bnr-update-meta-grid,
+  .bnr-update-card-grid {
+    grid-template-columns: 1fr;
+  }
+  .bnr-update-summary-card {
+    min-height: 0;
+  }
+}
+</style>
+```
+
+<div class="bnr-update-lede">
+This dated update brings together recent hospital-recorded cardiovascular disease
+(CVD) events and CVD deaths from the declared public releases. It uses the
+complete, frozen release snapshots stored with this report, so later data
+releases do not alter the figures shown here.
+</div>
+
+```{ojs}
+//| output: false
+releaseDescriptor = releaseId => {
+  const match = String(releaseId ?? "").match(/_(\d{4})_(\d{2})$/)
+  if (!match) return String(releaseId ?? "")
+  const year = Number(match[1])
+  const month = Number(match[2])
+  const monthName = d3.utcFormat("%B")(new Date(Date.UTC(year, month - 1, 1)))
+  return year + ", " + monthName
+}
+```
+
+:::: {.bnr-update-meta-grid}
+::: {.bnr-update-meta-item}
+[Report period]{.bnr-update-meta-label}
+
+[January 2026]{.bnr-update-meta-value}
+:::
+
+::: {.bnr-update-meta-item}
+[CVD event release]{.bnr-update-meta-label}
+
+```{ojs}
+//| echo: false
+{
+  const value = document.createElement("span")
+  value.className = "bnr-update-meta-value"
+  value.textContent = releaseDescriptor("cvd_2026_01")
+  return value
+}
+```
+:::
+
+::: {.bnr-update-meta-item}
+[Mortality release]{.bnr-update-meta-label}
+
+```{ojs}
+//| echo: false
+{
+  const value = document.createElement("span")
+  value.className = "bnr-update-meta-value"
+  value.textContent = releaseDescriptor("mort_2026_07")
+  return value
+}
+```
+:::
+
+::: {.bnr-update-meta-item}
+[Report version]{.bnr-update-meta-label}
+
+[v8]{.bnr-update-meta-value}
+:::
+::::
+
 
 ```{ojs}
 //| output: false
 eventMetrics = FileAttachment("data/event_release.csv").csv({typed: true})
 mortalityMetrics = FileAttachment("data/mortality_release.csv").csv({typed: true})
+
+// Untyped copies preserve the published CSV text for the full-release downloads.
+eventSourceRows = FileAttachment("data/event_release.csv").csv()
+mortalitySourceRows = FileAttachment("data/mortality_release.csv").csv()
 ```
 
 ```{ojs}
@@ -38,82 +331,781 @@ isPublishedNumber = row => {
   const value = Number(row?.display_value)
   return (status === "" || status === "none" || status === "not_applicable") && Number.isFinite(value)
 }
-monthKey = row => String(row.period_year).padStart(4, "0") + "-" + String(row.period_month).padStart(2, "0")
+
+complete = row => String(row?.period_complete) === "1"
+
+monthKey = row =>
+  String(row.period_year).padStart(4, "0") + "-" +
+  String(row.period_month).padStart(2, "0")
+
 monthSerial = key => {
   const [year, month] = key.split("-").map(Number)
   return year * 12 + month
 }
-complete = row => String(row.period_complete) === "1"
+
+monthDate = key => new Date(key + "-01T00:00:00Z")
+
+shiftMonth = (key, offset) => {
+  const [year, month] = key.split("-").map(Number)
+  return d3.utcFormat("%Y-%m")(new Date(Date.UTC(year, month - 1 + offset, 1)))
+}
+
+monthLabel = key => d3.utcFormat("%B %Y")(monthDate(key))
+monthShortLabel = key => d3.utcFormat("%b")(monthDate(key))
+
+monthRangeLabel = months => {
+  if (!months?.length) return ""
+  const start = monthDate(months[0])
+  const end = monthDate(months[months.length - 1])
+  const sameYear = d3.utcFormat("%Y")(start) === d3.utcFormat("%Y")(end)
+  return sameYear
+    ? d3.utcFormat("%B")(start) + "\u2013" + d3.utcFormat("%B %Y")(end)
+    : d3.utcFormat("%B %Y")(start) + "\u2013" + d3.utcFormat("%B %Y")(end)
+}
+
+rowReady = row => Boolean(row) && complete(row) && isPublishedNumber(row)
+
 onlyOne = (rows, label) => {
   if (rows.length !== 1) throw new Error(label + ": expected one public row per month.")
   return rows[0]
 }
+
+formatCount = value =>
+  Number.isFinite(Number(value))
+    ? Math.round(Number(value)).toLocaleString("en-GB")
+    : "Unavailable"
+
+definitionCode = choice =>
+  choice === "Inclusive"
+    ? "upper_clear_likely_possible"
+    : "primary_clear_likely"
 ```
 
 ```{ojs}
 //| output: false
 eventRows = eventMetrics.filter(row =>
-  row.metric_id === "CVD-BURDEN-001" && row.period_type === "monthly" &&
-  row.event_type === "all_cvd" && row.sex === "all" && row.age_group === "all" &&
-  row.ascertainment_scope === "hospital_only" && row.statistic === "monthly_count"
+  row.metric_id === "CVD-BURDEN-001" &&
+  row.period_type === "monthly" &&
+  row.event_type === "all_cvd" &&
+  row.sex === "all" &&
+  row.age_group === "all" &&
+  row.ascertainment_scope === "hospital_only" &&
+  row.statistic === "monthly_count"
 )
+
 mortalityRows = mortalityMetrics.filter(row =>
-  row.metric_id === "MORT-BURDEN-001" && row.period_type === "monthly" &&
-  row.event_type === "all_cvd" && row.sex === "all" && row.age_group === "all" &&
-  row.case_definition === "primary_clear_likely" && row.statistic === "monthly_count"
+  row.metric_id === "MORT-BURDEN-001" &&
+  row.period_type === "monthly" &&
+  row.event_type === "all_cvd" &&
+  row.sex === "all" &&
+  row.age_group === "all" &&
+  (row.case_definition === "primary_clear_likely" ||
+   row.case_definition === "upper_clear_likely_possible") &&
+  row.statistic === "monthly_count"
 )
+
 eventByMonth = d3.rollup(eventRows, rows => onlyOne(rows, "Events"), monthKey)
-mortalityByMonth = d3.rollup(mortalityRows, rows => onlyOne(rows, "Mortality"), monthKey)
-commonMonths = Array.from(eventByMonth.keys()).filter(key => mortalityByMonth.has(key)).sort()
-eligibleMonths = commonMonths.filter(key => isPublishedNumber(eventByMonth.get(key)) &&
-  isPublishedNumber(mortalityByMonth.get(key)) && complete(eventByMonth.get(key)) && complete(mortalityByMonth.get(key)))
-windowMonths = eligibleMonths.slice(-3)
-windowIsConsecutive = windowMonths.length === 3 &&
-  monthSerial(windowMonths[1]) === monthSerial(windowMonths[0]) + 1 &&
-  monthSerial(windowMonths[2]) === monthSerial(windowMonths[1]) + 1
-updateRows = windowIsConsecutive ? windowMonths.map(month => ({
-  month,
-  events: Number(eventByMonth.get(month).display_value),
-  deaths: Number(mortalityByMonth.get(month).display_value)
-})) : []
 ```
 
-## Headline
+::: {.bnr-update-controls}
+```{ojs}
+//| echo: false
+viewof mortalityCardChoice = Inputs.radio(
+  ["Primary", "Inclusive"],
+  {label: "Mortality definition", value: "Primary"}
+)
+```
+
+<div class="bnr-update-control-note">
+This selector applies to the summary cards and three-month detail below. Event
+counts are hospital-recorded throughout.
+</div>
+:::
+
+```{ojs}
+//| output: false
+selectedMortalityRows = mortalityRows.filter(row =>
+  row.case_definition === definitionCode(mortalityCardChoice)
+)
+
+mortalityByMonth = d3.rollup(
+  selectedMortalityRows,
+  rows => onlyOne(rows, "Mortality"),
+  monthKey
+)
+
+commonMonths = Array.from(eventByMonth.keys())
+  .filter(key => mortalityByMonth.has(key))
+  .sort()
+
+eligibleMonths = commonMonths.filter(key =>
+  rowReady(eventByMonth.get(key)) &&
+  rowReady(mortalityByMonth.get(key))
+)
+
+latestMonth = eligibleMonths.length
+  ? eligibleMonths[eligibleMonths.length - 1]
+  : null
+
+latestSummary = latestMonth
+  ? {
+      month: latestMonth,
+      events: Number(eventByMonth.get(latestMonth).display_value),
+      deaths: Number(mortalityByMonth.get(latestMonth).display_value)
+    }
+  : null
+
+lastThreeMonths = latestMonth
+  ? [-2, -1, 0].map(offset => shiftMonth(latestMonth, offset))
+  : []
+
+lastThreeReady =
+  lastThreeMonths.length === 3 &&
+  lastThreeMonths.every(key =>
+    rowReady(eventByMonth.get(key)) &&
+    rowReady(mortalityByMonth.get(key))
+  )
+
+lastThreeSummary = lastThreeReady
+  ? {
+      months: lastThreeMonths,
+      events: d3.sum(lastThreeMonths, key => Number(eventByMonth.get(key).display_value)),
+      deaths: d3.sum(lastThreeMonths, key => Number(mortalityByMonth.get(key).display_value))
+    }
+  : null
+```
+
+```{ojs}
+//| output: false
+summaryCard = ({kind, label, value, note}) => {
+  const card = document.createElement("div")
+  card.className = "bnr-update-summary-card bnr-update-" + kind + "-card"
+
+  const labelNode = document.createElement("div")
+  labelNode.className = "bnr-update-card-label"
+  labelNode.textContent = label
+
+  const valueNode = document.createElement("div")
+  valueNode.className = "bnr-update-card-value"
+  valueNode.textContent = formatCount(value)
+
+  const noteNode = document.createElement("div")
+  noteNode.className = "bnr-update-card-note"
+  noteNode.textContent = note
+
+  card.append(labelNode, valueNode, noteNode)
+  return card
+}
+
+summaryGrid = cards => {
+  const grid = document.createElement("div")
+  grid.className = "bnr-update-card-grid"
+  cards.forEach(card => grid.append(card))
+  return grid
+}
+
+availabilityNotice = text => {
+  const note = document.createElement("div")
+  note.className = "bnr-update-unavailable"
+  note.textContent = text
+  return note
+}
+```
+
+## Latest month
 
 ```{ojs}
 //| echo: false
 {
-  const result = document.createElement("p")
-  if (!windowIsConsecutive) {
-    result.textContent = "The declared releases do not contain three complete, consecutive and comparable published months."
-    return result
-  }
-  const events = d3.sum(updateRows, row => row.events)
-  const deaths = d3.sum(updateRows, row => row.deaths)
-  const start = d3.utcFormat("%B %Y")(new Date(updateRows[0].month + "-01T00:00:00Z"))
-  const end = d3.utcFormat("%B %Y")(new Date(updateRows[2].month + "-01T00:00:00Z"))
-  result.textContent = `${events.toLocaleString("en-GB")} hospital-recorded CVD events and ${deaths.toLocaleString("en-GB")} CVD deaths were published for the three-month period from ${start} to ${end}.`
-  return result
+  const period = document.createElement("div")
+  period.className = "bnr-update-period"
+  period.textContent = latestMonth
+    ? "Latest complete month common to both declared releases: " + monthLabel(latestMonth) + "."
+    : "No complete comparable month is available from the declared releases."
+  return period
 }
 ```
 
-## Published monthly counts
+```{ojs}
+//| echo: false
+latestSummary
+  ? summaryGrid([
+      summaryCard({
+        kind: "event",
+        label: "Hospital-recorded CVD events",
+        value: latestSummary.events,
+        note: "All CVD \u00b7 all sexes"
+      }),
+      summaryCard({
+        kind: "death",
+        label: "CVD deaths",
+        value: latestSummary.deaths,
+        note: mortalityCardChoice + " definition \u00b7 All CVD \u00b7 all sexes"
+      })
+    ])
+  : availabilityNotice(
+      "A latest-month summary cannot be shown because a required published value is missing, suppressed, incomplete or incompatible."
+    )
+```
+
+## Last 3 months
 
 ```{ojs}
 //| echo: false
-updateRows.length ? Inputs.table(updateRows.map(row => ({
-  Month: d3.utcFormat("%B %Y")(new Date(row.month + "-01T00:00:00Z")),
-  "Hospital-recorded CVD events": row.events,
-  "CVD deaths (primary definition)": row.deaths
-}))) : "No comparable three-month table is available."
+{
+  const period = document.createElement("div")
+  period.className = "bnr-update-period"
+  period.textContent = lastThreeSummary
+    ? "Three complete consecutive months: " + monthRangeLabel(lastThreeSummary.months) + "."
+    : "Three complete consecutive comparable months are not available from the declared releases."
+  return period
+}
 ```
 
-## Data sources
+```{ojs}
+//| echo: false
+lastThreeSummary
+  ? summaryGrid([
+      summaryCard({
+        kind: "event",
+        label: "Hospital-recorded CVD events",
+        value: lastThreeSummary.events,
+        note: "Three-month total \u00b7 All CVD \u00b7 all sexes"
+      }),
+      summaryCard({
+        kind: "death",
+        label: "CVD deaths",
+        value: lastThreeSummary.deaths,
+        note: "Three-month total \u00b7 " + mortalityCardChoice + " definition \u00b7 All CVD \u00b7 all sexes"
+      })
+    ])
+  : availabilityNotice(
+      "A three-month summary cannot be shown because the required months are not all published, complete and consecutive."
+    )
+```
 
-- CVD-event release: [cvd_2026_01](../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv)
-- Mortality release: [mort_2026_07](../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv)
-- Report version: bnr_cvd_update_2026_01_v3
+<details class="bnr-update-detail">
+<summary>Show monthly detail for this three-month period</summary>
 
-The calculations on this page read the complete release snapshots stored with
-this dated report. The links above identify the corresponding published source
-datasets.
+```{ojs}
+//| echo: false
+lastThreeSummary
+  ? Inputs.table(lastThreeSummary.months.map(month => ({
+      Month: monthLabel(month),
+      "Hospital-recorded CVD events": Number(eventByMonth.get(month).display_value),
+      "CVD deaths": Number(mortalityByMonth.get(month).display_value),
+      "Mortality definition": mortalityCardChoice
+    })))
+  : "No comparable three-month detail is available."
+```
+
+</details>
+
+## Rolling 12-month trend
+
+Each current line accumulates the latest 12 complete months available for that
+measure. Background lines show the same 12-month sequence shifted back by whole
+years. Only complete published 12-month blocks are included.
+
+```{ojs}
+//| output: false
+rollingBlock = (byMonth, endMonth, yearsBack = 0) => {
+  if (!endMonth) return null
+
+  const shiftedEnd = shiftMonth(endMonth, -12 * yearsBack)
+  const months = d3.range(-11, 1).map(offset => shiftMonth(shiftedEnd, offset))
+
+  if (!months.every(key => rowReady(byMonth.get(key)))) return null
+
+  const series = monthRangeLabel(months)
+  const startYear = months[0].slice(0, 4)
+  const endYear = months[months.length - 1].slice(0, 4)
+  const seriesYearRange = startYear === endYear ? startYear : startYear + "\u2013" + endYear
+  let cumulative = 0
+
+  return months.map((month, index) => {
+    const monthlyCount = Number(byMonth.get(month).display_value)
+    cumulative += monthlyCount
+    return {
+      axisMonth: monthShortLabel(month),
+      cumulative,
+      monthlyCount,
+      month,
+      series,
+      seriesYearRange,
+      seriesType: yearsBack === 0 ? "current" : "historical_comparator",
+      yearsBack,
+      step: index + 1
+    }
+  })
+}
+
+rollingComparators = (byMonth, endMonth) => {
+  if (!endMonth || !byMonth.size) return []
+
+  const earliestSerial = d3.min(Array.from(byMonth.keys()), monthSerial)
+  const maximumYearsBack = Math.max(
+    0,
+    Math.floor((monthSerial(endMonth) - earliestSerial) / 12)
+  )
+
+  return d3.range(1, maximumYearsBack + 1)
+    .map(yearsBack => rollingBlock(byMonth, endMonth, yearsBack))
+    .filter(block => block !== null)
+}
+
+eventChartEligibleMonths = Array.from(eventByMonth.keys())
+  .filter(key => rowReady(eventByMonth.get(key)))
+  .sort()
+
+eventChartLatestMonth = eventChartEligibleMonths.length
+  ? eventChartEligibleMonths[eventChartEligibleMonths.length - 1]
+  : null
+
+eventRollingCurrent = rollingBlock(eventByMonth, eventChartLatestMonth, 0)
+eventRollingComparators = rollingComparators(eventByMonth, eventChartLatestMonth)
+```
+
+```{ojs}
+//| output: false
+cumulativeTrendPlot = (current, comparators, plotWidth, yDomainMaximum = null) => {
+  if (!current) return null
+
+  const historical = comparators.flat()
+  const interactive = [
+    ...historical.map(row => ({
+      ...row,
+      hoverTitle: row.seriesYearRange
+    })),
+    ...current.map(row => ({
+      ...row,
+      hoverTitle:
+        "Current period\n" +
+        monthLabel(row.month) + "\n" +
+        "Monthly count: " + formatCount(row.monthlyCount) + "\n" +
+        "Cumulative count: " + formatCount(row.cumulative)
+    }))
+  ]
+
+  const marks = [Plot.ruleY([0], {stroke: "#d8e0e4"})]
+
+  if (historical.length) {
+    marks.push(
+      Plot.line(historical, {
+        x: "axisMonth",
+        y: "cumulative",
+        z: "series",
+        stroke: "#607780",
+        strokeOpacity: 0.18,
+        strokeWidth: 1.25
+      })
+    )
+  }
+
+  marks.push(
+    Plot.line(current, {
+      x: "axisMonth",
+      y: "cumulative",
+      stroke: "#045174",
+      strokeWidth: 3
+    })
+  )
+
+  // One pointer-driven tip mark is shared by current and historical series,
+  // so only one tooltip can be displayed at a time.
+  marks.push(
+    Plot.tip(
+      interactive,
+      Plot.pointerX({
+        x: "axisMonth",
+        y: "cumulative",
+        title: "hoverTitle"
+      })
+    )
+  )
+
+  marks.push(
+    Plot.dot(current.slice(-1), {
+      x: "axisMonth",
+      y: "cumulative",
+      fill: "#045174",
+      r: 4
+    })
+  )
+
+  const yOptions = {
+    grid: true,
+    label: null,
+    nice: true
+  }
+  if (
+    yDomainMaximum !== null &&
+    yDomainMaximum !== undefined &&
+    Number.isFinite(Number(yDomainMaximum)) &&
+    Number(yDomainMaximum) > 0
+  ) {
+    yOptions.domain = [0, Number(yDomainMaximum)]
+  }
+
+  return Plot.plot({
+    width: plotWidth,
+    height: 340,
+    marginLeft: 62,
+    marginRight: 22,
+    marginBottom: 42,
+    style: {
+      fontFamily: "inherit",
+      fontSize: "13px",
+      background: "transparent"
+    },
+    x: {
+      domain: current.map(row => row.axisMonth),
+      label: null
+    },
+    y: yOptions,
+    marks
+  })
+}
+
+
+
+rollingSummaryText = (current, subject) => {
+  if (!current) {
+    return "A complete 12-month series is not available for " + subject + "."
+  }
+  const total = current[current.length - 1].cumulative
+  return monthRangeLabel(current.map(row => row.month)) + ": " +
+    formatCount(total) + " " + subject + "."
+}
+
+chartExportRows = ({blocks, measure, sourceReleaseId, sourceSnapshot, ascertainmentScope = "", mortalityDefinition = "", mortalityDefinitionCode = ""}) =>
+  blocks.filter(Boolean).flat().map(row => ({
+    report_id: "bnr_cvd_update_2026_01_v8",
+    report_version: "v8",
+    report_date: "2026-09-03",
+    report_period: "January 2026",
+    source_release_id: sourceReleaseId,
+    source_snapshot: sourceSnapshot,
+    measure,
+    ascertainment_scope: ascertainmentScope,
+    mortality_definition: mortalityDefinition,
+    mortality_definition_code: mortalityDefinitionCode,
+    series_type: row.seriesType,
+    series_period: row.series,
+    series_year_range: row.seriesYearRange,
+    years_back: row.yearsBack,
+    month: row.month,
+    month_label: monthLabel(row.month),
+    month_number_in_series: row.step,
+    monthly_count: row.monthlyCount,
+    cumulative_count: row.cumulative
+  }))
+
+csvEscape = value => {
+  const text = value === null || value === undefined ? "" : String(value)
+  return /[",\r\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text
+}
+
+chartCsv = rows => {
+  if (!rows.length) return ""
+  const headers = Object.keys(rows[0])
+  return [
+    headers.map(csvEscape).join(","),
+    ...rows.map(row => headers.map(key => csvEscape(row[key])).join(","))
+  ].join("\r\n")
+}
+
+downloadLink = (csv, filename, linkText = "Download chart data (CSV)") => {
+  const url = URL.createObjectURL(new Blob([csv], {type: "text/csv;charset=utf-8"}))
+  const link = document.createElement("a")
+  link.className = "bnr-update-data-download"
+  link.href = url
+  link.download = filename
+  link.textContent = linkText
+  return {link, url}
+}
+
+sourceCsvWithMetadata = ({rows, sourceReleaseId, sourceSnapshot, sourceType, publishedSourceHref}) => {
+  if (!rows?.length) return ""
+
+  const metadataHeaders = [
+    "report_id",
+    "report_version",
+    "report_date",
+    "report_period",
+    "source_type",
+    "source_release_id",
+    "source_release",
+    "source_snapshot",
+    "published_source_href"
+  ]
+  const sourceHeaders = rows.columns?.length ? rows.columns : Object.keys(rows[0])
+  const headers = [...metadataHeaders, ...sourceHeaders]
+
+  return [
+    headers.map(csvEscape).join(","),
+    ...rows.map(row => {
+      const metadata = {
+        report_id: "bnr_cvd_update_2026_01_v8",
+        report_version: "v8",
+        report_date: "2026-09-03",
+        report_period: "January 2026",
+        source_type: sourceType,
+        source_release_id: sourceReleaseId,
+        source_release: releaseDescriptor(sourceReleaseId),
+        source_snapshot: sourceSnapshot,
+        published_source_href: publishedSourceHref
+      }
+      return headers.map(key =>
+        csvEscape(Object.prototype.hasOwnProperty.call(metadata, key) ? metadata[key] : row[key])
+      ).join(",")
+    })
+  ].join("\r\n")
+}
+```
+
+::: {.bnr-update-chart-card}
+<div class="bnr-update-chart-title">Hospital-recorded CVD events</div>
+
+```{ojs}
+//| echo: false
+{
+  const note = document.createElement("div")
+  note.className = "bnr-update-chart-note"
+  note.textContent = rollingSummaryText(
+    eventRollingCurrent,
+    "hospital-recorded CVD events"
+  )
+  return note
+}
+```
+
+<div class="bnr-update-chart-legend">
+  <span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>
+  <span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>
+</div>
+
+<div class="bnr-update-axis-title">↑ Cumulative count</div>
+
+```{ojs}
+//| echo: false
+eventRollingCurrent
+  ? cumulativeTrendPlot(eventRollingCurrent, eventRollingComparators, width)
+  : availabilityNotice(
+      "The declared CVD-event release does not contain a complete published 12-month block ending at its latest complete month."
+    )
+```
+
+```{ojs}
+//| echo: false
+{
+  const rows = chartExportRows({
+    blocks: [eventRollingCurrent, ...eventRollingComparators],
+    measure: "Hospital-recorded CVD events",
+    sourceReleaseId: "cvd_2026_01",
+    sourceSnapshot: "data/event_release.csv",
+    ascertainmentScope: "hospital_only"
+  })
+  if (!rows.length) return null
+  const download = downloadLink(chartCsv(rows), "bnr_cvd_update_2026_01_v8_events_rolling12.csv")
+  invalidation.then(() => URL.revokeObjectURL(download.url))
+  const actions = document.createElement("div")
+  actions.className = "bnr-update-chart-actions"
+  actions.append(download.link)
+  return actions
+}
+```
+:::
+
+::: {.bnr-update-controls}
+```{ojs}
+//| echo: false
+viewof mortalityChartChoice = Inputs.radio(
+  ["Primary", "Inclusive"],
+  {label: "Mortality chart definition", value: "Primary"}
+)
+```
+
+<div class="bnr-update-control-note">
+This selector applies only to the mortality trend chart and its CSV download.
+</div>
+:::
+
+```{ojs}
+//| output: false
+mortalityChartRows = mortalityRows.filter(row =>
+  row.case_definition === definitionCode(mortalityChartChoice)
+)
+
+mortalityChartByMonth = d3.rollup(
+  mortalityChartRows,
+  rows => onlyOne(rows, "Mortality chart"),
+  monthKey
+)
+
+mortalityChartEligibleMonths = Array.from(mortalityChartByMonth.keys())
+  .filter(key => rowReady(mortalityChartByMonth.get(key)))
+  .sort()
+
+mortalityChartLatestMonth = mortalityChartEligibleMonths.length
+  ? mortalityChartEligibleMonths[mortalityChartEligibleMonths.length - 1]
+  : null
+
+mortalityRollingCurrent = rollingBlock(
+  mortalityChartByMonth,
+  mortalityChartLatestMonth,
+  0
+)
+mortalityRollingComparators = rollingComparators(
+  mortalityChartByMonth,
+  mortalityChartLatestMonth
+)
+
+// Use one y-axis ceiling for both mortality definitions so switching the
+// selector does not rescale the chart.
+mortalityAxisValues = ["Primary", "Inclusive"].flatMap(choice => {
+  const rows = mortalityRows.filter(row =>
+    row.case_definition === definitionCode(choice)
+  )
+  const byMonth = d3.rollup(
+    rows,
+    group => onlyOne(group, "Mortality axis"),
+    monthKey
+  )
+  const eligible = Array.from(byMonth.keys())
+    .filter(key => rowReady(byMonth.get(key)))
+    .sort()
+  const latest = eligible.length ? eligible[eligible.length - 1] : null
+  const blocks = [
+    rollingBlock(byMonth, latest, 0),
+    ...rollingComparators(byMonth, latest)
+  ].filter(Boolean)
+  return blocks.flat().map(row => Number(row.cumulative))
+})
+
+mortalitySharedYMaximum = mortalityAxisValues.length
+  ? d3.max(mortalityAxisValues)
+  : null
+```
+
+::: {.bnr-update-chart-card}
+<div class="bnr-update-chart-title">CVD deaths</div>
+
+```{ojs}
+//| echo: false
+{
+  const note = document.createElement("div")
+  note.className = "bnr-update-chart-note"
+  note.textContent = rollingSummaryText(
+    mortalityRollingCurrent,
+    mortalityChartChoice.toLowerCase() + "-definition CVD deaths"
+  )
+  return note
+}
+```
+
+<div class="bnr-update-chart-legend">
+  <span class="bnr-update-legend-item"><span class="bnr-update-legend-current"></span>Current 12-month period</span>
+  <span class="bnr-update-legend-item"><span class="bnr-update-legend-history"></span>Previous aligned 12-month periods</span>
+</div>
+
+<div class="bnr-update-axis-title">↑ Cumulative count</div>
+
+```{ojs}
+//| echo: false
+mortalityRollingCurrent
+  ? cumulativeTrendPlot(
+      mortalityRollingCurrent,
+      mortalityRollingComparators,
+      width,
+      mortalitySharedYMaximum
+    )
+  : availabilityNotice(
+      "The declared mortality release does not contain a complete published 12-month block ending at its latest complete month for the selected definition."
+    )
+```
+
+```{ojs}
+//| echo: false
+{
+  const rows = chartExportRows({
+    blocks: [mortalityRollingCurrent, ...mortalityRollingComparators],
+    measure: "CVD deaths",
+    sourceReleaseId: "mort_2026_07",
+    sourceSnapshot: "data/mortality_release.csv",
+    mortalityDefinition: mortalityChartChoice,
+    mortalityDefinitionCode: definitionCode(mortalityChartChoice)
+  })
+  if (!rows.length) return null
+  const slug = mortalityChartChoice.toLowerCase()
+  const download = downloadLink(
+    chartCsv(rows),
+    "bnr_cvd_update_2026_01_v8_mortality_" + slug + "_rolling12.csv"
+  )
+  invalidation.then(() => URL.revokeObjectURL(download.url))
+  const actions = document.createElement("div")
+  actions.className = "bnr-update-chart-actions"
+  actions.append(download.link)
+  return actions
+}
+```
+:::
+
+::: {.bnr-update-notes-box}
+**Data sources and notes**
+
+```{ojs}
+//| echo: false
+{
+  const box = document.createElement("div")
+
+  const eventRow = document.createElement("p")
+  eventRow.append("CVD-event release: ")
+  const eventDownload = downloadLink(
+    sourceCsvWithMetadata({
+      rows: eventSourceRows,
+      sourceReleaseId: "cvd_2026_01",
+      sourceSnapshot: "data/event_release.csv",
+      sourceType: "CVD events",
+      publishedSourceHref: "../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv"
+    }),
+    "bnr_cvd_update_2026_01_v8_event_release.csv",
+    releaseDescriptor("cvd_2026_01")
+  )
+  invalidation.then(() => URL.revokeObjectURL(eventDownload.url))
+  eventRow.append(eventDownload.link)
+
+  const mortalityRow = document.createElement("p")
+  mortalityRow.append("Mortality release: ")
+  const mortalityDownload = downloadLink(
+    sourceCsvWithMetadata({
+      rows: mortalitySourceRows,
+      sourceReleaseId: "mort_2026_07",
+      sourceSnapshot: "data/mortality_release.csv",
+      sourceType: "CVD mortality",
+      publishedSourceHref: "../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv"
+    }),
+    "bnr_cvd_update_2026_01_v8_mortality_release.csv",
+    releaseDescriptor("mort_2026_07")
+  )
+  invalidation.then(() => URL.revokeObjectURL(mortalityDownload.url))
+  mortalityRow.append(mortalityDownload.link)
+
+  const reportRow = document.createElement("p")
+  reportRow.textContent =
+    "Report ID: bnr_cvd_update_2026_01_v8 · Report version: v8"
+
+  box.append(eventRow, mortalityRow, reportRow)
+  return box
+}
+```
+
+All event counts are hospital-recorded. Death counts use the selected Primary or
+Inclusive mortality definition. Monthly, three-month and cumulative 12-month
+totals are calculated only from published display values that are complete and
+not suppressed; unavailable values are never inferred.
+
+The full-release and chart-data CSVs are browser-generated convenience downloads
+from the frozen snapshots stored with this dated report. They add report and
+release metadata but do not replace the authoritative published release files.
+:::
