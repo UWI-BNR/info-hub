@@ -1,8 +1,8 @@
 schema: bnr_report_metadata_v1
-report_id: bnr_cvd_update_2026_01_v9
+report_id: bnr_cvd_update_2026_01_v14
 report_type: rolling_three_month_cvd_update
 report_period: 2026-01
-report_version: v9
+report_version: v14
 update_template_file: bnr_report_update_template.qmd
 update_template_version: 1.0.0
 update_template_size: 41232
@@ -17,7 +17,7 @@ mortality_source_size: 1131220
 mortality_source_checksum: 2326887044
 mortality_snapshot_file: data/mortality_release.csv
 landing_page: index.qmd
-landing_page_size: 41181
-landing_page_checksum: 185080432
-built_date: 2026-09-03
-built_time: 14:55:44
+landing_page_size: 41196
+landing_page_checksum: 2111547840
+built_date: 2026-09-05
+built_time: 06:18:34

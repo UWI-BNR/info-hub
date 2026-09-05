@@ -16,9 +16,29 @@ STATA NAMING NOTE:
   Local macro names are kept comfortably below Stata's 31-character limit.
 *******************************************************************************/
 
+*******************************************************************************
+* BNR ANALYST GUIDE - EDITABLE ANNUAL NARRATIVE
+*
+* BNR ANALYST: THIS IS THE PRINCIPAL EDITABLE FILE for the 2025 standard
+* section. Edit text inside the local macros below after reviewing the complete
+* candidate report and its declared public releases. Keep the macro names,
+* quotation marks and include location unchanged because the standard template
+* calls these names directly.
+*
+* Appropriate edits: accurate plain-language interpretation, emphasis and
+* caveats for the stated year. Inappropriate edits: calculations, metric
+* filters, release selection, disclosure decisions, putpdf layout or workflow
+* controls. If a number changes, correct the source release/workflow and rerun;
+* do not make the narrative contradict the published table.
+*******************************************************************************
+
 * -----------------------------------------------------------------------------
 * Year in brief
 * -----------------------------------------------------------------------------
+
+* EDITABLE BLOCK.
+* These three messages appear in order at the bottom of the one-page annual
+* summary. Each should state one decision-relevant finding in plain language.
 
 local annual_summary_message_1 ///
     "There were 1,021 hospital-recorded CVD events in 2025, about 27% above the published previous-five-year mean of 805.8. The Primary national estimate was 1,115.8 events after adding the estimated contribution from events identified through death records."
@@ -32,6 +52,12 @@ local annual_summary_message_3 ///
 * -----------------------------------------------------------------------------
 * CVD events
 * -----------------------------------------------------------------------------
+
+* EDITABLE BLOCK.
+* These locals populate "WHAT THIS MEANS" beneath Chapter 1 tables. The first
+* five cover All-CVD count, rate, event-type context, sex and age pages. The six
+* subtype locals provide distinct Heart and Stroke count/rate/sex commentary.
+* Refer to patterns visible on the same page and avoid causal claims.
 
 local ann_evt_counts_text ///
     "Hospital-recorded CVD events were higher in 2025 than in the recent comparison period: 1,021 events compared with a published previous-five-year mean of 805.8. The Primary national estimate was 1,115.8 and the Inclusive estimate 1,165.4, so adding death-record ascertainment increases the estimated national count without changing the broad message that 2025 was a high-count year relative to the recent hospital series."
@@ -48,6 +74,13 @@ local ann_evt_sex_text ///
 local ann_evt_age_text ///
     "The 2025 hospital-recorded event count was almost evenly divided by age: 508 events were among people aged under 70 and 511 among people aged 70 or older. This age profile describes the composition of recorded events; it should not be read as an age-specific population risk comparison."
 
+local ann_evt_heart_counts_text "Heart events form the smaller of the two main event groups shown on the preceding CVD pages. The chart and table show how the hospital-recorded series compares with the published national estimates; the definitions should be compared within this page, rather than added to the Stroke rows."
+local ann_evt_stroke_counts_text "Stroke remains the larger of the two main event groups shown on the preceding CVD pages. The national estimates add published death-record ascertainment to the hospital series, helping services see the likely scale of events beyond hospital records alone."
+local ann_evt_heart_rates_text "This page shows the recent pattern in Heart event rates after allowing for differences in the age structure of the population. Read the solid estimate and its confidence interval together; small year-to-year movements may not represent a meaningful change."
+local ann_evt_stroke_rates_text "This page shows the recent pattern in Stroke event rates after allowing for differences in the age structure of the population. The wider CVD page provides the overall context; here the focus is the Stroke contribution to that total."
+local ann_evt_heart_sex_text "The comparison helps services ask whether Heart events are affecting women and men differently after age is taken into account. It is a signal for planning and prevention, not evidence on its own of why a difference has occurred."
+local ann_evt_stroke_sex_text "The comparison helps services ask whether Stroke events are affecting women and men differently after age is taken into account. It should be read alongside the all-CVD comparison on the earlier page."
+
 * Backward-compatible umbrella local retained for the earlier standard file.
 local annual_events_interpretation ///
     "`ann_evt_counts_text'"
@@ -55,6 +88,11 @@ local annual_events_interpretation ///
 * -----------------------------------------------------------------------------
 * CVD mortality
 * -----------------------------------------------------------------------------
+
+* EDITABLE BLOCK.
+* These locals populate "WHAT THIS MEANS" beneath Chapter 2 tables. Preserve
+* the distinction between Primary and Inclusive definitions, and between their
+* definitional difference and statistical confidence intervals.
 
 local ann_mort_counts_text ///
     "Primary CVD deaths numbered 368 in 2025, below the published previous-five-year mean of 394.2. The Inclusive count was 588, close to its comparator of 583.6. The contrast between those two patterns is important: the recent position depends substantially on whether deaths classified as Possible CVD are included."
@@ -71,6 +109,13 @@ local ann_mort_sex_text ///
 local ann_mort_age_text ///
     "Among Primary CVD deaths with an age classification in 2025, 70.0% were aged 70 or older and 30.0% were under 70. One Primary CVD death is outside that age-distribution denominator, so the age percentages should be read from the published distribution rather than reconstructed from the total count."
 
+local ann_mort_heart_counts_text "Heart deaths are shown using both the Primary and Inclusive definitions. The difference between them reflects how deaths classified as Possible CVD are handled, rather than a second group of people who died."
+local ann_mort_stroke_counts_text "Stroke deaths are shown using both the Primary and Inclusive definitions. This gives decision-makers a transparent view of how the reported total changes when Possible CVD deaths are included."
+local ann_mort_heart_rates_text "These rates allow the Heart mortality pattern to be compared over time without changes in population age structure driving the result. The Primary and Inclusive lines answer different definition questions; they are not confidence limits around one estimate."
+local ann_mort_stroke_rates_text "These rates allow the Stroke mortality pattern to be compared over time without changes in population age structure driving the result. The Primary and Inclusive lines answer different definition questions; they are not confidence limits around one estimate."
+local ann_mort_heart_sex_text "The women-and-men comparison uses the Primary definition and age-standardised rates, so it is more informative for service planning than raw counts alone. The chart identifies patterns worth following up, not causes."
+local ann_mort_stroke_sex_text "The women-and-men comparison uses the Primary definition and age-standardised rates, so it is more informative for service planning than raw counts alone. The chart identifies patterns worth following up, not causes."
+
 * Backward-compatible umbrella local retained for the earlier standard file.
 local annual_mortality_interpretation ///
     "`ann_mort_counts_text'"
@@ -78,6 +123,10 @@ local annual_mortality_interpretation ///
 * -----------------------------------------------------------------------------
 * How complete is the picture?
 * -----------------------------------------------------------------------------
+
+* EDITABLE BLOCK.
+* These two locals interpret Chapter 3's DCO-reliance and Possible-death
+* matrices. Describe reliance/sensitivity, not data-quality grades or causes.
 
 local ann_evt_quality_text ///
     "In 2025, the estimated additional DCO contribution was about 8.5% of the Primary national event estimate for All CVD, Heart and Stroke. The similarity across the three groups is useful context: death-record ascertainment contributes meaningfully to the national estimate, but it is not the dominant component of the 2025 event total."
@@ -88,6 +137,11 @@ local ann_mort_quality_text ///
 * -----------------------------------------------------------------------------
 * Methods note
 * -----------------------------------------------------------------------------
+
+* CONTROLLED EDITABLE TEXT.
+* This statement summarises the annual standard section's public-data boundary.
+* Edit only when the approved method or report contract has genuinely changed;
+* ordinary annual wording changes belong in the findings locals above.
 
 local annual_methods_note ///
     "The standard section uses only the declared approved public CVD-event and mortality releases. Published rates, confidence intervals, linkage bounds and rolling comparators are read from those releases. Simple percentages used to explain DCO or Possible-death reliance are presentation summaries of published aggregate counts; no confidential data are reopened and no surveillance rate is recalculated. Asterisks denote values protected by the published disclosure-control rules."

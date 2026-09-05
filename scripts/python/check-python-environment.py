@@ -21,6 +21,8 @@ REQUIRED_PACKAGES = (
     ("plotly", "plotly"),
     ("plotnine", "plotnine"),
     ("PyYAML", "yaml"),
+    ("pypdf", "pypdf"),
+    ("reportlab", "reportlab"),
 )
 
 
