@@ -794,6 +794,8 @@ putpdf paragraph
 putpdf text ("The annual report is a reader of approved public statistics, not a second analytical workflow. It does not reopen confidential records, redo linkage, recalculate rates or confidence intervals, or reconstruct protected values."), bold font("`font_title'", 8.3, "`bnr_teal'")
 
 
+
+
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD events are identified"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -860,6 +862,9 @@ putpdf table methods_event_note(1,1) = ("WHEN READING THE REPORT | Compare event
 putpdf table methods_event_note(1,1), border(top, single, "`bnr_teal'")
 
 
+
+
+
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("Extending the picture using death records"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -919,11 +924,13 @@ putpdf table methods_linkage_note(1,1) = ("WHEN READING THE REPORT | A wider lin
 putpdf table methods_linkage_note(1,1), border(top, single, "`bnr_teal'")
 
 
+
+
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD deaths are classified"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("BNR mortality surveillance uses death-certificate information to create a consistent practical cardiovascular classification when a formally assigned national underlying cause of death is not available to the Registry for routine surveillance. A cardiovascular term appearing anywhere on a certificate does not automatically mean that CVD is treated as the underlying cause."), font("`font_body'", 8.4)
+putpdf text ("BNR mortality surveillance uses death-certificates to create a consistent practical cardiovascular classification when a formally assigned national underlying cause of death is not available for routine surveillance. A cardiovascular term appearing anywhere on a certificate does not automatically mean that CVD is treated as the underlying cause."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("How the certificate is interpreted"), bold font("`font_title'", 11, "`bnr_ink'")
@@ -986,6 +993,8 @@ putpdf table methods_mort_note(1,1), border(top, single, "`bnr_teal'")
 
 
 
+
+
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("How the report measures CVD"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -1005,31 +1014,34 @@ local methods_percent_eq "`methods_equation_dir'/annual_report_equation_percenta
 local methods_rate_eq "`methods_equation_dir'/annual_report_equation_rate.png"
 local methods_asr_eq "`methods_equation_dir'/annual_report_equation_asr.png"
 
-putpdf table methods_count_eq = (1,1), width(14%) border(all, nil) halign(center)
-putpdf table methods_count_eq(1,1) = image("`methods_count_eq'"), halign(center)
-putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here C is the count and I_i equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 7.8, "`bnr_muted'")
+putpdf paragraph
+putpdf text ("Counts"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table eq_count = (1,1), width(45%) border(all, nil) halign(center)
+putpdf table eq_count(1,1) = image("`methods_count_eq'"), halign(center)
+putpdf paragraph
+putpdf text ("In the count expression, I(i) equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Percentages"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_percent_eq = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table methods_percent_eq(1,1) = image("`methods_percent_eq'"), halign(center)
-putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here p is the percentage, n_g is the selected group and N is the relevant eligible total."), font("`font_body'", 7.8, "`bnr_muted'")
+putpdf table eq_count = (1,1), width(35%) border(all, nil) halign(center)
+putpdf table eq_count(1,1) = image("`methods_count_eq'"), halign(center)
+putpdf paragraph
+putpdf text ("In the count expression, I(i) equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 8.2)
+
 
 putpdf paragraph
 putpdf text ("Crude population rate"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_crude = (1,1), width(20%) border(all, nil) halign(center)
+putpdf table eq_crude = (1,1), width(50%) border(all, nil) halign(center)
 putpdf table eq_crude(1,1) = image("`methods_rate_eq'"), halign(center)
 putpdf paragraph
-putpdf text ("Here R is the rate, E is the eligible event or death count and P is the matching resident population. A crude rate relates the observed number to the matching population and period. It is useful for describing actual population experience, but comparisons can be affected by differences in age structure."), font("`font_body'", 8.2)
+putpdf text ("A crude rate relates the observed number to the matching resident population and period. It is useful for describing actual population experience, but comparisons can be affected by differences in age structure."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Direct age standardisation"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_asr = (1,1), width(20%) border(all, nil) halign(center)
+putpdf table eq_asr = (1,1), width(60%) border(all, nil) halign(center)
 putpdf table eq_asr(1,1) = image("`methods_asr_eq'"), halign(center)
 putpdf paragraph
-putpdf text ("Here ASR is the age-standardised rate, r_a is the rate in age group a and w_a is that group's standard-population weight. The report uses the WHO World Standard Population 2000-2025. Standardisation improves comparisons by applying the same age distribution to every group or year; it does not estimate an event count or remove uncertainty from ascertainment, classification or small numbers."), font("`font_body'", 8.2)
+putpdf text ("Here r(a) is the rate in age group a and w(a) is that group's standard-population weight. The report uses the WHO World Standard Population 2000-2025. Standardisation improves comparisons by applying the same age distribution to every group or year; it does not estimate an event count or remove uncertainty from ascertainment, classification or small numbers."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Denominators and reported forms"), bold font("`font_title'", 11, "`bnr_ink'")

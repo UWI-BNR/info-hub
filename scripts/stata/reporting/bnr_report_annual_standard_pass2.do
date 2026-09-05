@@ -435,9 +435,8 @@ putpdf text ///
     ("Publication note: This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
     font("`font_body'", 7.8, "`bnr_muted'")
 
-* The Year in Brief block below prepares its graph before it starts its own
-* PDF page.  Do not insert a pagebreak here: doing so creates an empty page
-* between the front matter and the Year in Brief.
+* Begin the existing Year in Brief page.
+putpdf pagebreak
 
 
 * -----------------------------------------------------------------------------
@@ -805,26 +804,6 @@ putpdf text ("Heart, Stroke and All CVD"), bold font("`font_title'", 11, "`bnr_i
 putpdf paragraph
 putpdf text ("Heart and Stroke are the two broad event families used in this report. All CVD combines eligible events from those families according to the approved classification hierarchy, so the same event is not counted twice merely because more than one cardiovascular term is present."), font("`font_body'", 8.4)
 
-putpdf paragraph
-putpdf text ("Heart and Stroke event definitions"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("In the event series, Heart is the BNR reporting label for eligible acute myocardial infarction (heart-attack) events. Stroke is the BNR reporting label for eligible acute stroke events. These are clinical event definitions, not simply any record that contains a heart- or stroke-related word. The maintained confidential workflow applies the approved diagnostic, residence, date and duplicate-resolution rules before assigning an event to either family."), font("`font_body'", 8.4)
-
-putpdf table methods_event_families = (3,3), width(100%) border(all, nil)
-putpdf table methods_event_families(1,1) = ("Reporting family")
-putpdf table methods_event_families(1,2) = ("What it represents")
-putpdf table methods_event_families(1,3) = ("What it does not mean")
-putpdf table methods_event_families(2,1) = ("Heart")
-putpdf table methods_event_families(2,2) = ("Eligible acute myocardial infarction events under the maintained BNR clinical rules")
-putpdf table methods_event_families(2,3) = ("Every cardiovascular presentation, cardiac symptom or certificate mention")
-putpdf table methods_event_families(3,1) = ("Stroke")
-putpdf table methods_event_families(3,2) = ("Eligible acute stroke events under the maintained BNR clinical rules")
-putpdf table methods_event_families(3,3) = ("Every neurological presentation, vascular risk factor or certificate mention")
-putpdf table methods_event_families(.,.), font("`font_body'", 7.5)
-putpdf table methods_event_families(1,.), bold bgcolor("`bnr_white'") ///
-    border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_event_families(2/3,1), bold
-
 putpdf table methods_event_rules = (7,2), width(100%) border(all, nil)
 putpdf table methods_event_rules(1,1) = ("Decision")
 putpdf table methods_event_rules(1,2) = ("How it affects the published statistic")
@@ -995,41 +974,36 @@ putpdf text ("Counts and percentages"), bold font("`font_title'", 11, "`bnr_ink'
 putpdf paragraph
 putpdf text ("A count is the number of eligible events or classified deaths. A percentage describes how a defined eligible total is divided across groups. The denominator must always be checked: a percentage among registered events or classified deaths is not a person's probability of experiencing or dying from CVD."), font("`font_body'", 8.4)
 
-* Equation figures are static template assets, rendered from LaTeX so that
-* fractions, symbols and subscripts are typeset rather than approximated with
-* table cells. They do not contain report data and should not be edited during
-* routine annual production.
-local methods_equation_dir "$BNR_REPO/scripts/stata/reporting/assets"
-local methods_count_eq "`methods_equation_dir'/annual_report_equation_count.png"
-local methods_percent_eq "`methods_equation_dir'/annual_report_equation_percentage.png"
-local methods_rate_eq "`methods_equation_dir'/annual_report_equation_rate.png"
-local methods_asr_eq "`methods_equation_dir'/annual_report_equation_asr.png"
-
-putpdf table methods_count_eq = (1,1), width(14%) border(all, nil) halign(center)
-putpdf table methods_count_eq(1,1) = image("`methods_count_eq'"), halign(center)
+putpdf table methods_basic_eq = (1,2), width(92%) border(all, nil) halign(center)
+putpdf table methods_basic_eq(1,1) = ("Count = Σ I(i)"), bold font("`font_body_med'", 9, "`bnr_teal'") bgcolor("`bnr_pale2'") halign(center)
+putpdf table methods_basic_eq(1,2) = ("Percentage = (selected group / eligible total) × 100"), bold font("`font_body_med'", 9, "`bnr_teal'") bgcolor("`bnr_pale2'") halign(center)
 putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here C is the count and I_i equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 7.8, "`bnr_muted'")
-
-putpdf paragraph
-putpdf text ("Percentages"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_percent_eq = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table methods_percent_eq(1,1) = image("`methods_percent_eq'"), halign(center)
-putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here p is the percentage, n_g is the selected group and N is the relevant eligible total."), font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("In the count expression, I(i) equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 7.8, "`bnr_muted'")
 
 putpdf paragraph
 putpdf text ("Crude population rate"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_crude = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table eq_crude(1,1) = image("`methods_rate_eq'"), halign(center)
+putpdf table eq_crude = (2,5), width(92%) border(all, nil) halign(center)
+putpdf table eq_crude(1,1), rowspan(2)
+putpdf table eq_crude(1,2), rowspan(2)
+putpdf table eq_crude(1,4), rowspan(2)
+putpdf table eq_crude(1,5), rowspan(2)
+putpdf table eq_crude(1,1) = ("Rate per 100,000"), bold font("`font_body_med'", 9, "`bnr_teal'") halign(center)
+putpdf table eq_crude(1,2) = ("="), bold font("`font_body_med'", 10, "`bnr_teal'") halign(center)
+putpdf table eq_crude(1,3) = ("eligible events or deaths"), bold font("`font_body_med'", 8.5, "`bnr_teal'") halign(center) border(bottom, single, "`bnr_teal'")
+putpdf table eq_crude(2,3) = ("matching resident population"), bold font("`font_body_med'", 8.5, "`bnr_teal'") halign(center)
+putpdf table eq_crude(1,4) = ("×"), bold font("`font_body_med'", 10, "`bnr_teal'") halign(center)
+putpdf table eq_crude(1,5) = ("100,000"), bold font("`font_body_med'", 9, "`bnr_teal'") halign(center)
+putpdf table eq_crude(.,.), bgcolor("`bnr_pale2'")
 putpdf paragraph
-putpdf text ("Here R is the rate, E is the eligible event or death count and P is the matching resident population. A crude rate relates the observed number to the matching population and period. It is useful for describing actual population experience, but comparisons can be affected by differences in age structure."), font("`font_body'", 8.2)
+putpdf text ("A crude rate relates the observed number to the matching resident population and period. It is useful for describing actual population experience, but comparisons can be affected by differences in age structure."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Direct age standardisation"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_asr = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table eq_asr(1,1) = image("`methods_asr_eq'"), halign(center)
+putpdf table eq_asr = (1,1), width(86%) border(all, nil) halign(center)
+putpdf table eq_asr(1,1) = ("Age-standardised rate = Σ [w(a) × r(a)]"), ///
+    bold font("`font_body_med'", 9.5, "`bnr_teal'") bgcolor("`bnr_pale2'") halign(center)
 putpdf paragraph
-putpdf text ("Here ASR is the age-standardised rate, r_a is the rate in age group a and w_a is that group's standard-population weight. The report uses the WHO World Standard Population 2000-2025. Standardisation improves comparisons by applying the same age distribution to every group or year; it does not estimate an event count or remove uncertainty from ascertainment, classification or small numbers."), font("`font_body'", 8.2)
+putpdf text ("Here r(a) is the rate in age group a and w(a) is that group's standard-population weight. The report uses the WHO World Standard Population 2000-2025. Standardisation improves comparisons by applying the same age distribution to every group or year; it does not estimate an event count or remove uncertainty from ascertainment, classification or small numbers."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Denominators and reported forms"), bold font("`font_title'", 11, "`bnr_ink'")
