@@ -1,0 +1,18 @@
+level,title,anchor_text,required_full_report
+1,{report_year} in brief,{report_year} in brief,yes
+1,1. CVD events,1 | CVD events,yes
+2,CVD,CVD event counts,yes
+2,Heart,Heart event counts,yes
+2,Stroke,Stroke event counts,yes
+1,2. CVD mortality,2 | CVD mortality,yes
+2,CVD,CVD deaths,yes
+2,Heart,Heart deaths,yes
+2,Stroke,Stroke deaths,yes
+1,3. How complete is the picture?,3 | How complete is the picture?,yes
+1,4. Methods,4 | Methods,yes
+2,What this report measures,What this report measures,yes
+2,How CVD events are identified,How CVD events are identified,yes
+2,How CVD deaths are classified,How CVD deaths are classified,yes
+2,How the report measures CVD,How the report measures CVD,yes
+2,Understanding uncertainty and time,"Understanding uncertainty, comparisons and time",yes
+2,Data quality and publication,"Data quality, confidentiality and publication",yes

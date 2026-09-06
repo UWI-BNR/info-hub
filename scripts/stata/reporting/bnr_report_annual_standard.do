@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_standard.do
-VERSION: 2.5.0 (4 September 2026)
+VERSION: 2.5.1 (6 September 2026)
 PURPOSE: Reusable putpdf composition for the standard annual CVD surveillance
          section.
 
@@ -29,6 +29,12 @@ DESIGN CONTRACT:
   - Interpretation remains analyst-owned in the year-specific interpretation
     file; this composition file does not generate editorial conclusions.
   - Special chapter composition remains outside this file.
+
+DESIGN PASS 2.5.1:
+  - Reserve one explicit front-matter page for the dynamic contents generated
+    by the controlled PDF-finishing helper.
+  - The placeholder is presentation metadata only. It contains no analytical
+    information and must remain unique within the report body.
 
 DESIGN PASS 2.2.0:
   - Keep summary-card backgrounds continuous behind labels and values.
@@ -435,13 +441,22 @@ putpdf text ///
     ("Publication note: This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
     font("`font_body'", 7.8, "`bnr_muted'")
 
-* The Year in Brief block below prepares its graph before it starts its own
-* PDF page.  Do not insert a pagebreak here: doing so creates an empty page
-* between the front matter and the Year in Brief.
+* -----------------------------------------------------------------------------
+* 5B. Dynamic contents placeholder
+* -----------------------------------------------------------------------------
+* INVARIANT PRESENTATION HAND-OFF - DO NOT EDIT OR DUPLICATE.
+* Stata owns the position of the Contents page. The controlled Python finishing
+* helper replaces this complete page after it has identified the sections that
+* actually exist in the rendered body PDF. The unique marker is deliberately
+* unobtrusive because the unstamped body PDF remains private.
 
+putpdf pagebreak
+putpdf paragraph, font("`font_body'", 1)
+putpdf text ("Contents"), bold font("`font_title'", 19, "`bnr_ink'") linebreak
+putpdf text ("BNR_TOC_PLACEHOLDER"), font("`font_body'", 1, "`bnr_white'")
 
 * -----------------------------------------------------------------------------
-* 5B. Year in brief - one-page visual summary
+* 5C. Year in brief - one-page visual summary
 * -----------------------------------------------------------------------------
 * MAINTAINED PRESENTATION AND METRIC-SELECTION BLOCK.
 * BNR ANALYST: do not change filters or calculations here. This block draws the
@@ -572,7 +587,7 @@ putpdf table yib_messages(3,2) = ("`annual_summary_message_3'"), ///
 * position. Its internal comments identify each graphic, table and narrative
 * hook. Moving the include changes report order and page flow.
 
-** include "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_stage3_sections.do"
+include "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_stage3_sections.do"
 
 
 

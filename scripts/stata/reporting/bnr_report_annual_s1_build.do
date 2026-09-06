@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.1.3 (6 September 2026)
+VERSION: 1.1.4 (6 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
 
 CHANGE 1.1.1:
@@ -19,6 +19,16 @@ CHANGE 1.1.2:
 CHANGE 1.1.3:
   - Remove the duplicate terminal "About this report" page. Report identity and
     release details remain in the maintained front matter and workflow records.
+
+CHANGE 1.1.4:
+  - Add a dynamic, linked contents page through the existing controlled PDF
+    finishing helper.
+  - Use adaptive contents discovery so deliberately shortened development
+    renders list only the sections actually present in the body PDF.
+  - Keep the contents hierarchy editorially constrained to two levels.
+  - Combine the reusable standard contents specification with a year-specific
+    Special-chapter specification, so each annual topic supplies its own title
+    and selected reader-facing waypoints.
 
 USAGE (enter each command on one line):
   do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1
@@ -233,6 +243,8 @@ local site_pdf_href "../../../../../downloads/files/reports/cvd/annual/`report_y
 local pdf_furniture_helper "$BNR_REPO/scripts/python/stamp_annual_report_pdf.py"
 local pdf_furniture_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 local pdf_furniture_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
+local pdf_toc_standard_spec "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_toc.csv"
+local pdf_toc_special_spec "$BNR_REPO/scripts/stata/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_toc.csv"
 
 local reports_dir "$BNR_STAGING/reports"
 local cvd_dir "`reports_dir'/cvd"
@@ -255,7 +267,7 @@ foreach required_dir in reports_dir cvd_dir annual_dir package_dir ///
 * INVARIANT - DO NOT EDIT.
 * Require the controlled PDF-finishing helper, supported Python interpreter
 * and approved crest before composition begins.
-foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo {
+foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo pdf_toc_standard_spec pdf_toc_special_spec {
     capture confirm file "``required_file''"
     if _rc {
         display as error "Annual report page-furniture requirement not found: ``required_file''"
@@ -330,10 +342,13 @@ if _rc {
 }
 
 * INVARIANT - DO NOT EDIT OR REORDER.
-* putpdf has no native running headers, footers or automatic page numbers. This
-* helper runs locally against the completed PDF only; all data, figures, tables
-* and narrative remain Stata-generated above.
-local pdf_furniture_command `""`pdf_furniture_python'" "`pdf_furniture_helper'" --input "`candidate_body_pdf'" --output "`candidate_pdf'" --report-title "BNR Annual CVD Report `report_year4'" --logo "`pdf_furniture_logo'" --skip-first-pages 1"'
+* putpdf has no native running headers, footers, automatic page numbers or a
+* reliable dynamic contents field. This helper runs locally against the
+* completed PDF only. It replaces the explicit contents placeholder, discovers
+* only registered headings present in this render, adds PDF navigation and then
+* applies page furniture. All report data and editorial content remain owned by
+* the Stata composition and the maintained contents specification.
+local pdf_furniture_command `""`pdf_furniture_python'" "`pdf_furniture_helper'" --input "`candidate_body_pdf'" --output "`candidate_pdf'" --report-title "BNR Annual CVD Report `report_year4'" --report-year "`report_year4'" --logo "`pdf_furniture_logo'" --skip-first-pages 1 --toc-spec "`pdf_toc_standard_spec'" --toc-spec "`pdf_toc_special_spec'" --toc-mode adaptive"'
 capture noisily shell `pdf_furniture_command'
 if _rc {
     local furniture_rc = _rc
@@ -400,7 +415,8 @@ file write `metadata_handle' "mortality_release_id: `mortality_release'" _n
 file write `metadata_handle' "mortality_source_size: `mortality_size'" _n
 file write `metadata_handle' "mortality_source_checksum: `mortality_checksum'" _n
 file write `metadata_handle' "pdf_file: `public_name'.pdf" _n
-file write `metadata_handle' "pdf_page_furniture: controlled_python_v1" _n
+file write `metadata_handle' "pdf_finishing: controlled_python_v2" _n
+file write `metadata_handle' "pdf_contents: dynamic_two_level_adaptive" _n
 file write `metadata_handle' "landing_page: index.qmd" _n
 file write `metadata_handle' "built_date: `build_date'" _n
 file write `metadata_handle' "built_time: `build_time'" _n
@@ -414,7 +430,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate created"
-noisily display as text   "  Script version:          1.1.2"
+noisily display as text   "  Script version:          1.1.4"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"
