@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Diabetes measures"
 description: "Holding page for near-term BNR diabetes measure specifications."
 ---

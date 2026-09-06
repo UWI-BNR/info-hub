@@ -1,11 +1,9 @@
 ---
 title: "Roles and decision rights"
 subtitle: "Who performs, checks, approves and publishes BNR work"
-date: 2026-08-11
-date-modified: 2026-08-11
+manual-review-status: reviewed-by-irh
 ---
 
-**Status:** Operational framework; role names require BNR confirmation.
 **Owner:** BNR Lead.
 
 ## Purpose
@@ -21,7 +19,7 @@ This page separates responsibility for preparing work from authority to approve 
 | **BNR Developer** | Maintains the analytical and publishing environment | a technical failure threatens reproducibility or confidentiality |
 | **Abstractor / registry officer** | Identifies potential cases, reviews sources and maintains REDCap records | source evidence is incomplete, inconsistent or ambiguous |
 | **Clinical reviewer** | Resolves clinical classification questions requiring clinical judgement | the available evidence cannot support a defensible decision |
-| **Approver** | Gives combined analytical, disclosure and publication approval | any required check or file is incomplete |
+| **Approver** | Records approval of the exact analytically and disclosure-reviewed payload | any required check or file is incomplete |
 | **Publisher** | Promotes only an approved package and updates the Info-Hub | approval is absent, invalid or does not match the package |
 
 The approver may be the BNR Lead, BNR Analyst or BNR Developer, according to BNR authority. The analyst, approver and publisher may be the same authorised person, but calculation, approval and publication remain separate actions.
@@ -42,9 +40,10 @@ The approver may be the BNR Lead, BNR Analyst or BNR Developer, according to BNR
 3. **Approve:** record an explicit decision against the identified package.
 4. **Publish:** promote that approved package and no other.
 
-::: {.callout-warning title="BNR confirmation required"}
-Confirm the current job titles mapped to each role, who may act as clinical reviewer, and which roles may approve public releases and data-access requests. Record role titles, not private contact details, in this manual.
-:::
+The standing BNR role names are **BNR Lead**, **BNR Analyst** and **BNR
+Developer**. Task labels such as reviewer, approver, publisher, abstractor and
+clinical reviewer describe actions or delegated functions; they do not create
+additional standing BNR role names.
 
 ## Evidence retained
 

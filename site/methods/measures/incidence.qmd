@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "CVD incidence and event rates"
 description: "How BNR relates eligible CVD events to the Barbados population."
 ---
@@ -27,9 +28,8 @@ A rate makes event numbers more comparable when populations differ in size. BNR 
 The approved DCO-enhanced rates are annual only and are supplied as crude and
 age-standardised rates for All CVD, Heart and Stroke, and for all, female and
 male sexes. Primary and Inclusive are alternative mortality definitions, not
-uncertainty bounds. They are calculated in the private Stata workflow and
-released as values or `*`; the website does not calculate, add or subtract
-rates from public rows.
+uncertainty bounds. They are released as approved values or `*`; the website
+does not calculate, add or subtract rates from public rows.
 
 ## How do we calculate it?
 

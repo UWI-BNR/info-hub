@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Create deidentified analytical inputs"
-description: "Step 3: create the private deidentified datasets used by dashboards, tabulations and briefings."
-date: 2026-08-10
-date-modified: 2026-08-10
+description: "Step 3: create the private deidentified datasets used by authorised downstream analyses."
 ---
 
 ---
@@ -20,7 +19,7 @@ Removes direct identifiers using approved positive variable lists and creates pu
 
 ## Run Step 3
 
-1. **Open Step 3.** In Stata, choose User > BNR > Update CVD dashboard > Step 3: Build deidentified datasets.
+1. **Open Step 3.** In Stata, choose User > BNR > Update CVD events dashboard > Step 3: Build deidentified datasets.
 2. **Select the release.** Enter the release year and release month.
 3. **Select datasets.** For a routine full refresh, leave Counts and incidence, Case fatality, Length of stay, Care performance, and All approved variables selected.
 4. **Choose replacement behaviour.** For a first run, leave Replace selected existing datasets unticked.
@@ -41,8 +40,8 @@ All selected datasets are written to:
 | Output | Purpose |
 |---|---|
 | `bnr_cvd_input_count_YYYYMM_v01.dta` + `.yml` | Counts and incidence input. The current dashboard burden workflow uses this dataset. |
-| `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` + `.yml` | Input for case-fatality analyses and briefings. |
-| `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` + `.yml` | Input for hospital length-of-stay analyses and briefings. |
+| `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` + `.yml` | Input for authorised case-fatality analyses. |
+| `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` + `.yml` | Input for authorised hospital length-of-stay analyses. |
 | `bnr_cvd_input_performance_YYYYMM_v01.dta` + `.yml` | Input for care-performance measures. |
 | `bnr_cvd_input_all_variables_YYYYMM_v01.dta` + `.yml` | Union of all approved deidentified analytical fields, used where a broader input is required. |
 | Step 3 log | Operational record stored under `$BNR_PRIVATE_LOGS/`. |

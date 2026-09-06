@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Set up a workstation"
 description: "Configure a Windows workstation to run the BNR Stata workflows and maintain the Quarto Info-Hub."
-date: 2026-08-10
-date-modified: 2026-08-10
 ---
 
 ---
@@ -657,10 +656,12 @@ Confirm:
 
 is visible and contains:
 
-- **Update CVD dashboard**
-- **Update mortality dashboard**
-- **Produce briefing**
-- **Produce tables**
+- **Update CVD events dashboard**
+- **Update CVD mortality dashboard**
+- **Rolling three-month CVD update**
+- **Annual CVD report**
+- **One-off CVD report publication**
+- **Report utilities**
 
 The menu should now load automatically whenever Stata starts.
 
@@ -722,8 +723,8 @@ Inspect several pages, including:
 
 - the Technical Manual;
 - a dashboard;
-- the tabulations page; and
-- a briefing page.
+- the public CVD tables page; and
+- a current report landing page.
 
 Confirm the navigation, tables, Mermaid diagrams and downloads render normally.
 

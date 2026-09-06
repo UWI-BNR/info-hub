@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Maintain the CVD mortality dashboard"
 description: "How the Quarto mortality dashboard reads the approved Step 6 release, handles Primary/Inclusive views and protects the analytical publication boundary."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
 
 ---

@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Build mortality burden data"
 description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the staging package."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
 
 ---
@@ -42,7 +41,7 @@ The public monthly scope is deliberately restricted to All CVD, both sexes, all 
 
 ## Run Step 3
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 3: Build mortality burden data**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 3: Build mortality burden data**.
 2. Enter the Step 2 release year and month.
 3. Leave replacement unticked for a first run.
 4. Run the step.

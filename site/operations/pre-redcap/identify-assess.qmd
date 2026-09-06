@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Identify and assess potential cases"
 description: "BNR team draft for documenting case finding and initial assessment before REDCap."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
 
 ---

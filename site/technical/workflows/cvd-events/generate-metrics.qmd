@@ -1,7 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Generate combined CVD metrics"
 description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
-date-modified: 2026-08-28
 ---
 
 ## Purpose

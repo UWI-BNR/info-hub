@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Review the mortality release"
 description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
-date: 2026-08-21
-date-modified: 2026-08-30
 ---
 
 ---
@@ -29,7 +28,7 @@ including the release/current datasets, package metadata, QA receipt, Step 3 sup
 
 ## Run Step 4
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 4: Review mortality release**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 4: Review mortality release**.
 2. Enter the same release year and month.
 3. Leave replacement unticked for the first review build.
 4. Run the step.

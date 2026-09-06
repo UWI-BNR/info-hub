@@ -1,0 +1,44 @@
+---
+title: "Build, approve and publish an annual CVD report"
+description: "Operate the controlled three-step annual-report workflow."
+manual-review-status: reviewed-by-irh
+---
+
+## Before Step 1
+
+Confirm the report year, event release, mortality release and next report
+version. Create the two analyst-owned year files:
+
+```text
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do
+scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do
+```
+
+The standard report uses approved public releases. The Focus On module is
+analyst-owned and must use inputs appropriate to its approved purpose.
+
+## Step 1: Build the candidate
+
+Choose **User > BNR > Annual CVD report > Step 1: Build annual report candidate**.
+Enter the report year, both source releases and report version. Confirm that the
+private candidate contains exactly the versioned PDF, `index.qmd` and
+`report.yml`. Do not approve until the complete PDF and landing page have been
+reviewed.
+
+## Step 2: Approve the candidate
+
+Choose **Step 2: Approve annual report candidate**. Identify the authorised
+approver and complete the candidate, disclosure and readiness confirmations.
+Step 2 copies the exact approved payload into `public_ready`, writes
+`public_manifest.csv`, and writes `approval.yml` last. It does not rebuild or
+publish the report.
+
+## Step 3: Publish the approved report
+
+Choose **Step 3: Publish approved annual report** for the same year and version.
+Step 3 reads only `public_ready`. Confirm successful verification and inspect
+the authoritative public report, website PDF mirror, landing page and metadata.
+
+A correction uses a higher approved version at the same stable period location.
+The superseded working-tree report is recoverable through Git history; do not
+retain parallel public copies or edit the generated PDF manually.

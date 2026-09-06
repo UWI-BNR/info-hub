@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "From health records to published statistics"
 description: "A plain-language overview of the BNR statistical production pathway."
 ---

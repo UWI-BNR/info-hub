@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Data quality and completeness"
 description: "How data quality affects BNR statistics and their interpretation."
 ---

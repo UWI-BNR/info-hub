@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Approve the reviewed mortality release"
 description: "Mortality Step 5: record authorised human approval of the exact Step 4 candidate and create the private public_ready package."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
 
 ---
@@ -29,7 +28,7 @@ If any confirmation is not true, stop and return to the appropriate earlier step
 
 ## Run Step 5
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 5: Approve reviewed mortality release**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 5: Approve reviewed mortality release**.
 2. Enter the reviewed release year and month.
 3. Enter the approver's full name and select an authorised role.
 4. Complete every review confirmation.

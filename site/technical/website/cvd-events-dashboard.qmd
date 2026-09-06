@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "CVD events dashboard transition note"
 description: "Current data-location and scope boundary before the separate CVD dashboard rebuild."
-date: 2026-08-21
-date-modified: 2026-08-28
 ---
 
 ---
@@ -63,7 +62,7 @@ The CVD dashboard should:
 
 It should not calculate a replacement count, percentage, rate, comparator or suppression decision.
 
-If a displayed analytical value is wrong, return to the [CVD events workflow](../workflows/dashboards/overview.qmd) rather than correcting the QMD.
+If a displayed analytical value is wrong, return to the [CVD events workflow](../workflows/cvd-events/overview.qmd) rather than correcting the QMD.
 
 ## Suppressed and incomplete values
 

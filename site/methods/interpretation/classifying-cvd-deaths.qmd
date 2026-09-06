@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "How CVD deaths are classified"
 description: "How BNR uses death-certificate information to create practical cardiovascular mortality classifications."
 ---

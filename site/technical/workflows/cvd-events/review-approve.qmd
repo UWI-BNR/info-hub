@@ -1,7 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Review and approve combined CVD metrics"
 description: "Step 5: prepare disclosure-review evidence and record approval."
-date-modified: 2026-08-28
 ---
 
 ## Prepare

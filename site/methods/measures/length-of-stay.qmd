@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Hospital length of stay"
 description: "How BNR summarises hospital stay following a registered CVD event."
 ---

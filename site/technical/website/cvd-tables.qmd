@@ -1,0 +1,39 @@
+---
+title: "Maintain the public CVD tables"
+description: "Maintain the website tables that present approved CVD event and mortality metric releases."
+manual-review-status: reviewed-by-irh
+---
+
+## Publication boundary
+
+The public CVD tables are a Quarto/Observable presentation of approved CVD
+event and mortality metric releases. They do not have a separate analytical
+workflow.
+
+The page may filter, arrange and format published values and make only the
+explicitly documented presentation calculations permitted by its approved
+contract. It must not recreate surveillance metrics, change suppression or
+infer protected values.
+
+## Source page
+
+```text
+site/surveillance/cvd/tables/index.qmd
+```
+
+The page reads the approved website-mirror CSVs published by CVD event Step 6
+and mortality Step 6. A routine data release should update the tables without a
+manual edit to their analytical values.
+
+## After a metric release
+
+1. Confirm the relevant Stata Step 6 completed and the website mirror agrees
+   with the authoritative public copy.
+2. Preview the tables page and inspect event and mortality coverage separately.
+3. Check unavailable, incomplete and protected values are not treated as zero.
+4. Test tab controls and table downloads.
+5. Run the local-link check and complete site render before deployment.
+
+If a value is wrong, correct the source data or Stata code and rerun the
+relevant release workflow. Do not repair a displayed analytical value in QMD or
+Observable code.

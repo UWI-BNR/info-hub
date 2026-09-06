@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Public Methods Manual"
 subtitle: "How BNR statistics are defined, calculated and interpreted"
 description: "Plain-language explanations of Barbados National Registry measures and methods."
@@ -112,7 +113,9 @@ Short explanations of the principal terms used in BNR publications.
 
 ## What this manual covers
 
-Use this manual when you want to understand a published measure, compare statistics or assess an important limitation. Links from individual pages lead to the relevant dashboards, briefings, tabulations and downloads.
+Use this manual when you want to understand a published measure, compare
+statistics or assess an important limitation. Links from individual pages lead
+to the relevant public tables, dashboards, reports and downloads.
 
 | Manual | Main question answered |
 |---|---|
@@ -126,4 +129,3 @@ The public manual does not contain patient information, software instructions, f
 
 [Latest BNR publications](../news/index.qmd){.btn .btn-primary}
 [Data downloads](../downloads/index.qmd){.btn .btn-outline-primary}
-

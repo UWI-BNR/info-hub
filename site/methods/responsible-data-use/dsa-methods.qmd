@@ -1,9 +1,8 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Research Data Sharing Agreement"
 subtitle: "_For access to restricted, de-identified data for approved research use_"
 description: "Public-facing BNR Research Data Sharing Agreement for approved access to restricted, de-identified registry data."
-date: 2026-08-11
-date-modified: 2026-08-11
 date-format: "D MMMM YYYY"
 lang: en-GB
 

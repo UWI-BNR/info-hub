@@ -1,0 +1,41 @@
+---
+title: "Run the CVD event release workflow"
+description: "Operational responsibilities for the separate six-step CVD event release."
+manual-review-status: reviewed-by-irh
+---
+
+## Purpose
+
+Use this workflow for every authorised CVD event metric release. Steps 1–3
+create private analytical inputs. Steps 4–6 generate, review, approve and
+publish the event metric package.
+
+## Before starting
+
+- Confirm the reporting year and month through [Authorise a data release](../release/data-release.qmd).
+- Work on the authorised workstation with the private workspace available.
+- Confirm **User > BNR > Update CVD events dashboard** is present in Stata.
+- Use the same release identity throughout.
+
+## Six steps
+
+1. **Extract REDCap data.** Run **Step 1: Extract REDCap data** and check the receipt and record count. [Technical detail](../../technical/workflows/cvd-events/extract-redcap.qmd)
+2. **Build the confidential cumulative dataset.** Run Step 2 and reconcile the historical and new records. [Technical detail](../../technical/workflows/cvd-events/prepare-confidential.qmd)
+3. **Build deidentified analytical inputs.** Run Step 3 with the authorised confirmations and verify the intended private inputs and receipts. [Technical detail](../../technical/workflows/cvd-events/create-analysis-inputs.qmd)
+4. **Generate event metrics.** Run Step 4 for the required metric family and inspect the automated QA. [Technical detail](../../technical/workflows/cvd-events/generate-metrics.qmd)
+5. **Prepare, review and approve.** Use Step 5 first to prepare the review package. Complete analytical and disclosure review, then use the separate approval action for the exact candidate. [Technical detail](../../technical/workflows/cvd-events/review-approve.qmd)
+6. **Publish approved metrics.** Run Step 6 and verify the authoritative public package, website mirror and release ZIP. [Technical detail](../../technical/workflows/cvd-events/publish-metrics.qmd)
+
+After analytical publication, inspect the affected public dashboard, tables and
+downloads through Quarto. Website presentation and GitHub deployment do not
+replace Step 5 approval or Step 6 publication.
+
+## Stop points and evidence
+
+Stop on a failed check, changed release identity, unexpected reconciliation,
+missing input, unresolved disclosure risk, approval mismatch or private content
+in Git status. Correct the source or version-controlled code and rerun.
+
+Retain receipts, private logs and inputs, staging and review files,
+`approval.yml`, the public manifest and the authoritative public package in
+their controlled locations outside Git where applicable.

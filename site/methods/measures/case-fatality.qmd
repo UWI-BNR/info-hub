@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "CVD case fatality"
 description: "How BNR measures death before discharge following a hospital-registered CVD event."
 ---

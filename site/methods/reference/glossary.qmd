@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Glossary"
 description: "Plain-language definitions of terms used in BNR publications."
 ---

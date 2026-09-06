@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Counts, percentages and rates"
 description: "How to choose and interpret common forms of BNR statistics."
 ---

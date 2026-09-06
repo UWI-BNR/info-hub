@@ -1,8 +1,7 @@
 ﻿---
 title: "Make a safe code change"
+manual-review-status: reviewed-by-irh
 description: "A simple, controlled method for changing BNR analysis or publication code without putting working workflows or public outputs at unnecessary risk."
-date: 2026-08-10
-date-modified: 2026-08-10
 ---
 
 ## What this chapter does
@@ -77,7 +76,7 @@ Examples:
 
 ```text
 fix-table-label
-update-incidence-briefing
+update-annual-report
 revise-step5-check
 update-python-dependency
 ```
@@ -91,7 +90,7 @@ Use the smallest test that gives reasonable confidence.
 | Change | Minimum test |
 |---|---|
 | QMD wording/link/layout | Local preview + full `quarto render` |
-| One analyst-owned briefing DO | Build that briefing and review affected outputs |
+| One annual report analyst module | Build that report candidate and review affected outputs |
 | Table calculation | Run from the earliest affected table step |
 | Dashboard calculation | Run from the earliest affected dashboard step |
 | Shared Stata helper | Test every current workflow that calls it |

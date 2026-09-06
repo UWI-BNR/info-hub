@@ -189,44 +189,46 @@ website:
 
         - section: "How the registry works"
           contents:
-            - text: "1. Roles and decision rights"
+            - text: "Roles and decision rights"
               href: operations/operating-model/roles-decision-rights.qmd
-            - text: "2. From cases to statistics"
+            - text: "From cases to statistics"
               href: operations/operating-model/routine-cycle.qmd
             - text: "Records and handover"
               href: operations/operating-model/records-handover.qmd
 
         - section: "Before REDCap"
           contents:
-            - text: "3. Identify potential cases"
+            - text: "Identify potential cases"
               href: operations/pre-redcap/identify-assess.qmd
-            - text: "4. Abstract source information"
+            - text: "Abstract source information"
               href: operations/pre-redcap/abstract-verify.qmd
 
         - section: "Working in REDCap"
           contents:
-            - text: "5. Create and complete a record"
+            - text: "Create and complete a record"
               href: operations/redcap/create-complete-record.qmd
-            - text: "6. Resolve record queries"
+            - text: "Resolve record queries"
               href: operations/redcap/resolve-record-queries.qmd
-            - text: "7. Maintain the REDCap database"
+            - text: "Maintain the REDCap database"
               href: operations/redcap/database-maintenance.qmd
-            - text: "8. Approve a data record"
+            - text: "Approve a data record"
               href: operations/redcap/approve-data-record.qmd
 
         - section: "Post-REDCap analytics & publishing"
           contents:
             - text: "Overview"
               href: operations/post-redcap/index.qmd
-            - text: "9. Authorise a data release"
+            - text: "Authorise a data release"
               href: operations/release/data-release.qmd
-            - text: "10. CVD events workflow"
-              href: operations/post-redcap/dashboard-workflow.qmd
-            - text: "11. CVD mortality workflow"
+            - text: "CVD event release workflow"
+              href: operations/post-redcap/cvd-events-workflow.qmd
+            - text: "CVD mortality release workflow"
               href: operations/post-redcap/mortality-workflow.qmd
-            - text: "12. Review, approve and publish"
+            - text: "BNR reporting workflows"
+              href: operations/post-redcap/reporting-workflows.qmd
+            - text: "Review, approve and publish"
               href: operations/release/review-approve-publish.qmd
-            - text: "13. Correct a release"
+            - text: "Correct a release"
               href: operations/release/correct-release.qmd
 
         - section: "BNR analysis framework"
@@ -244,24 +246,14 @@ website:
               href: operations/governance/data-sharing-governance.qmd
             - text: "Handle a data request"
               href: operations/governance/data-access-requests.qmd
-            - text: "Data sharing guide"
-              href: operations/data/data-governance/sharing-guide.qmd
             - text: "Data sharing procedure"
               href: operations/data/data-governance/sharing-sop.qmd
-            - text: "Dataset release procedure"
-              href: operations/data/data-governance/dataset-release.qmd
-            - text: "Dataset dissemination procedure"
-              href: operations/data/data-governance/dataset-dissemination.qmd
             - section: "Governance documents"
               contents:
-                - text: "Data access statement"
-                  href: operations/data/data-governance/data-access-statement.qmd
                 - text: "Data Sharing Agreement"
                   href: operations/data/data-governance/dsa-om.qmd
-                - text: "Data Trust framework"
-                  href: operations/data/data-governance/dtrust.qmd
 
-        - section: "BNR Refit Audit"
+        - section: "Historical refit record"
           contents:
             - text: "About the audit"
               href: operations/bnr-refit/index.qmd
@@ -283,9 +275,9 @@ website:
 
         - section: "Getting started"
           contents:
-            - text: "1. Analytics environment"
+            - text: "Analytics environment"
               href: technical/getting-started/environment.qmd
-            - text: "2. Set up a workstation"
+            - text: "Set up a workstation"
               href: technical/getting-started/workstation-setup.qmd
 
         - section: "Analytical workflows"
@@ -293,24 +285,24 @@ website:
             - text: "Overview"
               href: technical/workflows/overview.qmd
 
-            - section: "3. CVD events workflow"
+            - section: "CVD event release workflow"
               contents:
                 - text: "Overview"
-                  href: technical/workflows/dashboards/overview.qmd
+                  href: technical/workflows/cvd-events/overview.qmd
                 - text: "Step 1: Extract a REDCap release"
-                  href: technical/workflows/dashboards/extract-redcap.qmd
+                  href: technical/workflows/cvd-events/extract-redcap.qmd
                 - text: "Step 2: Prepare confidential dataset"
-                  href: technical/workflows/dashboards/prepare-confidential.qmd
+                  href: technical/workflows/cvd-events/prepare-confidential.qmd
                 - text: "Step 3: Create analytical inputs"
-                  href: technical/workflows/dashboards/create-analysis-inputs.qmd
+                  href: technical/workflows/cvd-events/create-analysis-inputs.qmd
                 - text: "Step 4: Generate CVD event metrics"
-                  href: technical/workflows/dashboards/generate-metrics.qmd
+                  href: technical/workflows/cvd-events/generate-metrics.qmd
                 - text: "Step 5: Review and approve"
-                  href: technical/workflows/dashboards/approve-metrics.qmd
+                  href: technical/workflows/cvd-events/review-approve.qmd
                 - text: "Step 6: Publish CVD event metrics"
-                  href: technical/workflows/dashboards/publish-metrics.qmd
+                  href: technical/workflows/cvd-events/publish-metrics.qmd
 
-            - section: "4. CVD mortality workflow"
+            - section: "CVD mortality release workflow"
               contents:
                 - text: "Overview"
                   href: technical/workflows/mortality/overview.qmd
@@ -327,20 +319,31 @@ website:
                 - text: "Step 6: Publish mortality outputs"
                   href: technical/workflows/mortality/publish.qmd
 
+            - section: "BNR reporting workflows"
+              contents:
+                - text: "Overview"
+                  href: technical/workflows/reporting/overview.qmd
+                - text: "Rolling three-month update"
+                  href: technical/workflows/reporting/rolling-update.qmd
+                - text: "Annual CVD report"
+                  href: technical/workflows/reporting/annual-report.qmd
+                - text: "One-off CVD report"
+                  href: technical/workflows/reporting/one-off-report.qmd
+
         - section: "Review and publication controls"
           contents:
-            - text: "5. Review an analytical release"
+            - text: "Review an analytical release"
               href: technical/controls/review-release.qmd
-            - text: "6. Disclosure control"
+            - text: "Disclosure control"
               href: technical/controls/disclosure-control.qmd
-            - text: "7. Approve and publish a release"
+            - text: "Approve and publish a release"
               href: technical/controls/approve-publish.qmd
 
         - section: "Operate the Info-Hub"
           contents:
-            - text: "8. Render and publish website"
+            - text: "Render and publish website"
               href: technical/website/render-publish.qmd
-            - section: "9. Update website content"
+            - section: "Update website content"
               contents:
                 - text: "Overview"
                   href: technical/website/update-content.qmd
@@ -348,17 +351,21 @@ website:
                   href: technical/website/cvd-events-dashboard.qmd
                 - text: "Maintain the CVD mortality dashboard"
                   href: technical/website/cvd-mortality-dashboard.qmd
+                - text: "Maintain the public CVD tables"
+                  href: technical/website/cvd-tables.qmd
 
         - section: "Maintain and recover"
           contents:
-            - text: "10. Make a safe code change"
+            - text: "Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
-            - text: "11. Files, releases and versions"
+            - text: "Files, releases and versions"
               href: technical/maintenance/files-releases-versions.qmd
-            - text: "12. Fix common problems"
+            - text: "Fix common problems"
               href: technical/maintenance/troubleshooting.qmd
 
         - section: "Quick reference"
           contents:
-            - text: "13. System reference"
+            - text: "System reference"
               href: technical/reference/index.qmd
+            - text: "CVD suppression validation, 2024-2025"
+              href: technical/reference/bnr-suppression-validation-2024-2025.qmd

@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Number of CVD events"
 description: "How BNR reports hospital-registered and approved annual DCO-enhanced cardiovascular event counts."
 ---

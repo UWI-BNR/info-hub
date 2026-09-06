@@ -1,7 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Publish approved combined CVD metrics"
 description: "Step 6: verify and promote the approved combined CVD package."
-date-modified: 2026-08-28
 ---
 
 ## Run

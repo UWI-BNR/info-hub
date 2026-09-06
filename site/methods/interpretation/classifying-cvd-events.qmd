@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "How CVD events are classified"
 description: "How BNR applies consistent event, source, residence and period rules."
 ---

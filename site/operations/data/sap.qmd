@@ -1,8 +1,7 @@
 ﻿---
 title: "BNR Information Hub Statistical Analysis Plan"
+manual-review-status: reviewed-by-irh
 subtitle: "Standing analytical methods for BNR metrics and published analytical outputs"
-date: "2026-05-15"
-date-modified: 2026-08-11
 version: "Draft v0.1"
 format:
   html:
@@ -27,7 +26,9 @@ format:
 
 This Statistical Analysis Plan defines the standing analytical methods used to produce BNR information hub metrics and published analytical outputs.
 
-The metric system is the permanent BNR deliverable. Briefings are temporary interpretations that consume those metrics. A briefing may go beyond the defined core metrics where this supports a specific research, interpretation or communication purpose.
+The metric system is the reusable analytical foundation. Reports are
+publication products that consume approved metrics and may include separately
+documented bespoke analysis where their approved purpose requires it.
 
 This SAP exists to ensure that BNR outputs are reproducible, auditable, interpretable and consistent across data releases.
 
@@ -39,7 +40,7 @@ This SAP applies to:
 - data quality metrics
 - process monitoring metrics
 - public dashboards
-- static briefings
+- static reports
 - downloadable analytical datasets
 - tables and figures derived from approved BNR data releases
 
@@ -53,10 +54,11 @@ All BNR information hub analytics follow these principles:
 2. Approved metric definitions are stable across data releases.
 3. Stratifications are dimensions, not separate metrics, unless the definition or method changes.
 4. Stata is the primary analytical engine for core surveillance computation.
-5. Quarto is used to publish and present approved outputs, not to define core analytical logic.
+5. Stata controls analytical publication; Quarto presents approved outputs and
+   does not define core analytical logic.
 6. Outputs are deterministic and reproducible from approved data releases and versioned code.
 7. Metadata is part of the analytical product.
-8. Briefings may interpret, combine or extend metrics, but do not redefine core metrics.
+8. Reports may interpret, combine or extend metrics, but do not redefine core metrics.
 
 ## Data release model
 
@@ -220,7 +222,7 @@ $$
 
 The comparison group and reference group must be explicit.
 
-Ratio metrics should only be added to the register when they are expected to be routinely produced and interpreted. Ad hoc ratios may appear in briefings as research outputs.
+Ratio metrics should only be added to the register when they are expected to be routinely produced and interpreted. Ad hoc ratios may appear in reports as research outputs.
 
 ### Model-adjusted metrics
 
@@ -408,11 +410,11 @@ Quarto pages may:
 
 Quarto pages must not silently redefine numerators, denominators, exclusions or statistical methods.
 
-## Briefings
+## Reports
 
-Briefings are narrative or research products.
+Reports are narrative or research products.
 
-A briefing may:
+A report may:
 
 - use approved core metrics
 - combine several metrics
@@ -421,7 +423,7 @@ A briefing may:
 - include additional bespoke analysis
 - explore research questions not covered by the metric register
 
-Where a briefing includes analysis outside the metric register, that analysis should be documented within the briefing materials and should not be treated as a new core metric unless it is later approved and added to the register.
+Where a report includes analysis outside the metric register, that analysis should be documented within the report materials and should not be treated as a new core metric unless it is later approved and added to the register.
 
 ## Change control
 

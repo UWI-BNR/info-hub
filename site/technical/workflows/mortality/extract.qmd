@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Extract mortality data"
 description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
 
 ---
@@ -26,7 +25,7 @@ The token itself must remain outside Git and must not appear in a DO file, QMD o
 
 ## Run Step 1
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 1: Extract mortality data**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 1: Extract mortality data**.
 2. Enter the release year and month.
 3. Leave replacement unticked for the first run.
 4. Run the step.

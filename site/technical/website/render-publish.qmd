@@ -1,8 +1,7 @@
 ﻿---
 title: "Render and publish the website"
+manual-review-status: reviewed-by-irh
 description: "Start a local Info-Hub session, review website changes, commit them safely and publish the Quarto site through GitHub."
-date: 2026-08-10
-date-modified: 2026-08-10
 ---
 
 ---
@@ -105,7 +104,7 @@ Then create a short working branch:
 
 1. Click the branch name in the lower-left status bar.
 2. Choose **Create new branch**.
-3. Give it a short descriptive name, for example `update-cvd-briefing` or `publish-cvd-2024-02`.
+3. Give it a short descriptive name, for example `update-annual-report` or `publish-cvd-2024-02`.
 
 Do not do routine editing directly on `main`.
 
@@ -316,7 +315,7 @@ Check the pages affected by the change.
 
 For an analytical release also check:
 
-- the relevant public dashboard, table or briefing page;
+- the relevant public dashboard, table or report page;
 - the expected download link;
 - the Downloads catalogue entry; and
 - any Latest Data or other listing affected by the release.

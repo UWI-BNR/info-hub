@@ -79,7 +79,7 @@ decision or repair pathway.
 
 There must be **no unagreed drift** in mortality workflow concepts, safeguards,
 terminology or compute/review/approve/publish separation from the established
-CVD dashboard and CVD tabulations workflows.
+CVD event release workflow and the shared reporting publication controls.
 
 Consistency means the same BNR policy and operational principles, not blindly
 copying code between different output structures. A mortality-specific
@@ -87,9 +87,11 @@ secondary-suppression plan must be explicit, justified and tested against the
 same safety principle: no protected value may be reconstructed from the full
 proposed release.
 
-The CVD dashboard and CVD tabulations workflows are reference implementations
-for workflow separation, review materials, approval and publication boundaries.
-They must not be weakened merely to make mortality superficially identical.
+The CVD event release and current report-publication workflows are reference
+implementations for workflow separation, review materials, approval and
+publication boundaries. The retired tabulations and briefings workflows are not
+current references and must not be restored as dependencies. Current controls
+must not be weakened merely to make mortality superficially identical.
 
 ## Review and approval
 

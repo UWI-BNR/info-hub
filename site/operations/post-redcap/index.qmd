@@ -1,71 +1,49 @@
 ---
-title: "Analytics & publishing"
-description: "Choose the controlled analytical pathway after BNR data have entered the reporting environment."
-date: 2026-08-11
-date-modified: 2026-08-21
----
-
+title: "Post-REDCap analytics and publishing"
+description: "Choose the controlled route for CVD event, mortality and reporting products."
+manual-review-status: reviewed-by-irh
 ---
 
 ## Purpose
 
-This section covers the controlled route from authorised BNR source data to approved analytical products and the public Info-Hub.
+Post-REDCap work turns authorised source releases into approved public metric
+datasets and reports. Stata computes and controls analytical publication;
+Quarto presents approved public outputs; GitHub deploys the static Info-Hub.
 
-CVD event metrics, tabulations and routine CVD briefings share one CVD preparation layer. CVD mortality has its own six-step workflow because it starts from the death-certificate source and includes a separate mortality classification stage.
+Human analytical review, disclosure review, approval and publication are
+separate actions. Private data, staging packages, logs, credentials and review
+evidence remain outside Git.
 
-For exact paths, files and commands, use the [Technical Manual analytical workflows](../../technical/workflows/overview.qmd).
+## Choose the route
 
-## The tools and their jobs
-
-| Tool | Operational role |
-|---|---|
-| **REDCap** | Holds the authoritative current CVD event records and mortality death-certificate records used by the two analytical routes. |
-| **Stata** | Extracts, prepares and analyses data; creates review packages; records approval; promotes approved analytical products. |
-| **VS Code** | Edits Quarto narrative and website source and shows the Git changes proposed for publication. |
-| **Quarto** | Renders the approved website presentation and downloads catalogue. |
-| **GitHub** | Records reviewed public changes and deploys the static Info-Hub. |
-
-## CVD shared preparation plus mortality
-
-CVD events Steps 1–3, accessed in Stata through **User > BNR > Update CVD dashboard**, form the common CVD analytical preparation layer. Step 3 creates the private deidentified inputs used by the three CVD downstream pathways.
-
-Mortality begins separately under **User > BNR > Update mortality dashboard** and runs through its own Steps 1–6.
-
-```{mermaid}
-flowchart TD
-    A["Authorised CVD REDCap release"] --> B["Stata: CVD events Steps 1–3"]
-    B --> C["CVD event metrics Steps 4–6"]
-    B --> D["Tabulation Steps 1–3"]
-    B --> E["Briefing Steps 1–3"]
-
-    M["Authorised mortality death-certificate release"] --> N["Mortality Steps 1–6"]
-
-    C --> F["Approved public products"]
-    D --> F
-    E --> F
-    N --> F
-    F --> G["VS Code + Quarto + GitHub"]
-```
-
-## Choose the pathway
-
-| Need | Start here | Detailed technical guide |
+| Required product | Controlled route | Technical instructions |
 |---|---|---|
-| Begin a new CVD monthly analytical cycle | [Authorise a data release](../release/data-release.qmd) | [CVD events Step 1](../../technical/workflows/dashboards/extract-redcap.qmd) |
-| Refresh CVD event metrics and shared CVD inputs | [CVD events workflow](dashboard-workflow.qmd) | [CVD events workflow](../../technical/workflows/dashboards/overview.qmd) |
-| Produce a CVD mortality burden release | [CVD mortality workflow](mortality-workflow.qmd) | [CVD mortality workflow](../../technical/workflows/mortality/overview.qmd) |
-| Refresh the routine CVD tables | [Tabulations workflow](tabulations-workflow.qmd) | [Tabulations](../../technical/workflows/tabulations/overview.qmd) |
-| Create a routine or ad-hoc analytical briefing | [Briefings workflow](briefings-workflow.qmd) | [Briefings](../../technical/workflows/briefings/overview.qmd) |
-| Complete common review and website publication | [Review, approve and publish](../release/review-approve-publish.qmd) | [Review and publication](../../technical/controls/review-release.qmd) |
+| Approved CVD event metric release | [CVD event release workflow](cvd-events-workflow.qmd): six steps | [CVD event workflow](../../technical/workflows/cvd-events/overview.qmd) |
+| Approved CVD mortality metric release | [CVD mortality release workflow](mortality-workflow.qmd): six steps | [Mortality workflow](../../technical/workflows/mortality/overview.qmd) |
+| Rolling three-month CVD update | [Reporting workflows](reporting-workflows.qmd): one controlled build from approved releases | [Rolling update](../../technical/workflows/reporting/rolling-update.qmd) |
+| Annual CVD report | [Reporting workflows](reporting-workflows.qmd): build, approve and publish | [Annual report](../../technical/workflows/reporting/annual-report.qmd) |
+| One-off CVD report | [Reporting workflows](reporting-workflows.qmd): prepare, approve and publish | [One-off report](../../technical/workflows/reporting/one-off-report.qmd) |
 
-## Rules common to every pathway
+Public CVD tables, dashboards and downloads are presentation products derived
+from approved public metric releases. They do not establish separate analytical
+workflows.
 
-1. Use the same release identity throughout one controlled workflow.
-2. Keep source data, logs, staging packages and review files in the private workspace.
-3. Inspect quality, method, plausibility and disclosure risk before approval.
-4. Approve the exact reviewed package through the relevant Stata step.
-5. Use the controlled Stata publication step; do not copy individual analytical output files by hand.
-6. Update Quarto content only from approved public products or their website mirrors.
-7. Render and inspect the site before committing and pushing public changes.
+## Common control sequence
 
-Stop when the source period, package identity, result, disclosure status or approval is unclear. Correct the authoritative source record or version-controlled code, then rerun from the earliest affected stage.
+1. Confirm authority, reporting period and source identity.
+2. Build the private candidate through the relevant Stata workflow.
+3. Review analytical validity and disclosure safety.
+4. Record approval against the exact candidate where the workflow requires it.
+5. Publish only the approved payload.
+6. Render and inspect the affected Quarto presentation.
+7. Deploy only reviewed, public-safe website source and approved public assets.
+
+The rolling update is the limited exception to a second report-level approval:
+its builder consumes already-approved event and mortality releases and permits
+only the authorised display transformations in the controlled template.
+
+## Corrections
+
+Never edit a generated dataset, table, chart or report manually. Correct the
+source data or version-controlled code, assign the required new version, and
+rerun from the earliest affected step. See [Correct a release](../release/correct-release.qmd).

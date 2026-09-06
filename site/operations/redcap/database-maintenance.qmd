@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "REDCap database maintenance"
 description: "BNR team draft for controlled maintenance of the live registry database."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
 
 ---

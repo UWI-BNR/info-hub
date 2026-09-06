@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Research data access"
 description: "How researchers can request access to restricted, de-identified BNR data."
 ---

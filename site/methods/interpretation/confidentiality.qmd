@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Protecting confidentiality"
 description: "How BNR reduces disclosure risk in public statistics."
 ---
@@ -15,7 +16,7 @@ BNR uses several safeguards:
 
 - public products contain aggregate rather than patient-level information;
 - only approved variables, tables and figures enter the public pathway;
-- positive counts below six are normally suppressed;
+- positive counts below six are suppressed;
 - additional cells may be suppressed where totals could reveal a protected value;
 - overly detailed combinations of characteristics are avoided; and
 - every release receives a disclosure-control review before publication.
@@ -49,4 +50,3 @@ Access to restricted, de-identified research data requires a separate applicatio
 
 - [Research data access](../responsible-data-use/research-data-access.qmd)
 - [Research Data Sharing Agreement](../responsible-data-use/dsa-methods.qmd)
-

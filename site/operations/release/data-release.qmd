@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Authorise a data release"
 subtitle: "Confirm the reporting period, then use CVD events Step 1 to extract the cumulative REDCap data"
-date: 2026-08-11
-date-modified: 2026-08-21
 ---
 
 **Status:** Implemented post-REDCap procedure; pre-extraction sign-off details require BNR confirmation.  
@@ -27,7 +26,7 @@ Confirm that:
 
 1. Record the release year and month and any accepted limitation, such as known late records.
 2. Open Stata on the authorised workstation and load the BNR menu if it is not already available.
-3. Choose **User > BNR > Update CVD dashboard > Step 1: Extract REDCap data**.
+3. Choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**.
 4. Enter the authorised release year and month. Leave replacement off for a first extraction.
 5. Select **Run extract**.
 6. Confirm that the Stata summary reports `Completed successfully`, the intended period and a plausible record count.
@@ -55,5 +54,4 @@ Confirm the operational sign-off used before extraction, the normal monthly timi
 
 ## Detailed technical instructions
 
-Use [CVD events Step 1: Extract a REDCap release](../../technical/workflows/dashboards/extract-redcap.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.
-
+Use [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.

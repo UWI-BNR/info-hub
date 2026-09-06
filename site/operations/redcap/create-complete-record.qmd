@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Create and complete a new record"
 description: "BNR team draft for creating one authoritative CVD event record in REDCap."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
 
 ---

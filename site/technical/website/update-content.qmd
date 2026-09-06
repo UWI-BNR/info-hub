@@ -1,8 +1,7 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Update website content"
-description: "Maintain public Quarto pages, briefings, listings, navigation and downloads after analytical publication."
-date: 2026-08-10
-date-modified: 2026-08-21
+description: "Maintain public Quarto pages, report landing pages, listings, navigation and downloads after analytical publication."
 ---
 
 ---
@@ -14,7 +13,7 @@ Use this chapter for ordinary **Quarto and website-content changes**.
 Examples include:
 
 - editing explanatory text;
-- updating a briefing page after a new analytical package is published;
+- checking a report landing page after its controlled publication step;
 - adding or changing links and images;
 - checking listings;
 - checking the Downloads page; and
@@ -122,25 +121,16 @@ The CVD event and CVD mortality dashboards have dedicated maintenance pages beca
 
 The general rule remains that Quarto presents approved analytical products. The mortality dashboard year-to-date count is the one documented narrow presentation exception; its safeguards are defined on the mortality dashboard maintenance page. Do not extend that exception to other statistics without an explicit methods and architecture decision.
 
-## Update an existing briefing
+## Update a report page
 
-Routine briefing pages need several package-specific paths and narrative pieces to move together.
+The rolling-update builder instantiates the central controlled template. Annual
+and one-off report workflows publish an approved landing page and PDF payload.
+Do not use an earlier generated page as a template or edit a generated report
+to change its analytical result.
 
-Use the dedicated How-To:
-
-[Update an existing briefing](update-briefing.qmd)
-
-That page covers:
-
-- the new package ID;
-- figures;
-- workbook and ZIP links;
-- shared narrative snippets;
-- visible reporting-year text;
-- PDF and slide links; and
-- final listing checks.
-
-Do not update the public briefing page until Briefing Step 3 has published the approved analytical package.
+- [Rolling three-month update](../workflows/reporting/rolling-update.qmd)
+- [Annual CVD report](../workflows/reporting/annual-report.qmd)
+- [One-off CVD report](../workflows/reporting/one-off-report.qmd)
 
 ## Check the Downloads page
 
@@ -148,9 +138,8 @@ The central Downloads catalogue is built automatically before each Quarto render
 
 The builder reads the approved download records created by the publication workflows, including:
 
-- briefing `downloads.yml` files;
 - metric catalogue records; and
-- tabulation `downloads.yml` files.
+- report catalogue records.
 
 It then creates:
 
@@ -228,7 +217,7 @@ Approved analytical figures should normally arrive through their controlled publ
 | `site/assets/` | Public images, styles and other site assets. |
 | `site/_shared/` | Shared snippets used by more than one page. |
 | `site/downloads/` | Approved website-mirror downloads and the generated central catalogue. |
-| `site/surveillance/` | Public surveillance pages, dashboards, tabulations and briefings. |
+| `site/surveillance/` | Public surveillance pages, dashboards, tables and reports. |
 | `site/technical/` | Technical Manual source. |
 | `site/operations/` | Operations Manual source. |
 | `site/_site/` | Generated rendered website. Do not edit or commit. |

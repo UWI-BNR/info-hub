@@ -1,0 +1,45 @@
+---
+title: "Build a rolling three-month CVD update"
+description: "Run the controlled one-step builder for a dated online update from approved public releases."
+manual-review-status: reviewed-by-irh
+---
+
+## What the builder does
+
+The builder verifies the declared release-stamped CVD event and mortality CSVs
+against their website mirrors, freezes complete copies inside the dated report
+package and instantiates the central Quarto/Observable template. It never reads
+a mutable `*_current.csv` file.
+
+## Run from the Stata menu
+
+Choose:
+
+**User > BNR > Rolling three-month CVD update > Build dated online update**
+
+Enter the report period, the event and mortality source releases, and a positive
+report version. For a new period, leave replacement off. A correction must use
+a strictly higher version and explicit replacement authorisation.
+
+## Command-line form
+
+```stata
+do "$BNR_STATA/reporting/bnr_report_update_build.do" ///
+    REPORT_YEAR REPORT_MONTH EVENT_YEAR EVENT_MONTH ///
+    MORTALITY_YEAR MORTALITY_MONTH REPORT_VERSION [replace]
+```
+
+## Check the result
+
+Confirm that:
+
+- the run summary identifies the intended report and both source releases;
+- `data/event_release.csv` and `data/mortality_release.csv` exist in the dated
+  package and are complete snapshots;
+- the generated `index.qmd` identifies the same version and releases;
+- the report uses the central template rather than a copied earlier instance;
+- no protected or unavailable component has been inferred; and
+- the dated page renders before the website change is deployed.
+
+The generated page is an instance, not a new template. Change future design in
+`scripts/stata/reporting/templates/bnr_report_update_template.qmd` and rebuild.

@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "CVD mortality"
 description: "How BNR counts and describes deaths classified as cardiovascular disease."
 ---
@@ -43,9 +44,9 @@ Two forms are published:
   between sex groups are less affected by differences in age structure.
 
 Population denominators use the approved UN World Population Prospects 2024
-Barbados series. The rate and its 95% statistical confidence interval are
-calculated in Stata and supplied to the dashboard; the dashboard does not
-calculate, combine or reconstruct them. Crude-rate intervals use the exact
+Barbados series. The approved rate and its 95% statistical confidence interval
+are supplied to the dashboard; the dashboard does not calculate, combine or
+reconstruct them. Crude-rate intervals use the exact
 Poisson (Garwood) method and ASR intervals use the Fay-Feuer gamma method.
 
 The intervals describe statistical variation conditional on the classified

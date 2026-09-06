@@ -1,4 +1,5 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "About BNR surveillance"
 description: "What the Barbados National Registry monitors and how surveillance statistics should be understood."
 ---
@@ -23,7 +24,7 @@ BNR surveillance is not a list of individual patients. Public outputs contain ag
 | **Cardiovascular disease (CVD)** | Definitions are available for event counts, event rates, case fatality and hospital length of stay. |
 | **Hypertension** | Measure page established; detailed specifications are being prepared for implementation. |
 | **Diabetes** | Measure page established; detailed specifications are being prepared for implementation. |
-| **Mortality** | CVD mortality counts and percentage distributions are available using the BNR Primary and Inclusive mortality definitions. |
+| **Mortality** | CVD mortality counts, percentage distributions and annual rates are available using the BNR Primary and Inclusive mortality definitions. |
 
 Hypertension and diabetes are part of the main BNR measure programme. Their pages are holding pages only until the approved definitions and publications are ready.
 
@@ -42,4 +43,3 @@ Before comparing a number, check what was counted, the population or event group
 - [From health records to published statistics](records-to-statistics.qmd)
 - [Measures overview](../measures/index.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
-

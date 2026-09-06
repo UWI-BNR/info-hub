@@ -1,0 +1,31 @@
+---
+title: "BNR reporting workflows"
+description: "Choose and operate the current rolling, annual and one-off CVD report routes."
+manual-review-status: reviewed-by-irh
+---
+
+## What this section covers
+
+BNR has three report products. They share publication principles but do not
+share one generic analysis dispatcher.
+
+| Product | Current route | Public form |
+|---|---|---|
+| Rolling three-month CVD update | One controlled build from approved public event and mortality releases | Dated HTML page |
+| Annual CVD report | Step 1 build, Step 2 approve, Step 3 publish | PDF and HTML landing page |
+| One-off CVD report | Bespoke analysis, then Step 1 prepare, Step 2 approve, Step 3 publish | PDF and HTML landing page |
+
+The annual and one-off routes keep candidate preparation, approval and
+publication separate. The rolling update is a narrow one-step exception because
+it uses already-approved public releases and introduces no new surveillance
+metric.
+
+## Run the correct route
+
+- [Build a rolling three-month CVD update](rolling-update.qmd)
+- [Build, approve and publish an annual CVD report](annual-report.qmd)
+- [Prepare, approve and publish a one-off CVD report](one-off-report.qmd)
+
+The optional [report disclosure screen](one-off-report.qmd#disclosure-screen)
+creates private review flags only. It does not apply secondary suppression or
+approve a report.

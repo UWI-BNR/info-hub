@@ -28,7 +28,8 @@ OUTPUT:      Private raw CSV, Stata dataset, YAML manifest and Stata log under:
 
 NOTES:       This is a private source-data extract. It deliberately retains
              identifiers and operational fields. De-identification belongs in
-             Step 2 of the monthly workflow.
+             Step 3 of the monthly workflow. Step 2 builds the confidential
+             cumulative dataset.
 
 ANALYST-EDITABLE INPUTS:
              Routine analysts normally change only the year, month and optional
