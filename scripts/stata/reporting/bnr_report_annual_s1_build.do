@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.1.2 (4 September 2026)
+VERSION: 1.1.3 (6 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
 
 CHANGE 1.1.1:
@@ -15,6 +15,10 @@ CHANGE 1.1.2:
     the controlled repository Python helper before the candidate is created.
   - The helper has no access to inputs or calculations; it decorates the PDF
     body only and stops Step 1 clearly if its local environment is unavailable.
+
+CHANGE 1.1.3:
+  - Remove the duplicate terminal "About this report" page. Report identity and
+    release details remain in the maintained front matter and workflow records.
 
 USAGE (enter each command on one line):
   do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1
@@ -311,23 +315,6 @@ include "$BNR_REPO/scripts/stata/reporting/bnr_report_annual_standard.do"
 * narrative. It remains visually continuous with the standard section but is
 * operationally separate.
 include "`focus'"
-
-* INVARIANT - DO NOT EDIT.
-* Generic report identity remains a workflow-controller responsibility. This
-* page provides an auditable link between the PDF and its source releases.
-putpdf pagebreak
-putpdf paragraph
-putpdf text ("About this report"), bold font("`font_title'", 14, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("Report identifier: `report_id'"), font("`font_body'", 8.5)
-putpdf paragraph
-putpdf text ("Report version: v`version_num'"), font("`font_body'", 8.5)
-putpdf paragraph
-putpdf text ("CVD-event release: `event_release'"), font("`font_body'", 8.5)
-putpdf paragraph
-putpdf text ("Mortality release: `mortality_release'"), font("`font_body'", 8.5)
-putpdf paragraph
-putpdf text ("The PDF is built from the declared approved public releases. Publication remains subject to the annual report Step 2 review and Step 3 publication controls."), font("`font_body'", 8)
 
 * INVARIANT - DO NOT EDIT.
 * Save the Stata-composed private body PDF. Failure stops here and leaves no

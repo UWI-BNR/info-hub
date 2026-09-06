@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="960" viewBox="0 0 1536 960">
+  <rect width="1536" height="960" fill="#ffffff"/>
+  <rect x="20" y="20" width="1496" height="920" rx="16" fill="#ffffff" stroke="#9db0c3" stroke-width="1.5"/>
+  <style>
+    .title{font:700 30px 'Montserrat',Arial,sans-serif;fill:#0b284c}.subtitle{font:italic 17px 'Montserrat',Arial,sans-serif;fill:#38536d}
+    .head{font:700 15px 'Montserrat',Arial,sans-serif;fill:#172d4d}.label{font:700 15px 'Montserrat',Arial,sans-serif;fill:#172d4d}
+    .desc{font:13px 'Montserrat',Arial,sans-serif;fill:#516579}.month{font:700 12px 'Montserrat',Arial,sans-serif;fill:#172d4d}
+    .note{font:12px 'Montserrat',Arial,sans-serif;fill:#38536d}.legend{font:13px 'Montserrat',Arial,sans-serif;fill:#172d4d}
+  </style>
+  <text x="48" y="63" class="title">BNR REFIT — IMPLEMENTATION POSITION</text>
+  <text x="48" y="91" class="subtitle">Programme period: April 2026 to March 2027 · position at December 2026</text>
+  <line x1="48" y1="112" x2="1488" y2="112" stroke="#d5a520" stroke-width="2"/>
+  <text x="48" y="148" class="head">PROGRAMME WORKSTREAM</text>
+  <g class="month" text-anchor="middle">
+    <text x="450" y="148">APR</text><text x="535" y="148">MAY</text><text x="620" y="148">JUN</text><text x="705" y="148">JUL</text>
+    <text x="790" y="148">AUG</text><text x="875" y="148">SEP</text><text x="960" y="148">OCT</text><text x="1045" y="148">NOV</text>
+    <text x="1130" y="148">DEC</text><text x="1215" y="148">JAN</text><text x="1300" y="148">FEB</text><text x="1385" y="148">MAR</text>
+  </g>
+  <g stroke="#dbe5ec" stroke-width="1" stroke-dasharray="3 4">
+    <line x1="407" y1="160" x2="407" y2="824"/><line x1="492" y1="160" x2="492" y2="824"/><line x1="577" y1="160" x2="577" y2="824"/>
+    <line x1="662" y1="160" x2="662" y2="824"/><line x1="747" y1="160" x2="747" y2="824"/><line x1="832" y1="160" x2="832" y2="824"/>
+    <line x1="917" y1="160" x2="917" y2="824"/><line x1="1002" y1="160" x2="1002" y2="824"/><line x1="1087" y1="160" x2="1087" y2="824"/>
+    <line x1="1172" y1="160" x2="1172" y2="824"/><line x1="1257" y1="160" x2="1257" y2="824"/><line x1="1342" y1="160" x2="1342" y2="824"/>
+    <line x1="1427" y1="160" x2="1427" y2="824"/>
+  </g>
+  <line x1="1130" y1="160" x2="1130" y2="824" stroke="#0b284c" stroke-width="2"/>
+  <rect x="1080" y="824" width="100" height="35" rx="4" fill="#0b284c"/><text x="1130" y="846" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="12" font-weight="700" fill="#fff">DEC 2026</text>
+  <g><text x="48" y="194" class="label">Programme review and data foundation</text><text x="48" y="213" class="desc">Review, historical reconstruction and architecture</text><line x1="450" y1="201" x2="790" y2="201" stroke="#075174" stroke-width="5"/><circle cx="450" cy="201" r="6" fill="#075174"/><path d="M790 192l9 9-9 9-9-9z" fill="#075174"/><text x="805" y="206" class="note">Completed</text></g>
+  <g><text x="48" y="258" class="label">CVD event identification and metrics</text><text x="48" y="277" class="desc">Identification, preparation and controlled release</text><line x1="450" y1="265" x2="960" y2="265" stroke="#2b7388" stroke-width="5"/><circle cx="450" cy="265" r="6" fill="#2b7388"/><path d="M960 256l9 9-9 9-9-9z" fill="#2b7388"/><text x="975" y="270" class="note">Operating</text></g>
+  <g><text x="48" y="322" class="label">CVD mortality identification and metrics</text><text x="48" y="341" class="desc">Ascertainment, classification and controlled release</text><line x1="450" y1="329" x2="1045" y2="329" stroke="#b25f52" stroke-width="5"/><circle cx="450" cy="329" r="6" fill="#b25f52"/><path d="M1045 320l9 9-9 9-9-9z" fill="#b25f52"/><text x="1060" y="334" class="note">Operating</text></g>
+  <g><text x="48" y="386" class="label">DCO identification and national estimates</text><text x="48" y="405" class="desc">Death-record identification, linkage and estimation</text><line x1="450" y1="393" x2="1130" y2="393" stroke="#916f00" stroke-width="5"/><circle cx="450" cy="393" r="6" fill="#916f00"/><path d="M1130 384l9 9-9 9-9-9z" fill="#916f00"/><text x="1145" y="398" class="note">Operating</text></g>
+  <g><text x="48" y="450" class="label">Dashboards and linked outputs</text><text x="48" y="469" class="desc">Dashboards, standard tables and monthly updates</text><line x1="535" y1="457" x2="1130" y2="457" stroke="#4f8837" stroke-width="5"/><circle cx="535" cy="457" r="6" fill="#4f8837"/><path d="M1130 448l9 9-9 9-9-9z" fill="#4f8837"/><text x="1145" y="462" class="note">Operating</text></g>
+  <g><text x="48" y="514" class="label">Annual report workflow</text><text x="48" y="533" class="desc">Candidate build, approval and publication</text><line x1="790" y1="521" x2="1130" y2="521" stroke="#6e4b8f" stroke-width="5"/><circle cx="790" cy="521" r="6" fill="#6e4b8f"/><path d="M1130 512l9 9-9 9-9-9z" fill="#6e4b8f"/><text x="1145" y="526" class="note">Operating</text></g>
+  <g><text x="48" y="578" class="label">One-off reports workflow</text><text x="48" y="597" class="desc">Approved standalone analyses and publications</text><line x1="875" y1="585" x2="1130" y2="585" stroke="#00808a" stroke-width="5"/><circle cx="875" cy="585" r="6" fill="#00808a"/><path d="M1130 576l9 9-9 9-9-9z" fill="#00808a"/><text x="1145" y="590" class="note">Operating</text></g>
+  <g><text x="48" y="642" class="label">System testing and validation</text><text x="48" y="661" class="desc">End-to-end testing and routine-use refinement</text><line x1="790" y1="649" x2="1130" y2="649" stroke="#3f6f89" stroke-width="5"/><line x1="1130" y1="649" x2="1385" y2="649" stroke="#3f6f89" stroke-width="3" stroke-dasharray="9 6"/><circle cx="790" cy="649" r="6" fill="#3f6f89"/><circle cx="1385" cy="649" r="7" fill="#fff" stroke="#3f6f89" stroke-width="2"/><text x="1182" y="638" class="note">Scheduled completion</text></g>
+  <g><text x="48" y="706" class="label">Manuals and handover</text><text x="48" y="725" class="desc">Technical, Operations and public Methods manuals</text><line x1="705" y1="713" x2="1130" y2="713" stroke="#00757d" stroke-width="5"/><line x1="1130" y1="713" x2="1385" y2="713" stroke="#00757d" stroke-width="3" stroke-dasharray="9 6"/><circle cx="705" cy="713" r="6" fill="#00757d"/><circle cx="1385" cy="713" r="7" fill="#fff" stroke="#00757d" stroke-width="2"/><text x="1182" y="702" class="note">Scheduled completion</text></g>
+  <g><text x="48" y="770" class="label">Later analytical modules</text><text x="48" y="789" class="desc">Survival and hospital-performance measures</text><line x1="1215" y1="777" x2="1385" y2="777" stroke="#7189a1" stroke-width="3" stroke-dasharray="9 6"/><circle cx="1215" cy="777" r="6" fill="#7189a1"/><circle cx="1385" cy="777" r="7" fill="#fff" stroke="#7189a1" stroke-width="2"/><text x="1230" y="766" class="note">Later development</text></g>
+  <line x1="48" y1="875" x2="1488" y2="875" stroke="#dbe5ec"/>
+  <g class="legend"><line x1="60" y1="907" x2="100" y2="907" stroke="#2b7388" stroke-width="5"/><text x="112" y="912">Work completed by Dec 2026</text><line x1="365" y1="907" x2="405" y2="907" stroke="#3f6f89" stroke-width="3" stroke-dasharray="9 6"/><text x="417" y="912">Scheduled completion</text><line x1="665" y1="907" x2="705" y2="907" stroke="#7189a1" stroke-width="3" stroke-dasharray="9 6"/><text x="717" y="912">Later development</text><line x1="955" y1="891" x2="955" y2="921" stroke="#0b284c" stroke-width="2"/><text x="968" y="912">Current position</text></g>
+</svg>

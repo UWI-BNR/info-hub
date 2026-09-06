@@ -1,14 +1,7 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_2025_focus.do
-VERSION: 1.3.0 (6 September 2026)
+VERSION: 1.2.0 (6 September 2026)
 PURPOSE: Compose the 2025 year-specific Special chapter.
-
-CHANGE 1.3.0:
-  - Align the chapter and both landscape graphics to four connected areas.
-  - Record the April 2026 to March 2027 programme period and December position.
-  - Treat the seven core workflows as operating by December 2026; reserve work
-    after December for final testing, manuals, handover and later modules.
-  - Replace internal-sounding status wording with public-facing labels.
 
 SPECIAL CHAPTER:
   The BNR Refit - strengthening cardiovascular surveillance from data capture
@@ -85,8 +78,8 @@ if "`font_body'" == ""     local font_body     "Montserrat"
 
 * These are public, static report assets. They contain no confidential data.
 * Replace the files only after confirming their dates and status labels.
-local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-12.png"
-local refit_system "$BNR_REPO/scripts/stata/reporting/assets/bnr_reporting_system_2026-12.png"
+local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-08-31.png"
+local refit_system "$BNR_REPO/scripts/stata/reporting/assets/bnr_reporting_system_2026-08-31.png"
 
 foreach required_asset in "`refit_timeline'" "`refit_system'" {
     capture confirm file "`required_asset'"
@@ -114,9 +107,20 @@ putpdf text ("Strengthening cardiovascular surveillance from data capture to pub
 putpdf paragraph
 putpdf text ("Building on a strong national resource"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("For many years, the Barbados National Registry has provided an important record of cardiovascular disease in Barbados. The BNR Refit builds on that foundation. It is modernising how information is prepared, checked, analysed, approved and shared so that the Registry can provide more timely and reproducible evidence for government, hospitals, clinics and public-health partners."), font("`font_body'", 8.7, "`bnr_ink'")
+#delimit ; 
+  putpdf text ("For many years, the Barbados National Registry has provided an important record of cardiovascular disease in Barbados. 
+                The BNR Refit builds on that foundation. It is modernising how information is prepared, checked, analysed, approved and 
+                shared so that the Registry can provide more timely and reproducible evidence for government, hospitals, clinics and
+                public-health partners."), font("`font_body'", 8.7, "`bnr_ink'");
+#delimit cr 
 putpdf paragraph
-putpdf text ("The work began as a review of Registry analytics and reporting processes. It expanded when the review showed that meaningful improvement also required change at earlier stages: consistent case definitions, data-entry checks, historical dataset identity, mortality ascertainment and clear approval responsibilities. The result is a coordinated programme rather than a collection of isolated technical fixes."), font("`font_body'", 8.7, "`bnr_ink'")
+#delimit ; 
+  putpdf text ("The work began as a review of the use of Registry analytics and reporting processes. 
+                The work was expanded when the review highlighted that meaningful improvement also required alteration to earlier registry stages: 
+                consistent case definitions, data-entry checks, historical dataset identity, mortality ascertainment 
+                and clear approval responsibilities. The result is a coordinated programme rather than a collection of 
+                isolated technical fixes."), font("`font_body'", 8.7, "`bnr_ink'");
+#delimit cr
 
 putpdf paragraph
 putpdf text ("Four connected areas"), bold font("`font_title'", 12, "`bnr_ink'")
@@ -129,27 +133,21 @@ putpdf table refit_scope(3,1), colspan(3)
 putpdf table refit_scope(3,5), colspan(3)
 putpdf table refit_scope(4,1), colspan(3)
 putpdf table refit_scope(4,5), colspan(3)
-putpdf table refit_scope(1,1) = ("DATA FOUNDATION"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(2,1) = ("Captured cases, managed REDCap data, historical records and approved source releases"), font("`font_body'", 7.6, "`bnr_ink'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(3,1) = ("ASSURANCE AND GOVERNANCE"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(4,1) = ("Validation, versioning, human approval, disclosure control and publication controls"), font("`font_body'", 7.6, "`bnr_ink'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(1,5) = ("DEFINITIONS AND METHODS"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(2,5) = ("Event, mortality and DCO identification; statistical methods and metric construction"), font("`font_body'", 7.6, "`bnr_ink'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(3,5) = ("PUBLIC REPORTING"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
-putpdf table refit_scope(4,5) = ("Dashboards, linked outputs, annual reports and one-off reports"), font("`font_body'", 7.6, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(1,1) = ("DATA"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(2,1) = ("A definitive, traceable analytical record"), font("`font_body'", 8, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(3,1) = ("GOVERNANCE"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(4,1) = ("Named releases, visible review and recorded approval"), font("`font_body'", 8, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(1,5) = ("METHODS"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(2,5) = ("Consistent event, mortality and uncertainty definitions"), font("`font_body'", 8, "`bnr_ink'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(3,5) = ("REPORTING"), bold font("`font_title'", 8, "`bnr_teal'") bgcolor("`bnr_pale2'")
+putpdf table refit_scope(4,5) = ("Clearer, repeatable products for different audiences"), font("`font_body'", 8, "`bnr_ink'") bgcolor("`bnr_pale2'")
 putpdf table refit_scope(.,1/3), bgcolor("`bnr_pale2'")
 putpdf table refit_scope(.,5/7), bgcolor("`bnr_pale2'")
 putpdf table refit_scope(.,4), bgcolor("`bnr_white'")
-putpdf table refit_scope(1,1)  = ("DATA FOUNDATION"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
-putpdf table refit_scope(1,5)  = ("DEFINITIONS AND METHODS"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
-putpdf table refit_scope(3,1)  = ("ASSURANCE AND GOVERNANCE"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
-putpdf table refit_scope(3,5)  = ("PUBLIC REPORTING"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
-
-putpdf paragraph
-putpdf table refit_period = (2,1), width(100%) border(all, nil)
-putpdf table refit_period(1,1) = ("THE REFIT PERIOD"), bold font("`font_title'", 8.2, "`bnr_teal'")
-putpdf table refit_period(2,1) = ("The current programme runs from April 2026 to March 2027. By December 2026, the core event, mortality and reporting workflows were operating. Work through March 2027 focuses on final testing, manuals and staff handover. Later analytical modules form a separate development phase."), font("`font_body'", 7.7, "`bnr_ink'")
-putpdf table refit_period(.,.), bgcolor("`bnr_white'") border(top, single, "`bnr_teal'")
+putpdf table refit_scope(1,1)  = ("DATA"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table refit_scope(1,5)  = ("METHODS"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table refit_scope(3,1)  = ("GOVERNANCE"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table refit_scope(3,5)  = ("REPORTING"), bold font("`font_title'", 8, "`bnr_teal'") border(top, single, "`bnr_teal'")
 
 putpdf paragraph
 putpdf table refit_opening_note = (2,1), width(100%) border(all, nil)
@@ -158,7 +156,11 @@ putpdf table refit_opening_note(2,1) = ("Preserve what BNR does well while makin
 putpdf table refit_opening_note(.,.), bgcolor("`bnr_white'") border(top, single, "`bnr_teal'")
 
 putpdf paragraph
-putpdf text ("The Special chapter describes programme development. The statistics elsewhere in this report remain governed by the definitions, uncertainty information and public-release boundaries described in Chapter 4."), font("`font_body'", 7.8, "`bnr_muted'")
+#delimit ;
+  putpdf text ("The Special chapter describes programme development. 
+                The statistics elsewhere in this report remain governed by the definitions, 
+                uncertainty information and public-release boundaries described in Chapter 4."), font("`font_body'", 7.8, "`bnr_muted'");
+#delimit cr
 
 
 * -----------------------------------------------------------------------------
@@ -173,17 +175,22 @@ putpdf paragraph
 putpdf text ("What the review examined"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
 
-putpdf text ("The review considered the pathway from case capture to public reporting. It examined documented processes, datasets, Stata programs, data definitions, quality controls and reporting products. The work identified a manageable set of connected improvements across case preparation, REDCap, analysis and governance."), font("`font_body'", 8.5, "`bnr_ink'")
+#delimit ;
+  putpdf text ("The review considered the pathway from case capture to public reporting. 
+                It examined documented processes, datasets, Stata programs, data definitions, quality controls and reporting products. 
+                The work identified a manageable set of connected improvements 
+                across case preparation, REDCap, analysis and governance."), font("`font_body'", 8.5, "`bnr_ink'");
+#delimit cr
 
 putpdf paragraph
 putpdf text ("How to read the status labels"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf table status_key = (2,5), width(100%) border(all, nil)
 putpdf table status_key(1,1) = ("Implemented"), bold font("`font_title'", 8.6, "`bnr_status_implemented'") halign(center) border(top, single, "`bnr_status_implemented'")
-putpdf table status_key(1,3) = ("Finalising"), bold font("`font_title'", 8.6, "`bnr_status_embedded'") halign(center) border(top, single, "`bnr_status_embedded'")
-putpdf table status_key(1,5) = ("Later development"), bold font("`font_title'", 8.6, "`bnr_status_later'") halign(center) border(top, single, "`bnr_status_later'")
+putpdf table status_key(1,3) = ("Being embedded"), bold font("`font_title'", 8.6, "`bnr_status_embedded'") halign(center) border(top, single, "`bnr_status_embedded'")
+putpdf table status_key(1,5) = ("Later phase"), bold font("`font_title'", 8.6, "`bnr_status_later'") halign(center) border(top, single, "`bnr_status_later'")
 putpdf table status_key(2,1) = ("Control introduced and operating"), font("`font_body'", 7.3, "`bnr_muted'") halign(center)
-putpdf table status_key(2,3) = ("Operating or completing agreed refinement and routine-use review"), font("`font_body'", 7.3, "`bnr_muted'") halign(center)
-putpdf table status_key(2,5) = ("Separate work planned beyond the routine reporting core"), font("`font_body'", 7.3, "`bnr_muted'") halign(center)
+putpdf table status_key(2,3) = ("Operating with refinement or routine-use review"), font("`font_body'", 7.3, "`bnr_muted'") halign(center)
+putpdf table status_key(2,5) = ("Approved later development"), font("`font_body'", 7.3, "`bnr_muted'") halign(center)
 
 putpdf paragraph
 putpdf text ("Areas strengthened through the refit"), bold font("`font_title'", 11, "`bnr_ink'")
@@ -208,11 +215,11 @@ putpdf table audit_public(5,1) = ("Implemented")
 putpdf table audit_public(5,2) = ("Duplicate resolution")
 putpdf table audit_public(5,3) = ("Event duplication controls needed greater consistency")
 putpdf table audit_public(5,4) = ("Maintained event rules and duplicate-resolution checks are applied before counting")
-putpdf table audit_public(6,1) = ("Implemented")
+putpdf table audit_public(6,1) = ("Being embedded")
 putpdf table audit_public(6,2) = ("REDCap quality")
 putpdf table audit_public(6,3) = ("Validation and metadata controls needed strengthening")
-putpdf table audit_public(6,4) = ("Core definitions, checks and documentation have been standardised")
-putpdf table audit_public(7,1) = ("Implemented")
+putpdf table audit_public(6,4) = ("Core definitions, checks and documentation are being standardised")
+putpdf table audit_public(7,1) = ("Being embedded")
 putpdf table audit_public(7,2) = ("Historical linkage")
 putpdf table audit_public(7,3) = ("Some older records contain fewer linkage identifiers")
 putpdf table audit_public(7,4) = ("Historical lineage has been reconstructed; remaining uncertainty is retained")
@@ -220,14 +227,15 @@ putpdf table audit_public(8,1) = ("Implemented")
 putpdf table audit_public(8,2) = ("Mortality evidence")
 putpdf table audit_public(8,3) = ("Routine national underlying-cause coding is not available to this workflow")
 putpdf table audit_public(8,4) = ("A transparent BNR classification provides Primary and Inclusive estimates")
-putpdf table audit_public(9,1) = ("Later development")
+putpdf table audit_public(9,1) = ("Next phase")
 putpdf table audit_public(9,2) = ("Extended analysis")
 putpdf table audit_public(9,3) = ("Survival and hospital-performance measures need dedicated development")
 putpdf table audit_public(9,4) = ("These remain separate from the stable routine reporting core")
 putpdf table audit_public(.,.), font("`font_body'", 6.9, "`bnr_ink'")
 putpdf table audit_public(1,.), bold font("`font_title'", 7.1, "`bnr_ink'") border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
 putpdf table audit_public(2/5,1), bold font("`font_title'", 7.2, "`bnr_status_implemented'") halign(center)
-putpdf table audit_public(6/8,1), bold font("`font_title'", 7.2, "`bnr_status_implemented'") halign(center)
+putpdf table audit_public(6/7,1), bold font("`font_title'", 7.2, "`bnr_status_embedded'") halign(center)
+putpdf table audit_public(8,1), bold font("`font_title'", 7.2, "`bnr_status_implemented'") halign(center)
 putpdf table audit_public(9,1), bold font("`font_title'", 7.2, "`bnr_status_later'") halign(center)
 putpdf table audit_public(2/9,2), bold
 
@@ -273,7 +281,7 @@ putpdf table improvements(8,1) = ("Documentation")
 putpdf table improvements(8,2) = ("Linked Operations, Technical and Methods manuals")
 putpdf table improvements(8,3) = ("Knowledge is easier to maintain and hand over")
 putpdf table improvements(9,1) = ("Reporting")
-putpdf table improvements(9,2) = ("Approved datasets feed dashboards, updates, annual reports and one-off reports")
+putpdf table improvements(9,2) = ("Approved datasets feed dashboards, updates and annual reports")
 putpdf table improvements(9,3) = ("The same statistic retains the same meaning")
 putpdf table improvements(.,.), font("`font_body'", 7.2, "`bnr_ink'")
 putpdf table improvements(1,.), bold font("`font_title'", 7.4, "`bnr_ink'") border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
@@ -300,7 +308,13 @@ putpdf paragraph
 putpdf text ("Professional judgement remains central"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
 
-putpdf text ("Automation performs repeatable calculation and checking. BNR staff still decide whether the declared inputs are appropriate, whether results are plausible, whether disclosure protection is sufficient, whether interpretation is suitable and whether the candidate should be released. Corrections are made in source data or version-controlled code and then rebuilt - never by manually changing a public file."), font("`font_body'", 8.3, "`bnr_ink'")
+#delimit ;
+  putpdf text ("Automation performs repeatable calculation and checking. 
+                BNR staff still decide whether the declared inputs are appropriate, whether results are plausible, 
+                whether disclosure protection is sufficient, whether interpretation is suitable and whether the candidate should be released. 
+                Corrections are made in source data or version-controlled code and then rebuilt - 
+                never by manually changing a public file."), font("`font_body'", 8.3, "`bnr_ink'");
+#delimit cr
 
 
 
@@ -317,7 +331,12 @@ putpdf paragraph
 putpdf text ("A foundation within the refit: the historical CVD record"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
 
-putpdf text ("The refit strengthens data, methods, governance and reporting together. One foundation for that wider programme was reconstruction of the 2009-2023 CVD record from the available historical sources. This work established what each source contained, how successive datasets had been created and which information could be carried safely into a controlled cumulative foundation."), font("`font_body'", 8.5, "`bnr_ink'")
+#delimit ; 
+  putpdf text ("The refit strengthens data, methods, governance and reporting together. 
+                One foundation for that wider programme was reconstruction of the 2009-2023 CVD record from the available historical sources. 
+                This work established what each source contained, how successive datasets had been created and which information 
+                could be carried safely into a controlled cumulative foundation."), font("`font_body'", 8.5, "`bnr_ink'");
+#delimit cr
 
 putpdf paragraph
 putpdf text ("Four stages of reconstruction"), bold font("`font_title'", 11, "`bnr_ink'")
@@ -348,10 +367,20 @@ putpdf paragraph
 putpdf text ("A practical example: recovering historical linkage information"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
 
-putpdf text ("During reconstruction, the team found that an anonymised historical file had been used as the base for several later cumulative analytical datasets. This propagated missing identifiers into subsequent files. Source tracing and code review clarified the lineage and allowed identifiers to be restored where suitable source information remained available."), font("`font_body'", 8.4, "`bnr_ink'")
+#delimit ; 
+  putpdf text ("During reconstruction, the team found that an anonymised historical file had been used as the base for 
+                several later cumulative analytical datasets. This propagated missing identifiers into subsequent files. 
+                Source tracing and code review clarified the lineage and allowed identifiers to be 
+                restored where suitable source information remained available."), font("`font_body'", 8.4, "`bnr_ink'");
+#delimit cr 
 
 putpdf paragraph
-putpdf text ("The remaining limitation is retained rather than hidden: some older records still contain fewer identifiers than recent records, so historical person-level linkage can be less certain. This does not mean that every historic event is uncertain; it means that analyses requiring linkage must respect the information available for each period."), font("`font_body'", 8.4, "`bnr_ink'")
+#delimit ; 
+  putpdf text ("The remaining limitation is retained rather than hidden: some older records still contain 
+                fewer identifiers than recent records, so historical person-level linkage can be less certain. 
+                This does not mean that every historic event is uncertain; it means that analyses requiring linkage 
+                must respect the information available for each period."), font("`font_body'", 8.4, "`bnr_ink'");
+#delimit cr
 
 putpdf table rebuild_note = (2,1), width(100%) border(all, nil)
 putpdf table rebuild_note(1,1) = ("WHAT THIS ENABLES"), bold font("`font_title'", 8.2, "`bnr_teal'")
@@ -376,15 +405,15 @@ putpdf table timeline_guide = (2,3), width(100%) border(all, nil)
 putpdf table timeline_guide(1,1) = ("WHAT HAS CHANGED")
 putpdf table timeline_guide(1,2) = ("WHAT IS OPERATING")
 putpdf table timeline_guide(1,3) = ("WHAT COMES NEXT")
-putpdf table timeline_guide(2,1) = ("Separate event and mortality workflows now feed shared, controlled reporting.")
-putpdf table timeline_guide(2,2) = ("Core event, mortality, dashboard, annual and one-off report workflows.")
-putpdf table timeline_guide(2,3) = ("Final testing, manuals and handover continue to March 2027; later analytical modules follow.")
+putpdf table timeline_guide(2,1) = ("Work is organised as named, documented workflows.")
+putpdf table timeline_guide(2,2) = ("Core data, metric, tabulation, briefing and reporting workflows.")
+putpdf table timeline_guide(2,3) = ("Documentation maturation, national event estimation and later analytical modules.")
 putpdf table timeline_guide(1,.), bold font("`font_title'", 6.5, "`bnr_teal'") border(top, single, "`bnr_teal'")
 putpdf table timeline_guide(2,.), font("`font_body'", 6.2, "`bnr_muted'")
 putpdf table refit_timeline_fig = (1,1), width(80%) border(all, nil) halign(center)
 putpdf table refit_timeline_fig(1,1) = image("`refit_timeline'"), halign(center)
 putpdf paragraph
-putpdf text ("Programme view at December 2026. Core workflows are operating; final testing, manuals and handover continue to March 2027. Later analytical modules remain a separate development phase."), italic font("`font_body'", 7.2, "`bnr_muted'")
+putpdf text ("Programme view dated 31 August 2026. The graphic records the planning position at that date; individual workstreams may advance through later approved implementation cycles."), italic font("`font_body'", 7.2, "`bnr_muted'")
 
 * -----------------------------------------------------------------------------
 * 6. Landscape figure - the reporting system
@@ -397,21 +426,19 @@ putpdf sectionbreak, pagesize(A4) landscape margin(top, 0.55) margin(bottom, 0.5
 putpdf paragraph
 putpdf text ("Special chapter | The BNR Refit"), bold font("`font_title'", 8, "`bnr_teal'")
 putpdf paragraph, font("`font_body'", 1)
-putpdf table system_guide = (2,4), width(100%) border(all, nil)
+putpdf table system_guide = (2,3), width(100%) border(all, nil)
 putpdf table system_guide(1,1) = ("DATA FOUNDATION")
-putpdf table system_guide(1,2) = ("DEFINITIONS AND METHODS")
-putpdf table system_guide(1,3) = ("ASSURANCE AND GOVERNANCE")
-putpdf table system_guide(1,4) = ("PUBLIC REPORTING")
-putpdf table system_guide(2,1) = ("Case capture, monthly data releases and maintained source data.")
-putpdf table system_guide(2,2) = ("Event, mortality and DCO identification with common metric methods.")
-putpdf table system_guide(2,3) = ("Validation, review, approval, disclosure control and versioning.")
-putpdf table system_guide(2,4) = ("Dashboards, linked outputs, reports and transparent online methods.")
+putpdf table system_guide(1,2) = ("CONTROLLED PRODUCTION")
+putpdf table system_guide(1,3) = ("PUBLIC PRODUCTS")
+putpdf table system_guide(2,1) = ("Case capture, managed registry data and maintained historical records.")
+putpdf table system_guide(2,2) = ("Definitions, checks, human review, approval and disclosure control.")
+putpdf table system_guide(2,3) = ("Separate tabulations, briefings, dashboards, Information Hub outputs and annual reports.")
 putpdf table system_guide(1,.), bold font("`font_title'", 6.5, "`bnr_teal'") border(top, single, "`bnr_teal'")
 putpdf table system_guide(2,.), font("`font_body'", 6.2, "`bnr_muted'")
-putpdf table refit_system_fig = (1,1), width(80%) border(all, nil) halign(center)
+putpdf table refit_system_fig = (1,1), width(66%) border(all, nil) halign(center)
 putpdf table refit_system_fig(1,1) = image("`refit_system'"), halign(center)
 putpdf paragraph
-putpdf text ("The four connected areas form one reporting system. Approved data use common definitions and methods, pass through explicit assurance and governance controls, and support several distinct public products."), italic font("`font_body'", 7.2, "`bnr_muted'")
+putpdf text ("The reporting system connects case capture, data management, controlled metric production and public reporting. Each component has a defined role, while review and approval remain explicit human decisions."), italic font("`font_body'", 7.2, "`bnr_muted'")
 
 * -----------------------------------------------------------------------------
 * 7. Closing page - current position and public value
@@ -424,21 +451,21 @@ putpdf sectionbreak, pagesize(A4) margin(top, 0.55) margin(bottom, 0.55) margin(
 putpdf paragraph
 putpdf text ("Where the refit stands"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The core reporting architecture is operating. Final testing, manuals and staff handover continue to March 2027; later analytical modules remain separate from the routine reporting core."), font("`font_body'", 8.5, "`bnr_ink'")
+putpdf text ("The central reporting architecture is now operating. Further work is being managed as defined refinements and later analytical phases rather than being allowed to destabilise the routine reporting core."), font("`font_body'", 8.5, "`bnr_ink'")
 
 putpdf table current_position = (4,3), width(100%) border(all, nil)
 putpdf table current_position(1,1) = ("DELIVERED AND OPERATIONAL")
-putpdf table current_position(1,2) = ("FINALISING BY MARCH 2027")
-putpdf table current_position(1,3) = ("LATER DEVELOPMENT")
-putpdf table current_position(2,1) = ("CVD event, mortality and DCO identification and release workflows")
-putpdf table current_position(2,2) = ("End-to-end system testing and routine-use review")
-putpdf table current_position(2,3) = ("Survival analysis")
-putpdf table current_position(3,1) = ("Dashboards with linked tables and monthly update reports")
-putpdf table current_position(3,2) = ("Technical, Operations and public Methods manual completion")
+putpdf table current_position(1,2) = ("BEING EMBEDDED")
+putpdf table current_position(1,3) = ("LATER PHASES")
+putpdf table current_position(2,1) = ("Event and mortality release workflows")
+putpdf table current_position(2,2) = ("DCO linkage and national event-estimation refinements")
+putpdf table current_position(2,3) = ("Survival and case-fatality analysis")
+putpdf table current_position(3,1) = ("Metric calculation, disclosure review and publication")
+putpdf table current_position(3,2) = ("Routine use, documentation review and staff handover")
 putpdf table current_position(3,3) = ("Hospital performance measures")
-putpdf table current_position(4,1) = ("Annual and one-off report workflows")
-putpdf table current_position(4,2) = ("Staff handover and completion of operating guidance")
-putpdf table current_position(4,3) = ("Carefully assessed new analytical modules")
+putpdf table current_position(4,1) = ("Tabulations, briefings, dashboards and annual reporting")
+putpdf table current_position(4,2) = ("Continued improvement of the Information Hub")
+putpdf table current_position(4,3) = ("Periodic research analyses and carefully assessed new modules")
 putpdf table current_position(.,.), font("`font_body'", 7.5, "`bnr_ink'")
 putpdf table current_position(1,1), bold font("`font_title'", 8.0, "`bnr_status_implemented'") border(top, single, "`bnr_status_implemented'")
 putpdf table current_position(1,2), bold font("`font_title'", 8.0, "`bnr_status_embedded'") border(top, single, "`bnr_status_embedded'")
@@ -465,7 +492,7 @@ putpdf table national_value(.,1), bold font("`font_title'", 8.5, "`bnr_teal'") h
 putpdf paragraph
 putpdf table closing_note = (2,1), width(100%) border(all, nil)
 putpdf table closing_note(1,1) = ("THE PRACTICAL OBJECTIVE"), bold font("`font_title'", 8.2, "`bnr_teal'")
-putpdf table closing_note(2,1) = ("The same published statistic should mean the same thing wherever it is encountered - in a dataset, dashboard, monthly update, one-off report or annual report."), bold font("`font_title'", 8.8, "`bnr_ink'")
+putpdf table closing_note(2,1) = ("The same published statistic should mean the same thing wherever it is encountered - in a dataset, dashboard, rolling update or annual report."), bold font("`font_title'", 8.8, "`bnr_ink'")
 putpdf table closing_note(.,.), bgcolor("`bnr_white'") border(top, single, "`bnr_teal'")
 
 putpdf paragraph
