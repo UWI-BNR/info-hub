@@ -794,6 +794,7 @@ putpdf paragraph
 putpdf text ("The annual report is a reader of approved public statistics, not a second analytical workflow. It does not reopen confidential records, redo linkage, recalculate rates or confidence intervals, or reconstruct protected values."), bold font("`font_title'", 8.3, "`bnr_teal'")
 
 
+** NEW METHODS PAGE. How CVD events are identified
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD events are identified"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -859,7 +860,7 @@ putpdf table methods_event_note = (1,1), width(100%) border(all, nil)
 putpdf table methods_event_note(1,1) = ("WHEN READING THE REPORT | Compare event series only when their disease definition, source coverage, period and population are compatible."), bold font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_event_note(1,1), border(top, single, "`bnr_teal'")
 
-
+** NEW METHODS PAGE. Extending the picture using death records
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("Extending the picture using death records"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -919,6 +920,7 @@ putpdf table methods_linkage_note(1,1) = ("WHEN READING THE REPORT | A wider lin
 putpdf table methods_linkage_note(1,1), border(top, single, "`bnr_teal'")
 
 
+** NEW METHODS PAGE. How CVD deaths are classified
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD deaths are classified"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -986,7 +988,7 @@ putpdf table methods_mort_note(1,1), border(top, single, "`bnr_teal'")
 
 
 
-putpdf pagebreak
+** NEW METHODS PAGE. How the report measures CVD
 putpdf paragraph
 putpdf text ("How the report measures CVD"), bold font("`font_title'", 14, "`bnr_ink'")
 
@@ -1066,7 +1068,8 @@ putpdf table methods_measure_note = (1,1), width(100%) border(all, nil)
 putpdf table methods_measure_note(1,1) = ("WHEN READING THE REPORT | Counts describe volume. Rates support population comparison. Age-standardised rates support fairer comparison across differently aged populations, but are not actual counts."), bold font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_measure_note(1,1), border(top, single, "`bnr_teal'")
 
-putpdf pagebreak
+
+** NEW METHODS PAGE. Understanding uncertainty, comparisons and time
 putpdf paragraph
 putpdf text ("Understanding uncertainty, comparisons and time"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
@@ -1152,7 +1155,7 @@ putpdf table methods_uncertainty_note = (1,1), width(100%) border(all, nil)
 putpdf table methods_uncertainty_note(1,1) = ("WHEN READING THE REPORT | Do not combine a statistical confidence interval, a DCO linkage range and the Primary-Inclusive difference into one overall interval. They answer different questions."), bold font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_uncertainty_note(1,1), border(top, single, "`bnr_teal'")
 
-
+** NEW METHODS PAGE. Data quality, confidentiality and publication
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("Data quality, confidentiality and publication"), bold font("`font_title'", 14, "`bnr_ink'")

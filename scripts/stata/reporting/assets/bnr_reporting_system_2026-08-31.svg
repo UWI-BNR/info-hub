@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="960" viewBox="0 0 1536 960">
+  <rect width="1536" height="960" fill="#ffffff"/>
+  <rect x="22" y="22" width="1492" height="916" rx="16" fill="#ffffff" stroke="#9db0c3" stroke-width="1.5"/>
+  <style>
+    .title {font: 700 32px 'Montserrat', Arial, sans-serif; fill:#0b284c}
+    .subtitle {font: italic 18px 'Montserrat', Arial, sans-serif; fill:#007b83}
+    .head {font: 700 18px 'Montserrat', Arial, sans-serif; fill:#0b284c}
+    .cardhead {font: 700 16px 'Montserrat', Arial, sans-serif; fill:#0b284c}
+    .cardtext {font: 14px 'Montserrat', Arial, sans-serif; fill:#38536d}
+    .small {font: 14px 'Montserrat', Arial, sans-serif; fill:#38536d}
+    .tag {font: 700 13px 'Montserrat', Arial, sans-serif; fill:#ffffff}
+  </style>
+  <text x="55" y="72" class="title">BNR REPORTING SYSTEM</text>
+  <text x="55" y="102" class="subtitle">A controlled route from registry data to parallel public products</text>
+  <line x1="55" y1="126" x2="1480" y2="126" stroke="#d5a520" stroke-width="2"/>
+
+  <text x="70" y="170" class="head">1. DATA FOUNDATION</text>
+  <text x="500" y="170" class="head">2. ANALYTICAL WORKFLOWS</text>
+  <text x="980" y="170" class="head">3. PUBLIC PRODUCTS</text>
+  <g fill="#f7fafb" stroke="#d5dde5">
+    <rect x="55" y="190" width="360" height="110" rx="12"/><rect x="55" y="320" width="360" height="110" rx="12"/><rect x="55" y="450" width="360" height="110" rx="12"/>
+    <rect x="465" y="190" width="410" height="110" rx="12"/><rect x="465" y="320" width="410" height="110" rx="12"/><rect x="465" y="450" width="410" height="110" rx="12"/>
+    <rect x="925" y="190" width="250" height="110" rx="12"/><rect x="1205" y="190" width="250" height="110" rx="12"/><rect x="925" y="320" width="250" height="110" rx="12"/><rect x="1205" y="320" width="250" height="110" rx="12"/>
+  </g>
+  <g>
+    <circle cx="87" cy="222" r="16" fill="#007b83"/><text x="87" y="228" text-anchor="middle" class="tag">A</text><text x="115" y="228" class="cardhead">Case capture</text><text x="115" y="253" class="cardtext">Registry case information</text>
+    <circle cx="87" cy="352" r="16" fill="#007b83"/><text x="87" y="358" text-anchor="middle" class="tag">B</text><text x="115" y="358" class="cardhead">REDCap data management</text><text x="115" y="383" class="cardtext">Defined fields and quality checks</text>
+    <circle cx="87" cy="482" r="16" fill="#007b83"/><text x="87" y="488" text-anchor="middle" class="tag">C</text><text x="115" y="488" class="cardhead">Maintained historical record</text><text x="115" y="513" class="cardtext">Known lineage and controlled base</text>
+  </g>
+  <g>
+    <circle cx="497" cy="222" r="16" fill="#0b7a75"/><text x="497" y="228" text-anchor="middle" class="tag">1</text><text x="525" y="228" class="cardhead">Event metrics</text><text x="525" y="253" class="cardtext">Counts, rates and quality summaries</text>
+    <circle cx="497" cy="352" r="16" fill="#b97800"/><text x="497" y="358" text-anchor="middle" class="tag">2</text><text x="525" y="358" class="cardhead">Mortality metrics</text><text x="525" y="383" class="cardtext">Primary and Inclusive mortality estimates</text>
+    <circle cx="497" cy="482" r="16" fill="#b97800"/><text x="497" y="488" text-anchor="middle" class="tag">3</text><text x="525" y="488" class="cardhead">National event estimation</text><text x="525" y="513" class="cardtext">DCO linkage and refinement work</text>
+  </g>
+  <g>
+    <circle cx="957" cy="222" r="16" fill="#569d33"/><text x="957" y="228" text-anchor="middle" class="tag">T</text><text x="985" y="228" class="cardhead">Tabulations</text><text x="985" y="253" class="cardtext">Standard tables</text>
+    <circle cx="1237" cy="222" r="16" fill="#f26b21"/><text x="1237" y="228" text-anchor="middle" class="tag">B</text><text x="1265" y="228" class="cardhead">Briefings</text><text x="1265" y="253" class="cardtext">Regular updates</text>
+    <circle cx="957" cy="352" r="16" fill="#286fb4"/><text x="957" y="358" text-anchor="middle" class="tag">D</text><text x="985" y="358" class="cardhead">Dashboards and Info Hub</text><text x="985" y="383" class="cardtext">Published metrics and context</text>
+    <circle cx="1237" cy="352" r="16" fill="#173457"/><text x="1237" y="358" text-anchor="middle" class="tag">R</text><text x="1265" y="358" class="cardhead">Annual reports</text><text x="1265" y="383" class="cardtext">Approved public narrative</text>
+  </g>
+  <text x="465" y="588" class="small">Shared definitions and managed data connect the foundation, analytical workflows and parallel public products.</text>
+
+  <rect x="55" y="610" width="1400" height="116" rx="14" fill="#eef5f7" stroke="#88b7bd"/>
+  <text x="82" y="647" class="head">CONTROLLED RELEASE GATE</text>
+  <text x="82" y="678" class="cardtext">Named release</text><text x="315" y="678" class="cardtext">Automated validation</text><text x="625" y="678" class="cardtext">Human review and approval</text><text x="995" y="678" class="cardtext">Disclosure protection</text><text x="1255" y="678" class="cardtext">Publication</text>
+  <g stroke="#007b83" stroke-width="2.5" fill="none"><path d="M210 672 H286"/><path d="M500 672 H596"/><path d="M880 672 H965"/><path d="M1175 672 H1230"/></g>
+  <g fill="#007b83"><path d="M276 665 l10 7 -10 7z"/><path d="M586 665 l10 7 -10 7z"/><path d="M955 665 l10 7 -10 7z"/><path d="M1220 665 l10 7 -10 7z"/></g>
+  <text x="82" y="705" class="small">Each public product is created from declared inputs; corrections are made in data or version-controlled code, then rebuilt and reviewed.</text>
+
+  <text x="70" y="784" class="head">LATER ANALYTICAL MODULES</text>
+  <rect x="55" y="804" width="390" height="82" rx="12" fill="#f6f8fa" stroke="#c7d2dd"/><rect x="470" y="804" width="390" height="82" rx="12" fill="#f6f8fa" stroke="#c7d2dd"/>
+  <text x="82" y="839" class="cardhead">Survival and case-fatality analysis</text><text x="82" y="865" class="cardtext">Dedicated next-phase development</text>
+  <text x="497" y="839" class="cardhead">Hospital-performance measures</text><text x="497" y="865" class="cardtext">Dedicated next-phase development</text>
+  <text x="55" y="922" class="small">The public products are parallel outputs of shared, approved analytical releases—not a single sequential reporting chain.</text>
+</svg>
