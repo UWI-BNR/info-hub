@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Review and approve combined CVD metrics"
 description: "Step 5: prepare disclosure-review evidence and record approval."
 ---
@@ -16,11 +16,11 @@ rebuild the review state.
 
 Review, at minimum:
 
-- `step5_review.xlsx` — human review guide;
-- `step5_disclosure_qa.csv` — every row must be `PASS`;
-- `step5_equation_audit.csv` — annual count/rate representation closure;
-- `step5_row_audit.dta` — protection propagation and numeric blanking; and
-- `step5_review_basis.csv` — fingerprints of the reviewed evidence.
+- `step5_review.xlsx` â€” human review guide;
+- `step5_disclosure_qa.csv` â€” every row must be `PASS`;
+- `step5_equation_audit.csv` â€” annual count/rate representation closure;
+- `step5_row_audit.dta` â€” protection propagation and numeric blanking; and
+- `step5_review_basis.csv` â€” fingerprints of the reviewed evidence.
 
 For annual DCO counts, check that the review records the protected identity
 `hospital only + additional DCO = hospital plus DCO`. Do not edit generated
@@ -43,3 +43,4 @@ publish. Use `replace` only for a deliberate re-approval of the same release.
 The public-ready candidate must not contain private linkage, component,
 allocation or suppression-decision fields. Protected rows remain in the public
 dataset with blank numeric fields and `display_value: *`.
+

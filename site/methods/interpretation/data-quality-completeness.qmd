@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Data quality and completeness"
 description: "How data quality affects BNR statistics and their interpretation."
 ---
@@ -51,4 +51,5 @@ A limitation does not make a statistic unusable. It defines the questions the st
 - [From health records to published statistics](../about/records-to-statistics.qmd)
 - [Releases, revisions and comparability](revisions-comparability.qmd)
 - [Protecting confidentiality](confidentiality.qmd)
+
 

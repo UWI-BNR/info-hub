@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Research Data Sharing Agreement"
 description: "How BNR staff issue, approve, store and audit the Research Data Sharing Agreement."
 ---
@@ -56,3 +56,4 @@ Save the completed page as a PDF, then attach it to an email using the button be
 - [Handle data-access requests](../../governance/data-access-requests.qmd)
 - [Data sharing and re-use procedure](sharing-sop.qmd)
 - [Technical Manual: disclosure control](../../../technical/controls/disclosure-control.qmd)
+

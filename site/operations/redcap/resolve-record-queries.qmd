@@ -1,12 +1,12 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Resolve record queries"
 description: "BNR team draft for resolving duplicates, missing information and uncertain event records."
 ---
 
 ---
 
-::: {.callout-warning title="BNR team draft — additions invited"}
+::: {.callout-warning title="BNR team draft â€” additions invited"}
 This page is deliberately incomplete. BNR staff should add the normal query route, decision authority and examples before approving the procedure.
 :::
 
@@ -38,4 +38,5 @@ Describe how BNR identifies, investigates, resolves and records queries affectin
 - [Create and complete a new record](create-complete-record.qmd)
 - [Approve a data record](approve-data-record.qmd)
 - [Authorise a data release](../release/data-release.qmd)
+
 

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Releases, revisions and comparability"
 description: "How to compare BNR statistics across releases and periods."
 ---
@@ -23,7 +23,7 @@ records, resolved outcomes, source corrections or a defined method change.
 
 ## Stable and release-stamped outputs
 
-A stable “current” file is convenient for users who need the latest approved data. A release-stamped file supports reproducibility because it identifies the exact historical release used in an analysis.
+A stable â€œcurrentâ€ file is convenient for users who need the latest approved data. A release-stamped file supports reproducibility because it identifies the exact historical release used in an analysis.
 
 For research or formal reporting, retain the release identifier, coverage date, dataset metadata and access date rather than relying only on a copied value.
 
@@ -62,3 +62,4 @@ When a data source, definition or coverage rule changes, part of the apparent tr
 - [Data quality and completeness](data-quality-completeness.qmd)
 - [From health records to published statistics](../about/records-to-statistics.qmd)
 - [Data downloads](../../downloads/index.qmd)
+

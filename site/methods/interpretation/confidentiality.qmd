@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Protecting confidentiality"
 description: "How BNR reduces disclosure risk in public statistics."
 ---
@@ -50,3 +50,4 @@ Access to restricted, de-identified research data requires a separate applicatio
 
 - [Research data access](../responsible-data-use/research-data-access.qmd)
 - [Research Data Sharing Agreement](../responsible-data-use/dsa-methods.qmd)
+

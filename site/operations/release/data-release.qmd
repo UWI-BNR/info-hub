@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Authorise a data release"
 subtitle: "Confirm the reporting period, then use CVD events Step 1 to extract the cumulative REDCap data"
 ---
@@ -55,3 +55,4 @@ Confirm the operational sign-off used before extraction, the normal monthly timi
 ## Detailed technical instructions
 
 Use [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.
+

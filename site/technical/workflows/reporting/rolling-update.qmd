@@ -1,7 +1,7 @@
----
+﻿---
 title: "Build a rolling three-month CVD update"
 description: "Run the controlled one-step builder for a dated online update from approved public releases."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## What the builder does
@@ -43,3 +43,4 @@ Confirm that:
 
 The generated page is an instance, not a new template. Change future design in
 `scripts/stata/reporting/templates/bnr_report_update_template.qmd` and rebuild.
+

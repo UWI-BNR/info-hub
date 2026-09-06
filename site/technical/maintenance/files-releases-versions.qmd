@@ -1,7 +1,7 @@
----
+﻿---
 title: "Files, releases and versions"
 description: "Identify authoritative, private, public and mirrored BNR files and apply current version rules."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Location determines authority
@@ -16,8 +16,8 @@ manual-review-status: reviewed-by-irh
 
 ## Release identity
 
-Use the complete workflow identity—product, reporting period, source release and
-version—at every step. Do not rely on a filename containing `current` to
+Use the complete workflow identityâ€”product, reporting period, source release and
+versionâ€”at every step. Do not rely on a filename containing `current` to
 identify the source of a reproducible build.
 
 Event and mortality workflows create release-stamped public packages and a
@@ -53,7 +53,7 @@ new approval.
 | Quarto wording or layout wrong | Correct Quarto source; repeat substantive review if interpretation changes. |
 | Website mirror missing or damaged | Recreate it from the authoritative approved package. |
 
-Do not retain duplicate “new” pages or manually patched generated files.
+Do not retain duplicate â€œnewâ€ pages or manually patched generated files.
 Use Git history to recover version-controlled source and the controlled
 authoritative stores to recover approved public packages.
 
@@ -62,3 +62,4 @@ authoritative stores to recover approved public packages.
 Check that Git status contains only intended public-safe source and approved
 public assets. Private paths, tokens, logs, approval evidence, workbooks and
 staging files must not be committed.
+

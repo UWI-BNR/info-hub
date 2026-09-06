@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "How CVD events are classified"
 description: "How BNR applies consistent event, source, residence and period rules."
 ---
@@ -51,4 +51,5 @@ The output metadata should identify the event type, source coverage, residence r
 - [Number of CVD events](../measures/cvd-event-counts.qmd)
 - [CVD incidence and event rates](../measures/incidence.qmd)
 - [Releases, revisions and comparability](revisions-comparability.qmd)
+
 

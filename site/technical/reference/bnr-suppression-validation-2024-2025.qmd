@@ -1,7 +1,7 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Validation of BNR CVD Suppression Rules"
-subtitle: "Review of 24 monthly releases, 2024–2025"
+subtitle: "Review of 24 monthly releases, 2024â€“2025"
 format:
   html:
     toc: true
@@ -25,7 +25,7 @@ For each monthly release, the review checked:
 - every suppressed row;
 - the private pre-suppression value;
 - the primary small-count rule;
-- the previous month’s equivalent value;
+- the previous monthâ€™s equivalent value;
 - whether the previous value had been public;
 - any release-to-release increment;
 - complementary suppression within event-by-sex panels;
@@ -142,6 +142,7 @@ Material changes to the output structure or disclosure rules should trigger rene
 
 The BNR rules draw on the principles in the *Handbook on Statistical Disclosure Control for Outputs*, Version 2.0. The Handbook emphasises thresholds, secondary disclosure, differencing across outputs, protection of percentages based on small counts, and the value of clear audit processes.
 
-BNR has adopted a local primary threshold of fewer than 6 events. This differs from the threshold of 10 used in the Handbook’s examples and reflects the BNR’s agreed output policy and context.
+BNR has adopted a local primary threshold of fewer than 6 events. This differs from the threshold of 10 used in the Handbookâ€™s examples and reflects the BNRâ€™s agreed output policy and context.
 
 [Open the Handbook on Statistical Disclosure Control for Outputs](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf)
+

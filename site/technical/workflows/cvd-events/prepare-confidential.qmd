@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Prepare the confidential dataset"
 description: "Step 2: combine the selected REDCap release with the frozen historical CVD dataset."
 ---
@@ -58,3 +58,4 @@ do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2024 1
 Read the **Reason** and **Log** lines in the operational summary.
 
 First check that the frozen historical file exists and that Step 1 was completed for the same year and month. Correct the reported problem and rerun Step 2. Do not use output from an incomplete run.
+

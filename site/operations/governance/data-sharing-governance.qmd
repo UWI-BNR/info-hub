@@ -1,7 +1,7 @@
----
+﻿---
 title: "Data sharing and governance"
 description: "The authoritative Operations Manual route for requests to use non-public BNR data."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Scope
@@ -39,3 +39,4 @@ prepare a dataset.
 Applications, requester details, agreements, ethics evidence, approval records,
 transfer logs and non-public datasets remain in authorised private systems.
 Only approved public-safe summaries or outputs may enter the Info-Hub.
+

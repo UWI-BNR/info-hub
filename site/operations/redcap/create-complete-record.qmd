@@ -1,12 +1,12 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Create and complete a new record"
 description: "BNR team draft for creating one authoritative CVD event record in REDCap."
 ---
 
 ---
 
-::: {.callout-warning title="BNR team draft — additions invited"}
+::: {.callout-warning title="BNR team draft â€” additions invited"}
 This page is deliberately incomplete. BNR staff should add the agreed local procedure, examples and decision points before it is approved as an operational procedure.
 :::
 
@@ -39,4 +39,5 @@ Describe how an authorised member of staff creates, completes and checks one RED
 - [Abstract source information](../pre-redcap/abstract-verify.qmd)
 - [Resolve record queries](resolve-record-queries.qmd)
 - [Approve a data record](approve-data-record.qmd)
+
 

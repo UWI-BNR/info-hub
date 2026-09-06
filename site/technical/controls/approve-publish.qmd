@@ -1,7 +1,7 @@
----
+﻿---
 title: "Approve and publish a release"
 description: "Bind approval to an exact candidate and publish only its controlled payload."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Core rule
@@ -47,3 +47,4 @@ source. Neither action substitutes for analytical approval or publication.
 If any approved content must change, correct the source or version-controlled
 code, create the required new version or authorised replacement, and repeat
 review and approval. Never overwrite or manually repair the generated payload.
+

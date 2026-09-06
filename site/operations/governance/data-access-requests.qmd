@@ -1,7 +1,7 @@
----
+﻿---
 title: "Handle a data-access request"
 description: "A controlled route from enquiry to an authorised data-sharing decision."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Receive and classify
@@ -54,3 +54,4 @@ BNR must confirm the intake contact, decision authority by access class,
 agreement signatories, service targets, authoritative register and approved
 transfer methods. Until confirmed, stop and refer the request to the BNR Lead.
 :::
+

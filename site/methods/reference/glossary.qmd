@@ -1,10 +1,10 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Glossary"
 description: "Plain-language definitions of terms used in BNR publications."
 ---
 
-## A–C
+## Aâ€“C
 
 **Acute myocardial infarction (AMI)**  
 The clinical term commonly used for a heart attack.
@@ -27,7 +27,7 @@ The practical method BNR uses to classify cardiovascular deaths from death-certi
 **Crude rate**  
 The observed event count divided by the relevant population, without age adjustment.
 
-## D–I
+## Dâ€“I
 
 **Death-certificate-only (DCO) event**  
 An eligible event identified from death information without a matching eligible hospital-registered event.
@@ -48,7 +48,7 @@ The number of eligible events relative to a stated population and period, often 
 The occurrence of new disease or health events in a population over time. In BNR CVD publications, check whether the displayed measure is specifically an event rate and which sources are included.
 
 **Historical reference band**  
-A fixed range from a stated historical period used to give context to a current value. In the mortality dashboard, the monthly band uses the minimum and maximum for each calendar month during 2015–2019 and is not recalculated with each release.
+A fixed range from a stated historical period used to give context to a current value. In the mortality dashboard, the monthly band uses the minimum and maximum for each calendar month during 2015â€“2019 and is not recalculated with each release.
 
 **Inclusive mortality definition**  
 The broader BNR CVD mortality definition containing deaths classified as Clear, Likely or Possible. It includes every death in the Primary definition.
@@ -56,7 +56,7 @@ The broader BNR CVD mortality definition containing deaths classified as Clear, 
 **Interquartile range (IQR)**  
 The span from the 25th to the 75th percentile, containing the middle half of observed values.
 
-## L–R
+## Lâ€“R
 
 **Length of stay**  
 The number of hospital days between admission and the hospital-end date under the stated rules. A same-day eligible admission counts as one day.
@@ -82,7 +82,7 @@ The main BNR CVD mortality definition containing deaths classified as Clear or L
 **Release**  
 An approved, identifiable version of a public dataset or output package.
 
-## S–Z
+## Sâ€“Z
 
 **Secondary suppression**  
 Hiding an additional value so that a directly protected small value cannot be calculated from published totals.
@@ -100,3 +100,4 @@ The continuing, systematic use of health information to monitor patterns and sup
 
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Measures overview](../measures/index.qmd)
+

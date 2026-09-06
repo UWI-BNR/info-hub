@@ -17,7 +17,7 @@ search: true
 manual-review-status: not-reviewed
 manual-review-display: true
 filters:
-  - _filters/manual-review-status.lua
+  - ../_filters/manual-review-status.lua
 
 format:
   html:

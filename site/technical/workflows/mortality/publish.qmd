@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Publish approved mortality outputs"
 description: "Mortality Step 6: verify and promote the exact ten-file mortality payload approved in Step 5."
 ---
@@ -87,3 +87,4 @@ See [Maintain the CVD mortality dashboard](../../website/cvd-mortality-dashboard
 A filesystem failure may occur after an earlier copy has succeeded. Inspect both the authoritative public folder and website mirror before rerunning.
 
 Do not repair a partial publication by hand-copying individual files.
+

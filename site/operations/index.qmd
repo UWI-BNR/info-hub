@@ -1,7 +1,7 @@
----
+﻿---
 title: "Operations Manual"
 description: "How the Barbados National Registry carries out, governs and records its routine work."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ::: {#operations-manual-sections}
@@ -165,3 +165,4 @@ tables, dashboards and downloads reuse approved metric releases. Pages covering
 work before and within REDCap remain visible BNR-team drafts for BNR staff to
 complete and approve. The historical refit pages remain **Not reviewed** and
 will be handled as a separate bounded task.
+

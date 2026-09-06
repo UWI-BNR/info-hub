@@ -1,7 +1,7 @@
----
+﻿---
 title: "Prepare, approve and publish a one-off CVD report"
 description: "Operate the controlled three-step publication route for a finished bespoke report."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Before the controlled workflow
@@ -41,3 +41,4 @@ negative or non-integer counts and duplicate identifiers.
 The screen does not change the source dataset, apply secondary suppression or
 approve the report. Its output remains private review evidence. The analyst must
 review the complete proposed report for direct and indirect disclosure risk.
+

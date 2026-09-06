@@ -1,6 +1,6 @@
 ﻿---
 title: "BNR Metric Specification Register"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 subtitle: "Standing definitions for approved information hub metrics"
 version: "Draft v0.1"
 format:
@@ -339,3 +339,4 @@ where \(i\) is an eligible record with valid abstraction timing fields.
 |---|---|---|---|
 | Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR Information Hub | BNR refit team |
 | Draft v0.2 | 2026-08-11 | Clarified event-rate sources, case-fatality denominator and length-of-stay validity rules | Ian Hambleton / BNR refit |
+

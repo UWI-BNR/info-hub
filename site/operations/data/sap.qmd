@@ -1,6 +1,6 @@
 ﻿---
 title: "BNR Information Hub Statistical Analysis Plan"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 subtitle: "Standing analytical methods for BNR metrics and published analytical outputs"
 version: "Draft v0.1"
 format:
@@ -443,3 +443,4 @@ Changes to individual metric definitions are recorded in the [BNR Metric Specifi
 | Version | Date | Summary | Author |
 |---|---|---|---|
 | Draft v0.1 | 2026-05-15 | Initial draft SAP for the BNR information hub metric system |
+

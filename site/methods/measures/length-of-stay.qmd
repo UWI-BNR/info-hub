@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Hospital length of stay"
 description: "How BNR summarises hospital stay following a registered CVD event."
 ---
@@ -62,3 +62,4 @@ A change in length of stay can reflect clinical need, pathways of care, discharg
 - [CVD case fatality](case-fatality.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
 - [CVD reference tables](../../surveillance/cvd/tables/index.qmd)
+

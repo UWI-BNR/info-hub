@@ -1,7 +1,7 @@
----
+﻿---
 title: "Build, approve and publish an annual CVD report"
 description: "Operate the controlled three-step annual-report workflow."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Before Step 1
@@ -42,3 +42,4 @@ the authoritative public report, website PDF mirror, landing page and metadata.
 A correction uses a higher approved version at the same stable period location.
 The superseded working-tree report is recoverable through Git history; do not
 retain parallel public copies or edit the generated PDF manually.
+

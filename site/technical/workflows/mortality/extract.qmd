@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Extract mortality data"
 description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
 ---
@@ -61,3 +61,4 @@ Add `replace` only for a deliberate rebuild of an existing Step 1 release.
 Read the reason and log path in the failure summary. Check the selected month, mortality token-file configuration, REDCap access and private output path.
 
 Do not use files from an incomplete run.
+

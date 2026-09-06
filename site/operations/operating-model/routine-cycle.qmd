@@ -1,7 +1,7 @@
----
+﻿---
 title: "From cases to statistics"
 description: "The linked route from case finding through REDCap to approved BNR statistics."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Purpose
@@ -31,7 +31,7 @@ REDCap is the authoritative location for record-level corrections. Generated ext
 | Stage | Main action | Procedure |
 |---|---|---|
 | **Authorise the release** | Confirm the reporting period and extract the cumulative REDCap release through Stata | [Authorise a data release](../release/data-release.qmd) |
-| **Prepare CVD event outputs** | Run shared CVD preparation Steps 1–3 and CVD event Steps 4–6 | [CVD events workflow](../post-redcap/cvd-events-workflow.qmd) |
+| **Prepare CVD event outputs** | Run shared CVD preparation Steps 1â€“3 and CVD event Steps 4â€“6 | [CVD events workflow](../post-redcap/cvd-events-workflow.qmd) |
 | **Produce CVD mortality outputs** | Run the separate six-step mortality extraction, classification and publication pathway | [CVD mortality workflow](../post-redcap/mortality-workflow.qmd) |
 | **Present public tables, dashboards and downloads** | Reuse approved public metric releases without creating another analytical route | [Post-REDCap overview](../post-redcap/index.qmd) |
 | **Produce reports** | Build the rolling update or prepare, approve and publish an annual or one-off report | [BNR reporting workflows](../post-redcap/reporting-workflows.qmd) |
@@ -48,3 +48,4 @@ REDCap is the authoritative location for record-level corrections. Generated ext
 - Stop whenever the source, responsibility, result, disclosure status or approval is unclear.
 
 See [Roles and decision rights](roles-decision-rights.qmd) for responsibility at each stage.
+

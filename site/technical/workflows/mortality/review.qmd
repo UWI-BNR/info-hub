@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Review the mortality release"
 description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
 ---
@@ -84,3 +84,4 @@ Add `replace` only when a deliberate Step 4 rebuild is required. A rebuild means
 Do not edit the workbook, candidate, suppression symbols or reference files.
 
 Correct the earliest affected source, reference, configuration or version-controlled code, rerun from that point and repeat Step 4 review before approval.
+

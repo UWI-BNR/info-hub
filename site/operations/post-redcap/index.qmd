@@ -1,7 +1,7 @@
----
+﻿---
 title: "Post-REDCap analytics and publishing"
 description: "Choose the controlled route for CVD event, mortality and reporting products."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Purpose
@@ -47,3 +47,4 @@ only the authorised display transformations in the controlled template.
 Never edit a generated dataset, table, chart or report manually. Correct the
 source data or version-controlled code, assign the required new version, and
 rerun from the earliest affected step. See [Correct a release](../release/correct-release.qmd).
+

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "CVD events dashboard transition note"
 description: "Current data-location and scope boundary before the separate CVD dashboard rebuild."
 ---
@@ -101,3 +101,4 @@ First separate a **data/publication problem** from a **Quarto/Observable problem
 - If download links fail, check the Step 6 website mirror before changing the page path.
 
 See [Update website content](update-content.qmd) and [Fix common problems](../maintenance/troubleshooting.qmd).
+

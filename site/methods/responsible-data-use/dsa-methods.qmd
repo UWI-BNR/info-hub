@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Research Data Sharing Agreement"
 subtitle: "_For access to restricted, de-identified data for approved research use_"
 description: "Public-facing BNR Research Data Sharing Agreement for approved access to restricted, de-identified registry data."
@@ -78,3 +78,4 @@ The button opens a pre-addressed email draft. Attach the completed PDF before se
 Requests for access to restricted BNR data are reviewed by the BNR team.
 
 The BNR may request further information before approving a data release.
+

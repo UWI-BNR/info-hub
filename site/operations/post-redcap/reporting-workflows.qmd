@@ -1,7 +1,7 @@
----
+﻿---
 title: "Run BNR reporting workflows"
 description: "Operational responsibilities for the rolling update, annual CVD report and one-off CVD reports."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Purpose
@@ -52,3 +52,4 @@ generated report manually.
 - [Rolling three-month update](../../technical/workflows/reporting/rolling-update.qmd)
 - [Annual CVD report](../../technical/workflows/reporting/annual-report.qmd)
 - [One-off CVD report](../../technical/workflows/reporting/one-off-report.qmd)
+

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Maintain operational records and hand over"
 subtitle: "Keep the registry reproducible when staff or systems change"
 ---
@@ -57,3 +57,4 @@ Review this manual, the Technical Manual, role assignments, private configuratio
 ::: {.callout-warning title="BNR confirmation required"}
 Confirm retention periods, backup owner, recovery-test frequency, formal handover approver and the location of the private configuration sheet. Do not publish live access details.
 :::
+

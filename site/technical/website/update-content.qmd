@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Update website content"
 description: "Maintain public Quarto pages, report landing pages, listings, navigation and downloads after analytical publication."
 ---
@@ -249,3 +249,4 @@ Do not try to solve these problems in Quarto:
 - a website download points to an analytical package that was never approved and published.
 
 Correct the problem through the appropriate analytical workflow, publish the new approved package, and then return to the Quarto page.
+

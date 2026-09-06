@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Generate combined CVD metrics"
 description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
 ---
@@ -40,3 +40,4 @@ human review workbook and disclosure QA.
 Annual DCO-facing public-shaped rows are limited to All CVD, Heart and Stroke;
 all, female and male; and Primary/Inclusive definitions. Additional-DCO counts
 are annual and all-age only; component accounting remains private.
+

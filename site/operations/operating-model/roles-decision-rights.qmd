@@ -1,7 +1,7 @@
----
+﻿---
 title: "Roles and decision rights"
 subtitle: "Who performs, checks, approves and publishes BNR work"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 **Owner:** BNR Lead.
@@ -53,3 +53,4 @@ additional standing BNR role names.
 - the release `approval.yml` and public manifest;
 - Git history for published website changes; and
 - data-access decisions and agreements where applicable.
+

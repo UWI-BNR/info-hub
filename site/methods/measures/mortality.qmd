@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "CVD mortality"
 description: "How BNR counts and describes deaths classified as cardiovascular disease."
 ---
@@ -86,18 +86,18 @@ The restricted monthly view reduces unnecessary disclosure risk. More detailed m
 
 ## Monthly historical context
 
-Monthly counts are shown against a **fixed 2015–2019 historical reference**.
+Monthly counts are shown against a **fixed 2015â€“2019 historical reference**.
 
 For each calendar month, the dashboard shows:
 
-- the lowest monthly count seen during 2015–2019;
-- the highest monthly count seen during 2015–2019; and
+- the lowest monthly count seen during 2015â€“2019;
+- the highest monthly count seen during 2015â€“2019; and
 - the average count for that calendar month during the same five-year period.
 
 This reference was reviewed as a fixed public asset. It is **not recalculated when a new mortality release is published**.
 
 ::: {.callout-note title="What the monthly band is not"}
-The 2015–2019 band is historical context. It is not a forecast, confidence interval or rolling five-year average.
+The 2015â€“2019 band is historical context. It is not a forecast, confidence interval or rolling five-year average.
 :::
 
 ## Quarterly and annual comparisons
@@ -153,7 +153,7 @@ They answer different questions and use different analytical denominators.
 - Primary is the main BNR mortality definition; Inclusive is a broader sensitivity definition.
 - Primary and Inclusive are alternatives and must not be added together.
 - Monthly reporting is intentionally restricted to All CVD, both sexes and all ages.
-- The monthly 2015–2019 reference is fixed historical context, not a rolling comparator.
+- The monthly 2015â€“2019 reference is fixed historical context, not a rolling comparator.
 - Quarterly and annual five-year comparisons are shown only where already available in the approved public data.
 - Percentage distributions describe the mix of classified deaths, not population risk.
 - BNR mortality classifications are not identical to formal ICD-10 underlying-cause-of-death statistics.
@@ -164,3 +164,4 @@ They answer different questions and use different analytical denominators.
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Protecting confidentiality](../interpretation/confidentiality.qmd)
 - [Releases, revisions and comparability](../interpretation/revisions-comparability.qmd)
+

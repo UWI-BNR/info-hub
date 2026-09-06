@@ -1,7 +1,7 @@
----
+﻿---
 title: "Correct or replace a release"
 subtitle: "Correct the authoritative source, then repeat the controlled workflow"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 **Status:** Operational framework.  
@@ -54,3 +54,4 @@ Do not overwrite an earlier release merely to hide an error. Preserve the supers
 ::: {.callout-warning title="BNR confirmation required"}
 Confirm who can order urgent withdrawal, where superseded packages are retained, when a public correction notice is required and how affected data users are notified.
 :::
+

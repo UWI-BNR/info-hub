@@ -1,7 +1,7 @@
----
+﻿---
 title: "System reference"
 description: "Current BNR Stata entry points, workflow controllers and publication boundaries."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Architecture and locations
@@ -102,7 +102,7 @@ bespoke analysis.
 
 ## Disclosure rule
 
-The BNR rule is **n < 6**: positive counts 1–5 are suppressed. Product-specific
+The BNR rule is **n < 6**: positive counts 1â€“5 are suppressed. Product-specific
 code applies deterministic protection, and a human reviewer checks the complete
 candidate for residual and complementary disclosure risk.
 
@@ -112,3 +112,4 @@ After a workflow change, compare labels with `bnr_menu.do`, run the relevant
 workflow tests, search for retired commands and filenames, check local links,
 render the full Quarto site and inspect Git status for private or unintended
 files.
+

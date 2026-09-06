@@ -1,7 +1,7 @@
----
+﻿---
 title: "BNR reporting workflows"
 description: "Choose and operate the current rolling, annual and one-off CVD report routes."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## What this section covers
@@ -29,3 +29,4 @@ metric.
 The optional [report disclosure screen](one-off-report.qmd#disclosure-screen)
 creates private review flags only. It does not apply secondary suppression or
 approve a report.
+

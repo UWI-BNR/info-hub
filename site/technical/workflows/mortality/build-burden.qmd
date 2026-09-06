@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Build mortality burden data"
 description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the staging package."
 ---
@@ -83,3 +83,4 @@ Use `replace` only for a deliberate rebuild. The optional `debug` word exposes d
 ## If Step 3 does not complete
 
 Check that the matching Step 2 DTA exists and that the selected release produces the expected completed-year analysis range. Read the private log before authorising replacement.
+

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Identify and assess potential cases"
 description: "BNR team draft for documenting case finding and initial assessment before REDCap."
 ---
@@ -44,3 +44,4 @@ State where the assessment decision and its supporting reference are recorded.
 
 - [Abstract and verify source information](abstract-verify.qmd)
 - [Statistical Analysis Plan](../data/sap.qmd)
+

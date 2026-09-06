@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Abstract and verify source information"
 description: "BNR team draft for documenting abstraction and verification before REDCap entry."
 ---
@@ -44,3 +44,4 @@ State where source references, queries, reviewer decisions and completion status
 
 - [Identify and assess potential cases](identify-assess.qmd)
 - [Create and complete a new record](../redcap/create-complete-record.qmd)
+

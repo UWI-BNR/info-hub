@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Research data access"
 description: "How researchers can request access to restricted, de-identified BNR data."
 ---
@@ -48,4 +48,5 @@ The agreement page explains how to complete, save and submit the document. The I
 
 - [Protecting confidentiality](../interpretation/confidentiality.qmd)
 - [Data downloads](../../downloads/index.qmd)
+
 

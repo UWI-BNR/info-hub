@@ -1,7 +1,7 @@
----
+﻿---
 title: "Review, approve and publish"
 subtitle: "The controlled route from private Stata staging to the public Info-Hub"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 **Owner:** Authorised reviewer, approver and publisher.
@@ -88,3 +88,4 @@ Stop if approval is absent, a package identity differs, a payload changed, repla
 - `approval.yml` and public manifest;
 - authoritative public package and publication log; and
 - Git commit and deployment history for the website presentation.
+

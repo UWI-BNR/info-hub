@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Publish approved combined CVD metrics"
 description: "Step 6: verify and promote the approved combined CVD package."
 ---
@@ -33,3 +33,4 @@ An unchanged catalogue is normal when Step 6 has replaced the contents of an
 existing release ZIP without changing the release identifier or its catalogue
 record. Inspect the output package and download links before the normal commit,
 render and deployment process.
+

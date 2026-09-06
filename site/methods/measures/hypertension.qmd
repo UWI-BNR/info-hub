@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Hypertension measures"
 description: "Holding page for near-term BNR hypertension measure specifications."
 ---
@@ -41,4 +41,5 @@ No number should be interpreted as a routine BNR hypertension measure until its 
 - [Measures overview](index.qmd)
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+
 

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Number of CVD events"
 description: "How BNR reports hospital-registered and approved annual DCO-enhanced cardiovascular event counts."
 ---
@@ -56,10 +56,10 @@ A change in counts can reflect a real change in disease burden, but also populat
 
 For annual all-age reporting only, the public release may show:
 
-- **Hospital only** — eligible events recorded from hospital information;
-- **Additional DCO** — the approved estimated contribution from eligible
+- **Hospital only** â€” eligible events recorded from hospital information;
+- **Additional DCO** â€” the approved estimated contribution from eligible
   death-certificate-only events; and
-- **Hospital plus DCO** — the corresponding broader annual estimate.
+- **Hospital plus DCO** â€” the corresponding broader annual estimate.
 
 These representations are available for All CVD, Heart and Stroke and for all,
 female and male sexes, using either the Primary or Inclusive mortality
@@ -78,3 +78,4 @@ derived by subtracting other displayed values.
 - [CVD incidence and event rates](incidence.qmd)
 - [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
 - [CVD surveillance outputs](../../surveillance/cvd/index.qmd)
+

@@ -1,6 +1,6 @@
 ﻿---
 title: "Fix common problems"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 description: "Short recovery recipes for common BNR Stata, approval, publication, Quarto, Git and workstation problems."
 ---
 
@@ -379,3 +379,4 @@ Record the error, selected release/package, relevant log path and what has alrea
 - [Render and publish the website](../website/render-publish.qmd)
 - [Understand files, releases and versions](files-releases-versions.qmd)
 - [System reference](../reference/index.qmd)
+

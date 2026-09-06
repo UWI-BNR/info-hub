@@ -1,12 +1,12 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "REDCap database maintenance"
 description: "BNR team draft for controlled maintenance of the live registry database."
 ---
 
 ---
 
-::: {.callout-warning title="BNR team draft — additions invited"}
+::: {.callout-warning title="BNR team draft â€” additions invited"}
 This page is deliberately incomplete. BNR staff should document the locally approved maintenance and change-control arrangements.
 :::
 
@@ -39,4 +39,5 @@ Describe the routine checks and controlled changes needed to keep the REDCap reg
 - [Resolve record queries](resolve-record-queries.qmd)
 - [Approve a data record](approve-data-record.qmd)
 - [Records and handover](../operating-model/records-handover.qmd)
+
 

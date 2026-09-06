@@ -1,13 +1,13 @@
----
+﻿---
 title: "Disclosure control"
 description: "Apply BNR's n < 6 small-number rule and complete human disclosure review."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Definitive small-number rule
 
 BNR suppresses a count when **n < 6**. The directly identifying frequencies are
-therefore 1–5. Zero is not a small positive count, but it must still be reviewed
+therefore 1â€“5. Zero is not a small positive count, but it must still be reviewed
 in context.
 
 Suppression is a release-level control, not only a cell-formatting rule. Review
@@ -42,3 +42,4 @@ approved metric releases.
 Do not approve or publish when a value from 1 to 5 is visible, a protected value
 can be derived, an unavailable component has been inferred, or the disclosure
 review is incomplete.
+

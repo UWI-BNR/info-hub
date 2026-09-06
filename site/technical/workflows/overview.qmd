@@ -1,7 +1,7 @@
----
+﻿---
 title: "Analytical workflows"
 description: "How the current CVD event, mortality and reporting workflows fit together."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## System boundary
@@ -46,3 +46,4 @@ and governance responsibility, and the **BNR Developer** maintains the
 analytical and publication implementation. An authorised person may perform
 more than one action, but build, review, approval, publication and deployment
 remain distinct recorded actions.
+

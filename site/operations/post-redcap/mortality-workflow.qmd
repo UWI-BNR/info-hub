@@ -1,7 +1,7 @@
----
+﻿---
 title: "Run the CVD mortality release workflow"
 description: "Operational responsibilities for the separate six-step CVD mortality release."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Purpose
@@ -40,3 +40,4 @@ outputs by hand; correct the source or code and rerun.
 Retain private source and classification outputs, staging and review material,
 approval controls, the publication log and the authoritative public release in
 their controlled locations.
+

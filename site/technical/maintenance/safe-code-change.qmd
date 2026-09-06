@@ -1,6 +1,6 @@
 ﻿---
 title: "Make a safe code change"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 description: "A simple, controlled method for changing BNR analysis or publication code without putting working workflows or public outputs at unnecessary risk."
 ---
 
@@ -239,3 +239,4 @@ If a public analytical output is affected, issue the correction through the cont
 - the methodological answer is unclear; or
 - several previously working workflows fail after one shared-code change.
 :::
+

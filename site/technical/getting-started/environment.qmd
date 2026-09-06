@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "The BNR analytics and publishing environment"
 description: "How the BNR analytical system fits together: tools, data locations, review boundaries, public outputs and publication."
 ---
@@ -264,3 +264,4 @@ The CVD event and mortality releases remain separate.
 6. **Prefer the simplest maintainable solution.** New tools or automation layers create future handover work as well as present-day convenience.
 
 The rest of this manual turns those principles into task-by-task instructions.
+

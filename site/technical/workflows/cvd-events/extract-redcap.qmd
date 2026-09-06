@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Extract a REDCap release"
 description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly release."
 ---
@@ -65,3 +65,4 @@ Read the **Reason** and **Log** lines in the operational summary.
 Check the selected month, network access and REDCap token-file location. If the release already exists, confirm that replacement is genuinely intended before rerunning with `replace`.
 
 Do not use an extract from an incomplete run.
+

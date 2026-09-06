@@ -1,7 +1,7 @@
----
+﻿---
 title: "Review an analytical release"
 description: "Common human checks before approval of a BNR metric or report candidate."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Review is a separate control
@@ -40,3 +40,4 @@ a new candidate and requires renewed review.
 
 See [Disclosure control](disclosure-control.qmd) and
 [Approve and publish](approve-publish.qmd).
+

@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "From health records to published statistics"
 description: "A plain-language overview of the BNR statistical production pathway."
 ---
@@ -46,4 +46,5 @@ The aim is not to prevent correction. It is to make corrections controlled, docu
 - [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
 - [Releases, revisions and comparability](../interpretation/revisions-comparability.qmd)
+
 

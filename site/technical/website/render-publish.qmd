@@ -1,6 +1,6 @@
 ﻿---
 title: "Render and publish the website"
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 description: "Start a local Info-Hub session, review website changes, commit them safely and publish the Quarto site through GitHub."
 ---
 
@@ -329,3 +329,4 @@ When finished:
 1. stop the Quarto preview window with `Ctrl + C` or close the preview Command Prompt;
 2. check VS Code Source Control for any unintended uncommitted changes; and
 3. close the browser and VS Code when no further work is required.
+

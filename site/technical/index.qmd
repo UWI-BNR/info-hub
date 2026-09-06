@@ -1,7 +1,7 @@
----
+﻿---
 title: "BNR Technical Manual"
 description: "Run, validate, troubleshoot, recover and maintain the implemented BNR analytical and publication system."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## What this manual is for
@@ -52,3 +52,4 @@ version-controlled code and a rerun.
 Public tables, dashboards, downloads and reports reuse approved public metric
 releases wherever their purpose permits. New presentation components must not
 establish a second calculation or approval route.
+

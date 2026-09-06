@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "About BNR surveillance"
 description: "What the Barbados National Registry monitors and how surveillance statistics should be understood."
 ---
@@ -43,3 +43,4 @@ Before comparing a number, check what was counted, the population or event group
 - [From health records to published statistics](records-to-statistics.qmd)
 - [Measures overview](../measures/index.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
+

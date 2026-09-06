@@ -1,7 +1,7 @@
----
+﻿---
 title: "Maintain the public CVD tables"
 description: "Maintain the website tables that present approved CVD event and mortality metric releases."
-manual-review-status: reviewed-by-irh
+manual-review-status: not-reviewed
 ---
 
 ## Publication boundary
@@ -37,3 +37,4 @@ manual edit to their analytical values.
 If a value is wrong, correct the source data or Stata code and rerun the
 relevant release workflow. Do not repair a displayed analytical value in QMD or
 Observable code.
+

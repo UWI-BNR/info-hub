@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "How CVD deaths are classified"
 description: "How BNR uses death-certificate information to create practical cardiovascular mortality classifications."
 ---
@@ -84,3 +84,4 @@ An official national or international CVD mortality series may use different sou
 - [CVD mortality](../measures/mortality.qmd)
 - [How CVD events are classified](classifying-cvd-events.qmd)
 - [Releases, revisions and comparability](revisions-comparability.qmd)
+

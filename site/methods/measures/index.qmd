@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Measures overview"
 description: "The measures explained in the BNR Public Methods Manual."
 ---
@@ -23,10 +23,11 @@ Different measures answer different questions. A count describes volume; a rate 
 Use counts for workload or burden, rates for population comparisons, case fatality for short-term hospital outcomes, and length of stay or bed-days for hospital use. No single measure gives a complete account of population health or service performance.
 
 ::: {.callout-warning title="Similar labels can hide different definitions"}
-Two statistics called “incidence” or “mortality” may use different sources, denominators or age-adjustment methods. Use the definition accompanying the BNR output before making a comparison.
+Two statistics called â€œincidenceâ€ or â€œmortalityâ€ may use different sources, denominators or age-adjustment methods. Use the definition accompanying the BNR output before making a comparison.
 :::
 
 ## Related pages
 
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Glossary](../reference/glossary.qmd)
+

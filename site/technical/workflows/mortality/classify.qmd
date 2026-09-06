@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Classify CVD deaths"
 description: "Mortality Step 2: apply the frozen BNR Heart/Stroke approximate mortality classifier to the private Step 1 source."
 ---
@@ -82,3 +82,4 @@ Add `replace` only for a deliberate rebuild.
 ## Change control
 
 A change to disease terminology, evidence classes, causal rules or scenario membership requires a deliberate new classifier-definition version and renewed validation. Do not change routine classification semantics as part of an ordinary monthly run.
+

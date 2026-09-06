@@ -1,5 +1,5 @@
----
-manual-review-status: reviewed-by-irh
+﻿---
+manual-review-status: not-reviewed
 title: "Counts, percentages and rates"
 description: "How to choose and interpret common forms of BNR statistics."
 ---
@@ -68,4 +68,5 @@ Compare statistics only when the event definition, source coverage, period, deno
 - [CVD incidence and event rates](../measures/incidence.qmd)
 - [CVD case fatality](../measures/case-fatality.qmd)
 - [CVD mortality](../measures/mortality.qmd)
+
 
