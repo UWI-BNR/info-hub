@@ -771,10 +771,49 @@ putpdf table e2_note(.,.), bgcolor("`bnr_white'") border(top, single, "`bnr_teal
 putpdf pagebreak
 putpdf paragraph
 putpdf text ("4 | Methods"), bold font("`font_title'", `size_chapter', "`bnr_ink'")
+
+* These are temporary web addresses. Keeping the common root in one local
+* means the final address can be updated once without searching this chapter.
+local methods_url_root      "https://uwi-bnr.github.io/info-hub"
+local methods_url_public    "`methods_url_root'/methods/"
+local methods_url_operations "`methods_url_root'/operations/"
+local methods_url_technical "`methods_url_root'/technical/"
+
+* Convert release IDs ending in YYYY_MM into a short readable date while
+* retaining the exact release ID required for reproducibility.
+local methods_months "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+local event_release_display "`event_release'"
+if regexm("`event_release'", "_[0-9][0-9][0-9][0-9]_[0-9][0-9]$") {
+    local event_release_year = substr("`event_release'", strlen("`event_release'") - 6, 4)
+    local event_release_month_n = real(substr("`event_release'", strlen("`event_release'") - 1, 2))
+    if inrange(`event_release_month_n', 1, 12) {
+        local event_release_month : word `event_release_month_n' of `methods_months'
+        local event_release_display "`event_release' (`event_release_year', `event_release_month')"
+    }
+}
+
+local mortality_release_display "`mortality_release'"
+if regexm("`mortality_release'", "_[0-9][0-9][0-9][0-9]_[0-9][0-9]$") {
+    local mortality_release_year = substr("`mortality_release'", strlen("`mortality_release'") - 6, 4)
+    local mortality_release_month_n = real(substr("`mortality_release'", strlen("`mortality_release'") - 1, 2))
+    if inrange(`mortality_release_month_n', 1, 12) {
+        local mortality_release_month : word `mortality_release_month_n' of `methods_months'
+        local mortality_release_display "`mortality_release' (`mortality_release_year', `mortality_release_month')"
+    }
+}
+
 putpdf paragraph
 putpdf text ("What this report measures"), bold font("`font_title'", 14, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("`annual_methods_note'"), font("`font_body'", 8.5)
+
+* Opening message card: this is the enduring public rationale for the methods.
+putpdf table methods_opening_card = (2,1), width(100%) border(all, nil)
+putpdf table methods_opening_card(1,1) = ("WHY THESE METHODS MATTER"), ///
+    bold font("`font_title'", 8.4, "`bnr_teal'")
+putpdf table methods_opening_card(2,1) = ///
+    ("National surveillance brings together information recorded for different purposes, at different times and in different settings. The BNR applies consistent clinical, residency, timing, linkage and quality rules so these records can support a coherent national picture. Each published result can be traced to an approved data release and is accompanied by clear information about its coverage, uncertainty and confidentiality."), ///
+    font("`font_body'", 8.4, "`bnr_teal'")
+putpdf table methods_opening_card(1,1), border(top, single, "`bnr_teal'")
+putpdf table methods_opening_card(2,1), border(bottom, single, "`bnr_teal'")
 
 putpdf paragraph
 putpdf text ("Data used for this report"), bold font("`font_title'", 14, "`bnr_ink'")
@@ -795,19 +834,16 @@ if r(N) > 0 {
     local mort_first = string(r(min), "%4.0f")
     local mort_last = string(r(max), "%4.0f")
 }
-putpdf table availability = (3,4), width(100%) border(all, nil)
+putpdf table availability = (3,3), width(100%) border(all, nil)
 putpdf table availability(1,1) = ("Series")
-putpdf table availability(1,2) = ("First complete annual year")
-putpdf table availability(1,3) = ("Latest complete annual year")
-putpdf table availability(1,4) = ("Data release used")
+putpdf table availability(1,2) = ("Complete annual coverage")
+putpdf table availability(1,3) = ("Public data release used")
 putpdf table availability(2,1) = ("CVD events")
-putpdf table availability(2,2) = ("`event_first'")
-putpdf table availability(2,3) = ("`event_last'")
-putpdf table availability(2,4) = ("`event_release'")
+putpdf table availability(2,2) = ("`event_first' to `event_last'")
+putpdf table availability(2,3) = ("`event_release_display'")
 putpdf table availability(3,1) = ("CVD mortality")
-putpdf table availability(3,2) = ("`mort_first'")
-putpdf table availability(3,3) = ("`mort_last'")
-putpdf table availability(3,4) = ("`mortality_release'")
+putpdf table availability(3,2) = ("`mort_first' to `mort_last'")
+putpdf table availability(3,3) = ("`mortality_release_display'")
 putpdf table availability(.,.), font("`font_body'", 8)
 putpdf table availability(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
@@ -816,49 +852,35 @@ putpdf table availability(.,1), bold
 putpdf paragraph
 putpdf text ("Population, period and unit of analysis"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("This report describes eligible cardiovascular events and deaths among Barbados residents. Event statistics report events rather than necessarily unique people: one person may contribute more than one eligible event. This annual report uses complete annual periods - always Jan to Dec - from the two declared public data releases. All data summaries presented are annual. The one exception is the monthly "), font("`font_body'", 8.4)
-putpdf text ("How the year unfolded "), italic font("`font_body'", 8.4)
-putpdf text ("chart in the section: `report_year4' in Brief."), font("`font_body'", 8.4)
+putpdf text ("This report describes eligible cardiovascular events and classified deaths among Barbados residents. Each event statistic counts eligible event episodes, so one person can contribute more than one event over time. Mortality statistics count deaths meeting the stated BNR evidence definition."), font("`font_body'", 8.4)
 
 putpdf paragraph
-putpdf text ("Measures used in Chapters 1 to 3"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_metric_map = (8,4), width(100%) border(all, nil)
-putpdf table methods_metric_map(1,1) = ("Report measure")
-putpdf table methods_metric_map(1,2) = ("What is counted or compared")
-putpdf table methods_metric_map(1,3) = ("Principal source")
-putpdf table methods_metric_map(1,4) = ("Denominator")
-putpdf table methods_metric_map(2,1) = ("Event counts")
-putpdf table methods_metric_map(2,2) = ("Eligible CVD events")
-putpdf table methods_metric_map(2,3) = ("Hospital records, with annual DCO-enhanced estimates")
-putpdf table methods_metric_map(2,4) = ("None")
-putpdf table methods_metric_map(3,1) = ("Event rates")
-putpdf table methods_metric_map(3,2) = ("Eligible events relative to population")
-putpdf table methods_metric_map(3,3) = ("Event release and approved population data")
-putpdf table methods_metric_map(3,4) = ("Matching resident population")
-putpdf table methods_metric_map(4,1) = ("Event patterns")
-putpdf table methods_metric_map(4,2) = ("Events by sex or broad age group")
-putpdf table methods_metric_map(4,3) = ("Event release")
-putpdf table methods_metric_map(4,4) = ("Relevant eligible event group")
-putpdf table methods_metric_map(5,1) = ("Death counts")
-putpdf table methods_metric_map(5,2) = ("Deaths meeting a BNR mortality definition")
-putpdf table methods_metric_map(5,3) = ("Death-certificate information")
-putpdf table methods_metric_map(5,4) = ("None")
-putpdf table methods_metric_map(6,1) = ("Mortality rates")
-putpdf table methods_metric_map(6,2) = ("Classified deaths relative to population")
-putpdf table methods_metric_map(6,3) = ("Mortality release and approved population data")
-putpdf table methods_metric_map(6,4) = ("Matching resident population")
-putpdf table methods_metric_map(7,1) = ("Mortality patterns")
-putpdf table methods_metric_map(7,2) = ("Classified deaths by sex or broad age group")
-putpdf table methods_metric_map(7,3) = ("Mortality release")
-putpdf table methods_metric_map(7,4) = ("Relevant classified-death group")
-putpdf table methods_metric_map(8,1) = ("Quality measures")
-putpdf table methods_metric_map(8,2) = ("Reliance on additional or less-certain information")
-putpdf table methods_metric_map(8,3) = ("Approved release aggregates")
-putpdf table methods_metric_map(8,4) = ("Measure-specific eligible total")
+putpdf text ("The main results cover complete calendar years from January to December. The monthly "), font("`font_body'", 8.4)
+putpdf text ("How the year unfolded "), italic font("`font_body'", 8.4)
+putpdf text ("chart provides the one within-year view. Monthly and quarterly event results describe hospital-recorded events; broader national estimates incorporating death records are completed annually."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("A guide to the results"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table methods_metric_map = (5,3), width(100%) border(all, nil)
+putpdf table methods_metric_map(1,1) = ("Result")
+putpdf table methods_metric_map(1,2) = ("What it describes")
+putpdf table methods_metric_map(1,3) = ("Main information source")
+putpdf table methods_metric_map(2,1) = ("Events")
+putpdf table methods_metric_map(2,2) = ("Eligible Heart and Stroke event episodes")
+putpdf table methods_metric_map(2,3) = ("Hospital records, extended annually with eligible death records")
+putpdf table methods_metric_map(3,1) = ("Deaths")
+putpdf table methods_metric_map(3,2) = ("Deaths meeting a stated BNR cardiovascular evidence definition")
+putpdf table methods_metric_map(3,3) = ("Death-certificate information")
+putpdf table methods_metric_map(4,1) = ("Population rates")
+putpdf table methods_metric_map(4,2) = ("Events or deaths in relation to the corresponding resident population")
+putpdf table methods_metric_map(4,3) = ("Approved releases and population estimates")
+putpdf table methods_metric_map(5,1) = ("Quality indicators")
+putpdf table methods_metric_map(5,2) = ("How much selected results depend on additional or less-certain information")
+putpdf table methods_metric_map(5,3) = ("Approved public-release summaries")
 putpdf table methods_metric_map(.,.), font("`font_body'", 7.3)
 putpdf table methods_metric_map(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_metric_map(2/8,1), bold
+putpdf table methods_metric_map(2/5,1), bold
 
 
 
@@ -867,61 +889,70 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD events are identified"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Consistent event rules allow changes over time to be interpreted more fairly. Records are included only after the approved disease, residence, date, source and duplicate-resolution rules have been applied. The time series presented in this report is internally comparable from 2010 onwards. However, changes in methodology introduced in 2025 mean that estimates in this report should not be compared directly with estimates published in reports from 2023 or earlier."), font("`font_body'", 8.4)
+putpdf text ("The BNR applies the same sequence of clinical, residency, timing and episode rules to every potential event. This turns information collected through routine care into a consistent surveillance series and supports fairer comparison over time."), font("`font_body'", 8.4)
+
+* A ruled teal callout gives the comparability statement prominence without
+* relying on bold text alone or on cell shading.
+putpdf table methods_comparability_card = (2,1), width(100%) border(all, nil)
+putpdf table methods_comparability_card(1,1) = ("COMPARING RESULTS OVER TIME"), ///
+    bold font("`font_title'", 8.4, "`bnr_teal'")
+putpdf table methods_comparability_card(2,1) = ///
+    ("The complete series in this report can be compared consistently from 2010 onwards. The method was revised in 2025, so comparisons with earlier years should use the historical series reproduced in this report rather than estimates printed in reports from 2023 or earlier."), ///
+    font("`font_body'", 8.4, "`bnr_teal'")
+putpdf table methods_comparability_card(1,1), border(top, single, "`bnr_teal'")
+putpdf table methods_comparability_card(2,1), border(bottom, single, "`bnr_teal'")
 
 putpdf paragraph
 putpdf text ("Heart, Stroke and All CVD"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Heart and Stroke are the two broad event families used in this report. All CVD combines eligible events or deaths from those families according to an approved classification hierarchy, so the same event or death is not counted twice merely because more than one cardiovascular term is present on clinical records or death certification."), font("`font_body'", 8.4)
+putpdf text ("Each eligible event is assigned to Heart or Stroke under the maintained BNR rules. All CVD is the reporting aggregate formed by combining those two event groups."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Heart and Stroke event definitions"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("In the event series, Heart is the BNR reporting label for eligible acute myocardial infarction (heart-attack) events. Stroke is the BNR reporting label for eligible acute stroke events. We apply diagnostic, residence, date and duplicate-resolution rules before assigning an event to either family."), font("`font_body'", 8.4)
+putpdf text ("The clinical definition is the starting point. Residency, event date and episode rules then establish whether, when and how an eligible event contributes to the published series."), font("`font_body'", 8.4)
 
 putpdf table methods_event_families = (3,2), width(100%) border(all, nil)
 putpdf table methods_event_families(1,1) = ("Reporting family")
 putpdf table methods_event_families(1,2) = ("What it represents")
 putpdf table methods_event_families(2,1) = ("Heart")
 putpdf table methods_event_families(2,2) = ///
-    ("Acute myocardial infarction events among Barbados residents (ICD-10 I21–I22), confirmed under BNR clinical and validation rules.")
+    ("Eligible acute myocardial infarction events, generally corresponding to ICD-10 I21-I22, confirmed under BNR clinical and validation rules.")
 putpdf table methods_event_families(3,1) = ("Stroke")
 putpdf table methods_event_families(3,2) = ///
-    ("Stroke events among Barbados residents (ICD-10 I60–I64), confirmed under BNR clinical and validation rules.")
+    ("Eligible acute stroke events, generally corresponding to ICD-10 I60-I64, confirmed under BNR clinical and validation rules.")
 putpdf table methods_event_families(.,.), font("`font_body'", 7.5)
 putpdf table methods_event_families(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
 putpdf table methods_event_families(2/3,1), bold
 
-putpdf table methods_event_rules = (7,2), width(100%) border(all, nil)
+putpdf table methods_event_rules = (6,2), width(100%) border(all, nil)
 putpdf table methods_event_rules(1,1) = ("Decision")
-putpdf table methods_event_rules(1,2) = ("How it affects the published statistic")
+putpdf table methods_event_rules(1,2) = ("What the rule achieves")
 putpdf table methods_event_rules(2,1) = ("Disease definition")
-putpdf table methods_event_rules(2,2) = ("The record must meet the approved Heart or Stroke criteria.")
+putpdf table methods_event_rules(2,2) = ("Confirms that the clinical evidence meets the approved Heart or Stroke definition.")
 putpdf table methods_event_rules(3,1) = ("Residence")
-putpdf table methods_event_rules(3,2) = ("The event must relate to a person who was resident in Barbados for at least six months of the relevant calendar year.")
+putpdf table methods_event_rules(3,2) = ("Restricts the series to people resident in Barbados for at least six months of the relevant calendar year.")
 putpdf table methods_event_rules(4,1) = ("Event date")
-putpdf table methods_event_rules(4,2) = ("The approved event date places the event in its reporting period.")
-putpdf table methods_event_rules(5,1) = ("Duplicate resolution")
-putpdf table methods_event_rules(5,2) = ("Records describing the same event episode are resolved before counting.")
+putpdf table methods_event_rules(4,2) = ("Places the event in the correct reporting period using the approved date hierarchy.")
+putpdf table methods_event_rules(5,1) = ("Event episode")
+putpdf table methods_event_rules(5,2) = ("Brings together records that describe the same clinical episode before counting.")
 putpdf table methods_event_rules(6,1) = ("Repeat event")
-putpdf table methods_event_rules(6,2) = ("A later eligible event may be counted separately when it falls outside the approved 28-day event window.")
-putpdf table methods_event_rules(7,1) = ("Analytical completeness")
-putpdf table methods_event_rules(7,2) = ("A record must contain the information required for the selected measure.")
+putpdf table methods_event_rules(6,2) = ("Allows a later eligible event to contribute a new count when it occurs outside the 28-day event window.")
 putpdf table methods_event_rules(.,.), font("`font_body'", 7.7)
 putpdf table methods_event_rules(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_event_rules(2/7,1), bold
+putpdf table methods_event_rules(2/6,1), bold
 
 putpdf paragraph
 putpdf text ("Events and people"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The unit of analysis is an event, not necessarily a unique person. Records within an event window (28-days) are considered a single event episode; a later event can contribute another count when it occurs at least 28-days after a recorded previous event. Event counts should therefore not be described as numbers of different people."), font("`font_body'", 8.4)
+putpdf text ("Each count represents an event episode. Records occurring within the 28-day event window are treated as part of the same episode. A later eligible event can contribute another count, so one person may contribute more than one event over time."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Hospital-recorded ascertainment"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Hospital-recorded statistics use eligible events identified from hospital information. The Queen Elizabeth Hospital is Barbados's only tertiary hospital, making this series an important view of serious recognised CVD events. It is not assumed to represent complete national ascertainment: access to care, referral, diagnosis and recording can all affect what is observed. For true national CVD estimates, we add death-certificate-only (DCO) events to the hospital events. The process for doing this is described in the next section."), font("`font_body'", 8.4)
+putpdf text ("Hospital-recorded statistics use eligible events identified from hospital information. As Barbados's only tertiary hospital, the Queen Elizabeth Hospital provides an important view of serious recognised CVD events. Access to care, referral, diagnosis and recording all shape this view. The annual national reporting estimates extend it with eligible events identified through death records, as described next."), font("`font_body'", 8.4)
 
 
 
@@ -930,12 +961,12 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("Extending the picture using death records"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Some eligible cardiovascular events are identified only through death information. These death-certificate-only events broaden the annual picture beyond hospital records, but they introduce additional questions about classification and whether a death record matches an event already counted by the hospital."), font("`font_body'", 8.4)
+putpdf text ("Some eligible cardiovascular events are identified through death information rather than hospital records. Bringing the two sources together broadens the national picture and requires careful classification and matching so that an event already represented in the hospital series is counted appropriately."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("What is a DCO event?"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("A death-certificate-only (DCO) event is an eligible event identified from death information without a matched eligible hospital-recorded event. DCO-enhanced event counts and rates are annual only. Monthly and quarterly event views remain hospital-recorded because death-record ascertainment closes at year-end."), font("`font_body'", 8.4)
+putpdf text ("A death-certificate-only (DCO) event is an eligible event identified from death information with no matched eligible hospital-recorded event. DCO-enhanced counts and rates are produced annually, after death-record ascertainment for the year is complete. Annual aggregation also supports safe reporting where monthly or quarterly DCO numbers may be small. Monthly and quarterly event views therefore describe hospital-recorded events."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("How linkage is undertaken"), bold font("`font_title'", 11, "`bnr_ink'")
@@ -947,33 +978,33 @@ putpdf table methods_linkage(2,2) = ///
     ("We prepare the hospital records and relevant death records for secure comparison.")
 putpdf table methods_linkage(3,1) = ("2  Match")
 putpdf table methods_linkage(3,2) = ///
-    ("We compare records using trusted combinations of names, dates and other identifying details, starting with the clearest matches.")
+    ("We compare records using approved combinations of names, dates and other identifying details, starting with the clearest matches.")
 putpdf table methods_linkage(4,1) = ("3  Resolve")
 putpdf table methods_linkage(4,2) = ///
-    ("Clear matches are accepted. Records that do not match clearly are kept separate rather than being linked by guesswork.")
+    ("We accept clear matches and retain the uncertainty where the available information supports more than one interpretation.")
 putpdf table methods_linkage(5,1) = ("4  Aggregate")
 putpdf table methods_linkage(5,2) = ///
-    ("We use the linked information to produce the event counts used in the report. Personal identifiers are removed before anything is published.")
+    ("We use the resolved links to produce anonymous aggregate event estimates for publication.")
 putpdf table methods_linkage(.,.), font("`font_body'", 7.6)
 putpdf table methods_linkage(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
 putpdf table methods_linkage(2/5,1), bold font("`font_title'", 7.6, "`bnr_teal'")
 
 putpdf paragraph
-putpdf text ("Published national representations"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Three published views of CVD events"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf table event_scope = (4,3), width(100%) border(all, nil)
 putpdf table event_scope(1,1) = ("Published series")
-putpdf table event_scope(1,2) = ("Source coverage")
-putpdf table event_scope(1,3) = ("Interpretation")
+putpdf table event_scope(1,2) = ("Information included")
+putpdf table event_scope(1,3) = ("How to use it")
 putpdf table event_scope(2,1) = ("Hospital-recorded")
 putpdf table event_scope(2,2) = ("Eligible hospital events")
-putpdf table event_scope(2,3) = ("Observed serious events recorded through the hospital source")
+putpdf table event_scope(2,3) = ("Shows recognised serious events recorded through the hospital source")
 putpdf table event_scope(3,1) = ("Primary national")
 putpdf table event_scope(3,2) = ("Hospital events plus DCO contribution based on Clear + Likely mortality evidence")
-putpdf table event_scope(3,3) = ("Our primary annual estimate")
+putpdf table event_scope(3,3) = ("Provides the main BNR annual national estimate")
 putpdf table event_scope(4,1) = ("Inclusive national")
 putpdf table event_scope(4,2) = ("Hospital events plus DCO contribution that also includes Possible mortality evidence")
-putpdf table event_scope(4,3) = ("A broader national estimate using the wider case definition, which is more sensitive to differences in how cases are classified.")
+putpdf table event_scope(4,3) = ("Provides a broader estimate showing sensitivity to the wider evidence definition")
 putpdf table event_scope(.,.), font("`font_body'", 7.4)
 putpdf table event_scope(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
@@ -982,10 +1013,10 @@ putpdf table event_scope(2/4,1), bold
 putpdf paragraph
 putpdf text ("Linkage uncertainty range"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Where records cannot be linked with certainty and this could affect the national total, the public data provides three values. The lower value uses the more conservative interpretation, the central value is the main estimate reported by the BNR, and the upper value includes the wider contribution that remains plausible under the approved linkage rules. Together, these values show the uncertainty arising from record linkage; they are not a statistical confidence interval."), font("`font_body'", 8.2)
+putpdf text ("Where unresolved links could affect the national total, the public data provide three values. The lower value uses the more conservative interpretation, the central value is the main BNR estimate, and the upper value reflects the broader contribution supported by the approved linkage rules. Together they show how much the national estimate could change under the accepted interpretations of unresolved matches. Because the DCO contribution is estimated at aggregate level, national event estimates may contain decimal values before rounding for presentation."), font("`font_body'", 8.2)
 
 putpdf table methods_linkage_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_linkage_note(1,1) = ("WHEN READING THE REPORT | A wider linkage uncertainty band means that unresolved record linkage has more influence on the national estimate. It is not a 95% confidence interval."), font("`font_title'", 8.2, "`bnr_teal'")
+putpdf table methods_linkage_note(1,1) = ("WHEN READING THE REPORT | A wider linkage range means that unresolved matching has more influence on the national estimate. Statistical confidence intervals describe the precision of a rate and answer a different question."), font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_linkage_note(1,1), border(top, single, "`bnr_teal'")
 
 
@@ -995,29 +1026,35 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("How CVD deaths are classified"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("BNR mortality surveillance uses death-certificate information to create a consistent practical cardiovascular classification. A formal assigned national underlying cause of death is not currently available to the Registry for routine surveillance. Because death certificates are received in paper form, the BNR first transcribes them into a standard electronic format on behalf of the Government, enabling them to be processed consistently alongside the other registry records."), font("`font_body'", 8.4)
+putpdf text ("BNR mortality surveillance uses death-certificate information to create a consistent cardiovascular classification for routine surveillance. A formally coded national underlying cause of death is not currently available to the Registry for this purpose. Because certificates are received in paper form, the BNR first transcribes them into a standard electronic format on behalf of the Government, allowing every certificate to be assessed consistently."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("How the certificate is interpreted"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("A mention of a cardiovascular condition anywhere on a death certificate does not, by itself, mean that CVD is recorded as the underlying cause of death. We consider the wording, its location in Part I or Part II, the order of conditions in Part I, relevant mortality-coding principles and the strength of the supporting evidence. Part I records the sequence leading directly to death, while Part II records other contributing conditions. The position of a condition provides context but is not a simple ranking of diagnoses. On this basis, each death is assigned to one of five evidence classes, described below."), font("`font_body'", 8.4)
+putpdf text ("A cardiovascular term is interpreted in the context of the full certificate before a BNR classification is assigned. We consider the wording, whether it appears in Part I or Part II, the order of conditions in Part I, relevant mortality-coding principles and the strength of the supporting evidence. Part I records the sequence leading directly to death, while Part II records other contributing conditions. These details provide the context for assigning each death to one of five evidence classes."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Evidence classes"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table mort_classes = (6,2), width(100%) border(all, nil)
+putpdf table mort_classes = (6,3), width(100%) border(all, nil)
 putpdf table mort_classes(1,1) = ("Class")
-putpdf table mort_classes(1,2) = ("BNR interpretation")
+putpdf table mort_classes(1,2) = ("What the evidence means")
+putpdf table mort_classes(1,3) = ("Use in published definitions")
 putpdf table mort_classes(2,1) = ("Clear")
-putpdf table mort_classes(2,2) = ("Strong evidence that the death belongs in the relevant BNR cardiovascular mortality group.")
+putpdf table mort_classes(2,2) = ("Strong evidence for the relevant cardiovascular mortality group")
+putpdf table mort_classes(2,3) = ("Primary and Inclusive")
 putpdf table mort_classes(3,1) = ("Likely")
-putpdf table mort_classes(3,2) = ("Good evidence, although some uncertainty remains.")
+putpdf table mort_classes(3,2) = ("Good cardiovascular evidence with some remaining uncertainty")
+putpdf table mort_classes(3,3) = ("Primary and Inclusive")
 putpdf table mort_classes(4,1) = ("Possible")
-putpdf table mort_classes(4,2) = ("Cardiovascular attribution is plausible, but uncertainty is material.")
+putpdf table mort_classes(4,2) = ("Plausible cardiovascular evidence with material uncertainty")
+putpdf table mort_classes(4,3) = ("Inclusive")
 putpdf table mort_classes(5,1) = ("Mention only")
-putpdf table mort_classes(5,2) = ("Relevant wording is present but does not support approximate underlying-cause attribution.")
+putpdf table mort_classes(5,2) = ("Relevant wording recorded as contextual evidence")
+putpdf table mort_classes(5,3) = ("Classification record")
 putpdf table mort_classes(6,1) = ("No evidence")
-putpdf table mort_classes(6,2) = ("No qualifying cardiovascular evidence is identified by the approved rules.")
-putpdf table mort_classes(.,.), font("`font_body'", 7.8)
+putpdf table mort_classes(6,2) = ("The approved rules identify no qualifying cardiovascular evidence")
+putpdf table mort_classes(6,3) = ("Classification record")
+putpdf table mort_classes(.,.), font("`font_body'", 7.4)
 putpdf table mort_classes(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
 putpdf table mort_classes(.,1), bold
@@ -1025,33 +1062,21 @@ putpdf table mort_classes(.,1), bold
 putpdf paragraph
 putpdf text ("Heart, Stroke and All CVD"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Heart includes qualifying ischaemic and coronary heart-disease evidence and is not limited to certificates that literally say “heart attack”. Stroke includes qualifying acute ischaemic stroke and non-traumatic cerebral haemorrhage patterns under the approved rules. All CVD combines the resolved Heart and Stroke classifications according to a maintained hierarchy, ensuring that each qualifying death is counted once in the combined CVD estimate."), font("`font_body'", 8.2)
+putpdf text ("Heart includes qualifying ischaemic and coronary heart-disease evidence, including certificates that use terms other than 'heart attack'. Stroke includes qualifying acute ischaemic stroke and non-traumatic cerebral haemorrhage patterns. Each qualifying death is resolved to Heart or Stroke under the maintained hierarchy. All CVD is the reporting aggregate formed by combining those two groups."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Primary and Inclusive definitions"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_mort_defs = (3,3), width(100%) border(all, nil)
-putpdf table methods_mort_defs(1,1) = ("Definition")
-putpdf table methods_mort_defs(1,2) = ("Evidence included")
-putpdf table methods_mort_defs(1,3) = ("How to interpret it")
-putpdf table methods_mort_defs(2,1) = ("Primary")
-putpdf table methods_mort_defs(2,2) = ("Clear + Likely")
-putpdf table methods_mort_defs(2,3) = ("The main BNR mortality reporting definition")
-putpdf table methods_mort_defs(3,1) = ("Inclusive")
-putpdf table methods_mort_defs(3,2) = ("Clear + Likely + Possible")
-putpdf table methods_mort_defs(3,3) = ("A broader sensitivity definition that includes more uncertain cardiovascular attribution")
-putpdf table methods_mort_defs(.,.), font("`font_body'", 7.7)
-putpdf table methods_mort_defs(1,.), bold bgcolor("`bnr_white'") ///
-    border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_mort_defs(2/3,1), bold
+putpdf paragraph
+putpdf text ("Primary combines Clear and Likely evidence and is the main BNR mortality series. Inclusive contains the Primary series and additionally includes Possible cardiovascular deaths. The distance between them shows how sensitive the reported burden is to including this less-certain evidence."), font("`font_body'", 8.2)
 
 putpdf paragraph
 putpdf text ("Relation to official cause-of-death statistics"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The BNR method is a structured approximate-underlying-cause classification for surveillance. It does not implement the full international process for selecting and coding an official ICD-10 underlying cause of death. BNR results should therefore not be assumed to be directly equivalent to official national or international mortality series, even when their labels appear similar."), font("`font_body'", 8.2)
+putpdf text ("Official cause-of-death statistics use the full international process for selecting and coding an ICD-10 underlying cause. The BNR uses a maintained death-certificate evidence classification to provide consistent and timely cardiovascular surveillance. The two series serve related but distinct purposes, so comparisons should take their different methods into account."), font("`font_body'", 8.2)
 
 putpdf table methods_mort_note = (1,1), width(100%) border(all, nil)
 putpdf table methods_mort_note(1,1) = ///
-    ("WHEN READING THE REPORT | Primary is the main series; Inclusive contains Primary plus Possible cardiovascular deaths. They are alternative views of the same burden and must not be added together. Their difference shows classification sensitivity."), ///
+    ("WHEN READING THE REPORT | Read Primary and Inclusive as alternative views of the same mortality burden. Primary is the main series; Inclusive shows how the result changes when Possible cardiovascular deaths are included."), ///
     font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_mort_note(1,1), ///
     border(top, single, "`bnr_teal'")
@@ -1059,125 +1084,132 @@ putpdf table methods_mort_note(1,1), ///
 
 
 ** NEW METHODS PAGE. How the report measures CVD
+putpdf pagebreak
 putpdf paragraph
 putpdf text ("How the report measures CVD"), bold font("`font_title'", 14, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("Counts"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("A count is the number of eligible events or classified deaths."), font("`font_body'", 8.4)
+putpdf text ("The report uses four complementary ways to describe CVD burden. Each answers a different question, so the measure and its denominator should always be read together."), font("`font_body'", 8.4)
 
-* Equation figures are static template assets, rendered from LaTeX so that
-* fractions, symbols and subscripts are typeset rather than approximated with
-* table cells. They do not contain report data and should not be edited during
-* routine annual production.
-local methods_equation_dir "$BNR_REPO/scripts/stata/reporting/assets"
-local methods_count_eq "`methods_equation_dir'/annual_report_equation_count.png"
-local methods_percent_eq "`methods_equation_dir'/annual_report_equation_percentage.png"
-local methods_rate_eq "`methods_equation_dir'/annual_report_equation_rate.png"
-local methods_asr_eq "`methods_equation_dir'/annual_report_equation_asr.png"
-
-putpdf table methods_count_eq = (1,1), width(14%) border(all, nil) halign(center)
-putpdf table methods_count_eq(1,1) = image("`methods_count_eq'"), halign(center)
-putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here C is the count and I_i equals one when record i is an eligible event or death and zero otherwise."), font("`font_body'", 7.8, "`bnr_muted'")
-
-putpdf paragraph
-putpdf text ("Percentages"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph 
-putpdf text ("A percentage describes how a defined eligible total is divided across groups. The denominator must always be checked: a percentage among registered events or classified deaths is not a person's probability of experiencing or dying from CVD."), font("`font_body'", 8.4)
-
-putpdf table methods_percent_eq = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table methods_percent_eq(1,1) = image("`methods_percent_eq'"), halign(center)
-putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Here p is the percentage, n_g is the selected group and N is the relevant eligible total."), font("`font_body'", 7.8, "`bnr_muted'")
-
-putpdf paragraph
-putpdf text ("Crude population rate"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_crude = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table eq_crude(1,1) = image("`methods_rate_eq'"), halign(center)
-putpdf paragraph
-putpdf text ("Here R is the rate, E is the eligible event or death count and P is the matching resident population. A crude rate relates the observed number to the matching population and period. It is presented per 100,000 people. The crude rate is useful for describing actual population experience, but comparisons (across different years, between different places) can be complicated by differences in age structure. To solve this comparison problem, we use age-standardised rates. For the Barbados population estimates, we use the United Nations World Population Prospects (2024 edition). Every numerator is paired with the denominator for the same year and, where relevant, the same sex and age group."), font("`font_body'", 8.2)
-
-putpdf paragraph
-putpdf text ("Directly age standardised rates"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table eq_asr = (1,1), width(20%) border(all, nil) halign(center)
-putpdf table eq_asr(1,1) = image("`methods_asr_eq'"), halign(center)
-putpdf paragraph
-putpdf text ("ASR is the age-standardised rate, r_a is the rate in age group a and w_a is that group's standard-population weight. This report uses the WHO World Standard Population 2000-2025. Standardisation improves comparisons by applying the same age distribution to every group or year. The ASR is also presented per 100,000 people."), font("`font_body'", 8.2)
-
-
-** NEW METHODS SECTION (no new page). How the report measured CVD p2 of 2
-putpdf paragraph
-putpdf text ("Denominators and reported forms"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_rate_map = (5,4), width(100%) border(all, nil)
-putpdf table methods_rate_map(1,1) = ("Measure")
-putpdf table methods_rate_map(1,2) = ("Numerator")
-putpdf table methods_rate_map(1,3) = ("Denominator")
-putpdf table methods_rate_map(1,4) = ("Main reported forms")
-putpdf table methods_rate_map(2,1) = ("Event rate")
-putpdf table methods_rate_map(2,2) = ("Eligible hospital or DCO-enhanced events")
-putpdf table methods_rate_map(2,3) = ("Matching Barbados resident population")
-putpdf table methods_rate_map(2,4) = ("Crude and age-standardised")
-putpdf table methods_rate_map(3,1) = ("Mortality rate")
-putpdf table methods_rate_map(3,2) = ("Deaths under the selected BNR definition")
-putpdf table methods_rate_map(3,3) = ("Matching Barbados resident population")
-putpdf table methods_rate_map(3,4) = ("Crude and age-standardised")
-putpdf table methods_rate_map(4,1) = ("Women and men")
-putpdf table methods_rate_map(4,2) = ("Sex-specific events or deaths")
-putpdf table methods_rate_map(4,3) = ("Resident population of the same sex")
-putpdf table methods_rate_map(4,4) = ("Separate published rates")
-putpdf table methods_rate_map(5,1) = ("Age pattern")
-putpdf table methods_rate_map(5,2) = ("Events or deaths in a broad age groups (<70 years, 70 and older)")
-putpdf table methods_rate_map(5,3) = ("Relevant eligible total or age-specific population, as labelled")
-putpdf table methods_rate_map(5,4) = ("Count, percentage or crude age-specific rate")
-putpdf table methods_rate_map(.,.), font("`font_body'", 7.3)
-putpdf table methods_rate_map(1,.), bold bgcolor("`bnr_white'") ///
+putpdf table methods_measure_guide = (5,3), width(100%) border(all, nil)
+putpdf table methods_measure_guide(1,1) = ("Measure")
+putpdf table methods_measure_guide(1,2) = ("Question it answers")
+putpdf table methods_measure_guide(1,3) = ("Best used for")
+putpdf table methods_measure_guide(2,1) = ("Count")
+putpdf table methods_measure_guide(2,2) = ("How many eligible events or classified deaths were recorded?")
+putpdf table methods_measure_guide(2,3) = ("Describing the volume of events or deaths")
+putpdf table methods_measure_guide(3,1) = ("Percentage")
+putpdf table methods_measure_guide(3,2) = ("What share of a defined total belongs to a particular group?")
+putpdf table methods_measure_guide(3,3) = ("Describing the composition of that total")
+putpdf table methods_measure_guide(4,1) = ("Crude rate")
+putpdf table methods_measure_guide(4,2) = ("How frequent was the outcome in the population during that year?")
+putpdf table methods_measure_guide(4,3) = ("Describing the population's observed experience")
+putpdf table methods_measure_guide(5,1) = ("Age-standardised rate")
+putpdf table methods_measure_guide(5,2) = ("How do rates compare after allowing for differences in age structure?")
+putpdf table methods_measure_guide(5,3) = ("Comparing years, sexes or populations more fairly")
+putpdf table methods_measure_guide(.,.), font("`font_body'", 7.6)
+putpdf table methods_measure_guide(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_rate_map(2/5,1), bold
+putpdf table methods_measure_guide(2/5,1), bold font("`font_title'", 7.6, "`bnr_teal'")
+
+putpdf paragraph
+putpdf text ("Counts and percentages"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("A count reports the number of eligible event episodes or classified deaths. A percentage shows how a stated total is distributed across groups. For example, the percentage of registered events occurring before age 70 describes the age pattern among those events; it represents a share of the event total rather than a person's chance of developing CVD."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Why denominators matter"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("The denominator defines the population or total to which a result refers. Counts have no population denominator. Percentages use the eligible total named with the result. Population rates pair events or deaths with the resident population for the same year and, where relevant, the same sex and age group."), font("`font_body'", 8.4)
+
+
+** NEW METHODS PAGE. Population rates and fair comparisons
+putpdf pagebreak
+putpdf paragraph
+putpdf text ("Population rates and fair comparisons"), bold font("`font_title'", 14, "`bnr_ink'")
+
+putpdf paragraph
+putpdf text ("Why use a population rate?"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("A count describes volume. A population rate relates that count to the number of residents who could contribute to it, allowing years or groups of different sizes to be compared. Event and mortality rates in this report are presented per 100,000 residents."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Crude and age-standardised rates"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf table methods_rate_guide = (3,3), width(100%) border(all, nil)
+putpdf table methods_rate_guide(1,1) = ("Rate")
+putpdf table methods_rate_guide(1,2) = ("What it describes")
+putpdf table methods_rate_guide(1,3) = ("How to use it")
+putpdf table methods_rate_guide(2,1) = ("Crude")
+putpdf table methods_rate_guide(2,2) = ("The observed number of events or deaths in relation to the matching resident population")
+putpdf table methods_rate_guide(2,3) = ("Describes the population's actual experience during that year")
+putpdf table methods_rate_guide(3,1) = ("Age-standardised")
+putpdf table methods_rate_guide(3,2) = ("The rate after applying the same standard age distribution to every year or group")
+putpdf table methods_rate_guide(3,3) = ("Supports fairer comparison where population age structures differ")
+putpdf table methods_rate_guide(.,.), font("`font_body'", 7.6)
+putpdf table methods_rate_guide(1,.), bold bgcolor("`bnr_white'") ///
+    border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
+putpdf table methods_rate_guide(2/3,1), bold font("`font_title'", 7.6, "`bnr_teal'")
+
+putpdf paragraph
+putpdf text ("Matching the population to the result"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Every event or death numerator is paired with the Barbados resident population for the same year. Rates for women and men use the corresponding sex-specific population. Age-specific rates use the population in the stated age group. The report uses United Nations World Population Prospects, 2024 edition, for the population estimates."), font("`font_body'", 8.4)
+
+putpdf paragraph
+putpdf text ("Age standardisation"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("Cardiovascular disease is strongly related to age, and the age structure of a population can change over time. Direct age standardisation applies the WHO World Standard Population 2000-2025 to every comparison. This gives each year or group the same reference age structure, allowing differences in rates to be interpreted more fairly."), font("`font_body'", 8.4)
 
 putpdf table methods_measure_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_measure_note(1,1) = ("WHEN READING THE REPORT | Counts describe volume. Rates support population comparison. Age-standardised rates support fairer comparison across differently aged populations, and are presented per 100,000 people."), font("`font_title'", 8.2, "`bnr_teal'")
-putpdf table methods_measure_note(1,1), border(top, single, "`bnr_teal'")
+putpdf table methods_measure_note(1,1) = ("TECHNICAL DETAIL | Full formulas, denominator specifications and standard-population information are provided in the online BNR Methods manual: `methods_url_public'"), ///
+    font("`font_title'", 8.0, "`bnr_red_text'") bgcolor("`bnr_pale2'")
+putpdf table methods_measure_note(1,1), border(top, single, "`bnr_red_text'")
 
 
 
 
-** NEW METHODS PAGE. Understanding uncertainty, comparisons and time
+** NEW METHODS PAGE. Understanding uncertainty and time
 putpdf pagebreak 
 putpdf paragraph
-putpdf text ("Understanding uncertainty, comparisons and time"), bold font("`font_title'", 14, "`bnr_ink'")
+putpdf text ("Understanding uncertainty and time"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("In this report, we identify different three different types of uncertainty. The statistical variation around our estimated event and mortality rates, the uncertainty associated with unresolved record linkage, and the uncertainty associated with our mortality classification (which identifies the 5 evidence classes described)."), font("`font_body'", 8.4)
+putpdf text ("Every surveillance estimate contains some uncertainty. In this report, uncertainty can arise when a rate is calculated from observed numbers, when hospital and death records are linked, and when the cardiovascular evidence on a death certificate is classified. We show each separately because each answers a different question about the result."), font("`font_body'", 8.4)
 
-putpdf table methods_uncertainty = (5,3), width(100%) border(all, nil)
-putpdf table methods_uncertainty(1,1) = ("What is shown")
-putpdf table methods_uncertainty(1,2) = ("How it appears")
-putpdf table methods_uncertainty(1,3) = ("What it means")
-putpdf table methods_uncertainty(2,1) = ("Statistical 95% confidence interval")
-putpdf table methods_uncertainty(2,2) = ("Vertical whiskers")
-putpdf table methods_uncertainty(2,3) = ("Statistical variation around the published rate")
-putpdf table methods_uncertainty(3,1) = ("DCO linkage range")
-putpdf table methods_uncertainty(3,2) = ("Pale transparent band")
-putpdf table methods_uncertainty(3,3) = ("How unresolved linkage might affect an annual national event estimate")
-putpdf table methods_uncertainty(4,1) = ("Primary and Inclusive mortality")
-putpdf table methods_uncertainty(4,2) = ("Separate lines or values")
-putpdf table methods_uncertainty(4,3) = ("Sensitivity to including Possible cardiovascular deaths")
-putpdf table methods_uncertainty(5,1) = ("Previous-five-year mean")
-putpdf table methods_uncertainty(5,2) = ("Comparator line or value")
-putpdf table methods_uncertainty(5,3) = ("Historical context, not an uncertainty interval or forecast")
+putpdf table methods_uncertainty = (4,3), width(100%) border(all, nil)
+putpdf table methods_uncertainty(1,1) = ("Source of uncertainty")
+putpdf table methods_uncertainty(1,2) = ("The question it answers")
+putpdf table methods_uncertainty(1,3) = ("How it appears")
+putpdf table methods_uncertainty(2,1) = ("Statistical precision")
+putpdf table methods_uncertainty(2,2) = ("How precisely has the rate been estimated from the observed number of events or deaths?")
+putpdf table methods_uncertainty(2,3) = ("95% confidence interval")
+putpdf table methods_uncertainty(3,1) = ("Linkage uncertainty")
+putpdf table methods_uncertainty(3,2) = ("How much could unresolved matching change the annual national event estimate?")
+putpdf table methods_uncertainty(3,3) = ("Lower, central and upper linkage values")
+putpdf table methods_uncertainty(4,1) = ("Classification sensitivity")
+putpdf table methods_uncertainty(4,2) = ("How much does the mortality result change when Possible cardiovascular deaths are included?")
+putpdf table methods_uncertainty(4,3) = ("Primary and Inclusive results")
 putpdf table methods_uncertainty(.,.), font("`font_body'", 7.3)
 putpdf table methods_uncertainty(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table methods_uncertainty(2/5,1), bold
+putpdf table methods_uncertainty(2/4,1), bold font("`font_title'", 7.3, "`bnr_teal'")
+
+putpdf paragraph
+putpdf text ("How to read the three forms"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("A narrower confidence interval indicates a more precise rate estimate. A wider linkage range shows that unresolved matching has more influence on the national event estimate. A larger difference between Primary and Inclusive mortality shows greater sensitivity to the classification of less-certain death-certificate evidence."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("Statistical confidence intervals"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Published crude-rate intervals use the exact Poisson (Garwood) method where specified. Published directly age-standardised rates use the Fay-Feuer gamma method."), font("`font_body'", 8.2)
+putpdf text ("The 95% confidence interval shows the statistical precision of a published rate. Wider intervals commonly occur when the underlying number of events or deaths is small. Crude-rate intervals use the exact Poisson (Garwood) method where specified, and directly age-standardised rates use the Fay-Feuer gamma method."), font("`font_body'", 8.2)
+
+putpdf paragraph
+putpdf text ("Comparisons over time"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf paragraph
+putpdf text ("The previous-five-year mean is the average for the five complete calendar years immediately before the year being reported. It provides recent historical context for the current result. Longer-term charts show the full internally comparable series and help readers see whether a recent change forms part of a sustained pattern."), font("`font_body'", 8.4)
 
 putpdf table methods_uncertainty_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_uncertainty_note(1,1) = ("WHEN READING THE REPORT | Do not combine a statistical confidence interval, a DCO linkage range and the Primary-Inclusive difference into one overall interval. They answer different questions."), font("`font_title'", 8.2, "`bnr_teal'")
+putpdf table methods_uncertainty_note(1,1) = ("WHEN READING THE REPORT | Read each form of uncertainty beside the estimate it describes. Together they show statistical precision, the influence of unresolved linkage and sensitivity to mortality classification."), font("`font_title'", 8.2, "`bnr_teal'")
 putpdf table methods_uncertainty_note(1,1), border(top, single, "`bnr_teal'")
 
 
@@ -1186,7 +1218,7 @@ putpdf table methods_uncertainty_note(1,1), border(top, single, "`bnr_teal'")
 ** NEW METHODS PAGE. Data quality, confidentiality and publication
 putpdf pagebreak
 putpdf paragraph
-putpdf text ("Data quality, confidentiality and publication"), ///
+putpdf text ("Data quality and publication"), ///
     bold font("`font_title'", 14, "`bnr_ink'")
 
 putpdf paragraph
@@ -1194,21 +1226,17 @@ putpdf text ("Data quality metrics in Chapter 3"), ///
     bold font("`font_title'", 11, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("National event estimates combine eligible hospital events with qualifying events identified from death certificates, so they are not limited to people who reach hospital. The Chapter 3 measures show how much national event estimates rely on these death-record events and how much mortality totals rely on the less-certain "), font("`font_body'", 8.2)
-
-putpdf text ("Possible "), italic  font("`font_body'", 8.2) 
-putpdf text ("class. They are quality and sensitivity summaries, not measures of individual risk and not judgements that a particular record is correct or incorrect."),  font("`font_body'", 8.2) 
-
+putpdf text ("The Chapter 3 indicators show how two important parts of the method contribute to the published results: extending hospital-recorded events with eligible death records, and including Possible cardiovascular deaths in the broader mortality definition. They make the influence of these choices visible alongside the disease estimates."), font("`font_body'", 8.2)
 
 putpdf table methods_quality_eq = (2,2), width(100%) border(all, nil)
 
 putpdf table methods_quality_eq(1,1) = ("DCO contribution")
 putpdf table methods_quality_eq(1,2) = ///
-    ("Shows how much national event estimates increase when eligible death-certificate-only events are included alongside hospital events.")
+    ("The percentage of the Primary national event estimate contributed by eligible death-certificate-only events.")
 
 putpdf table methods_quality_eq(2,1) = ("Possible-death reliance")
 putpdf table methods_quality_eq(2,2) = ///
-    ("Shows how much the Inclusive mortality estimate depends on deaths where cardiovascular disease is possible, but less certain.")
+    ("The percentage of the Inclusive mortality total contributed by deaths in the Possible evidence class.")
 
 putpdf table methods_quality_eq(.,.), font("`font_body'", 7.7)
 putpdf table methods_quality_eq(.,1), ///
@@ -1217,51 +1245,32 @@ putpdf table methods_quality_eq(1,.), ///
     border(top, single, "`bnr_teal'")
 
 putpdf paragraph
-putpdf text ("Three kinds of uncertainty"), ///
-    bold font("`font_title'", 11, "`bnr_ink'")
-
-putpdf table methods_uncertainty = (3,2), width(100%) border(all, nil)
-
-putpdf table methods_uncertainty(1,1) = ("Statistical uncertainty")
-putpdf table methods_uncertainty(1,2) = ///
-    ("The natural variation in rates calculated from relatively small numbers.")
-
-putpdf table methods_uncertainty(2,1) = ("Classification sensitivity")
-putpdf table methods_uncertainty(2,2) = ///
-    ("How mortality results change when Possible cardiovascular deaths are included.")
-
-putpdf table methods_uncertainty(3,1) = ("Linkage uncertainty")
-putpdf table methods_uncertainty(3,2) = ///
-    ("The plausible effect where death and hospital records cannot be linked with complete certainty.")
-
-putpdf table methods_uncertainty(.,.), font("`font_body'", 7.7)
-putpdf table methods_uncertainty(.,1), ///
-    bold font("`font_title'", 7.7, "`bnr_teal'")
-putpdf table methods_uncertainty(1,.), ///
-    border(top, single, "`bnr_teal'")
-
-putpdf paragraph
 putpdf text ("Completeness"), ///
     bold font("`font_title'", 11, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("Where completeness is reported, it shows the proportion of eligible records containing the required information. Information that is genuinely not applicable is not counted as missing. Changes in completeness can alter apparent patterns without a corresponding change in disease burden."), ///
+putpdf text ("Where completeness is reported, it shows the proportion of eligible records containing the information required for that measure. Information that does not apply to a record is excluded from the expected total. Reading completeness alongside the results helps distinguish changes in recording from changes in CVD burden."), ///
     font("`font_body'", 8.1)
 
 putpdf paragraph
-putpdf text ("Confidentiality"), ///
+putpdf text ("Protecting confidentiality"), ///
     bold font("`font_title'", 11, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("BNR publishes totals and rates, not patient-level records. Small counts may be withheld, and further checks prevent protected values being worked out from totals or comparisons across releases. A person reviews each proposed public release before approval. Suppressed means not published, not zero."), ///
+putpdf text ("The BNR publishes aggregate totals, rates and summaries. Exact counts from 1 to 5 are suppressed, and additional values are protected where totals, calculated results or comparisons across releases could reveal a small count. An asterisk marks a protected result and means that its value remains confidential. Every proposed public release receives human review before approval."), ///
     font("`font_body'", 8.1)
+
+putpdf table methods_disclosure_note = (1,1), width(100%) border(all, nil)
+putpdf table methods_disclosure_note(1,1) = ("TECHNICAL DETAIL | The complete disclosure-control method is documented in the online BNR Methods manual: `methods_url_public'"), ///
+    font("`font_title'", 8.0, "`bnr_red_text'") bgcolor("`bnr_pale2'")
+putpdf table methods_disclosure_note(1,1), border(top, single, "`bnr_red_text'")
 
 putpdf paragraph
 putpdf text ("Before publication"), ///
     bold font("`font_title'", 11, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("The underlying data are prepared, checked, reviewed and approved before publication. The annual report uses these approved public data releases and does not change the underlying results."), ///
+putpdf text ("The underlying data are prepared, checked, reviewed and approved before publication. The annual report then reads the named approved releases, preserving a traceable connection between the published data and every result shown here."), ///
     font("`font_body'", 8.1)
 
 putpdf paragraph
@@ -1269,69 +1278,29 @@ putpdf text ("Responsible interpretation"), ///
     bold font("`font_title'", 11, "`bnr_ink'")
 
 putpdf paragraph
-putpdf text ("Changes may reflect health, health-care access, diagnosis, recording, completeness, population estimates or several factors together. Compare like with like; distinguish events from people and hospital-recorded results from national estimates; consider each form of uncertainty separately; and interpret small annual changes cautiously. Surveillance patterns can guide decisions and questions, but do not by themselves prove why a change occurred."), ///
+putpdf text ("Changes may reflect population health, access to care, diagnosis, recording, completeness, population estimates or several influences together. Strong interpretation compares like with like, distinguishes events from people and hospital-recorded results from national estimates, and reads each form of uncertainty beside the result it describes. Surveillance patterns provide evidence for decisions and help identify the questions that warrant further investigation."), ///
     font("`font_body'", 8.1)
 
-putpdf table methods_final_note = (1,1), width(100%) border(all, nil)
+putpdf table methods_final_note = (2,1), width(100%) border(all, nil)
 
 putpdf table methods_final_note(1,1) = ///
-    ("WHEN READING THE REPORT | Definitions, source coverage, period, denominator, completeness and uncertainty are part of every result, not optional footnotes to the number."), ///
-    font("`font_title'", 8.2, "`bnr_teal'")
+    ("WHY THE RESULTS CAN BE TRUSTED"), ///
+    bold font("`font_title'", 8.3, "`bnr_teal'")
+putpdf table methods_final_note(2,1) = ///
+    ("Consistent definitions, complementary data sources, explicit uncertainty, named public releases, confidentiality protection and human approval work together to produce results that are reliable, transparent, timely and safe to publish."), ///
+    font("`font_body'", 8.3, "`bnr_teal'")
 
 putpdf table methods_final_note(1,1), ///
     border(top, single, "`bnr_teal'")
-
-
-/*
-
-** NEW METHODS PAGE. Data quality, confidentiality and publication
-putpdf pagebreak
-putpdf paragraph
-putpdf text ("Data quality, confidentiality and publication"), bold font("`font_title'", 14, "`bnr_ink'")
+putpdf table methods_final_note(2,1), ///
+    border(bottom, single, "`bnr_teal'")
 
 putpdf paragraph
-putpdf text ("Data quality indicators"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Further information"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("In Chapter 3, we describe how strongly national event estimates rely on death-record ascertainment and how strongly mortality totals rely on the less-certain "), font("`font_body'", 8.2)
-putpdf text ("Possible "), italic font("`font_body'", 8.2) append
-putpdf text ("class. They are quality and sensitivity summaries, not measures of individual risk and not judgements that a particular record is correct or incorrect."), font("`font_body'", 8.2) append
-
-putpdf table methods_quality_eq = (2,2), width(100%) border(all, nil)
-putpdf table methods_quality_eq(1,1) = ("DCO contribution")
-putpdf table methods_quality_eq(1,2) = ("estimated additional DCO events / Primary national event estimate × 100")
-putpdf table methods_quality_eq(2,1) = ("Possible-death reliance")
-putpdf table methods_quality_eq(2,2) = ("Possible-only deaths / Inclusive mortality count × 100")
-putpdf table methods_quality_eq(.,.), font("`font_body'", 7.7)
-putpdf table methods_quality_eq(.,1), bold font("`font_title'", 7.7, "`bnr_teal'")
-putpdf table methods_quality_eq(1,.), border(top, single, "`bnr_teal'")
-
+putpdf text ("TEMPORARY WEB ADDRESSES - VERIFY BEFORE PUBLICATION"), ///
+    bold font("`font_title'", 7.8, "`bnr_red_text'")
 putpdf paragraph
-putpdf text ("Disclosure control"), bold font("`font_title'", 11, "`bnr_ink'")
+putpdf text ("Public Methods manual: `methods_url_public'"), font("`font_body'", 7.8, "`bnr_red_text'")
 putpdf paragraph
-putpdf text ("The BNR publishes only aggregate summaries of CVD burden. As part of our publication process, exact counts from 1 to 5 require primary suppression and are never released. Secondary suppression protects values recoverable from totals, while derived and temporal protections address calculated outputs and differencing across releases. After disclosure control has been completed, every potential data or report release is reviewed by a BNR analyst before approval. Suppressed means not published, not zero, and the protected value can never be reconstructed from any combination of secondary values."), font("`font_body'", 8.1)
-
-putpdf paragraph
-putpdf text ("Two controlled production pathways"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table workflow = (3,3), width(100%) border(all, nil)
-putpdf table workflow(1,1) = ("Pathway")
-putpdf table workflow(1,2) = ("Controlled stages")
-putpdf table workflow(1,3) = ("Boundary")
-putpdf table workflow(2,1) = ("Data releases / Dashboards / Tabulations")
-putpdf table workflow(2,2) = ("Prepare → calculate → review → approve → publish")
-putpdf table workflow(2,3) = ("Creates approved aggregate CVD-event and mortality products from controlled analytical inputs")
-putpdf table workflow(3,1) = ("Annual report")
-putpdf table workflow(3,2) = ("Build report → approve report → publish")
-putpdf table workflow(3,3) = ("Reads declared public releases; it does not repeat classification, linkage, calculation or suppression")
-putpdf table workflow(.,.), font("`font_body'", 7.5)
-putpdf table workflow(1,.), bold bgcolor("`bnr_white'") ///
-    border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
-putpdf table workflow(2/3,1), bold font("`font_title'", 7.5, "`bnr_teal'")
-
-putpdf paragraph
-putpdf text ("Responsible interpretation"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf paragraph
-putpdf text ("Changes may reflect health, health-care access, diagnosis, recording, completeness, population estimates or several factors together. Compare like with like; distinguish events from people and hospital-recorded results from national estimates; consider all three forms of uncertainty separately; and interpret small annual changes cautiously. Surveillance patterns can guide decisions and questions, but do not by themselves prove why a change occurred."), font("`font_body'", 8.1)
-
-putpdf table methods_final_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_final_note(1,1) = ("WHEN READING THE REPORT | Definitions, source coverage, period, denominator, completeness and uncertainty are part of every result, not optional footnotes to the number."), font("`font_title'", 8.2, "`bnr_teal'")
-putpdf table methods_final_note(1,1), border(top, single, "`bnr_teal'")
+putpdf text ("Operations manual: `methods_url_operations'   Technical manual: `methods_url_technical'"), font("`font_body'", 7.8, "`bnr_red_text'")
