@@ -41,13 +41,16 @@ STATA NAMING NOTE:
 * summary. Each should state one decision-relevant finding in plain language.
 
 local annual_summary_message_1 ///
-    "There were 1,021 hospital-recorded CVD events in 2025, about 27% above the published previous-five-year mean of 805.8. The Primary national estimate was 1,115.8 events after adding the estimated contribution from events identified through death records."
+    "There were 1,021 hospital-recorded CVD events in 2025, about 27% above the published previous-five-year average of 805.8. The Primary national estimate was 1,115.8 events after adding the estimated contribution from events identified through death records."
 
 local annual_summary_message_2 ///
-    "Stroke accounted for 67.9% of hospital-recorded CVD events in 2025. The Primary national age-standardised event rate was also higher in men than women: 288.8 compared with 184.0 per 100,000."
+    "The Primary national age-standardised CVD event rate was higher in men than women: 288.8 compared with 184.0 per 100,000."
 
 local annual_summary_message_3 ///
-    "There were 368 Primary CVD deaths in 2025, about 7% below the previous-five-year mean of 394.2. The Inclusive definition counted 588 deaths, close to its recent five-year comparator, showing how strongly mortality totals depend on whether Possible deaths are included."
+    "Stroke accounted for 67.9% of hospital-recorded CVD events in 2025."
+
+local annual_summary_message_4 ///
+    "There were 368 Primary CVD deaths in 2025, about 7% below the previous-five-year mean of 394.2. The Inclusive definition counted 588 deaths, close to its recent five-year comparator, showing how strongly mortality totals depend on whether Possible deaths are included. Read more about our CVD death definitions in chapter 4|Methods."
 
 * -----------------------------------------------------------------------------
 * CVD events
@@ -132,7 +135,7 @@ local ann_evt_quality_text ///
     "In 2025, the estimated additional DCO contribution was about 8.5% of the Primary national event estimate for All CVD, Heart and Stroke. The similarity across the three groups is useful context: death-record ascertainment contributes meaningfully to the national estimate, but it is not the dominant component of the 2025 event total."
 
 local ann_mort_quality_text ///
-    "Possible-only deaths accounted for 37.4% of the 2025 Inclusive All-CVD total. The corresponding proportions were also substantial for Heart and Stroke, at about 36% and 39%. These are sensitivity indicators for cause-of-death classification, not scores of whether the mortality data are good or bad."
+    "Possible-only deaths accounted for 37.4% of the 2025 Inclusive CVD total deaths. The corresponding proportions were also substantial for Heart and Stroke, at about 36% and 39%. These are sensitivity indicators for cause-of-death classification on death certificates. We use these sensitivity results in the absence of national underlying cause of death recording. Read more about our CVD death definitions in chapter 4|Methods."
 
 * -----------------------------------------------------------------------------
 * Methods note
@@ -144,4 +147,4 @@ local ann_mort_quality_text ///
 * ordinary annual wording changes belong in the findings locals above.
 
 local annual_methods_note ///
-    "The standard section uses only the declared approved public CVD-event and mortality releases. Published rates, confidence intervals, linkage bounds and rolling comparators are read from those releases. Simple percentages used to explain DCO or Possible-death reliance are presentation summaries of published aggregate counts; no confidential data are reopened and no surveillance rate is recalculated. Asterisks denote values protected by the published disclosure-control rules."
+    "This report uses information from the approved public CVD-event and mortality data releases, available online at the BNR Information Hub. All published rates, confidence intervals, uncertainty bounds, and rolling comparators used in this report are available in those data releases. Asterisks denote values protected by our published disclosure-control rules."
