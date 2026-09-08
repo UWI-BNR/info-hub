@@ -4,6 +4,10 @@ title: "Releases, revisions and comparability"
 description: "How to compare BNR statistics across releases and periods."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR identifies public releases so that users can tell which data and methods produced a result. Figures may be revised when source information improves or a controlled correction is required.
 
 ## Why this matters

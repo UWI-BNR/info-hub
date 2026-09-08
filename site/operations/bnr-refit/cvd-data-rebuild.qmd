@@ -67,6 +67,10 @@ execute:
   freeze: auto
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 
 ## Re-creating the Historical CVD Dataset (2009–2023)
 

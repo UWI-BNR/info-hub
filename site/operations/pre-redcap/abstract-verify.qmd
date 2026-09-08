@@ -4,6 +4,10 @@ title: "Abstract and verify source information"
 description: "BNR team draft for documenting abstraction and verification before REDCap entry."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft"}

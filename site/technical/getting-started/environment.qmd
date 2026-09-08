@@ -4,6 +4,10 @@ title: "The BNR analytics and publishing environment"
 description: "How the BNR analytical system fits together: tools, data locations, review boundaries, public outputs and publication."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this chapter explains

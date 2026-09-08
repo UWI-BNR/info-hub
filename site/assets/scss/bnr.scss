@@ -387,19 +387,16 @@ $secondary: #001f3d;
    MANUAL IDENTITY ACCENTS
    =========================================================================
 
-   Manual colours are limited to wayfinding: landing-page card rules and a
-   small identity flag below the centrally generated review-status strip.
-   Shared navigation, links and buttons retain the BNR site palette.
+   Landing cards use a shared BNR-navy top rule and a manual-specific pale
+   fill. Small labels and identity flags carry the manual accent. Shared
+   navigation, links and buttons retain the BNR site palette.
 */
 
 body.bnr-methods-manual {
-  --bnr-manual-accent: #2f6f73;
-  --bnr-manual-tint: #edf6f6;
-  --bnr-manual-text: #24585c;
-}
-
-body.bnr-methods-manual #methods-manual-sections .card {
-  border-top-color: var(--bnr-manual-accent) !important;
+  --bnr-manual-accent: #356a49;
+  --bnr-manual-tint: #e9f3ec;
+  --bnr-manual-text: #2e593d;
+  --bnr-landing-card-tint: #dcece1;
 }
 
 body.bnr-methods-manual #methods-manual-sections .card-body > .small {
@@ -422,6 +419,47 @@ body.bnr-methods-manual #methods-manual-sections .card-body > .small {
 }
 
 body.bnr-methods-manual .bnr-manual-flag--methods {
+  border-left-color: var(--bnr-manual-accent);
+  background: var(--bnr-manual-tint);
+  color: var(--bnr-manual-text);
+}
+
+body.bnr-operations-manual {
+  --bnr-manual-accent: #8b4f27;
+  --bnr-manual-tint: #faf0e8;
+  --bnr-manual-text: #70401e;
+  --bnr-landing-card-tint: #f5e4d5;
+}
+
+body.bnr-operations-manual #operations-manual-sections .card-body > .small {
+  color: var(--bnr-manual-accent) !important;
+}
+
+body.bnr-operations-manual .bnr-manual-flag--operations {
+  border-left-color: var(--bnr-manual-accent);
+  background: var(--bnr-manual-tint);
+  color: var(--bnr-manual-text);
+}
+
+body.bnr-tech-manual {
+  --bnr-manual-accent: #6c557f;
+  --bnr-manual-tint: #f3eef6;
+  --bnr-manual-text: #4f3c60;
+  --bnr-landing-card-tint: #e9e0ee;
+}
+
+body.bnr-methods-manual #methods-manual-sections .card,
+body.bnr-operations-manual #operations-manual-sections .card,
+body.bnr-tech-manual #technical-manual-sections .card {
+  border-top-color: #045174 !important;
+  background-color: var(--bnr-landing-card-tint) !important;
+}
+
+body.bnr-tech-manual #technical-manual-sections .card-body > .small {
+  color: var(--bnr-manual-accent) !important;
+}
+
+body.bnr-tech-manual .bnr-manual-flag--technical {
   border-left-color: var(--bnr-manual-accent);
   background: var(--bnr-manual-tint);
   color: var(--bnr-manual-text);

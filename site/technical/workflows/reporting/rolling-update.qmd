@@ -4,6 +4,10 @@ description: "Run the controlled one-step builder for a dated online update from
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## What the builder does
 
 The builder verifies the declared release-stamped CVD event and mortality CSVs

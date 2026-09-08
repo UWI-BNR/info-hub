@@ -4,6 +4,10 @@ title: "Publish approved combined CVD metrics"
 description: "Step 6: verify and promote the approved combined CVD package."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Run
 
 ```stata

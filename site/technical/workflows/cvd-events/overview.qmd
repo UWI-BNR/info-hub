@@ -4,6 +4,10 @@ description: "Run the six-step CVD events workflow from REDCap extract through r
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## What this workflow does
 
 CVD event Steps 1â€“3 create the private extract, confidential cumulative dataset

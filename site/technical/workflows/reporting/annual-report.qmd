@@ -4,6 +4,10 @@ description: "Operate the controlled three-step annual-report workflow."
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Before Step 1
 
 Confirm the report year, event release, mortality release and next report

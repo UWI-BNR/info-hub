@@ -4,6 +4,10 @@ description: "The authoritative Operations Manual route for requests to use non-
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Scope
 
 This section governs requests for BNR data that are not already available as

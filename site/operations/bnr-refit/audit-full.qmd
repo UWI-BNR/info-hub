@@ -67,6 +67,10 @@ execute:
   freeze: auto
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 # BNR Process Audit: Findings
 
 The [Executive Summary](index.qmd) presents the key findings from the Barbados National Registry (BNR) Process Audit, conducted as part of the ongoing system refit to enhance efficiency, accuracy, and sustainability. The audit’s initial focus was on post-REDCap activities—particularly the Stata-based analysis and reporting algorithms used for the cardiovascular disease (CVD) registry.  

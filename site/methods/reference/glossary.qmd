@@ -4,6 +4,10 @@ title: "Glossary"
 description: "Plain-language definitions of terms used in BNR publications."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 ## Aâ€“C
 
 **Acute myocardial infarction (AMI)**  

@@ -4,6 +4,10 @@ title: "How CVD deaths are classified"
 description: "How BNR uses death-certificate information to create practical cardiovascular mortality classifications."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR uses a practical classification method to identify deaths with evidence of cardiovascular disease when a formally assigned national underlying cause of death is not available to the Registry for routine surveillance.
 
 ## Why this matters

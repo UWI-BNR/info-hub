@@ -4,6 +4,10 @@ description: "Choose and operate the current rolling, annual and one-off CVD rep
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## What this section covers
 
 BNR has three report products. They share publication principles but do not

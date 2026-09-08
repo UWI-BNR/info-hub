@@ -4,6 +4,10 @@ title: "Maintain the CVD mortality dashboard"
 description: "How the Quarto mortality dashboard reads the approved Step 6 release, handles Primary/Inclusive views and protects the analytical publication boundary."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this page covers

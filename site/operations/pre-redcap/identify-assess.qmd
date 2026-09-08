@@ -4,6 +4,10 @@ title: "Identify and assess potential cases"
 description: "BNR team draft for documenting case finding and initial assessment before REDCap."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft"}

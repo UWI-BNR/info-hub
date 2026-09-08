@@ -10,6 +10,10 @@ format:
     link-external-newwindow: true
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Purpose
 
 This report records the practical validation of the BNR CVD disclosure-control rules using two complete years of monthly outputs.

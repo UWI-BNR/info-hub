@@ -4,6 +4,10 @@ title: "Number of CVD events"
 description: "How BNR reports hospital-registered and approved annual DCO-enhanced cardiovascular event counts."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 The CVD event count is the number of eligible heart and stroke events recorded
 from hospital information during a stated period. The annual public release
 also contains approved DCO-enhanced national count representations.

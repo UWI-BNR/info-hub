@@ -4,6 +4,10 @@ description: "Apply BNR's n < 6 small-number rule and complete human disclosure 
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Definitive small-number rule
 
 BNR suppresses a count when **n < 6**. The directly identifying frequencies are

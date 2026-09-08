@@ -46,6 +46,10 @@ execute:
 draft: false
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 This page provides the BNR Research Data Sharing Agreement for researchers and research teams requesting access to restricted, de-identified registry data.
 
 Approval is not automatic. Each request is reviewed in relation to the purpose of the work, the sensitivity of the data, the proposed safeguards, and the public health value of the request.

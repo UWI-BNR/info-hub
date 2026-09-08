@@ -4,6 +4,10 @@ title: "CVD events dashboard transition note"
 description: "Current data-location and scope boundary before the separate CVD dashboard rebuild."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this page covers

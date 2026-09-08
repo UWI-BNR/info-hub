@@ -4,6 +4,10 @@ title: "Measures overview"
 description: "The measures explained in the BNR Public Methods Manual."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 Different measures answer different questions. A count describes volume; a rate relates events to a population; case fatality describes an outcome among events; and length of stay describes hospital use.
 
 ## Measures in this manual

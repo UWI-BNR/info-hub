@@ -4,6 +4,10 @@ title: "Prepare the confidential dataset"
 description: "Step 2: combine the selected REDCap release with the frozen historical CVD dataset."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

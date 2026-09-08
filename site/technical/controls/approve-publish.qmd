@@ -4,6 +4,10 @@ description: "Bind approval to an exact candidate and publish only its controlle
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Core rule
 
 Approval and publication are separate actions. Approval identifies the exact

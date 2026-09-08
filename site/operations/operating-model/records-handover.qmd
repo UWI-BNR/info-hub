@@ -4,6 +4,10 @@ title: "Maintain operational records and hand over"
 subtitle: "Keep the registry reproducible when staff or systems change"
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Status:** Operational framework.
 **Owner:** BNR Lead and BNR Developer.
 

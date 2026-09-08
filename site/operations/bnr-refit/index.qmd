@@ -4,6 +4,10 @@ title: "BNR Refit Audit"
 subtitle: "Why the current operating model was introduced"
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Status:** Audit and institutional-history appendix.
 **Owner:** BNR Lead.
 

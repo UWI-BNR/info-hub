@@ -4,6 +4,10 @@ title: "CVD incidence and event rates"
 description: "How BNR relates eligible CVD events to the Barbados population."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 CVD event rates describe how frequently eligible heart attack and stroke events are recorded relative to the Barbados population during a stated period.
 
 ## At a glance

@@ -4,6 +4,10 @@ description: "Operational responsibilities for the separate six-step CVD event r
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Purpose
 
 Use this workflow for every authorised CVD event metric release. Steps 1â€“3

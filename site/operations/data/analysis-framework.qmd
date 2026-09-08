@@ -4,6 +4,10 @@ title: "BNR analysis framework"
 description: "The standing statistical rules and metric definitions used for routine BNR reporting."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ## Purpose

@@ -4,6 +4,10 @@ title: "CVD case fatality"
 description: "How BNR measures death before discharge following a hospital-registered CVD event."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 In-hospital case fatality is the percentage of eligible hospital-registered CVD events where the patient died before discharge.
 
 ## At a glance

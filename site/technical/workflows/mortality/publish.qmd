@@ -4,6 +4,10 @@ title: "Publish approved mortality outputs"
 description: "Mortality Step 6: verify and promote the exact ten-file mortality payload approved in Step 5."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

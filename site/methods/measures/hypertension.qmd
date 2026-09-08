@@ -4,6 +4,10 @@ title: "Hypertension measures"
 description: "Holding page for near-term BNR hypertension measure specifications."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 Hypertension is part of the main BNR surveillance programme. This page has been positioned with the other routine measures so that the approved definitions can be added without changing the manual structure.
 
 ::: {.callout-note title="Content in preparation"}

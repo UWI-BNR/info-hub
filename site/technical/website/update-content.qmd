@@ -4,6 +4,10 @@ title: "Update website content"
 description: "Maintain public Quarto pages, report landing pages, listings, navigation and downloads after analytical publication."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this chapter does

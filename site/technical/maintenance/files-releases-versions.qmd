@@ -4,6 +4,10 @@ description: "Identify authoritative, private, public and mirrored BNR files and
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Location determines authority
 
 | Location type | Contents | Rule |

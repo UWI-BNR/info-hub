@@ -4,6 +4,10 @@ title: "Review the mortality release"
 description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

@@ -4,6 +4,10 @@ description: "Maintain the website tables that present approved CVD event and mo
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Publication boundary
 
 The public CVD tables are a Quarto/Observable presentation of approved CVD

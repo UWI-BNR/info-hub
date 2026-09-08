@@ -4,6 +4,10 @@ title: "Research data access"
 description: "How researchers can request access to restricted, de-identified BNR data."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR publishes aggregate data openly where this can be done safely. Some research questions require more detailed, restricted data. Access to those data is considered through a separate application and governance process.
 
 ## What can be requested

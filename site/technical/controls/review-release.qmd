@@ -4,6 +4,10 @@ description: "Common human checks before approval of a BNR metric or report cand
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Review is a separate control
 
 A successful build is not approval. Review the exact private candidate and its

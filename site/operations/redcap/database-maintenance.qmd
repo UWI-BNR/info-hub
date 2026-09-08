@@ -4,6 +4,10 @@ title: "REDCap database maintenance"
 description: "BNR team draft for controlled maintenance of the live registry database."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft â€” additions invited"}

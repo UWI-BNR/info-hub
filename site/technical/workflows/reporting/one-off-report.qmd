@@ -4,6 +4,10 @@ description: "Operate the controlled three-step publication route for a finished
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Before the controlled workflow
 
 Complete and document the bespoke analysis. The common workflow begins with a

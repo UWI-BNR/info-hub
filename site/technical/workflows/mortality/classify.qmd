@@ -4,6 +4,10 @@ title: "Classify CVD deaths"
 description: "Mortality Step 2: apply the frozen BNR Heart/Stroke approximate mortality classifier to the private Step 1 source."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

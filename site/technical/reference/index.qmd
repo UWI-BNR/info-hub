@@ -4,6 +4,10 @@ description: "Current BNR Stata entry points, workflow controllers and publicati
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Architecture and locations
 
 | Area | Current responsibility |

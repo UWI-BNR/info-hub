@@ -4,6 +4,10 @@ title: "Hospital length of stay"
 description: "How BNR summarises hospital stay following a registered CVD event."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 Length of stay is the number of hospital days between admission and the end of an eligible admission linked to a registered CVD event. A same-day admission and discharge counts as one day.
 
 ## At a glance

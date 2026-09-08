@@ -4,6 +4,10 @@ description: "Operational controls for preparing, approving, transferring and cl
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Before preparation
 
 Require a recorded, authorised decision that identifies:

@@ -4,6 +4,10 @@ title: "Counts, percentages and rates"
 description: "How to choose and interpret common forms of BNR statistics."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 Counts, percentages and rates use numbers differently. Choosing the right one depends on the question being asked.
 
 ## Why this matters

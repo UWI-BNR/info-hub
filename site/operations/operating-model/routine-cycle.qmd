@@ -4,6 +4,10 @@ description: "The linked route from case finding through REDCap to approved BNR 
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Purpose
 
 This page maps the complete registry pathway. Every stage links to the page that explains how that stage is carried out or, for team-owned draft procedures, where BNR staff should add the local detail.

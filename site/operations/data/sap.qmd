@@ -9,6 +9,10 @@ format:
     toc-depth: 3
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 # BNR Information Hub Statistical Analysis Plan
 
 ## Document control

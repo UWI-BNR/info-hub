@@ -4,6 +4,10 @@ title: "Run the CVD mortality workflow"
 description: "Run the six-step mortality workflow from the private death-certificate extract through classification, review, approval and controlled publication."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this workflow does

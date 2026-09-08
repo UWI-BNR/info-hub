@@ -4,6 +4,10 @@ title: "Set up a workstation"
 description: "Configure a Windows workstation to run the BNR Stata workflows and maintain the Quarto Info-Hub."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this chapter does

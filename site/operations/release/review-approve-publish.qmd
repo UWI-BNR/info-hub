@@ -4,6 +4,10 @@ subtitle: "The controlled route from private Stata staging to the public Info-Hu
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Owner:** Authorised reviewer, approver and publisher.
 
 ## Purpose

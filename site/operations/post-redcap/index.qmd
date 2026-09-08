@@ -4,6 +4,10 @@ description: "Choose the controlled route for CVD event, mortality and reporting
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Purpose
 
 Post-REDCap work turns authorised source releases into approved public metric

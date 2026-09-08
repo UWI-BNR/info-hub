@@ -4,6 +4,10 @@ subtitle: "Correct the authoritative source, then repeat the controlled workflow
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Status:** Operational framework.  
 **Owner:** BNR Lead and BNR Analyst.
 

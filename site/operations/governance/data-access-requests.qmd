@@ -4,6 +4,10 @@ description: "A controlled route from enquiry to an authorised data-sharing deci
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Receive and classify
 
 1. Record the requester, organisation, purpose, population, period and requested

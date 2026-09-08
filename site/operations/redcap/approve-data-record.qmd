@@ -4,6 +4,10 @@ title: "Approve a data record"
 description: "BNR team draft for confirming that a REDCap event record is ready for analytical use."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft â€” additions invited"}

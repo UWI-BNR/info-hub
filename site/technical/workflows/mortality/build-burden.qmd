@@ -4,6 +4,10 @@ title: "Build mortality burden data"
 description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the staging package."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

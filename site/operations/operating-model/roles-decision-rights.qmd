@@ -4,6 +4,10 @@ subtitle: "Who performs, checks, approves and publishes BNR work"
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Owner:** BNR Lead.
 
 ## Purpose

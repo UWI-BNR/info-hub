@@ -4,6 +4,10 @@ title: "Research Data Sharing Agreement"
 description: "How BNR staff issue, approve, store and audit the Research Data Sharing Agreement."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 This is the standing agreement for approved access to restricted, deidentified BNR data. The agreement form appears immediately below; staff processing notes are available in the expandable box.

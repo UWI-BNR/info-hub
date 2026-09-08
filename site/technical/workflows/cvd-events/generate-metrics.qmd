@@ -4,6 +4,10 @@ title: "Generate combined CVD metrics"
 description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Purpose
 
 Step 4 combines the CVD Step 3 count input with a completed mortality release.

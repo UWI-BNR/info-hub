@@ -4,6 +4,10 @@ title: "Protecting confidentiality"
 description: "How BNR reduces disclosure risk in public statistics."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR publishes aggregate information designed to inform the public without revealing information about identifiable individuals.
 
 ## Why this matters

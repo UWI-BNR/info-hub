@@ -4,6 +4,10 @@ description: "Operational responsibilities for the separate six-step CVD mortali
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ## Purpose
 
 Use this separate workflow to create an approved CVD mortality metric release

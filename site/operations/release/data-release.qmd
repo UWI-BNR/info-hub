@@ -4,6 +4,10 @@ title: "Authorise a data release"
 subtitle: "Confirm the reporting period, then use CVD events Step 1 to extract the cumulative REDCap data"
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Status:** Implemented post-REDCap procedure; pre-extraction sign-off details require BNR confirmation.  
 **Owner:** BNR Lead and BNR Analyst.
 

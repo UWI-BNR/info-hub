@@ -4,6 +4,10 @@ title: "Data quality and completeness"
 description: "How data quality affects BNR statistics and their interpretation."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR checks records and aggregate outputs before publication, but no health-information system is perfect. Public interpretation should account for completeness, timeliness, consistency and classification.
 
 ## Why this matters

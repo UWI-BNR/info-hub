@@ -21,4 +21,4 @@ filters:
 
 format:
   html:
-    body-classes: "bnr-technical-manual"
+    body-classes: "bnr-technical-manual bnr-tech-manual"

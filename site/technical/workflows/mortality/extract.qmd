@@ -4,6 +4,10 @@ title: "Extract mortality data"
 description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this step does

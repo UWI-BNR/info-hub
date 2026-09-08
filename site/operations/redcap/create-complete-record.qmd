@@ -4,6 +4,10 @@ title: "Create and complete a new record"
 description: "BNR team draft for creating one authoritative CVD event record in REDCap."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft â€” additions invited"}

@@ -4,6 +4,10 @@ title: "How CVD events are classified"
 description: "How BNR applies consistent event, source, residence and period rules."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 Consistent classification allows CVD statistics to be compared over time. BNR applies approved rules to decide which records represent eligible heart attack or stroke events and how they enter each measure.
 
 ## Why this matters

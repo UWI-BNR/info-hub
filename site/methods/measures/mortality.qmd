@@ -4,6 +4,10 @@ title: "CVD mortality"
 description: "How BNR counts and describes deaths classified as cardiovascular disease."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR mortality statistics describe deaths that meet the Registry's practical cardiovascular mortality classification. The dashboard reports **numbers of deaths**, **percentage distributions** and annual **mortality rates** using two related definitions: **Primary** and **Inclusive**.
 
 ## At a glance

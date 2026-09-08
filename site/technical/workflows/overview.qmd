@@ -4,6 +4,10 @@ description: "How the current CVD event, mortality and reporting workflows fit t
 manual-review-status: not-reviewed
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## System boundary
 
 Stata prepares data, computes measures, applies analytical controls and

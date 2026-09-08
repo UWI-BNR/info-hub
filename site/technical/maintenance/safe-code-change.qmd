@@ -4,6 +4,10 @@ manual-review-status: not-reviewed
 description: "A simple, controlled method for changing BNR analysis or publication code without putting working workflows or public outputs at unnecessary risk."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## What this chapter does
 
 Use this chapter when changing **Stata code, Quarto source, Python support code, configuration or another maintained project file**.

@@ -4,6 +4,10 @@ title: "Resolve record queries"
 description: "BNR team draft for resolving duplicates, missing information and uncertain event records."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 ---
 
 ::: {.callout-warning title="BNR team draft â€” additions invited"}

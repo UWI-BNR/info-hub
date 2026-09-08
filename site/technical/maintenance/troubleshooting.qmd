@@ -4,6 +4,10 @@ manual-review-status: not-reviewed
 description: "Short recovery recipes for common BNR Stata, approval, publication, Quarto, Git and workstation problems."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## What this chapter does
 
 Use this chapter when a normally working BNR task stops or produces an unexpected result.

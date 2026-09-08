@@ -4,6 +4,10 @@ manual-review-status: not-reviewed
 description: "Start a local Info-Hub session, review website changes, commit them safely and publish the Quarto site through GitHub."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ---
 
 ## What this chapter does

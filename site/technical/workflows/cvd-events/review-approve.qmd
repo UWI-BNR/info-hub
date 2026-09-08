@@ -4,6 +4,10 @@ title: "Review and approve combined CVD metrics"
 description: "Step 5: prepare disclosure-review evidence and record approval."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
 ## Prepare
 
 ```stata
