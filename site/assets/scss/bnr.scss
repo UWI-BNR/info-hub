@@ -384,6 +384,51 @@ $secondary: #001f3d;
 
 
 /* =========================================================================
+   MANUAL IDENTITY ACCENTS
+   =========================================================================
+
+   Manual colours are limited to wayfinding: landing-page card rules and a
+   small identity flag below the centrally generated review-status strip.
+   Shared navigation, links and buttons retain the BNR site palette.
+*/
+
+body.bnr-methods-manual {
+  --bnr-manual-accent: #2f6f73;
+  --bnr-manual-tint: #edf6f6;
+  --bnr-manual-text: #24585c;
+}
+
+body.bnr-methods-manual #methods-manual-sections .card {
+  border-top-color: var(--bnr-manual-accent) !important;
+}
+
+body.bnr-methods-manual #methods-manual-sections .card-body > .small {
+  color: var(--bnr-manual-accent) !important;
+}
+
+.bnr-manual-flag {
+  display: inline-block;
+  margin: 0.15rem 0 1.1rem;
+  padding: 0.34rem 0.7rem 0.34rem 0.75rem;
+  border-left: 0.3rem solid #6c757d;
+  border-radius: 0 0.25rem 0.25rem 0;
+  background: #f1f3f5;
+  color: #495057;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+body.bnr-methods-manual .bnr-manual-flag--methods {
+  border-left-color: var(--bnr-manual-accent);
+  background: var(--bnr-manual-tint);
+  color: var(--bnr-manual-text);
+}
+
+
+/* =========================================================================
    BRIEFING PAGES
    ========================================================================= */
 

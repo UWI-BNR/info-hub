@@ -4,6 +4,125 @@ description: "Run, validate, troubleshoot, recover and maintain the implemented 
 manual-review-status: not-reviewed
 ---
 
+::: {#technical-manual-sections}
+
+## Quick links
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[START HERE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Set up the environment {.card-title}
+
+Understand the system and prepare a workstation for BNR analytical work.
+
+::: {.mt-auto}
+[Open section](getting-started/environment.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[WORKFLOWS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Run analytical workflows {.card-title}
+
+Follow the implemented CVD event, mortality and reporting routes.
+
+::: {.mt-auto}
+[Open section](workflows/overview.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[CONTROLS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Review & publication controls {.card-title}
+
+Review releases, apply disclosure control and record approval.
+
+::: {.mt-auto}
+[Open section](controls/review-release.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[INFO-HUB]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Operate the website {.card-title}
+
+Render, check, publish and maintain the public Info-Hub.
+
+::: {.mt-auto}
+[Open section](website/render-publish.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[MAINTENANCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### Maintain & recover {.card-title}
+
+Make safe changes, manage versions and resolve common problems.
+
+::: {.mt-auto}
+[Open section](maintenance/safe-code-change.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
+::: {.card-body .d-flex .flex-column}
+
+[REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+
+### System reference {.card-title}
+
+Find the principal workflows, commands, files, folders and terms.
+
+::: {.mt-auto}
+[Open section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+
+:::
+:::
+:::
+
+:::
+:::
+
+<br>
+
 ## What this manual is for
 
 Use this manual for exact menus, parameters, files, checks, failure conditions
@@ -52,4 +171,3 @@ version-controlled code and a rerun.
 Public tables, dashboards, downloads and reports reuse approved public metric
 releases wherever their purpose permits. New presentation components must not
 establish a second calculation or approval route.
-

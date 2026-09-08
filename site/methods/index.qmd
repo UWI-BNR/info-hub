@@ -9,7 +9,7 @@ page-layout: full
 
 This manual explains what Barbados National Registry statistics mean, how the main measures are calculated and what readers should bear in mind when using them.
 
-::: {.content-visible when-format="html"}
+::: {#methods-manual-sections .content-visible when-format="html"}
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
@@ -129,4 +129,3 @@ The public manual does not contain patient information, software instructions, f
 
 [Latest BNR publications](../news/index.qmd){.btn .btn-primary}
 [Data downloads](../downloads/index.qmd){.btn .btn-outline-primary}
-

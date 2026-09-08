@@ -4,6 +4,10 @@ title: "From health records to published statistics"
 description: "A plain-language overview of the BNR statistical production pathway."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 BNR statistics are produced through a controlled sequence. Health information is assessed and prepared before any aggregate result is approved for publication.
 
 ## The statistical journey
@@ -46,5 +50,4 @@ The aim is not to prevent correction. It is to make corrections controlled, docu
 - [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
 - [Releases, revisions and comparability](../interpretation/revisions-comparability.qmd)
-
 

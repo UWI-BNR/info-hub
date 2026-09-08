@@ -4,6 +4,10 @@ title: "About BNR surveillance"
 description: "What the Barbados National Registry monitors and how surveillance statistics should be understood."
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
 The Barbados National Registry (BNR) brings together health information to describe important diseases and outcomes in Barbados. Its statistics support public health planning, service improvement and research.
 
 ## Why surveillance matters
@@ -43,4 +47,3 @@ Before comparing a number, check what was counted, the population or event group
 - [From health records to published statistics](records-to-statistics.qmd)
 - [Measures overview](../measures/index.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
-
