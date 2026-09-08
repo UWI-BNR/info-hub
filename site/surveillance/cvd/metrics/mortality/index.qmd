@@ -624,7 +624,7 @@ viewof selected_end_period_index = periodSlider(
 # Indicator
 
 ```{=html}
-<div class="bnr-dashboard-switch"><a href="../burden/index.html" target="_blank" rel="noopener noreferrer">View the CVD events dashboard →</a></div>
+<div class="bnr-dashboard-switch"><a href="../burden/index.html" data-external="1">View the CVD events dashboard →</a></div>
 ```
 
 ```{ojs}
@@ -1719,7 +1719,7 @@ Incomplete year`
   ]
 
   return html`<div class="bnr-data-page-stack">
-    <div class="bnr-dashboard-switch"><a href="../burden/index.html" target="_blank" rel="noopener noreferrer">View the CVD events dashboard →</a></div>
+    <div class="bnr-dashboard-switch"><a href="../burden/index.html" data-external="1">View the CVD events dashboard →</a></div>
     <section class="bnr-data-display-card">
       <h3>Latest Data Release</h3>
       <table class="bnr-metadata-table"><tbody>${metaRows.map(d => html`<tr><td>${d.item}</td><td>${d.value}</td></tr>`)}</tbody></table>
