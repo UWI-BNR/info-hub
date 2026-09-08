@@ -99,8 +99,8 @@ if "`font_body'" == ""     local font_body     "Montserrat"
 
 * These are public, static report assets. They contain no confidential data.
 * Replace the files only after confirming their dates and status labels.
-local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-12.png"
-local refit_system "$BNR_REPO/scripts/stata/reporting/assets/bnr_reporting_system_2026-12.png"
+local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-12_web.png"
+local refit_system "$BNR_REPO/scripts/stata/reporting/assets/bnr_reporting_system_2026-12_web.png"
 
 foreach required_asset in "`refit_timeline'" "`refit_system'" {
     capture confirm file "`required_asset'"

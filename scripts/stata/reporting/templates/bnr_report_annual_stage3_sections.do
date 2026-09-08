@@ -158,6 +158,7 @@ foreach event in all_cvd heart stroke {
         putpdf table evt_`event'_count_fig = (1,1), width(100%) border(all, nil) halign(center)
         putpdf table evt_`event'_count_fig(1,1) = image("`fig'")
     }
+
     putpdf table evt_`event'_count_tab = (4,6), width(100%) border(all, nil)
     putpdf table evt_`event'_count_tab(1,1) = ("Measure")
     forvalues j = 0/4 {
@@ -321,7 +322,9 @@ foreach event in all_cvd heart stroke {
     }
     putpdf paragraph, font("`font_body'", 1)
     putpdf text ("Latest five complete years"), bold font("`font_title'", 9, "`bnr_ink'")
-    putpdf table evt_`event'_rate_tab = (7,6), width(100%) border(all, nil)
+
+    matrix rate_card_widths = (25, 15, 15, 15, 15, 15)
+    putpdf table evt_`event'_rate_tab = (7,6), width(100%) border(all, nil)  width(rate_card_widths)
     putpdf table evt_`event'_rate_tab(1,1) = ("ASR per 100,000")
     forvalues j = 0/4 {
         local yy = `first_table_year' + `j'
