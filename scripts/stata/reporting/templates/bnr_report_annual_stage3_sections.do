@@ -127,17 +127,32 @@ foreach event in all_cvd heart stroke {
     }
     putpdf text ("`event_label' event counts"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Hospital-recorded events and published national estimates across the complete annual series."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table evt_`event'_count_cards = (2,3), width(100%) border(all, nil)
+
+    matrix evt_count_card_widths = (30, 5, 30, 5, 30)
+
+    putpdf table evt_`event'_count_cards = (4,5), width(100%) width(evt_count_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table evt_`event'_count_cards(`r',2) = ("")
+        putpdf table evt_`event'_count_cards(`r',4) = ("")
+    }
+    putpdf table evt_`event'_count_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table evt_`event'_count_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
     putpdf table evt_`event'_count_cards(1,1) = ("Hospital-recorded")
-    putpdf table evt_`event'_count_cards(1,2) = ("Primary national")
-    putpdf table evt_`event'_count_cards(1,3) = ("Inclusive national")
+    putpdf table evt_`event'_count_cards(1,3) = ("Primary national")
+    putpdf table evt_`event'_count_cards(1,5) = ("Inclusive national")
     putpdf table evt_`event'_count_cards(2,1) = ("`hospital'")
-    putpdf table evt_`event'_count_cards(2,2) = ("`primary'")
-    putpdf table evt_`event'_count_cards(2,3) = ("`inclusive'")
+    putpdf table evt_`event'_count_cards(2,3) = ("`primary'")
+    putpdf table evt_`event'_count_cards(2,5) = ("`inclusive'")
+    putpdf table evt_`event'_count_cards(3,1) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_count_cards(3,3) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_count_cards(3,5) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table evt_`event'_count_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table evt_`event'_count_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table evt_`event'_count_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table evt_`event'_count_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_count_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table evt_`event'_count_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_count_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_count_cards(1,5), border(top, single, "`event_colour'")
+
     capture confirm file "`fig'"
     if !_rc {
         putpdf table evt_`event'_count_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -255,17 +270,50 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' event rates"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Age-standardised rates per 100,000. Whiskers are published 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table evt_`event'_rate_cards = (2,3), width(100%) border(all, nil)
+
+    * Column widths are percentages of the available table width.
+    matrix evt_rate_card_widths = (30, 5, 30, 5, 30)
+
+    * Dynamically match each numeric format width to the displayed integer.
+    local hospital_width  = strlen(strtrim(string(`hospital',  "%21.0f")))
+    local primary_width   = strlen(strtrim(string(`primary',   "%21.0f")))
+    local inclusive_width = strlen(strtrim(string(`inclusive', "%21.0f")))
+
+    local hospital_format  "%`hospital_width'.0f"
+    local primary_format   "%`primary_width'.0f"
+    local inclusive_format "%`inclusive_width'.0f"
+
+    putpdf table evt_`event'_rate_cards = (4,5), width(100%) width(evt_rate_card_widths) border(all, nil)
+
+    forvalues r = 1/4 {
+        putpdf table evt_`event'_rate_cards(`r',2) = ("")
+        putpdf table evt_`event'_rate_cards(`r',4) = ("")
+    }
+
+    putpdf table evt_`event'_rate_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table evt_`event'_rate_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
+
     putpdf table evt_`event'_rate_cards(1,1) = ("Hospital-recorded ASR")
-    putpdf table evt_`event'_rate_cards(1,2) = ("Primary national ASR")
-    putpdf table evt_`event'_rate_cards(1,3) = ("Inclusive national ASR")
-    putpdf table evt_`event'_rate_cards(2,1) = ("`hospital'")
-    putpdf table evt_`event'_rate_cards(2,2) = ("`primary'")
-    putpdf table evt_`event'_rate_cards(2,3) = ("`inclusive'")
+    putpdf table evt_`event'_rate_cards(1,3) = ("Primary national ASR")
+    putpdf table evt_`event'_rate_cards(1,5) = ("Inclusive national ASR")
+
+    putpdf table evt_`event'_rate_cards(2,1) = (`hospital'), nformat(`hospital_format')
+    putpdf table evt_`event'_rate_cards(2,3) = (`primary'), nformat(`primary_format')
+    putpdf table evt_`event'_rate_cards(2,5) = (`inclusive'), nformat(`inclusive_format')
+
+    putpdf table evt_`event'_rate_cards(3,1) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_rate_cards(3,3) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_rate_cards(3,5) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+
     putpdf table evt_`event'_rate_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table evt_`event'_rate_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table evt_`event'_rate_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table evt_`event'_rate_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_rate_cards(.,.), bgcolor("`bnr_white'") halign(center)
+
+    putpdf table evt_`event'_rate_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_rate_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_rate_cards(1,5), border(top, single, "`event_colour'")
+
+
     capture confirm file "`fig'"
     if !_rc {
         putpdf table evt_`event'_rate_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -324,8 +372,6 @@ foreach event in all_cvd heart stroke {
     putpdf table evt_`event'_rate_note(1,1) = ("WHAT THIS MEANS"), bold font("`font_title'", 8.2, "`event_colour'")
     putpdf table evt_`event'_rate_note(2,1) = ("`table_note'"), font("`font_body'", 7.8, "`bnr_ink'")
     putpdf table evt_`event'_rate_note(.,.), bgcolor("`bnr_white'") border(top, single, "`event_colour'")
-
-
 
 
     * EVENTS / WOMEN AND MEN PAGE --------------------------------------------
@@ -394,17 +440,36 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' events: women and men"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Primary national age-standardised event rates per 100,000."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table evt_`event'_sex_cards = (2,3), width(100%) border(all, nil)
+    matrix evt_sex_card_widths = (30, 5, 30, 5, 30)
+    local all_width    = strlen(strtrim(string(`all',    "%21.0f")))
+    local female_width = strlen(strtrim(string(`female', "%21.0f")))
+    local male_width   = strlen(strtrim(string(`male',   "%21.0f")))
+    local all_format    "%`all_width'.0f"
+    local female_format "%`female_width'.0f"
+    local male_format   "%`male_width'.0f"
+
+    putpdf table evt_`event'_sex_cards = (4,5), width(100%) width(evt_sex_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table evt_`event'_sex_cards(`r',2) = ("")
+        putpdf table evt_`event'_sex_cards(`r',4) = ("")
+    }
+    putpdf table evt_`event'_sex_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table evt_`event'_sex_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
     putpdf table evt_`event'_sex_cards(1,1) = ("All sexes")
-    putpdf table evt_`event'_sex_cards(1,2) = ("Women")
-    putpdf table evt_`event'_sex_cards(1,3) = ("Men")
-    putpdf table evt_`event'_sex_cards(2,1) = ("`all'")
-    putpdf table evt_`event'_sex_cards(2,2) = ("`female'")
-    putpdf table evt_`event'_sex_cards(2,3) = ("`male'")
+    putpdf table evt_`event'_sex_cards(1,3) = ("Women")
+    putpdf table evt_`event'_sex_cards(1,5) = ("Men")
+    putpdf table evt_`event'_sex_cards(2,1) = (`all'), nformat(`all_format')
+    putpdf table evt_`event'_sex_cards(2,3) = (`female'), nformat(`female_format')
+    putpdf table evt_`event'_sex_cards(2,5) = (`male'), nformat(`male_format')
+    putpdf table evt_`event'_sex_cards(3,1) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_sex_cards(3,3) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_sex_cards(3,5) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table evt_`event'_sex_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table evt_`event'_sex_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table evt_`event'_sex_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table evt_`event'_sex_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_sex_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table evt_`event'_sex_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_sex_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_sex_cards(1,5), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table evt_`event'_sex_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -530,17 +595,30 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' events: age patterns"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Hospital-recorded annual event counts by broad age group. These are composition counts, not age-specific rates."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table evt_`event'_age_cards = (2,3), width(100%) border(all, nil)
+    matrix evt_age_card_widths = (30, 5, 30, 5, 30)
+
+    putpdf table evt_`event'_age_cards = (4,5), width(100%) width(evt_age_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table evt_`event'_age_cards(`r',2) = ("")
+        putpdf table evt_`event'_age_cards(`r',4) = ("")
+    }
+    putpdf table evt_`event'_age_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table evt_`event'_age_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
     putpdf table evt_`event'_age_cards(1,1) = ("All ages")
-    putpdf table evt_`event'_age_cards(1,2) = ("Under 70")
-    putpdf table evt_`event'_age_cards(1,3) = ("70 and older")
+    putpdf table evt_`event'_age_cards(1,3) = ("Under 70")
+    putpdf table evt_`event'_age_cards(1,5) = ("70 and older")
     putpdf table evt_`event'_age_cards(2,1) = ("`all'")
-    putpdf table evt_`event'_age_cards(2,2) = ("`under'")
-    putpdf table evt_`event'_age_cards(2,3) = ("`older'")
+    putpdf table evt_`event'_age_cards(2,3) = ("`under'")
+    putpdf table evt_`event'_age_cards(2,5) = ("`older'")
+    putpdf table evt_`event'_age_cards(3,1) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_age_cards(3,3) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table evt_`event'_age_cards(3,5) = ("events"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table evt_`event'_age_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table evt_`event'_age_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table evt_`event'_age_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table evt_`event'_age_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_age_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table evt_`event'_age_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_age_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table evt_`event'_age_cards(1,5), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table evt_`event'_age_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -679,15 +757,24 @@ foreach event in all_cvd heart stroke {
     }
     putpdf text ("`event_label' deaths"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Primary = Clear + Likely CVD deaths. Inclusive = Clear + Likely + Possible CVD deaths."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table mort_`event'_count_cards = (2,2), width(70%) border(all, nil)
+    matrix mort_count_card_widths = (47.5, 5, 47.5)
+
+    putpdf table mort_`event'_count_cards = (4,3), width(100%) width(mort_count_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table mort_`event'_count_cards(`r',2) = ("")
+    }
+    putpdf table mort_`event'_count_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
     putpdf table mort_`event'_count_cards(1,1) = ("Primary deaths")
-    putpdf table mort_`event'_count_cards(1,2) = ("Inclusive deaths")
+    putpdf table mort_`event'_count_cards(1,3) = ("Inclusive deaths")
     putpdf table mort_`event'_count_cards(2,1) = ("`primary'")
-    putpdf table mort_`event'_count_cards(2,2) = ("`inclusive'")
+    putpdf table mort_`event'_count_cards(2,3) = ("`inclusive'")
+    putpdf table mort_`event'_count_cards(3,1) = ("deaths"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_count_cards(3,3) = ("deaths"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table mort_`event'_count_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table mort_`event'_count_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table mort_`event'_count_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table mort_`event'_count_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_count_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table mort_`event'_count_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_count_cards(1,3), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table mort_`event'_count_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -802,15 +889,28 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' mortality rates"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Primary and Inclusive age-standardised mortality rates per 100,000. Whiskers are published 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table mort_`event'_rate_cards = (2,2), width(70%) border(all, nil)
+    matrix mort_rate_card_widths = (47.5, 5, 47.5)
+    local primary_width   = strlen(strtrim(string(`primary',   "%21.0f")))
+    local inclusive_width = strlen(strtrim(string(`inclusive', "%21.0f")))
+    local primary_format   "%`primary_width'.0f"
+    local inclusive_format "%`inclusive_width'.0f"
+
+    putpdf table mort_`event'_rate_cards = (4,3), width(100%) width(mort_rate_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table mort_`event'_rate_cards(`r',2) = ("")
+    }
+    putpdf table mort_`event'_rate_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
     putpdf table mort_`event'_rate_cards(1,1) = ("Primary ASMR")
-    putpdf table mort_`event'_rate_cards(1,2) = ("Inclusive ASMR")
-    putpdf table mort_`event'_rate_cards(2,1) = ("`primary'")
-    putpdf table mort_`event'_rate_cards(2,2) = ("`inclusive'")
+    putpdf table mort_`event'_rate_cards(1,3) = ("Inclusive ASMR")
+    putpdf table mort_`event'_rate_cards(2,1) = (`primary'), nformat(`primary_format')
+    putpdf table mort_`event'_rate_cards(2,3) = (`inclusive'), nformat(`inclusive_format')
+    putpdf table mort_`event'_rate_cards(3,1) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_rate_cards(3,3) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table mort_`event'_rate_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table mort_`event'_rate_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table mort_`event'_rate_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table mort_`event'_rate_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_rate_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table mort_`event'_rate_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_rate_cards(1,3), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table mort_`event'_rate_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -930,17 +1030,36 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' deaths: women and men"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Primary age-standardised mortality rates per 100,000."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table mort_`event'_sex_cards = (2,3), width(100%) border(all, nil)
+    matrix mort_sex_card_widths = (30, 5, 30, 5, 30)
+    local all_width    = strlen(strtrim(string(`all',    "%21.0f")))
+    local female_width = strlen(strtrim(string(`female', "%21.0f")))
+    local male_width   = strlen(strtrim(string(`male',   "%21.0f")))
+    local all_format    "%`all_width'.0f"
+    local female_format "%`female_width'.0f"
+    local male_format   "%`male_width'.0f"
+
+    putpdf table mort_`event'_sex_cards = (4,5), width(100%) width(mort_sex_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table mort_`event'_sex_cards(`r',2) = ("")
+        putpdf table mort_`event'_sex_cards(`r',4) = ("")
+    }
+    putpdf table mort_`event'_sex_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table mort_`event'_sex_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
     putpdf table mort_`event'_sex_cards(1,1) = ("All sexes")
-    putpdf table mort_`event'_sex_cards(1,2) = ("Women")
-    putpdf table mort_`event'_sex_cards(1,3) = ("Men")
-    putpdf table mort_`event'_sex_cards(2,1) = ("`all'")
-    putpdf table mort_`event'_sex_cards(2,2) = ("`female'")
-    putpdf table mort_`event'_sex_cards(2,3) = ("`male'")
+    putpdf table mort_`event'_sex_cards(1,3) = ("Women")
+    putpdf table mort_`event'_sex_cards(1,5) = ("Men")
+    putpdf table mort_`event'_sex_cards(2,1) = (`all'), nformat(`all_format')
+    putpdf table mort_`event'_sex_cards(2,3) = (`female'), nformat(`female_format')
+    putpdf table mort_`event'_sex_cards(2,5) = (`male'), nformat(`male_format')
+    putpdf table mort_`event'_sex_cards(3,1) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_sex_cards(3,3) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_sex_cards(3,5) = ("per 100,000"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table mort_`event'_sex_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table mort_`event'_sex_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table mort_`event'_sex_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table mort_`event'_sex_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_sex_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table mort_`event'_sex_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_sex_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_sex_cards(1,5), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table mort_`event'_sex_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -1062,17 +1181,30 @@ foreach event in all_cvd heart stroke {
     putpdf paragraph
     putpdf text ("`event_label' deaths: age patterns"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
     putpdf text ("Primary-definition annual death counts by broad age group. These are composition counts, not age-specific rates."), font("`font_body'", 8, "`bnr_muted'")
-    putpdf table mort_`event'_age_cards = (2,3), width(100%) border(all, nil)
+    matrix mort_age_card_widths = (30, 5, 30, 5, 30)
+
+    putpdf table mort_`event'_age_cards = (4,5), width(100%) width(mort_age_card_widths) border(all, nil)
+    forvalues r = 1/4 {
+        putpdf table mort_`event'_age_cards(`r',2) = ("")
+        putpdf table mort_`event'_age_cards(`r',4) = ("")
+    }
+    putpdf table mort_`event'_age_cards(4,1) = (""), font("`font_title'", 7.5, "`bnr_teal'")
+    putpdf table mort_`event'_age_cards(4,3) = (""), font("`font_title'", 2.5, "`bnr_teal'")
     putpdf table mort_`event'_age_cards(1,1) = ("All ages")
-    putpdf table mort_`event'_age_cards(1,2) = ("Under 70")
-    putpdf table mort_`event'_age_cards(1,3) = ("70 and older")
+    putpdf table mort_`event'_age_cards(1,3) = ("Under 70")
+    putpdf table mort_`event'_age_cards(1,5) = ("70 and older")
     putpdf table mort_`event'_age_cards(2,1) = ("`all'")
-    putpdf table mort_`event'_age_cards(2,2) = ("`under'")
-    putpdf table mort_`event'_age_cards(2,3) = ("`older'")
+    putpdf table mort_`event'_age_cards(2,3) = ("`under'")
+    putpdf table mort_`event'_age_cards(2,5) = ("`older'")
+    putpdf table mort_`event'_age_cards(3,1) = ("deaths"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_age_cards(3,3) = ("deaths"), font("`font_body'", 7.3, "`bnr_muted'")
+    putpdf table mort_`event'_age_cards(3,5) = ("deaths"), font("`font_body'", 7.3, "`bnr_muted'")
     putpdf table mort_`event'_age_cards(1,.), bold font("`font_title'", 7.4, "`bnr_muted'")
     putpdf table mort_`event'_age_cards(2,.), bold font("`font_title'", 14, "`bnr_ink'")
-    putpdf table mort_`event'_age_cards(.,.), bgcolor("`bnr_white'")
-    putpdf table mort_`event'_age_cards(1,.), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_age_cards(.,.), bgcolor("`bnr_white'") halign(center)
+    putpdf table mort_`event'_age_cards(1,1), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_age_cards(1,3), border(top, single, "`event_colour'")
+    putpdf table mort_`event'_age_cards(1,5), border(top, single, "`event_colour'")
     capture confirm file "`fig'"
     if !_rc {
         putpdf table mort_`event'_age_fig = (1,1), width(100%) border(all, nil) halign(center)
@@ -1119,6 +1251,7 @@ foreach event in all_cvd heart stroke {
     putpdf table mort_`event'_age_note(.,.), bgcolor("`bnr_white'") border(top, single, "`event_colour'")
     }
 }
+
 
 * INVARIANT CHAPTER SOURCE LINE.
 * Record both release IDs after the live Events and Mortality pages so readers

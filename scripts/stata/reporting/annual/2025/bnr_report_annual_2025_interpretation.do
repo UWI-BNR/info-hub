@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_2025_interpretation.do
-VERSION: 1.1.1 (3 September 2026)
+VERSION: 1.2.0 (7 September 2026)
 PURPOSE: Analyst-owned interpretation text for the 2025 annual CVD report.
 
 EDITING RULE:
@@ -62,27 +62,40 @@ local annual_summary_message_4 ///
 * subtype locals provide distinct Heart and Stroke count/rate/sex commentary.
 * Refer to patterns visible on the same page and avoid causal claims.
 
+* CVD COMBINED
 local ann_evt_counts_text ///
-    "Hospital-recorded CVD events were higher in 2025 than in the recent comparison period: 1,021 events compared with a published previous-five-year mean of 805.8. The Primary national estimate was 1,115.8 and the Inclusive estimate 1,165.4, so adding death-record ascertainment increases the estimated national count without changing the broad message that 2025 was a high-count year relative to the recent hospital series."
+    "Hospital-recorded CVD events reached 1,021 in 2025: the highest annual count in the 2010 to 2025 series and 27% above the previous-five-year mean of 805.8. After including the estimated contribution from death-certificate-only events, the Primary national estimate was 1,115.8 and the Inclusive estimate was 1,165.4. All three measures point to an unusually high CVD event burden in 2025."
 
 local ann_evt_rates_text ///
-    "The 2025 Primary national age-standardised CVD event rate was 228.8 per 100,000, compared with 210.1 for the hospital-recorded series and 238.3 for the Inclusive national estimate. Statistical confidence intervals and DCO linkage ranges overlap substantially across these definitions, so the report treats the differences as uncertainty around ascertainment rather than as separate disease trends."
+    "After allowing for differences in population age, the Primary national CVD event rate rose from 190.9 per 100,000 in 2024 to 228.8 in 2025, close to the series high of 232.6 in 2019. The 2025 hospital-recorded rate was 210.1 and the Inclusive national rate was 238.3. The three estimates give the same broad message of a high-rate year, while their separate confidence intervals and linkage ranges describe the uncertainty around the exact national level."
 
 local ann_evt_type_text ///
     "Stroke made up about two thirds of hospital-recorded CVD events in 2025: 693 Stroke events compared with 328 Heart events. The same ordering is visible in the Primary national age-standardised rates, at 155.1 per 100,000 for Stroke and 73.7 for Heart."
 
 local ann_evt_sex_text ///
-    "Men had a higher Primary national age-standardised CVD event rate than women in 2025: 288.8 compared with 184.0 per 100,000. The difference is also visible in the hospital-recorded series, so it is not explained solely by the addition of death-record-only events."
+    "The 2025 Primary national age-standardised CVD event rate was 288.8 per 100,000 in men and 184.0 in women: about 57% higher in men. The male rate has been higher in every year of the 2010 to 2025 series, and the 2025 confidence intervals are clearly separated. This persistent difference is important for prevention and service planning; understanding its causes requires evidence on risk factors, diagnosis and access to care."
 
 local ann_evt_age_text ///
-    "The 2025 hospital-recorded event count was almost evenly divided by age: 508 events were among people aged under 70 and 511 among people aged 70 or older. This age profile describes the composition of recorded events; it should not be read as an age-specific population risk comparison."
+    "Hospital-recorded events were almost evenly divided by age in 2025: 508 among people under 70 and 511 among people aged 70 or older. Both groups were above their previous-five-year means of 416.2 and 388.2, so both contributed to the high overall count. These counts describe where recorded events occurred; age-specific rates, available online at the BNR Information Hub, are the appropriate measure for comparing population risk."
 
-local ann_evt_heart_counts_text "Heart events form the smaller of the two main event groups shown on the preceding CVD pages. The chart and table show how the hospital-recorded series compares with the published national estimates; the definitions should be compared within this page, rather than added to the Stroke rows."
-local ann_evt_stroke_counts_text "Stroke remains the larger of the two main event groups shown on the preceding CVD pages. The national estimates add published death-record ascertainment to the hospital series, helping services see the likely scale of events beyond hospital records alone."
-local ann_evt_heart_rates_text "This page shows the recent pattern in Heart event rates after allowing for differences in the age structure of the population. Read the solid estimate and its confidence interval together; small year-to-year movements may not represent a meaningful change."
-local ann_evt_stroke_rates_text "This page shows the recent pattern in Stroke event rates after allowing for differences in the age structure of the population. The wider CVD page provides the overall context; here the focus is the Stroke contribution to that total."
-local ann_evt_heart_sex_text "The comparison helps services ask whether Heart events are affecting women and men differently after age is taken into account. It is a signal for planning and prevention, not evidence on its own of why a difference has occurred."
-local ann_evt_stroke_sex_text "The comparison helps services ask whether Stroke events are affecting women and men differently after age is taken into account. It should be read alongside the all-CVD comparison on the earlier page."
+* HEART and STROKE
+local ann_evt_heart_counts_text ///
+    "Hospital-recorded Heart events reached 328 in 2025: the highest annual count in the 2010 to 2025 series and 36% above the previous-five-year mean of 240.4. The Primary national estimate was 358.2 and the Inclusive estimate was 365.1. The closeness of the two national estimates strengthens the conclusion that 2025 was an unusually high year for Heart events."
+
+local ann_evt_stroke_counts_text /// 
+    "Hospital-recorded Stroke events reached 693 in 2025: the highest annual count in the 2010 to 2025 series and 23% above the previous-five-year mean of 565.4. The Primary national estimate was 757.5 and the Inclusive estimate was 798.2. As Stroke is the larger event group, this increase contributed most of the overall excess in CVD events above the recent mean."
+
+local ann_evt_heart_rates_text ///
+    "The 2025 Primary national Heart event rate was 73.7 per 100,000, up from 59.9 in 2024 and the highest point estimate since 2019. The hospital-recorded rate was 67.7 and the Inclusive national rate was 74.9. The 2024 and 2025 confidence intervals overlap slightly, so further years will help show whether this increase is sustained."
+
+local ann_evt_stroke_rates_text ///
+    "The 2025 Primary national Stroke event rate was 155.1 per 100,000, up from 131.0 in 2024 and the highest point estimate since 2016. The hospital-recorded rate was 142.5 and the Inclusive national rate was 163.0. The rise is visible across all three measures, supporting the broader finding of a high CVD event rate in 2025."
+
+local ann_evt_heart_sex_text ///
+    "The 2025 Primary national Heart event rate was 93.4 per 100,000 in men and 56.7 in women: about 65% higher in men. The male rate has been higher throughout the 2010 to 2025 series, and the 2025 confidence intervals are clearly separated. This persistent pattern is important for prevention and service planning, while its causes require further evidence."
+
+local ann_evt_stroke_sex_text ///
+    "The 2025 Primary national Stroke event rate was 195.4 per 100,000 in men and 127.3 in women: about 54% higher in men. Rates rose for both sexes from 2024, with a larger increase among men. The 2025 confidence intervals are clearly separated, making this an important difference to monitor and address."
 
 * Backward-compatible umbrella local retained for the earlier standard file.
 local annual_events_interpretation ///
@@ -97,27 +110,40 @@ local annual_events_interpretation ///
 * the distinction between Primary and Inclusive definitions, and between their
 * definitional difference and statistical confidence intervals.
 
+* ALL CVD
 local ann_mort_counts_text ///
-    "Primary CVD deaths numbered 368 in 2025, below the published previous-five-year mean of 394.2. The Inclusive count was 588, close to its comparator of 583.6. The contrast between those two patterns is important: the recent position depends substantially on whether deaths classified as Possible CVD are included."
-
+    "Primary CVD deaths numbered 368 in 2025, almost unchanged from 365 in 2024 and 7% below the previous-five-year mean of 394.2. The Inclusive count was 588, up from 568 in 2024 and close to its recent mean of 583.6. The difference of 220 deaths between Primary and Inclusive measures represents the Possible CVD class included in the broader definition and shows how strongly the total depends on cause-of-death classification uncertainty."
 local ann_mort_rates_text ///
-    "The 2025 Primary age-standardised CVD mortality rate was 76.0 per 100,000, while the Inclusive rate was 123.7. Their statistical confidence intervals are shown separately from the definitional difference; the gap between Primary and Inclusive estimates is not a confidence interval."
+    "The Primary age-standardised CVD mortality rate was broadly stable, moving from 73.9 per 100,000 in 2024 to 76.0 in 2025. The Inclusive rate moved from 115.7 to 123.7, with overlapping confidence intervals across the two years. Each line has its own statistical confidence interval; the distance between the Primary and Inclusive lines shows the sensitivity of the result to including Possible CVD deaths."
 
 local ann_mort_type_text ///
     "Primary Heart and Stroke mortality were very similar in 2025. There were 186 Heart deaths and 182 Stroke deaths, with age-standardised rates of 39.3 and 36.7 per 100,000 respectively. Their 95% confidence intervals overlap, so the report does not interpret the small difference between them as a clear separation."
 
 local ann_mort_sex_text ///
-    "Primary CVD death counts were identical for women and men in 2025 at 184 each, but the age-standardised mortality rate was higher in men: 106.8 compared with 59.7 per 100,000 in women. The published 95% confidence intervals do not overlap, illustrating why rates add information that raw counts alone cannot provide."
+    "Primary CVD death counts were identical for women and men in 2025, at 184 each. After allowing for population age, the mortality rate was 106.8 per 100,000 in men and 59.7 in women: about 79% higher in men, with clearly separated confidence intervals. Age-standardised rates therefore reveal an important difference that the equal counts alone do not show."
 
 local ann_mort_age_text ///
-    "Among Primary CVD deaths with an age classification in 2025, 70.0% were aged 70 or older and 30.0% were under 70. One Primary CVD death is outside that age-distribution denominator, so the age percentages should be read from the published distribution rather than reconstructed from the total count."
+    "Of the 367 Primary CVD deaths with age recorded in 2025, 257 were among people aged 70 or older and 110 were among people under 70: 70% and 30% respectively. Both counts were below their previous-five-year means, so both age groups contributed to the lower overall total. One further Primary CVD death had no age classification and is excluded from these percentages."
 
-local ann_mort_heart_counts_text "Heart deaths are shown using both the Primary and Inclusive definitions. The difference between them reflects how deaths classified as Possible CVD are handled, rather than a second group of people who died."
-local ann_mort_stroke_counts_text "Stroke deaths are shown using both the Primary and Inclusive definitions. This gives decision-makers a transparent view of how the reported total changes when Possible CVD deaths are included."
-local ann_mort_heart_rates_text "These rates allow the Heart mortality pattern to be compared over time without changes in population age structure driving the result. The Primary and Inclusive lines answer different definition questions; they are not confidence limits around one estimate."
-local ann_mort_stroke_rates_text "These rates allow the Stroke mortality pattern to be compared over time without changes in population age structure driving the result. The Primary and Inclusive lines answer different definition questions; they are not confidence limits around one estimate."
-local ann_mort_heart_sex_text "The women-and-men comparison uses the Primary definition and age-standardised rates, so it is more informative for service planning than raw counts alone. The chart identifies patterns worth following up, not causes."
-local ann_mort_stroke_sex_text "The women-and-men comparison uses the Primary definition and age-standardised rates, so it is more informative for service planning than raw counts alone. The chart identifies patterns worth following up, not causes."
+
+* HEART and STROKE 
+local ann_mort_heart_counts_text ///
+    "Primary Heart deaths numbered 186 in 2025, almost unchanged from 185 in 2024 and 12% below the previous-five-year mean of 212.2. The Inclusive count was 292, up from 272 and almost equal to its recent mean of 293.0. The 106 deaths between the two 2025 estimates are Possible Heart deaths, showing the effect of the broader classification."
+
+local ann_mort_stroke_counts_text ///
+    "Primary Stroke deaths numbered 182 in 2025, close to 180 in 2024 and exactly equal to the previous-five-year mean of 182.0. The Inclusive count was unchanged at 296 and was also close to its recent mean of 290.6. The stable recent pattern sits alongside substantial classification sensitivity: Possible Stroke deaths make up 114 of the Inclusive total."
+
+local ann_mort_heart_rates_text ///
+    "The Primary Heart mortality rate was broadly stable, moving from 37.8 per 100,000 in 2024 to 39.3 in 2025, and remained below the rates seen in 2021 to 2023. The Inclusive rate rose from 55.7 to 62.6, although its confidence intervals overlap across the two years. The distance between the lines shows the effect of including Possible Heart deaths."
+
+local ann_mort_stroke_rates_text ///
+    "Stroke mortality rates were broadly stable between 2024 and 2025. The Primary rate moved from 36.1 to 36.7 per 100,000, while the Inclusive rate moved from 60.0 to 61.1; both pairs of confidence intervals overlap substantially. The continuing distance between the two lines shows the effect of including Possible Stroke deaths."
+
+local ann_mort_heart_sex_text ///
+    "Primary Heart death counts were similar for women and men in 2025, at 92 and 94. The age-standardised rate was higher in men, at 50.2 per 100,000 compared with 31.7 in women, as it has been throughout the series. The 2025 confidence intervals overlap slightly, so the size of the difference is estimated with some uncertainty."
+
+local ann_mort_stroke_sex_text ///
+    "Primary Stroke death counts were also similar for women and men in 2025, at 92 and 90. After allowing for population age, the mortality rate was 56.7 per 100,000 in men and 28.0 in women: about twice as high in men, with separated confidence intervals. The persistent male-female difference is important for prevention and service planning."
 
 * Backward-compatible umbrella local retained for the earlier standard file.
 local annual_mortality_interpretation ///
