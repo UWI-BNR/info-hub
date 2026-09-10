@@ -387,8 +387,9 @@ $secondary: #001f3d;
    MANUAL IDENTITY ACCENTS
    =========================================================================
 
-   Landing cards use a shared BNR-navy top rule and a manual-specific pale
-   fill. Small labels and identity flags carry the manual accent. Shared
+   Landing cards retain the standard site light surface and shared BNR-navy
+   top rule. A broad, text-free pale band provides manual-specific wayfinding;
+   small labels and identity flags carry the darker manual accent. Shared
    navigation, links and buttons retain the BNR site palette.
 */
 
@@ -396,11 +397,6 @@ body.bnr-methods-manual {
   --bnr-manual-accent: #356a49;
   --bnr-manual-tint: #e9f3ec;
   --bnr-manual-text: #2e593d;
-  --bnr-landing-card-tint: #dcece1;
-}
-
-body.bnr-methods-manual #methods-manual-sections .card-body > .small {
-  color: var(--bnr-manual-accent) !important;
 }
 
 .bnr-manual-flag {
@@ -428,11 +424,6 @@ body.bnr-operations-manual {
   --bnr-manual-accent: #8b4f27;
   --bnr-manual-tint: #faf0e8;
   --bnr-manual-text: #70401e;
-  --bnr-landing-card-tint: #f5e4d5;
-}
-
-body.bnr-operations-manual #operations-manual-sections .card-body > .small {
-  color: var(--bnr-manual-accent) !important;
 }
 
 body.bnr-operations-manual .bnr-manual-flag--operations {
@@ -445,18 +436,43 @@ body.bnr-tech-manual {
   --bnr-manual-accent: #6c557f;
   --bnr-manual-tint: #f3eef6;
   --bnr-manual-text: #4f3c60;
-  --bnr-landing-card-tint: #e9e0ee;
 }
 
-body.bnr-methods-manual #methods-manual-sections .card,
-body.bnr-operations-manual #operations-manual-sections .card,
-body.bnr-tech-manual #technical-manual-sections .card {
-  border-top-color: #045174 !important;
-  background-color: var(--bnr-landing-card-tint) !important;
+#methods-manual-sections {
+  --bnr-landing-accent: #356a49;
+  --bnr-landing-tint: #b9d8c1;
 }
 
-body.bnr-tech-manual #technical-manual-sections .card-body > .small {
-  color: var(--bnr-manual-accent) !important;
+#operations-manual-sections {
+  --bnr-landing-accent: #8b4f27;
+  --bnr-landing-tint: #e7bf9e;
+}
+
+#technical-manual-sections {
+  --bnr-landing-accent: #6c557f;
+  --bnr-landing-tint: #d1c0dc;
+}
+
+#methods-manual-sections .card-body .small,
+#operations-manual-sections .card-body .small,
+#technical-manual-sections .card-body .small {
+  color: var(--bnr-landing-accent) !important;
+}
+
+#methods-manual-sections .card,
+#operations-manual-sections .card,
+#technical-manual-sections .card {
+  overflow: hidden;
+}
+
+#methods-manual-sections .card::before,
+#operations-manual-sections .card::before,
+#technical-manual-sections .card::before {
+  content: "";
+  display: block;
+  height: 22px;
+  background: var(--bnr-landing-tint);
+  border-bottom: 2px solid var(--bnr-landing-accent);
 }
 
 body.bnr-tech-manual .bnr-manual-flag--technical {

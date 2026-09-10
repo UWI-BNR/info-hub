@@ -1,33 +1,35 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Measures overview"
-description: "The measures explained in the BNR Public Methods Manual."
+description: "The core measures available in the BNR Information Hub."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--methods}
 Public Methods Manual
 :::
 
-Different measures answer different questions. A count describes volume; a rate relates events to a population; case fatality describes an outcome among events; and length of stay describes hospital use.
+The BNR Information Hub presents a number of core measures, and each measure can answer different questions. A count describes volume; a percentage presents the disease burden in a population subgroup, such as men, women, or younger adults; a rate relates events to a population. 
 
-## Measures in this manual
+As well as these core measure, updated monthly, the BNR team produce regular insights on further aspects of disease burden, such as hospital case fatality, length of hospital stay, and more. For recent BNR outputs, click [here](../../news/index.qmd).
 
-| Measure | Question answered | Usually reported as |
-|---|---|---|
-| [Number of CVD events](cvd-event-counts.qmd) | How many eligible hospital-registered events were recorded? | Number of events |
-| [CVD incidence and event rates](incidence.qmd) | How frequently were eligible events recorded relative to the population? | Events per 100,000 population |
-| [CVD case fatality](case-fatality.qmd) | What proportion of eligible hospital events ended in death before discharge? | Percentage |
-| [Hospital length of stay](length-of-stay.qmd) | How long did eligible CVD admissions last? | Median days and interquartile range |
-| [CVD mortality](mortality.qmd) | How many deaths meet the BNR CVD mortality definitions, how are they distributed, and how do annual rates compare? | Counts, percentage distributions and rates |
-| [Hypertension](hypertension.qmd) | How will hypertension coverage, care and control be monitored? | Counts, percentages and rates |
-| [Diabetes](diabetes.qmd) | How will diabetes coverage, care and outcomes be monitored? | Counts, percentages and rates |
+## Core measures from the BNR
+
+| Measure | Measure Type | Question answered | Usually reported as |
+|---|--|----|---|
+| [Number of CVD events](cvd-event-counts.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> | How many eligible hospital-registered events were recorded? | Number of events |
+| [CVD event rates](incidence.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |How frequently were eligible events recorded relative to the population? | Events per 100,000 population |
+| [CVD mortality](mortality.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |How many deaths meet the BNR CVD mortality definitions, how are they distributed, and how do annual rates compare? | Counts, percentage distributions and rates |
+| [Hypertension](hypertension.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |Measures of hypertension coverage and control | Counts, percentages and rates |
+| [Diabetes](diabetes.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |Measures of diabetes coverage and control | Counts, percentages and rates |
+| [Case fatality](case-fatality.qmd) | <span style="color: #6c757d;">INSIGHT</span> |What proportion of eligible hospital events ended in death before discharge? | Percentage |
+| [Hospital length of stay](length-of-stay.qmd) | <span style="color: #6c757d;">INSIGHT</span> | How long did eligible CVD admissions last? | Median days and interquartile range |
 
 ## Choose the right measure
 
 Use counts for workload or burden, rates for population comparisons, case fatality for short-term hospital outcomes, and length of stay or bed-days for hospital use. No single measure gives a complete account of population health or service performance.
 
 ::: {.callout-warning title="Similar labels can hide different definitions"}
-Two statistics called â€œincidenceâ€ or â€œmortalityâ€ may use different sources, denominators or age-adjustment methods. Use the definition accompanying the BNR output before making a comparison.
+Two statistics called including the word *event*, *mortality*, or *rate* (for example) may use different sources, denominators or age-adjustment methods. Use the definition accompanying each BNR output before making a comparison.
 :::
 
 ## Related pages

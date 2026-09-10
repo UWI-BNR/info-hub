@@ -2,16 +2,15 @@
 manual-review-status: not-reviewed
 title: "Hypertension measures"
 description: "Holding page for near-term BNR hypertension measure specifications."
+draft: true
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--methods}
 Public Methods Manual
 :::
 
-Hypertension is part of the main BNR surveillance programme. This page has been positioned with the other routine measures so that the approved definitions can be added without changing the manual structure.
-
 ::: {.callout-note title="Content in preparation"}
-Detailed hypertension measures and publication rules are being prepared for implementation. This page is not an approved metric specification.
+Detailed hypertension measures and publication rules are being prepared for implementation. This page is not yet an approved metric specification.
 :::
 
 ## What BNR intends to monitor
@@ -19,7 +18,7 @@ Detailed hypertension measures and publication rules are being prepared for impl
 Subject to final approval, the measures are expected to describe areas such as:
 
 - population or service coverage;
-- recorded hypertension prevalence;
+- recorded hypertension prevalence (using HoTN 1);
 - recent blood-pressure measurement;
 - treatment and continuity of care; and
 - blood-pressure control.
@@ -35,10 +34,6 @@ Subject to final approval, the measures are expected to describe areas such as:
 | Clinical rule | Threshold, diagnosis or treatment definition |
 | Exclusions | Missing, ineligible or not-applicable records |
 | Interpretation | Intended use and important limitations |
-
-## Publication status
-
-No number should be interpreted as a routine BNR hypertension measure until its definition, source, quality checks and disclosure rules have been approved and added here.
 
 ## Related pages
 

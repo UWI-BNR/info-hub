@@ -128,17 +128,14 @@ website:
         - text: "Methods home"
           href: methods/index.qmd
 
-        - section: "About BNR surveillance"
+        - section: "Start here"
           contents:
             - text: "About BNR surveillance"
               href: methods/about/bnr-surveillance.qmd
-
-        - section: "From records to statistics"
-          contents:
             - text: "From records to statistics"
               href: methods/about/records-to-statistics.qmd
 
-        - section: "What BNR reports"
+        - section: "Understanding our measures"
           contents:
             - text: "Measures overview"
               href: methods/measures/index.qmd
@@ -146,18 +143,18 @@ website:
               href: methods/measures/cvd-event-counts.qmd
             - text: "CVD incidence and event rates"
               href: methods/measures/incidence.qmd
+            - text: "CVD case fatality"
+              href: methods/measures/case-fatality.qmd
+            - text: "Hospital length of stay"
+              href: methods/measures/length-of-stay.qmd
             - text: "CVD mortality"
               href: methods/measures/mortality.qmd
             - text: "Hypertension"
               href: methods/measures/hypertension.qmd
             - text: "Diabetes"
               href: methods/measures/diabetes.qmd
-            - text: "CVD case fatality"
-              href: methods/measures/case-fatality.qmd
-            - text: "Hospital length of stay"
-              href: methods/measures/length-of-stay.qmd
 
-        - section: "Counts, percentages and rates"
+        - section: "Understanding the methods"
           contents:
             - text: "Counts, percentages and rates"
               href: methods/interpretation/counts-percentages-rates.qmd
@@ -165,9 +162,6 @@ website:
               href: methods/interpretation/classifying-cvd-events.qmd
             - text: "How CVD deaths are classified"
               href: methods/interpretation/classifying-cvd-deaths.qmd
-
-        - section: "Quality and confidentiality"
-          contents:
             - text: "Data quality and completeness"
               href: methods/interpretation/data-quality-completeness.qmd
             - text: "Protecting confidentiality"
@@ -175,7 +169,7 @@ website:
             - text: "Releases, revisions and comparability"
               href: methods/interpretation/revisions-comparability.qmd
 
-        - section: "Plain-language glossary"
+        - section: "Reference and data access"
           contents:
             - text: "Glossary"
               href: methods/reference/glossary.qmd

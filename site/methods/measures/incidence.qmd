@@ -1,6 +1,6 @@
 ﻿---
-manual-review-status: not-reviewed
-title: "CVD incidence and event rates"
+manual-review-status: reviewed-by-irh
+title: "CVD event rates"
 description: "How BNR relates eligible CVD events to the Barbados population."
 ---
 
@@ -22,57 +22,91 @@ CVD event rates describe how frequently eligible heart attack and stroke events 
 
 ## What does this measure tell us?
 
-A rate makes event numbers more comparable when populations differ in size. BNR may report a hospital-based event rate and, where death-certificate-only information is available, a broader estimated national event rate.
+A rate makes event numbers more comparable when populations differ in size. BNR may report a hospital-based event rate and, annually &mdash; with the addition of death-certificate-only (DCO) information &mdash; a broader estimated national event rate.
 
 | Series | Events included | Main interpretation |
 |---|---|---|
 | **Hospital-based event rate** | Eligible hospital-registered events | Recorded serious CVD events relative to the resident population |
-| **Estimated national event rate** | Hospital events plus identified death-certificate-only events | A broader estimate, subject to the quality and completeness of death-certificate ascertainment |
+| **Estimated national event rate** | Hospital events plus identified death-certificate-only (DCO) events | A broader estimate, subject to the quality and completeness of death-certificate ascertainment |
 
-The approved DCO-enhanced rates are annual only and are supplied as crude and
+The approved DCO-enhanced national rates are produced annually, and are supplied as crude and
 age-standardised rates for All CVD, Heart and Stroke, and for all, female and
-male sexes. Primary and Inclusive are alternative mortality definitions, not
-uncertainty bounds. They are released as approved values or `*`; the website
-does not calculate, add or subtract rates from public rows.
+male sexes. *Primary* and *Inclusive* are alternative mortality definitions. You can read more about how we define *Primary* and *Inclusive* mortality [here](../interpretation/classifying-cvd-deaths.qmd). Statistics are released as approved values or `*` if the resulting numbers are small (5 or lower). 
 
 ## How do we calculate it?
+
+### Crude event rate
 
 The crude rate is:
 
 $$
-\text{Rate per 100,000} = \frac{\text{eligible events}}{\text{resident population}} \times 100,000
+\text{Crude rate per 100,000} =
+\frac{\text{eligible events}}{\text{resident population}} \times 100,000
 $$
 
-Age-adjusted rates first calculate age-specific rates and then apply a standard set of age weights. This reduces differences caused only by one population or period having an older age structure.
+It describes the number of eligible events relative to the whole resident population.
+
+### Age-standardised event rate
+
+Age-standardised rates account for differences in the age structure of populations. They first calculate a rate for each age group, then combine those rates using a fixed set of standard population weights.
+
+$$
+\text{Age-standardised rate} =
+\frac{\sum_a \left(r_a \times w_a\right)}{\sum_a w_a}
+$$
+
+where $r_a$ is the age-specific rate in age group $a$, and $w_a$ is that age group’s weight in the selected standard population.
+
+This allows fairer comparisons over time, between women and men, or between places when their populations have different age profiles. It does not represent the observed number of events in the population.
 
 ## What is included and excluded?
 
-The numerator uses eligible events among Barbados residents in the stated period. Non-residents, duplicates and out-of-period records are excluded. The output metadata states whether death-certificate-only events are included.
+The numerator uses eligible events among Barbados residents in the stated period. Non-residents, duplicates and out-of-period records are excluded. In all BNR data releases, the accompanying metadata (how we describe our datasets) states whether death-certificate-only events are included.
 
-The denominator is the resident population for the same period and, where relevant, the same sex and age group. BNR records the population source and standard population with the published output.
+The denominator is the resident population for the same period and, where relevant, the same sex and age group. For age-standardised rates, BNR applies the published standard population weights to the age-specific rates. The published output records both the population source and standard population used.
 
 ## Worked example
+
+### Crude rate
 
 If 140 eligible events occurred in a fictional population of 280,000:
 
 $$
-\frac{140}{280,000} \times 100,000 = 50
+\frac{140}{280{,}000} \times 100{,}000 = 50
 $$
 
 The crude event rate would be **50 per 100,000 population**.
+
+### Age-standardised rate
+
+Suppose the same population has two age groups:
+
+| Age group         | Eligible events | Population | Age-specific rate per 100,000 | Standard weight |
+| ----------------- | --------------: | ---------: | ----------------------------: | --------------: |
+| Under 70 years    |              80 |    200,000 |                            40 |            0.80 |
+| 70 years and over |              60 |     80,000 |                            75 |            0.20 |
+
+The age-standardised rate is:
+
+$$
+(40 \times 0.80) + (75 \times 0.20) = 47
+$$
+
+The age-standardised event rate would be **47 per 100,000 standard population**.
+
 
 ## How should it be interpreted?
 
 Compare like with like: crude with crude, or age-adjusted with age-adjusted using the same standard. Age adjustment improves comparison but does not remove every difference in ascertainment, diagnosis or data quality.
 
-BNR publications have historically used the familiar term *incidence*. Because the numerator counts eligible events, including recurrent events where allowed by the event definition, the accompanying technical label *event rate* is often more precise.
+BNR publications have historically used the familiar term *incidence*. Because the numerator counts eligible events, including recurrent events where allowed by the event definition, the accompanying technical label *event rate* is more precise.
 
 ## Things to bear in mind
 
 - Hospital-based and hospital-plus-death-certificate series answer related but different questions.
-- A broader source is not automatically more accurate if linkage or cause-of-death information is incomplete.
+- Our wider estimated national rates are not automatically more accurate if linkage or cause-of-death information is incomplete.
 - Rates based on small numbers can vary considerably from year to year.
-- Confidence intervals show statistical uncertainty but not all uncertainty from data coverage or classification.
+- Confidence intervals show statistical uncertainty but not all the uncertainty from data coverage or classification. You can read more on our forms of uncertainty in the methods of our [annual report](../../surveillance/cvd/reports/annual/2025/index.qmd).
 
 ## Related statistics and outputs
 
