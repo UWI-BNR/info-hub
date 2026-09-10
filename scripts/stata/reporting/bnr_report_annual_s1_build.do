@@ -1,7 +1,15 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.1.4 (6 September 2026)
+VERSION: 1.2.0 (10 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
+
+CHANGE 1.2.0:
+  - Append a one-page public-health update composed in Stata from the same
+    approved public releases as the annual report.
+  - Extract that final appendix through the controlled presentation-only PDF
+    helper and give the standalone page appropriate running furniture.
+  - Create a separate Quarto landing page so the companion product appears in
+    Latest outputs, while keeping report and update in one approval package.
 
 CHANGE 1.1.1:
   - Use a repository-relative CLI entry point so the local path configuration
@@ -150,6 +158,8 @@ local event_release "cvd_`event_year4'_`event_month2'"
 local mortality_release "mort_`mortality_year4'_`mortality_month2'"
 local report_id "bnr_cvd_annual_report_`report_year4'_v`version_num'"
 local public_name "bnr_cvd_annual_report_`report_year4'"
+local update_id "bnr_cvd_public_health_update_`report_year4'_v`version_num'"
+local update_public_name "bnr_cvd_public_health_update_`report_year4'"
 
 local event_csv "$BNR_PUBLIC/metrics/cvd/cvd_metrics_`event_release'.csv"
 local mortality_csv "$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_`mortality_release'.csv"
@@ -235,16 +245,21 @@ local candidate_dir "`package_dir'/candidate"
 local ready_dir "`package_dir'/public_ready"
 local candidate_pdf "`candidate_dir'/`report_id'.pdf"
 local candidate_body_pdf "`candidate_dir'/`report_id'_body.pdf"
+local candidate_update_pdf "`candidate_dir'/`update_id'.pdf"
 local candidate_qmd "`candidate_dir'/index.qmd"
+local candidate_update_qmd "`candidate_dir'/public_health_update.qmd"
 local candidate_metadata "`candidate_dir'/report.yml"
 local approval "`ready_dir'/approval.yml"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_annual_s1_`report_id'.log"
 local site_pdf_href "../../../../../downloads/files/reports/cvd/annual/`report_year4'/`public_name'.pdf"
+local site_update_pdf_href "../../../../../downloads/files/reports/cvd/annual/`report_year4'/`update_public_name'.pdf"
 local pdf_furniture_helper "$BNR_REPO/scripts/python/stamp_annual_report_pdf.py"
 local pdf_furniture_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 local pdf_furniture_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
 local pdf_toc_standard_spec "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_toc.csv"
 local pdf_toc_special_spec "$BNR_REPO/scripts/stata/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_toc.csv"
+local pdf_toc_appendix_spec "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_appendix_toc.csv"
+local update_template "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_public_health_update.do"
 
 local reports_dir "$BNR_STAGING/reports"
 local cvd_dir "`reports_dir'/cvd"
@@ -267,7 +282,7 @@ foreach required_dir in reports_dir cvd_dir annual_dir package_dir ///
 * INVARIANT - DO NOT EDIT.
 * Require the controlled PDF-finishing helper, supported Python interpreter
 * and approved crest before composition begins.
-foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo pdf_toc_standard_spec pdf_toc_special_spec {
+foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo pdf_toc_standard_spec pdf_toc_special_spec pdf_toc_appendix_spec update_template {
     capture confirm file "``required_file''"
     if _rc {
         display as error "Annual report page-furniture requirement not found: ``required_file''"
@@ -285,7 +300,7 @@ if !_rc {
     display as error "Approved packages are immutable. Build a higher version."
     exit 602
 }
-foreach candidate_file in candidate_pdf candidate_qmd candidate_metadata {
+foreach candidate_file in candidate_pdf candidate_update_pdf candidate_qmd candidate_update_qmd candidate_metadata {
     capture confirm file "``candidate_file''"
     if !_rc & !`replace_existing' {
         display as error "Candidate output already exists: ``candidate_file''"
@@ -328,6 +343,12 @@ include "$BNR_REPO/scripts/stata/reporting/bnr_report_annual_standard.do"
 * operationally separate.
 include "`focus'"
 
+* INVARIANT INCLUDE ORDER - DO NOT MOVE.
+* The maintained final appendix uses the same cached approved public releases
+* and the three messages already loaded from the year interpretation file.
+* Its exact final-page position allows the PDF helper to extract it safely.
+include "`update_template'"
+
 * INVARIANT - DO NOT EDIT.
 * Save the Stata-composed private body PDF. Failure stops here and leaves no
 * apparently finished candidate for review.
@@ -348,7 +369,7 @@ if _rc {
 * only registered headings present in this render, adds PDF navigation and then
 * applies page furniture. All report data and editorial content remain owned by
 * the Stata composition and the maintained contents specification.
-local pdf_furniture_command `""`pdf_furniture_python'" "`pdf_furniture_helper'" --input "`candidate_body_pdf'" --output "`candidate_pdf'" --report-title "BNR Annual CVD Report `report_year4'" --report-year "`report_year4'" --logo "`pdf_furniture_logo'" --skip-first-pages 1 --toc-spec "`pdf_toc_standard_spec'" --toc-spec "`pdf_toc_special_spec'" --toc-mode adaptive"'
+local pdf_furniture_command `""`pdf_furniture_python'" "`pdf_furniture_helper'" --input "`candidate_body_pdf'" --output "`candidate_pdf'" --report-title "BNR Annual CVD Report `report_year4'" --report-year "`report_year4'" --logo "`pdf_furniture_logo'" --skip-first-pages 1 --toc-spec "`pdf_toc_standard_spec'" --toc-spec "`pdf_toc_special_spec'" --toc-spec "`pdf_toc_appendix_spec'" --toc-mode adaptive --extract-anchor "Public health update | CVD in `report_year4'" --extract-output "`candidate_update_pdf'" --extract-title "BNR Public Health Update `report_year4'""'
 capture noisily shell `pdf_furniture_command'
 if _rc {
     local furniture_rc = _rc
@@ -366,7 +387,24 @@ if _rc {
     display as error "The page-furniture helper completed without writing: `candidate_pdf'"
     exit 603
 }
+capture confirm file "`candidate_update_pdf'"
+if _rc {
+    capture log close bnr_report_annual_s1
+    display as error "ANNUAL REPORT STEP 1 FAILED SAFELY"
+    display as error "The standalone public-health update was not written: `candidate_update_pdf'"
+    exit 603
+}
 capture erase "`candidate_body_pdf'"
+
+
+* Select two different listing images deterministically for this report year.
+* Advancing the report year advances by two images through the seven-image set.
+local listing_images listing_mountain_coast.webp listing_mangrove_reflections.webp listing_reef_shallows.webp listing_salt_pan.webp listing_shore.webp listing_sugarcane_field.webp 
+local annual_listing_index = mod(2 * (`report_year_num' - 2000), 6) + 1
+local update_listing_index = mod(2 * (`report_year_num' - 2000) + 1, 6) + 1
+local annual_listing_image : word `annual_listing_index' of `listing_images'
+local update_listing_image : word `update_listing_index' of `listing_images'
+
 
 * INVARIANT - DO NOT EDIT.
 * Write the website landing page and machine-readable report metadata from the
@@ -386,8 +424,8 @@ file write `qmd_handle' "report-version: v`version_num'" _n
 file write `qmd_handle' "coverage-period: `report_year4'" _n
 file write `qmd_handle' "event-release-id: `event_release'" _n
 file write `qmd_handle' "mortality-release-id: `mortality_release'" _n
-file write `qmd_handle' "image: /assets/images/listings/listing_mountain_coast.webp" _n
-file write `qmd_handle' "image-alt: Barbados mountain coast." _n
+file write `qmd_handle' "image: /assets/images/listings/`annual_listing_image'" _n
+file write `qmd_handle' "image-alt: Barbados landscape." _n
 file write `qmd_handle' "categories:" _n
 file write `qmd_handle' "  - CVD" _n
 file write `qmd_handle' "  - Annual report" _n
@@ -396,9 +434,41 @@ file write `qmd_handle' "  html:" _n
 file write `qmd_handle' "    toc: false" _n
 file write `qmd_handle' "    page-layout: article" _n
 file write `qmd_handle' "---" _n _n
-file write `qmd_handle' "[Open or download the PDF report](`site_pdf_href'){.btn .btn-primary}" _n _n
+file write `qmd_handle' "[Open or download the PDF report](`site_pdf_href'){.btn .btn-primary} [Open the one-page public health update](`site_update_pdf_href'){.btn .btn-outline-primary}" _n _n
 file write `qmd_handle' `"<iframe src="`site_pdf_href'" title="Annual CVD report: `report_year4'" width="100%" height="900"></iframe>"' _n
 file close `qmd_handle'
+
+* INVARIANT GENERATED COMPANION LANDING PAGE.
+* This separate QMD makes the approved one-page product discoverable through
+* Quarto's Latest outputs and CVD-report listings. It contains no calculations.
+tempname update_qmd_handle
+file open `update_qmd_handle' using "`candidate_update_qmd'", write text replace
+file write `update_qmd_handle' "---" _n
+file write `update_qmd_handle' `"title: "CVD public health update: `report_year4'""' _n
+file write `update_qmd_handle' `"description: "One-page summary of the latest complete annual CVD event and mortality results for Barbados.""' _n
+file write `update_qmd_handle' "date: `build_date'" _n
+file write `update_qmd_handle' "date-modified: `build_date'" _n
+file write `update_qmd_handle' "report-id: `update_id'" _n
+file write `update_qmd_handle' "report-type: Public health update" _n
+file write `update_qmd_handle' "report-version: v`version_num'" _n
+file write `update_qmd_handle' "coverage-period: `report_year4'" _n
+file write `update_qmd_handle' "event-release-id: `event_release'" _n
+file write `update_qmd_handle' "mortality-release-id: `mortality_release'" _n
+file write `update_qmd_handle' "related-report-id: `report_id'" _n
+file write `update_qmd_handle' "image: /assets/images/listings/`update_listing_image'" _n
+file write `update_qmd_handle' "image-alt: Barbados landscape." _n
+file write `update_qmd_handle' "categories:" _n
+file write `update_qmd_handle' "  - CVD" _n
+file write `update_qmd_handle' "  - Public health update" _n
+file write `update_qmd_handle' "format:" _n
+file write `update_qmd_handle' "  html:" _n
+file write `update_qmd_handle' "    toc: false" _n
+file write `update_qmd_handle' "    page-layout: article" _n
+file write `update_qmd_handle' "---" _n _n
+file write `update_qmd_handle' "This concise update accompanies the [complete Annual CVD report](../../annual/`report_year4'/index.qmd)." _n _n
+file write `update_qmd_handle' "[Open or download the one-page PDF](`site_update_pdf_href'){.btn .btn-primary} [Open the complete annual report](../../annual/`report_year4'/index.qmd){.btn .btn-outline-primary}" _n _n
+file write `update_qmd_handle' `"<iframe src="`site_update_pdf_href'" title="CVD public health update: `report_year4'" width="100%" height="900"></iframe>"' _n
+file close `update_qmd_handle'
 
 tempname metadata_handle
 file open `metadata_handle' using "`candidate_metadata'", write text replace
@@ -415,7 +485,10 @@ file write `metadata_handle' "mortality_release_id: `mortality_release'" _n
 file write `metadata_handle' "mortality_source_size: `mortality_size'" _n
 file write `metadata_handle' "mortality_source_checksum: `mortality_checksum'" _n
 file write `metadata_handle' "pdf_file: `public_name'.pdf" _n
-file write `metadata_handle' "pdf_finishing: controlled_python_v2" _n
+file write `metadata_handle' "public_health_update_id: `update_id'" _n
+file write `metadata_handle' "public_health_update_pdf_file: `update_public_name'.pdf" _n
+file write `metadata_handle' "public_health_update_landing_page: public_health_update.qmd" _n
+file write `metadata_handle' "pdf_finishing: controlled_python_v3" _n
 file write `metadata_handle' "pdf_contents: dynamic_two_level_adaptive" _n
 file write `metadata_handle' "landing_page: index.qmd" _n
 file write `metadata_handle' "built_date: `build_date'" _n
@@ -430,11 +503,12 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate created"
-noisily display as text   "  Script version:          1.1.4"
+noisily display as text   "  Script version:          1.2.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"
 noisily display as text  `"  Candidate package:       `candidate_dir'"'
+noisily display as text  `"  One-page update:         `candidate_update_pdf'"'
 noisily display as text  `"  Private build log:       `private_log'"'
 noisily display as text   "  Publication boundary:    Nothing approved or published"
 noisily display as text   "  Next step:               Review the candidate, then run Step 2."

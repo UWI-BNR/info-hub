@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_2025_interpretation.do
-VERSION: 1.2.0 (7 September 2026)
+VERSION: 1.3.0 (10 September 2026)
 PURPOSE: Analyst-owned interpretation text for the 2025 annual CVD report.
 
 EDITING RULE:
@@ -51,6 +51,25 @@ local annual_summary_message_3 ///
 
 local annual_summary_message_4 ///
     "There were 368 Primary CVD deaths in 2025, about 7% below the previous-five-year mean of 394.2. The Inclusive definition counted 588 deaths, close to its recent five-year comparator, showing how strongly mortality totals depend on whether Possible deaths are included. Read more about our CVD death definitions in chapter 4|Methods."
+
+* -----------------------------------------------------------------------------
+* Public-health update appendix
+* -----------------------------------------------------------------------------
+
+* EDITABLE BLOCK.
+* These three short messages appear on the final one-page public-health update,
+* which is also extracted as a standalone approved companion product. Keep the
+* wording concise, decision-relevant and consistent with the values displayed
+* on that page. Do not type headline numbers into the page template itself.
+
+local annual_phu_message_1 ///
+    "BNR recorded 1,116 CVD events in 2025, an age-standardised rate of 229 per 100,000. The rate returned to approximately its 2019 level after several years of lower recorded rates, reinforcing the need for sustained cardiovascular prevention and service preparedness."
+
+local annual_phu_message_2 ///
+    "Stroke accounted for 758 events—around two-thirds of all CVD events—and its rate was more than twice the heart-event rate. However, heart disease and stroke contributed almost equally to CVD deaths, supporting strong prevention, acute care and rehabilitation pathways for both conditions."
+
+local annual_phu_message_3 ///
+    "CVD events returned to a high level in 2025, while the mortality rate remained near its recent low. This pattern is consistent with improved survival, although better identification of non-fatal events may also contribute. If sustained, it means more people living with CVD and greater need for rehabilitation, secondary prevention and continuing care."
 
 * -----------------------------------------------------------------------------
 * CVD events

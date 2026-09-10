@@ -82,12 +82,12 @@ website:
         text: Latest
       - text: Surveillance
         menu:
-        - href: surveillance/cvd/metrics/burden/index.qmd
-          text: CVD events dashboard
-        - href: surveillance/cvd/metrics/mortality/index.qmd
-          text: CVD deaths dashboard
         - href: surveillance/cvd/index.qmd
-          text: Reports and updates
+          text: Cardiovascular disease
+        - href: surveillance/hypertension/index.qmd
+          text: Hypertension
+        - href: surveillance/diabetes/index.qmd
+          text: Diabetes
       - href: downloads/index.qmd
         text: Downloads
       - href: methods/index.qmd

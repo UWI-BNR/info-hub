@@ -1,7 +1,11 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s2_approve.do
-VERSION: 1.0.0 (2 September 2026)
+VERSION: 1.1.0 (10 September 2026)
 PURPOSE: Record human approval of an annual CVD report candidate.
+
+CHANGE 1.1.0:
+  Approve the annual report and its extracted one-page public-health update as
+  one manifested five-file payload.
 
 USAGE:
   do "$BNR_STATA/reporting/bnr_report_annual_s2_approve.do" 2025 1 ///
@@ -72,6 +76,7 @@ foreach required_global in BNR_STATA BNR_STAGING BNR_PRIVATE_LOGS {
 * Reconstruct the exact Step 1 candidate identity and its private paths.
 local year4 : display %04.0f `year_num'
 local report_id "bnr_cvd_annual_report_`year4'_v`version_num'"
+local update_id "bnr_cvd_public_health_update_`year4'_v`version_num'"
 local package_dir "$BNR_STAGING/reports/cvd/annual/`report_id'"
 local candidate_dir "`package_dir'/candidate"
 local ready_dir "`package_dir'/public_ready"
@@ -105,7 +110,8 @@ capture noisily do "$BNR_STATA/reporting/bnr_report_approve_candidate.do" ///
     "`candidate_dir'" "`ready_dir'" "`report_id'" ///
     "annual_cvd_report" "report_year" "`year4'" "`version_num'" ///
     "`approver_name'" "`approver_role'" "`confirm_candidate'" ///
-    "`confirm_disclosure'" "`confirm_ready'"
+    "`confirm_disclosure'" "`confirm_ready'" ///
+    "`update_id'.pdf" "public_health_update.qmd"
 local approval_rc = _rc
 if `approval_rc' {
     capture log close bnr_report_annual_s2
@@ -131,11 +137,12 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 2: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate approved"
-noisily display as text   "  Script version:          1.0.0"
+noisily display as text   "  Script version:          1.1.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text  `"  Approved by:             `approver_name'"'
 noisily display as text  `"  Public-ready manifest:   `manifest'"'
 noisily display as text  `"  Approval receipt:        `approval'"'
+noisily display as text   "  Approval scope:          Annual report + one-page update"
 noisily display as text  `"  Private approval log:    `private_log'"'
 noisily display as text   "  Publication boundary:    Nothing published"
 noisily display as text   "  Next step:               Run annual report Step 3."

@@ -18,7 +18,7 @@ bespoke analysis into a controlled public report.
 | Product | Preparation | Approval | Publication |
 |---|---|---|---|
 | **Rolling three-month CVD update** | One controlled builder verifies and freezes exact approved event and mortality release CSVs. | No second analytical approval: the inputs have already been approved and the template may perform only authorised simple display arithmetic. | The builder writes the dated report package; Quarto rendering and GitHub deployment remain separate. |
-| **Annual CVD report** | Step 1 builds a private PDF, landing-page and metadata candidate from declared approved releases and the year-specific analyst files. | Step 2 records approval of the exact candidate. | Step 3 publishes only the approved payload. |
+| **Annual CVD report** | Step 1 builds the private annual PDF and its final one-page public-health-update appendix, extracts the update as a standalone PDF, and prepares both landing pages and shared metadata. | Step 2 records one approval for the exact five-file annual-report and update payload. | Step 3 publishes only that approved payload. |
 | **One-off CVD report** | The bespoke analysis is completed first. Step 1 prepares the finished PDF as a private candidate. | Step 2 records approval of the exact candidate. | Step 3 publishes only the approved payload. |
 
 ## Responsibilities
@@ -40,7 +40,9 @@ the actions and their evidence remain separate.
 For a rolling update, retain the report identity, build metadata and complete
 frozen copies of both source releases. For annual and one-off reports, retain
 the private candidate, public manifest, `approval.yml`, publication log and
-authoritative published report. Private review evidence remains outside Git.
+authoritative published products. The annual candidate includes both the full
+report and its standalone one-page update. Private review evidence remains
+outside Git.
 
 ## Stop points
 
@@ -56,4 +58,3 @@ generated report manually.
 - [Rolling three-month update](../../technical/workflows/reporting/rolling-update.qmd)
 - [Annual CVD report](../../technical/workflows/reporting/annual-report.qmd)
 - [One-off CVD report](../../technical/workflows/reporting/one-off-report.qmd)
-

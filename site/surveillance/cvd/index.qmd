@@ -10,6 +10,7 @@ listing:
     contents:
       - "reports/updates/*/index.qmd"
       - "reports/annual/*/index.qmd"
+      - "reports/briefings/*/index.qmd"
       - "reports/studies/*/index.qmd"
     type: table
     sort: "date desc"
@@ -79,8 +80,8 @@ Explore the latest CVD summary statistics.
 
 ## Reports and studies
 
-Rolling three-month CVD surveillance updates, annual reports and one-off
-analytical studies will appear here as they are published.
+Rolling three-month CVD surveillance updates, annual reports, public-health
+updates and one-off analytical studies will appear here as they are published.
 
 ::: {#cvd-reports}
 :::

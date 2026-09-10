@@ -22,7 +22,7 @@ staging, logs, credentials and review evidence stay outside Git.
 | [CVD event release](cvd-events/overview.qmd) | 6 | Authorised CVD REDCap release | Approved public event metric datasets |
 | [CVD mortality release](mortality/overview.qmd) | 6 | Authorised mortality REDCap release | Approved public mortality metric datasets |
 | [Rolling three-month update](reporting/rolling-update.qmd) | 1 | Exact approved event and mortality release CSVs | Dated, versioned online update package |
-| [Annual CVD report](reporting/annual-report.qmd) | 3 | Approved standard releases plus year-specific analyst files | Approved PDF and landing-page package |
+| [Annual CVD report](reporting/annual-report.qmd) | 3 | Approved standard releases plus year-specific analyst files | Approved annual PDF, one-page update and landing-page package |
 | [One-off CVD report](reporting/one-off-report.qmd) | 3 | Finished bespoke PDF | Approved PDF and landing-page package |
 
 The event and mortality workflows remain separate. Public CVD tables,
@@ -50,4 +50,3 @@ and governance responsibility, and the **BNR Developer** maintains the
 analytical and publication implementation. An authorised person may perform
 more than one action, but build, review, approval, publication and deployment
 remain distinct recorded actions.
-

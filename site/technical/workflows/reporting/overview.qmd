@@ -16,7 +16,7 @@ share one generic analysis dispatcher.
 | Product | Current route | Public form |
 |---|---|---|
 | Rolling three-month CVD update | One controlled build from approved public event and mortality releases | Dated HTML page |
-| Annual CVD report | Step 1 build, Step 2 approve, Step 3 publish | PDF and HTML landing page |
+| Annual CVD report | Step 1 builds the report and extracts its final update appendix; Steps 2 and 3 approve and publish both together | Annual PDF, one-page update PDF and separate HTML landing pages |
 | One-off CVD report | Bespoke analysis, then Step 1 prepare, Step 2 approve, Step 3 publish | PDF and HTML landing page |
 
 The annual and one-off routes keep candidate preparation, approval and
@@ -33,4 +33,3 @@ metric.
 The optional [report disclosure screen](one-off-report.qmd#disclosure-screen)
 creates private review flags only. It does not apply secondary suppression or
 approve a report.
-

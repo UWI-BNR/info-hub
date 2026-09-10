@@ -2,8 +2,9 @@
 
 Stata/putpdf creates every report page and the editorial contents
 specification. This presentation-only helper replaces one explicit contents
-placeholder with a dynamic, linked contents page, then adds restrained running
-page furniture before the existing approval workflow.
+placeholder with a dynamic, linked contents page, adds restrained running page
+furniture, and can extract the final public-health-update appendix as a
+standalone companion PDF before the existing approval workflow.
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ INK = Color(44 / 255, 62 / 255, 80 / 255)
 TEAL = Color(4 / 255, 81 / 255, 116 / 255)
 MUTED = Color(102 / 255, 102 / 255, 102 / 255)
 RULE = Color(222 / 255, 226 / 255, 230 / 255)
+WHITE = Color(1, 1, 1)
 
 
 @dataclass(frozen=True)
@@ -101,6 +103,19 @@ def parse_args() -> argparse.Namespace:
             "full stops when a required section is absent"
         ),
     )
+    parser.add_argument(
+        "--extract-anchor",
+        help="exact displayed heading identifying the final page to extract",
+    )
+    parser.add_argument(
+        "--extract-output",
+        type=Path,
+        help="standalone one-page companion PDF written from the extracted page",
+    )
+    parser.add_argument(
+        "--extract-title",
+        help="short title displayed in the standalone running header",
+    )
     return parser.parse_args()
 
 
@@ -121,6 +136,26 @@ def validate_args(args: argparse.Namespace) -> None:
                 )
     if args.toc_spec is not None and not args.report_year:
         raise ValueError("--report-year is required when --toc-spec is used.")
+    extraction_values = (
+        args.extract_anchor,
+        args.extract_output,
+        args.extract_title,
+    )
+    if any(value is not None for value in extraction_values) and not all(
+        value is not None for value in extraction_values
+    ):
+        raise ValueError(
+            "--extract-anchor, --extract-output and --extract-title must be supplied together."
+        )
+    if args.extract_output is not None:
+        if args.extract_output.resolve() in {
+            args.input.resolve(),
+            args.output.resolve(),
+        }:
+            raise ValueError("The extracted and annual PDF paths must be different files.")
+        if not args.report_year:
+            raise ValueError("--report-year is required for standalone page furniture.")
+        args.extract_output.parent.mkdir(parents=True, exist_ok=True)
     args.output.parent.mkdir(parents=True, exist_ok=True)
 
 
@@ -393,6 +428,121 @@ def footer_overlay(
     return PdfReader(packet).pages[0]
 
 
+def standalone_overlay(
+    width: float,
+    height: float,
+    report_title: str,
+    report_year: str,
+    logo: Path | None,
+) -> object:
+    """Replace annual furniture with restrained one-page-product furniture."""
+    packet = BytesIO()
+    page_canvas = canvas.Canvas(packet, pagesize=(width, height))
+
+    # The putpdf content starts inside 0.55-inch margins. These two white masks
+    # cover only the annual helper's 31-point header/footer furniture.
+    page_canvas.setFillColor(WHITE)
+    page_canvas.rect(0, height - 33, width, 33, stroke=0, fill=1)
+    page_canvas.rect(0, 0, width, 33, stroke=0, fill=1)
+
+    header_y = height - 20
+    if logo is not None:
+        image = ImageReader(str(logo))
+        image_width, image_height = image.getSize()
+        logo_height = 13
+        logo_width = logo_height * image_width / image_height
+        page_canvas.drawImage(
+            image,
+            36,
+            header_y - logo_height + 3,
+            width=logo_width,
+            height=logo_height,
+            mask="auto",
+        )
+        title_x = 36 + logo_width + 6
+    else:
+        title_x = 36
+
+    page_canvas.setStrokeColor(RULE)
+    page_canvas.setLineWidth(0.35)
+    page_canvas.line(36, height - 31, width - 36, height - 31)
+    page_canvas.setFillColor(MUTED)
+    page_canvas.setFont("Helvetica", 7.2)
+    page_canvas.drawString(title_x, header_y - 4, report_title)
+
+    page_canvas.line(36, 31, width - 36, 31)
+    page_canvas.setFont("Helvetica", 7.0)
+    page_canvas.drawString(36, 19, "Barbados National Registry")
+    page_canvas.drawRightString(
+        width - 36, 19, f"Public health update | {report_year}"
+    )
+
+    page_canvas.save()
+    packet.seek(0)
+    return PdfReader(packet).pages[0]
+
+
+def extract_final_page(args: argparse.Namespace) -> None:
+    """Extract one uniquely anchored final page and replace annual furniture."""
+    if args.extract_output is None:
+        return
+
+    reader = PdfReader(str(args.output))
+    page_text = extracted_page_text(reader)
+    page_index = find_unique_page(page_text, args.extract_anchor)
+    if page_index is None:
+        raise ValueError(
+            f'Public-health-update extraction anchor was not found: "{args.extract_anchor}".'
+        )
+    if page_index != len(reader.pages) - 1:
+        raise ValueError(
+            "The public-health-update anchor is not on the final physical page; "
+            "the appendix may have spilled or the report order may have changed."
+        )
+
+    page = reader.pages[page_index]
+    page.merge_page(
+        standalone_overlay(
+            float(page.mediabox.width),
+            float(page.mediabox.height),
+            args.extract_title,
+            args.report_year,
+            args.logo,
+        )
+    )
+
+    writer = PdfWriter()
+    writer.add_page(page)
+    writer.add_metadata(
+        {
+            "/Title": args.extract_title,
+            "/Subject": "BNR annual CVD public health update",
+        }
+    )
+
+    with tempfile.NamedTemporaryFile(
+        mode="wb", suffix=".pdf", dir=args.extract_output.parent, delete=False
+    ) as stream:
+        temporary_output = Path(stream.name)
+        writer.write(stream)
+
+    try:
+        check = PdfReader(str(temporary_output))
+        if len(check.pages) != 1:
+            raise RuntimeError(
+                f"Standalone helper wrote {len(check.pages)} pages; expected 1."
+            )
+        extracted_lines = extracted_page_text(check)[0]
+        if normalise_text(args.extract_anchor) not in extracted_lines:
+            raise RuntimeError(
+                "The standalone PDF does not retain its required displayed title."
+            )
+        temporary_output.replace(args.extract_output)
+    finally:
+        if temporary_output.exists():
+            temporary_output.unlink()
+
+
 def finish_pdf(args: argparse.Namespace) -> int:
     validate_args(args)
 
@@ -508,6 +658,8 @@ def finish_pdf(args: argparse.Namespace) -> int:
         if temporary_output.exists():
             temporary_output.unlink()
 
+    extract_final_page(args)
+
     print("BNR annual PDF finishing completed")
     print(f"Input:       {args.input}")
     print(f"Output:      {args.output}")
@@ -519,6 +671,9 @@ def finish_pdf(args: argparse.Namespace) -> int:
         print(f"TOC omitted: {len(omitted)}")
         for title in omitted:
             print(f"  omitted from this render: {title}")
+    if args.extract_output is not None:
+        print(f"Extracted:   {args.extract_output}")
+        print("Extract pages: 1")
     return 0
 
 

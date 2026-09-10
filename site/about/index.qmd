@@ -1,6 +1,233 @@
-﻿---
+---
 title: "About the BNR"
-format: html
+description: "The Barbados National Registry: national evidence for healthier lives in Barbados."
+page-layout: full
+title-block-style: none
+toc: false
+body-classes: bnr-about-page
 ---
 
-This page will introduce the Barbados National Registry and its role in chronic disease surveillance.
+::: {.bnr-about}
+
+::: {.bnr-about-hero}
+::: {.bnr-about-hero-inner}
+
+<p class="bnr-kicker">The Barbados National Registry</p>
+
+# About the BNR
+
+<p class="bnr-about-hero-statement">Evidence for healthier lives in Barbados</p>
+
+The Barbados National Registry for Chronic Non-communicable Diseases (BNR) brings health information together to help Barbados understand major chronic diseases and use evidence to strengthen prevention, care and planning.
+
+:::
+:::
+
+::: {.bnr-about-container}
+
+## A national registry with a long view
+
+BNR is operated by the George Alleyne Chronic Disease Research Centre at The University of the West Indies, on behalf of the Ministry of Health and Wellness. It provides evidence on patterns in disease and outcomes that matter to Barbados.
+
+The Registry's work began with national surveillance for stroke, followed by heart attack and cancer. The BNR Information Hub is the public home for the Registry's current cardiovascular disease outputs: events, deaths, reports, data and methods.
+
+::: {.bnr-about-milestones}
+
+::: {.bnr-about-milestone}
+<span class="bnr-about-year">2010</span>
+
+Stroke, Heart, Cancer surveillance began
+:::
+
+::: {.bnr-about-milestone}
+<span class="bnr-about-year">2018</span>
+
+CVD surveillance adopts REDCap database 
+:::
+
+::: {.bnr-about-milestone}
+<span class="bnr-about-year">2025</span>
+
+BNR systems and processes strengthened
+:::
+
+::: {.bnr-about-milestone}
+<span class="bnr-about-year">2026</span>
+
+BNR moves online! BNR Information Hub launched
+:::
+
+:::
+
+## What BNR evidence is used for
+
+::: {.grid .bnr-about-purpose-cards}
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .h-100}
+::: {.card-body}
+
+### Understand patterns
+
+Track how major chronic diseases and their outcomes change over time, across population groups and across the health system.
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .h-100}
+::: {.card-body}
+
+### Support decisions
+
+Provide evidence for government, hospitals, clinics, public-health teams, researchers and other partners working to improve health.
+
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-4}
+::: {.card .h-100}
+::: {.card-body}
+
+### Make information useful
+
+Turn carefully reviewed information into reports, data products and plain-language explanations that can be used with confidence.
+
+:::
+:::
+:::
+
+:::
+
+## From records to public evidence
+
+::: {.bnr-about-pathway}
+
+::: {.bnr-about-step}
+<span class="bnr-about-step-number">1</span>
+
+### Collect and organise
+
+Information is brought together into a managed national record.
+:::
+
+::: {.bnr-about-step}
+<span class="bnr-about-step-number">2</span>
+
+### Define and analyse
+
+Clear definitions and statistical methods are applied consistently.
+:::
+
+::: {.bnr-about-step}
+<span class="bnr-about-step-number">3</span>
+
+### Check and protect
+
+Results are reviewed, and confidential information is protected before release.
+:::
+
+::: {.bnr-about-step}
+<span class="bnr-about-step-number">4</span>
+
+### Publish and explain
+
+Evidence is shared through dashboards, reports, data and accessible methods.
+:::
+
+:::
+
+::: {.bnr-about-callout}
+
+## The BNR Information Hub
+
+The Hub makes BNR evidence easier to find, understand and use. Its initial focus is cardiovascular disease, including heart attacks, stroke and deaths associated with cardiovascular disease. Explore the latest results alongside the definitions and information needed to interpret them responsibly.
+
+::: {.bnr-utility-links}
+[Explore CVD surveillance](../surveillance/cvd/index.qmd){.btn .btn-primary}
+[Read the methods](../methods/index.qmd){.btn .btn-outline-primary}
+[View latest reports](../news/index.qmd){.btn .btn-outline-primary}
+:::
+
+:::
+
+## Our commitment
+
+BNR is committed to evidence that is useful, transparent and handled responsibly. We publish clear definitions, explain important limitations, protect personal confidentiality and make public information available in forms that support informed discussion and action.
+
+## Who we are
+
+The Registry brings together public-health, clinical, analytical and data-management expertise. The entries below are a template for the BNR team to complete with approved names, short biographies and photographs.
+
+::: {.bnr-staff-grid}
+
+::: {.bnr-staff-card}
+<div class="bnr-staff-avatar" role="img" aria-label="Photograph placeholder">
+<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="22" r="10"/><path d="M14 54c2-12 10-18 18-18s16 6 18 18"/></svg>
+</div>
+
+::: {.bnr-staff-details}
+
+### Dr Christina Howitt
+
+**BNR Director**
+
+Provides strategic leadership for the Registry, its partnerships and its public-health contribution.
+
+:::
+:::
+
+::: {.bnr-staff-card}
+<div class="bnr-staff-avatar" role="img" aria-label="Photograph placeholder">
+<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="22" r="10"/><path d="M14 54c2-12 10-18 18-18s16 6 18 18"/></svg>
+</div>
+
+::: {.bnr-staff-details}
+
+### Jacqui Campbell
+
+**BNR Lead Analyst**
+
+Leads analytical methods, reporting and the production of clear, reliable public evidence.
+
+:::
+:::
+
+::: {.bnr-staff-card}
+<div class="bnr-staff-avatar" role="img" aria-label="Photograph placeholder">
+<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="22" r="10"/><path d="M14 54c2-12 10-18 18-18s16 6 18 18"/></svg>
+</div>
+
+::: {.bnr-staff-details}
+
+### Name to be confirmed
+
+**CVD Abstractor**
+
+Supports the identification, abstraction and quality review of cardiovascular disease information.
+
+:::
+:::
+
+::: {.bnr-staff-card}
+<div class="bnr-staff-avatar" role="img" aria-label="Photograph placeholder">
+<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="22" r="10"/><path d="M14 54c2-12 10-18 18-18s16 6 18 18"/></svg>
+</div>
+
+::: {.bnr-staff-details}
+
+### Name to be confirmed
+
+**Cancer Abstractor**
+
+Supports the identification, abstraction and quality review of cancer information.
+
+:::
+:::
+
+:::
+
+:::
+:::

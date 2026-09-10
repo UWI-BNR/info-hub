@@ -255,7 +255,7 @@ The CVD event and mortality releases remain separate.
 | **CVD events** | Approved event metric release | [CVD event workflow](../workflows/cvd-events/overview.qmd) |
 | **CVD mortality** | Approved mortality metric release | [Mortality workflow](../workflows/mortality/overview.qmd) |
 | **Rolling update** | Dated online update from approved releases | [Rolling update](../workflows/reporting/rolling-update.qmd) |
-| **Annual report** | Controlled PDF and landing page | [Annual report](../workflows/reporting/annual-report.qmd) |
+| **Annual report** | Controlled annual PDF, one-page update and landing pages | [Annual report](../workflows/reporting/annual-report.qmd) |
 | **One-off report** | Controlled publication of a finished bespoke PDF | [One-off report](../workflows/reporting/one-off-report.qmd) |
 
 ## A few rules worth remembering
@@ -268,4 +268,3 @@ The CVD event and mortality releases remain separate.
 6. **Prefer the simplest maintainable solution.** New tools or automation layers create future handover work as well as present-day convenience.
 
 The rest of this manual turns those principles into task-by-task instructions.
-

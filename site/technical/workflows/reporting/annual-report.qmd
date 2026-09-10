@@ -21,19 +21,40 @@ scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do
 The standard report uses approved public releases. The Focus On module is
 analyst-owned and must use inputs appropriate to its approved purpose.
 
+The interpretation file also owns the three concise, year-specific **Key
+messages** used by the public-health update. Update those messages from the
+reviewed annual results; do not hard-code a report year or headline value in
+the reusable appendix template.
+
 ## Step 1: Build the candidate
 
 Choose **User > BNR > Annual CVD report > Step 1: Build annual report candidate**.
 Enter the report year, both source releases and report version. Confirm that the
-private candidate contains exactly the versioned PDF, `index.qmd` and
-`report.yml`. Do not approve until the complete PDF and landing page have been
-reviewed.
+private candidate contains exactly five payload files:
+
+- the versioned annual-report PDF;
+- the versioned one-page public-health-update PDF;
+- `index.qmd` for the annual report;
+- `public_health_update.qmd` for the companion product; and
+- `report.yml` for the package.
+
+The update is first composed as the final page of the annual report. The
+controlled Python helper extracts that exact page, replaces its annual running
+furniture with compact standalone furniture, and verifies that it remains one
+page. The helper does not read surveillance data or alter the page's analytical
+content.
+
+Review both PDFs and both landing pages. In particular, confirm that the final
+annual-report page and the standalone update contain the same cards, graph and
+Key messages, and that the displayed year follows the requested report year.
+Do not approve until the complete five-file candidate has been reviewed.
 
 ## Step 2: Approve the candidate
 
 Choose **Step 2: Approve annual report candidate**. Identify the authorised
 approver and complete the candidate, disclosure and readiness confirmations.
-Step 2 copies the exact approved payload into `public_ready`, writes
+Step 2 approves the annual report and companion update together. It copies the
+exact five-file payload into `public_ready`, writes
 `public_manifest.csv`, and writes `approval.yml` last. It does not rebuild or
 publish the report.
 
@@ -41,9 +62,11 @@ publish the report.
 
 Choose **Step 3: Publish approved annual report** for the same year and version.
 Step 3 reads only `public_ready`. Confirm successful verification and inspect
-the authoritative public report, website PDF mirror, landing page and metadata.
+the authoritative public report package, both website PDF mirrors, both landing
+pages and the shared metadata. Confirm that the public-health update appears in
+the CVD report listing and in **Latest outputs** after the Quarto site is
+rendered.
 
 A correction uses a higher approved version at the same stable period location.
 The superseded working-tree report is recoverable through Git history; do not
 retain parallel public copies or edit the generated PDF manually.
-

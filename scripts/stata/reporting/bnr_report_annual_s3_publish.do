@@ -1,7 +1,11 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s3_publish.do
-VERSION: 1.0.0 (2 September 2026)
+VERSION: 1.1.0 (10 September 2026)
 PURPOSE: Publish an approved annual CVD report payload.
+
+CHANGE 1.1.0:
+  Publish the approved one-page public-health update and its separate website
+  landing page as part of the same annual report payload.
 
 USAGE:
   do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 1
@@ -70,6 +74,8 @@ foreach required_global in BNR_REPO BNR_STATA BNR_STAGING BNR_PUBLIC ///
 local year4 : display %04.0f `year_num'
 local report_id "bnr_cvd_annual_report_`year4'_v`version_num'"
 local public_name "bnr_cvd_annual_report_`year4'"
+local update_id "bnr_cvd_public_health_update_`year4'_v`version_num'"
+local update_public_name "bnr_cvd_public_health_update_`year4'"
 local ready_dir "$BNR_STAGING/reports/cvd/annual/`report_id'/public_ready"
 
 local public_reports "$BNR_PUBLIC/reports"
@@ -79,6 +85,8 @@ local public_dir "`public_annual'/`year4'"
 local public_pdf "`public_dir'/`public_name'.pdf"
 local public_qmd "`public_dir'/index.qmd"
 local public_metadata "`public_dir'/report.yml"
+local public_update_pdf "`public_dir'/`update_public_name'.pdf"
+local public_update_qmd "`public_dir'/public_health_update.qmd"
 
 local site_files "$BNR_REPO/site/downloads/files/reports"
 local site_cvd "`site_files'/cvd"
@@ -86,16 +94,20 @@ local site_annual "`site_cvd'/annual"
 local site_pdf_dir "`site_annual'/`year4'"
 local site_pdf "`site_pdf_dir'/`public_name'.pdf"
 local site_metadata "`site_pdf_dir'/report.yml"
+local site_update_pdf "`site_pdf_dir'/`update_public_name'.pdf"
 local site_reports "$BNR_REPO/site/surveillance/cvd/reports/annual"
 local site_report_dir "`site_reports'/`year4'"
 local site_qmd "`site_report_dir'/index.qmd"
+local site_updates "$BNR_REPO/site/surveillance/cvd/reports/briefings"
+local site_update_dir "`site_updates'/`year4'"
+local site_update_qmd "`site_update_dir'/index.qmd"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_annual_s3_`report_id'.log"
 
 * INVARIANT - DO NOT EDIT.
 * Create only the predefined publication and website directories.
 foreach required_dir in public_reports public_cvd public_annual public_dir ///
         site_files site_cvd site_annual site_pdf_dir site_reports ///
-        site_report_dir {
+        site_report_dir site_updates site_update_dir {
     quietly mata: st_local("dir_exists", strofreal(direxists("``required_dir''")))
     if "`dir_exists'" != "1" {
         capture mkdir "``required_dir''"
@@ -108,14 +120,18 @@ foreach required_dir in public_reports public_cvd public_annual public_dir ///
 
 * INVARIANT - DO NOT EDIT OR BYPASS.
 * The shared publisher validates approval and manifest identity before copying
-* the three approved files. A failure leaves public_ready unchanged.
+* the five approved annual-report and companion files. A failure leaves
+* public_ready unchanged.
 capture log close bnr_report_annual_s3
 log using "`private_log'", text replace name(bnr_report_annual_s3)
 capture noisily do "$BNR_STATA/reporting/bnr_report_publish_candidate.do" ///
     "`ready_dir'" "`report_id'" "annual_cvd_report" ///
     "report_year" "`year4'" "`version_num'" ///
     "`public_pdf'" "`public_qmd'" "`public_metadata'" ///
-    "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'"
+    "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'" ///
+    "`update_id'.pdf" "public_health_update.qmd" ///
+    "`public_update_pdf'" "`public_update_qmd'" ///
+    "`site_update_pdf'" "`site_update_qmd'"
 local publication_rc = _rc
 if `publication_rc' {
     capture log close bnr_report_annual_s3
@@ -139,11 +155,13 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 3: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Published successfully"
-noisily display as text   "  Script version:          1.0.0"
+noisily display as text   "  Script version:          1.1.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text  `"  Public report package:   `public_dir'"'
 noisily display as text  `"  Website PDF:             `site_pdf'"'
 noisily display as text  `"  Website landing page:    `site_qmd'"'
+noisily display as text  `"  One-page update PDF:     `site_update_pdf'"'
+noisily display as text  `"  Update landing page:     `site_update_qmd'"'
 noisily display as text  `"  Private publication log: `private_log'"'
 noisily display as text   "  Next step:               Render and review the Quarto site."
 noisily display as result "============================================================================="
