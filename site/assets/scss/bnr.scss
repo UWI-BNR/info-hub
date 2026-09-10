@@ -242,9 +242,36 @@ $secondary: #001f3d;
    It does not change h2 styling globally.
 */
 
-.bnr-home-section#surveillance-areas h2 {
+.bnr-home-section#cvd-surveillance h2 {
   border-bottom: 0;
   padding-bottom: 0;
+}
+
+/* The three primary destinations are parallel choices, so they share one
+   restrained BNR-navy rule rather than separate colours or numbered steps. */
+.bnr-home-section#cvd-surveillance .card {
+  overflow: hidden;
+  border-top: 0.22rem solid #045174;
+  border-radius: 0.35rem;
+}
+
+.bnr-home-section#cvd-surveillance .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.35rem;
+}
+
+.bnr-home-section#cvd-surveillance .card-title {
+  color: #045174;
+}
+
+/* Quarto places the final button link inside the card's last paragraph.
+   Pushing that paragraph to the bottom keeps the three button baselines
+   aligned when the descriptions have different lengths. */
+.bnr-home-section#cvd-surveillance .card-body > p:last-child {
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 
