@@ -5,6 +5,7 @@ local show_status = false
 local status_key = "not-reviewed"
 
 local labels = {
+  ["not-used"] = "Not used in this manual",
   ["not-reviewed"] = "Not reviewed",
   ["reviewed-by-irh"] = "Reviewed by IRH",
   ["approved-by-bnr"] = "Approved by BNR"
@@ -29,7 +30,7 @@ function Meta(meta)
   if labels[status_key] == nil then
     error(
       "Unknown manual-review-status '" .. status_key ..
-      "'. Use not-reviewed, reviewed-by-irh or approved-by-bnr."
+      "'. Use not-used, not-reviewed, reviewed-by-irh or approved-by-bnr."
     )
   end
 
@@ -38,6 +39,12 @@ end
 
 function Pandoc(doc)
   if not show_status or not FORMAT:match("html") then
+    return doc
+  end
+
+  -- Approved pages retain their YAML status for the internal review register,
+  -- but are deliberately free of an editorial-status callout when published.
+  if status_key == "approved-by-bnr" then
     return doc
   end
 

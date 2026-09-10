@@ -20,8 +20,9 @@ MANUALS = {
     "operations": ("Operations Manual", Path("site/operations")),
     "technical": ("Technical Manual", Path("site/technical")),
 }
-STATUS_ORDER = ("not-reviewed", "reviewed-by-irh", "approved-by-bnr")
+STATUS_ORDER = ("not-used", "not-reviewed", "reviewed-by-irh", "approved-by-bnr")
 STATUS_LABELS = {
+    "not-used": "Not used",
     "not-reviewed": "Not reviewed",
     "reviewed-by-irh": "Reviewed by IRH",
     "approved-by-bnr": "Approved by BNR",
@@ -180,14 +181,15 @@ def count(rows: list[PageStatus], manual_key: str, status: str) -> int:
 def markdown_report(rows: list[PageStatus]) -> str:
     lines = ["# Manual review-status register", "", "## Summary", ""]
     lines.extend([
-        "| Manual | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |",
-        "|---|---:|---:|---:|---:|---:|",
+        "| Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |",
+        "|---|---:|---:|---:|---:|---:|---:|",
     ])
     for manual_key, (manual_name, _) in MANUALS.items():
         known = sum(count(rows, manual_key, status) for status in STATUS_ORDER)
         total = sum(row.manual_key == manual_key for row in rows)
         lines.append(
-            f"| {manual_name} | {count(rows, manual_key, 'not-reviewed')} | "
+            f"| {manual_name} | {count(rows, manual_key, 'not-used')} | "
+            f"{count(rows, manual_key, 'not-reviewed')} | "
             f"{count(rows, manual_key, 'reviewed-by-irh')} | "
             f"{count(rows, manual_key, 'approved-by-bnr')} | {total - known} | {total} |"
         )

@@ -1,5 +1,5 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: not-used
 title: "Hypertension measures"
 description: "Holding page for near-term BNR hypertension measure specifications."
 draft: true

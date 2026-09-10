@@ -6,11 +6,11 @@ Public Methods Manual,Measures overview,site/methods/measures/index.qmd,reviewed
 Public Methods Manual,Number of CVD events,site/methods/measures/cvd-event-counts.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,CVD event rates,site/methods/measures/incidence.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,CVD mortality,site/methods/measures/mortality.qmd,reviewed-by-irh,Page YAML
-Public Methods Manual,Hypertension measures,site/methods/measures/hypertension.qmd,not-reviewed,Page YAML
-Public Methods Manual,Diabetes measures,site/methods/measures/diabetes.qmd,not-reviewed,Page YAML
-Public Methods Manual,CVD case fatality,site/methods/measures/case-fatality.qmd,not-reviewed,Page YAML
-Public Methods Manual,Hospital length of stay,site/methods/measures/length-of-stay.qmd,not-reviewed,Page YAML
-Public Methods Manual,"Counts, percentages and rates",site/methods/interpretation/counts-percentages-rates.qmd,not-reviewed,Page YAML
+Public Methods Manual,Hypertension measures,site/methods/measures/hypertension.qmd,not-used,Page YAML
+Public Methods Manual,Diabetes measures,site/methods/measures/diabetes.qmd,not-used,Page YAML
+Public Methods Manual,CVD case fatality,site/methods/measures/case-fatality.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Hospital length of stay,site/methods/measures/length-of-stay.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,"Counts, percentages and rates",site/methods/interpretation/counts-percentages-rates.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,How CVD events are classified,site/methods/interpretation/classifying-cvd-events.qmd,not-reviewed,Page YAML
 Public Methods Manual,How CVD deaths are classified,site/methods/interpretation/classifying-cvd-deaths.qmd,not-reviewed,Page YAML
 Public Methods Manual,Data quality and completeness,site/methods/interpretation/data-quality-completeness.qmd,not-reviewed,Page YAML

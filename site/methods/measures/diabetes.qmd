@@ -1,14 +1,13 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: not-used
 title: "Diabetes measures"
 description: "Holding page for near-term BNR diabetes measure specifications."
+draft: true 
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--methods}
 Public Methods Manual
 :::
-
-Diabetes is part of the main BNR surveillance programme. This page has been positioned with the other routine measures so that the approved definitions can be added without changing the manual structure.
 
 ::: {.callout-note title="Content in preparation"}
 Detailed diabetes measures and publication rules are being prepared for implementation. This page is not an approved metric specification.
@@ -21,8 +20,7 @@ Subject to final approval, the measures are expected to describe areas such as:
 - registry or service coverage;
 - recorded diabetes prevalence;
 - completion of key monitoring checks;
-- glycaemic control and other risk factors; and
-- complications or relevant care outcomes.
+- glycaemic control 
 
 ## What the completed page will specify
 

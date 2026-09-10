@@ -370,13 +370,19 @@ $secondary: #001f3d;
   margin: 0;
 }
 
-.bnr-manual-review-status--reviewed-by-irh {
-  border-left-color: #39789a;
-  background: #edf5f8;
-  color: #254f65;
+.bnr-manual-review-status--not-used {
+  border-left-color: #6c757d;
+  background: #f1f3f5;
+  color: #495057;
 }
 
-.bnr-manual-review-status--approved-by-bnr {
+.bnr-manual-review-status--not-reviewed {
+  border-left-color: #b8545f;
+  background: #fdf0f1;
+  color: #74363d;
+}
+
+.bnr-manual-review-status--reviewed-by-irh {
   border-left-color: #4f7a5b;
   background: #eef5f0;
   color: #35543e;

@@ -2,11 +2,11 @@
 
 ## Summary
 
-| Manual | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
-|---|---:|---:|---:|---:|---:|
-| Public Methods Manual | 13 | 7 | 0 | 0 | 20 |
-| Operations Manual | 28 | 0 | 0 | 0 | 28 |
-| Technical Manual | 36 | 0 | 0 | 0 | 36 |
+| Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Public Methods Manual | 2 | 8 | 10 | 0 | 0 | 20 |
+| Operations Manual | 0 | 28 | 0 | 0 | 0 | 28 |
+| Technical Manual | 0 | 36 | 0 | 0 | 0 | 36 |
 
 ## Public Methods Manual
 
@@ -19,11 +19,11 @@
 | Number of CVD events | `site/methods/measures/cvd-event-counts.qmd` | Reviewed by IRH | Page YAML |
 | CVD event rates | `site/methods/measures/incidence.qmd` | Reviewed by IRH | Page YAML |
 | CVD mortality | `site/methods/measures/mortality.qmd` | Reviewed by IRH | Page YAML |
-| Hypertension measures | `site/methods/measures/hypertension.qmd` | Not reviewed | Page YAML |
-| Diabetes measures | `site/methods/measures/diabetes.qmd` | Not reviewed | Page YAML |
-| CVD case fatality | `site/methods/measures/case-fatality.qmd` | Not reviewed | Page YAML |
-| Hospital length of stay | `site/methods/measures/length-of-stay.qmd` | Not reviewed | Page YAML |
-| Counts, percentages and rates | `site/methods/interpretation/counts-percentages-rates.qmd` | Not reviewed | Page YAML |
+| Hypertension measures | `site/methods/measures/hypertension.qmd` | Not used | Page YAML |
+| Diabetes measures | `site/methods/measures/diabetes.qmd` | Not used | Page YAML |
+| CVD case fatality | `site/methods/measures/case-fatality.qmd` | Reviewed by IRH | Page YAML |
+| Hospital length of stay | `site/methods/measures/length-of-stay.qmd` | Reviewed by IRH | Page YAML |
+| Counts, percentages and rates | `site/methods/interpretation/counts-percentages-rates.qmd` | Reviewed by IRH | Page YAML |
 | How CVD events are classified | `site/methods/interpretation/classifying-cvd-events.qmd` | Not reviewed | Page YAML |
 | How CVD deaths are classified | `site/methods/interpretation/classifying-cvd-deaths.qmd` | Not reviewed | Page YAML |
 | Data quality and completeness | `site/methods/interpretation/data-quality-completeness.qmd` | Not reviewed | Page YAML |

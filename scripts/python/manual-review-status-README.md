@@ -98,8 +98,8 @@ simple final check after a batch of manual edits.
 2. Run the relevant manual-specific link check.
 3. Resolve any missing links and consider whether each destination is
    appropriate in context.
-4. Change reviewed pages from `manual-review-status: not-reviewed` to
-   `manual-review-status: reviewed-by-irh`.
+4. Set the page status to one of: `not-used`, `not-reviewed`,
+   `reviewed-by-irh` or `approved-by-bnr`.
 5. Render the website locally and inspect the edited pages before committing
    your local changes.
 
@@ -123,9 +123,9 @@ outputs\utility-reports\manual-review-status.md
 outputs\utility-reports\manual-review-status.csv
 ```
 
-The Markdown report starts with counts of `not-reviewed`, `reviewed-by-irh` and
-`approved-by-bnr` for the Public Methods, Operations and Technical manuals. It
-then lists every QMD page in the order of its manual sidebar. The manual
+The Markdown report starts with counts of `not-used`, `not-reviewed`,
+`reviewed-by-irh` and `approved-by-bnr` for the Public Methods, Operations and
+Technical manuals. It then lists every QMD page in the order of its manual sidebar. The manual
 sidebars mirror the landing-page cards, so the register follows the reader's
 manual order rather than folder order. Any page not present in its sidebar is
 listed afterwards. Each row includes its title, status and whether the status
