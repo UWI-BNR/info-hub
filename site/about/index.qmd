@@ -25,7 +25,7 @@ The Barbados National Registry for Chronic Non-communicable Diseases (BNR) bring
 
 ::: {.bnr-about-container}
 
-## A national registry with a long view
+## A national registry built over time
 
 BNR is operated by the George Alleyne Chronic Disease Research Centre at The University of the West Indies, on behalf of the Ministry of Health and Wellness. It provides evidence on patterns in disease and outcomes that matter to Barbados.
 
