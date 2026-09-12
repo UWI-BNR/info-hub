@@ -1,5 +1,5 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Protecting confidentiality"
 description: "How BNR reduces disclosure risk in public statistics."
 ---
@@ -12,7 +12,7 @@ BNR publishes aggregate information designed to inform the public without reveal
 
 ## Why this matters
 
-Removing names is not always enough. A very small count combined with a rare characteristic, period or other public knowledge can sometimes allow a person to be recognised or sensitive information to be inferred.
+Removing names is not enough. A very small count combined with a rare characteristic, time period or other public knowledge can sometimes allow a person to be recognised, or sensitive information to be inferred.
 
 ## How public outputs are protected
 
@@ -20,10 +20,10 @@ BNR uses several safeguards:
 
 - public products contain aggregate rather than patient-level information;
 - only approved variables, tables and figures enter the public pathway;
-- positive counts below six are suppressed;
-- additional cells may be suppressed where totals could reveal a protected value;
+- positive counts below six are always suppressed;
+- additional data may be suppressed where totals could reveal a protected value;
 - overly detailed combinations of characteristics are avoided; and
-- every release receives a disclosure-control review before publication.
+- *every release receives a disclosure-control review before publication.*
 
 Suppressed values are usually displayed using a symbol explained with the table or dataset. A suppressed cell means the value is not published; it does not mean zero.
 
@@ -33,14 +33,14 @@ Suppressed values are usually displayed using a symbol explained with the table 
 
 ## Worked example
 
-Suppose a table shows 20 events in total and 17 in one category. Publishing both values would reveal that the other category contains 3 events, even if that small cell were blank. A second value or total may therefore also need protection.
+Suppose a table shows 20 events in total and 17 in one category. Publishing both values would reveal that the other category contains 3 events, even if that small cell were blank. The second value or the total will therefore also need protection.
 
 ## Confidentiality and usefulness
 
 Disclosure control balances privacy with the public value of statistics. BNR may combine periods or categories, publish a rate at a less detailed level, or omit a breakdown when safe publication is not possible.
 
 ::: {.callout-important title="Restricted data are not public data"}
-Access to restricted, de-identified research data requires a separate application, approval and Data Sharing Agreement. Public availability of an aggregate table does not imply access to its underlying records.
+Access to restricted, de-identified research data requires a separate application, approval and [Data Sharing Agreement](../responsible-data-use/research-data-access.qmd). Public availability of an aggregate table does not imply access to its underlying records.
 :::
 
 ## What to remember
@@ -53,5 +53,5 @@ Access to restricted, de-identified research data requires a separate applicatio
 ## Related measures
 
 - [Research data access](../responsible-data-use/research-data-access.qmd)
-- [Research Data Sharing Agreement](../responsible-data-use/dsa-methods.qmd)
+- [Research Data Sharing Agreement](../responsible-data-use/research-data-access.qmd)
 

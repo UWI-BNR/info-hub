@@ -25,23 +25,7 @@ YAML_VALUE = re.compile(r"^([A-Za-z0-9_-]+):\s*(.*?)\s*$")
 
 SKIP_SCHEMES = {"http", "https", "mailto", "tel", "data", "javascript"}
 TEXT_EXTENSIONS = {".qmd", ".md", ".html", ".htm", ".yml", ".yaml"}
-# These locations do not contain authored, publishable site content.  In
-# particular, ``outputs`` is a publication-staging area whose relative links
-# are written for their eventual location under ``site``.
-EXCLUDED_DIRS = {
-    ".git",
-    ".quarto",
-    ".venv",
-    "_site",
-    "_site-version",
-    "docs",
-    "node_modules",
-    "outputs",
-    "repo-review",
-    "temp",
-    "tmp",
-    "venv-info-hub",
-}
+EXCLUDED_DIRS = {".git", ".quarto", "_site", "repo-review", "node_modules"}
 MANUAL_SCOPES = {
     "methods": Path("site/methods"),
     "operations": Path("site/operations"),
@@ -85,23 +69,11 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def is_excluded(path: Path, root: Path) -> bool:
-    """Return True for generated, archived or environment-owned content."""
-    parts = path.relative_to(root).parts
-    return any(
-        part in EXCLUDED_DIRS
-        or part.startswith("venv-")
-        or part.startswith("tmp-")
-        or part.startswith("temp-")
-        for part in parts
-    )
-
-
 def iter_source_files(root: Path, scan_root: Path):
     for path in scan_root.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in TEXT_EXTENSIONS:
             continue
-        if is_excluded(path, root):
+        if any(part in EXCLUDED_DIRS for part in path.relative_to(root).parts):
             continue
         yield path
 
@@ -235,9 +207,7 @@ def main() -> int:
             markdown_links = [(text.strip(), target) for text, target in MARKDOWN_LINK.findall(line)]
             html_links = [("HTML link", target) for target in HTML_LINK.findall(line)]
             for link_text, raw_link in [*markdown_links, *html_links]:
-                # Quarto shortcodes and template expressions are resolved at
-                # render time; they are not literal local file paths.
-                if "@@" in raw_link or "<%" in raw_link or "{{" in raw_link:
+                if "@@" in raw_link:
                     continue
                 target, kind = candidate_targets(root, source, raw_link.strip("<>"))
                 if kind != "local" or target is None:

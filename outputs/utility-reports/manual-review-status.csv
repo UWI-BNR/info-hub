@@ -11,14 +11,13 @@ Public Methods Manual,Diabetes measures,site/methods/measures/diabetes.qmd,not-u
 Public Methods Manual,CVD case fatality,site/methods/measures/case-fatality.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,Hospital length of stay,site/methods/measures/length-of-stay.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,"Counts, percentages and rates",site/methods/interpretation/counts-percentages-rates.qmd,reviewed-by-irh,Page YAML
-Public Methods Manual,How CVD events are classified,site/methods/interpretation/classifying-cvd-events.qmd,not-reviewed,Page YAML
-Public Methods Manual,How CVD deaths are classified,site/methods/interpretation/classifying-cvd-deaths.qmd,not-reviewed,Page YAML
-Public Methods Manual,Data quality and completeness,site/methods/interpretation/data-quality-completeness.qmd,not-reviewed,Page YAML
-Public Methods Manual,Protecting confidentiality,site/methods/interpretation/confidentiality.qmd,not-reviewed,Page YAML
-Public Methods Manual,"Releases, revisions and comparability",site/methods/interpretation/revisions-comparability.qmd,not-reviewed,Page YAML
-Public Methods Manual,Glossary,site/methods/reference/glossary.qmd,not-reviewed,Page YAML
-Public Methods Manual,Research data access,site/methods/responsible-data-use/research-data-access.qmd,not-reviewed,Page YAML
-Public Methods Manual,Research Data Sharing Agreement,site/methods/responsible-data-use/dsa-methods.qmd,not-reviewed,Page YAML
+Public Methods Manual,How CVD events are classified,site/methods/interpretation/classifying-cvd-events.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,How CVD deaths are classified,site/methods/interpretation/classifying-cvd-deaths.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Data quality and completeness,site/methods/interpretation/data-quality-completeness.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Protecting confidentiality,site/methods/interpretation/confidentiality.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,"Releases, revisions and comparability",site/methods/interpretation/revisions-comparability.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Glossary,site/methods/reference/glossary.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Research data access,site/methods/responsible-data-use/research-data-access.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Operations Manual,site/operations/index.qmd,not-reviewed,Page YAML
 Operations Manual,Roles and decision rights,site/operations/operating-model/roles-decision-rights.qmd,not-reviewed,Page YAML
 Operations Manual,From cases to statistics,site/operations/operating-model/routine-cycle.qmd,not-reviewed,Page YAML

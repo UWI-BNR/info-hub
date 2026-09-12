@@ -1,0 +1,62 @@
+---
+manual-review-status: not-reviewed
+title: "Research Data Sharing Agreement"
+subtitle: "For approved access to restricted, de-identified BNR data"
+description: "The main responsibilities accepted by approved users of restricted BNR data."
+draft: true
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
+A Data Sharing Agreement records exactly what BNR has approved and how the data may be used. It protects the people represented in the Registry and gives the applicant, their institution and BNR a clear record of their responsibilities.
+
+The agreement is completed only after BNR has reviewed the application. Approved applicants receive a private, project-specific REDCap link; the agreement is not completed on this public page.
+
+## What the agreement records
+
+The agreement identifies:
+
+- the approved purpose, disease area, population, period and variables;
+- the people authorised to use the data;
+- the approved storage and analysis environment;
+- any limits on linkage, sharing and publication;
+- whether proposed outputs must be checked before release;
+- the date on which access ends; and
+- how the data must be returned or securely destroyed.
+
+## Responsibilities of approved users
+
+Approved users must:
+
+- use the data only for the approved purpose;
+- give access only to the named project team;
+- keep the data in the approved secure environment;
+- not attempt to identify any person;
+- not link, share or publish the record-level data unless this is specifically approved;
+- follow any requirement for BNR to review proposed outputs;
+- report any suspected loss, unauthorised access or disclosure promptly; and
+- return or securely destroy the data by the agreed date.
+
+::: {.callout-important title="Approval applies to a specific request"}
+Approval for one project, team or dataset does not authorise a different use. Contact BNR before changing the purpose, team, data required, storage arrangements or project end date.
+:::
+
+## Reporting a data incident
+
+Report any suspected loss, unauthorised access or disclosure promptly to:
+
+- **Dr Christina Howitt, BNR Director:** [bnr@cavehill.uwi.edu](mailto:bnr@cavehill.uwi.edu)
+- **Office of Research, The University of the West Indies, Cave Hill Campus, Bridgetown, Barbados:** (246) 417-4847 or [researchethics@cavehill.uwi.edu](mailto:researchethics@cavehill.uwi.edu)
+
+## Apply for access
+
+[Start a research data application](https://redcap.link/u9784k1s){.btn .btn-primary target="_blank" rel="noopener"}
+
+The application opens in REDCap. Applicants should not email completed forms or enter identifiable patient information in the application.
+
+## Related pages
+
+- [Research data access](research-data-access.qmd)
+- [Protecting confidentiality](../interpretation/confidentiality.qmd)

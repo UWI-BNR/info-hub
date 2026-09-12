@@ -3,9 +3,16 @@ manual-review-status: reviewed-by-irh
 title: "Public Methods Manual"
 subtitle: "How BNR statistics are defined, calculated and interpreted"
 description: "Plain-language explanations of Barbados National Registry measures and methods."
-toc: false
-page-layout: full
 ---
+
+<!-- Remove Left-hand table of contents -->
+<style>
+#TOC,
+#quarto-margin-sidebar,
+#quarto-sidebar-toc-left {
+  display: none !important;
+}
+</style>
 
 This manual explains what Barbados National Registry statistics mean, how the main measures are calculated and what readers should bear in mind when using them.
 
@@ -97,7 +104,7 @@ How data limitations, review and disclosure control affect published figures.
 ::: {.card-body .d-flex .flex-column}
 [REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Plain-language glossary {.card-title}
+### Reference and data access {.card-title}
 
 Short explanations of the principal terms used in BNR publications.
 

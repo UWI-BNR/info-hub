@@ -4,7 +4,7 @@
 
 | Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
 |---|---:|---:|---:|---:|---:|---:|
-| Public Methods Manual | 2 | 8 | 10 | 0 | 0 | 20 |
+| Public Methods Manual | 2 | 0 | 17 | 0 | 0 | 19 |
 | Operations Manual | 0 | 28 | 0 | 0 | 0 | 28 |
 | Technical Manual | 0 | 36 | 0 | 0 | 0 | 36 |
 
@@ -24,14 +24,13 @@
 | CVD case fatality | `site/methods/measures/case-fatality.qmd` | Reviewed by IRH | Page YAML |
 | Hospital length of stay | `site/methods/measures/length-of-stay.qmd` | Reviewed by IRH | Page YAML |
 | Counts, percentages and rates | `site/methods/interpretation/counts-percentages-rates.qmd` | Reviewed by IRH | Page YAML |
-| How CVD events are classified | `site/methods/interpretation/classifying-cvd-events.qmd` | Not reviewed | Page YAML |
-| How CVD deaths are classified | `site/methods/interpretation/classifying-cvd-deaths.qmd` | Not reviewed | Page YAML |
-| Data quality and completeness | `site/methods/interpretation/data-quality-completeness.qmd` | Not reviewed | Page YAML |
-| Protecting confidentiality | `site/methods/interpretation/confidentiality.qmd` | Not reviewed | Page YAML |
-| Releases, revisions and comparability | `site/methods/interpretation/revisions-comparability.qmd` | Not reviewed | Page YAML |
-| Glossary | `site/methods/reference/glossary.qmd` | Not reviewed | Page YAML |
-| Research data access | `site/methods/responsible-data-use/research-data-access.qmd` | Not reviewed | Page YAML |
-| Research Data Sharing Agreement | `site/methods/responsible-data-use/dsa-methods.qmd` | Not reviewed | Page YAML |
+| How CVD events are classified | `site/methods/interpretation/classifying-cvd-events.qmd` | Reviewed by IRH | Page YAML |
+| How CVD deaths are classified | `site/methods/interpretation/classifying-cvd-deaths.qmd` | Reviewed by IRH | Page YAML |
+| Data quality and completeness | `site/methods/interpretation/data-quality-completeness.qmd` | Reviewed by IRH | Page YAML |
+| Protecting confidentiality | `site/methods/interpretation/confidentiality.qmd` | Reviewed by IRH | Page YAML |
+| Releases, revisions and comparability | `site/methods/interpretation/revisions-comparability.qmd` | Reviewed by IRH | Page YAML |
+| Glossary | `site/methods/reference/glossary.qmd` | Reviewed by IRH | Page YAML |
+| Research data access | `site/methods/responsible-data-use/research-data-access.qmd` | Reviewed by IRH | Page YAML |
 
 ## Operations Manual
 

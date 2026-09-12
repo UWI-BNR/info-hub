@@ -1,54 +1,41 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "How CVD events are classified"
-description: "How BNR applies consistent event, source, residence and period rules."
+description: "How BNR applies consistent event, data source, residence and period rules."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--methods}
 Public Methods Manual
 :::
 
-Consistent classification allows CVD statistics to be compared over time. BNR applies approved rules to decide which records represent eligible heart attack or stroke events and how they enter each measure.
+Consistent classification allows CVD statistics to be compared over time. BNR applies approved rules to decide which records represent eligible heart attack or stroke events, then records, analyses, and reports these measures consistently over time.
 
 ## Why this matters
 
-A hospital episode, a registered CVD event and a unique person are not interchangeable. Classification determines the unit that is counted and prevents the same source information from being counted twice.
+A hospital admission, a registered CVD event and a unique person are not interchangeable. A person can have more than one CVD event, and for any CVD event there may be more than one hospital admission.  Classification defines which distinct CVD events are counted, so that multiple records describing the same event are not counted more than once.
 
 ## Main classification questions
 
-| Question | Why it matters |
-|---|---|
-| Does the record meet the approved heart attack or stroke criteria? | Determines event eligibility and type |
-| Is the person a Barbados resident under the stated rule? | Defines the population represented |
-| Does the event fall within the reporting period? | Aligns numerator and denominator |
-| Is it already represented by another record? | Prevents duplicate counting |
-| Was it registered through hospital information or death certification only? | Determines which published series includes it |
-| Is required information complete enough for the measure? | Defines the eligible analytical denominator |
-
-## Event types
-
-BNR CVD reporting currently distinguishes:
-
-- **heart attack**, also called acute myocardial infarction (AMI); and
-- **stroke**.
-
-Clinical and source-specific criteria are maintained in the approved registry documentation. Public outputs use these classifications consistently and state when a broader or different source definition applies.
+| Question | Rule used | Read more |
+|---|---|---|
+| **Does it meet the Heart or Stroke definition?** | The event must be confirmed as **Heart attack** (ICD-10 I21–I22) or **Stroke** (ICD-10 I60–I64) under the approved BNR classification process. Suspected, unresolved or ineligible events are not counted. | [Identify and assess potential cases](../../operations/pre-redcap/identify-assess.qmd) |
+| **Was the person a Barbados resident?** | The person must have lived in Barbados for at least six months during the relevant year. Citizenship and place of birth do not determine residence. | — |
+| **Did the event occur during the reporting period?** | Hospital events are assigned using the approved **event date**, rather than the admission, discharge or abstraction date. Death-certificate-only events are assigned using the year of death. | [Statistical Analysis Plan: period definitions](../../operations/data/sap.qmd#period-definitions) |
+| **Is it a separate event?** | Each distinct CVD event is counted once, even if it involved several admissions, transfers or source records. Events for the same person must be at least 28 days apart to be considered separate, and each must meet the relevant clinical definition. | [Statistical Analysis Plan: inclusion rules](../../operations/data/sap.qmd#standard-inclusion-rules) |
+| **Was it found through hospital information or death certification?** | A **hospital-registered event** is identified through hospital case finding. A **death-certificate-only event** meets the BNR Heart or Stroke criteria but has no matching hospital event for the same person during the 0–27 days before death. A hospital event 28 or more days earlier does not prevent the death from representing a separate event. Death-certificate-only events are included only in results clearly labelled as using this broader coverage. | [How CVD deaths are classified](classifying-cvd-deaths.qmd) and [Annual event estimates](../measures/cvd-event-counts.qmd#annual-dco-enhanced-counts) |
+| **Is enough information available?** | Every counted event needs a confirmed event type, residence, data source and valid event date. Other requirements depend on the measure. For example, a record without age may still be included in the overall count but not in an age-specific result. | [Data quality and completeness](data-quality-completeness.qmd#missing-information-and-denominators) |
 
 ## Events and people
 
-Most routine CVD measures use the **event** as the unit. A person may therefore contribute more than one event if each meets the applicable definition. Publications should not describe an event count as a count of unique people unless a person-level method was explicitly used.
+BNR counts **events**, not admissions or individual people. One person may therefore contribute more than one event, but only when the events are separate and each meets the relevant definition. Multiple records describing the same event contribute only once.
 
-## Hospital and death-certificate-only events
-
-A death-certificate-only (DCO) event is identified from death information without a matching eligible hospital-registered event. DCO events are excluded from hospital-only measures and included only in outputs that explicitly use the broader source.
-
-::: {.callout-warning title="Source coverage changes the meaning"}
-A hospital-only series and a hospital-plus-DCO series should not be joined or compared as though their event coverage were identical.
+::: {.callout-warning title="Why source coverage matters"}
+Hospital-only and hospital-plus-death-certificate statistics do not cover exactly the same events. The broader estimate already includes the hospital events, so the two figures should not be added together. Check the source label when comparing results.
 :::
 
 ## What to remember
 
-The output metadata should identify the event type, source coverage, residence rule, period and exclusions. Those details define the statistic as much as its displayed label.
+The event type, reporting period, source coverage and exclusions all help define what a statistic means. These details should be checked when comparing results across publications or over time.
 
 ## Related measures
 

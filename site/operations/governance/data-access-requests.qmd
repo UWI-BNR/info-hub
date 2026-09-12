@@ -1,6 +1,6 @@
-﻿---
+---
 title: "Handle a data-access request"
-description: "A controlled route from enquiry to an authorised data-sharing decision."
+description: "The controlled REDCap route from application to closure."
 manual-review-status: not-reviewed
 ---
 
@@ -8,54 +8,53 @@ manual-review-status: not-reviewed
 Operations Manual
 :::
 
-## Receive and classify
+The private REDCap Data Access Register is the authoritative record for applications, decisions, agreements, releases and closure. Do not manage a request through email alone or create a separate local register.
 
-1. Record the requester, organisation, purpose, population, period and requested
-   variables in the authorised private register.
-2. Check whether an existing approved public aggregate output meets the need.
-3. If not, classify the minimum required information as aggregate,
-   deidentified record-level or identifiable/linkable.
-4. Identify applicable ownership, legal, ethical, confidentiality and security
-   requirements.
-5. Refer the request to the BNR-authorised decision route for that access class.
+## 1. Receive and classify
 
-Do not describe record-level data as anonymous merely because direct identifiers
-have been removed.
+The applicant completes the public **Data Access Application** survey. Confirm that the record identifies the applicant, organisation, purpose, population, period, minimum variables, planned outputs, ethics position and security arrangements.
 
-## Decide
+First check whether an existing approved public output meets the need. If not, classify the minimum information required as a new aggregate output, restricted de-identified record-level data, or identifiable/linkable data requiring referral.
 
-The authorised decision must record one of these outcomes:
+Do not describe record-level data as anonymous merely because direct identifiers have been removed.
 
-- direct the requester to an existing public output;
-- ask for clarification or a smaller dataset;
-- approve specified data and safeguards, subject to an agreement;
-- refer for further ethics, legal or governance review; or
-- refuse, with a recorded reason.
+## 2. Review and decide
 
-Approval must state the permitted purpose, people, variables, records, period,
-storage, transfer, onward-sharing, output-review, retention and destruction
-conditions. Complete the [Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
-when required.
+Complete the **BNR Review and Decision** instrument. Record the review of:
 
-## Prepare and release
+- purpose and public-health value;
+- minimum necessary data;
+- ethics and legal position;
+- confidentiality and disclosure risk;
+- storage, access and security safeguards; and
+- feasibility.
 
-The BNR Analyst prepares only the approved minimum dataset through controlled,
-reproducible code. A second authorised check confirms dataset identity,
-conditions and disclosure safety. Use the approved transfer route and record
-what was supplied, when, by whom and to whom.
+Record one decision: approve, approve with conditions, refer for further review, decline, or withdrawn by the applicant. An approval must define the permitted purpose, people, data scope, storage, transfer, output review, retention and destruction conditions.
 
-Never place an application, non-public dataset, agreement, credential, transfer
-detail or review evidence in Git.
+Only set **ready to issue agreement** to **Yes** when every required review and condition has been recorded.
 
-## Close and retain evidence
+## 3. Issue and complete the agreement
 
-Retain the request, assessment, decision, approver, agreement, exact dataset
-version, preparation record, transfer record, output decisions and
-expiry/destruction evidence in the authorised private governance location.
+Send the applicant a private, record-specific survey invitation for the **Data Sharing Agreement**. Never send the public application link as a substitute for the agreement link.
 
-::: {.callout-note title="BNR policy details still required"}
-BNR must confirm the intake contact, decision authority by access class,
-agreement signatories, service targets, authoritative register and approved
-transfer methods. Until confirmed, stop and refer the request to the BNR Lead.
+The applicant reviews the approved scope and signs electronically. The authorised BNR signatory then countersigns the same record. Retain the applicant's certified REDCap PDF and the final executed agreement PDF in the approved private location.
+
+Do not release data until the agreement is complete and release is authorised.
+
+## 4. Release, monitor and close
+
+Complete the **Release, Monitoring and Closure** instrument. Record the exact dataset ID, version and filename; who prepared and independently checked it; the disclosure check; and when, how, by whom and to whom it was transferred.
+
+Use the approved transfer route. Record output-review decisions, any suspected incident, the end-of-access action and the evidence used to close the request.
+
+Never place an application, non-public dataset, agreement, credential, transfer detail or review evidence in Git or in public `outputs/` folders.
+
+::: {.callout-warning title="Stop if the approved scope changes"}
+Refer the request back for review before changing its purpose, team, data scope, linkage, storage environment, transfer method or retention period.
 :::
 
+## Related guidance
+
+- [Research Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
+- [Data sharing and re-use procedure](../data/data-governance/sharing-sop.qmd)
+- [Technical Manual: disclosure control](../../technical/controls/disclosure-control.qmd)

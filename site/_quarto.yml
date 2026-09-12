@@ -157,7 +157,7 @@ website:
             - text: "Hospital length of stay"
               href: methods/measures/length-of-stay.qmd
 
-        - section: "Counts, percentages and rates"
+        - section: "Interpreting the measures"
           contents:
             - text: "Counts, percentages and rates"
               href: methods/interpretation/counts-percentages-rates.qmd
@@ -175,14 +175,12 @@ website:
             - text: "Releases, revisions and comparability"
               href: methods/interpretation/revisions-comparability.qmd
 
-        - section: "Plain-language glossary"
+        - section: "Reference and data access"
           contents:
             - text: "Glossary"
               href: methods/reference/glossary.qmd
             - text: "Research data access"
               href: methods/responsible-data-use/research-data-access.qmd
-            - text: "Data Sharing Agreement"
-              href: methods/responsible-data-use/dsa-methods.qmd
 
     - id: operations
       title: "Operations Manual"

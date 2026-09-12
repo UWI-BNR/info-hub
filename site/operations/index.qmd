@@ -4,6 +4,16 @@ description: "How the Barbados National Registry carries out, governs and record
 manual-review-status: not-reviewed
 ---
 
+<!-- Remove Left-hand table of contents -->
+<style>
+#TOC,
+#quarto-margin-sidebar,
+#quarto-sidebar-toc-left {
+  display: none !important;
+}
+</style>
+
+
 ::: {#operations-manual-sections}
 
 ## Quick links

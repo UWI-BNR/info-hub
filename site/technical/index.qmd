@@ -4,6 +4,16 @@ description: "Run, validate, troubleshoot, recover and maintain the implemented 
 manual-review-status: not-reviewed
 ---
 
+<!-- Remove Left-hand table of contents -->
+<style>
+#TOC,
+#quarto-margin-sidebar,
+#quarto-sidebar-toc-left {
+  display: none !important;
+}
+</style>
+
+
 ::: {#technical-manual-sections}
 
 ## Quick links
