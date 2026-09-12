@@ -422,3 +422,7 @@ tables above provide the functional classification and recovery details.
 ?? site/technical/workflows/reporting/overview.qmd
 ?? site/technical/workflows/reporting/rolling-update.qmd
 ```
+
+- 2026-09-12 12:50:12 +00:00 - Removed the generated 2025 annual CVD report v6 public package and associated public-health-update artefacts to reset controlled development to v1.
+
+- 2026-09-12 13:07:25 +00:00 - Reset generated 2025 annual CVD report v1-v6 development artefacts, including the associated public-health update, before a fresh controlled v1 run.

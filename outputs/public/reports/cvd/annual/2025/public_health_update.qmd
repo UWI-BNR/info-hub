@@ -1,16 +1,16 @@
 ---
 title: "CVD public health update: 2025"
 description: "One-page summary of the latest complete annual CVD event and mortality results for Barbados."
-date: 2026-09-10
-date-modified: 2026-09-10
-report-id: bnr_cvd_public_health_update_2025_v6
+date: 2026-09-12
+date-modified: 2026-09-12
+report-id: bnr_cvd_public_health_update_2025_v1
 report-type: Public health update
-report-version: v6
+report-version: v1
 coverage-period: 2025
 event-release-id: cvd_2026_01
 mortality-release-id: mort_2026_07
-related-report-id: bnr_cvd_annual_report_2025_v6
-image: /assets/images/listings/listing_reef_shallows.webp
+related-report-id: bnr_cvd_annual_report_2025_v1
+image: /assets/images/listings/listing_salt_pan.webp
 image-alt: Barbados landscape.
 categories:
   - CVD
