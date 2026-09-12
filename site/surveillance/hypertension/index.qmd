@@ -1,6 +1,7 @@
 ﻿---
 title: "Hypertension Surveillance"
 format: html
+draft: true
 ---
 
 This section will contain hypertension outputs.

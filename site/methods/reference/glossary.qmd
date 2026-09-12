@@ -1,12 +1,14 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "Glossary"
 description: "Plain-language definitions of terms used in BNR publications."
 ---
 
-## A–C
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
-**Acute myocardial infarction (AMI)**  
-The clinical term commonly used for a heart attack.
+## A&mdash;C
 
 **Age-adjusted rate**  
 A rate calculated using a standard age distribution so that populations or periods with different age structures can be compared more fairly. Also called an age-standardised rate.
@@ -14,19 +16,28 @@ A rate calculated using a standard age distribution so that populations or perio
 **Aggregate data**  
 Information combined into totals, percentages, rates or other summaries rather than presented as individual records.
 
+**BNR mortality classification**  
+The practical method BNR uses to classify cardiovascular deaths from death-certificate wording and structure. It is an approximate surveillance classification, not formal national ICD-10 underlying-cause coding.
+
+**Cardiovascular disease (CVD)**
+A group of diseases affecting the heart and blood vessels. In current BNR event reporting, CVD refers to eligible Heart attack and Stroke events under the approved registry definitions.
+
 **Case fatality**  
 The proportion of eligible disease events that end in death within the defined outcome period or setting.
 
 **Confidence interval**  
 A range expressing statistical uncertainty around an estimate under a stated method. It does not capture every source of data-quality uncertainty.
 
-**BNR mortality classification**  
-The practical method BNR uses to classify cardiovascular deaths from death-certificate wording and structure. It is an approximate surveillance classification, not formal national ICD-10 underlying-cause coding.
+**Confidence interval**
+A range—usually a **95% confidence interval**—showing the statistical uncertainty around an estimate under a stated method. It does not capture every uncertainty from missing information, source coverage or classification.
 
 **Crude rate**  
 The observed event count divided by the relevant population, without age adjustment.
 
-## D–I
+## D&mdash;I
+
+**Data period**
+The month, quarter, year or other period represented by a dataset or publication. It may end before the publication date because records require time for collection, review and approval.
 
 **Death-certificate-only (DCO) event**  
 An eligible event identified from death information without a matching eligible hospital-registered event.
@@ -40,14 +51,22 @@ Checks and changes used to reduce the risk that published information reveals so
 **Event**  
 An occurrence meeting the relevant registry definition. One person may contribute more than one event.
 
-**Event rate**  
-The number of eligible events relative to a stated population and period, often expressed per 100,000.
+**Event rate**
+The number of eligible CVD events recorded in a stated population during a stated period, usually expressed per 100,000 population. BNR event rates may include more than one event for the same person when each event meets the approved definition for a separate event.
 
-**Incidence**  
-The occurrence of new disease or health events in a population over time. In BNR CVD publications, check whether the displayed measure is specifically an event rate and which sources are included.
+**Heart attack**
+The everyday term for an acute myocardial infarction (AMI): damage to heart muscle caused by a sudden blockage of its blood supply. BNR includes events meeting its approved Heart attack definition; not every heart condition is counted as a Heart attack.
 
 **Historical reference band**  
-A fixed range from a stated historical period used to give context to a current value. In the mortality dashboard, the monthly band uses the minimum and maximum for each calendar month during 2015–2019 and is not recalculated with each release.
+A fixed range from a stated historical period used to give context to a current value. In the mortality dashboard, the monthly band uses the minimum and maximum for each calendar month during 2015&mdash;2019 and is not recalculated with each release.
+
+**Hospital-registered event**
+An eligible Heart attack or Stroke event identified through BNR hospital case finding and review. It is distinct from an event identified from death-certificate information only.
+
+**Incidence**
+A commonly used term for the occurrence of new disease or health events in a population over time. Strictly, an incidence measure should define whether it counts first-ever events, new cases of disease, or new events after a defined disease-free period.
+
+BNR uses event rate in its current CVD publications because its numerator counts eligible Heart and Stroke events, including recurrent events where the approved event definition allows them. This is more precise than implying that every counted event is a person’s first occurrence of disease. Older publications may use the word incidence; users should check the event definition and source coverage before comparing figures.
 
 **Inclusive mortality definition**  
 The broader BNR CVD mortality definition containing deaths classified as Clear, Likely or Possible. It includes every death in the Primary definition.
@@ -55,10 +74,13 @@ The broader BNR CVD mortality definition containing deaths classified as Clear, 
 **Interquartile range (IQR)**  
 The span from the 25th to the 75th percentile, containing the middle half of observed values.
 
-## L–R
+## L&mdash;R
 
 **Length of stay**  
 The number of hospital days between admission and the hospital-end date under the stated rules. A same-day eligible admission counts as one day.
+
+**Linkage**
+The process of deciding whether records from different sources relate to the same person or event. For example, BNR uses linkage to decide whether a death-certificate record represents an event already recorded through hospital information.
 
 **Median**  
 The middle value after observations are placed in order. Half are below it and half above it.
@@ -81,13 +103,25 @@ The main BNR CVD mortality definition containing deaths classified as Clear or L
 **Release**  
 An approved, identifiable version of a public dataset or output package.
 
-## S–Z
+**Revision**
+An approved replacement of an earlier published value or dataset. Revisions may occur when later information becomes available, an error is corrected, or a documented method change requires updated results.
+
+## S&mdash;Z
 
 **Secondary suppression**  
 Hiding an additional value so that a directly protected small value cannot be calculated from published totals.
 
+**Source coverage**
+The sources of information included in a statistic. For example, a hospital-only event rate has different coverage from an annual estimate that also includes eligible death-certificate-only events.
+
+**Standard population**
+A fixed age distribution used to calculate age-adjusted rates. It allows fairer comparison between populations or periods with different age structures; it is not the actual Barbados population. 
+
 **Stratification**  
 A breakdown of a measure by a characteristic such as period, event type, sex or age group.
+
+**Stroke**
+A sudden disruption of blood flow to the brain, or bleeding within the brain. BNR includes events meeting its approved Stroke definition; not every condition affecting the brain is counted as Stroke.
 
 **Suppression**  
 Withholding a value from publication to protect confidentiality. A suppressed value is not the same as zero.
@@ -99,3 +133,4 @@ The continuing, systematic use of health information to monitor patterns and sup
 
 - [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
 - [Measures overview](../measures/index.qmd)
+

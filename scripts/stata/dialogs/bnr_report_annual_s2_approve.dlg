@@ -1,0 +1,74 @@
+*! BNR annual CVD report Step 2: approve candidate
+*! version 1.0.0, 2 September 2026
+VERSION 19.0
+POSITION . . 550 540
+
+LIST approval_roles
+BEGIN
+BNR Lead
+BNR Analyst
+BNR Developer
+END
+
+DIALOG main, label("BNR: Annual report Step 2 - approve candidate")
+BEGIN
+  TEXTBOX tx_intro 15 15 520 54, label("Approve only after reviewing the exact candidate package. Approval copies its three files to public_ready, manifests them, then writes the approval receipt last.")
+  GROUPBOX gb_report 15 84 520 68, label("Candidate")
+  TEXT tx_year 30 112 95 ., label("Report year:")
+  SPINNER ed_year 135 109 75 ., default(2025) min(2024) max(2100) nomemory error("Report year")
+  TEXT tx_version 270 112 65 ., label("Version:")
+  SPINNER ed_version 340 109 55 ., default(1) min(1) max(99) nomemory error("Report version")
+
+  GROUPBOX gb_approver 15 168 520 105, label("Authorised approver")
+  TEXT tx_name 30 198 95 ., label("Full name:")
+  EDIT ed_name 135 195 330 ., nomemory error("Approver full name")
+  TEXT tx_role 30 236 95 ., label("Role:")
+  COMBOBOX cb_role 135 232 180 ., dropdownlist contents(approval_roles) nomemory
+
+  GROUPBOX gb_review 15 289 520 126, label("Required review confirmations")
+  CHECKBOX ck_candidate 30 316 490 ., default(0) nomemory label("I reviewed the complete candidate PDF, landing page and metadata")
+  CHECKBOX ck_disclosure 30 346 490 ., default(0) nomemory label("I completed and recorded disclosure review")
+  CHECKBOX ck_ready 30 376 490 ., default(0) nomemory label("I confirm this exact candidate is ready for public release")
+
+  TEXTBOX tx_boundary 20 438 510 50, label("Approval does not publish. There is deliberately no replace option: an approved package is immutable and corrections require a higher version.")
+END
+
+OK ok1, label("Approve candidate")
+CANCEL cancel1, label("Cancel")
+RESET reset1
+
+PROGRAM command
+BEGIN
+  require main.ed_name
+  require main.cb_role
+  put "do $BNR_STATA/reporting/bnr_report_annual_s2_approve.do "
+  put main.ed_year
+  put " "
+  put main.ed_version
+  put " "
+  put `"""'
+  put main.ed_name
+  put `"""'
+  put " "
+  put `"""'
+  put main.cb_role
+  put `"""'
+  if main.ck_candidate {
+    put " candidate"
+  }
+  if !main.ck_candidate {
+    put " missing"
+  }
+  if main.ck_disclosure {
+    put " disclosure"
+  }
+  if !main.ck_disclosure {
+    put " missing"
+  }
+  if main.ck_ready {
+    put " ready"
+  }
+  if !main.ck_ready {
+    put " missing"
+  }
+END

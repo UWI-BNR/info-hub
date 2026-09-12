@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Classify CVD deaths"
 description: "Mortality Step 2: apply the frozen BNR Heart/Stroke approximate mortality classifier to the private Step 1 source."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
 ---
 
@@ -38,7 +41,7 @@ See the Public Methods Manual page [How CVD deaths are classified](../../../meth
 
 ## Run Step 2
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 2: Classify causes of death**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 2: Classify causes of death**.
 2. Enter the same release year and month used in Step 1.
 3. Leave replacement unticked for the first run.
 4. Run the step.
@@ -83,3 +86,4 @@ Add `replace` only for a deliberate rebuild.
 ## Change control
 
 A change to disease terminology, evidence classes, causal rules or scenario membership requires a deliberate new classifier-definition version and renewed validation. Do not change routine classification semantics as part of an ordinary monthly run.
+

@@ -1,7 +1,7 @@
 # Shared metadata for all Public Methods Manual pages
 lang: en-GB
 author: "Barbados National Registry"
-date: 2026-08-12
+date: last-modified
 title-block-style: plain
 published-title: "Updated"
 date-format: "D MMMM YYYY"
@@ -12,9 +12,15 @@ number-sections: false
 page-navigation: true
 search: true
 
+# Manual review status is inherited by every page. Change the display switch
+# here to remove the strip from the complete manual before public publication.
+manual-review-status: not-reviewed
+manual-review-display: true
+filters:
+  - ../_filters/manual-review-status.lua
+
 format:
   html:
     # Reuse the compact manual metadata treatment while retaining a
     # Methods-specific class for any later refinements.
     body-classes: "bnr-technical-manual bnr-methods-manual"
-

@@ -1,68 +1,52 @@
----
+﻿---
 title: "Analytical workflows"
-description: "How the CVD events, mortality, tabulation and briefing workflows fit together."
-date: 2026-08-10
-date-modified: 2026-08-21
+description: "How the current CVD event, mortality and reporting workflows fit together."
+manual-review-status: not-reviewed
 ---
 
----
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
-## CVD shared preparation plus a separate mortality pathway
+## System boundary
 
-The BNR now has two analytical starting routes.
+Stata prepares data, computes measures, applies analytical controls and
+publishes approved public packages. Quarto consumes those packages to present
+public pages. GitHub deploys the static Info-Hub. Confidential data, private
+staging, logs, credentials and review evidence stay outside Git.
 
-The **CVD events pathway** begins with the CVD REDCap release. Its first three steps form the common private preparation layer used by CVD event metrics, tabulations and routine briefings.
+## Current workflow map
 
-The **CVD mortality pathway** begins with the mortality death-certificate REDCap source. It has its own six-step route because mortality extraction, classification, reporting structure and disclosure controls are different.
+| Workflow | Steps | Authoritative input | Controlled result |
+|---|---:|---|---|
+| [CVD event release](cvd-events/overview.qmd) | 6 | Authorised CVD REDCap release | Approved public event metric datasets |
+| [CVD mortality release](mortality/overview.qmd) | 6 | Authorised mortality REDCap release | Approved public mortality metric datasets |
+| [Rolling three-month update](reporting/rolling-update.qmd) | 1 | Exact approved event and mortality release CSVs | Dated, versioned online update package |
+| [Annual CVD report](reporting/annual-report.qmd) | 3 | Approved standard releases plus year-specific analyst files | Approved annual PDF, one-page update and landing-page package |
+| [One-off CVD report](reporting/one-off-report.qmd) | 3 | Finished bespoke PDF | Approved PDF and landing-page package |
 
-```{mermaid}
-flowchart TD
-    A["CVD REDCap release"] --> B["CVD events Step 1<br/>Private REDCap extract"]
-    B --> C["CVD events Step 2<br/>Confidential cumulative dataset"]
-    C --> D["CVD events Step 3<br/>Deidentified analytical inputs"]
+The event and mortality workflows remain separate. Public CVD tables,
+dashboards and downloads are website views of approved metric releases; they
+do not rerun or redefine the analysis.
 
-    D --> E["CVD event metrics<br/>Steps 4-6"]
-    D --> F["Tabulations<br/>Steps 1-3"]
-    D --> G["Routine briefings<br/>Steps 1-3"]
+## Control pattern
 
-    M["Mortality REDCap death-certificate source"] --> N["CVD mortality workflow<br/>Steps 1-6"]
+- Build candidates in private locations.
+- Run automated validation and complete human analytical and disclosure review.
+- Bind approval to the exact reviewed payload where required.
+- Publish only through the workflow's publication action.
+- Let Quarto read approved public outputs only.
+- Correct source data or version-controlled code, then rerun; never patch a
+  generated output.
 
-    E --> H["Approved public outputs"]
-    F --> H
-    G --> H
-    N --> H
+The rolling update is deliberately narrower: the builder verifies and freezes
+already-approved public event and mortality releases and the controlled
+template performs only authorised display arithmetic.
 
-    H --> I["Quarto publishing layer"]
-    I --> J["BNR Info-Hub"]
-```
+## Responsibilities
 
-## How the routes differ
-
-| Workflow | Private analytical input | What the workflow then owns |
-|---|---|---|
-| **CVD event metrics** | Purpose-specific Step 3 metric input, currently `count` for the burden family | Metric calculation, disclosure control, review, approval and metric publication. |
-| **CVD mortality** | Mortality Step 1 death-certificate extract, followed by the approved Step 2 classifier | Mortality classification, burden metrics, mortality-specific disclosure control, review, approval and publication. |
-| **Tabulations** | CVD Step 3 `all_variables` | Seven routine table calculations, table-specific suppression, review, approval and table publication. |
-| **Routine briefings** | CVD Step 3 `count`, `case_fatality` or `length_of_stay`, depending on the briefing | Analyst-owned calculations and figures, human disclosure review, approval and briefing-package publication. |
-
-The CVD Step 3 products remain private. Tabulations and CVD briefings **do not rebuild the confidential cumulative dataset** and should not repeat the CVD Steps 1-3 preparation logic.
-
-Mortality does not branch from CVD Step 3. Its own source, classification and six-step publication contract are documented in [CVD mortality workflow](mortality/overview.qmd).
-
-## Ad-hoc briefings
-
-The ad-hoc briefing pathway is deliberately more flexible.
-
-An ad-hoc analysis is created in an analyst-owned DO file rather than through the routine Briefing Step 1 dispatcher. The analyst must declare the source and create the standard private staging package. The package then joins the common briefing controls at **Briefing Step 2: Review and approve** and **Briefing Step 3: Publish**, using the exact ad-hoc package ID.
-
-For registry analyses, use an appropriate approved deidentified analytical source wherever the analysis permits. Any different source must be explicitly recorded in the briefing release metadata.
-
-The operational CVD mortality dashboard workflow is separate from the briefing dispatcher. A future mortality-rate briefing remains a separate analytical product unless and until it is migrated into that controlled briefing route.
-
-## Compute and publish remain separate
-
-Stata creates and controls the analytical products. Quarto consumes approved public products.
-
-The one documented publication-layer convenience calculation is the mortality dashboard year-to-date count. Its narrow rules are described in [Maintain the CVD mortality dashboard](../website/cvd-mortality-dashboard.qmd); it does not establish a general analytical pathway in Quarto.
-
-Updating narrative pages, dashboards, listings or other website content is covered under **Operate the Info-Hub**, not inside the analytical workflow steps.
+The **BNR Analyst** runs and reviews analysis, the **BNR Lead** holds operational
+and governance responsibility, and the **BNR Developer** maintains the
+analytical and publication implementation. An authorised person may perform
+more than one action, but build, review, approval, publication and deployment
+remain distinct recorded actions.

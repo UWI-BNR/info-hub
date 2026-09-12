@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Extract mortality data"
 description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
 ---
 
@@ -26,7 +29,7 @@ The token itself must remain outside Git and must not appear in a DO file, QMD o
 
 ## Run Step 1
 
-1. In Stata, choose **User > BNR > Update mortality dashboard > Step 1: Extract mortality data**.
+1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 1: Extract mortality data**.
 2. Enter the release year and month.
 3. Leave replacement unticked for the first run.
 4. Run the step.
@@ -62,3 +65,4 @@ Add `replace` only for a deliberate rebuild of an existing Step 1 release.
 Read the reason and log path in the failure summary. Check the selected month, mortality token-file configuration, REDCap access and private output path.
 
 Do not use files from an incomplete run.
+

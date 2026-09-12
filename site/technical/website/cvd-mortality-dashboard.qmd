@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Maintain the CVD mortality dashboard"
 description: "How the Quarto mortality dashboard reads the approved Step 6 release, handles Primary/Inclusive views and protects the analytical publication boundary."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
 ---
 
@@ -173,3 +176,4 @@ A normal new release should extend the available timeline automatically and shou
 - If a protected value appears to be recoverable, stop publication and investigate before deployment.
 
 See [Update website content](update-content.qmd), [CVD mortality workflow](../workflows/mortality/overview.qmd) and [Apply and review disclosure control](../controls/disclosure-control.qmd).
+

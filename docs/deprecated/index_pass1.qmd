@@ -1,0 +1,55 @@
+﻿---
+title: "BNR Technical Manual"
+description: "Run, validate, troubleshoot, recover and maintain the implemented BNR analytical and publication system."
+manual-review-status: not-reviewed
+---
+
+## What this manual is for
+
+Use this manual for exact menus, parameters, files, checks, failure conditions
+and recovery procedures. Operational responsibility and retained evidence
+belong in the [Operations Manual](../operations/index.qmd); statistical meaning
+and interpretation belong in the [Public Methods Manual](../methods/index.qmd).
+
+## Architecture
+
+| Layer | Responsibility |
+|---|---|
+| **REDCap and controlled sources** | Hold authoritative confidential records. |
+| **Stata** | Prepare analytical inputs, calculate statistics, apply publication controls and promote approved public packages. |
+| **Quarto** | Present approved public outputs without becoming a parallel analytical workflow. |
+| **GitHub** | Version and deploy the static, public-safe Info-Hub. |
+
+Private data, staging packages, credentials, logs and review evidence remain
+outside Git. Generated outputs are corrected only through source data or
+version-controlled code and a rerun.
+
+## Start here
+
+- [Analytics environment](getting-started/environment.qmd)
+- [Set up a workstation](getting-started/workstation-setup.qmd)
+- [Analytical workflow map](workflows/overview.qmd)
+- [System reference](reference/index.qmd)
+
+## Implemented analytical routes
+
+- [CVD event release](workflows/cvd-events/overview.qmd): separate six-step workflow.
+- [CVD mortality release](workflows/mortality/overview.qmd): separate six-step workflow.
+- [Rolling three-month update](workflows/reporting/rolling-update.qmd): one controlled build from approved standard releases.
+- [Annual CVD report](workflows/reporting/annual-report.qmd): build, approve and publish.
+- [One-off CVD report](workflows/reporting/one-off-report.qmd): prepare, approve and publish.
+
+## Publication and maintenance
+
+- [Review an analytical release](controls/review-release.qmd)
+- [Apply disclosure control](controls/disclosure-control.qmd)
+- [Approve and publish a release](controls/approve-publish.qmd)
+- [Maintain public CVD tables](website/cvd-tables.qmd)
+- [Render and publish the website](website/render-publish.qmd)
+- [Make a safe code change](maintenance/safe-code-change.qmd)
+- [Fix common problems](maintenance/troubleshooting.qmd)
+
+Public tables, dashboards, downloads and reports reuse approved public metric
+releases wherever their purpose permits. New presentation components must not
+establish a second calculation or approval route.
+

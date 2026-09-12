@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Run the CVD mortality workflow"
 description: "Run the six-step mortality workflow from the private death-certificate extract through classification, review, approval and controlled publication."
-date: 2026-08-21
-date-modified: 2026-08-21
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
 ---
 
@@ -21,7 +24,7 @@ The workflow keeps calculation, disclosure control, human approval and publicati
 
 1. **[Step 1: Extract mortality data](extract.qmd).** Create the private all-deaths source extract through the selected month-end.
 2. **[Step 2: Classify causes of death](classify.qmd).** Apply the frozen BNR Heart/Stroke approximate mortality classifier.
-3. **[Step 3: Build mortality burden data](build-burden.qmd).** Calculate the private count and distribution reporting lattice and stage the release.
+3. **[Step 3: Build mortality burden data](build-burden.qmd).** Calculate the private count, distribution and annual-rate reporting lattice and stage the release.
 4. **[Step 4: Review the mortality release](review.qmd).** Revalidate the package, apply deterministic disclosure control and create the private human-review materials.
 5. **[Step 5: Approve the reviewed release](approve.qmd).** Record human approval of the exact reviewed candidate and create the private `public_ready` package.
 6. **[Step 6: Publish approved outputs](publish.qmd).** Verify the approval and manifest, then promote only the approved payload.
@@ -32,11 +35,13 @@ The current burden family publishes:
 
 - mortality counts (`MORT-BURDEN-001`);
 - annual percentage distributions (`MORT-BURDEN-002`);
+- crude and directly age-standardised mortality rates with their documented
+  confidence intervals;
 - Primary and Inclusive mortality definitions;
 - monthly, quarterly and annual reporting rows under the approved publication scope; and
 - the fixed reviewed 2015-2019 monthly historical-reference asset.
 
-Population mortality rates and DCO linkage are outside this workflow.
+DCO linkage remains outside this workflow.
 
 ## Publication boundary
 
@@ -60,3 +65,4 @@ The public dashboard then reads only from that website mirror. See [Maintain the
 - Generated datasets, metadata, manifests and approval receipts are never repaired by hand.
 
 See [Apply and review disclosure control](../../controls/disclosure-control.qmd) for the common BNR policy.
+

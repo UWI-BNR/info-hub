@@ -1,8 +1,9 @@
 # Shared metadata for all Operations Manual pages
 lang: en-GB
-author: "Ian Hambleton"
+author: "Barbados National Registry"
+date: last-modified
 title-block-style: plain
-published-title: "Created"
+published-title: "Updated"
 date-format: "D MMMM YYYY"
 toc: true
 toc-title: "On this page"
@@ -10,6 +11,13 @@ toc-depth: 2
 number-sections: false
 page-navigation: true
 search: true
+
+# Manual review status is inherited by every page. Change the display switch
+# here to remove the strip from the complete manual before public publication.
+manual-review-status: not-reviewed
+manual-review-display: true
+filters:
+  - ../_filters/manual-review-status.lua
 
 format:
   html:

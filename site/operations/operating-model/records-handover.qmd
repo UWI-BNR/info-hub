@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Maintain operational records and hand over"
 subtitle: "Keep the registry reproducible when staff or systems change"
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
 **Status:** Operational framework.
 **Owner:** BNR Lead and BNR Developer.
@@ -18,8 +21,8 @@ Maintain enough evidence and current guidance for another authorised operator to
 |---|---|
 | Registry records and corrections | REDCap and its audit trail |
 | Protected extracts, logs, staging and review files | private BNR workspace |
-| Approved public packages | `outputs/public/` |
-| Website mirror and documentation | public Info-Hub repository |
+| Approved public packages | configured authoritative public storage outside Git |
+| Website mirror and documentation | public-safe Info-Hub repository paths |
 | Code and documentation history | Git repository |
 | Credentials, private locations and recovery contacts | private local configuration sheet |
 | Material post-handover changes | concise change history |
@@ -31,7 +34,7 @@ Maintain enough evidence and current guidance for another authorised operator to
 - keep Technical Manual commands aligned with current files and dialogs;
 - remove obsolete navigation rather than leaving empty public pages;
 - review dependencies before upgrading Stata, Quarto, Python or extensions;
-- retain approved packages separately from disposable website mirrors; and
+- retain authoritative approved packages separately from replaceable website mirrors; and
 - use Git history for ordinary development changes.
 
 ## Handover checklist
@@ -58,3 +61,4 @@ Review this manual, the Technical Manual, role assignments, private configuratio
 ::: {.callout-warning title="BNR confirmation required"}
 Confirm retention periods, backup owner, recovery-test frequency, formal handover approver and the location of the private configuration sheet. Do not publish live access details.
 :::
+

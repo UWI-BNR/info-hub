@@ -1,0 +1,48 @@
+﻿---
+title: "Prepare, approve and publish a one-off CVD report"
+description: "Operate the controlled three-step publication route for a finished bespoke report."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Before the controlled workflow
+
+Complete and document the bespoke analysis. The common workflow begins with a
+finished PDF; it does not run, standardise or reproduce the analytical method.
+Use a stable lowercase study ID containing letters, numbers and underscores.
+
+## Step 1: Prepare the candidate
+
+Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off
+report candidate**. Supply the study ID, positive report version, finished PDF,
+public title, description and report date. Confirm that the private candidate
+contains the PDF, `index.qmd` and `report.yml`.
+
+## Step 2: Approve the candidate
+
+Choose **Step 2: Approve one-off report candidate**. Identify the authorised
+approver and complete the candidate, disclosure and readiness confirmations.
+Approval creates the exact manifested `public_ready` payload and
+`approval.yml`; it does not publish.
+
+## Step 3: Publish the report
+
+Choose **Step 3: Publish approved one-off report** for the same study ID and
+version. Confirm verification and inspect the authoritative PDF, website mirror,
+landing page and metadata. A correction requires a higher approved version at
+the same stable study location.
+
+## Disclosure screen {#disclosure-screen}
+
+The optional utility is available at **User > BNR > Report utilities > Screen
+report counts for disclosure review**. Its input must contain `output_id`,
+`cell_id` and numeric `cell_count`. It flags counts from zero to five, missing,
+negative or non-integer counts and duplicate identifiers.
+
+The screen does not change the source dataset, apply secondary suppression or
+approve the report. Its output remains private review evidence. The analyst must
+review the complete proposed report for direct and indirect disclosure risk.
+

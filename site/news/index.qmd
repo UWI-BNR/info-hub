@@ -4,13 +4,9 @@ description: "Latest public outputs from the Barbados National Registry Informat
 title-block-style: none
 
 listing:
-  - id: latest-outputs
+  - id: latest-reports
     contents:
-      - "../surveillance/cvd/briefings/*.qmd"
-      # Add these when the folders and outputs exist:
-      # - "../surveillance/hypertension/briefings/*.qmd"
-      # - "../surveillance/diabetes/briefings/*.qmd"
-      # - "../surveillance/cancer/briefings/*.qmd"
+      - "../surveillance/*/reports/*/*/index.qmd"
     type: grid
     sort: "date desc"
     categories: true
@@ -38,13 +34,11 @@ format:
 
 ### Live surveillance
 
-Explore the latest BNR CVD dashboard, updated weekly.
+Explore the latest BNR CVD interactive dashboards.
 
 ::: {.bnr-utility-links}
 [Latest CVD events](../surveillance/cvd/metrics/burden/index.qmd){.btn .btn-outline-primary} [Latest CVD deaths](../surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-outline-primary}
 :::
-
-
 
 :::
 
@@ -55,7 +49,7 @@ Explore the latest BNR CVD dashboard, updated weekly.
 Explore the latest CVD summary statistics.
 
 ::: {.bnr-utility-links}
-[Latest CVD tables](../surveillance/cvd/tabulations/index.qmd){.btn .btn-outline-primary}
+[Latest CVD tables](../surveillance/cvd/tables/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::
@@ -65,9 +59,10 @@ Explore the latest CVD summary statistics.
 <br>
 
 ## Latest reports
-The latest public outputs from the Barbados National Registry are listed below. These include surveillance briefings, downloadable data packages, and other approved reporting outputs. Use the search box or category filters to find outputs by topic, condition, or output type.
 
-::: {#latest-outputs}
+New rolling three-month CVD surveillance updates, annual reports, one-page
+public-health updates and one-off analytical studies from the Barbados National
+Registry are listed here as they are published.
+
+::: {#latest-reports}
 :::
-
-

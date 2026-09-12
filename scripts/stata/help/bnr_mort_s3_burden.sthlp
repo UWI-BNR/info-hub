@@ -39,6 +39,13 @@ rolling five-year comparator rows are deliberately not calculated: Step 4
 builds the separate fixed 2015-2019 monthly reference candidate for review.
 
 {p 4 4 2}
+Step 3 also creates annual crude and directly age-standardised mortality rates
+per 100,000 for Primary and Inclusive definitions, All CVD/Heart/Stroke and
+both/female/male sex strata. Rates use the approved private WPP 2024 Barbados
+population and WHO World Standard assets. Their 95% statistical confidence
+intervals are retained for review; the dashboard does not calculate rates.
+
+{p 4 4 2}
 Count series also include the appropriate prior-five-year mean. Age is not
 crossed with sex, individual outcome or subannual period. Monthly Heart and
 Stroke rows are deliberately omitted to reduce sparse cells.
@@ -76,6 +83,4 @@ log. The words {cmd:replace} and {cmd:debug} may be supplied in either order.
 {p 4 4 2}
 Frequencies 1 to 5 and directly connected count/percentage rows are flagged for
 private review. A deliberate Step 3 replacement also invalidates any earlier
-{cmd:public_ready} approval package for the same release. Step 3 does not apply final public suppression, approve, publish, create
-rates, perform DCO linkage or copy anything to Quarto or the website. Those
-functions belong to later workflow steps or separate analytical workstreams.
+{cmd:public_ready} approval package for the same release. Step 3 does not apply final public suppression, approve, perform DCO linkage or copy anything to Quarto or the website. Rate protection is applied in Step 4 as a secondary companion to a protected annual death count.

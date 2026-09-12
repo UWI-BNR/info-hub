@@ -37,9 +37,9 @@ format:
     link-external-newwindow: false
 ---
 
-This page provides public download packages from approved Barbados National Registry surveillance outputs.
+This page provides public metric-dataset packages from approved Barbados National Registry surveillance releases.
 
-> Each row represents one approved, versioned `ZIP` package. Briefing packages may contain datasets, figures, metadata, an Excel workbook, and a README file. Metric packages contain approved release-stamped and current datasets with accompanying metadata. Package contents vary by output.
+> Each row represents one approved, versioned `ZIP` metric package containing release-stamped and current datasets with accompanying metadata. Package contents vary by release workflow.
 
 Use the search box to filter by output type, topic, period, version, surveillance area, or output title.
 

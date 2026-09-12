@@ -1,50 +1,56 @@
 ---
+manual-review-status: reviewed-by-irh
 title: "Research data access"
 description: "How researchers can request access to restricted, de-identified BNR data."
 ---
 
-BNR publishes aggregate data openly where this can be done safely. Some research questions require more detailed, restricted data. Access to those data is considered through a separate application and governance process.
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
-## What can be requested
+BNR publishes summary data openly whenever this can be done safely. Some research questions require more detailed, restricted data. Researchers can apply for access through a controlled review and agreement process.
 
-A request should identify:
+## Before applying
+
+Check the [data downloads](../../downloads/index.qmd) first. An existing public dataset or report may already meet your needs and can be used without a restricted-data application.
+
+If restricted data are needed, your application should explain:
 
 - the research purpose and expected public health value;
 - the disease area, population and period required;
-- the minimum variables and detail needed;
-- the proposed analytical outputs;
-- ethics approval, where applicable; and
+- the minimum variables and level of detail needed;
+- the proposed analyses and outputs;
+- ethics approval or the reason it is not required; and
 - secure storage, access and destruction arrangements.
 
-## How decisions are made
+## How the process works
 
-Approval is not automatic. BNR considers the purpose, proportionality, sensitivity, disclosure risk, safeguards, legal and ethical position, and the feasibility of preparing a suitable dataset.
+1. **Apply.** Submit the online application with enough information for BNR to assess the request.
+2. **Review.** BNR checks the purpose, minimum data needed, ethical safeguards, confidentiality safeguards and feasibility.
+3. **Agree.** If the request is approved, the applicant receives a project-specific Data Sharing Agreement to review and sign electronically.
+4. **Release and close.** BNR records the exact dataset released and follows the approved access, output-review, retention and destruction conditions.
 
-The principle of **data minimisation** applies: an approved dataset should contain no more detail than the project needs.
+Approval is not automatic. BNR may direct an applicant to an existing public output, ask for clarification, approve a smaller dataset, refer the request for further review or decline it with a recorded reason.
 
-## Conditions of access
-
-Approved users may be required to:
-
-- sign the BNR Research Data Sharing Agreement;
-- use data only for the approved purpose;
-- restrict access to named team members;
-- store data in the approved environment;
-- submit proposed outputs for disclosure review; and
-- return or securely destroy data at the agreed end point.
+The principle of **data minimisation** applies: an approved dataset should contain no more information than the project needs.
 
 ::: {.callout-important title="De-identified does not mean public"}
-Detailed records can retain disclosure risk even when direct identifiers are removed. Restricted data must not be shared onward or placed in public repositories.
+Detailed records can retain a risk of identification even after names and other direct identifiers are removed. Restricted data must not be shared onward or placed in public repositories.
 :::
 
 ## Start an application
 
-[Open the Research Data Sharing Agreement](dsa-methods.qmd){.btn .btn-primary}
+[Apply for restricted BNR data](https://redcap.link/u9784k1s){.btn .btn-primary target="_blank" rel="noopener"}
 
-The agreement page explains how to complete, save and submit the document. The Info-Hub does not store information entered into the form.
+The application opens in REDCap. We record and store the information you provide securely, following the data confidentiality rules that we apply to our health data processing, and in line with the Barbados Data Protection Act (2019).
+
+## After you apply
+
+BNR may contact you for clarification or supporting documents. If access is approved, BNR will send the Data Sharing Agreement through a private, project-specific REDCap link. A public survey submission does not itself authorise access to data.
+
+Questions can be sent to [bnr@cavehill.uwi.edu](mailto:bnr@cavehill.uwi.edu).
 
 ## Related pages
 
 - [Protecting confidentiality](../interpretation/confidentiality.qmd)
 - [Data downloads](../../downloads/index.qmd)
-

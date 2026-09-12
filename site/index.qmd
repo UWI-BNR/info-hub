@@ -18,19 +18,19 @@ toc: false
 
 ::: {.bnr-home-section .bnr-intro-section}
 
-<p class="bnr-intro-main">We track major chronic diseases and primary care indicators to understand Barbados’ changing health patterns.</p>
+<p class="bnr-intro-main">Explore timely national evidence on cardiovascular events, deaths, and patterns of care in Barbados.</p>
 
-<p class="bnr-intro-sub">With clear, reliable evidence, we help guide decisions that strengthen care and improve health outcomes.</p>
+<p class="bnr-intro-sub">BNR brings together surveillance data, transparent methods, and public reports to support prevention, service planning, and accountability.</p>
 
 ::: {.d-flex .gap-3 .justify-content-center .flex-wrap .mt-4 .bnr-home-actions}
-[View latest data](news/index.qmd){.btn .btn-outline-primary}
+[View latest outputs](news/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::
 
-::: {.bnr-home-section #surveillance-areas}
+::: {.bnr-home-section #cvd-surveillance}
 
-## Surveillance areas
+## Explore CVD surveillance
 
 ::: {.grid}
 
@@ -38,11 +38,11 @@ toc: false
 ::: {.card .h-100}
 ::: {.card-body}
 
-### Cardiovascular disease {.card-title}
+### CVD events {.card-title}
 
-Tracking heart attacks and strokes helps show how disease burden and outcomes are changing across Barbados.
+Track heart attacks and strokes over time, including counts, rates, and patterns by sex and age.
 
-[Open CVD surveillance](surveillance/cvd/index.qmd){.btn .btn-primary}
+[Explore CVD events](surveillance/cvd/metrics/burden/index.qmd){.btn .btn-primary}
  
 :::
 :::
@@ -52,11 +52,11 @@ Tracking heart attacks and strokes helps show how disease burden and outcomes ar
 ::: {.card .h-100}
 ::: {.card-body}
 
-### Hypertension {.card-title}
+### CVD deaths {.card-title}
 
-Monitoring hypertension in primary care helps show how common risk is being detected, treated, and controlled.
+Explore deaths associated with heart disease and stroke, including mortality rates and uncertainty in cause-of-death classification.
 
-[Open hypertension surveillance](surveillance/hypertension/index.qmd){.btn .btn-primary}
+[Explore CVD deaths](surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-primary}
 
 :::
 :::
@@ -66,11 +66,11 @@ Monitoring hypertension in primary care helps show how common risk is being dete
 ::: {.card .h-100}
 ::: {.card-body}
 
-### Diabetes {.card-title}
+### Reports and updates {.card-title}
 
-Following diabetes care helps show how people are being monitored, supported, and protected from long-term complications.
+Read public health updates, annual reports, and focused analyses that translate BNR data into useful evidence.
 
-[Open diabetes surveillance](surveillance/diabetes/index.qmd){.btn .btn-primary}
+[View reports and updates](news/index.qmd){.btn .btn-primary}
 
 :::
 :::
@@ -82,14 +82,15 @@ Following diabetes care helps show how people are being monitored, supported, an
 ::: {.bnr-home-section .bnr-utility-section}
 ::: {.bnr-utility-card}
 
-## Understanding the numbers
+## Understand and use the data
 
-We publish methods, definitions, data notes, and release updates so users can understand how BNR information is produced and how it should be interpreted.
+Explore definitions, methods, data-quality information and downloadable releases to understand and use BNR statistics appropriately.
 
 ::: {.bnr-utility-links}
 [Methods and definitions](./methods/index.qmd){.btn .btn-outline-primary}
-[Data sources](./downloads/index.qmd){.btn .btn-outline-primary}
-[Quality checks](./operations/index.qmd){.btn .btn-outline-primary}
+[Data quality and completeness](./methods/interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary}
+[Protecting confidentiality](./methods/interpretation/confidentiality.qmd){.btn .btn-outline-primary}
+[Download data](./downloads/index.qmd){.btn .btn-outline-primary}
 :::
 
 :::

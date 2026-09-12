@@ -404,7 +404,7 @@ while r(eof) == 0 {
     if `"`approval_line'"' == "domain: mortality" {
         local approval_domain_ok 1
     }
-    if `"`approval_line'"' == "metric_family: burden" {
+    if `"`approval_line'"' == "metric_family: burden_and_rate" {
         local approval_family_ok 1
     }
     if `"`approval_line'"' == "workflow_step: 5" {
@@ -1175,7 +1175,7 @@ file write `catalogue_handle' "package_id: `package_id'" _n
 file write `catalogue_handle' "release_id: `release_id'" _n
 file write `catalogue_handle' "surveillance_area: Mortality" _n
 file write `catalogue_handle' "domain: mortality" _n
-file write `catalogue_handle' "metric_family: burden" _n
+file write `catalogue_handle' "metric_family: burden_and_rate" _n
 file write `catalogue_handle' "period: `selected_period'" _n
 file write `catalogue_handle' "release_date: `approved_date'" _n
 file write `catalogue_handle' "" _n

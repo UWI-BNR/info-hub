@@ -1,11 +1,13 @@
----
+﻿---
 title: "Review, approve and publish"
 subtitle: "The controlled route from private Stata staging to the public Info-Hub"
-date: 2026-08-11
-date-modified: 2026-08-21
+manual-review-status: not-reviewed
 ---
 
-**Status:** Implemented common procedure.  
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 **Owner:** Authorised reviewer, approver and publisher.
 
 ## Purpose
@@ -37,10 +39,10 @@ Use the approval action belonging to the workflow:
 
 | Product | Stata approval action |
 |---|---|
-| CVD event metrics | **User > BNR > Update CVD dashboard > Step 5: Review and approve package for release** |
-| CVD mortality | **User > BNR > Update mortality dashboard > Step 5: Approve reviewed mortality release** |
-| Tabulations | **User > BNR > Produce tables > Step 2B: Approve reviewed tables** |
-| Briefings | **User > BNR > Produce briefing > Step 2: Review and approve** |
+| CVD event metrics | **User > BNR > Update CVD events dashboard > Step 5: Review and approve package for release** |
+| CVD mortality | **User > BNR > Update CVD mortality dashboard > Step 5: Approve reviewed mortality release** |
+| Annual CVD report | **User > BNR > Annual CVD report > Step 2: Approve annual report candidate** |
+| One-off CVD report | **User > BNR > One-off CVD report publication > Step 2: Approve one-off report candidate** |
 
 Select the exact reviewed package, identify the authorised approver and complete the confirmations. Check the resulting `approval.yml` and manifest. Approval applies only to that identified payload; a later payload change requires renewed review and approval.
 
@@ -51,9 +53,13 @@ Use the separate publication action for the same product and release:
 | Product | Stata publication action |
 |---|---|
 | CVD event metrics | CVD event **Step 6: Publish approved outputs** |
-| CVD mortality | Mortality **Step 6: Publish approved outputs** |
-| Tabulations | Table **Step 3: Publish approved tables** |
-| Briefings | Briefing **Step 3: Publish approved briefing** |
+| CVD mortality | Mortality **Step 6: Publish approved mortality outputs** |
+| Annual CVD report | Annual report **Step 3: Publish approved annual report** |
+| One-off CVD report | One-off report **Step 3: Publish approved one-off report** |
+
+The rolling three-month update has one controlled build action and consumes
+already-approved event and mortality releases. It does not add a second
+analytical approval step.
 
 Confirm that the Stata summary reports successful publication and verification. Check the authoritative public package, its stable or release-stamped copy where applicable, the ZIP and the website mirror.
 

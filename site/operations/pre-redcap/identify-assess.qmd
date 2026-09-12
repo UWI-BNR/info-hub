@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Identify and assess potential cases"
 description: "BNR team draft for documenting case finding and initial assessment before REDCap."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
 ---
 
@@ -45,3 +48,4 @@ State where the assessment decision and its supporting reference are recorded.
 
 - [Abstract and verify source information](abstract-verify.qmd)
 - [Statistical Analysis Plan](../data/sap.qmd)
+

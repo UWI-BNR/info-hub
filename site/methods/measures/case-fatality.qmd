@@ -1,7 +1,12 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "CVD case fatality"
 description: "How BNR measures death before discharge following a hospital-registered CVD event."
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
 In-hospital case fatality is the percentage of eligible hospital-registered CVD events where the patient died before discharge.
 
@@ -17,7 +22,7 @@ In-hospital case fatality is the percentage of eligible hospital-registered CVD 
 
 ## What does this measure tell us?
 
-Case fatality describes short-term outcome among people reaching the hospital-event series. It is not the same as a population mortality rate: its denominator is a group of CVD events, not the general population.
+Case fatality describes short-term outcome among people registered as being admitted to hospital for a heart attack or stroke. It is not the same as a population mortality rate: its denominator is a group of CVD events, not the general population.
 
 ## How do we calculate it?
 
@@ -25,13 +30,13 @@ $$
 \text{Case fatality (\%)} = \frac{\text{in-hospital deaths}}{\text{eligible events with known outcome}} \times 100
 $$
 
-BNR may also show a clearly labelled sensitivity estimate that combines confirmed deaths with probable deaths. This is useful when recent discharge outcomes remain incomplete, but it must remain distinguishable from the confirmed measure.
+The BNR case-fatality reports also show a clearly labelled sensitivity estimate that combines *confirmed deaths* with *probable deaths*. This is useful when recent discharge outcomes remain incomplete, but it always remains clearly distinguishable from the confirmed measure.
 
 ## What is included and excluded?
 
-The measure includes eligible hospital-registered heart attack or stroke events among Barbados residents. Death-certificate-only records, duplicates, non-residents and events without the outcome information required for the chosen estimate are excluded from the confirmed measure.
+The measure includes eligible hospital-registered heart attack or stroke events among Barbados residents. Death-certificate-only records, duplicates, non-residents and events without a discharge outcome are excluded from the case-fatality measure.
 
-When BNR reports a probable-death sensitivity series, the publication states the time rule used and explains why it was needed.
+When BNR reports a *probable-death* sensitivity series, the publication states the time rule used and explains why it was needed.
 
 ## Worked example
 
@@ -45,12 +50,12 @@ The in-hospital case fatality would be **8%**.
 
 ## How should it be interpreted?
 
-A lower percentage can indicate improved survival, but comparisons also depend on age, severity, event mix, access to hospital care, transfers and completeness of outcome recording. Age-adjusted estimates may be used to improve comparisons across periods or groups.
+A lower percentage can indicate improved in-hospital survival, but comparisons also depend on age, severity, event mix, access to hospital care, transfers and completeness of outcome recording. Age-adjusted estimates may be used to improve comparisons across periods or groups.
 
 ## Things to bear in mind
 
 - Case fatality describes deaths among eligible hospital events, not deaths in the whole population.
-- Confirmed and confirmed-plus-probable series should not be treated as identical.
+- *Confirmed* and *confirmed-plus-probable* series should not be treated as identical.
 - Recent periods may change as outcomes are completed.
 - Small numerators and denominators can produce unstable percentages.
 
@@ -58,5 +63,5 @@ A lower percentage can indicate improved survival, but comparisons also depend o
 
 - [Mortality](mortality.qmd)
 - [Data quality and completeness](../interpretation/data-quality-completeness.qmd)
-- [CVD case-fatality briefing](../../surveillance/cvd/briefings/case-fatality.qmd)
+- [CVD reference tables](../../surveillance/cvd/tables/index.qmd)
 

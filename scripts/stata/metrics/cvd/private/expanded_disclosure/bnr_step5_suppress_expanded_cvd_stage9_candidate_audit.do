@@ -1,0 +1,197 @@
+/*******************************************************************************
+DO-FILE: bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do
+VERSION: 1.3.2 (29 August 2026)
+PURPOSE: Audit the provisional combined candidate against its private
+         protection register before integration into the Step 5 controller.
+
+This helper confirms that every protection decision is reflected in the
+candidate, existing burden comparator flags remain protected, protected numeric
+fields are blank, the statistical-CI contract is intact, the approved national
+DCO lattice has a generic disclosure note, and no private support or decision
+fields remain.
+*******************************************************************************/
+
+version 19
+clear all
+set more off
+
+display as result "Running expanded CVD Step 5 Stage 9 candidate-audit helper v1.3.1"
+
+args audited_private_dta candidate_dta row_audit_dta qa_dta release_id
+
+foreach argument in audited_private_dta candidate_dta row_audit_dta qa_dta release_id {
+    if "``argument''" == "" exit 198
+}
+
+capture confirm file "`audited_private_dta'"
+assert _rc == 0
+capture confirm file "`candidate_dta'"
+assert _rc == 0
+
+local key_variables metric_id period_type period_year period_month event_type ///
+    sex age_group ascertainment_scope statistic mortality_definition
+tempfile expected_protection
+
+use "`audited_private_dta'", clear
+local private_required release_id stage6_protection_status ///
+    related_suppression_review national_dco_release_exception
+local private_input_required `key_variables' `private_required'
+foreach variable of local private_input_required {
+    capture confirm variable `variable'
+    if _rc exit 111
+}
+assert release_id == "`release_id'"
+isid `key_variables', missok
+
+keep `key_variables' stage6_protection_status related_suppression_review ///
+    national_dco_release_exception
+generate byte expected_protected = stage6_protection_status != "none"
+save "`expected_protection'", replace
+
+use "`candidate_dta'", clear
+local candidate_required release_id suppression_status disclosure_note ///
+    value numerator denominator linkage_lower_value linkage_upper_value ///
+    ci_lower_value ci_upper_value ci_level ci_method
+local candidate_input_required `key_variables' `candidate_required'
+foreach variable of local candidate_input_required {
+    capture confirm variable `variable'
+    if _rc exit 111
+}
+assert release_id == "`release_id'"
+isid `key_variables', missok
+
+local private_field_count = 0
+foreach variable in sdc_policy primary_suppression_threshold primary_suppression ///
+        related_primary_cells related_suppression_review suppression_review ///
+        suppression_reason stage3_original_primary stage3_hospital_primary ///
+        stage3_dco_primary national_dco_release_exception ///
+        stage4_primary_before_exception stage4_dco_primary_relaxed ///
+        stage5_unknown_support_present stage5_mixed_support_present ///
+        stage5_structural_secondary stage5_structural_exception ///
+        stage6_existing_secondary stage6_hosp_existing stage6_protection_status ///
+        stage7_protected {
+    capture confirm variable `variable'
+    if !_rc local private_field_count = `private_field_count' + 1
+}
+
+merge 1:1 `key_variables' using "`expected_protection'"
+assert _merge == 3
+drop _merge
+
+generate byte candidate_protected = suppression_status != "none"
+generate byte protection_failure = ///
+    expected_protected == 1 & candidate_protected == 0
+generate byte comparator_failure = ///
+    related_suppression_review == 1 & candidate_protected == 0
+
+generate byte numeric_failure = candidate_protected == 1 & ///
+    (!missing(value) | !missing(numerator) | !missing(denominator) | ///
+    !missing(linkage_lower_value) | !missing(linkage_upper_value) | ///
+    !missing(ci_lower_value) | !missing(ci_upper_value))
+
+generate byte ci_contract_failure = 0
+
+* Rate rows always retain method/level metadata.
+replace ci_contract_failure = 1 if metric_id == "CVD-INCIDENCE-001" & ///
+    (ci_level != 95 | ci_method == "")
+
+* Unprotected rates must retain their numerical CI and the central estimate
+* must remain inside that interval.
+replace ci_contract_failure = 1 if metric_id == "CVD-INCIDENCE-001" & ///
+    candidate_protected == 0 & ///
+    (missing(ci_lower_value) | missing(ci_upper_value) | ///
+    ci_lower_value < 0 | ci_lower_value > value + 0.0000001 | ///
+    ci_upper_value + 0.0000001 < value | ///
+    ci_upper_value < ci_lower_value)
+
+* Protected rates must not retain numerical CI limits.
+replace ci_contract_failure = 1 if metric_id == "CVD-INCIDENCE-001" & ///
+    candidate_protected == 1 & ///
+    (!missing(ci_lower_value) | !missing(ci_upper_value))
+
+* Non-rate rows never carry statistical-CI fields.
+replace ci_contract_failure = 1 if metric_id != "CVD-INCIDENCE-001" & ///
+    (!missing(ci_lower_value) | !missing(ci_upper_value) | ///
+    !missing(ci_level) | ci_method != "")
+
+* Approved, unprotected national DCO rows must retain the released linkage
+* lower/upper values used by the dashboard. These are distinct from the
+* statistical CI and must contain the central estimate.
+generate byte linkage_contract_failure = 0
+replace linkage_contract_failure = 1 if ///
+    national_dco_release_exception == 1 & candidate_protected == 0 & ///
+    (missing(linkage_lower_value) | missing(linkage_upper_value) | ///
+     linkage_lower_value > value + 0.0000001 | ///
+     linkage_upper_value + 0.0000001 < value | ///
+     linkage_upper_value < linkage_lower_value)
+
+generate byte exception_note_failure = ///
+    national_dco_release_exception == 1 & candidate_protected == 0 & ///
+    disclosure_note != ///
+    "Approved national aggregate DCO estimate; individual linkage information remains protected."
+
+generate str8 result = cond( ///
+    protection_failure == 0 & comparator_failure == 0 & ///
+    numeric_failure == 0 & ci_contract_failure == 0 & ///
+    linkage_contract_failure == 0 & exception_note_failure == 0, ///
+    "PASS", "FAIL")
+generate str244 detail = ///
+    "Candidate protection, numeric blanking, CI/linkage contracts and national-DCO note agree with the private register."
+
+quietly count if protection_failure == 1
+local protection_failures = r(N)
+quietly count if comparator_failure == 1
+local comparator_failures = r(N)
+quietly count if numeric_failure == 1
+local numeric_failures = r(N)
+quietly count if ci_contract_failure == 1
+local ci_contract_failures = r(N)
+quietly count if linkage_contract_failure == 1
+local linkage_contract_failures = r(N)
+quietly count if exception_note_failure == 1
+local exception_note_failures = r(N)
+quietly count if result == "FAIL"
+local failed_rows = r(N)
+
+save "`row_audit_dta'", replace
+
+clear
+set obs 7
+generate str64 check = ""
+generate str8 result = "PASS"
+generate str244 detail = ""
+
+replace check = "Private protection register propagated" in 1
+replace result = cond(`protection_failures' == 0, "PASS", "FAIL") in 1
+replace detail = "`protection_failures' protected source rows were not protected in the candidate." in 1
+
+replace check = "Existing burden comparator decisions retained" in 2
+replace result = cond(`comparator_failures' == 0, "PASS", "FAIL") in 2
+replace detail = "`comparator_failures' existing comparator decisions were not protected in the candidate." in 2
+
+replace check = "Protected numeric fields blank" in 3
+replace result = cond(`numeric_failures' == 0, "PASS", "FAIL") in 3
+replace detail = "`numeric_failures' protected rows retain a numeric release field, linkage bound or CI bound." in 3
+
+replace check = "Statistical CI contract retained" in 4
+replace result = cond(`ci_contract_failures' == 0, "PASS", "FAIL") in 4
+replace detail = "`ci_contract_failures' candidate rows violate the statistical-CI contract." in 4
+
+replace check = "DCO linkage-bound contract retained" in 5
+replace result = cond(`linkage_contract_failures' == 0, "PASS", "FAIL") in 5
+replace detail = "`linkage_contract_failures' approved national DCO rows have missing or inconsistent released linkage bounds." in 5
+
+replace check = "National DCO aggregate note retained" in 6
+replace result = cond(`exception_note_failures' == 0, "PASS", "FAIL") in 6
+replace detail = "`exception_note_failures' unprotected approved national DCO rows lack the generic aggregate-release note." in 6
+
+replace check = "Private fields absent from candidate" in 7
+replace result = cond(`private_field_count' == 0, "PASS", "FAIL") in 7
+replace detail = "`private_field_count' private support or decision fields remain in the candidate." in 7
+
+save "`qa_dta'", replace
+
+assert `failed_rows' == 0
+assert `private_field_count' == 0
+
+display as result "Expanded CVD Step 5 Stage 9 candidate-audit helper passed."

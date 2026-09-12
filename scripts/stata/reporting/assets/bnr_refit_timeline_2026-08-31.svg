@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="960" viewBox="0 0 1536 960">
+  <rect width="1536" height="960" fill="#ffffff"/>
+  <rect x="22" y="22" width="1492" height="916" rx="16" fill="#ffffff" stroke="#9db0c3" stroke-width="1.5"/>
+  <style>
+    .title {font: 700 31px 'Montserrat', Arial, sans-serif; fill:#0b284c}
+    .subtitle {font: italic 18px 'Montserrat', Arial, sans-serif; fill:#38536d}
+    .label {font: 700 17px 'Montserrat', Arial, sans-serif; fill:#172d4d}
+    .small {font: 15px 'Montserrat', Arial, sans-serif; fill:#38536d}
+    .tiny {font: 13px 'Montserrat', Arial, sans-serif; fill:#38536d}
+    .month {font: 700 14px 'Montserrat', Arial, sans-serif; fill:#172d4d}
+    .key {font: 14px 'Montserrat', Arial, sans-serif; fill:#172d4d}
+  </style>
+  <text x="52" y="70" class="title">BNR REFIT — IMPLEMENTATION POSITION</text>
+  <text x="52" y="99" class="subtitle">Status at 31 August 2026</text>
+  <line x1="52" y1="121" x2="1480" y2="121" stroke="#d5a520" stroke-width="2"/>
+
+  <text x="52" y="158" class="label">PROGRAMME OVERVIEW</text>
+  <text x="52" y="181" class="small">Major workstreams</text>
+  <g stroke="#dbe5ec" stroke-width="1" stroke-dasharray="3 4">
+    <line x1="400" y1="166" x2="400" y2="765"/><line x1="530" y1="166" x2="530" y2="765"/>
+    <line x1="660" y1="166" x2="660" y2="765"/><line x1="790" y1="166" x2="790" y2="765"/>
+    <line x1="920" y1="166" x2="920" y2="765"/><line x1="1050" y1="166" x2="1050" y2="765"/>
+    <line x1="1180" y1="166" x2="1180" y2="765"/><line x1="1310" y1="166" x2="1310" y2="765"/>
+    <line x1="1440" y1="166" x2="1440" y2="765"/>
+  </g>
+  <g class="month" text-anchor="middle">
+    <text x="400" y="151">APR</text><text x="530" y="151">MAY</text><text x="660" y="151">JUN</text>
+    <text x="790" y="151">JUL</text><text x="920" y="151">AUG</text><text x="1050" y="151">SEP</text>
+    <text x="1180" y="151">OCT</text><text x="1310" y="151">NOV</text><text x="1440" y="151">DEC</text>
+  </g>
+  <line x1="920" y1="166" x2="920" y2="765" stroke="#173457" stroke-width="2"/>
+  <rect x="875" y="770" width="90" height="37" rx="4" fill="#0b284c"/>
+  <text x="920" y="793" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="13" font-weight="700" fill="#fff">31 AUG</text>
+
+  <g>
+    <text x="52" y="230" class="label">Data foundation</text><text x="52" y="252" class="small">Capture, managed data and historical base</text>
+    <line x1="385" y1="231" x2="920" y2="231" stroke="#0b7a75" stroke-width="5"/><line x1="920" y1="231" x2="1435" y2="231" stroke="#0b7a75" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="385" cy="231" r="8" fill="#0b7a75"/><rect x="912" y="223" width="16" height="16" transform="rotate(45 920 231)" fill="#0b7a75"/>
+    <text x="610" y="220" class="tiny">Audit and redesign</text><text x="934" y="252" class="tiny">Operating and improving</text>
+  </g>
+  <g>
+    <text x="52" y="304" class="label">Metrics workflow</text><text x="52" y="326" class="small">Calculate, validate, approve and publish</text>
+    <line x1="530" y1="305" x2="920" y2="305" stroke="#5e2b91" stroke-width="5"/><line x1="920" y1="305" x2="1370" y2="305" stroke="#5e2b91" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="530" cy="305" r="8" fill="#5e2b91"/><rect x="912" y="297" width="16" height="16" transform="rotate(45 920 305)" fill="#5e2b91"/>
+    <text x="650" y="295" class="tiny">Development and staging</text><text x="936" y="327" class="tiny">Routine release cycle</text>
+  </g>
+  <g>
+    <text x="52" y="378" class="label">Tabulations workflow</text><text x="52" y="400" class="small">Produce and publish standard tables</text>
+    <line x1="660" y1="379" x2="920" y2="379" stroke="#569d33" stroke-width="5"/><line x1="920" y1="379" x2="1290" y2="379" stroke="#569d33" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="660" cy="379" r="8" fill="#569d33"/><rect x="912" y="371" width="16" height="16" transform="rotate(45 920 379)" fill="#569d33"/>
+    <text x="736" y="369" class="tiny">Build</text><text x="936" y="401" class="tiny">Operating</text>
+  </g>
+  <g>
+    <text x="52" y="452" class="label">Briefings workflow</text><text x="52" y="474" class="small">Regular updates and publications</text>
+    <line x1="430" y1="453" x2="920" y2="453" stroke="#f26b21" stroke-width="5"/><line x1="920" y1="453" x2="1435" y2="453" stroke="#f26b21" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="430" cy="453" r="8" fill="#f26b21"/><rect x="912" y="445" width="16" height="16" transform="rotate(45 920 453)" fill="#f26b21"/>
+    <text x="600" y="443" class="tiny">Redesign</text><text x="936" y="475" class="tiny">Operating</text>
+  </g>
+  <g>
+    <text x="52" y="526" class="label">Documentation</text><text x="52" y="548" class="small">Technical, operational and public methods</text>
+    <line x1="400" y1="527" x2="1050" y2="527" stroke="#007b83" stroke-width="5"/><line x1="1050" y1="527" x2="1385" y2="527" stroke="#007b83" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="400" cy="527" r="8" fill="#007b83"/><rect x="1042" y="519" width="16" height="16" transform="rotate(45 1050 527)" fill="#007b83"/>
+    <text x="690" y="517" class="tiny">Manual development</text><text x="1065" y="549" class="tiny">Embedding and review</text>
+  </g>
+  <g>
+    <text x="52" y="600" class="label">Mortality workflow</text><text x="52" y="622" class="small">Mortality data and burden estimates</text>
+    <line x1="920" y1="601" x2="920" y2="601" stroke="#c83737" stroke-width="5"/><line x1="920" y1="601" x2="1435" y2="601" stroke="#c83737" stroke-width="3" stroke-dasharray="10 6"/>
+    <rect x="912" y="593" width="16" height="16" transform="rotate(45 920 601)" fill="#c83737"/>
+    <text x="936" y="623" class="tiny">Operating; refinement continues</text>
+  </g>
+  <g>
+    <text x="52" y="674" class="label">National event estimation</text><text x="52" y="696" class="small">DCO linkage and national-rate refinement</text>
+    <line x1="920" y1="675" x2="1180" y2="675" stroke="#b97800" stroke-width="5"/><line x1="1180" y1="675" x2="1435" y2="675" stroke="#b97800" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="920" cy="675" r="8" fill="#b97800"/><rect x="1172" y="667" width="16" height="16" transform="rotate(45 1180 675)" fill="#b97800"/>
+    <text x="960" y="665" class="tiny">Implementation and validation</text><text x="1195" y="697" class="tiny">Routine embedding</text>
+  </g>
+  <g>
+    <text x="52" y="748" class="label">Later analytical modules</text><text x="52" y="770" class="small">Survival and hospital-performance measures</text>
+    <line x1="1050" y1="749" x2="1435" y2="749" stroke="#7189a1" stroke-width="3" stroke-dasharray="10 6"/>
+    <circle cx="1050" cy="749" r="8" fill="#7189a1"/><text x="1067" y="739" class="tiny">Planned development</text>
+  </g>
+  <line x1="52" y1="838" x2="1480" y2="838" stroke="#d5dde5"/>
+  <g class="key"><line x1="70" y1="878" x2="112" y2="878" stroke="#0b284c" stroke-width="5"/><text x="124" y="883">Operating</text><line x1="260" y1="878" x2="302" y2="878" stroke="#0b284c" stroke-width="3" stroke-dasharray="10 6"/><text x="314" y="883">Planned / later work</text><rect x="560" y="870" width="16" height="16" transform="rotate(45 568 878)" fill="#0b284c"/><text x="588" y="883">Current position</text><circle cx="780" cy="878" r="8" fill="#0b284c"/><text x="798" y="883">Started</text></g>
+  <text x="52" y="918" class="tiny">This programme view records the position at 31 August 2026; later approved implementation cycles may update individual workstreams.</text>
+</svg>

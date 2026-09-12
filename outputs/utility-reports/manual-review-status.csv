@@ -1,0 +1,84 @@
+﻿manual,page,path,manual_review_status,status_source
+Public Methods Manual,Public Methods Manual,site/methods/index.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,About BNR surveillance,site/methods/about/bnr-surveillance.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,From health records to published statistics,site/methods/about/records-to-statistics.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Measures overview,site/methods/measures/index.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Number of CVD events,site/methods/measures/cvd-event-counts.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,CVD event rates,site/methods/measures/incidence.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,CVD mortality,site/methods/measures/mortality.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Hypertension measures,site/methods/measures/hypertension.qmd,not-used,Page YAML
+Public Methods Manual,Diabetes measures,site/methods/measures/diabetes.qmd,not-used,Page YAML
+Public Methods Manual,CVD case fatality,site/methods/measures/case-fatality.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Hospital length of stay,site/methods/measures/length-of-stay.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,"Counts, percentages and rates",site/methods/interpretation/counts-percentages-rates.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,How CVD events are classified,site/methods/interpretation/classifying-cvd-events.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,How CVD deaths are classified,site/methods/interpretation/classifying-cvd-deaths.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Data quality and completeness,site/methods/interpretation/data-quality-completeness.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Protecting confidentiality,site/methods/interpretation/confidentiality.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,"Releases, revisions and comparability",site/methods/interpretation/revisions-comparability.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Glossary,site/methods/reference/glossary.qmd,reviewed-by-irh,Page YAML
+Public Methods Manual,Research data access,site/methods/responsible-data-use/research-data-access.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Operations Manual,site/operations/index.qmd,not-reviewed,Page YAML
+Operations Manual,Roles and decision rights,site/operations/operating-model/roles-decision-rights.qmd,not-reviewed,Page YAML
+Operations Manual,From cases to statistics,site/operations/operating-model/routine-cycle.qmd,not-reviewed,Page YAML
+Operations Manual,Maintain operational records and hand over,site/operations/operating-model/records-handover.qmd,not-reviewed,Page YAML
+Operations Manual,Identify and assess potential cases,site/operations/pre-redcap/identify-assess.qmd,not-reviewed,Page YAML
+Operations Manual,Abstract and verify source information,site/operations/pre-redcap/abstract-verify.qmd,not-reviewed,Page YAML
+Operations Manual,Create and complete a new record,site/operations/redcap/create-complete-record.qmd,not-reviewed,Page YAML
+Operations Manual,Resolve record queries,site/operations/redcap/resolve-record-queries.qmd,not-reviewed,Page YAML
+Operations Manual,REDCap database maintenance,site/operations/redcap/database-maintenance.qmd,not-reviewed,Page YAML
+Operations Manual,Approve a data record,site/operations/redcap/approve-data-record.qmd,not-reviewed,Page YAML
+Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redcap/index.qmd,not-reviewed,Page YAML
+Operations Manual,Authorise a data release,site/operations/release/data-release.qmd,not-reviewed,Page YAML
+Operations Manual,Run the CVD event release workflow,site/operations/post-redcap/cvd-events-workflow.qmd,not-reviewed,Page YAML
+Operations Manual,Run the CVD mortality release workflow,site/operations/post-redcap/mortality-workflow.qmd,not-reviewed,Page YAML
+Operations Manual,Run BNR reporting workflows,site/operations/post-redcap/reporting-workflows.qmd,not-reviewed,Page YAML
+Operations Manual,"Review, approve and publish",site/operations/release/review-approve-publish.qmd,not-reviewed,Page YAML
+Operations Manual,Correct or replace a release,site/operations/release/correct-release.qmd,not-reviewed,Page YAML
+Operations Manual,BNR analysis framework,site/operations/data/analysis-framework.qmd,not-reviewed,Page YAML
+Operations Manual,BNR Information Hub Statistical Analysis Plan,site/operations/data/sap.qmd,not-reviewed,Page YAML
+Operations Manual,BNR Metric Specification Register,site/operations/data/sap-metrics.qmd,not-reviewed,Page YAML
+Operations Manual,Data sharing and governance,site/operations/governance/data-sharing-governance.qmd,not-reviewed,Page YAML
+Operations Manual,Handle a data-access request,site/operations/governance/data-access-requests.qmd,not-reviewed,Page YAML
+Operations Manual,Data-sharing procedure,site/operations/data/data-governance/sharing-sop.qmd,not-reviewed,Page YAML
+Operations Manual,Research Data Sharing Agreement,site/operations/data/data-governance/dsa-om.qmd,not-reviewed,Page YAML
+Operations Manual,BNR Refit Audit,site/operations/bnr-refit/index.qmd,not-reviewed,Page YAML
+Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,not-reviewed,Inherited from _metadata.yml
+Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,not-reviewed,Inherited from _metadata.yml
+Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,not-reviewed,Inherited from _metadata.yml
+Technical Manual,BNR Technical Manual,site/technical/index.qmd,not-reviewed,Page YAML
+Technical Manual,The BNR analytics and publishing environment,site/technical/getting-started/environment.qmd,not-reviewed,Page YAML
+Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,not-reviewed,Page YAML
+Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,not-reviewed,Page YAML
+Technical Manual,Prepare the confidential dataset,site/technical/workflows/cvd-events/prepare-confidential.qmd,not-reviewed,Page YAML
+Technical Manual,Create deidentified analytical inputs,site/technical/workflows/cvd-events/create-analysis-inputs.qmd,not-reviewed,Page YAML
+Technical Manual,Generate combined CVD metrics,site/technical/workflows/cvd-events/generate-metrics.qmd,not-reviewed,Page YAML
+Technical Manual,Review and approve combined CVD metrics,site/technical/workflows/cvd-events/review-approve.qmd,not-reviewed,Page YAML
+Technical Manual,Publish approved combined CVD metrics,site/technical/workflows/cvd-events/publish-metrics.qmd,not-reviewed,Page YAML
+Technical Manual,Run the CVD mortality workflow,site/technical/workflows/mortality/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Extract mortality data,site/technical/workflows/mortality/extract.qmd,not-reviewed,Page YAML
+Technical Manual,Classify CVD deaths,site/technical/workflows/mortality/classify.qmd,not-reviewed,Page YAML
+Technical Manual,Build mortality burden data,site/technical/workflows/mortality/build-burden.qmd,not-reviewed,Page YAML
+Technical Manual,Review the mortality release,site/technical/workflows/mortality/review.qmd,not-reviewed,Page YAML
+Technical Manual,Approve the reviewed mortality release,site/technical/workflows/mortality/approve.qmd,not-reviewed,Page YAML
+Technical Manual,Publish approved mortality outputs,site/technical/workflows/mortality/publish.qmd,not-reviewed,Page YAML
+Technical Manual,BNR reporting workflows,site/technical/workflows/reporting/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
+Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,not-reviewed,Page YAML
+Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,not-reviewed,Page YAML
+Technical Manual,Review an analytical release,site/technical/controls/review-release.qmd,not-reviewed,Page YAML
+Technical Manual,Disclosure control,site/technical/controls/disclosure-control.qmd,not-reviewed,Page YAML
+Technical Manual,Approve and publish a release,site/technical/controls/approve-publish.qmd,not-reviewed,Page YAML
+Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,not-reviewed,Page YAML
+Technical Manual,Update website content,site/technical/website/update-content.qmd,not-reviewed,Page YAML
+Technical Manual,CVD events dashboard transition note,site/technical/website/cvd-events-dashboard.qmd,not-reviewed,Page YAML
+Technical Manual,Maintain the CVD mortality dashboard,site/technical/website/cvd-mortality-dashboard.qmd,not-reviewed,Page YAML
+Technical Manual,Maintain the public CVD tables,site/technical/website/cvd-tables.qmd,not-reviewed,Page YAML
+Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-change.qmd,not-reviewed,Page YAML
+Technical Manual,"Files, releases and versions",site/technical/maintenance/files-releases-versions.qmd,not-reviewed,Page YAML
+Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.qmd,not-reviewed,Page YAML
+Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
+Technical Manual,Validation of BNR CVD Suppression Rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML
+Technical Manual,BNR Technical Manual,site/technical/index_pass1.qmd,not-reviewed,Page YAML

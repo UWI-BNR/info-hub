@@ -1,13 +1,13 @@
-schema: bnr_public_mortality_dataset_v1
+schema: bnr_public_mortality_dataset_v2
 dataset_type: current
 package_status: public_ready
 package_id: mort_burden_mort_2026_07
 release_id: mort_2026_07
 domain: mortality
-metric_family: burden
-rows: 3618
-primary_definition_rows: 1809
-upper_definition_rows: 1809
+metric_family: burden_and_rate
+rows: 4194
+primary_definition_rows: 2097
+upper_definition_rows: 2097
 analysis_start_year: 2010
 analysis_end_year: 2025
 case_definitions:
@@ -30,9 +30,17 @@ monthly_public_scope: all_cvd_all_sexes_all_ages_only
 monthly_rolling_comparator_included: false
 quarterly_annual_rolling_comparators_included: true
 monthly_historical_reference: mortality_monthly_reference_2015_2019
-cvd_rows: 1566
-heart_rows: 1026
-stroke_rows: 1026
+cvd_rows: 1758
+heart_rows: 1218
+stroke_rows: 1218
+rate_rows: 576
+rate_metric_id: MORT-RATE-001
+rate_unit: rate_per_100000
+rate_forms: crude_and_directly_age_standardised
+rate_population_source: UN_WPP_2024
+rate_standard_population: WHO_WORLD_2000_2025
+rate_ci_level: 95
+rate_ci_methods: poisson_exact_garwood_and_fay_feuer_gamma
 sdc_policy: bnr_sdc_v1
 primary_suppression_threshold: 6
 suppressed_rows: 0
@@ -47,6 +55,8 @@ suppressed_exact_fields:
   - numerator
   - denominator
   - comparison_n
+  - ci_lower_value
+  - ci_upper_value
 suppressed_display_value: asterisk
 insufficient_history_status: insufficient_history
 insufficient_history_is_suppression: false

@@ -1,14 +1,17 @@
 ﻿---
 title: "BNR Metric Specification Register"
+manual-review-status: not-reviewed
 subtitle: "Standing definitions for approved information hub metrics"
-date: "2026-05-15"
-date-modified: 2026-08-11
 version: "Draft v0.1"
 format:
   html:
     toc: true
     toc-depth: 3
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
 ## Document control
 
@@ -25,7 +28,9 @@ format:
 
 This register defines approved BNR information hub metrics.
 
-The metric system is the permanent BNR deliverable. Briefings are temporary interpretations that consume those metrics. A briefing may go beyond the defined core metrics where needed for research, interpretation or communication.
+The metric system is the reusable analytical foundation. Reports are
+publication products that consume approved metrics and may include separately
+documented bespoke analysis where their approved purpose requires it.
 
 This register is designed to be expanded over time. The first version focuses on core cardiovascular disease metrics required for routine surveillance, public reporting and operational monitoring.
 
@@ -173,7 +178,7 @@ The equations and standardisation method are the same as CVD-RATE-001, but the n
 | Population and exclusions | Barbados residents; exclude non-residents, duplicates and records outside the reporting period. |
 | Stratifications | Required: period, event type, rate type. Optional: sex and source status. |
 | Uncertainty / suppression | Same statistical interval and disclosure rules as CVD-RATE-001. Interpretation must also acknowledge uncertainty from incomplete DCO ascertainment. |
-| Responsible code | `briefings/cvd_incidence/cvd_incidence.do` |
+| Responsible code | `metrics/cvd/bnr_cvd_run_incidence_rate_estimation.do` |
 | Notes | Required as a supplementary national estimate. It has broader case coverage than CVD-RATE-001 but is not assumed to be inherently more accurate because DCO ascertainment is imperfect. |
 
 ## CVD outcome metrics
@@ -338,3 +343,4 @@ where \(i\) is an eligible record with valid abstraction timing fields.
 |---|---|---|---|
 | Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR Information Hub | BNR refit team |
 | Draft v0.2 | 2026-08-11 | Clarified event-rate sources, case-fatality denominator and length-of-stay validity rules | Ian Hambleton / BNR refit |
+

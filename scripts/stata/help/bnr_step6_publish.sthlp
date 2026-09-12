@@ -1,80 +1,16 @@
 {smcl}
-{* *! version 1.1.0 04aug2026}{...}
-{title:BNR Step 6: Publish approved outputs}
+{title:BNR Step 6: Publish approved combined CVD metrics}
 
-{pstd}
-{cmd:bnr_step6_publish} promotes one metric package already approved by
-Step 5. It verifies {cmd:approval.yml}, {cmd:public_manifest.csv}, and every
-approved payload checksum before copying anything.
+{pstd}Step 6 verifies {cmd:approval.yml}, {cmd:public_manifest.csv} and every approved payload checksum before promotion. It does not calculate, suppress, approve, render or deploy.
 
 {title:Syntax}
-
-{p 8 18 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step6_publish.do"}
-{it:year month metric_family} [{cmd:replace}]
-
-{pstd}
-The currently implemented metric family is {cmd:burden}.
+{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step6_publish.do"} {it:year month} [{cmd:replace}]
 
 {title:Example}
+{phang2}{cmd:. do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 4}
 
-{phang2}
-{cmd:do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 3 burden}
-
-{title:What Step 6 creates}
-
-{pstd}
-The authoritative release is written below:
-
-{phang2}
-{cmd:$BNR_PUBLIC/metrics/cvd/burden/}
-
-{pstd}
-An identical disposable website copy is written below:
-
-{phang2}
-{cmd:$BNR_REPO/site/downloads/files/metrics/cvd/burden/}
-
-{pstd}
-Both CSV and de-identified Stata DTA datasets are published. Step 6 also
-creates one release ZIP containing the seven approved payload files.
-
-{pstd}
-After verifying the ZIP, Step 6 creates one release-specific catalogue record
-below both the authoritative public package and the disposable website mirror:
-
-{phang2}
-{cmd:catalogue/cvd_YYYY_MM.yml}
-
-{pstd}
-The record registers the ZIP for the central Downloads catalogue. It is
-publication metadata generated from the approved package; it is not an
-additional analytical payload.
-
-{title:Replace}
-
-{pstd}
-Without {cmd:replace}, Step 6 stops if the selected release-stamped files
-already exist. Use {cmd:replace} only for a deliberate republication after
-checking the existing release. Stable {cmd:current} files are refreshed during
-every successful publication.
-
-{title:Boundary}
-
-{pstd}
-Step 6 does not calculate, suppress, edit, approve, rebuild the central
-Downloads catalogue, render, commit or deploy. It promotes only the seven
-files named by the Step 5 public manifest.
-{cmd:approval.yml} and {cmd:public_manifest.csv} remain private controls.
+{title:Outputs}
+{pstd}The authoritative public package is under {cmd:$BNR_PUBLIC/metrics/cvd/}. Step 6 refreshes only the website current CSV under {cmd:$BNR_REPO/site/downloads/files/metrics/cvd/}, copies the release ZIP to {cmd:releases/}, and writes a small catalogue record under {cmd:catalogue/}. The private approval and manifest controls are not published.
 
 {title:Next action}
-
-{pstd}
-After Step 6 succeeds, run:
-
-{phang2}
-{cmd:python site/scripts/build_download_catalogue.py}
-
-{pstd}
-Then inspect the Downloads page before the normal commit, render and deployment
-process.
+{pstd}Run {cmd:python site/scripts/build_download_catalogue.py}. An unchanged catalogue is expected when republication replaces the contents of an existing release ZIP without changing its release identifier or catalogue record.

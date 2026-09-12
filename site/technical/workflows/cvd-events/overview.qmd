@@ -1,0 +1,32 @@
+﻿---
+title: "Run the CVD events workflow"
+description: "Run the six-step CVD events workflow from REDCap extract through review, approval and publication."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this workflow does
+
+CVD event Steps 1â€“3 create the private extract, confidential cumulative dataset
+and deidentified analytical inputs. These products remain private.
+
+CVD event Steps 4â€“6 calculate, review, approve and publish the metric package.
+Public dashboards, tables, downloads and standard reports consume approved
+public releases; they do not repeat this analysis.
+
+`REDCap -> private extract -> confidential cumulative dataset -> deidentified analytical inputs -> metrics -> review and approval -> publication`
+
+See [Analytical workflows](../overview.qmd) for the complete workflow map.
+
+## Run the workflow
+
+1. **[Step 1: Extract REDCap data](extract-redcap.qmd).** Create the private cumulative source snapshot.
+2. **[Step 2: Build the cumulative dataset](prepare-confidential.qmd).** Join the selected REDCap release to the frozen historical CVD data.
+3. **[Step 3: Build deidentified datasets](create-analysis-inputs.qmd).** Create the shared private analytical inputs.
+4. **[Step 4: Calculate CVD event metrics](generate-metrics.qmd).** Create the private metric staging package.
+5. **[Step 5: Review and approve](review-approve.qmd).** Apply disclosure control, review the release and record approval.
+6. **[Step 6: Publish approved outputs](publish-metrics.qmd).** Promote only the approved package.
+

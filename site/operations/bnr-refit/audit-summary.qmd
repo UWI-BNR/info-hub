@@ -67,6 +67,10 @@ execute:
   freeze: auto
 ---
 
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
 # Barbados National Registry (BNR): Process Audit Executive Summary  
 *Prepared for the BNR Advisory Committee and the Barbados Ministry of Health and Wellness,*
 *October, 2025*

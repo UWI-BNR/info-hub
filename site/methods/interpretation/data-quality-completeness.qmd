@@ -1,53 +1,63 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "Data quality and completeness"
 description: "How data quality affects BNR statistics and their interpretation."
 ---
 
-BNR checks records and aggregate outputs before publication, but no health-information system is perfect. Public interpretation should account for completeness, timeliness, consistency and classification.
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
+BNR checks all data records and published results before release, but no health-information system is perfect. We describe the coverage, definitions and limitations of each output so readers can judge what it can safely show.
 
 ## Why this matters
 
-A precise calculation can still give an incomplete picture if eligible events were missed or important fields were not recorded. Quality information helps readers judge what a statistic can support.
+A calculation can be correct but still give an incomplete picture if eligible events were not recorded, key information is missing, or recent records are still being processed. Quality information helps readers understand the strengths and limits of a statistic.
 
 ## Main dimensions of quality
 
-| Dimension | Question to ask |
-|---|---|
-| **Coverage** | Are all intended sources, places and periods represented? |
-| **Completeness** | Are the fields needed for the measure present? |
-| **Validity** | Do values and dates satisfy the stated rules? |
-| **Consistency** | Are definitions and coding applied similarly across records and time? |
-| **Timeliness** | Has enough time passed for records and outcomes to be completed? |
-| **Uniqueness** | Have duplicate representations of the same event been resolved? |
+| Dimension | Question to ask | How BNR responds |
+|--|---|-----|
+| **Coverage** | Are the intended sources, places and periods represented? | BNR states which sources each result uses. Hospital-based results and annual estimates that also use death-certificate information are clearly labelled separately. However, the BNR cannot claim that every eligible event in Barbados is represented by an available data source. |
+| **Completeness** | Are the fields needed for the measure present? | BNR checks that the information required for each measure is available. A record may still be used for a general count while being excluded from a result needing additional information, such as age or outcome. |
+| **Validity** | Do values and dates satisfy the stated rules? | BNR checks required fields, allowed values and logical date order. Records with important errors or conflicts are held for review and corrected through the controlled workflow before a revised result is released. |
+| **Consistency** | Are definitions and coding applied similarly across records and time? | BNR uses standard definitions, controlled code and documented methods for current releases. Where a material method or coverage change affects comparison over time, BNR identifies it rather than treating unlike figures as directly comparable. |
+| **Timeliness** | Has enough time passed for records and outcomes to be completed? | BNR records the data period covered by each release and may revise recent figures as later information becomes available. Recent results should be interpreted as the best approved information available at the time of release. |
+| **Uniqueness** | Have duplicate representations of the same event been resolved? | BNR screens for duplicate records and ensures that several records, admissions or transfers describing the same CVD event contribute only one event count. Separate events for the same person can all be counted when they [meet the approved definition](./classifying-cvd-events.qmd). |
 
 ## Missing information and denominators
 
-Some measures require more information than others. A case count may need an event type and date, while case fatality also needs a discharge outcome. A record can therefore be eligible for one statistic but not another.
+Different measures need different information. An overall event count may need an event type and date, while an age-specific rate also needs age and a case-fatality measure needs an outcome.
 
-Public percentages should state or make available the eligible denominator. Excluding records with missing information can affect comparability if missingness changes over time or differs between groups.
+For this reason, a record can be included in one result but not another. Published percentages, rates and other comparisons make available the eligible denominators used in it's [public data downloads](../../downloads/index.qmd).
 
-## Recent periods
+## Recent time periods and revisions
 
-Recent data are often less complete because abstraction, verification, discharge outcomes or death registration can take time. BNR may revise a recent period when later information becomes available.
+Recent data may still be developing because case finding, record review, discharge outcomes and death registration take time. BNR may revise a recent time period when later information is received or a controlled correction is made.
+
+A revised figure does not mean that the earlier release was improper; it means that the newer release uses more complete or corrected information. See [Releases, revisions and comparability](revisions-comparability.qmd) for more detail.
 
 ## Quality checks and uncertainty
 
-BNR checks required variables, logical date order, duplicates, unexpected values, output totals and disclosure-control results. Confidence intervals describe sampling or count uncertainty under a statistical model; they do not capture every form of missingness, misclassification or source coverage.
+Before release, BNR checks required information, date logic, possible duplicates, unexpected values, totals, labels and confidentiality protection. Results are then checked by a member of our team before publication.
 
-::: {.callout-tip title="Read limitations alongside results"}
-A limitation does not make a statistic unusable. It defines the questions the statistic can answer safely and the comparisons that need caution.
+Statistical confidence intervals describe uncertainty caused by the number of events observed. They do **not** capture every possible effect of missing information, incomplete source coverage or classification uncertainty. You can read more about how we report our different types of uncertainty [here](../../operations/data/sap.qmd).
+
+::: {.callout-tip title="Use results with their notes"}
+A limitation does not make a statistic unusable. It helps define the questions it can answer safely, and the comparisons that need more caution.
 :::
 
 ## What to remember
 
-- Quality is specific to a measure and period.
-- Missing values can change the analytical denominator.
-- Recent figures may mature.
-- Statistical precision and data completeness are different concepts.
+- Quality depends on the measure, source and period.
+- A result may exclude records that lack information needed for that specific measure.
+- Recent figures can change as information matures.
+- Statistical precision and completeness are different things.
 
 ## Related measures
 
 - [From health records to published statistics](../about/records-to-statistics.qmd)
 - [Releases, revisions and comparability](revisions-comparability.qmd)
 - [Protecting confidentiality](confidentiality.qmd)
+
 

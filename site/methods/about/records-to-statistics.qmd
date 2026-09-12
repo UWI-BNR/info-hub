@@ -1,7 +1,12 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "From health records to published statistics"
 description: "A plain-language overview of the BNR statistical production pathway."
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
 BNR statistics are produced through a controlled sequence. Health information is assessed and prepared before any aggregate result is approved for publication.
 
@@ -9,17 +14,18 @@ BNR statistics are produced through a controlled sequence. Health information is
 
 ```{mermaid}
 flowchart TD
-  A["Health records and notifications"] --> B["Eligible events identified"]
-  B --> C["Records checked and prepared"]
-  C --> D["Aggregate statistics calculated"]
-  D --> E["Quality, confidentiality and approval checks"]
-  E --> F["Published BNR outputs"]
+  A("Health records and notifications") --> B("Eligible events identified")
+  B --> C("Records checked and prepared")
+  C --> D("Aggregate statistics calculated")
+  D --> E("Quality, confidentiality and approval checks")
+  E --> F("Published BNR outputs")
 ```
+
 
 ## What happens at each stage
 
 | Stage | Public explanation |
-|---|---|
+|--|-----|
 | **Identify** | Potentially eligible events or records are found from approved sources. |
 | **Classify** | Registry definitions are applied so that comparable events are grouped consistently. |
 | **Prepare** | Duplicates, dates, residence, missing values and logical inconsistencies are checked. |
@@ -35,10 +41,10 @@ The aim is not to prevent correction. It is to make corrections controlled, docu
 
 ## What to remember
 
-- Publication is separate from calculation.
+- We only publish after we have completed our careful data processing and checking. 
 - Public figures are aggregates, not identifiable patient records.
-- Definitions and coverage matter as much as the displayed number.
-- A revised value is not necessarily evidence of an error in the original analysis; it may reflect more complete information.
+- Definitions and data quality matter as much as the displayed number.
+- A revised value is not necessarily evidence of an error in the original analysis; it may simply reflect more complete information.
 
 ## Related pages
 

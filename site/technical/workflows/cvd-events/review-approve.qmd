@@ -1,0 +1,50 @@
+﻿---
+manual-review-status: not-reviewed
+title: "Review and approve combined CVD metrics"
+description: "Step 5: prepare disclosure-review evidence and record approval."
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Prepare
+
+```stata
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 prepare
+```
+
+This reads `$BNR_STAGING/metrics/cvd/cvd_2024_04/` and writes private review
+evidence to its `review/` folder. Use `prepare replace` only to deliberately
+rebuild the review state.
+
+Review, at minimum:
+
+- `step5_review.xlsx` â€” human review guide;
+- `step5_disclosure_qa.csv` â€” every row must be `PASS`;
+- `step5_equation_audit.csv` â€” annual count/rate representation closure;
+- `step5_row_audit.dta` â€” protection propagation and numeric blanking; and
+- `step5_review_basis.csv` â€” fingerprints of the reviewed evidence.
+
+For annual DCO counts, check that the review records the protected identity
+`hospital only + additional DCO = hospital plus DCO`. Do not edit generated
+evidence, candidates or workbooks manually; correct code or input, rerun and
+review again.
+
+## Approve
+
+After an authorised BNR Lead, BNR Analyst or BNR Developer has completed the
+review, run:
+
+```stata
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 approve "Full name" "BNR Developer"
+```
+
+Approval rechecks the review fingerprints and QA, then writes the private
+`public_ready/` package, `public_manifest.csv` and `approval.yml`. It does not
+publish. Use `replace` only for a deliberate re-approval of the same release.
+
+The public-ready candidate must not contain private linkage, component,
+allocation or suppression-decision fields. Protected rows remain in the public
+dataset with blank numeric fields and `display_value: *`.
+

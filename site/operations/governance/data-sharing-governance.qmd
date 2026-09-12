@@ -1,32 +1,46 @@
----
-title: "Data sharing & governance"
-description: "How BNR receives, assesses, approves, documents and monitors requests to use registry data."
-date: 2026-08-11
-date-modified: 2026-08-11
----
-
+﻿---
+title: "Data sharing and governance"
+description: "The authoritative Operations Manual route for requests to use non-public BNR data."
+manual-review-status: not-reviewed
 ---
 
-## Purpose
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
-This chapter brings together the complete BNR data-sharing pathway, from a first enquiry to approval, agreement, release, dissemination and closure.
+## Scope
 
-## Start with the request
+This section governs requests for BNR data that are not already available as
+approved public aggregate outputs. It does not change the analytical
+publication workflows for public statistics.
 
-Use [Handle a data request](data-access-requests.qmd) as the operational route. It identifies the information to collect, the decision points, the agreement required and the evidence to retain.
+Use the least detailed data that can meet an approved purpose. Deidentified
+record-level data remain non-public and require a recorded decision and any
+applicable agreement, ethics and security controls.
 
-## Guidance and procedures
+## Authoritative route
 
-- [Data sharing guide](../data/data-governance/sharing-guide.qmd)
-- [Data sharing procedure](../data/data-governance/sharing-sop.qmd)
-- [Dataset release procedure](../data/data-governance/dataset-release.qmd)
-- [Dataset dissemination procedure](../data/data-governance/dataset-dissemination.qmd)
+1. [Handle the data-access request](data-access-requests.qmd).
+2. Follow the [data-sharing procedure](../data/data-governance/sharing-sop.qmd).
+3. Complete the [Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
+   where required.
 
-## Governance documents
+## Responsibilities
 
-- [Data access statement](../data/data-governance/data-access-statement.qmd)
-- [Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
-- [Data Trust framework](../data/data-governance/dtrust.qmd)
+- The **BNR Lead** owns the governance decision and confirms the authorised
+  decision route.
+- The **BNR Analyst** defines and prepares the minimum approved dataset and
+  checks proposed outputs.
+- The **BNR Developer** supports secure, reproducible preparation and transfer
+  without placing confidential material in Git.
 
-These pages describe the public rules and responsibilities. Credentials, confidential applications, applicant details and actual transferred datasets remain in authorised private systems.
+The person or body authorised to approve each access class is a BNR policy
+decision. Do not infer authority from technical access or from the ability to
+prepare a dataset.
+
+## Public/private boundary
+
+Applications, requester details, agreements, ethics evidence, approval records,
+transfer logs and non-public datasets remain in authorised private systems.
+Only approved public-safe summaries or outputs may enter the Info-Hub.
 

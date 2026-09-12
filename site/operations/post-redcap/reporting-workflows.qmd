@@ -1,0 +1,60 @@
+﻿---
+title: "Run BNR reporting workflows"
+description: "Operational responsibilities for the rolling update, annual CVD report and one-off CVD reports."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Purpose
+
+Use the reporting routes to turn approved public metric releases or a finished
+bespoke analysis into a controlled public report.
+
+## Choose the report route
+
+| Product | Preparation | Approval | Publication |
+|---|---|---|---|
+| **Rolling three-month CVD update** | One controlled builder verifies and freezes exact approved event and mortality release CSVs. | No second analytical approval: the inputs have already been approved and the template may perform only authorised simple display arithmetic. | The builder writes the dated report package; Quarto rendering and GitHub deployment remain separate. |
+| **Annual CVD report** | Step 1 builds the private annual PDF and its final one-page public-health-update appendix, extracts the update as a standalone PDF, and prepares both landing pages and shared metadata. | Step 2 records one approval for the exact five-file annual-report and update payload. | Step 3 publishes only that approved payload. |
+| **One-off CVD report** | The bespoke analysis is completed first. Step 1 prepares the finished PDF as a private candidate. | Step 2 records approval of the exact candidate. | Step 3 publishes only the approved payload. |
+
+## Responsibilities
+
+- The **BNR Analyst** confirms sources, methods, results, interpretation and
+  disclosure safety.
+- The **BNR Lead**, **BNR Analyst** or **BNR Developer**, where authorised,
+  records approval for annual and one-off candidates.
+- The authorised publisher runs the separate publication step and confirms
+  that it promoted the approved payload only.
+- The **BNR Developer** maintains the shared reporting controls and the Quarto
+  presentation without moving analytical calculation into the website layer.
+
+One person may perform more than one action where BNR governance permits, but
+the actions and their evidence remain separate.
+
+## Evidence retained
+
+For a rolling update, retain the report identity, build metadata and complete
+frozen copies of both source releases. For annual and one-off reports, retain
+the private candidate, public manifest, `approval.yml`, publication log and
+authoritative published products. The annual candidate includes both the full
+report and its standalone one-page update. Private review evidence remains
+outside Git.
+
+## Stop points
+
+Stop if a source release is not approved, a package identity changes, a
+required value is unavailable or protected, disclosure review is incomplete,
+or the approved payload differs from the payload proposed for publication.
+Correct the source or version-controlled code and rerun; never correct a
+generated report manually.
+
+## Technical instructions
+
+- [Reporting workflow overview](../../technical/workflows/reporting/overview.qmd)
+- [Rolling three-month update](../../technical/workflows/reporting/rolling-update.qmd)
+- [Annual CVD report](../../technical/workflows/reporting/annual-report.qmd)
+- [One-off CVD report](../../technical/workflows/reporting/one-off-report.qmd)

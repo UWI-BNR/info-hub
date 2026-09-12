@@ -1,13 +1,16 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "Approve a data record"
 description: "BNR team draft for confirming that a REDCap event record is ready for analytical use."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
 ---
 
-::: {.callout-warning title="BNR team draft — additions invited"}
+::: {.callout-warning title="BNR team draft â€” additions invited"}
 This page is deliberately incomplete. BNR staff should define the approval status, responsible role and release-blocking checks.
 :::
 
@@ -39,4 +42,5 @@ Describe how BNR confirms that an event record is sufficiently complete, interna
 - [Create and complete a new record](create-complete-record.qmd)
 - [Resolve record queries](resolve-record-queries.qmd)
 - [Authorise a data release](../release/data-release.qmd)
+
 

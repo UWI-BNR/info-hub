@@ -1,0 +1,40 @@
+﻿---
+manual-review-status: not-reviewed
+title: "Publish approved combined CVD metrics"
+description: "Step 6: verify and promote the approved combined CVD package."
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Run
+
+```stata
+do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 4
+```
+
+Use `replace` only for deliberate republication of the same approved release.
+
+## What Step 6 verifies and creates
+
+Step 6 verifies `approval.yml`, the seven-file `public_manifest.csv`, and each
+payload checksum. It writes the authoritative public package to:
+
+`$BNR_PUBLIC/metrics/cvd/`
+
+It mirrors only the stable current CSV, release ZIP and catalogue record to:
+
+`$BNR_REPO/site/downloads/files/metrics/cvd/`
+
+Private controls are not copied. Then run:
+
+```powershell
+python site/scripts/build_download_catalogue.py
+```
+
+An unchanged catalogue is normal when Step 6 has replaced the contents of an
+existing release ZIP without changing the release identifier or its catalogue
+record. Inspect the output package and download links before the normal commit,
+render and deployment process.
+

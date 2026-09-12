@@ -1,9 +1,16 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "Number of CVD events"
-description: "How BNR counts eligible hospital-registered cardiovascular events."
+description: "How BNR reports hospital-registered and approved annual DCO-enhanced cardiovascular event counts."
 ---
 
-The CVD event count is the number of eligible heart attack and stroke events registered from hospital information during a stated period.
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
+
+The CVD event count is the number of eligible heart and stroke events recorded
+from hospital information during a stated period. The annual public release
+also contains approved Death-Certificate-Only (DCO)-enhanced national count representations.
 
 ## At a glance
 
@@ -37,17 +44,30 @@ A person can experience more than one eligible event. For that reason, this is a
 
 ## Worked example
 
-Suppose 120 eligible stroke events and 80 eligible heart attack events were registered during a year:
+Simple enough. Suppose 120 eligible stroke events and 80 eligible heart attack events were registered during a year:
 
 $$
 120 + 80 = 200\text{ CVD events}
 $$
 
-These fictional numbers describe 200 events. They do not necessarily describe 200 different people.
-
 ## How should it be interpreted?
 
 A change in counts can reflect a real change in disease burden, but also population size, health-care use, diagnostic practice, timeliness or completeness. Counts should not be interpreted as population incidence unless a suitable population denominator is used.
+
+## Annual DCO-enhanced counts
+
+For annual all-age reporting only, the public data release may show:
+
+- **Hospital only** &mdash; eligible events recorded from hospital information;
+- **Additional DCO** &mdash; the approved estimated contribution from eligible
+  death-certificate-only events; and
+- **Hospital plus DCO** &mdash; the corresponding broader annual estimate.
+
+These representations are available for All CVD, Heart and Stroke and for all,
+female and male sexes, using either the Primary or Inclusive mortality
+definition where relevant. Because of potentially small-numbers, the DCOs are not presented for monthly, quarterly or age-specific views. Suppressed values are shown as `*`.
+
+You can read more on how we assign mortality causes [here](../interpretation/classifying-cvd-deaths.qmd). You can read more on how we determine DCO events [here](../interpretation/classifying-cvd-events.qmd). 
 
 ## Things to bear in mind
 
@@ -59,5 +79,6 @@ A change in counts can reflect a real change in disease burden, but also populat
 
 - [CVD incidence and event rates](incidence.qmd)
 - [How CVD events are classified](../interpretation/classifying-cvd-events.qmd)
+- [How CVD deaths are classified](../interpretation/classifying-cvd-deaths.qmd)
 - [CVD surveillance outputs](../../surveillance/cvd/index.qmd)
 

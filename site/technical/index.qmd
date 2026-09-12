@@ -1,11 +1,18 @@
----
-title: "Technical Manual"
-description: "Step-by-step guidance for operating and maintaining the BNR analytics and publishing environment."
-date: 2026-08-10
-date-modified: 2026-08-21
+﻿---
+title: "BNR Technical Manual"
+description: "Run, validate, troubleshoot, recover and maintain the implemented BNR analytical and publication system."
+manual-review-status: not-reviewed
 ---
 
----
+<!-- Remove Left-hand table of contents -->
+<style>
+#TOC,
+#quarto-margin-sidebar,
+#quarto-sidebar-toc-left {
+  display: none !important;
+}
+</style>
+
 
 ::: {#technical-manual-sections}
 
@@ -17,11 +24,11 @@ date-modified: 2026-08-21
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[01-02]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[START HERE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Getting started {.card-title}
+### Set up the environment {.card-title}
 
-Environment and workstation setup.
+Understand the system and prepare a workstation for BNR analytical work.
 
 ::: {.mt-auto}
 [Open section](getting-started/environment.qmd){.btn .btn-outline-primary .btn-sm}
@@ -35,11 +42,11 @@ Environment and workstation setup.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[03-06]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[WORKFLOWS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Analytical workflows {.card-title}
+### Run analytical workflows {.card-title}
 
-CVD events, mortality, tables and briefings.
+Follow the implemented CVD event, mortality and reporting routes.
 
 ::: {.mt-auto}
 [Open section](workflows/overview.qmd){.btn .btn-outline-primary .btn-sm}
@@ -53,11 +60,11 @@ CVD events, mortality, tables and briefings.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[07-09]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[CONTROLS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Review & publication {.card-title}
+### Review & publication controls {.card-title}
 
-Review, disclosure control and approval.
+Review releases, apply disclosure control and record approval.
 
 ::: {.mt-auto}
 [Open section](controls/review-release.qmd){.btn .btn-outline-primary .btn-sm}
@@ -71,11 +78,11 @@ Review, disclosure control and approval.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[10-11]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[INFO-HUB]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Operate the Info-Hub {.card-title}
+### Operate the website {.card-title}
 
-Render, publish and update the site.
+Render, check, publish and maintain the public Info-Hub.
 
 ::: {.mt-auto}
 [Open section](website/render-publish.qmd){.btn .btn-outline-primary .btn-sm}
@@ -89,11 +96,11 @@ Render, publish and update the site.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[12-14]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[MAINTENANCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
 ### Maintain & recover {.card-title}
 
-Change safely and fix problems.
+Make safe changes, manage versions and resolve common problems.
 
 ::: {.mt-auto}
 [Open section](maintenance/safe-code-change.qmd){.btn .btn-outline-primary .btn-sm}
@@ -107,11 +114,11 @@ Change safely and fix problems.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[15]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Quick reference {.card-title}
+### System reference {.card-title}
 
-Files, folders, commands and terms.
+Find the principal workflows, commands, files, folders and terms.
 
 ::: {.mt-auto}
 [Open section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
@@ -126,40 +133,51 @@ Files, folders, commands and terms.
 
 <br>
 
-## What this manual covers
+## What this manual is for
 
-The Technical Manual is the practical how-to guide for the BNR analytics and publishing environment **after data have entered the controlled analytical pathway**.
+Use this manual for exact menus, parameters, files, checks, failure conditions
+and recovery procedures. Operational responsibility and retained evidence
+belong in the [Operations Manual](../operations/index.qmd); statistical meaning
+and interpretation belong in the [Public Methods Manual](../methods/index.qmd).
 
-Use it to run analytical workflows, review and approve outputs, publish controlled releases, maintain the Info-Hub website, make safe code changes and diagnose common problems.
+## Architecture
 
-It is designed for **dip-in, dip-out use**. Find the task you need, follow the steps and complete the human checks before moving on.
-
-## The three BNR manuals
-
-| Manual | Main purpose |
+| Layer | Responsibility |
 |---|---|
-| **Technical Manual** | Operate and maintain the analytics, release and publishing environment. |
-| **[Operations Manual](../operations/index.qmd)** | Registry operating procedures, responsibilities and routine decision points from source records through public release. |
-| **[Public Methods Manual](../methods/index.qmd)** | Plain-language explanation of the methods used to produce and interpret BNR public statistics. |
+| **REDCap and controlled sources** | Hold authoritative confidential records. |
+| **Stata** | Prepare analytical inputs, calculate statistics, apply publication controls and promote approved public packages. |
+| **Quarto** | Present approved public outputs without becoming a parallel analytical workflow. |
+| **GitHub** | Version and deploy the static, public-safe Info-Hub. |
 
-The manuals overlap only where a handover between operational stages needs to be clear.
+Private data, staging packages, credentials, logs and review evidence remain
+outside Git. Generated outputs are corrected only through source data or
+version-controlled code and a rerun.
 
-## Chapters
+## Start here
 
-| Chapter | What it covers |
-|---|---|
-| **1. Analytics environment** | How Stata, private storage, public outputs, Quarto and GitHub fit together. |
-| **2. Set up a workstation** | Software, repositories, local paths and system checks. |
-| **3. CVD events workflow** | Monthly CVD REDCap extraction, shared analytical preparation, CVD event metrics, approval and publication. |
-| **4. Tabulations** | Routine CVD tables, disclosure control, review, approval and publication. |
-| **5. Briefings** | Routine and ad-hoc analytical briefing packages, including review, approval and publication. |
-| **6. CVD mortality workflow** | Mortality extraction, approximate CVD death classification, burden metrics, disclosure review, approval and publication. |
-| **7. Review an analytical release** | Common checks before any analytical release is approved. |
-| **8. Disclosure control** | BNR small-number rules and human disclosure review. |
-| **9. Approve and publish a release** | Common approval and promotion principles. |
-| **10. Render and publish the website** | Local Quarto rendering, checking and deployment. |
-| **11. Update website content** | Maintaining pages, dashboards, briefings, listings, navigation and downloads. |
-| **12. Make a safe code change** | Branch, edit, test, review and merge changes safely. |
-| **13. Files, releases and versions** | Important locations, package identities and version conventions. |
-| **14. Fix common problems** | Short symptom, cause and fix recipes. |
-| **15. System reference** | Workflow, command, folder, file and terminology quick reference. |
+- [Analytics environment](getting-started/environment.qmd)
+- [Set up a workstation](getting-started/workstation-setup.qmd)
+- [Analytical workflow map](workflows/overview.qmd)
+- [System reference](reference/index.qmd)
+
+## Implemented analytical routes
+
+- [CVD event release](workflows/cvd-events/overview.qmd): separate six-step workflow.
+- [CVD mortality release](workflows/mortality/overview.qmd): separate six-step workflow.
+- [Rolling three-month update](workflows/reporting/rolling-update.qmd): one controlled build from approved standard releases.
+- [Annual CVD report](workflows/reporting/annual-report.qmd): build, approve and publish.
+- [One-off CVD report](workflows/reporting/one-off-report.qmd): prepare, approve and publish.
+
+## Publication and maintenance
+
+- [Review an analytical release](controls/review-release.qmd)
+- [Apply disclosure control](controls/disclosure-control.qmd)
+- [Approve and publish a release](controls/approve-publish.qmd)
+- [Maintain public CVD tables](website/cvd-tables.qmd)
+- [Render and publish the website](website/render-publish.qmd)
+- [Make a safe code change](maintenance/safe-code-change.qmd)
+- [Fix common problems](maintenance/troubleshooting.qmd)
+
+Public tables, dashboards, downloads and reports reuse approved public metric
+releases wherever their purpose permits. New presentation components must not
+establish a second calculation or approval route.

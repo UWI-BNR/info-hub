@@ -36,7 +36,7 @@ execute:
 .bnr-headline-card { border: 1px solid #dee2e6; border-radius: .35rem; padding: .7rem .75rem; background: #fff; }
 .bnr-headline-label { font-size: .9rem; font-weight: 600; color: #444; margin-bottom: .15rem; }
 .bnr-headline-value { font-size: 1.65rem; font-weight: 700; line-height: 1.1; }
-.bnr-headline-note, .bnr-period-note { font-size: .85rem; color: #666; margin-top: .2rem; }
+.bnr-headline-note { font-size: .85rem; color: #666; margin-top: .2rem; }
 .bnr-definition-values { display: flex; flex-direction: column; gap: .25rem; margin-top: .1rem; }
 .bnr-definition-value-row { display: grid; grid-template-columns: minmax(72px,auto) 1fr; gap: .45rem; align-items: baseline; }
 .bnr-definition-value-name { font-size: .82rem; font-weight: 700; }
@@ -75,11 +75,44 @@ execute:
 .bnr-quality-medium { background: #ffe7a8; color: #6b5600; }
 .bnr-quality-high { background: #f3c6cc; color: #842029; }
 .bnr-quality-unavailable { color: #b7bec3; }
+.bnr-quality-era-row th { font-size: .76rem !important; font-weight: 650 !important; color: #44515a !important; padding-top: .2rem !important; padding-bottom: .25rem !important; }
+.bnr-coverage-table .bnr-quality-era-old { background: #f5f6f7 !important; border-radius: .22rem; }
+.bnr-coverage-table .bnr-quality-era-new { background: #eef4f7 !important; border-radius: .22rem; }
+.bnr-coverage-table .bnr-quality-era-start { border-left: 2px solid #8aa6b4 !important; }
+.bnr-quality-value { cursor: help; }
+.bnr-quality-hover-detail {
+  height: 2.15rem;
+  margin: .28rem 0 .38rem;
+  padding: .38rem .55rem;
+  border: 1px solid #dce4e8;
+  border-radius: .3rem;
+  background: #f7f9fa;
+  color: #52616b;
+  font-size: .82rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.bnr-quality-hover-active {
+  color: #25333b;
+  font-weight: 600;
+  background: #f2f6f8;
+}
 .bnr-data-tabs { display: flex; align-items: end; gap: .15rem; border-bottom: 1px solid #dee2e6; margin: .25rem 0 .55rem; }
 .bnr-data-tab { display: inline-block; padding: .38rem .7rem; border: 1px solid transparent; border-bottom: 0; border-radius: .3rem .3rem 0 0; text-decoration: none !important; font-weight: 600; font-size: .9rem; }
 .bnr-data-tab-active { background: #fff; border-color: #dee2e6; color: #2c3e50; margin-bottom: -1px; }
 .bnr-data-tab-download { color: #045174; cursor: pointer; }
 .bnr-data-tab-download:hover { background: #f3f6f7; }
+.bnr-plot-downloads { display: flex; justify-content: flex-end; gap: .35rem; margin: .1rem 0 .25rem; }
+.bnr-plot-download-button { border: 1px solid #bdc3c7; border-radius: .25rem; background: #fff; color: #045174; padding: .18rem .45rem; font: inherit; font-size: .78rem; line-height: 1.2; cursor: pointer; }
+.bnr-plot-download-button:hover { background: #f3f6f7; }
+.bnr-dashboard-switch { display: flex; justify-content: flex-end; margin: .05rem 0 .45rem; }
+.bnr-dashboard-switch a { display: inline-block; border: 1px solid #c7dce5; border-radius: .3rem; background: #eef6f8; color: #045174; padding: .34rem .62rem; font-size: .88rem; font-weight: 650; text-decoration: none !important; }
+.bnr-dashboard-switch a:hover { background: #e3f0f4; border-color: #aacbd8; }
+.bnr-legend-whisker { display: inline-block; width: 16px; height: 16px; border-left: 2px solid #5f6368; opacity: .7; margin-left: 7px; }
 .bnr-period-fixed { color: #2c3e50; font-size: .95rem; line-height: 1.35; margin-top: .1rem; }
 .bnr-period-slider-value { margin-top: .25rem; padding: .18rem .4rem; min-height: 1.7rem; border: 1px solid #bdc3c7; border-radius: .25rem; background: #fff; color: #2c3e50; font-size: .9rem; line-height: 1.3; text-align: center; }
 .bnr-chart-title { font-size: 1.05rem; font-weight: 700; margin: .25rem 0 .35rem; color: #2c3e50; }
@@ -90,6 +123,9 @@ execute:
 .bnr-legend-line { display: inline-block; width: 28px; height: 0; border-top: 3px solid; }
 .bnr-legend-dotted { border-top-style: dashed; opacity: .5; }
 .bnr-legend-swatch { display: inline-block; width: 16px; height: 16px; border: 1px solid rgba(0,0,0,.25); border-radius: .2rem; }
+.bnr-age-card-group { margin-top: .55rem; }
+.bnr-age-card-label { font-size: .9rem; font-weight: 700; color: #44515a; margin: 0 0 .3rem .05rem; }
+.bnr-age-legend-symbol { display: inline-block; width: 1rem; text-align: center; font-weight: 700; color: #555; }
 .bnr-definition-panel { border-top: 1px solid #e9ecef; padding-top: .5rem; margin-top: .65rem; }
 .bnr-release-grid { display: grid; grid-template-columns: repeat(4,minmax(140px,1fr)); gap: .65rem; margin-top: .45rem; }
 .bnr-release-item { border: 1px solid #dee2e6; border-radius: .35rem; padding: .55rem .65rem; background: #fff; }
@@ -207,11 +243,11 @@ release_date_label = (() => {
 ```{ojs}
 //| echo: false
 viewof selected_indicator = Inputs.select(
-  ["counts", "profile"],
+  ["counts", "profile", "rates"],
   {
     label: "Indicator",
     value: "counts",
-    format: d => ({counts: "Number of deaths", profile: "Distribution of deaths"}[d])
+    format: d => ({counts: "Number of deaths", profile: "Distribution of deaths", rates: "Mortality rate"}[d])
   }
 )
 ```
@@ -242,20 +278,19 @@ viewof selected_case_definitions = (() => {
 
 ```{ojs}
 //| echo: false
-html`<div class="bnr-period-note" style="margin-top:-.35rem;margin-bottom:.55rem">
-  <strong>Primary:</strong> deaths classified as clear or likely CVD.<br>
-  <strong>Inclusive:</strong> also includes possible CVD deaths.
-</div>`
-```
-
-```{ojs}
-//| echo: false
 viewof selected_period_type = (() => {
   if (selected_indicator === "profile") {
     const wrapper = html`<div>
       <label>Time period</label>
       <div class="bnr-period-fixed">Annual</div>
-      <div class="bnr-period-note">The distribution view is available by year.</div>
+    </div>`
+    wrapper.value = "annual"
+    return wrapper
+  }
+  if (selected_indicator === "rates") {
+    const wrapper = html`<div>
+      <label>Time period</label>
+      <div class="bnr-period-fixed">Annual</div>
     </div>`
     wrapper.value = "annual"
     return wrapper
@@ -273,8 +308,8 @@ viewof selected_period_type = (() => {
 // Event options are derived from the published rows. This makes the control expand
 // automatically if later approved releases extend the time horizon, while preserving
 // the deliberately restricted monthly scope.
-effective_period_type = selected_indicator === "profile" ? "annual" : selected_period_type
-effective_metric_id = selected_indicator === "counts" ? "MORT-BURDEN-001" : "MORT-BURDEN-002"
+effective_period_type = ["profile", "rates"].includes(selected_indicator) ? "annual" : selected_period_type
+effective_metric_id = selected_indicator === "counts" ? "MORT-BURDEN-001" : selected_indicator === "rates" ? "MORT-RATE-001" : "MORT-BURDEN-002"
 event_order = ["all_cvd", "heart", "stroke"]
 event_options = Array.from(new Set(
   burden
@@ -289,6 +324,247 @@ viewof selected_event_type = Inputs.select(
   event_options,
   {label: "CVD type", value: event_options.includes("all_cvd") ? "all_cvd" : event_options[0], format: d => eventLabel(d)}
 )
+```
+
+```{ojs}
+//| echo: false
+viewof selected_rate_measure = (() => {
+  if (selected_indicator !== "rates") {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = "asr"
+    return wrapper
+  }
+  return Inputs.select(
+    ["asr", "crude"],
+    {label: "Rate measure", value: "asr", format: d => ({asr: "Age-standardised rate", crude: "Crude rate"}[d])}
+  )
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_rate_sexes = (() => {
+  if (selected_indicator !== "rates") {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = ["all"]
+    return wrapper
+  }
+  const input = Inputs.checkbox(
+    ["all", "female", "male"],
+    {
+      label: "Sex",
+      value: ["all"],
+      format: d => ({all: "Both sexes", female: "Women", male: "Men"}[d])
+    }
+  )
+  const boxes = input.querySelectorAll('input[type="checkbox"]')
+  if (boxes.length) {
+    const optionLabels = Array.from(boxes).map(box => box.closest("label")).filter(Boolean)
+    const optionContainer = optionLabels[0]?.parentElement
+    if (optionContainer) {
+      optionContainer.style.display = "flex"
+      optionContainer.style.flexDirection = "column"
+      optionContainer.style.alignItems = "flex-start"
+      optionContainer.style.gap = ".2rem"
+    }
+    optionLabels.forEach(label => {
+      label.style.display = "flex"
+      label.style.alignItems = "center"
+      label.style.justifyContent = "flex-start"
+      label.style.width = "100%"
+      label.style.margin = "0"
+    })
+  }
+  if (boxes.length && !Array.from(boxes).some(box => box.checked)) {
+    boxes[0].checked = true
+    input.dispatchEvent(new Event("input", {bubbles: true}))
+  }
+  return input
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_count_sexes = (() => {
+  const selectableCountSex =
+    selected_indicator === "counts" &&
+    ["quarterly", "annual"].includes(selected_period_type)
+
+  if (!selectableCountSex) {
+    // Rates have their own selectable Sex control immediately above this cell.
+    // Every other view is fixed to the combined population, so retain the
+    // control in the usual position as a checked, disabled Both sexes box.
+    if (selected_indicator === "rates") {
+      const wrapper = html`<div style="display:none"></div>`
+      wrapper.value = ["all"]
+      return wrapper
+    }
+
+    const input = Inputs.checkbox(
+      ["all"],
+      {label: "Sex", value: ["all"], format: () => "Both sexes"}
+    )
+    const box = input.querySelector('input[type="checkbox"]')
+    if (box) {
+      box.checked = true
+      box.disabled = true
+      const label = box.closest("label")
+      if (label) {
+        label.style.opacity = "0.48"
+        label.style.cursor = "default"
+        label.title = "Only Both sexes is available for this view."
+      }
+    }
+    return input
+  }
+
+  const input = Inputs.checkbox(
+    ["all", "female", "male"],
+    {
+      label: "Sex",
+      value: ["all"],
+      format: d => ({all: "Both sexes", female: "Women", male: "Men"})[d]
+    }
+  )
+  const boxes = input.querySelectorAll('input[type="checkbox"]')
+  if (boxes.length) {
+    const optionLabels = Array.from(boxes).map(box => box.closest("label")).filter(Boolean)
+    const optionContainer = optionLabels[0]?.parentElement
+    if (optionContainer) {
+      optionContainer.style.display = "flex"
+      optionContainer.style.flexDirection = "column"
+      optionContainer.style.alignItems = "flex-start"
+      optionContainer.style.gap = ".2rem"
+    }
+    optionLabels.forEach(label => {
+      label.style.display = "flex"
+      label.style.alignItems = "center"
+      label.style.justifyContent = "flex-start"
+      label.style.width = "100%"
+      label.style.margin = "0"
+    })
+  }
+  if (boxes.length && !Array.from(boxes).some(box => box.checked)) {
+    boxes[0].checked = true
+    input.dispatchEvent(new Event("input", {bubbles: true}))
+  }
+  return input
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_age_groups = (() => {
+  const activeCountSexesForAge = Array.isArray(selected_count_sexes) ? selected_count_sexes : ["all"]
+  const bothSexesOnly =
+    activeCountSexesForAge.length === 1 &&
+    activeCountSexesForAge[0] === "all"
+  const ageBreakdownAvailable =
+    selected_indicator === "counts" &&
+    selected_period_type === "annual" &&
+    selected_event_type === "all_cvd" &&
+    bothSexesOnly
+
+  if (ageBreakdownAvailable) {
+    const ageOrder = ["all", "under_70", "age_70_plus"]
+    const options = Array.from(new Set(
+      burden
+        .filter(d =>
+          d.metric_id === "MORT-BURDEN-001" &&
+          d.period_type === "annual" &&
+          d.event_type === "all_cvd" &&
+          d.statistic === "annual_count"
+        )
+        .map(d => d.age_group)
+    )).sort((a, b) => ageOrder.indexOf(a) - ageOrder.indexOf(b))
+
+    const input = Inputs.checkbox(
+      options,
+      {label: "Age group", value: ["all"], format: d => ageLabel(d)}
+    )
+    const boxes = input.querySelectorAll('input[type="checkbox"]')
+    if (boxes.length) {
+      const optionLabels = Array.from(boxes).map(box => box.closest("label")).filter(Boolean)
+      const optionContainer = optionLabels[0]?.parentElement
+      if (optionContainer) {
+        optionContainer.style.display = "flex"
+        optionContainer.style.flexDirection = "column"
+        optionContainer.style.alignItems = "flex-start"
+        optionContainer.style.gap = ".2rem"
+      }
+      optionLabels.forEach(label => {
+        label.style.display = "flex"
+        label.style.alignItems = "center"
+        label.style.justifyContent = "flex-start"
+        label.style.width = "100%"
+        label.style.margin = "0"
+      })
+    }
+    return input
+  }
+
+  const input = Inputs.checkbox(
+    ["all"],
+    {label: "Age group", value: ["all"], format: () => "All ages"}
+  )
+  const box = input.querySelector('input[type="checkbox"]')
+  if (box) {
+    box.checked = true
+    box.disabled = true
+    const label = box.closest("label")
+    if (label) {
+      label.style.opacity = "0.48"
+      label.style.cursor = "default"
+      label.title =
+        selected_indicator === "counts" &&
+        selected_period_type === "annual" &&
+        selected_event_type === "all_cvd" &&
+        !bothSexesOnly
+          ? "Age-group breakdowns are available only when Both sexes is the sole selected sex."
+          : "Only All ages is available for this view."
+    }
+  }
+  return input
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_rate_uncertainty = (() => {
+  if (selected_indicator !== "rates") {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = []
+    return wrapper
+  }
+  return Inputs.checkbox(
+    ["statistical_ci"],
+    {
+      label: "Uncertainty",
+      value: ["statistical_ci"],
+      format: d => ({statistical_ci: "95% statistical confidence interval"})[d]
+    }
+  )
+})()
+```
+
+```{ojs}
+//| echo: false
+viewof selected_count_comparator = (() => {
+  if (selected_indicator !== "counts") {
+    const wrapper = html`<div style="display:none"></div>`
+    wrapper.value = []
+    return wrapper
+  }
+  const option = selected_period_type === "monthly" ? "monthly_reference" : "rolling_5yr"
+  return Inputs.checkbox(
+    [option],
+    {
+      label: "Comparator",
+      value: [],
+      format: d => d === "monthly_reference" ? "2015–2019 reference" : "5-year rolling average"
+    }
+  )
+})()
 ```
 
 ```{ojs}
@@ -345,48 +621,11 @@ viewof selected_end_period_index = periodSlider(
 )
 ```
 
-```{ojs}
-//| echo: false
-viewof selected_age_group = (() => {
-  const ageBreakdownAvailable =
-    selected_indicator === "counts" &&
-    selected_period_type === "annual" &&
-    selected_event_type === "all_cvd"
-
-  if (ageBreakdownAvailable) {
-    const ageOrder = ["all", "under_70", "age_70_plus"]
-    const options = Array.from(new Set(
-      burden
-        .filter(d =>
-          d.metric_id === "MORT-BURDEN-001" &&
-          d.period_type === "annual" &&
-          d.event_type === "all_cvd" &&
-          d.statistic === "annual_count"
-        )
-        .map(d => d.age_group)
-    )).sort((a, b) => ageOrder.indexOf(a) - ageOrder.indexOf(b))
-    return Inputs.select(options, {label: "Age group", value: "all", format: d => ageLabel(d)})
-  }
-
-  const wrapper = selected_indicator === "profile"
-    ? html`<div>
-        <label>Age group</label>
-        <div class="bnr-period-fixed">All ages</div>
-        <div class="bnr-period-note">Age groups are shown within the annual distribution view.</div>
-      </div>`
-    : html`<div>
-        <label>Age group</label>
-        <div class="bnr-period-fixed">All ages</div>
-        <div class="bnr-period-note">Age groups are available only for annual All CVD counts.</div>
-      </div>`
-  wrapper.value = "all"
-  return wrapper
-})()
-```
-
 # Indicator
 
-## Release {height=235}
+```{=html}
+<div class="bnr-dashboard-switch"><a href="../burden/index.html" data-external="1">View the CVD events dashboard →</a></div>
+```
 
 ```{ojs}
 //| echo: false
@@ -406,6 +645,52 @@ formatValue = d => {
   if (!d) return "—"
   if (!isSafe(d)) return d.display_value || "—"
   return d.unit === "percent" ? `${d.value.toFixed(1)}%` : Math.round(d.value).toLocaleString()
+}
+rateStatistic = d => d === "asr" ? "annual_age_standardised_rate" : "annual_crude_rate"
+rateAgeGroup = d => d === "asr" ? "age_standardised" : "all"
+rateSexLabel = d => ({all: "Both sexes", female: "Women", male: "Men"}[d] || d)
+rateSexDash = d => ({all: null, female: "8,5", male: "2,4"}[d] ?? null)
+rateSexLegendStyle = d => d === "female" ? "dashed" : d === "male" ? "dotted" : "solid"
+rateValue = d => {
+  if (!d) return "—"
+  if (!isSafe(d)) return d.display_value || "—"
+  return Number(d.value).toFixed(1)
+}
+rateInterval = d => {
+  if (!d || !isSafe(d)) return d?.display_value || "—"
+  return Number.isFinite(d.ci_lower_value) && Number.isFinite(d.ci_upper_value)
+    ? `${Number(d.ci_lower_value).toFixed(1)}–${Number(d.ci_upper_value).toFixed(1)}` : "—"
+}
+ciMethodLabel = d => ({poisson_exact_garwood: "Exact Poisson / Garwood", fay_feuer_gamma: "Fay–Feuer gamma"}[d] || d || "—")
+plotDownloadBase = value => String(value || "bnr-mortality-plot").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "bnr-mortality-plot"
+plotSvgNode = plot => plot?.tagName?.toLowerCase() === "svg" ? plot : plot?.querySelector?.("svg")
+plotSvgText = plot => {
+  const svg = plotSvgNode(plot)
+  if (!svg) return ""
+  const clone = svg.cloneNode(true)
+  clone.setAttribute("xmlns", "http://www.w3.org/2000/svg")
+  clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink")
+  const background = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+  background.setAttribute("width", "100%"); background.setAttribute("height", "100%"); background.setAttribute("fill", "white")
+  clone.insertBefore(background, clone.firstChild)
+  return `<?xml version="1.0" encoding="UTF-8"?>\n${new XMLSerializer().serializeToString(clone)}`
+}
+downloadPlot = (plot, baseName) => {
+  const svg = plotSvgNode(plot), text = plotSvgText(plot)
+  if (!svg || !text) return html``
+  const save = (blob, name) => { const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 0) }
+  const root = document.createElement("div"); root.className = "bnr-plot-downloads"
+  for (const ext of ["svg", "png"]) {
+    const button = document.createElement("button"); button.type = "button"; button.className = "bnr-plot-download-button"; button.textContent = `Download ${ext.toUpperCase()}`
+    button.onclick = () => {
+      if (ext === "svg") return save(new Blob([text], {type: "image/svg+xml;charset=utf-8"}), `${plotDownloadBase(baseName)}.svg`)
+      const image = new Image(), url = URL.createObjectURL(new Blob([text], {type: "image/svg+xml;charset=utf-8"}))
+      image.onload = () => { const w = Number(svg.getAttribute("width")) || 960, h = Number(svg.getAttribute("height")) || 500, canvas = document.createElement("canvas"); canvas.width = w * 2; canvas.height = h * 2; const ctx = canvas.getContext("2d"); ctx.scale(2, 2); ctx.fillStyle = "white"; ctx.fillRect(0, 0, w, h); ctx.drawImage(image, 0, 0, w, h); canvas.toBlob(blob => { URL.revokeObjectURL(url); if (blob) save(blob, `${plotDownloadBase(baseName)}.png`) }, "image/png") }
+      image.onerror = () => URL.revokeObjectURL(url); image.src = url
+    }
+    root.append(button)
+  }
+  return root
 }
 formatNumber = x => Number.isFinite(x) ? Math.round(x).toLocaleString() : "—"
 sortedRows = rows => [...rows].sort((a, b) => new Date(a.period_start) - new Date(b.period_start))
@@ -439,37 +724,13 @@ interpretation = (title, what, use) => html`<div class="bnr-interpretation">
   <div class="bnr-interpretation-title">${title}</div>
   <div class="bnr-interpretation-grid">
     <div class="bnr-interpretation-label">What this shows</div><div>${what}</div>
-    <div class="bnr-interpretation-label">How to read it</div><div>${use}</div>
+    <div class="bnr-interpretation-label">How to read it</div><div>${use} <a href="../../../../methods/measures/mortality.html" target="_blank" rel="noopener noreferrer">Public Methods: mortality</a>.</div>
   </div>
 </div>`
 definitionColour = d => d === "primary_clear_likely" ? colour("primary") : colour("inclusive")
 definitionSelection = definitions => html`<div class="bnr-definition-choice">
   ${definitions.map((d, i) => html`${i ? html`<span class="bnr-definition-join">&nbsp;and&nbsp;</span>` : ""}<strong style=${`color:${definitionColour(d)}`}>${definitionLabel(d)}</strong>`)}
 </div>`
-```
-
-```{ojs}
-//| echo: false
-// Latest release information is deliberately separate from the latest data period.
-{
-  const countRows = burden.filter(d =>
-    d.metric_id === "MORT-BURDEN-001" &&
-    ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic)
-  )
-  const latestData = latestRow(countRows)
-  const earliestData = sortedRows(countRows)[0] || null
-  return html`<div>
-    <div class="bnr-section-title">Latest Data Release</div>
-    <div class="bnr-release-grid">
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestData ? periodLabel(latestData) : "—"}</div></div>
-      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
-    </div>
-    <div class="bnr-note-box">This dashboard shows deaths classified as cardiovascular disease using the BNR mortality method. The release date is shown separately from the latest data period because the most recent data may be older than the date the release was published.</div>
-    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href="../../../../methods/measures/mortality.html">Learn how BNR defines and reports CVD mortality.</a></p>
-  </div>`
-}
 ```
 
 ## Indicator detail {.flow}
@@ -503,10 +764,6 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const contiguousObservedSegments = rows => {
     const ordered = sortedRows(rows)
     return pairSegments(ordered, (a, b) => adjacentPeriods(a, b) && isSafe(a) && isSafe(b) && isComplete(a) && isComplete(b))
-  }
-  const incompleteSegments = rows => {
-    const ordered = sortedRows(rows)
-    return pairSegments(ordered, (a, b) => adjacentPeriods(a, b) && isSafe(a) && isSafe(b) && (!isComplete(a) || !isComplete(b)))
   }
 
   const monthlyYtd = (definition, latestMonthly) => {
@@ -555,12 +812,13 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     const completePoints = observedAll.filter(d => isSafe(d) && isComplete(d)).map(d => ({...d, chart_x: new Date(d.period_start)}))
     const incompletePoints = observedAll.filter(d => isSafe(d) && !isComplete(d)).map(d => ({...d, chart_x: new Date(d.period_start)}))
     const completeSegments = contiguousObservedSegments(observedAll).map(d => ({...d, chart_x: new Date(d.period_start)}))
-    const dottedSegments = incompleteSegments(observedAll).map(d => ({...d, chart_x: new Date(d.period_start)}))
-    return {definition, observedAll, latestMonthly, ytd, refLatest, referenceForChart, completePoints, incompletePoints, completeSegments, dottedSegments}
+    return {definition, observedAll, latestMonthly, ytd, refLatest, referenceForChart, completePoints, incompletePoints, completeSegments}
   }
 
   const monthlyPanel = definitions => {
     const series = definitions.map(definition => monthlySeries(definition))
+    const activeComparator = Array.isArray(selected_count_comparator) ? selected_count_comparator : []
+    const showMonthlyComparator = activeComparator.includes("monthly_reference")
     const latestItems = series.map(s => ({
       definition: s.definition,
       value: s.latestMonthly ? formatValue(s.latestMonthly) : "—",
@@ -577,13 +835,32 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       note: s.refLatest && s.latestMonthly ? `${periodLabel(s.latestMonthly)} · mean ${formatNumber(s.refLatest.reference_mean)}` : "Fixed 2015–2019 reference"
     }))
 
-    // When both definitions are displayed, both monthly charts use one common y-axis.
-    // The domain is derived from all displayed observed counts and reference maxima;
-    // because Inclusive is the broader definition this will normally adopt its range.
-    const yCandidates = series.flatMap(s => [
-      ...s.observedAll.filter(isSafe).map(d => d.value),
-      ...s.referenceForChart.map(d => d.reference_max)
-    ]).filter(Number.isFinite)
+    // Keep the monthly count y-axis stable while mortality definitions are toggled.
+    // The domain always considers both approved mortality definitions over the visible
+    // period range, plus the fixed reference maxima when that comparator is shown.
+    const monthlyScaleDefinitions = ["primary_clear_likely", "upper_clear_likely_possible"]
+    const monthlyScaleRows = burden.filter(d =>
+      d.metric_id === "MORT-BURDEN-001" &&
+      monthlyScaleDefinitions.includes(d.case_definition) &&
+      d.period_type === "monthly" &&
+      d.statistic === "monthly_count" &&
+      d.event_type === "all_cvd" &&
+      d.sex === "all" &&
+      d.age_group === "all" &&
+      inRange(d) &&
+      isSafe(d)
+    )
+    const visibleCalendarMonths = new Set(monthlyScaleRows.map(d => d.period_month))
+    const monthlyReferenceScaleMaxima = showMonthlyComparator
+      ? monthly_reference.filter(d =>
+          monthlyScaleDefinitions.includes(d.case_definition) &&
+          visibleCalendarMonths.has(d.period_month)
+        ).map(d => d.reference_max)
+      : []
+    const yCandidates = [
+      ...monthlyScaleRows.map(d => d.value),
+      ...monthlyReferenceScaleMaxima
+    ].filter(Number.isFinite)
     const yMax = yCandidates.length ? Math.max(...yCandidates) : 1
     const sharedYDomain = [0, yMax * 1.05]
 
@@ -593,24 +870,26 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
         <div class="bnr-chart-title" style=${`color:${seriesColour}`}>${definitionLabel(s.definition)}</div>
         <div class="bnr-chart-legend">
           <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${seriesColour}`}></span>Monthly count</span>
-          <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style=${`border-color:${seriesColour}`}></span>Incomplete month</span>
-          <span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style=${`background:${colour("referenceBand")}`}></span>2015–2019 range</span>
-          <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${colour("referenceMean")}`}></span>2015–2019 average</span>
+          ${showMonthlyComparator ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-swatch" style=${`background:${colour("referenceBand")}`}></span>2015–2019 range</span>
+          <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${colour("referenceMean")}`}></span>2015–2019 average</span>` : ""}
         </div>
+        <div class="bnr-axis-title">↑ Count</div>
         ${Plot.plot({
           height: 390,
           marginLeft: 80,
           marginBottom: 70,
           style: {fontSize: "15px", fontFamily: "inherit"},
           x: {label: "Month", type: "time"},
-          y: {label: "Count", grid: true, domain: sharedYDomain, nice: true},
+          y: {label: null, grid: true, domain: sharedYDomain, nice: true},
           marks: [
-            Plot.areaY(s.referenceForChart, {x: d => new Date(d.period_start), y1: "reference_min", y2: "reference_max", fill: colour("referenceBand")}),
-            Plot.lineY(s.referenceForChart, {x: d => new Date(d.period_start), y: "reference_mean", stroke: colour("referenceMean"), strokeWidth: 2.5}),
+            ...(showMonthlyComparator ? [
+              Plot.areaY(s.referenceForChart, {x: d => new Date(d.period_start), y1: "reference_min", y2: "reference_max", fill: colour("referenceBand")}),
+              Plot.lineY(s.referenceForChart, {x: d => new Date(d.period_start), y: "reference_mean", stroke: colour("referenceMean"), strokeWidth: 2.5})
+            ] : []),
             Plot.lineY(s.completeSegments, {x: "chart_x", y: "value", z: "segment", stroke: seriesColour, strokeWidth: 2}),
-            Plot.lineY(s.dottedSegments, {x: "chart_x", y: "value", z: "segment", stroke: seriesColour, strokeOpacity: .45, strokeWidth: 2, strokeDasharray: "5,4"}),
             Plot.dot(s.completePoints, {x: "chart_x", y: "value", fill: seriesColour, stroke: seriesColour, r: 3.5, title: d => `${periodLabel(d)}\n${formatValue(d)}\nComplete month`}),
-            Plot.dot(s.incompletePoints, {x: "chart_x", y: "value", fill: seriesColour, fillOpacity: .4, stroke: seriesColour, strokeOpacity: .5, r: 3.5, title: d => `${periodLabel(d)}\n${formatValue(d)}\nIncomplete month`}),
+            Plot.dot(s.incompletePoints, {x: "chart_x", y: "value", fill: "#f6c98a", fillOpacity: .32, stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7}),
+            Plot.dot(s.incompletePoints, {x: "chart_x", y: "value", fill: seriesColour, stroke: seriesColour, r: 4.2, title: d => `${periodLabel(d)}\n${formatValue(d)}\nIncomplete month`}),
             Plot.ruleY([0])
           ]
         })}
@@ -620,14 +899,14 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">Monthly CVD deaths</div>
       ${definitionSelection(definitions)}
-      <div class="bnr-card-grid">
+      <div class="bnr-chart-title">Monthly all-CVD deaths, both sexes, all ages</div>
+      <p class="bnr-trend-note">${showMonthlyComparator ? "The shaded band shows the lowest and highest count for the same calendar month during 2015–2019. The orange line shows the 2015–2019 average." : "The 2015–2019 historical reference can be added using Comparator."}</p>
+      <div class="bnr-monthly-stack">${series.map(chartFor)}</div>
+      <div class="bnr-card-grid" style="margin-top:.75rem">
         ${headlineByDefinition("Latest month", latestItems)}
         ${headlineByDefinition("Year to date", ytdItems)}
-        ${headlineByDefinition("2015–2019 reference range", referenceItems)}
+        ${showMonthlyComparator ? headlineByDefinition("2015–2019 reference range", referenceItems) : ""}
       </div>
-      <div class="bnr-chart-title">Monthly all-CVD deaths, both sexes, all ages</div>
-      <p class="bnr-trend-note">The shaded band shows the lowest and highest count for the same calendar month during 2015–2019. The orange line shows the 2015–2019 average.</p>
-      <div class="bnr-monthly-stack">${series.map(chartFor)}</div>
     </div>`
   }
 
@@ -636,7 +915,19 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     const comparatorStatistic = selected_period_type === "quarterly"
       ? "quarterly_same_quarter_previous_5yr_mean"
       : "annual_previous_5yr_mean"
-    const chartX = d => selected_period_type === "annual" ? String(d.period_year) : new Date(d.period_start)
+    const chartX = d => selected_period_type === "annual" ? Number(d.period_year) : new Date(d.period_start)
+    const activeCountSexes = Array.isArray(selected_count_sexes) ? selected_count_sexes : ["all"]
+    const activeCountAgeGroups =
+      selected_period_type === "annual" && selected_event_type === "all_cvd"
+        ? (Array.isArray(selected_age_groups) ? selected_age_groups : ["all"])
+        : ["all"]
+    const activeComparator = Array.isArray(selected_count_comparator) ? selected_count_comparator : []
+    const showRollingComparator = activeComparator.includes("rolling_5yr")
+    const countSexLabel = d => ({all: "Both sexes", female: "Women", male: "Men"})[d] || d
+    const countSexDash = d => ({all: null, female: "8,5", male: "2,4"})[d] ?? null
+    const countSexLegendStyle = d => d === "female" ? "dashed" : d === "male" ? "dotted" : "solid"
+    const countAgeSymbol = d => ({all: "circle", under_70: "triangle", age_70_plus: "square"})[d] || "circle"
+    const countAgeLegendSymbol = d => ({all: "●", under_70: "▲", age_70_plus: "■"})[d] || "●"
 
     const series = definitions.map(definition => {
       const observed = sortedRows(burden.filter(d =>
@@ -645,7 +936,7 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
         d.period_type === selected_period_type &&
         d.statistic === statistic &&
         d.event_type === selected_event_type &&
-        d.age_group === selected_age_group &&
+        activeCountAgeGroups.includes(d.age_group) &&
         inRange(d) &&
         ["all", "female", "male"].includes(d.sex)
       ))
@@ -655,34 +946,27 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
         d.period_type === selected_period_type &&
         d.statistic === comparatorStatistic &&
         d.event_type === selected_event_type &&
-        d.age_group === selected_age_group &&
+        activeCountAgeGroups.includes(d.age_group) &&
         inRange(d) &&
         ["all", "female", "male"].includes(d.sex) &&
         hasPublishedValue(d)
       ))
-      const allObservedRows = observed.filter(d => d.sex === "all")
-      return {
-        definition,
-        observed,
-        comparator,
-        completePoints: allObservedRows.filter(d => isSafe(d) && isComplete(d)).map(d => ({...d, chart_x: chartX(d)})),
-        incompletePoints: allObservedRows.filter(d => isSafe(d) && !isComplete(d)).map(d => ({...d, chart_x: chartX(d)})),
-        completeSegments: contiguousObservedSegments(allObservedRows).map(d => ({...d, chart_x: chartX(d)})),
-        dottedSegments: incompleteSegments(allObservedRows).map(d => ({...d, chart_x: chartX(d)}))
-      }
+      return {definition, observed, comparator}
     })
 
-    const latestItem = (s, sex) => {
-      const row = latestRow(s.observed.filter(d => d.sex === sex))
+    const latestItem = (s, sex, ageGroup) => {
+      const row = latestRow(s.observed.filter(d => d.sex === sex && d.age_group === ageGroup))
       return {
         definition: s.definition,
         value: row ? formatValue(row) : "—",
         note: row ? `${periodLabel(row)}${isComplete(row) ? "" : " · incomplete"}` : "No published value"
       }
     }
-    const comparatorItem = (s, sex) => {
-      const observedLatest = latestRow(s.observed.filter(d => d.sex === sex))
-      const row = observedLatest ? s.comparator.find(d => d.sex === sex && d.period === observedLatest.period) || null : null
+    const comparatorItem = (s, sex, ageGroup) => {
+      const observedLatest = latestRow(s.observed.filter(d => d.sex === sex && d.age_group === ageGroup))
+      const row = observedLatest
+        ? s.comparator.find(d => d.sex === sex && d.age_group === ageGroup && d.period === observedLatest.period) || null
+        : null
       return {
         definition: s.definition,
         value: row ? formatValue(row) : "—",
@@ -690,74 +974,288 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       }
     }
 
-    const ageSpecific = selected_age_group !== "all"
-    const latestCards = ageSpecific
-      ? html`<div class="bnr-card-grid">${headlineByDefinition(`Latest: ${ageLabel(selected_age_group)}`, series.map(s => latestItem(s, "all")))}</div>`
-      : html`<div class="bnr-card-grid">
-          ${headlineByDefinition("Latest: all", series.map(s => latestItem(s, "all")))}
-          ${headlineByDefinition("Latest: women", series.map(s => latestItem(s, "female")))}
-          ${headlineByDefinition("Latest: men", series.map(s => latestItem(s, "male")))}
-        </div>`
-    const comparatorCards = ageSpecific
-      ? html`<div class="bnr-card-grid">${headlineByDefinition(`5-year average: ${ageLabel(selected_age_group)}`, series.map(s => comparatorItem(s, "all")))}</div>`
-      : html`<div class="bnr-card-grid">
-          ${headlineByDefinition("5-year average: all", series.map(s => comparatorItem(s, "all")))}
-          ${headlineByDefinition("5-year average: women", series.map(s => comparatorItem(s, "female")))}
-          ${headlineByDefinition("5-year average: men", series.map(s => comparatorItem(s, "male")))}
-        </div>`
+    const cardsForAge = (ageGroup, comparator = false) => html`<div class="bnr-age-card-group">
+      ${activeCountAgeGroups.length > 1 || ageGroup !== "all" ? html`<div class="bnr-age-card-label">${ageLabel(ageGroup)}</div>` : ""}
+      <div class="bnr-card-grid">
+        ${headlineByDefinition(comparator ? "5-year average: all" : "Latest: all", series.map(s => comparator ? comparatorItem(s, "all", ageGroup) : latestItem(s, "all", ageGroup)))}
+        ${headlineByDefinition(comparator ? "5-year average: women" : "Latest: women", series.map(s => comparator ? comparatorItem(s, "female", ageGroup) : latestItem(s, "female", ageGroup)))}
+        ${headlineByDefinition(comparator ? "5-year average: men" : "Latest: men", series.map(s => comparator ? comparatorItem(s, "male", ageGroup) : latestItem(s, "male", ageGroup)))}
+      </div>
+    </div>`
 
-    const marks = series.flatMap(s => {
+    const latestCards = html`<div>${activeCountAgeGroups.map(ageGroup => cardsForAge(ageGroup, false))}</div>`
+    const comparatorCards = html`<div>${activeCountAgeGroups.map(ageGroup => cardsForAge(ageGroup, true))}</div>`
+
+    const marks = series.flatMap(s => activeCountSexes.flatMap(sex => activeCountAgeGroups.flatMap(ageGroup => {
       const seriesColour = definitionColour(s.definition)
+      const observedRows = s.observed.filter(d => d.sex === sex && d.age_group === ageGroup)
+      const completePoints = observedRows.filter(d => isSafe(d) && isComplete(d)).map(d => ({...d, chart_x: chartX(d)}))
+      const incompletePoints = observedRows.filter(d => isSafe(d) && !isComplete(d)).map(d => ({...d, chart_x: chartX(d)}))
+      const completeSegments = contiguousObservedSegments(observedRows).map(d => ({...d, chart_x: chartX(d)}))
+      const sexDash = countSexDash(sex)
+      const pointSymbol = countAgeSymbol(ageGroup)
+      const observedLineOptions = {x: "chart_x", y: "value", z: "segment", stroke: seriesColour, strokeWidth: 2.3}
+      if (sexDash) observedLineOptions.strokeDasharray = sexDash
+      const comparatorRows = s.comparator.filter(d => d.sex === sex && d.age_group === ageGroup).map(d => ({...d, chart_x: chartX(d)}))
+      const comparatorLineOptions = {x: "chart_x", y: "value", stroke: seriesColour, strokeOpacity: .42, strokeWidth: 1.5}
+      if (sexDash) comparatorLineOptions.strokeDasharray = sexDash
       return [
-        Plot.lineY(s.completeSegments, {x: "chart_x", y: "value", z: "segment", stroke: seriesColour, strokeWidth: 2.3}),
-        Plot.lineY(s.dottedSegments, {x: "chart_x", y: "value", z: "segment", stroke: seriesColour, strokeOpacity: .42, strokeWidth: 2.3, strokeDasharray: "2,4"}),
-        Plot.dot(s.completePoints, {x: "chart_x", y: "value", fill: seriesColour, stroke: seriesColour, r: 3.3, title: d => `${definitionLabel(s.definition)}\n${periodLabel(d)}\n${formatValue(d)}\n${selected_period_type === "quarterly" ? "Complete quarter" : "Complete year"}`}),
-        Plot.dot(s.incompletePoints, {x: "chart_x", y: "value", fill: seriesColour, fillOpacity: .35, stroke: seriesColour, strokeOpacity: .5, r: 3.3, title: d => `${definitionLabel(s.definition)}\n${periodLabel(d)}\n${formatValue(d)}\n${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}`}),
-        Plot.lineY(s.comparator.filter(d => d.sex === "all").map(d => ({...d, chart_x: chartX(d)})), {x: "chart_x", y: "value", stroke: seriesColour, strokeOpacity: .72, strokeWidth: 2.6, strokeDasharray: "8,5"})
+        Plot.lineY(completeSegments, observedLineOptions),
+        Plot.dot(completePoints, {x: "chart_x", y: "value", symbol: pointSymbol, fill: seriesColour, stroke: seriesColour, r: 3.8, title: d => `${definitionLabel(s.definition)} · ${countSexLabel(sex)} · ${ageLabel(ageGroup)}
+${periodLabel(d)}
+${formatValue(d)}
+${selected_period_type === "quarterly" ? "Complete quarter" : "Complete year"}`}),
+        Plot.dot(incompletePoints, {x: "chart_x", y: "value", symbol: pointSymbol, fill: "#f6c98a", fillOpacity: .32, stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7}),
+        Plot.dot(incompletePoints, {x: "chart_x", y: "value", symbol: pointSymbol, fill: seriesColour, stroke: seriesColour, r: 4.5, title: d => `${definitionLabel(s.definition)} · ${countSexLabel(sex)} · ${ageLabel(ageGroup)}
+${periodLabel(d)}
+${formatValue(d)}
+${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}`}),
+        ...(showRollingComparator ? [Plot.lineY(comparatorRows, comparatorLineOptions)] : [])
       ]
-    })
+    })))
 
+    // Keep the count y-axis stable while mortality-definition, age-group or sex
+    // checkboxes are toggled. The scale always considers both approved mortality
+    // definitions, all published sex strata and all available age groups for the
+    // current event type and visible period range. No values are derived.
+    const countScaleDefinitions = ["primary_clear_likely", "upper_clear_likely_possible"]
+    const scaleAgeGroups = selected_period_type === "annual" && selected_event_type === "all_cvd"
+      ? ["all", "under_70", "age_70_plus"]
+      : ["all"]
+    const scaleStatistics = [statistic, ...(showRollingComparator ? [comparatorStatistic] : [])]
+    const scaleValues = burden.filter(d =>
+      d.metric_id === "MORT-BURDEN-001" &&
+      countScaleDefinitions.includes(d.case_definition) &&
+      d.period_type === selected_period_type &&
+      scaleStatistics.includes(d.statistic) &&
+      d.event_type === selected_event_type &&
+      scaleAgeGroups.includes(d.age_group) &&
+      ["all", "female", "male"].includes(d.sex) &&
+      inRange(d) &&
+      hasPublishedValue(d)
+    ).map(d => d.value).filter(Number.isFinite)
+    const countYMax = scaleValues.length ? Math.max(...scaleValues) : 1
+    const sharedCountYDomain = [0, countYMax * 1.05]
+
+    const selectedSexText = activeCountSexes.map(countSexLabel).join(", ")
+    const selectedAgeText = activeCountAgeGroups.map(ageLabel).join(", ")
     return html`<div class="bnr-definition-panel">
       <div class="bnr-section-title">${selected_period_type === "quarterly" ? "Quarterly detail" : "Annual detail"}</div>
       ${definitionSelection(definitions)}
-      ${latestCards}
-      ${comparatorCards}
-      <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)}${selected_age_group === "all" ? ", both sexes" : `, ${ageLabel(selected_age_group).toLowerCase()}`}</div>
-      <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. The dashed line shows the published five-year comparison where it is available.</p>
+      <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)} · ${selectedSexText} · ${selectedAgeText}</div>
+      <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}.${showRollingComparator ? " The published five-year rolling average is shown with lighter lines where available." : " Add the five-year rolling average using Comparator."}</p>
       <div class="bnr-chart-legend">
         ${definitions.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${definitionColour(d)}`}></span>${definitionLabel(d)}</span>`)}
-        <span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#666;border-top-style:dashed"></span>Previous 5-year average</span>
-        <span class="bnr-chart-legend-item"><span class="bnr-legend-line bnr-legend-dotted" style="border-color:#777"></span>${selected_period_type === "quarterly" ? "Incomplete quarter" : "Incomplete year"}</span>
+        ${activeCountSexes.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:#555;border-top-style:${countSexLegendStyle(d)}`}></span>${countSexLabel(d)}</span>`)}
+        ${activeCountAgeGroups.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-age-legend-symbol">${countAgeLegendSymbol(d)}</span>${ageLabel(d)}</span>`)}
+        ${showRollingComparator ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style="border-color:#666;opacity:.42;border-top-width:2px"></span>5-year rolling average</span>` : ""}
       </div>
+      <div class="bnr-axis-title">↑ Count</div>
       ${Plot.plot({
         height: 470,
         marginLeft: 80,
         marginBottom: 76,
         style: {fontSize: "15px", fontFamily: "inherit"},
-        x: selected_period_type === "annual" ? {label: "Year"} : {label: "Quarter", type: "time"},
-        y: {label: "Count", grid: true},
+        x: selected_period_type === "annual" ? {label: "Year", type: "linear", tickFormat: "d"} : {label: "Quarter", type: "time"},
+        y: {label: null, grid: true, domain: sharedCountYDomain, nice: true},
         marks: [...marks, Plot.ruleY([0])]
       })}
+      <div style="margin-top:.75rem">
+        ${latestCards}
+        ${showRollingComparator ? comparatorCards : ""}
+      </div>
+    </div>`
+  }
+
+  if (selected_indicator === "rates") {
+    if (!selected_rate_sexes.length) {
+      return html`<div class="bnr-note-box">Select <strong>Both sexes</strong>, <strong>Women</strong>, <strong>Men</strong>, or a combination under Sex.</div>`
+    }
+
+    const statistic = rateStatistic(selected_rate_measure)
+    const ageGroup = rateAgeGroup(selected_rate_measure)
+    const activeRateUncertainty = Array.isArray(selected_rate_uncertainty) ? selected_rate_uncertainty : []
+    const showStatisticalCi = activeRateUncertainty.includes("statistical_ci")
+
+    // Keep all three published sex strata available for the summary cards even
+    // when only a subset is selected for the chart.
+    const definitionRows = selected_case_definitions.map(definition => ({
+      definition,
+      observed: sortedRows(burden.filter(d =>
+        d.metric_id === "MORT-RATE-001" &&
+        d.period_type === "annual" &&
+        d.statistic === statistic &&
+        d.age_group === ageGroup &&
+        d.case_definition === definition &&
+        d.event_type === selected_event_type &&
+        ["all", "female", "male"].includes(d.sex) &&
+        inRange(d)
+      ))
+    }))
+
+    const rateSeries = definitionRows.flatMap(s => selected_rate_sexes.map(sex => {
+      const observed = s.observed.filter(d => d.sex === sex)
+      const safe = observed.filter(d => isSafe(d))
+      return {
+        definition: s.definition,
+        sex,
+        observed,
+        complete: safe.filter(d => isComplete(d)),
+        incomplete: safe.filter(d => !isComplete(d)),
+        segments: contiguousObservedSegments(observed).map(d => ({...d, chart_x: Number(d.period_year)})),
+        ci: safe.filter(d => Number.isFinite(d.ci_lower_value) && Number.isFinite(d.ci_upper_value))
+      }
+    }))
+
+    const latestItems = sex => definitionRows.map(s => {
+      const row = latestRow(s.observed.filter(d => d.sex === sex))
+      const noteParts = row ? [`${periodLabel(row)} · per 100,000`] : []
+      if (
+        row &&
+        showStatisticalCi &&
+        isSafe(row) &&
+        Number.isFinite(row.ci_lower_value) &&
+        Number.isFinite(row.ci_upper_value)
+      ) {
+        noteParts.push(`95% CI ${rateInterval(row)}`)
+      }
+      return {
+        definition: s.definition,
+        value: rateValue(row),
+        note: row ? noteParts.join(" · ") : "No published value"
+      }
+    })
+
+    // Hold the mortality-rate y-axis fixed while sex and mortality-definition
+    // series are toggled, but allow crude and age-standardised rates to use
+    // different domains. The scale therefore uses all three sex strata, both
+    // mortality definitions and released CI upper limits for the selected CVD
+    // type, rate measure and year range.
+    const allRateScaleRows = burden.filter(d =>
+      d.metric_id === "MORT-RATE-001" &&
+      d.period_type === "annual" &&
+      d.statistic === statistic &&
+      d.age_group === ageGroup &&
+      d.event_type === selected_event_type &&
+      ["all", "female", "male"].includes(d.sex) &&
+      inRange(d) &&
+      isSafe(d)
+    )
+    const scaleValues = allRateScaleRows.flatMap(d => [d.value, d.ci_upper_value]).filter(Number.isFinite)
+    const yMax = scaleValues.length ? Math.max(...scaleValues) * 1.05 : 1
+
+    const marks = rateSeries.flatMap(s => {
+      const c = definitionColour(s.definition)
+      const dash = rateSexDash(s.sex)
+      return [
+        ...(showStatisticalCi ? [Plot.link(s.ci, {
+          x1: d => Number(d.period_year), x2: d => Number(d.period_year),
+          y1: "ci_lower_value", y2: "ci_upper_value",
+          stroke: c, strokeOpacity: .42, strokeWidth: 1.25
+        })] : []),
+        Plot.lineY(s.segments, {
+          x: "chart_x", y: "value", z: "segment",
+          stroke: c, strokeWidth: s.sex === "all" ? 2.6 : 2.2,
+          ...(dash ? {strokeDasharray: dash} : {})
+        }),
+        Plot.dot(s.complete, {
+          x: d => Number(d.period_year), y: "value",
+          fill: c, stroke: c, r: s.sex === "all" ? 3.7 : 3.3,
+          title: d => `${definitionLabel(s.definition)} · ${rateSexLabel(s.sex)}
+${periodLabel(d)}
+${rateValue(d)} per 100,000
+95% CI: ${rateInterval(d)}
+Complete year`
+        }),
+        Plot.dot(s.incomplete, {
+          x: d => Number(d.period_year), y: "value",
+          fill: "#f6c98a", fillOpacity: .32,
+          stroke: "#d98b3d", strokeOpacity: .9, strokeWidth: 1.7, r: 7
+        }),
+        Plot.dot(s.incomplete, {
+          x: d => Number(d.period_year), y: "value",
+          fill: c, stroke: c, r: 4.2,
+          title: d => `${definitionLabel(s.definition)} · ${rateSexLabel(s.sex)}
+${periodLabel(d)}
+${rateValue(d)} per 100,000
+95% CI: ${rateInterval(d)}
+Incomplete year`
+        })
+      ]
+    })
+
+    const ratePlot = Plot.plot({
+      height: 470,
+      marginLeft: 96,
+      marginBottom: 70,
+      style: {fontSize: "15px", fontFamily: "inherit"},
+      x: {label: "Year", type: "linear", tickFormat: "d"},
+      y: {label: null, grid: true, domain: [0, yMax], nice: true},
+      marks: [...marks, Plot.ruleY([0])]
+    })
+
+    const sexTitle = selected_rate_sexes.length === 3
+      ? "both sexes, women and men"
+      : selected_rate_sexes.map(d => rateSexLabel(d).toLowerCase()).join(", ")
+
+    return html`<div>
+      ${interpretation(
+        "Annual mortality rates",
+        `The published annual ${selected_rate_measure === "asr" ? "age-standardised" : "crude"} mortality rate per 100,000 population for ${eventLabel(selected_event_type)} deaths.`,
+        "Use the same mortality definition and CVD type when comparing rates. Sex strata can be overlaid on the same chart. Confidence intervals are supplied with the published estimates; the dashboard does not calculate them."
+      )}
+      <hr>
+      <div class="bnr-definition-panel">
+        <div class="bnr-section-title">${selected_rate_measure === "asr" ? "Age-standardised rate" : "Crude rate"}</div>
+        ${definitionSelection(selected_case_definitions)}
+        <div class="bnr-chart-title">Trend for ${eventLabel(selected_event_type)}, ${sexTitle}</div>
+        <p class="bnr-trend-note">Showing ${available_periods[rangeStartIndex]?.label || "—"} to ${available_periods[rangeEndIndex]?.label || "—"}. Lines${showStatisticalCi ? " and confidence intervals" : ""} break where a published value is protected, incomplete or unavailable.</p>
+        <div class="bnr-chart-legend">
+          ${selected_case_definitions.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:${definitionColour(d)}`}></span>${definitionLabel(d)}</span>`)}
+          ${selected_rate_sexes.map(d => html`<span class="bnr-chart-legend-item"><span class="bnr-legend-line" style=${`border-color:#555;border-top-style:${rateSexLegendStyle(d)}`}></span>${rateSexLabel(d)}</span>`)}
+          ${showStatisticalCi ? html`<span class="bnr-chart-legend-item"><span class="bnr-legend-whisker"></span>95% statistical CI</span>` : ""}
+        </div>
+        <div class="bnr-axis-title">↑ Rate per 100,000</div>
+        ${ratePlot}
+        ${downloadPlot(ratePlot, `${release_id || "mort-current"}-rate-${selected_rate_measure}-${selected_event_type}`)}
+        <div class="bnr-card-grid" style="margin-top:.75rem">
+          ${headlineByDefinition("Latest: all", latestItems("all"))}
+          ${headlineByDefinition("Latest: women", latestItems("female"))}
+          ${headlineByDefinition("Latest: men", latestItems("male"))}
+        </div>
+        <div class="bnr-note-box"><strong>Uncertainty:</strong> The 95% statistical confidence intervals shown here are supplied in the approved public dataset. They describe statistical variation around the central estimate and are not recalculated or combined with another uncertainty measure.</div>
+        <div class="bnr-note-box"><strong>Population:</strong> UN World Population Prospects 2024. ${selected_rate_measure === "asr" ? html`<strong>Standard population:</strong> WHO World 2000–2025.` : ""}</div>
+      </div>
     </div>`
   }
 
   if (selected_indicator === "counts") {
+    if (["quarterly", "annual"].includes(selected_period_type) && !selected_count_sexes.length) {
+      return html`<div class="bnr-note-box">Select <strong>Both sexes</strong>, <strong>Women</strong>, <strong>Men</strong>, or a combination under Sex.</div>`
+    }
+    const bothSexesOnlyForAge =
+      Array.isArray(selected_count_sexes) &&
+      selected_count_sexes.length === 1 &&
+      selected_count_sexes[0] === "all"
+    if (selected_period_type === "annual" && selected_event_type === "all_cvd" && bothSexesOnlyForAge && !selected_age_groups.length) {
+      return html`<div class="bnr-note-box">Select <strong>All ages</strong>, <strong>Under 70</strong>, <strong>70 and older</strong>, or a combination under Age group.</div>`
+    }
     const intro = selected_period_type === "monthly"
       ? interpretation(
           "Monthly CVD deaths",
           "The number of deaths classified as CVD each month. Monthly data are shown only for All CVD, both sexes and all ages.",
-          "The shaded band shows the range seen in the same calendar month during 2015–2019, and the orange line shows the average for that month. This is a fixed historical reference. If a value is protected, it is not plotted and is not treated as zero."
+          "The fixed 2015–2019 historical reference can be added with Comparator. If a value is protected, it is not plotted and is not treated as zero."
         )
       : selected_period_type === "quarterly"
       ? interpretation(
           "Quarterly CVD deaths",
-          `The number of deaths classified as ${eventLabel(selected_event_type)} in each quarter. The cards show the latest published counts, and the chart shows the trend for both sexes.`,
-          "The dashed line shows the average for the same quarter in the previous five years, where that comparison is available in the published data. An incomplete quarter is shown with a lighter dotted line. Protected values are not plotted and are not treated as zero."
+          `The number of deaths classified as ${eventLabel(selected_event_type)} in each quarter. The cards show the latest published counts for all, women and men, and the chart can show one or more sex series.`,
+          "Use Sex to compare published sex-specific trends. The five-year rolling average can be added with Comparator where it is available. Protected values are not plotted and are not treated as zero."
         )
       : interpretation(
           "Annual CVD deaths",
-          `The number of deaths classified as ${eventLabel(selected_event_type)} in each year. The cards show the latest published counts, and the chart shows the annual trend.`,
-          "The dashed line shows the average for the previous five years, where that comparison is available in the published data. An incomplete year is shown with a lighter dotted line. Protected values are not plotted and are not treated as zero."
+          `The number of deaths classified as ${eventLabel(selected_event_type)} in each year. The cards show the latest published counts for all, women and men. For All CVD, the chart can also compare one or more broad age groups.`,
+          "Use Sex and, for All CVD, Age group to compare published trends. The five-year rolling average can be added with Comparator where it is available. Protected values are not plotted and are not treated as zero."
         )
     return html`<div>
       ${intro}
@@ -890,18 +1388,18 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const distributionSets = selected_case_definitions.map(definition => distributionData(definition))
   const eventGroup = distributionSets.some(d => d.eventRows.length) ? html`<div class="bnr-definition-panel">
     <div class="bnr-section-title">Heart and stroke: All CVD</div>
-    ${distributionSummary("event")}
     <div class="bnr-distribution-stack">${distributionSets.map(d => distributionChart(d, "event"))}</div>
+    ${distributionSummary("event")}
   </div>` : ""
   const ageGroup = distributionSets.some(d => d.ageRows.length) ? html`<div class="bnr-definition-panel">
     <div class="bnr-section-title">Age groups: All CVD</div>
-    ${distributionSummary("age")}
     <div class="bnr-distribution-stack">${distributionSets.map(d => distributionChart(d, "age"))}</div>
+    ${distributionSummary("age")}
   </div>` : ""
   const sexGroup = distributionSets.some(d => d.sexRows.length) ? html`<div class="bnr-definition-panel">
     <div class="bnr-section-title">Women and men: ${eventLabel(selected_event_type)}</div>
-    ${distributionSummary("sex")}
     <div class="bnr-distribution-stack">${distributionSets.map(d => distributionChart(d, "sex"))}</div>
+    ${distributionSummary("sex")}
   </div>` : ""
 
   return html`<div>
@@ -920,11 +1418,11 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
 }
 ```
 
-## Quality {height=410}
+## Possible deaths {height=525}
 
 ```{ojs}
 //| echo: false
-// This matrix is a deliberately permitted presentation-derived quality measure.
+// This matrix is a deliberately permitted presentation-derived measure.
 // For each year and CVD type, it subtracts the published Primary annual count from
 // the published Inclusive annual count, then expresses that difference as a share
 // of the Inclusive annual count so All CVD, Heart and Stroke are directly comparable.
@@ -944,6 +1442,8 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const years = lastYear === null || lastYear < 2010
     ? []
     : Array.from({length: lastYear - 2010 + 1}, (_, i) => 2010 + i)
+  const yearsBefore2018 = years.filter(year => year < 2018)
+  const yearsFrom2018 = years.filter(year => year >= 2018)
   const events = [
     {key: "all_cvd", label: "All CVD"},
     {key: "heart", label: "Heart"},
@@ -972,32 +1472,97 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       "background:#f3c6cc;color:#842029;"
   }
   const qualityPercent = x => `${qualityRounded(x)}%`
+  const yearCellClass = year => year === 2018 ? "bnr-quality-era-start" : ""
 
-  return html`<div class="bnr-definition-panel">
-    <div class="bnr-section-title">Possible deaths - quality measure</div>
-    <p class="bnr-trend-note">Each cell shows deaths included only in the <strong>Inclusive</strong> definition as a percentage of that Inclusive annual count. This standardises the measure so All CVD, Heart and Stroke can be compared directly. Hover over a cell to see the underlying number of Possible-only deaths.</p>
+  const qualityPanel = html`<div class="bnr-definition-panel">
+    <div class="bnr-section-title">How much does the estimate rely on Possible deaths?</div>
+    <p class="bnr-trend-note">Each number is the percentage of deaths in the <strong>Inclusive</strong> estimate that are not in the <strong>Primary</strong> estimate. In simple terms, it shows how much the estimate depends on deaths classified as <strong>Possible</strong>. Hover over a number to see the death counts behind the percentage.</p>
     <div class="bnr-quality-key">
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-low"></span><strong>Lower:</strong> &lt;20</span>
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-medium"></span><strong>Moderate:</strong> 20-29</span>
       <span class="bnr-quality-key-item"><span class="bnr-quality-swatch bnr-quality-swatch-high"></span><strong>Higher:</strong> 30+</span>
     </div>
     <div class="bnr-coverage-scroll">
-      <table class="bnr-coverage-table" aria-label="Possible-only CVD deaths as a percentage of Inclusive annual deaths by year and CVD type">
-        <thead><tr><th></th>${years.map(year => html`<th scope="col">${year}</th>`)}</tr></thead>
+      <table class="bnr-coverage-table" aria-label="Deaths classified as Possible as a percentage of Inclusive annual deaths by year and CVD type">
+        <thead>
+          <tr class="bnr-quality-era-row">
+            <th></th>
+            ${yearsBefore2018.length ? html`<th colspan=${yearsBefore2018.length} class="bnr-quality-era-old">2010-2017 · causes stored together</th>` : ""}
+            ${yearsFrom2018.length ? html`<th colspan=${yearsFrom2018.length} class="bnr-quality-era-new bnr-quality-era-start">2018 onward · certificate lines stored separately</th>` : ""}
+          </tr>
+          <tr><th></th>${years.map(year => html`<th scope="col" class=${yearCellClass(year)}>${year}</th>`)}</tr>
+        </thead>
         <tbody>
           ${events.map(event => html`<tr>
             <th scope="row" class="bnr-coverage-label">${event.label}</th>
             ${years.map(year => {
               const result = possibleOnly(event.key, year)
+              const eraClass = yearCellClass(year)
               return result
-                ? html`<td class="bnr-coverage-cell bnr-quality-cell" title=${`${event.label}: ${year} · ${qualityPercent(result.possibleShare)} of Inclusive deaths were Possible-only · ${formatNumber(result.difference)} deaths (Inclusive ${formatNumber(result.inclusive)} minus Primary ${formatNumber(result.primary)})`}><span class="bnr-quality-value" style=${qualityStyle(result.possibleShare)}>${qualityRounded(result.possibleShare)}</span></td>`
-                : html`<td class="bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable" title=${`${event.label}: ${year} · quality measure unavailable`}>-</td>`
+                ? html`<td class=${`bnr-coverage-cell bnr-quality-cell ${eraClass}`}><span class="bnr-quality-value" style=${qualityStyle(result.possibleShare)} data-event=${event.key} data-year=${year} tabindex="0">${qualityRounded(result.possibleShare)}</span></td>`
+                : html`<td class=${`bnr-coverage-cell bnr-quality-cell bnr-quality-unavailable ${eraClass}`}>-</td>`
             })}
           </tr>`)}
         </tbody>
       </table>
     </div>
-    <div class="bnr-note-box"><strong>How to use this:</strong> Lower percentages mean less reliance on the Possible classification. Values are rounded to the nearest whole percentage. The green, amber and red bands indicate lower (&lt;20), moderate (20-29) and higher (30+) reliance on Possible classifications; they are pragmatic visual flags, not formal quality standards. Protected or incomplete source values are never reconstructed.</div>
+    <div class="bnr-quality-hover-detail">Hover over a number to see the death counts behind that percentage.</div>
+    <div class="bnr-note-box"><strong>Why 2018 and later look different:</strong> Before 2018, causes of death were usually stored together in one text field, so the original order on the death certificate was not available. From 2018, the certificate lines were stored separately. This lets BNR show uncertainty more clearly, so more deaths can appear as Possible. A higher percentage after 2018 does <strong>not</strong> necessarily mean that the data became worse. Values before and after 2018 should therefore be compared with care. The colours show lower, moderate and higher percentages only; they are not a judgement of data quality.</div>
+  </div>`
+
+  const hoverDetail = qualityPanel.querySelector(".bnr-quality-hover-detail")
+  const resetHoverDetail = () => {
+    hoverDetail.textContent = "Hover over a number to see the death counts behind that percentage."
+    hoverDetail.classList.remove("bnr-quality-hover-active")
+  }
+
+  qualityPanel.querySelectorAll(".bnr-quality-value[data-event][data-year]").forEach(cell => {
+    const showHoverDetail = () => {
+      const eventType = cell.getAttribute("data-event")
+      const year = Number(cell.getAttribute("data-year"))
+      const event = events.find(item => item.key === eventType)
+      const result = possibleOnly(eventType, year)
+
+      if (!event || !result) {
+        resetHoverDetail()
+        return
+      }
+
+      hoverDetail.textContent = `${event.label}, ${year} (difference ${qualityPercent(result.possibleShare)}) · Total Inclusive deaths: ${formatNumber(result.inclusive)} · Clear + Likely: ${formatNumber(result.primary)} · Possible: ${formatNumber(result.difference)}`
+      hoverDetail.classList.add("bnr-quality-hover-active")
+    }
+    cell.addEventListener("mouseenter", showHoverDetail)
+    cell.addEventListener("focus", showHoverDetail)
+    cell.addEventListener("mouseleave", resetHoverDetail)
+    cell.addEventListener("blur", resetHoverDetail)
+  })
+
+  return qualityPanel
+}
+```
+
+## Release {height=235}
+
+```{ojs}
+//| echo: false
+// Latest release information is deliberately separate from the latest data period.
+{
+  const countRows = burden.filter(d =>
+    d.metric_id === "MORT-BURDEN-001" &&
+    ["monthly_count", "quarterly_count", "annual_count"].includes(d.statistic)
+  )
+  const latestData = latestRow(countRows)
+  const earliestData = sortedRows(countRows)[0] || null
+  return html`<div>
+    <div class="bnr-section-title">Latest Data Release</div>
+    <div class="bnr-release-grid">
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release date</div><div class="bnr-release-item-value">${release_date_label}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Latest data</div><div class="bnr-release-item-value">${latestData ? periodLabel(latestData) : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">First year</div><div class="bnr-release-item-value">${earliestData ? earliestData.period_year : "—"}</div></div>
+      <div class="bnr-release-item"><div class="bnr-release-item-label">Release ID</div><div class="bnr-release-item-value">${release_id || "—"}</div></div>
+    </div>
+    <div class="bnr-note-box">This dashboard shows deaths classified as cardiovascular disease using the BNR mortality method. The release date is shown separately from the latest data period because the most recent data may be older than the date the release was published.</div>
+    <p class="bnr-trend-note" style="margin-top:.75rem"><strong>About these figures:</strong> <a href="../../../../methods/measures/mortality.html">Learn how BNR defines and reports CVD mortality.</a></p>
   </div>`
 }
 ```
@@ -1062,10 +1627,32 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const selectedRows = burden.filter(d => {
     if (!selected_case_definitions.includes(d.case_definition) || !inRange(d)) return false
     if (selected_indicator === "counts") {
+      const activeCountSexes = selected_period_type === "monthly"
+        ? ["all"]
+        : (Array.isArray(selected_count_sexes) ? selected_count_sexes : ["all"])
+      const activeComparator = Array.isArray(selected_count_comparator) ? selected_count_comparator : []
+      const comparatorStatistic = selected_period_type === "quarterly"
+        ? "quarterly_same_quarter_previous_5yr_mean"
+        : selected_period_type === "annual"
+        ? "annual_previous_5yr_mean"
+        : null
+      const allowedStatistics = [`${selected_period_type}_count`]
+      if (comparatorStatistic && activeComparator.includes("rolling_5yr")) allowedStatistics.push(comparatorStatistic)
+      const activeCountAgeGroups = selected_period_type === "annual" && selected_event_type === "all_cvd"
+        ? (Array.isArray(selected_age_groups) ? selected_age_groups : ["all"])
+        : ["all"]
       return d.metric_id === "MORT-BURDEN-001" &&
         d.period_type === selected_period_type &&
         d.event_type === selected_event_type &&
-        d.age_group === selected_age_group
+        activeCountAgeGroups.includes(d.age_group) &&
+        activeCountSexes.includes(d.sex) &&
+        allowedStatistics.includes(d.statistic)
+    }
+    if (selected_indicator === "rates") {
+      return d.metric_id === "MORT-RATE-001" && d.period_type === "annual" &&
+        d.statistic === rateStatistic(selected_rate_measure) &&
+        d.age_group === rateAgeGroup(selected_rate_measure) &&
+        d.event_type === selected_event_type && ["all", "female", "male"].includes(d.sex)
     }
     if (d.metric_id !== "MORT-BURDEN-002" || d.period_type !== "annual") return false
     const eventDistribution = d.statistic === "event_type_distribution" && ["heart", "stroke"].includes(d.event_type)
@@ -1076,7 +1663,7 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
 
   const displayText = d => {
     if (d.suppression_status !== "none" || !Number.isFinite(d.value)) return d.display_value || "—"
-    return d.unit === "percent" ? `${d.value.toFixed(1)}%` : Math.round(d.value).toLocaleString()
+    return d.unit === "percent" ? `${d.value.toFixed(1)}%` : d.unit === "rate_per_100000" ? d.value.toFixed(1) : Math.round(d.value).toLocaleString()
   }
   const definitionText = d => definitionLabel(d.case_definition)
   const statisticLabel = d => ({
@@ -1087,7 +1674,9 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     annual_previous_5yr_mean: "Average for the previous 5 years",
     event_type_distribution: "Heart and Stroke distribution",
     age_distribution: "Age distribution",
-    sex_distribution: "Women and men distribution"
+    sex_distribution: "Women and men distribution",
+    annual_crude_rate: "Annual crude mortality rate",
+    annual_age_standardised_rate: "Annual age-standardised mortality rate"
   })[d.statistic] || String(d.statistic).replaceAll("_", " ")
   const zipName = release_id ? `bnr_mort_burden_${release_id}.zip` : ""
   const latestCount = latestRow(burden.filter(d => d.metric_id === "MORT-BURDEN-001" && ["monthly_count","quarterly_count","annual_count"].includes(d.statistic)))
@@ -1097,7 +1686,7 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     const s = value === null || value === undefined ? "" : String(value)
     return /[",\r\n]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s
   }
-  const selectedViewHeaders = ["Period","Definition","CVD type","Sex","Age group","Measure","Value","Data status","Protection note"]
+  const selectedViewHeaders = ["Period","Definition","CVD type","Sex","Age group","Measure","Value","95% statistical CI","CI method","Data status","Protection note"]
   const selectedViewRows = displayRows.map(d => [
     periodLabel(d),
     definitionText(d),
@@ -1106,6 +1695,8 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
     ageLabel(d.age_group) || d.age_group,
     statisticLabel(d),
     displayText(d),
+    d.metric_id === "MORT-RATE-001" ? rateInterval(d) : "",
+    d.metric_id === "MORT-RATE-001" ? ciMethodLabel(d.ci_method) : "",
     isComplete(d) ? "Complete" : "Incomplete",
     d.disclosure_note || ""
   ])
@@ -1113,21 +1704,22 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
   const selectedViewUrl = URL.createObjectURL(new Blob([selectedViewCsv], {type: "text/csv;charset=utf-8"}))
   invalidation.then(() => URL.revokeObjectURL(selectedViewUrl))
   const definitionSlug = selected_case_definitions.map(d => d === "primary_clear_likely" ? "primary" : "inclusive").join("_") || "none"
-  const indicatorSlug = selected_indicator === "counts" ? "counts" : "distribution"
+  const indicatorSlug = selected_indicator === "counts" ? "counts" : selected_indicator === "rates" ? "rates" : "distribution"
   const selectedViewFilename = `bnr_mortality_selected_${indicatorSlug}_${effective_period_type}_${definitionSlug}_${release_id || "current"}.csv`
 
   const metaRows = [
     {item: "Source", value: "Published BNR mortality data"},
     {item: "Data file", value: "mort_burden_metrics_current.csv"},
-    {item: "Release", value: release_id || "—"},
+    {item: "Release ID", value: release_id || "—"},
     {item: "Release date", value: release_date_label},
     {item: "Latest data period", value: latestCount ? periodLabel(latestCount) : "—"},
     {item: "Status", value: "Published public release"},
     {item: "Protected values", value: "Protected values are shown exactly as published. The dashboard never tries to work them out."},
-    {item: "Monthly comparison", value: "Fixed 2015–2019 historical reference; it does not change with each new release."}
+    {item: "Monthly comparison", value: "Optional fixed 2015–2019 historical reference; it does not change with each new release."}
   ]
 
   return html`<div class="bnr-data-page-stack">
+    <div class="bnr-dashboard-switch"><a href="../burden/index.html" data-external="1">View the CVD events dashboard →</a></div>
     <section class="bnr-data-display-card">
       <h3>Latest Data Release</h3>
       <table class="bnr-metadata-table"><tbody>${metaRows.map(d => html`<tr><td>${d.item}</td><td>${d.value}</td></tr>`)}</tbody></table>
@@ -1138,7 +1730,6 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       <h3 style="margin-top:1rem">Downloads</h3>
       <table class="bnr-download-table"><thead><tr><th>Resource</th><th>Description</th><th>Link</th></tr></thead><tbody>
         <tr><td>Current CSV</td><td>Current published mortality dataset in CSV format.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv" download>Download CSV</a></td></tr>
-        <tr><td>Current Stata dataset</td><td>Current published mortality dataset in Stata format.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.dta" download>Download DTA</a></td></tr>
         <tr><td>Monthly reference CSV</td><td>Fixed 2015–2019 monthly historical reference.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv" download>Download reference CSV</a></td></tr>
         <tr><td>Dataset information</td><td>Definitions and technical details for the current mortality dataset.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/metadata/mort_burden_metrics_current.yml" download>Download metadata</a></td></tr>
         <tr><td>Reference information</td><td>Definitions and technical details for the monthly historical reference.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/metadata/mort_monthly_reference_2015_2019.yml" download>Download metadata</a></td></tr>
@@ -1154,7 +1745,7 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
       </div>
       <p class="bnr-trend-note"><strong>Rows shown:</strong> ${displayRows.length.toLocaleString()}. The selected-view download contains the same rows and displayed values as this table. Protected values stay protected.</p>
       <div class="bnr-data-scroll"><table class="bnr-data-table">
-        <thead><tr><th>Period</th><th>Definition</th><th>CVD type</th><th>Sex</th><th>Age group</th><th>Measure</th><th>Value</th><th>Data status</th><th>Protection note</th></tr></thead>
+        <thead><tr><th>Period</th><th>Definition</th><th>CVD type</th><th>Sex</th><th>Age group</th><th>Measure</th><th>Value</th><th>95% statistical CI</th><th>CI method</th><th>Data status</th><th>Protection note</th></tr></thead>
         <tbody>${displayRows
           .map(d => html`<tr class=${isComplete(d) ? "" : "bnr-incomplete-row"}>
             <td>${periodLabel(d)}</td>
@@ -1164,6 +1755,8 @@ definitionSelection = definitions => html`<div class="bnr-definition-choice">
             <td>${ageLabel(d.age_group) || d.age_group}</td>
             <td>${statisticLabel(d)}</td>
             <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${displayText(d)}</td>
+            <td>${d.metric_id === "MORT-RATE-001" ? rateInterval(d) : ""}</td>
+            <td>${d.metric_id === "MORT-RATE-001" ? ciMethodLabel(d.ci_method) : ""}</td>
             <td>${isComplete(d) ? "Complete" : "Incomplete"}</td>
             <td>${d.disclosure_note || ""}</td>
           </tr>`)}

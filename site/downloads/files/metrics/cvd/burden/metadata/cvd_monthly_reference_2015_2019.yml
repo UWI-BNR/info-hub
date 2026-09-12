@@ -1,0 +1,9 @@
+schema: bnr_cvd_monthly_reference_v1
+reference_period: 2015-2019
+ascertainment_scope: hospital_only
+event_type: all_cvd
+sex: all
+age_group: all
+method: calendar_month_min_mean_max
+routine_rule: checksum_verify_do_not_recalculate
+reference_status: first_hardened_release

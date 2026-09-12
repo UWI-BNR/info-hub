@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="900" viewBox="0 0 1536 900">
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#6f8799"/></marker></defs>
+  <rect width="1536" height="900" fill="#ffffff"/>
+  <rect x="20" y="20" width="1496" height="860" rx="16" fill="#ffffff" stroke="#9db0c3" stroke-width="1.5"/>
+  <style>
+    .title{font:700 30px 'Montserrat',Arial,sans-serif;fill:#0b284c}.subtitle{font:italic 17px 'Montserrat',Arial,sans-serif;fill:#38536d}
+    .num{font:700 18px 'Montserrat',Arial,sans-serif;fill:#fff}.head{font:700 16px 'Montserrat',Arial,sans-serif;fill:#0b284c}
+    .box{font:700 14.5px 'Montserrat',Arial,sans-serif;fill:#172d4d}.small{font:13px 'Montserrat',Arial,sans-serif;fill:#516579}
+  </style>
+  <text x="48" y="67" class="title">THE BNR INFORMATION HUB — MONITORING CARDIOVASCULAR HEALTH</text>
+  <text x="48" y="96" class="subtitle">A new national system from regular data releases to transparent public reporting</text>
+  <line x1="48" y1="118" x2="1488" y2="118" stroke="#d5a520" stroke-width="2"/>
+  <g stroke="#6f8799" stroke-width="2" marker-end="url(#arrow)"><line x1="374" y1="174" x2="397" y2="174"/><line x1="746" y1="174" x2="769" y2="174"/><line x1="1118" y1="174" x2="1141" y2="174"/></g>
+
+  <g>
+    <rect x="48" y="140" width="326" height="608" rx="14" fill="#f0f6f8" stroke="#7fa3b2"/>
+    <circle cx="83" cy="174" r="22" fill="#045174"/><text x="83" y="181" text-anchor="middle" class="num">1</text>
+    <text x="116" y="168" class="head">DATA FOUNDATION</text><text x="116" y="191" class="small">Managed inputs with known identity</text>
+    <rect x="70" y="224" width="282" height="70" rx="9" fill="#fff" stroke="#c4d7df"/><text x="91" y="252" class="box">Case capture</text><text x="91" y="274" class="small">Structured clinical records</text>
+    <rect x="70" y="310" width="282" height="70" rx="9" fill="#fff" stroke="#c4d7df"/><text x="91" y="338" class="box">REDCap management</text><text x="91" y="360" class="small">Defined checks and metadata</text>
+    <rect x="70" y="396" width="282" height="70" rx="9" fill="#fff" stroke="#c4d7df"/><text x="91" y="424" class="box">Monthly data releases</text><text x="91" y="446" class="small">Named reporting inputs</text>
+    <rect x="70" y="482" width="282" height="70" rx="9" fill="#fff" stroke="#c4d7df"/><text x="91" y="510" class="box">Core variable set</text><text x="91" y="532" class="small">Protected essential information</text>
+    <rect x="70" y="568" width="282" height="82" rx="9" fill="#fff" stroke="#c4d7df"/><text x="91" y="597" class="box">Historical record</text><text x="91" y="619" class="small">Traceable cumulative foundation</text>
+  </g>
+
+  <g>
+    <rect x="420" y="140" width="326" height="608" rx="14" fill="#f6f3f9" stroke="#aa94bb"/>
+    <circle cx="455" cy="174" r="22" fill="#6e4b8f"/><text x="455" y="181" text-anchor="middle" class="num">2</text>
+    <text x="488" y="168" class="head">DEFINITIONS &amp; METHODS</text><text x="488" y="191" class="small">Common rules across products</text>
+    <rect x="442" y="224" width="282" height="70" rx="9" fill="#fff" stroke="#d8cbe1"/><text x="463" y="252" class="box">Event definitions</text><text x="463" y="274" class="small">CVD, heart and stroke</text>
+    <rect x="442" y="310" width="282" height="70" rx="9" fill="#fff" stroke="#d8cbe1"/><text x="463" y="338" class="box">Repeat-event rules</text><text x="463" y="360" class="small">Consistent event counting</text>
+    <rect x="442" y="396" width="282" height="70" rx="9" fill="#fff" stroke="#d8cbe1"/><text x="463" y="424" class="box">Mortality ascertainment</text><text x="463" y="446" class="small">Primary and Inclusive estimates</text>
+    <rect x="442" y="482" width="282" height="70" rx="9" fill="#fff" stroke="#d8cbe1"/><text x="463" y="510" class="box">DCO linkage</text><text x="463" y="532" class="small">National event estimation</text>
+    <rect x="442" y="568" width="282" height="82" rx="9" fill="#fff" stroke="#d8cbe1"/><text x="463" y="597" class="box">Metrics and uncertainty</text><text x="463" y="619" class="small">Consistent statistical methods</text>
+  </g>
+
+  <g>
+    <rect x="792" y="140" width="326" height="608" rx="14" fill="#f8f6ed" stroke="#c8b578"/>
+    <circle cx="827" cy="174" r="22" fill="#a96f00"/><text x="827" y="181" text-anchor="middle" class="num">3</text>
+    <text x="860" y="168" class="head">ASSURANCE &amp; GOVERNANCE</text><text x="860" y="191" class="small">Controls before publication</text>
+    <rect x="814" y="224" width="282" height="70" rx="9" fill="#fff" stroke="#ddd2ad"/><text x="835" y="252" class="box">Automated checks</text><text x="835" y="274" class="small">Repeatable validation</text>
+    <rect x="814" y="310" width="282" height="70" rx="9" fill="#fff" stroke="#ddd2ad"/><text x="835" y="338" class="box">Expert review</text><text x="835" y="360" class="small">Analytical plausibility</text>
+    <rect x="814" y="396" width="282" height="70" rx="9" fill="#fff" stroke="#ddd2ad"/><text x="835" y="424" class="box">Disclosure protection</text><text x="835" y="446" class="small">Safe public outputs</text>
+    <rect x="814" y="482" width="282" height="70" rx="9" fill="#fff" stroke="#ddd2ad"/><text x="835" y="510" class="box">Recorded approval</text><text x="835" y="532" class="small">Explicit human decisions</text>
+    <rect x="814" y="568" width="282" height="82" rx="9" fill="#fff" stroke="#ddd2ad"/><text x="835" y="597" class="box">Versioned publication</text><text x="835" y="619" class="small">Controlled public promotion</text>
+  </g>
+
+  <g>
+    <rect x="1164" y="140" width="324" height="608" rx="14" fill="#eef7f3" stroke="#8bb7a4"/>
+    <circle cx="1199" cy="174" r="22" fill="#2f7e60"/><text x="1199" y="181" text-anchor="middle" class="num">4</text>
+    <text x="1232" y="168" class="head">PUBLIC REPORTING</text><text x="1232" y="191" class="small">Different products, one meaning</text>
+    <rect x="1186" y="224" width="280" height="70" rx="9" fill="#fff" stroke="#c3dbd1"/><text x="1207" y="252" class="box">Dashboards</text><text x="1207" y="274" class="small">Interactive national monitoring</text>
+    <rect x="1186" y="310" width="280" height="70" rx="9" fill="#fff" stroke="#c3dbd1"/><text x="1207" y="338" class="box">Monthly updates</text><text x="1207" y="360" class="small">Linked tables and summaries</text>
+    <rect x="1186" y="396" width="280" height="70" rx="9" fill="#fff" stroke="#c3dbd1"/><text x="1207" y="424" class="box">Annual reports</text><text x="1207" y="446" class="small">Controlled national summaries</text>
+    <rect x="1186" y="482" width="280" height="70" rx="9" fill="#fff" stroke="#c3dbd1"/><text x="1207" y="510" class="box">One-off reports</text><text x="1207" y="532" class="small">Approved focused analyses</text>
+    <rect x="1186" y="568" width="280" height="82" rx="9" fill="#fff" stroke="#c3dbd1"/><text x="1207" y="597" class="box">Transparent methods</text><text x="1207" y="619" class="small">Definitions in online manuals</text>
+  </g>
+
+  <rect x="156" y="786" width="1224" height="54" rx="27" fill="#0b284c"/>
+  <text x="768" y="820" text-anchor="middle" font-family="Montserrat,Arial,sans-serif" font-size="18" font-weight="700" fill="#fff">One controlled route to the BNR Information Hub</text>
+</svg>

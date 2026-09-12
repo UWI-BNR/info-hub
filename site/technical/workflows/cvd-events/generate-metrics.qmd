@@ -1,0 +1,47 @@
+﻿---
+manual-review-status: not-reviewed
+title: "Generate combined CVD metrics"
+description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Purpose
+
+Step 4 combines the CVD Step 3 count input with a completed mortality release.
+It calculates and privately stages hospital-only burden results, annual
+hospital-plus-DCO rates, and the private DCO component evidence used by Step 5.
+It does not review, approve or publish.
+
+## Required inputs
+
+| Input | Location |
+|---|---|
+| Step 3 count data and receipt | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/` |
+| Completed mortality-linked CVD calculations | `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/` |
+
+## Run
+
+```stata
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 4 2026 7
+```
+
+Use `replace` only to deliberately rebuild the same CVD release.
+
+## Output and checks
+
+The private staging package is:
+
+`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
+
+Inspect its `datasets/`, `metadata/` and `review/` folders and confirm the
+controller reports successful combined calculation and staging. Do not alter
+generated products by hand. The following Step 5 preparation supplies the
+human review workbook and disclosure QA.
+
+Annual DCO-facing public-shaped rows are limited to All CVD, Heart and Stroke;
+all, female and male; and Primary/Inclusive definitions. Additional-DCO counts
+are annual and all-age only; component accounting remains private.
+

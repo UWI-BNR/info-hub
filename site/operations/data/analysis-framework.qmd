@@ -1,9 +1,12 @@
----
+﻿---
+manual-review-status: not-reviewed
 title: "BNR analysis framework"
 description: "The standing statistical rules and metric definitions used for routine BNR reporting."
-date: 2026-08-11
-date-modified: 2026-08-11
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
 
 ---
 
@@ -25,4 +28,5 @@ This chapter records the agreed analytical rules that sit between the registry d
 5. Retain the change through normal Git version history and release evidence.
 
 The analytical code must implement the approved framework. A convenient code result does not override an agreed statistical definition.
+
 

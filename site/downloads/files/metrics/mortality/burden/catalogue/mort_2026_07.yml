@@ -4,9 +4,9 @@ package_id: mort_burden_mort_2026_07
 release_id: mort_2026_07
 surveillance_area: Mortality
 domain: mortality
-metric_family: burden
+metric_family: burden_and_rate
 period: 2026-07
-release_date: 2026-08-21
+release_date: 2026-08-30
 
 title: |-
   Mortality burden metrics

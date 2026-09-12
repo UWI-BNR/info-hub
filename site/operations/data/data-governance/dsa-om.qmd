@@ -1,60 +1,63 @@
 ---
+manual-review-status: not-reviewed
 title: "Research Data Sharing Agreement"
-description: "How BNR staff issue, approve, store and audit the Research Data Sharing Agreement."
-date: 2026-08-11
-date-modified: 2026-08-11
+description: "How BNR staff issue, countersign, store and audit agreements in REDCap."
 ---
 
----
-
-This is the standing agreement for approved access to restricted, deidentified BNR data. The agreement form appears immediately below; staff processing notes are available in the expandable box.
-
-::: {.callout-note collapse="true" title="BNR staff: process this agreement"}
-
-### When to use it
-
-Use the agreement when a researcher or research team requests restricted, deidentified record-level data. It is not normally required for aggregate products already approved and published through the Info-Hub.
-
-### Procedure
-
-1. Record the request and confirm its purpose, lead researcher and institution.
-2. Check whether a public aggregate product can meet the need.
-3. Agree the minimum dataset, disease area, period, format and version.
-4. Confirm the legal, ethical, storage and access requirements.
-5. Complete the agreement with the researcher and obtain the required BNR approval.
-6. Store the signed agreement in the authorised internal location.
-7. Record the approval and exact dataset released in the Data Release Register.
-8. Release data only after every required decision and signature is complete.
-
-### Records to retain
-
-Retain the application, decision, agreement, dataset identity and version, approving role, transfer record, conditions, expiry or destruction requirement, and storage reference. Do not store completed agreements, personal details or correspondence in the public repository or `outputs/`.
-
-### Pre-release check
-
-- [ ] The purpose and minimum necessary dataset are clear.
-- [ ] Ethics and governance requirements have been checked.
-- [ ] Storage and named access arrangements are acceptable.
-- [ ] Disclosure risk has been considered.
-- [ ] Both parties have completed the agreement.
-- [ ] The authorised BNR role has approved the release.
-- [ ] The agreement and release have been recorded internally.
-
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
 :::
 
-## Agreement form
+Use the Data Sharing Agreement for approved access to restricted, de-identified record-level data. It is not normally required for aggregate products already approved and published through the Information Hub.
 
-{{< include ../../../_shared/data-sharing-agreement-body.qmd >}}
+The agreement is managed in the private REDCap Data Access Register. The public website explains the terms but does not collect applicant details or signatures.
 
-## Submit the agreement
+## Before issuing an agreement
 
-Save the completed page as a PDF, then attach it to an email using the button below. The button opens a pre-addressed draft; it does not send the form or attach the PDF automatically.
+Confirm in the **BNR Review and Decision** instrument that:
 
-[Prepare email to BNR](mailto:bnr@uwi.edu?subject=BNR%20Research%20Data%20Sharing%20Agreement){.btn .btn-primary}
+- a public aggregate product cannot meet the need;
+- the purpose and minimum necessary dataset are clear;
+- ethics and governance requirements have been checked;
+- storage and named-user arrangements are acceptable;
+- confidentiality and disclosure risk have been considered;
+- the approved scope and conditions are recorded; and
+- the authorised decision-maker has approved the request.
+
+## Issue the applicant agreement
+
+1. Check the applicant email address and the agreement version.
+2. Confirm that the approved scope shown in the agreement is complete and accurate.
+3. Send a private, record-specific survey invitation from REDCap.
+4. Confirm that the applicant accepted the terms and completed the electronic signature.
+5. Check that REDCap stored the certified PDF snapshot.
+
+Do not use the public application link to collect a signature or send a reusable agreement link.
+
+## BNR countersignature
+
+After the applicant has signed, the authorised BNR signatory completes the staff-only countersignature fields on the same instrument. Mark the agreement as executed only when both parties have completed it.
+
+Create and store the final executed agreement PDF in the approved private location. Record its reference in REDCap; do not place it in Git or a public website folder.
+
+## Amendments
+
+Refer the request back for review if the purpose, team, data scope, linkage, storage environment, transfer method or retention period changes. Record the revised decision and issue a new agreement version when the change is material. Do not overwrite the evidence of the agreement previously signed.
+
+## Pre-release check
+
+- [ ] The approved purpose and minimum dataset are clear.
+- [ ] Ethics and governance requirements are complete.
+- [ ] Named access and storage arrangements are approved.
+- [ ] The applicant's certified PDF is present.
+- [ ] The authorised BNR role has countersigned.
+- [ ] The final executed agreement is stored privately.
+- [ ] Release is authorised in the REDCap record.
+
+Only then proceed to the **Release, Monitoring and Closure** instrument and the controlled data-preparation process.
 
 ## Related guidance
 
 - [Handle data-access requests](../../governance/data-access-requests.qmd)
 - [Data sharing and re-use procedure](sharing-sop.qmd)
-- [Data Trust Framework](dtrust.qmd)
 - [Technical Manual: disclosure control](../../../technical/controls/disclosure-control.qmd)

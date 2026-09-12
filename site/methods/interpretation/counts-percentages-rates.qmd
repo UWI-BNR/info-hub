@@ -1,7 +1,12 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "Counts, percentages and rates"
 description: "How to choose and interpret common forms of BNR statistics."
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
 Counts, percentages and rates use numbers differently. Choosing the right one depends on the question being asked.
 
@@ -42,7 +47,7 @@ $$
 \text{Rate per }k = \frac{\text{events}}{\text{population}} \times k
 $$
 
-BNR commonly uses \(k=100,000\) for CVD event rates. The multiplier makes small frequencies easier to read; it does not change the underlying comparison.
+BNR commonly uses \(k=100,000\) for CVD event rates. For example, a heart attack event rate of 70 per 100,000 means that, in a population of 100,000 residents, about 70 eligible heart attack events occurred during the year.The multiplier makes small frequencies easier to read; it does not change the underlying comparison.
 
 ## Crude and age-adjusted rates
 
@@ -67,4 +72,5 @@ Compare statistics only when the event definition, source coverage, period, deno
 - [CVD incidence and event rates](../measures/incidence.qmd)
 - [CVD case fatality](../measures/case-fatality.qmd)
 - [CVD mortality](../measures/mortality.qmd)
+
 

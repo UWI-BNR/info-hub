@@ -1,7 +1,12 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "How CVD deaths are classified"
 description: "How BNR uses death-certificate information to create practical cardiovascular mortality classifications."
 ---
+
+::: {.bnr-manual-flag .bnr-manual-flag--methods}
+Public Methods Manual
+:::
 
 BNR uses a practical classification method to identify deaths with evidence of cardiovascular disease when a formally assigned national underlying cause of death is not available to the Registry for routine surveillance.
 
@@ -52,11 +57,11 @@ BNR mortality reporting distinguishes two broad cardiovascular families.
 
 **Stroke** includes qualifying acute ischaemic stroke and non-traumatic cerebral haemorrhage patterns within the approved BNR Stroke family. Explicit traumatic and other excluded haemorrhage patterns are not treated as direct Stroke evidence under these rules.
 
-The public dashboard also reports **All CVD**, combining the resolved Heart and Stroke classifications according to the approved mortality method.
+The public dashboard also reports **All CVD**, combining the resolved Heart and Stroke classifications.
 
 ## What happens when the certificate structure is uncertain?
 
-The position of information on the death certificate matters. If the original causal line structure is uncertain or has been combined in a way that loses that ordering, the classifier does not simply assume the strongest evidence class.
+The position of information on the death certificate matters. If the original death certificate structure is uncertain, the classifier does not simply assume the strongest evidence class.
 
 This is one reason BNR retains explicit uncertainty classes rather than forcing every cardiovascular mention into a single yes/no category.
 
@@ -65,6 +70,12 @@ This is one reason BNR retains explicit uncertainty classes rather than forcing 
 The BNR method uses some mortality-coding principles, but it does not implement the full international process for selecting and coding an official underlying cause of death.
 
 It should therefore not be described as equivalent to formal ICD-10 underlying-cause coding or to automated mortality-coding systems used for official national statistics.
+
+::: {.callout-note title="Where the detailed rules are recorded"}
+BNR keeps a version-controlled technical rule dictionary for this classifier. It records each Heart and Stroke rule, the evidence class it assigns, the reason for the decision and the supporting mortality-coding principle.
+
+The [technical guide to classifying CVD deaths](../../technical/workflows/mortality/classify.qmd) identifies the current `bnr_mort_s2_rule_dictionary.csv` file and related technical documentation. Public results summarise the resulting classifications; they do not include personal death-certificate text.
+:::
 
 ::: {.callout-warning title="Compare mortality series carefully"}
 An official national or international CVD mortality series may use different source information, ICD-10 code selections and underlying-cause rules. Similar labels do not guarantee equivalent definitions.
@@ -83,3 +94,4 @@ An official national or international CVD mortality series may use different sou
 - [CVD mortality](../measures/mortality.qmd)
 - [How CVD events are classified](classifying-cvd-events.qmd)
 - [Releases, revisions and comparability](revisions-comparability.qmd)
+

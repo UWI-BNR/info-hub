@@ -99,7 +99,7 @@ program define _bnr_mort_s5_write_approval
     file write `approval_yml' "package_id: `package_id'" _n
     file write `approval_yml' "release_id: `release_id'" _n
     file write `approval_yml' "domain: mortality" _n
-    file write `approval_yml' "metric_family: burden" _n
+    file write `approval_yml' "metric_family: burden_and_rate" _n
     file write `approval_yml' "workflow_step: 5" _n
     file write `approval_yml' "approved_by: `approver_name'" _n
     file write `approval_yml' "approved_role: `approver_role'" _n
@@ -140,6 +140,15 @@ gettoken confirm_definitions remainder : remainder
 gettoken confirm_disclosure remainder : remainder
 gettoken confirm_candidate remainder : remainder
 gettoken confirm_ready remainder : remainder
+local replace_existing = 0
+if `"`remainder'"' != "" {
+    gettoken replace_word remainder : remainder
+    if lower(`"`replace_word'"') != "replace" | `"`remainder'"' != "" {
+        display as error "The only optional word after the five confirmations is replace."
+        exit 198
+    }
+    local replace_existing = 1
+}
 local remainder : list retokenize remainder
 
 local approver_name = strtrim(`"`approver_name'"')
@@ -153,11 +162,6 @@ local confirm_ready = lower(strtrim(`"`confirm_ready'"'))
 if `"`release_year'"' == "" | `"`release_month'"' == "" | ///
         `"`approver_name'"' == "" | `"`approver_role'"' == "" {
     display as error "Release year, release month, approver name and role are required."
-    exit 198
-}
-
-if `"`remainder'"' != "" {
-    display as error "Unexpected text follows the five approval confirmations."
     exit 198
 }
 
@@ -280,6 +284,7 @@ noisily display as text "BNR MORTALITY STEP 5: RECORD HUMAN APPROVAL"
 noisily display as result "  Script version:       Pass 4.1 approved-reference metadata hardening"
 noisily display as result "  Selected release:     `release_id'"
 noisily display as result "  Approver:             `approver_name' (`approver_role')"
+noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
 
 * ==============================================================================
 * 3. HARD SAFETY BOUNDARIES -- DO NOT EDIT
@@ -313,7 +318,7 @@ foreach output_file in ///
         `"`public_reference_csv'"' ///
         `"`public_reference_yml'"' {
     capture confirm file `"`output_file'"'
-    if !_rc {
+    if !_rc & !`replace_existing' {
         _bnr_mort_s5_fail 602 "`release_id'" `"`private_log'"' ///
             `"A public-ready or approval file already exists: `output_file'"'
     }
@@ -353,9 +358,9 @@ foreach variable in check result detail {
 }
 
 quietly count
-if r(N) != 16 {
+if r(N) != 17 {
     _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'"' ///
-        "The Step 4 QA receipt does not contain the expected 16 checks."
+        "The Step 4 QA receipt does not contain the expected 17 checks."
 }
 
 quietly count if result != "PASS"
@@ -366,7 +371,7 @@ if r(N) {
 
 foreach required_check in complete_step3_package release_and_current_match ///
         metric_schema_and_grain release_period definitions ///
-        dashboard_lattice count_reconciliation distribution_reconciliation ///
+        dashboard_lattice count_reconciliation distribution_reconciliation mortality_rate_contract ///
         step3_qa_receipt metadata_contract monthly_reference_candidate ///
         disclosure_control temporal_differencing ///
         review_candidate_structure review_candidate_suppression ///
@@ -388,7 +393,7 @@ local required_variables metric_id release_id period_type period period_start //
     period_year period_month period_quarter period_complete ///
     event_type sex age_group case_definition ///
     source_status statistic value display_value unit numerator denominator ///
-    comparison_n status_flag sdc_policy primary_suppression ///
+    comparison_n status_flag ci_lower_value ci_upper_value ci_level ci_method sdc_policy primary_suppression ///
     primary_suppression_threshold ///
     related_primary_cells related_suppression_review suppression_review ///
     suppression_reason suppression_status disclosure_note
@@ -444,7 +449,7 @@ if r(N) {
         "The reviewed candidate disclosure-control policy or threshold has changed."
 }
 
-quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002")
+quietly count if !inlist(metric_id, "MORT-BURDEN-001", "MORT-BURDEN-002", "MORT-RATE-001")
 if r(N) {
     _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'"' ///
         "The reviewed candidate contains an unrecognised metric identifier."
@@ -452,7 +457,7 @@ if r(N) {
 
 quietly count if !inlist(event_type, "all_cvd", "heart", "stroke") | ///
     !inlist(sex, "all", "female", "male") | ///
-    !inlist(age_group, "all", "under_70", "age_70_plus")
+    !inlist(age_group, "all", "under_70", "age_70_plus", "age_standardised")
 if r(N) {
     _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'"' ///
         "The reviewed candidate contains an unrecognised reporting dimension."
@@ -464,9 +469,28 @@ if r(N) {
         "The reviewed candidate contains an unrecognised suppression status."
 }
 
+quietly count if metric_id == "MORT-RATE-001" & ///
+    (period_type != "annual" | !inlist(age_group, "all", "age_standardised") | ///
+     !inlist(statistic, "annual_crude_rate", "annual_age_standardised_rate") | ///
+     unit != "rate_per_100000" | ci_level != 95 | ci_method == "")
+if r(N) {
+    _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'" ///
+        "The reviewed candidate contains an invalid mortality-rate reporting row."
+}
+
+quietly count if metric_id == "MORT-RATE-001" & suppression_status == "none" & ///
+    (missing(value, ci_lower_value, ci_upper_value) | ci_lower_value < 0 | ///
+     ci_lower_value > value | ci_upper_value < value | ci_upper_value < ci_lower_value | ///
+     (age_group == "all" & (missing(numerator, denominator) | denominator <= 0)) | ///
+     (age_group == "age_standardised" & (!missing(numerator) | !missing(denominator))))
+if r(N) {
+    _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'" ///
+        "An unrestricted mortality rate has an invalid estimate, CI or denominator contract."
+}
+
 quietly count if suppression_status != "none" & ///
     (!missing(value) | !missing(numerator) | !missing(denominator) | ///
-     !missing(comparison_n))
+     !missing(comparison_n) | !missing(ci_lower_value) | !missing(ci_upper_value))
 if r(N) {
     _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'"' ///
         "A protected candidate row retains an exact numeric result or supporting count."
@@ -529,6 +553,8 @@ quietly count if event_type == "heart"
 local heart_rows = r(N)
 quietly count if event_type == "stroke"
 local stroke_rows = r(N)
+quietly count if metric_id == "MORT-RATE-001"
+local rate_rows = r(N)
 quietly summarize period_year, meanonly
 local analysis_start_year = floor(r(min))
 local analysis_end_year = floor(r(max))
@@ -541,7 +567,8 @@ local expected_count_rows = ///
 local expected_distribution_rows = `expected_years' * 10
 local expected_count_rows = 2 * `expected_count_rows'
 local expected_distribution_rows = 2 * `expected_distribution_rows'
-local expected_public_rows = `expected_count_rows' + `expected_distribution_rows'
+local expected_rate_rows = `expected_years' * 36
+local expected_public_rows = `expected_count_rows' + `expected_distribution_rows' + `expected_rate_rows'
 if `analysis_start_year' != 2010 | `public_rows' != `expected_public_rows' {
     _bnr_mort_s5_fail 459 "`release_id'" `"`private_log'"' ///
         "The reviewed candidate does not match the approved 2010-onward dashboard lattice."
@@ -732,13 +759,13 @@ foreach dataset_type in release current {
 
     tempname dataset_meta
     file open `dataset_meta' using `"`yml_file'"', write text replace
-    file write `dataset_meta' "schema: bnr_public_mortality_dataset_v1" _n
+    file write `dataset_meta' "schema: bnr_public_mortality_dataset_v2" _n
     file write `dataset_meta' "dataset_type: `dataset_type'" _n
     file write `dataset_meta' "package_status: public_ready" _n
     file write `dataset_meta' "package_id: `package_id'" _n
     file write `dataset_meta' "release_id: `release_id'" _n
     file write `dataset_meta' "domain: mortality" _n
-    file write `dataset_meta' "metric_family: burden" _n
+    file write `dataset_meta' "metric_family: burden_and_rate" _n
     file write `dataset_meta' "rows: `public_rows'" _n
     file write `dataset_meta' "primary_definition_rows: `primary_definition_rows'" _n
     file write `dataset_meta' "upper_definition_rows: `upper_definition_rows'" _n
@@ -767,6 +794,14 @@ foreach dataset_type in release current {
     file write `dataset_meta' "cvd_rows: `cvd_rows'" _n
     file write `dataset_meta' "heart_rows: `heart_rows'" _n
     file write `dataset_meta' "stroke_rows: `stroke_rows'" _n
+    file write `dataset_meta' "rate_rows: `rate_rows'" _n
+    file write `dataset_meta' "rate_metric_id: MORT-RATE-001" _n
+    file write `dataset_meta' "rate_unit: rate_per_100000" _n
+    file write `dataset_meta' "rate_forms: crude_and_directly_age_standardised" _n
+    file write `dataset_meta' "rate_population_source: UN_WPP_2024" _n
+    file write `dataset_meta' "rate_standard_population: WHO_WORLD_2000_2025" _n
+    file write `dataset_meta' "rate_ci_level: 95" _n
+    file write `dataset_meta' "rate_ci_methods: poisson_exact_garwood_and_fay_feuer_gamma" _n
     file write `dataset_meta' "sdc_policy: bnr_sdc_v1" _n
     file write `dataset_meta' "primary_suppression_threshold: 6" _n
     file write `dataset_meta' "suppressed_rows: `suppressed_rows'" _n
@@ -781,6 +816,8 @@ foreach dataset_type in release current {
     file write `dataset_meta' "  - numerator" _n
     file write `dataset_meta' "  - denominator" _n
     file write `dataset_meta' "  - comparison_n" _n
+    file write `dataset_meta' "  - ci_lower_value" _n
+    file write `dataset_meta' "  - ci_upper_value" _n
     file write `dataset_meta' "suppressed_display_value: asterisk" _n
     file write `dataset_meta' "insufficient_history_status: insufficient_history" _n
     file write `dataset_meta' "insufficient_history_is_suppression: false" _n
@@ -792,18 +829,24 @@ foreach dataset_type in release current {
 
 tempname package_meta
 file open `package_meta' using `"`metadata_package'"', write text replace
-file write `package_meta' "schema: bnr_public_mortality_package_v1" _n
+file write `package_meta' "schema: bnr_public_mortality_package_v2" _n
 file write `package_meta' "package_id: `package_id'" _n
 file write `package_meta' "package_status: public_ready" _n
 file write `package_meta' "release_id: `release_id'" _n
 file write `package_meta' "domain: mortality" _n
-file write `package_meta' "metric_family: burden" _n
+file write `package_meta' "metric_family: burden_and_rate" _n
 file write `package_meta' "created: `today_iso'" _n
 file write `package_meta' "review_standard: bnr_mortality_review_v1" _n
 file write `package_meta' "disclosure_policy: bnr_sdc_v1" _n
 file write `package_meta' "dashboard_suppression_field: suppression_status" _n
 file write `package_meta' "dashboard_display_field: display_value" _n
 file write `package_meta' "dashboard_disclosure_note_field: disclosure_note" _n
+file write `package_meta' "rate_metric_id: MORT-RATE-001" _n
+file write `package_meta' "rate_unit: rate_per_100000" _n
+file write `package_meta' "rate_forms: crude_and_directly_age_standardised" _n
+file write `package_meta' "rate_population_source: UN_WPP_2024" _n
+file write `package_meta' "rate_standard_population: WHO_WORLD_2000_2025" _n
+file write `package_meta' "rate_ci_fields: ci_lower_value_ci_upper_value_ci_level_ci_method" _n
 file write `package_meta' "insufficient_history_is_suppression: false" _n
 file write `package_meta' "primary_definition_rows: `primary_definition_rows'" _n
 file write `package_meta' "upper_definition_rows: `upper_definition_rows'" _n
@@ -866,69 +909,69 @@ capture mkdir "`ready_meta'"
 local copy_rc 0
 local failed_target ""
 
-capture copy `"`review_candidate'"' `"`public_release_dta'"'
+capture copy `"`review_candidate'"' `"`public_release_dta'"', replace
 if _rc {
     local copy_rc = _rc
     local failed_target `"`public_release_dta'"'
 }
 if !`copy_rc' {
-    capture copy `"`public_csv'"' `"`public_release_csv'"'
+    capture copy `"`public_csv'"' `"`public_release_csv'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_release_csv'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`review_candidate'"' `"`public_current_dta'"'
+    capture copy `"`review_candidate'"' `"`public_current_dta'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_current_dta'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`public_csv'"' `"`public_current_csv'"'
+    capture copy `"`public_csv'"' `"`public_current_csv'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_current_csv'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`metadata_release'"' `"`public_release_yml'"'
+    capture copy `"`metadata_release'"' `"`public_release_yml'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_release_yml'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`metadata_current'"' `"`public_current_yml'"'
+    capture copy `"`metadata_current'"' `"`public_current_yml'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_current_yml'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`metadata_package'"' `"`public_package_yml'"'
+    capture copy `"`metadata_package'"' `"`public_package_yml'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_package_yml'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`reference_dta'"' `"`public_reference_dta'"'
+    capture copy `"`reference_dta'"' `"`public_reference_dta'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_reference_dta'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`reference_csv'"' `"`public_reference_csv'"'
+    capture copy `"`reference_csv'"' `"`public_reference_csv'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_reference_csv'"'
     }
 }
 if !`copy_rc' {
-    capture copy `"`public_reference_metadata'"' `"`public_reference_yml'"'
+    capture copy `"`public_reference_metadata'"' `"`public_reference_yml'"', replace
     if _rc {
         local copy_rc = _rc
         local failed_target `"`public_reference_yml'"'
@@ -989,7 +1032,7 @@ postclose `manifest_handle'
 
 use `"`manifest_dta'"', clear
 format file_size checksum %20.0f
-capture quietly export delimited using `"`manifest'"'
+capture quietly export delimited using `"`manifest'"', replace
 if _rc {
     local manifest_rc = _rc
     capture erase `"`public_release_dta'"'
@@ -1071,7 +1114,7 @@ if _rc {
         "The temporary approval receipt could not be written."
 }
 
-capture copy `"`approval_temp'"' `"`approval'"'
+capture copy `"`approval_temp'"' `"`approval'"', replace
 if _rc {
     local approval_copy_rc = _rc
     capture erase `"`public_release_dta'"'

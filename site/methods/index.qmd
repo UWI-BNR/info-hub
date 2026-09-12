@@ -1,14 +1,22 @@
----
+﻿---
+manual-review-status: reviewed-by-irh
 title: "Public Methods Manual"
 subtitle: "How BNR statistics are defined, calculated and interpreted"
 description: "Plain-language explanations of Barbados National Registry measures and methods."
-toc: false
-page-layout: full
 ---
+
+<!-- Remove Left-hand table of contents -->
+<style>
+#TOC,
+#quarto-margin-sidebar,
+#quarto-sidebar-toc-left {
+  display: none !important;
+}
+</style>
 
 This manual explains what Barbados National Registry statistics mean, how the main measures are calculated and what readers should bear in mind when using them.
 
-::: {.content-visible when-format="html"}
+::: {#methods-manual-sections}
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
@@ -21,7 +29,7 @@ This manual explains what Barbados National Registry statistics mean, how the ma
 What the Registry monitors, why surveillance matters and what these statistics can show.
 
 ::: {.mt-auto}
-[Open section](about/bnr-surveillance.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](about/bnr-surveillance.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -37,7 +45,7 @@ What the Registry monitors, why surveillance matters and what these statistics c
 How health information becomes reviewed, confidentiality-protected public statistics.
 
 ::: {.mt-auto}
-[Open section](about/records-to-statistics.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](about/records-to-statistics.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -53,7 +61,7 @@ How health information becomes reviewed, confidentiality-protected public statis
 Definitions and worked examples for CVD, hypertension and diabetes measures.
 
 ::: {.mt-auto}
-[Open section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -64,12 +72,12 @@ Definitions and worked examples for CVD, hypertension and diabetes measures.
 ::: {.card-body .d-flex .flex-column}
 [INTERPRETATION]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Counts, percentages and rates {.card-title}
+### Interpreting the measures {.card-title}
 
 How different kinds of statistics answer different questions.
 
 ::: {.mt-auto}
-[Open section](interpretation/counts-percentages-rates.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](interpretation/counts-percentages-rates.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -85,7 +93,7 @@ How different kinds of statistics answer different questions.
 How data limitations, review and disclosure control affect published figures.
 
 ::: {.mt-auto}
-[Open section](interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -96,12 +104,12 @@ How data limitations, review and disclosure control affect published figures.
 ::: {.card-body .d-flex .flex-column}
 [REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Plain-language glossary {.card-title}
+### Reference and data access {.card-title}
 
 Short explanations of the principal terms used in BNR publications.
 
 ::: {.mt-auto}
-[Open section](reference/glossary.qmd){.btn .btn-outline-primary .btn-sm}
+[Begin section](reference/glossary.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -109,10 +117,14 @@ Short explanations of the principal terms used in BNR publications.
 
 :::
 :::
+
+<br>
 
 ## What this manual covers
 
-Use this manual when you want to understand a published measure, compare statistics or assess an important limitation. Links from individual pages lead to the relevant dashboards, briefings, tabulations and downloads.
+Use this manual when you want to understand a published measure, compare
+statistics or assess an important data limitation. Links from individual pages lead
+to the relevant public tables, dashboards, reports and downloads.
 
 | Manual | Main question answered |
 |---|---|
@@ -126,4 +138,3 @@ The public manual does not contain patient information, software instructions, f
 
 [Latest BNR publications](../news/index.qmd){.btn .btn-primary}
 [Data downloads](../downloads/index.qmd){.btn .btn-outline-primary}
-
