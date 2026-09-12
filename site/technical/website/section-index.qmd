@@ -1,0 +1,64 @@
+---
+manual-review-status: not-reviewed
+title: "Operate the website"
+description: "Choose a Technical Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Render and publish the website](render-publish.qmd) {.card-title}
+
+Review and deploy the Quarto site through GitHub.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Update website content](update-content.qmd) {.card-title}
+
+Maintain pages, listings, navigation and downloads.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Maintain the CVD events dashboard](cvd-events-dashboard.qmd) {.card-title}
+
+Current data and scope boundaries for the events dashboard.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Maintain the CVD mortality dashboard](cvd-mortality-dashboard.qmd) {.card-title}
+
+Maintain the approved mortality dashboard presentation.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Maintain the public CVD tables](cvd-tables.qmd) {.card-title}
+
+Present approved event and mortality metric releases.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

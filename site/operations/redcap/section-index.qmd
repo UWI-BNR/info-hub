@@ -1,0 +1,54 @@
+---
+manual-review-status: not-reviewed
+title: "Working in REDCap"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Create and complete a record](create-complete-record.qmd) {.card-title}
+
+Create one authoritative CVD event record in REDCap.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Resolve record queries](resolve-record-queries.qmd) {.card-title}
+
+Resolve duplicates, missing information and uncertain records.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Maintain the REDCap database](database-maintenance.qmd) {.card-title}
+
+Apply controlled maintenance to the live registry database.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Approve a data record](approve-data-record.qmd) {.card-title}
+
+Confirm that a record is ready for analytical use.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

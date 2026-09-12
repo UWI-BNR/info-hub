@@ -1,0 +1,34 @@
+---
+manual-review-status: not-reviewed
+title: "Before REDCap"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Identify potential cases](identify-assess.qmd) {.card-title}
+
+How potential CVD cases are found and initially assessed.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Abstract source information](abstract-verify.qmd) {.card-title}
+
+How source information is abstracted and verified.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

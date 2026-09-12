@@ -31,7 +31,7 @@ manual-review-status: not-reviewed
 Roles, decisions and the route from case finding to public statistics.
 
 ::: {.mt-auto}
-[Open section](operating-model/routine-cycle.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](operating-model/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -49,7 +49,7 @@ Roles, decisions and the route from case finding to public statistics.
 Visible BNR-team draft procedures for case finding and abstraction.
 
 ::: {.mt-auto}
-[Open section](pre-redcap/identify-assess.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](pre-redcap/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -67,7 +67,7 @@ Visible BNR-team draft procedures for case finding and abstraction.
 Visible BNR-team drafts for creating, resolving, maintaining and approving records.
 
 ::: {.mt-auto}
-[Open section](redcap/create-complete-record.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](redcap/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -85,7 +85,7 @@ Visible BNR-team drafts for creating, resolving, maintaining and approving recor
 CVD event and mortality releases, controlled reports and public presentation.
 
 ::: {.mt-auto}
-[Open section](post-redcap/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](post-redcap/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -103,7 +103,7 @@ CVD event and mortality releases, controlled reports and public presentation.
 The standing analysis plan and metric specifications.
 
 ::: {.mt-auto}
-[Open section](data/analysis-framework.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](data/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -121,7 +121,7 @@ The standing analysis plan and metric specifications.
 Requests, agreements, release procedures and responsible reuse.
 
 ::: {.mt-auto}
-[Open section](governance/data-sharing-governance.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](governance/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -139,7 +139,7 @@ Requests, agreements, release procedures and responsible reuse.
 The audit and rebuild record retained for later bounded review.
 
 ::: {.mt-auto}
-[Open section](bnr-refit/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](bnr-refit/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -175,4 +175,3 @@ tables, dashboards and downloads reuse approved metric releases. Pages covering
 work before and within REDCap remain visible BNR-team drafts for BNR staff to
 complete and approve. The historical refit pages remain **Not reviewed** and
 will be handled as a separate bounded task.
-

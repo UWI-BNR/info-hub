@@ -1,0 +1,44 @@
+---
+manual-review-status: not-reviewed
+title: "Maintain and recover"
+description: "Choose a Technical Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Make a safe code change](safe-code-change.qmd) {.card-title}
+
+Change analysis or publication code through a controlled route.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Files, releases and versions](files-releases-versions.qmd) {.card-title}
+
+Identify authoritative files and apply current version rules.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Fix common problems](troubleshooting.qmd) {.card-title}
+
+Recovery guidance for common system and workflow problems.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

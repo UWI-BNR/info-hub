@@ -29,7 +29,7 @@ This manual explains what Barbados National Registry statistics mean, how the ma
 What the Registry monitors, why surveillance matters and what these statistics can show.
 
 ::: {.mt-auto}
-[Begin section](about/bnr-surveillance.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](about/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -45,7 +45,7 @@ What the Registry monitors, why surveillance matters and what these statistics c
 How health information becomes reviewed, confidentiality-protected public statistics.
 
 ::: {.mt-auto}
-[Begin section](about/records-to-statistics.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](about/records-to-statistics-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -61,7 +61,7 @@ How health information becomes reviewed, confidentiality-protected public statis
 Definitions and worked examples for CVD, hypertension and diabetes measures.
 
 ::: {.mt-auto}
-[Begin section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -77,7 +77,7 @@ Definitions and worked examples for CVD, hypertension and diabetes measures.
 How different kinds of statistics answer different questions.
 
 ::: {.mt-auto}
-[Begin section](interpretation/counts-percentages-rates.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](interpretation/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -93,7 +93,7 @@ How different kinds of statistics answer different questions.
 How data limitations, review and disclosure control affect published figures.
 
 ::: {.mt-auto}
-[Begin section](interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](interpretation/quality-confidentiality-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -109,7 +109,7 @@ How data limitations, review and disclosure control affect published figures.
 Short explanations of the principal terms used in BNR publications.
 
 ::: {.mt-auto}
-[Begin section](reference/glossary.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::

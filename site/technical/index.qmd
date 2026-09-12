@@ -31,7 +31,7 @@ manual-review-status: not-reviewed
 Understand the system and prepare a workstation for BNR analytical work.
 
 ::: {.mt-auto}
-[Open section](getting-started/environment.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](getting-started/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -49,7 +49,7 @@ Understand the system and prepare a workstation for BNR analytical work.
 Follow the implemented CVD event, mortality and reporting routes.
 
 ::: {.mt-auto}
-[Open section](workflows/overview.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](workflows/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -67,7 +67,7 @@ Follow the implemented CVD event, mortality and reporting routes.
 Review releases, apply disclosure control and record approval.
 
 ::: {.mt-auto}
-[Open section](controls/review-release.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](controls/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -85,7 +85,7 @@ Review releases, apply disclosure control and record approval.
 Render, check, publish and maintain the public Info-Hub.
 
 ::: {.mt-auto}
-[Open section](website/render-publish.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](website/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -103,7 +103,7 @@ Render, check, publish and maintain the public Info-Hub.
 Make safe changes, manage versions and resolve common problems.
 
 ::: {.mt-auto}
-[Open section](maintenance/safe-code-change.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](maintenance/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -121,7 +121,7 @@ Make safe changes, manage versions and resolve common problems.
 Find the principal workflows, commands, files, folders and terms.
 
 ::: {.mt-auto}
-[Open section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](reference/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::

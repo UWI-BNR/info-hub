@@ -1,0 +1,84 @@
+---
+manual-review-status: not-reviewed
+title: "Post-REDCap analytics and publishing"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Section overview](index.qmd) {.card-title}
+
+Choose the controlled route for each BNR publication product.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Authorise a data release](../release/data-release.qmd) {.card-title}
+
+Confirm the authority, period and source for a release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD event release workflow](cvd-events-workflow.qmd) {.card-title}
+
+Operational responsibilities for the six-step event release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD mortality release workflow](mortality-workflow.qmd) {.card-title}
+
+Operational responsibilities for the six-step mortality release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [BNR reporting workflows](reporting-workflows.qmd) {.card-title}
+
+Responsibilities for rolling, annual and one-off reports.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Review, approve and publish](../release/review-approve-publish.qmd) {.card-title}
+
+Complete the controlled review and publication sequence.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Correct a release](../release/correct-release.qmd) {.card-title}
+
+Correct source data or code and rerun the affected route.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

@@ -1,0 +1,54 @@
+---
+manual-review-status: not-reviewed
+title: "Run analytical workflows"
+description: "Choose a workflow family."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Analytical workflow overview](overview.qmd) {.card-title}
+
+How the event, mortality and reporting routes fit together.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD event release workflow](cvd-events/overview.qmd) {.card-title}
+
+Run the six-step CVD event release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD mortality release workflow](mortality/overview.qmd) {.card-title}
+
+Run the six-step CVD mortality release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [BNR reporting workflows](reporting/overview.qmd) {.card-title}
+
+Run rolling, annual and one-off reporting routes.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

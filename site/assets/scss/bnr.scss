@@ -899,6 +899,78 @@ body.bnr-tech-manual {
   border-bottom: 2px solid var(--bnr-landing-accent);
 }
 
+/* Public Methods section listings: a compact version of the landing-card
+   treatment. Links use ordinary dark text; green is reserved for wayfinding. */
+.bnr-methods-section-card {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.bnr-methods-section-card::before {
+  content: "";
+  display: block;
+  height: 14px;
+  background: #b9d8c1;
+  border-bottom: 2px solid #356a49;
+}
+
+.bnr-methods-section-listing .card-title,
+.bnr-methods-section-listing .card-title a {
+  color: #212529;
+}
+
+.bnr-methods-section-listing .card-title a:hover {
+  color: #212529;
+}
+
+/* Separate the return action from the complete row of section cards. */
+.bnr-methods-return {
+  margin-top: 1.5rem;
+}
+
+.bnr-methods-return p {
+  margin-bottom: 0;
+}
+
+/* Operations and Technical second-level contents cards. The structure is
+   shared; each manual supplies its own established accent and tint. */
+body.bnr-operations-manual {
+  --bnr-section-accent: #8b4f27;
+  --bnr-section-tint: #e7bf9e;
+}
+
+body.bnr-tech-manual {
+  --bnr-section-accent: #6c557f;
+  --bnr-section-tint: #d1c0dc;
+}
+
+.bnr-manual-section-card {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.bnr-manual-section-card::before {
+  content: "";
+  display: block;
+  height: 14px;
+  background: var(--bnr-section-tint);
+  border-bottom: 2px solid var(--bnr-section-accent);
+}
+
+.bnr-manual-section-listing .card-title,
+.bnr-manual-section-listing .card-title a,
+.bnr-manual-section-listing .card-title a:hover {
+  color: #212529;
+}
+
+.bnr-manual-return {
+  margin-top: 1.5rem;
+}
+
+.bnr-manual-return p {
+  margin-bottom: 0;
+}
+
 body.bnr-tech-manual .bnr-manual-flag--technical {
   border-left-color: var(--bnr-manual-accent);
   background: var(--bnr-manual-tint);

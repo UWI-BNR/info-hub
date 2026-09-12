@@ -130,11 +130,15 @@ website:
 
         - section: "About BNR surveillance"
           contents:
+            - text: "Overview"
+              href: methods/about/index.qmd
             - text: "About BNR surveillance"
               href: methods/about/bnr-surveillance.qmd
 
         - section: "From records to statistics"
           contents:
+            - text: "Overview"
+              href: methods/about/records-to-statistics-index.qmd
             - text: "From records to statistics"
               href: methods/about/records-to-statistics.qmd
 
@@ -159,6 +163,8 @@ website:
 
         - section: "Interpreting the measures"
           contents:
+            - text: "Overview"
+              href: methods/interpretation/index.qmd
             - text: "Counts, percentages and rates"
               href: methods/interpretation/counts-percentages-rates.qmd
             - text: "How CVD events are classified"
@@ -168,6 +174,8 @@ website:
 
         - section: "Quality and confidentiality"
           contents:
+            - text: "Overview"
+              href: methods/interpretation/quality-confidentiality-index.qmd
             - text: "Data quality and completeness"
               href: methods/interpretation/data-quality-completeness.qmd
             - text: "Protecting confidentiality"
@@ -177,6 +185,8 @@ website:
 
         - section: "Reference and data access"
           contents:
+            - text: "Overview"
+              href: methods/reference/index.qmd
             - text: "Glossary"
               href: methods/reference/glossary.qmd
             - text: "Research data access"
@@ -193,6 +203,8 @@ website:
 
         - section: "How the registry works"
           contents:
+            - text: "Section contents"
+              href: operations/operating-model/section-index.qmd
             - text: "Roles and decision rights"
               href: operations/operating-model/roles-decision-rights.qmd
             - text: "From cases to statistics"
@@ -202,6 +214,8 @@ website:
 
         - section: "Before REDCap"
           contents:
+            - text: "Section contents"
+              href: operations/pre-redcap/section-index.qmd
             - text: "Identify potential cases"
               href: operations/pre-redcap/identify-assess.qmd
             - text: "Abstract source information"
@@ -209,6 +223,8 @@ website:
 
         - section: "Working in REDCap"
           contents:
+            - text: "Section contents"
+              href: operations/redcap/section-index.qmd
             - text: "Create and complete a record"
               href: operations/redcap/create-complete-record.qmd
             - text: "Resolve record queries"
@@ -220,6 +236,8 @@ website:
 
         - section: "Post-REDCap analytics & publishing"
           contents:
+            - text: "Section contents"
+              href: operations/post-redcap/section-index.qmd
             - text: "Overview"
               href: operations/post-redcap/index.qmd
             - text: "Authorise a data release"
@@ -237,6 +255,8 @@ website:
 
         - section: "BNR analysis framework"
           contents:
+            - text: "Section contents"
+              href: operations/data/section-index.qmd
             - text: "Overview"
               href: operations/data/analysis-framework.qmd
             - text: "Statistical Analysis Plan"
@@ -246,6 +266,8 @@ website:
 
         - section: "Data sharing & governance"
           contents:
+            - text: "Section contents"
+              href: operations/governance/section-index.qmd
             - text: "Overview"
               href: operations/governance/data-sharing-governance.qmd
             - text: "Handle a data request"
@@ -259,6 +281,8 @@ website:
 
         - section: "Historical refit record"
           contents:
+            - text: "Section contents"
+              href: operations/bnr-refit/section-index.qmd
             - text: "About the audit"
               href: operations/bnr-refit/index.qmd
             - text: "Audit summary"
@@ -279,6 +303,8 @@ website:
 
         - section: "Getting started"
           contents:
+            - text: "Section contents"
+              href: technical/getting-started/section-index.qmd
             - text: "Analytics environment"
               href: technical/getting-started/environment.qmd
             - text: "Set up a workstation"
@@ -286,6 +312,8 @@ website:
 
         - section: "Analytical workflows"
           contents:
+            - text: "Section contents"
+              href: technical/workflows/section-index.qmd
             - text: "Overview"
               href: technical/workflows/overview.qmd
 
@@ -336,6 +364,8 @@ website:
 
         - section: "Review and publication controls"
           contents:
+            - text: "Section contents"
+              href: technical/controls/section-index.qmd
             - text: "Review an analytical release"
               href: technical/controls/review-release.qmd
             - text: "Disclosure control"
@@ -345,6 +375,8 @@ website:
 
         - section: "Operate the Info-Hub"
           contents:
+            - text: "Section contents"
+              href: technical/website/section-index.qmd
             - text: "Render and publish website"
               href: technical/website/render-publish.qmd
             - section: "Update website content"
@@ -360,6 +392,8 @@ website:
 
         - section: "Maintain and recover"
           contents:
+            - text: "Section contents"
+              href: technical/maintenance/section-index.qmd
             - text: "Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
             - text: "Files, releases and versions"
@@ -369,6 +403,8 @@ website:
 
         - section: "Quick reference"
           contents:
+            - text: "Section contents"
+              href: technical/reference/section-index.qmd
             - text: "System reference"
               href: technical/reference/index.qmd
             - text: "CVD suppression validation, 2024-2025"
