@@ -1,6 +1,6 @@
 ---
 title: "Run the CVD mortality release workflow"
-description: "Operational responsibilities for the separate six-step CVD mortality release."
+description: "Export, classify, review, approve and publish CVD mortality statistics in six steps."
 manual-review-status: not-reviewed
 ---
 
@@ -10,33 +10,116 @@ Operations Manual
 
 ## Purpose
 
-Use this separate workflow to create an approved CVD mortality metric release from the authorised death-certificate source. It does not reuse the CVD event preparation pathway.
+Use this workflow for every authorised CVD mortality release. The six steps take the data from the mortality REDCap project, classify CVD deaths, calculate the statistics, support human review and approval, and publish the approved files.
+
+This is separate from the CVD event preparation workflow. Steps 1–5 create private working files. Only Step 6 moves approved files into the public area.
 
 ## Before starting
 
-- First use [Authorise a data release](../release/data-release.qmd) to confirm the reporting period and authority to proceed.
+- First use [Authorise a data export](../release/data-release.qmd) to confirm the reporting period and authority to proceed.
 - Work on the authorised workstation with the private workspace available.
-- Confirm the configured mortality REDCap access is available to Step 1.
+- Confirm the configured mortality REDCap access is available.
 - Confirm **User > BNR > Update CVD mortality dashboard** is present in Stata.
-- Use the same release identity throughout.
+- Use the same release year (`YYYY`) and month (`MM`) throughout.
+- Leave replacement options off unless a rerun has been deliberately authorised.
 
-## Step 1: extract mortality data
+## Step 1: extract the mortality data
 
-Step 1 extracts mortality data from REDCap for the authorised period. It creates the retained source extract, receipt and private log for this release. Check that the period and record count are plausible before moving to Step 2.
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 1 takes a snapshot of all mortality records in REDCap through the authorised month-end. It prepares the source data but does not classify Heart, Stroke or underlying cause of death.
 
-The shared release page explains when a release may start. The [technical Step 1 instructions](../../technical/workflows/mortality/extract.qmd) explain the dialog, files and troubleshooting.
+**How to run it.** In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 1: Extract mortality data**. Enter the authorised year and month, then run the extract.
 
-## Six steps
+**What to check.** Confirm that the summary says the step completed successfully. Check that the cut-off date, record count and death-date range are plausible.
 
-1. **Extract mortality data.** Run Step 1 and check the receipt and record count.
-2. **Classify CVD deaths.** Run Step 2 and review the private classification outputs. The BNR approximate classifier is not formal national underlying-cause coding.
-3. **Build mortality burden data.** Run Step 3 and verify the count, proportion and rate outputs, reporting scope and QA.
-4. **Review the release.** Run Step 4 and complete analytical, classification and disclosure review of the candidate.
-5. **Approve the reviewed release.** Run Step 5 for the exact reviewed candidate. Approval creates the controlled public-ready payload; it does not publish.
-6. **Publish approved outputs.** Run Step 6 and verify the authoritative public package, release ZIP, catalogue record and website mirror.
+**Files and location.** Step 1 automatically creates `bnr_mort_s1_YYYYMM_raw.csv`, `bnr_mort_s1_YYYYMM.dta` and `bnr_mort_s1_YYYYMM_manifest.yml` in `$BNR_DATA_RAW/redcap/mortality/yYYYY/mMM/`. The private Step 1 log is under `$BNR_PRIVATE_LOGS/`.
 
-## Stop points and evidence
+See [Mortality Step 1: Extract mortality data](../../technical/workflows/mortality/extract.qmd) for the dialog fields, exact file contents and troubleshooting.
+:::
 
-Stop on a failed check, changed release identity, missing input, implausible classification or burden results, incomplete disclosure review, approval mismatch or private content in Git status. Never edit generated mortality outputs by hand; correct the source or code and rerun.
+## Step 2: classify CVD deaths
 
-Retain private source and classification outputs, staging and review material, approval controls, the publication log and the authoritative public release in their controlled locations.
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 2 applies the fixed BNR classifier to the death-certificate information. It identifies the evidence for All CVD, Heart and Stroke and assigns the categories used for Primary and Inclusive reporting. This is an approximate BNR classification, not formal national underlying-cause coding.
+
+**How to run it.** In the mortality menu, choose **Step 2: Classify causes of death**. Enter the same release year and month used in Step 1, then run the step.
+
+**What to check.** Confirm that the summary says the step completed successfully. Review the class counts and check the review and structure-summary files for unexpected patterns or warnings. Do not continue while a classification or source-structure result remains unexplained.
+
+**Files and location.** Step 2 creates the classified Stata dataset, classification summary, review file, structure summary and YAML receipt in `$BNR_DATA_DERIVED/mortality/yYYYY/mMM/`. The files begin `bnr_mort_s2_YYYYMM`. The private Step 2 log is under `$BNR_PRIVATE_LOGS/`.
+
+See [Mortality Step 2: Classify CVD deaths](../../technical/workflows/mortality/classify.qmd) for the evidence classes, reporting definitions, exact file names and change-control rules.
+:::
+
+## Step 3: calculate the mortality statistics
+
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 3 uses the classified deaths to calculate the approved mortality counts, percentage distributions and annual rates. It creates a private staging package containing exact values. It does not apply the final public disclosure controls, approve or publish the release.
+
+**How to run it.** In the mortality menu, choose **Step 3: Build mortality burden data**. Enter the same release year and month, then run the step.
+
+**What to check.** Confirm that the summary says the step completed successfully. Check the analysis years and metric row counts. Open the staging package and confirm that its datasets, metadata, automated QA and suppression worklist are present. Do not treat the Step 3 suppression workbook as the final human review package; Step 4 creates that package.
+
+**Files and location.** Step 3 creates the package in `$BNR_STAGING/mortality/burden/mort_YYYY_MM/`. Review its `datasets/`, `metadata/` and `review/` folders, plus `readme.txt`. The private Step 3 log is under `$BNR_PRIVATE_LOGS/`.
+
+See [Mortality Step 3: Build mortality burden data](../../technical/workflows/mortality/build-burden.qmd) for the metric structure, exact files, denominator sources and automated checks.
+:::
+
+## Step 4: review the mortality release
+
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 4 checks the Step 3 package again, applies the approved disclosure-control rules and creates the exact candidate for public release together with the files needed for human review. It does not approve or publish the release.
+
+**How to run it.** In the mortality menu, choose **Step 4: Review mortality release**. Enter the same release year and month, then run the step. Open the review workbook named in the summary.
+
+**What to check.** Confirm the release identity and analysis period, the Primary and Inclusive results, crude and age-standardised rates, automated QA, protected rows and proposed public candidate. Check that protected values have been removed correctly and that the fixed 2015–2019 monthly reference is present. Decide whether the release is plausible, safe and ready for approval.
+
+**Files and location.** Step 4 writes its candidate, human-review workbook, QA receipt, review-basis file and monthly-reference files to `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`. The main workbook is `mort_s4_review_mort_YYYY_MM.xlsx`. The private Step 4 log is under `$BNR_PRIVATE_LOGS/`.
+
+See [Mortality Step 4: Review the mortality release](../../technical/workflows/mortality/review.qmd) for the full review list, disclosure-control rules and exact files.
+:::
+
+## Step 5: approve the reviewed release
+
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 5 records an authorised person's approval of the exact candidate reviewed in Step 4. It checks that the reviewed files have not changed, creates the private public-ready package and writes the approval record. It does not publish the files.
+
+**How to run it.** Complete the Step 4 review first. In the mortality menu, choose **Step 5: Approve reviewed mortality release**. Enter the release year and month, the approver's full name and an authorised role. Complete every confirmation, then run Step 5.
+
+**What to check.** Confirm that the summary reports successful approval pending Step 6. Open `approval.yml` and check the release, package, approver, role, disclosure status and manifest details. Approval is complete only when all five review confirmations are true.
+
+**Files and location.** Step 5 creates `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`. This contains the ten approved data and metadata files, plus the private controls `public_manifest.csv` and `approval.yml`. The private Step 5 log is under `$BNR_PRIVATE_LOGS/`.
+
+See [Mortality Step 5: Approve the reviewed release](../../technical/workflows/mortality/approve.qmd) for the authorised roles, five confirmations, exact payload and approval controls.
+:::
+
+## Step 6: publish the approved files
+
+::: {.callout-note collapse="true" title="Details"}
+**What this step does.** Step 6 checks the approval, manifest and approved files before copying them across the private-to-public boundary. It creates the release ZIP and catalogue record and refreshes the website copy. It does not recalculate or approve the statistics.
+
+**How to run it.** In the mortality menu, choose **Step 6: Publish approved mortality outputs**. Enter the approved release year and month, then run Step 6.
+
+**What to check.** Confirm that the summary reports `Run status: PUBLISHED` and `Verification: PASSED`. Inspect the authoritative public package and website copy. Open the ZIP and confirm that it contains the ten approved files. Check the catalogue record and confirm that `approval.yml`, `public_manifest.csv` and private review files were not published.
+
+**Files and location.** The authoritative public package is under `$BNR_PUBLIC/metrics/mortality/burden/`. The website copy is under `$BNR_REPO/site/downloads/files/metrics/mortality/burden/`. The stable dashboard dataset is `datasets/mort_burden_metrics_current.csv`; the fixed monthly reference is `datasets/mort_monthly_reference_2015_2019.csv`.
+
+After Step 6, rebuild the Downloads catalogue through the normal site-render process. Inspect the mortality dashboard and Downloads page before the normal website commit, render and deployment.
+
+See [Mortality Step 6: Publish approved mortality outputs](../../technical/workflows/mortality/publish.qmd) for the full verification checks, public package structure and website steps.
+:::
+
+## When to stop
+
+Stop the workflow if:
+
+- a step reports that it failed or did not finish;
+- the release year or month changes unexpectedly between steps;
+- a required input, receipt or package file is missing;
+- record counts, date ranges, classifications or calculated results do not look plausible;
+- a classification or source-structure warning remains unexplained;
+- a disclosure-control check fails or protected values remain visible;
+- the approval does not match the reviewed candidate; or
+- private files appear in Git status or a public folder.
+
+Read the summary and private log for the failed step. Correct the earliest affected source file, setting or version-controlled code, then rerun from that step. If Step 4 is rebuilt, complete the human review again before approval. Do not repair generated outputs by editing or copying individual files by hand.
