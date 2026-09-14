@@ -1,7 +1,7 @@
 ﻿---
 title: "From cases to statistics"
-description: "The linked route from case finding through REDCap to approved BNR statistics."
-manual-review-status: not-reviewed
+description: "The route from case-finding through REDCap to approved BNR statistics."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
@@ -10,7 +10,7 @@ Operations Manual
 
 ## Purpose
 
-This page maps the complete registry pathway. Every stage links to the page that explains how that stage is carried out or, for team-owned draft procedures, where BNR staff should add the local detail.
+This page maps the registry pathway. Each stage links to the page that explains how that stage is operationalised. 
 
 ## Before REDCap
 
@@ -28,28 +28,29 @@ This page maps the complete registry pathway. Every stage links to the page that
 | **Maintain** | Control access, routine checks and structural database changes | [Maintain the REDCap database](../redcap/database-maintenance.qmd) |
 | **Approve the record** | Confirm that the record is ready for analytical use | [Approve a data record](../redcap/approve-data-record.qmd) |
 
-REDCap is the authoritative location for record-level corrections. Generated extracts and analytical files are never corrected by hand.
+REDCap is the authoritative location for record-level corrections. Data exported from REDCap should *never* be corrected by hand.
 
 ## Post-REDCap analytics & publishing
 
 | Stage | Main action | Procedure |
 |---|---|---|
-| **Authorise the release** | Confirm the reporting period and extract the cumulative REDCap release through Stata | [Authorise a data release](../release/data-release.qmd) |
-| **Prepare CVD event outputs** | Run shared CVD preparation Steps 1â€“3 and CVD event Steps 4â€“6 | [CVD events workflow](../post-redcap/cvd-events-workflow.qmd) |
-| **Produce CVD mortality outputs** | Run the separate six-step mortality extraction, classification and publication pathway | [CVD mortality workflow](../post-redcap/mortality-workflow.qmd) |
-| **Present public tables, dashboards and downloads** | Reuse approved public metric releases without creating another analytical route | [Post-REDCap overview](../post-redcap/index.qmd) |
-| **Produce reports** | Build the rolling update or prepare, approve and publish an annual or one-off report | [BNR reporting workflows](../post-redcap/reporting-workflows.qmd) |
-| **Review and publish the site** | Complete human review, approval and Stata analytical publication, then inspect Quarto presentation and GitHub deployment | [Review, approve and publish](../release/review-approve-publish.qmd) |
-| **Correct** | Correct the source or code and rerun the affected pathway | [Correct or replace a release](../release/correct-release.qmd) |
+| **Authorise the release** | Confirm the reporting period and extract the cumulative REDCap release using Stata | [Authorise a data release](../release/data-release.qmd) |
+| **Prepare CVD event outputs** |Run the six-step event extraction, classification and publication pathway  | [CVD events workflow](../post-redcap/cvd-events-workflow.qmd) |
+| **Produce CVD mortality outputs** | Run the six-step mortality extraction, classification and publication pathway | [CVD mortality workflow](../post-redcap/mortality-workflow.qmd) |
+| **Update public dashboards, tables and downloads** | Use approved public data releases to update website dashboards, tabulations, and download pages | [Post-REDCap overview](../post-redcap/index.qmd) |
+| **Produce reports** | Build the monthly rolling update report. Build the annnual report and public health update. Prepare, approve and publish a one-off report | [BNR reporting workflows](../post-redcap/reporting-workflows.qmd) |
+| **Review and publish the Info-hub site** | Complete human review, approval and Stata analytical publication, then inspect the Quarto website preview before GitHub deployment | [Review, approve and publish](../release/review-approve-publish.qmd) |
+| **Correct a data release** | Update an already public data-release | [Correct or replace a release](../release/correct-release.qmd) |
 
 ## Rules that apply throughout
 
+  
+- **Stata** performs data preparation, data analytics, data publishing. 
+- **Quarto** presents approved public data products. 
+- Confidential data, logs and review material are never posted to the public repository.
 - Use one identified reporting period and package identity throughout a workflow.
-- Stata performs data preparation, calculation and controlled analytical publication.
-- Quarto presents approved public products. Any documented display-only calculation must remain narrowly defined and must not replace the Stata analytical workflow.
-- Confidential data, logs and review material remain outside the public repository.
 - Successful analysis is not approval, and analytical publication is not website deployment.
 - Stop whenever the source, responsibility, result, disclosure status or approval is unclear.
 
-See [Roles and decision rights](roles-decision-rights.qmd) for responsibility at each stage.
+See [BNR user roles](roles-decision-rights.qmd) for responsibility at each stage.
 

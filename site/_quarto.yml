@@ -234,23 +234,23 @@ website:
             - text: "Approve a data record"
               href: operations/redcap/approve-data-record.qmd
 
-        - section: "Post-REDCap analytics & publishing"
+        - section: "After REDCap"
           contents:
             - text: "Section contents"
               href: operations/post-redcap/section-index.qmd
             - text: "Overview"
               href: operations/post-redcap/index.qmd
-            - text: "Authorise a data release"
+            - text: "Authorise a data export"
               href: operations/release/data-release.qmd
-            - text: "CVD event release workflow"
+            - text: "CVD event workflow"
               href: operations/post-redcap/cvd-events-workflow.qmd
-            - text: "CVD mortality release workflow"
+            - text: "CVD mortality workflow"
               href: operations/post-redcap/mortality-workflow.qmd
             - text: "BNR reporting workflows"
               href: operations/post-redcap/reporting-workflows.qmd
             - text: "Review, approve and publish"
               href: operations/release/review-approve-publish.qmd
-            - text: "Correct a release"
+            - text: "Correct a data release"
               href: operations/release/correct-release.qmd
 
         - section: "BNR analysis framework"

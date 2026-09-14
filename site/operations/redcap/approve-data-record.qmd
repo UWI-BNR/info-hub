@@ -1,7 +1,7 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Approve a data record"
-description: "BNR team draft for confirming that a REDCap event record is ready for analytical use."
+description: "The BNR process for confirming that a REDCap event record is ready for analytical use."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
@@ -30,10 +30,9 @@ Describe how BNR confirms that an event record is sufficiently complete, interna
 
 ## BNR details to add
 
-- whether approval is record-level, form-level or status-based;
+- whether approval is for a form, or for an entire event record;
 - the mandatory checks;
 - who may approve;
-- whether the data entrant may also approve;
 - which issues prevent approval; and
 - how an approved record is reopened after correction.
 

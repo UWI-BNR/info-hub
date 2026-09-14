@@ -132,7 +132,8 @@ to the relevant public tables, dashboards, reports and downloads.
 | **[Operations Manual](../operations/index.qmd)** | What must BNR staff do, who decides and what evidence is retained? |
 | **[Technical Manual](../technical/index.qmd)** | How do staff operate the analytics and publishing environment? |
 
-The public manual does not contain patient information, software instructions, file paths or internal security details.
+The methods manual explains what the BNR measures and how its statistics should be understood. The operations manual guides staff through the routine tasks needed to keep the BNR system running. The technical manual documents the code, data processes and system design that support the BNR’s work.
+
 
 ## Go to the statistics
 

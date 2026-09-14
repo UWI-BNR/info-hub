@@ -136,22 +136,15 @@ Find the principal workflows, commands, files, folders and terms.
 ## What this manual is for
 
 Use this manual for exact menus, parameters, files, checks, failure conditions
-and recovery procedures. Operational responsibility and retained evidence
-belong in the [Operations Manual](../operations/index.qmd); statistical meaning
-and interpretation belong in the [Public Methods Manual](../methods/index.qmd).
+and recovery procedures. 
 
-## Architecture
-
-| Layer | Responsibility |
+| Manual | Main question answered |
 |---|---|
-| **REDCap and controlled sources** | Hold authoritative confidential records. |
-| **Stata** | Prepare analytical inputs, calculate statistics, apply publication controls and promote approved public packages. |
-| **Quarto** | Present approved public outputs without becoming a parallel analytical workflow. |
-| **GitHub** | Version and deploy the static, public-safe Info-Hub. |
+| **Public Methods Manual** | What does this statistic mean, and how should I interpret it? |
+| **[Operations Manual](../operations/index.qmd)** | What must BNR staff do, who decides and what evidence is retained? |
+| **[Technical Manual](../technical/index.qmd)** | How do staff operate the analytics and publishing environment? |
 
-Private data, staging packages, credentials, logs and review evidence remain
-outside Git. Generated outputs are corrected only through source data or
-version-controlled code and a rerun.
+The technical manual documents the code, data processes and system design that support the BNR’s work. The methods manual explains what the BNR measures and how its statistics should be understood. The operations manual guides staff through the routine tasks needed to keep the BNR system running. 
 
 ## Start here
 

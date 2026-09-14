@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Run the CVD mortality release workflow"
 description: "Operational responsibilities for the separate six-step CVD mortality release."
 manual-review-status: not-reviewed
@@ -10,38 +10,33 @@ Operations Manual
 
 ## Purpose
 
-Use this separate workflow to create an approved CVD mortality metric release
-from the authorised death-certificate source. It does not reuse the CVD event
-preparation pathway.
+Use this separate workflow to create an approved CVD mortality metric release from the authorised death-certificate source. It does not reuse the CVD event preparation pathway.
 
 ## Before starting
 
-- Confirm the release year and month and the operator's authority.
+- First use [Authorise a data release](../release/data-release.qmd) to confirm the reporting period and authority to proceed.
 - Work on the authorised workstation with the private workspace available.
-- Confirm the configured mortality REDCap credential is available to Step 1.
+- Confirm the configured mortality REDCap access is available to Step 1.
 - Confirm **User > BNR > Update CVD mortality dashboard** is present in Stata.
+- Use the same release identity throughout.
+
+## Step 1: extract mortality data
+
+Step 1 extracts mortality data from REDCap for the authorised period. It creates the retained source extract, receipt and private log for this release. Check that the period and record count are plausible before moving to Step 2.
+
+The shared release page explains when a release may start. The [technical Step 1 instructions](../../technical/workflows/mortality/extract.qmd) explain the dialog, files and troubleshooting.
 
 ## Six steps
 
-1. **Extract mortality data.** Run Step 1 and check the month-end and record count. [Technical detail](../../technical/workflows/mortality/extract.qmd)
-2. **Classify CVD deaths.** Run Step 2 and review the private classification outputs. The BNR approximate classifier is not formal national underlying-cause coding. [Technical detail](../../technical/workflows/mortality/classify.qmd)
-3. **Build mortality burden data.** Run Step 3 and verify the count, proportion and rate outputs, reporting scope and QA. [Technical detail](../../technical/workflows/mortality/build-burden.qmd)
-4. **Review the release.** Run Step 4 and complete analytical, classification and disclosure review of the candidate. [Technical detail](../../technical/workflows/mortality/review.qmd)
-5. **Approve the reviewed release.** Run Step 5 for the exact reviewed candidate. Approval creates the controlled public-ready payload; it does not publish. [Technical detail](../../technical/workflows/mortality/approve.qmd)
-6. **Publish approved outputs.** Run Step 6 and verify the authoritative public package, release ZIP, catalogue record and website mirror. [Technical detail](../../technical/workflows/mortality/publish.qmd)
-
-After Step 6, inspect the mortality dashboard, tables, methods links and
-downloads presentation. A routine data release normally updates the website
-from approved public data without changing the page's analysis.
+1. **Extract mortality data.** Run Step 1 and check the receipt and record count.
+2. **Classify CVD deaths.** Run Step 2 and review the private classification outputs. The BNR approximate classifier is not formal national underlying-cause coding.
+3. **Build mortality burden data.** Run Step 3 and verify the count, proportion and rate outputs, reporting scope and QA.
+4. **Review the release.** Run Step 4 and complete analytical, classification and disclosure review of the candidate.
+5. **Approve the reviewed release.** Run Step 5 for the exact reviewed candidate. Approval creates the controlled public-ready payload; it does not publish.
+6. **Publish approved outputs.** Run Step 6 and verify the authoritative public package, release ZIP, catalogue record and website mirror.
 
 ## Stop points and evidence
 
-Stop on a failed check, changed release identity, missing input, implausible
-classification or burden results, incomplete disclosure review, approval
-mismatch or private content in Git status. Never edit generated mortality
-outputs by hand; correct the source or code and rerun.
+Stop on a failed check, changed release identity, missing input, implausible classification or burden results, incomplete disclosure review, approval mismatch or private content in Git status. Never edit generated mortality outputs by hand; correct the source or code and rerun.
 
-Retain private source and classification outputs, staging and review material,
-approval controls, the publication log and the authoritative public release in
-their controlled locations.
-
+Retain private source and classification outputs, staging and review material, approval controls, the publication log and the authoritative public release in their controlled locations.

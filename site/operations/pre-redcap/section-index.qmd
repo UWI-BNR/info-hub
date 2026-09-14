@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Before REDCap"
 description: "Choose an Operations Manual page in this section."
 ---
@@ -11,7 +11,7 @@ description: "Choose an Operations Manual page in this section."
 ::: {.card-body}
 ### [Identify potential cases](identify-assess.qmd) {.card-title}
 
-How potential CVD cases are found and initially assessed.
+How potential events are found and initially assessed.
 :::
 :::
 :::
