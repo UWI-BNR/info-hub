@@ -1,7 +1,7 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Abstract and verify source information"
-description: "BNR team draft for documenting abstraction and verification before REDCap entry."
+description: "The BNR processes for abstraction and verification before REDCap data entry."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}

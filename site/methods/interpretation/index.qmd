@@ -1,0 +1,42 @@
+---
+manual-review-status: reviewed-by-irh
+title: "Interpreting the measures"
+description: "Choose a page in this section."
+---
+
+::: {.grid .bnr-methods-section-listing}
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Counts, percentages and rates](counts-percentages-rates.qmd) {.card-title}
+
+How common forms of BNR statistics answer different questions.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [How CVD events are classified](classifying-cvd-events.qmd) {.card-title}
+
+How BNR applies consistent event and source rules.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [How CVD deaths are classified](classifying-cvd-deaths.qmd) {.card-title}
+
+How BNR creates practical cardiovascular mortality classifications.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

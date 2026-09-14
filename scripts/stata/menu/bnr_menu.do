@@ -42,7 +42,7 @@ window menu append item "Update CVD events dashboard" ///
 window menu append submenu "BNR" "Update CVD mortality dashboard"
 
 window menu append item "Update CVD mortality dashboard" ///
-    "Step 1: Extract mortality data" ///
+    "Step 1: Extract REDCap data" ///
     "db bnr_mort_s1_extract"
 
 window menu append item "Update CVD mortality dashboard" ///

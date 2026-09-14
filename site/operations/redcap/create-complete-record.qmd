@@ -1,7 +1,7 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Create and complete a new record"
-description: "BNR team draft for creating one authoritative CVD event record in REDCap."
+description: "The BNR process for creating one authoritative event record in REDCap."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
@@ -10,7 +10,7 @@ Operations Manual
 
 ---
 
-::: {.callout-warning title="BNR team draft â€” additions invited"}
+::: {.callout-warning title="BNR process draft&mdash;details required"}
 This page is deliberately incomplete. BNR staff should add the agreed local procedure, examples and decision points before it is approved as an operational procedure.
 :::
 
@@ -24,7 +24,7 @@ Describe how an authorised member of staff creates, completes and checks one RED
 2. Search REDCap for an existing record before creating a new one.
 3. Create the event record using the agreed event identifier procedure.
 4. Enter the required information from the abstraction source.
-5. Record missing or uncertain information as a query; do not guess.
+5. Record missing or uncertain information as a query.
 6. Complete the required validation and completeness checks.
 7. Save the record with the correct status for further review or approval.
 

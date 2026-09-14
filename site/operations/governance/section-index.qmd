@@ -1,0 +1,54 @@
+---
+manual-review-status: not-reviewed
+title: "Data sharing and governance"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Governance overview](data-sharing-governance.qmd) {.card-title}
+
+The authoritative route for requests to use non-public data.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Handle a data request](data-access-requests.qmd) {.card-title}
+
+Manage an application from receipt through closure.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Data-sharing procedure](../data/data-governance/sharing-sop.qmd) {.card-title}
+
+Prepare, approve, transfer and close a non-public release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Data Sharing Agreement](../data/data-governance/dsa-om.qmd) {.card-title}
+
+Issue, countersign, store and audit agreements in REDCap.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

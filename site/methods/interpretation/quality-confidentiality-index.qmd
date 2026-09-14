@@ -1,0 +1,42 @@
+---
+manual-review-status: reviewed-by-irh
+title: "Quality and confidentiality"
+description: "Choose a page in this section."
+---
+
+::: {.grid .bnr-methods-section-listing}
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Data quality and completeness](data-quality-completeness.qmd) {.card-title}
+
+How data quality affects BNR statistics and interpretation.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Protecting confidentiality](confidentiality.qmd) {.card-title}
+
+How BNR reduces disclosure risk in public statistics.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Releases, revisions and comparability](revisions-comparability.qmd) {.card-title}
+
+How to compare BNR statistics across releases and periods.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

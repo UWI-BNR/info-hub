@@ -1,0 +1,32 @@
+---
+manual-review-status: reviewed-by-irh
+title: "Reference and data access"
+description: "Choose a page in this section."
+---
+
+::: {.grid .bnr-methods-section-listing}
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Glossary](glossary.qmd) {.card-title}
+
+Plain-language definitions used in BNR publications.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Research data access](../responsible-data-use/research-data-access.qmd) {.card-title}
+
+How researchers can request restricted, de-identified BNR data.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

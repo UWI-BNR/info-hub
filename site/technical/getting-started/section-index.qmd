@@ -1,0 +1,34 @@
+---
+manual-review-status: not-reviewed
+title: "Set up the environment"
+description: "Choose a Technical Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Analytics environment](environment.qmd) {.card-title}
+
+How the analytical and publishing system fits together.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Set up a workstation](workstation-setup.qmd) {.card-title}
+
+Configure Windows for the BNR workflows and Info-Hub.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

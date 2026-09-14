@@ -1,6 +1,6 @@
 ﻿---
-manual-review-status: not-reviewed
-title: "Maintain operational records and hand over"
+manual-review-status: reviewed-by-irh
+title: "BNR operations continuity"
 subtitle: "Keep the registry reproducible when staff or systems change"
 ---
 
@@ -17,48 +17,67 @@ Maintain enough evidence and current guidance for another authorised operator to
 
 ## Records to maintain
 
-| Record | Authoritative location |
-|---|---|
-| Registry records and corrections | REDCap and its audit trail |
-| Protected extracts, logs, staging and review files | private BNR workspace |
-| Approved public packages | configured authoritative public storage outside Git |
-| Website mirror and documentation | public-safe Info-Hub repository paths |
-| Code and documentation history | Git repository |
-| Credentials, private locations and recovery contacts | private local configuration sheet |
-| Material post-handover changes | concise change history |
+
+| Stage         | Record                                                              | Where it is kept and why                                                                                                                                                                                             |
+| ------------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Before REDCap** | Registry definitions and abstraction instructions                   | This manual is the official reference for which cases to include, what information to collect and how to record it.                                                                                                  |
+| **Before REDCap** | Source-record references and evidence used to support an entry      | The original clinical or registry source system remains the authoritative source. REDCap should retain only the necessary reference or summary, not duplicate identifiable source material.                          |
+| **Before REDCap** | Cases needing clinical review or clarification                      | Record the outstanding issue and final decision with the relevant registry record, so that decisions requiring clinical judgement can be understood later.                                                           |
+| **REDCap**        | Live registry records, corrections and material correction reasons  | REDCap holds the current record. Its audit trail preserves what changed and when; record the reason for a material correction with the affected record where needed.                                                 |
+| **REDCap**        | Data-entry rules and live project configuration                     | This manual explains the rules; REDCap holds the live forms, fields, validation and user-facing configuration. Keep a current configuration export with the private handover records when a material change is made. |
+| **REDCap**        | Authorised users and their access roles                             | REDCap User Rights is the live record of access. The private local configuration sheet records the responsible contacts and access-recovery information. Review both when staff responsibilities change.             |
+| **REDCap**        | Outstanding data-quality queries                                    | Keep unresolved queries with the affected REDCap record, and close them when resolved. Do not maintain a duplicate process / spreadsheet unless BNR later adopts one for a defined purpose.                                    |
+| **After REDCap**  | Protected extracts, processing logs, staging files and review files | The private BNR workspace holds these restricted working files. They must not be placed in the public repository.                                                                                                    |
+| **After REDCap**  | Release version, package contents and approval evidence             | The approved data package contains its dataset period and version, package ID, manifest and `approval.yml`. Together these show exactly what was approved for release and by whom.                                        |
+| **After REDCap**  | Approved public-release packages                                    | The approved copy in authoritative public storage outside Git is the official release and must not be edited by hand.                                                                                                |
+|**After REDCap**  | Website copy and supporting documentation                           | Public-safe Info-Hub repository paths hold the website copy. This is a mirror that can be recreated from the approved release.                                                                                       |
+| **After REDCap**  | History of changes to code and documentation                        | The Git repository is the official record of changes to code and documentation, using its commit history.                                                                                                            |
+| **All stages** | Private access and recovery arrangements | Keep the responsible roles, restricted file locations and recovery contacts in the appropriate institutional access records. Do not store passwords or access tokens in Git or in the manual. |
+| **All stages**  | Significant changes made after handover                             | The concise change history records only changes that materially affect methods, approval, publication, disclosure control, required software or staff responsibilities.                                              |
+                             |
 
 ## Routine maintenance
 
-- keep role assignments and the private configuration sheet current;
-- test that an authorised second operator can locate and run each routine pathway;
-- keep Technical Manual commands aligned with current files and dialogs;
-- remove obsolete navigation rather than leaving empty public pages;
-- review dependencies before upgrading Stata, Quarto, Python or extensions;
-- retain authoritative approved packages separately from replaceable website mirrors; and
-- use Git history for ordinary development changes.
+- Keep role assignments and the private configuration sheet up to date.
+- Check that a second authorised person can find and run each routine workflow.
+- Keep the commands and instructions in the Technical Manual in step with the current files and dialogs.
+- Remove out-of-date navigation rather than leaving empty public pages.
+- Check software requirements, such as Python and Git, before upgrading Stata, Quarto, Python or any extensions.
 
 ## Handover checklist
 
-The outgoing and incoming operators should jointly confirm:
+The person handing over and the person taking over should check together that:
 
-- access has been granted through normal institutional routes;
-- local paths and credentials are held by the correct roles;
-- the latest complete release and any work in progress are identified;
-- all unresolved queries, failed runs and pending approvals are listed;
-- a routine workflow can be run in a safe test or current cycle;
-- backup and recovery responsibilities are understood;
-- repository branch and Git status are understood; and
-- private access is removed when no longer required.
+- The new operator has been given the access they need through the usual BNR or institutional process.
+- The right people hold the local file locations and access details.
+- Everyone knows which release is the latest complete version, and what work is still under way.
+- Any unresolved questions, failed runs and approvals still needed are clearly listed.
+- The usual workflow can be run safely, either as a test or during the current reporting cycle.
+- Everyone understands who is responsible for backup and recovery.
+- The current repository branch and Git status are clear.
+- Access for people who no longer need it has been removed.
 
-## Change control after formal handover
+## Recording important changes after handover
 
-Record changes that materially affect a metric definition, approval or publication pathway, public output structure, disclosure control, required dependency or staff responsibility. Routine edits need only clear Git history.
+Keep a short record of any change that affects:
 
-## Annual or role-change review
+- How a measure is defined.
+- How work is approved or published.
+- The structure of public outputs.
+- Confidentiality protection.
+- Software that the system needs.
+- Who is responsible for a task.
 
-Review this manual, the Technical Manual, role assignments, private configuration sheet, dependencies, access rights and recovery arrangements at least annually and whenever a key operator leaves or a core system changes.
+Small routine changes only need a clear record in Git.
 
-::: {.callout-warning title="BNR confirmation required"}
-Confirm retention periods, backup owner, recovery-test frequency, formal handover approver and the location of the private configuration sheet. Do not publish live access details.
-:::
+## Annual review and review after staff changes
+
+At least once a year—and whenever a key member of staff leaves or a core system changes—review:
+
+- This manual and the Technical Manual.
+- Who is responsible for each role.
+- The private configuration sheet.
+- Required software and other dependencies.
+- Access rights.
+- Backup and recovery arrangements.
 

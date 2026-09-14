@@ -1,0 +1,44 @@
+---
+manual-review-status: not-reviewed
+title: "BNR analysis framework"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Analysis framework overview](analysis-framework.qmd) {.card-title}
+
+How agreed analytical rules govern routine reporting.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Statistical Analysis Plan](sap.qmd) {.card-title}
+
+The standing statistical methods and decision rules.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Metric specification register](sap-metrics.qmd) {.card-title}
+
+Implementation-ready definitions for routine indicators.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

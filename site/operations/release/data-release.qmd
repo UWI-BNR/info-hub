@@ -1,62 +1,64 @@
 ﻿---
-manual-review-status: not-reviewed
-title: "Authorise a data release"
-subtitle: "Confirm the reporting period, then use CVD events Step 1 to extract the cumulative REDCap data"
+manual-review-status: reviewed-by-irh
+title: "Extract data from REDCap"
+subtitle: "Confirm the reporting period, then use CVD Step 1 to export the cumulative REDCap data"
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
 Operations Manual
 :::
 
-**Status:** Implemented post-REDCap procedure; pre-extraction sign-off details require BNR confirmation.  
 **Owner:** BNR Lead and BNR Analyst.
 
 ## Purpose
 
-A data release is the identified cumulative REDCap extract used for one analytical cycle. It records the release year and month, the extraction time and the source receipt so that results can be reproduced even after REDCap records change.
+A data extract is the identified cumulative REDCap export used for one analytical cycle. It records the extract year and month, the extraction time and the source receipt so that results can be reproduced even after REDCap records change.
 
 ## Before starting
 
 Confirm that:
 
-- the intended release year and month are unambiguous and the month has ended;
+- the intended export year and month are unambiguous and the month has ended;
 - expected case finding, abstraction and record approval are sufficiently complete;
-- release-blocking queries and duplicates have been resolved;
+- REDCap queries and duplicates for the month in question have been resolved;
 - known late records and unresolved outcomes have been reviewed;
 - REDCap structural changes have been communicated to the analyst; and
 - the BNR Lead or delegated role has authorised extraction.
 
 ## Step-by-step procedure
 
-1. Record the release year and month and any accepted limitation, such as known late records.
+1. Record the export year and month and any accepted limitation, such as known late records.
 2. Open Stata on the authorised workstation and load the BNR menu if it is not already available.
-3. Choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**.
-4. Enter the authorised release year and month. Leave replacement off for a first extraction.
+   - For events, choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**.
+   - For deaths, choose **User > BNR > Update CVD mortality dashboard > Step 1: Extract REDCap data**.
+4. Enter the authorised export year and month. Leave replacement (`replace`) off for a first extraction.
 5. Select **Run extract**.
 6. Confirm that the Stata summary reports `Completed successfully`, the intended period and a plausible record count.
-7. Check that the raw CSV, Stata copy, YAML extraction receipt and private log were created together.
-8. Open the receipt and confirm its dates and record count. Stop if they do not match the authorised release.
-9. Record that the release is ready for CVD events Step 2.
+7. Check that the raw CSV, Stata copy and YAML extraction receipt were created in the private release folder, `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`, and that the private log was created under `$BNR_PRIVATE_LOGS/`.
+8. Open the receipt and confirm its dates and record count. Stop if they do not match the authorised export.
+9. Record that the export is ready for CVD events Step 2.
 
-Later REDCap corrections belong to a new or explicitly authorised replacement analytical cycle. Do not alter or relabel the retained extract.
+Later REDCap corrections belong to a subsequent export month, or an explicitly authorised replacement export for the same month. Do not alter the already exported data.
 
 ## Stop points
 
 Stop if the reporting period, project, authority, field structure, record count or extraction result is uncertain. Do not use output from a failed or partial Step 1 run.
 
-## Evidence retained
+## Evidence created during extraction
 
-- authorisation and reporting period;
-- accepted limitations;
-- raw CSV and Stata source copy;
-- extraction receipt; and
-- private Stata log.
+Step 1 automatically creates the following private records for each CVD event release:
 
-::: {.callout-warning title="BNR confirmation required"}
-Confirm the operational sign-off used before extraction, the normal monthly timing and which unresolved record issues postpone a release.
-:::
+- **Raw CSV and Stata source copy:** created in  
+  `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`.  
+  These are the REDCap data snapshot used for the release.
+- **Extraction receipt:** created in the same private release folder as a YAML file.  
+  It records the reporting period, extraction details and checks on the source files.
+- **Private Stata log:** created under `$BNR_PRIVATE_LOGS/`.  
+  It records whether the extraction completed successfully and any error message if it did not.
+
+The release authorisation, reporting period and any accepted limitations should be recorded with the private release records. These files contain private registry information or operational details. Do not copy them into Git or public website folders.
 
 ## Detailed technical instructions
 
-Use [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.
-
+- Use [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.
+- Use [CVD mortality Step 1: Extract mortality data](../../technical/workflows/mortality/extract.qmd) for dialog fields, output locations, the command-line equivalent and troubleshooting.

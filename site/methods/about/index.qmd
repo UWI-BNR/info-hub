@@ -1,0 +1,22 @@
+---
+manual-review-status: reviewed-by-irh
+title: "About BNR surveillance"
+description: "Choose a page in this section."
+---
+
+::: {.grid .bnr-methods-section-listing}
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [About BNR surveillance](bnr-surveillance.qmd) {.card-title}
+
+What the Registry monitors and why surveillance matters.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

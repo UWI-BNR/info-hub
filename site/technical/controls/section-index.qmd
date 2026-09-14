@@ -1,0 +1,44 @@
+---
+manual-review-status: not-reviewed
+title: "Review and publication controls"
+description: "Choose a Technical Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Review an analytical release](review-release.qmd) {.card-title}
+
+Complete the required human checks before approval.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Disclosure control](disclosure-control.qmd) {.card-title}
+
+Apply small-number rules and human disclosure review.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Approve and publish a release](approve-publish.qmd) {.card-title}
+
+Bind approval to the exact candidate and publish it.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

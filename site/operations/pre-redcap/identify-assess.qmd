@@ -1,7 +1,7 @@
 ﻿---
-manual-review-status: not-reviewed
-title: "Identify and assess potential cases"
-description: "BNR team draft for documenting case finding and initial assessment before REDCap."
+manual-review-status: reviewed-by-irh
+title: "Identify and assess potential events"
+description: "The BNR processes for case-finding and initial event assessment before REDCap data entry."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}

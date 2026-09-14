@@ -1,0 +1,84 @@
+---
+manual-review-status: reviewed-by-irh
+title: "Post-REDCap analytics and publishing"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Section overview](index.qmd) {.card-title}
+
+A summary of processes for each BNR Info-hub publication type.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Authorise a data export](../release/data-release.qmd) {.card-title}
+
+Confirm the date, data coverage, and data release authority for a data release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD event workflow](cvd-events-workflow.qmd) {.card-title}
+
+Operational responsibilities for the six-step event release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD mortality workflow](mortality-workflow.qmd) {.card-title}
+
+Operational responsibilities for the six-step mortality release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [BNR reporting workflows](reporting-workflows.qmd) {.card-title}
+
+Responsibilities for rolling update report, annual report, and one-off reports.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Review, approve and publish](../release/review-approve-publish.qmd) {.card-title}
+
+Complete the controlled review and publication sequence.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Correct a data release](../release/correct-release.qmd) {.card-title}
+
+Correct source data or code and rerun the affected workflow.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

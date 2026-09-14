@@ -1,39 +1,68 @@
 ﻿---
 manual-review-status: reviewed-by-irh
-title: "Measures overview"
-description: "The core measures available in the BNR Information Hub."
+title: "What BNR reports"
+description: "Choose a BNR measure to understand what it shows and how to interpret it."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--methods}
 Public Methods Manual
 :::
 
-The BNR Information Hub presents a number of core measures, and each measure can answer different questions. A count describes volume; a percentage presents the disease burden in a population subgroup, such as men, women, or younger adults; a rate relates events to a population. 
+::: {.grid .bnr-methods-section-listing}
 
-As well as these core measure, updated monthly, the BNR team produce regular insights on further aspects of disease burden, such as hospital case fatality, length of hospital stay, and more. For recent BNR outputs, click [here](../../news/index.qmd).
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Number of CVD events](cvd-event-counts.qmd) {.card-title}
 
-## Core measures from the BNR
-
-| Measure | Measure Type | Question answered | Usually reported as |
-|---|--|----|---|
-| [Number of CVD events](cvd-event-counts.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> | How many eligible hospital-registered events were recorded? | Number of events |
-| [CVD event rates](incidence.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |How frequently were eligible events recorded relative to the population? | Events per 100,000 population |
-| [CVD mortality](mortality.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |How many deaths meet the BNR CVD mortality definitions, how are they distributed, and how do annual rates compare? | Counts, percentage distributions and rates |
-| [Hypertension](hypertension.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |Measures of hypertension coverage and control | Counts, percentages and rates |
-| [Diabetes](diabetes.qmd) | <span style="color: #356a49; font-weight: 500;">CORE</span> |Measures of diabetes coverage and control | Counts, percentages and rates |
-| [Case fatality](case-fatality.qmd) | <span style="color: #6c757d;">INSIGHT</span> |What proportion of eligible hospital events ended in death before discharge? | Percentage |
-| [Hospital length of stay](length-of-stay.qmd) | <span style="color: #6c757d;">INSIGHT</span> | How long did eligible CVD admissions last? | Median days and interquartile range |
-
-## Choose the right measure
-
-Use counts for workload or burden, rates for population comparisons, case fatality for short-term hospital outcomes, and length of stay or bed-days for hospital use. No single measure gives a complete account of population health or service performance.
-
-::: {.callout-warning title="Similar labels can hide different definitions"}
-Two statistics called including the word *event*, *mortality*, or *rate* (for example) may use different sources, denominators or age-adjustment methods. Use the definition accompanying each BNR output before making a comparison.
+How many eligible CVD events were recorded.
+:::
+:::
 :::
 
-## Related pages
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD incidence and event rates](incidence.qmd) {.card-title}
 
-- [Counts, percentages and rates](../interpretation/counts-percentages-rates.qmd)
-- [Glossary](../reference/glossary.qmd)
+How frequently eligible CVD events occurred in the population.
+:::
+:::
+:::
 
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD mortality](mortality.qmd) {.card-title}
+
+BNR cardiovascular deaths, distributions and annual mortality rates.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD case fatality](case-fatality.qmd) {.card-title}
+
+Deaths before discharge following eligible hospital CVD events.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Hospital length of stay](length-of-stay.qmd) {.card-title}
+
+How long eligible CVD admissions lasted.
+:::
+:::
+
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

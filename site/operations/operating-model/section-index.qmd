@@ -1,0 +1,44 @@
+---
+manual-review-status: not-reviewed
+title: "How the registry works"
+description: "Choose an Operations Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Roles and decision rights](roles-decision-rights.qmd) {.card-title}
+
+Who is responsible and where operational decisions are made.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [From cases to statistics](routine-cycle.qmd) {.card-title}
+
+The route from case finding to approved public statistics.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Records and handover](records-handover.qmd) {.card-title}
+
+What operational evidence is retained and handed over.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

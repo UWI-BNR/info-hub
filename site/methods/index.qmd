@@ -29,7 +29,7 @@ This manual explains what Barbados National Registry statistics mean, how the ma
 What the Registry monitors, why surveillance matters and what these statistics can show.
 
 ::: {.mt-auto}
-[Begin section](about/bnr-surveillance.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](about/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -45,7 +45,7 @@ What the Registry monitors, why surveillance matters and what these statistics c
 How health information becomes reviewed, confidentiality-protected public statistics.
 
 ::: {.mt-auto}
-[Begin section](about/records-to-statistics.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](about/records-to-statistics-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -61,7 +61,7 @@ How health information becomes reviewed, confidentiality-protected public statis
 Definitions and worked examples for CVD, hypertension and diabetes measures.
 
 ::: {.mt-auto}
-[Begin section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](measures/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -77,7 +77,7 @@ Definitions and worked examples for CVD, hypertension and diabetes measures.
 How different kinds of statistics answer different questions.
 
 ::: {.mt-auto}
-[Begin section](interpretation/counts-percentages-rates.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](interpretation/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -93,7 +93,7 @@ How different kinds of statistics answer different questions.
 How data limitations, review and disclosure control affect published figures.
 
 ::: {.mt-auto}
-[Begin section](interpretation/data-quality-completeness.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](interpretation/quality-confidentiality-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -109,7 +109,7 @@ How data limitations, review and disclosure control affect published figures.
 Short explanations of the principal terms used in BNR publications.
 
 ::: {.mt-auto}
-[Begin section](reference/glossary.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](reference/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 :::
 :::
@@ -132,7 +132,8 @@ to the relevant public tables, dashboards, reports and downloads.
 | **[Operations Manual](../operations/index.qmd)** | What must BNR staff do, who decides and what evidence is retained? |
 | **[Technical Manual](../technical/index.qmd)** | How do staff operate the analytics and publishing environment? |
 
-The public manual does not contain patient information, software instructions, file paths or internal security details.
+The methods manual explains what the BNR measures and how its statistics should be understood. The operations manual guides staff through the routine tasks needed to keep the BNR system running. The technical manual documents the code, data processes and system design that support the BNR’s work.
+
 
 ## Go to the statistics
 

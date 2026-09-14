@@ -1,0 +1,34 @@
+---
+manual-review-status: not-reviewed
+title: "System reference"
+description: "Choose a Technical Manual page in this section."
+---
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [System reference](index.qmd) {.card-title}
+
+Principal workflows, commands, files and publication boundaries.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Suppression validation, 2024–2025](bnr-suppression-validation-2024-2025.qmd) {.card-title}
+
+Validation record for the BNR CVD suppression rules.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
+

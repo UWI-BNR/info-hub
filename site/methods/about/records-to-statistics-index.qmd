@@ -1,0 +1,22 @@
+---
+manual-review-status: reviewed-by-irh
+title: "From records to statistics"
+description: "Choose a page in this section."
+---
+
+::: {.grid .bnr-methods-section-listing}
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-methods-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [From health records to published statistics](records-to-statistics.qmd) {.card-title}
+
+How health information becomes reviewed public statistics.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-methods-return}
+[Browse all Methods sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::
