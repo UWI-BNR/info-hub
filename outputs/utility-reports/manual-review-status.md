@@ -5,7 +5,7 @@
 | Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
-| Operations Manual | 0 | 20 | 15 | 0 | 0 | 35 |
+| Operations Manual | 0 | 19 | 16 | 0 | 0 | 35 |
 | Technical Manual | 0 | 41 | 0 | 0 | 0 | 41 |
 
 ## Public Methods Manual
@@ -58,7 +58,7 @@
 | Post-REDCap analytics and publishing | `site/operations/post-redcap/index.qmd` | Not reviewed | Page YAML |
 | Extract data from REDCap | `site/operations/release/data-release.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD event release workflow | `site/operations/post-redcap/cvd-events-workflow.qmd` | Reviewed by IRH | Page YAML |
-| Run the CVD mortality release workflow | `site/operations/post-redcap/mortality-workflow.qmd` | Not reviewed | Page YAML |
+| Run the CVD mortality release workflow | `site/operations/post-redcap/mortality-workflow.qmd` | Reviewed by IRH | Page YAML |
 | Run BNR reporting workflows | `site/operations/post-redcap/reporting-workflows.qmd` | Not reviewed | Page YAML |
 | Review, approve and publish | `site/operations/release/review-approve-publish.qmd` | Not reviewed | Page YAML |
 | Correct or replace a release | `site/operations/release/correct-release.qmd` | Not reviewed | Page YAML |

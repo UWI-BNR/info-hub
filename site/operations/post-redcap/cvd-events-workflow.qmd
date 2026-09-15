@@ -25,109 +25,88 @@ Steps 1–5 create private working files. Only Step 6 moves approved files into 
 ## Step 1: extract the REDCap data
 
 ::: {.callout-note collapse="true" title="Details"}
-**What this step does.** Step 1 exports a cumulative snapshot of the CVD event records in REDCap for the authorised period (Jan 2024 onwards). It does not change the REDCap records. The resulting dataset contains Personally Identifiable Information (PII) and should be held privately and securely at all times.
-
-**How to run it.** From Stata, choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**. Enter the authorised year and month, then run the extract.
-
-**What to check.** Confirm that the summary says the step completed successfully. Check that the release period and record count are plausible. Open the Stata dataset and check that it contains records covering the expected event dates.
-
-**Files and location.** Step 1 automatically creates a raw CSV, a Stata copy and a YAML extraction receipt in `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`. The private Step 1 log is under `$BNR_PRIVATE_LOGS/`.
-
-See [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for the exact file names, dialog fields and troubleshooting.
+| Question | Details |
+|---|---|
+| What this step does | Exports a cumulative snapshot of the CVD event records in REDCap for the authorised period (January 2024 onwards). It does not change REDCap. The resulting data contain personally identifiable information and must remain private. |
+| How to run it | In Stata, choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**. Enter the authorised year and month, then run the extract. |
+| What to check | Confirm that the summary says the step completed successfully. Check that the release period and record count are plausible. Open the Stata dataset and check that it contains records covering the expected event dates. |
+| Files and location | Step 1 automatically creates a raw CSV, a Stata copy and a YAML extraction receipt in `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`. The private Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [CVD events Step 1: Extract a REDCap release](../../technical/workflows/cvd-events/extract-redcap.qmd) for exact file names, dialog fields and troubleshooting. |
 :::
 
 ## Step 2: build the complete confidential dataset
 
 ::: {.callout-note collapse="true" title="Details"}
-**What this step does.** Step 2 joins the selected REDCap export to the fixed historical CVD dataset (Jan 2010&mdash;Dec 2023) . It brings the older and newer records into one consistent confidential dataset. The resulting dataset contains Personally Identifiable Information (PII) and should be held privately and securely at all times.
-
-**How to run it.** In the Stata CVD events menu, choose **Step 2: Build cumulative dataset**. Enter the same release year and month used in Step 1, then select **Build dataset**.
-
-**What to check.** Confirm that the summary says the step completed successfully. Check that the historical, newer and total record counts are plausible, and that the event-date range is correct.
-
-**Files and location.** Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`. Check that `bnr_cvd_confidential_YYYYMM_v01.dta` and its matching YAML receipt exist. The receipt should show the correct source files, release identity and record counts. The private Step 2 log is under `$BNR_PRIVATE_LOGS/`.
-
-See [CVD events Step 2: Prepare the confidential dataset](../../technical/workflows/cvd-events/prepare-confidential.qmd) for the input files, exact checks and troubleshooting.
+| Question | Details |
+|---|---|
+| What this step does | Joins the selected REDCap export to the fixed historical CVD dataset (January 2010–December 2023), creating one consistent confidential dataset. It contains personally identifiable information and must remain private. |
+| How to run it | In the Stata CVD events menu, choose **Step 2: Build cumulative dataset**. Enter the same release year and month used in Step 1, then select **Build dataset**. |
+| What to check | Confirm that the summary says the step completed successfully. Check that the historical, newer and total record counts are plausible, and that the event-date range is correct. |
+| Files and location | Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`. Check that `bnr_cvd_confidential_YYYYMM_v01.dta` and its matching YAML receipt exist. The receipt should show the correct source files, release identity and record counts. The private Step 2 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [CVD events Step 2: Prepare the confidential dataset](../../technical/workflows/cvd-events/prepare-confidential.qmd) for the input files, exact checks and troubleshooting. |
 :::
 
 ## Step 3: create de-identified analytical datasets
 
 ::: {.callout-note collapse="true" title="Details"}
-
-**What this step does.** Step 3 removes direct identifiers and creates separate private datasets for the approved types of analysis. These files are safer to analyse but are still private.
-
-**How to run it.** In the CVD events menu, choose **Step 3: Build deidentified datasets**. Enter the same release year and month. For a full routine refresh, leave all five dataset types selected, then run Step 3.
-
-**What to check.** Confirm that the summary says the step completed successfully and lists the datasets you selected. Check that each dataset has a matching YAML receipt, that the record counts are plausible and that direct identifiers are absent.
-
-**Files and location.** The datasets and receipts are created in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`. The count dataset, `bnr_cvd_input_count_YYYYMM_v01.dta`, is used by Step 4 to calculate hospital-recorded event counts and distributions. The other Step 3 datasets support their approved types of analysis but are not used by the routine Step 4 release. The private Step 3 log is under `$BNR_PRIVATE_LOGS/`.
-
-See [CVD events Step 3: Create deidentified analytical inputs](../../technical/workflows/cvd-events/create-analysis-inputs.qmd) for the five dataset types, approved variable lists and troubleshooting.
-
+| Question | Details |
+|---|---|
+| What this step does | Removes direct identifiers and creates separate private datasets for the approved types of analysis. These deidentified files are safer to analyse but are still private. |
+| How to run it | In the CVD events menu, choose **Step 3: Build deidentified datasets**. Enter the same release year and month. For a full routine refresh, leave all five dataset types selected, then run Step 3. |
+| What to check | Confirm that the summary says the step completed successfully and lists the datasets you selected. Check that each dataset has a matching YAML receipt, that the record counts are plausible and that direct identifiers are absent. |
+| Files and location | The datasets and receipts are created in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`. The count dataset, `bnr_cvd_input_count_YYYYMM_v01.dta`, is used by Step 4 to calculate hospital-recorded event counts and distributions. The other Step 3 datasets support their approved types of analysis but are not used by the routine Step 4 release. The private Step 3 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [CVD events Step 3: Create deidentified analytical inputs](../../technical/workflows/cvd-events/create-analysis-inputs.qmd) for the five dataset types, approved variable lists and troubleshooting. |
 :::
 
 ## Step 4: calculate the CVD event statistics
 
 ::: {.callout-note collapse="true" title="Details"}
-
-**What this step does.** Step 4 creates the combined aggregated CVD event statistics. It uses the Step 3 count dataset to calculate hospital-recorded event counts and distributions. It also uses the Step 2 confidential event dataset and the selected mortality release to complete the DCO linkage and calculate the hospital-plus-DCO results. It then creates a private staging package for review. It does not approve or publish anything. These files may still contain small numbers (less than 6) that would create a disclosure risk. In Step 5, disclosure control is applied before human review and approval.  
-
-**How to run it.** In the CVD events menu, choose **Step 4: Calculate metrics for dashboards**. Enter the CVD event release year and month and the completed mortality release year and month, then run Step 4.
-
-**What to check.** Confirm that the summary reports successful calculation and staging. Check that the CVD event and mortality release identities are the intended pair. Review the reported event counts, incidence-rate rows, source-quarantine status and DCO linkage-review totals. Open the staging package and confirm that its `datasets/`, `metadata/` and `review/` folders are present. Do not edit generated files by hand.
-
-**Files and location.**
-
-- The Step 3 count dataset is in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`.
-- The Step 2 confidential event dataset is in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`.
-- The mortality-linked calculations and detailed private linkage-review files are under `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/`.
-- The private staging package after completion of step 4 is created in `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`.
-- The private Step 4 log is under `$BNR_PRIVATE_LOGS/`.
-
-See [CVD events Step 4: Generate combined CVD metrics](../../technical/workflows/cvd-events/generate-metrics.qmd) for the required inputs, reporting scope and detailed checks.
-
+| Question | Details |
+|---|---|
+| What this step does | Creates a single dataset containing all aggregated CVD event statistics needed for the Info-hub visuals. It uses the Step 3 count dataset for hospital-recorded event counts,  distributions and rates, and the Step 2 confidential event dataset plus the selected mortality release for DCO linkage and hospital-plus-DCO results. It then creates a private "staging" package for review. It does not approve or publish anything. Small numbers may still create a disclosure risk; Step 5 applies disclosure control before final review and approval. |
+| How to run it | In the CVD events menu, choose **Step 4: Calculate metrics for dashboards**. Enter the CVD event release year and month and the completed mortality release year and month, then run Step 4. |
+| What to check | Confirm that the summary reports successful calculation and staging. Check that the CVD event and mortality release identities are the intended pair. Review the reported event counts, incidence-rate rows, source-quarantine status and DCO linkage-review totals. Open the staging package and confirm that its `datasets/`, `metadata/` and `review/` folders are present. Do not edit generated files by hand. |
+| Files and location | The Step 3 count dataset is in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`; the Step 2 confidential event dataset is in `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`; and mortality-linked calculations and detailed private linkage-review files are under `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/`. The Step 4 staging package is created in `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`, and the private Step 4 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [CVD events Step 4: Generate combined CVD metrics](../../technical/workflows/cvd-events/generate-metrics.qmd) for the required inputs, reporting scope and detailed checks. |
 :::
 
 
 ## Step 5: review and approve the release
 
 ::: {.callout-note collapse="true" title="Details"}
-**What this step does.** Step 5 is a two-stage process. First we `prepare the review package`&mdash;creating the files needed for human review. After the review is complete, a separate `record approval` action approves exact candidate data package and creates the private public-ready package. Approval does not publish the files.
-
-**How to run it.** In the CVD events menu, use Step 5 to **prepare** the review package. The reviewer then checks the results and disclosure control. Only when every check is satisfactory should an authorised BNR Lead, BNR Analyst or BNR Developer use the separate Step 5 **approve** action and enter their name and role.
-
-**What to check.** In the `review/` folder, open `step5_review.xlsx`. Confirm that every row in `step5_disclosure_qa.csv` is marked `PASS`, and review `step5_equation_audit.csv`, `step5_row_audit.dta` and `step5_review_basis.csv`. For annual DCO counts, check that hospital-only counts plus additional DCO counts equal hospital-plus-DCO counts. After approval, open `approval.yml` and confirm the release, approver, role and approval details are correct.
-
-**Files and location.** The review evidence is in `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`. Approval creates the `public_ready/` folder, `public_manifest.csv` and `approval.yml` within the same staging package. The private Step 5 logs are under `$BNR_PRIVATE_LOGS/`. The `approval.yml` receipt must be present for the final step 6 to proceed.
-
-See [CVD events Step 5: Review and approve combined CVD metrics](../../technical/workflows/cvd-events/review-approve.qmd) for the full review checks, approval command and public-ready controls.
+| Question | Details |
+|---|---|
+| What this step does | Has two stages. **Prepare the review package** creates the files needed for human review. After review, **record approval** approves the exact candidate package and creates the private public-ready package. Approval does not publish the files. |
+| How to run it | In the CVD events menu, first use Step 5 to **prepare** the review package. The reviewer checks the results and disclosure control. Only when every check is satisfactory should an authorised BNR Lead or BNR Analyst use the separate Step 5 **approve** action and enter their name and role. |
+| What to check | In the `review/` folder, open `step5_review.xlsx`. Confirm that every row in `step5_disclosure_qa.csv` is `PASS`, and review `step5_equation_audit.csv`, `step5_row_audit.dta` and `step5_review_basis.csv`. For annual DCO counts, check that hospital-only counts plus additional DCO counts equal hospital-plus-DCO counts. After approval, open `approval.yml` and confirm the release, approver, role and approval details. |
+| Files and location | Review evidence is in `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`. Approval creates the `public_ready/` folder, `public_manifest.csv` and `approval.yml` within the same staging package. The private Step 5 logs are under `$BNR_PRIVATE_LOGS/`. `approval.yml` must be present before Step 6 can proceed. |
+| Technical detail | See [CVD events Step 5: Review and approve combined CVD metrics](../../technical/workflows/cvd-events/review-approve.qmd) for full review checks, the approval command and public-ready controls. |
 :::
 
 ## Step 6: publish the approved files
 
 ::: {.callout-note collapse="true" title="Details"}
-**What this step does.** Step 6 checks that the approval and manifest match the approved files. It then copies the approved package into the authoritative public area and refreshes the website copy. It does not recalculate or approve the statistics.
-
-**How to run it.** In the CVD events menu, choose **Step 6: Publish approved metrics**. Enter the approved release year and month, then run Step 6.
-
-**What to check.** Confirm that publication and verification completed successfully. Inspect the authoritative public package, the release ZIP and the website copy. Check that the current CSV and download link refer to the intended release. Private review and approval-control files must not appear in the website folders.
-
-**Files and location.** The authoritative public package is under `$BNR_PUBLIC/metrics/cvd/`. The website copy is under `$BNR_REPO/site/downloads/files/metrics/cvd/`. After Step 6, rebuild the Downloads catalogue and inspect the affected dashboard and Downloads page before the normal website commit, render and deployment.
-
-See [CVD events Step 6: Publish approved combined CVD metrics](../../technical/workflows/cvd-events/publish-metrics.qmd) for the publication checks and catalogue command.
+| Question | Details |
+|---|---|
+| What this step does | Checks that the approval and manifest match the approved files. It then copies the approved package into the authoritative public area and refreshes the website copy. It does not recalculate or approve the statistics. |
+| How to run it | In the CVD events menu, choose **Step 6: Publish approved metrics**. Enter the approved release year and month, then run Step 6. |
+| What to check | Confirm that publication and verification completed successfully. Inspect the authoritative public package, release ZIP and website copy. Check that the current CSV and download link refer to the intended release. Private review and approval-control files must not appear in website folders. |
+| Files and location | The authoritative public package is under `$BNR_PUBLIC/metrics/cvd/`. The website copy is under `$BNR_REPO/site/downloads/files/metrics/cvd/`. After Step 6, rebuild the Downloads catalogue and inspect the affected dashboard and Downloads page before the normal website commit, render and deployment. |
+| Technical detail | See [CVD events Step 6: Publish approved combined CVD metrics](../../technical/workflows/cvd-events/publish-metrics.qmd) for the publication checks and catalogue command. |
 :::
 
-## When to stop
+## If a step needs attention
 
-Stop the workflow if:
+This workflow is automated and should run reliably when the REDCap data structure, required fields and file locations remain unchanged. Problems are therefore expected to be uncommon. If a problem does occur, the step summaries, receipts and private logs will usually show where it stopped. Do not try to repair generated files by hand.
 
-- a step reports that it failed or did not finish;
-- the release year or month changes unexpectedly between steps;
-- a required input or receipt is missing;
-- record counts, dates or calculated results do not look plausible;
-- the event and mortality releases used in Step 4 are not the intended pair;
-- a disclosure-control check fails or remains unexplained;
-- the approval does not match the reviewed candidate; or
-- private files appear in Git status or a public folder.
+If a current month fails, it can be useful to rerun a previously completed month in the same safe environment. If the earlier month completes normally, the problem is more likely to be in the new month’s data or release settings than in the workflow itself. If the earlier month also fails, stop and seek support before changing code or configuration.
 
-Read the summary and private log for the failed step. Correct the earliest affected source file, setting or version-controlled code, then rerun from that step. Do not repair generated outputs by editing or copying individual files by hand.
+| Situation | What to do |
+|---|---|
+| A step fails or does not finish | Read its summary and private log. Check the reported input, access, setting or file location, then rerun the step if the cause is clear. |
+| A file, receipt or expected output is missing | Stop and check the preceding step. Do not create or copy an individual replacement file by hand. |
+| A count, date, classification or calculated result is surprising | Stop and discuss it with the BNR Lead or Analyst. Correct the earliest affected source or workflow step, then rerun from there. |
+| The current month fails and the cause is unclear | Where safe, rerun a previously completed month without promoting or replacing any outputs. A successful earlier run suggests a problem with the current data or release settings; a second failure suggests a wider workflow, access or configuration problem. |
+| Step 4 uses the wrong event or mortality release | Stop before review. Rerun Step 4 using the intended release pair. |
+| A disclosure-control check fails, or protected values appear in a candidate | Do not approve or publish. Correct the source or version-controlled code, then rebuild the review package and complete review again. |
+| Private content appears in Git status or a public folder | Stop publication immediately. Remove the private content from the public location through the approved recovery process and seek support before continuing. |

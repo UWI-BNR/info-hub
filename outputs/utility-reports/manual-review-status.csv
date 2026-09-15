@@ -40,7 +40,7 @@ Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redc
 Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redcap/index.qmd,not-reviewed,Page YAML
 Operations Manual,Extract data from REDCap,site/operations/release/data-release.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Run the CVD event release workflow,site/operations/post-redcap/cvd-events-workflow.qmd,reviewed-by-irh,Page YAML
-Operations Manual,Run the CVD mortality release workflow,site/operations/post-redcap/mortality-workflow.qmd,not-reviewed,Page YAML
+Operations Manual,Run the CVD mortality release workflow,site/operations/post-redcap/mortality-workflow.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Run BNR reporting workflows,site/operations/post-redcap/reporting-workflows.qmd,not-reviewed,Page YAML
 Operations Manual,"Review, approve and publish",site/operations/release/review-approve-publish.qmd,not-reviewed,Page YAML
 Operations Manual,Correct or replace a release,site/operations/release/correct-release.qmd,not-reviewed,Page YAML
