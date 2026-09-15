@@ -1,0 +1,23 @@
+---
+title: "Refresh the report listings"
+description: "Check the CVD reports and Latest Surveillance Outputs pages after a report is published."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+The **CVD Reports and Studies** and **Latest Surveillance Outputs** pages find published report landing pages automatically during a Quarto render. There is no separate list to update by hand.
+
+| Question | Details |
+|--|----|
+| What happens | Quarto reads the title, date, report type, image and other details from each published report landing page. It sorts the entries by date and rebuilds both listings. |
+| What you do | Complete the relevant report publication workflow, then run a complete Quarto render. Do not copy a private candidate page into the listings. |
+| What you check | Confirm the item appears once, with the correct title, description, date, image and report type. Open its landing page and PDF or data links. Check both the CVD listing and Latest Surveillance Outputs. |
+| Files to check | CVD listing: `site/surveillance/cvd/index.qmd`. Latest outputs: `site/news/index.qmd`. Report landing pages are under `site/surveillance/cvd/reports/updates/`, `annual/`, `briefings/` or `studies/`. |
+| If something is wrong | Check the report landing page and its YAML header first. Correct the controlled source or rebuild the report where necessary, then render again. Do not insert a listing card by hand. |
+
+For the listing searches, required metadata and troubleshooting, see [Technical: rebuild the report listings](../../technical/workflows/reporting/report-listings-regeneration.qmd).

@@ -1,7 +1,7 @@
 ﻿---
 title: "Review, approve and publish"
 subtitle: "The controlled route from private Stata staging to the public Info-Hub"
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
@@ -44,7 +44,7 @@ Use the approval action belonging to the workflow:
 | Annual CVD report | **User > BNR > Annual CVD report > Step 2: Approve annual report candidate** |
 | One-off CVD report | **User > BNR > One-off CVD report publication > Step 2: Approve one-off report candidate** |
 
-Select the exact reviewed package, identify the authorised approver and complete the confirmations. Check the resulting `approval.yml` and manifest. Approval applies only to that identified payload; a later payload change requires renewed review and approval.
+Select the exact reviewed package, identify the authorised approver and complete the confirmations. Check the resulting `approval.yml` and manifest. Approval applies only to that identified product; a later product change requires a new review and approval.
 
 ## Step 4: Publish the approved package in Stata
 
@@ -57,9 +57,7 @@ Use the separate publication action for the same product and release:
 | Annual CVD report | Annual report **Step 3: Publish approved annual report** |
 | One-off CVD report | One-off report **Step 3: Publish approved one-off report** |
 
-The rolling three-month update has one controlled build action and consumes
-already-approved event and mortality releases. It does not add a second
-analytical approval step.
+The rolling three-month update has one controlled build action and consumes already-approved event and mortality releases. It does not need a second analytical approval step.
 
 Confirm that the Stata summary reports successful publication and verification. Check the authoritative public package, its stable or release-stamped copy where applicable, the ZIP and the website mirror.
 
@@ -71,25 +69,44 @@ Confirm that the Stata summary reports successful publication and verification. 
 4. Run a complete local site render.
 5. Inspect the rendered pages and Downloads catalogue.
 
-Quarto consumes approved public products and must never point to private staging. Publication-layer behaviour must follow the documented dashboard contract; it must not become a second analytical workflow.
+Quarto consumes approved public products and must never point to private staging. 
 
-## Step 6: Review Git and deploy
+## Step 6: Review Git and publish the website
 
 1. In VS Code Source Control, inspect every changed file.
 2. Confirm that the changes are intended and public-safe.
-3. Commit and push the reviewed website change.
-4. Check the GitHub Actions deployment and the live pages.
+3. Commit the reviewed changes to your **working branch** and push that branch to GitHub. Do not try to push directly to `main`.
+4. On GitHub, create a pull request from the working branch to `main`.
+5. Check the changed files again. When the change is ready, merge the pull request into `main`.
+6. The merge starts GitHub Actions, which renders and deploys the live website.
+7. Check that the GitHub Actions **build** and **deploy** jobs complete successfully, then check the affected live pages.
 
-Follow [Render and publish the website](../../technical/website/render-publish.qmd) for exact VS Code, Quarto, Git and GitHub instructions.
+Follow [Render and publish the website](../../technical/website/render-publish.qmd) for the exact VS Code, Quarto, Git, pull-request and GitHub Actions steps.
 
-## Stop points
+## If something needs attention
 
-Stop if approval is absent, a package identity differs, a payload changed, replacement was not authorised, confidential material appears in Git status, or the rendered site differs from the approved product.
+The process is designed to stop before an unreviewed or changed package is made public. Do not try to repair generated files by hand or continue past a warning that you do not understand.
 
-## Evidence retained
+| Situation | What to do |
+|---|---|
+| Approval is missing | Do not publish the package or update the website. Return to the approval step and complete the required review and approval. |
+| The package identity, reporting period or source release is not the one expected | Stop. Check that the intended approved package has been selected. Correct the earliest affected step, then repeat review and approval if anything has changed. |
+| A package file has changed after approval | Stop. Do not use the changed package. Rebuild the candidate from the earliest affected step and complete review and approval again. |
+| A process asks to replace an existing file unexpectedly | Stop and check why the existing file is present. Use replacement only when a deliberate correction or rebuild has been agreed. |
+| Confidential material appears in VS Code Source Control or Git status | Do not commit or push. Remove it from the public repository folder using the approved recovery process, then ask for support before continuing. |
+| The local rendered page does not match the approved package | Do not create a pull request or merge to `main`. Check the website input files and page code, correct the problem, then render and review again. |
+| GitHub Actions fails after the pull request is merged | Open the failed workflow run in GitHub Actions and read the error message. Do not make further changes to `main` until the cause is understood. |
+| The live page is wrong or missing after deployment | Check that the expected pull request was merged, that the GitHub Actions build and deploy jobs succeeded, and that the browser is not showing an old cached copy. If still wrong, stop and seek support. |
 
-- private review evidence;
-- `approval.yml` and public manifest;
-- authoritative public package and publication log; and
-- Git commit and deployment history for the website presentation.
+## Records created by the workflow
 
+The workflow creates or preserves the following records. Together, they show what was reviewed, approved and made public.
+
+| Record | Where to find it | What it shows |
+|---|---|---|
+| Private review evidence | Private release and staging folders | The checks completed before approval. |
+| `approval.yml` and public manifest | The approved private package | The exact package, approver and files authorised for publication. |
+| Authoritative public package and publication log | Approved public output location | The files promoted by the controlled publication step and the result of that step. |
+| Git commit, pull request and GitHub Actions history | GitHub repository | The website change reviewed, merged into `main`, rendered and deployed. |
+
+Keep private records out of Git and the public website folders.

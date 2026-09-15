@@ -42,7 +42,7 @@ review.
 {title:Approval confirmations}
 
 {p 4 4 2}
-One authorised BNR Lead, BNR Analyst or BNR Developer must supply their full
+One authorised BNR Lead or BNR Analyst must supply their full
 name and tick all five confirmations. Complete the concrete review action in
 each item before ticking it:
 
@@ -76,7 +76,7 @@ the intended, unchanged package for Step 6 publication processing.
 
 {p 8 8 2}
 {cmd:do "$BNR_STATA/mortality/bnr_mort_s5_approve.do"} {it:year} {it:month}
-{it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"}
+{it:"Full name"} {it:"BNR Lead"|"BNR Analyst"}
 {cmd:release definitions disclosure candidate ready}
 
 {p 8 8 2}

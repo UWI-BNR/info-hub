@@ -5,7 +5,6 @@ LIST approver_roles
 BEGIN
 BNR Lead
 BNR Analyst
-BNR Developer
 END
 DIALOG main, label("BNR Step 5: Review and approval")
 BEGIN

@@ -53,7 +53,7 @@ and refresh the disposable website mirror under:
 
 `$BNR_REPO/site/downloads/files/metrics/mortality/burden/`
 
-The public dashboard then reads only from that website mirror. See [Maintain the CVD mortality dashboard](../../website/cvd-mortality-dashboard.qmd).
+The public dashboard then reads only from that website mirror. See [Refresh the CVD dashboards](../reporting/dashboard-regeneration.qmd).
 
 ## Fixed workflow rules
 
@@ -65,4 +65,3 @@ The public dashboard then reads only from that website mirror. See [Maintain the
 - Generated datasets, metadata, manifests and approval receipts are never repaired by hand.
 
 See [Apply and review disclosure control](../../controls/disclosure-control.qmd) for the common BNR policy.
-

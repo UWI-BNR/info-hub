@@ -1,8 +1,11 @@
 /*******************************************************************************
 DO-FILE:     bnr_step5_review.do
-VERSION:     2.6.1 (24 August 2026)
+VERSION:     2.6.2 (15 September 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Step 5 - prepare, review and record approval
+
+CHANGE 2.6.2:
+             Restrict approval to authorised BNR Lead and BNR Analyst roles.
 
 PURPOSE:     Run one of two deliberately separate Step 5 actions:
 
@@ -56,7 +59,7 @@ PREPARE:     do "$BNR_STATA/monthly/bnr_step5_review.do" ///
 
 APPROVE:     do "$BNR_STATA/monthly/bnr_step5_review.do" ///
                  2024 2 burden approve ///
-                 "Full name" "BNR Developer"
+                 "Full name" "BNR Analyst"
 *******************************************************************************/
 
 version 19
@@ -74,7 +77,7 @@ program define _bnr_step5_fail
     noisily display as error "============================================================================="
     noisily display as error "STEP 5: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         2.6.1"
+    noisily display as error "  Script version:         2.6.2"
     noisily display as error "  Selected release:       `release_id'"
     noisily display as error "  Action:                 `action'"
     noisily display as error `"  Reason:                 `reason'"'
@@ -176,10 +179,9 @@ else {
     }
 
     local role_lower = lower(strtrim(`"`approver_role'"'))
-    if !inlist(`"`role_lower'"', "bnr lead", "bnr analyst", ///
-            "bnr developer") {
+    if !inlist(`"`role_lower'"', "bnr lead", "bnr analyst") {
         display as error ///
-            "Approver role must be BNR Lead, BNR Analyst or BNR Developer."
+            "Approver role must be BNR Lead or BNR Analyst."
         exit 198
     }
     if strpos(`"`approver_name'"', char(34)) {
@@ -191,9 +193,6 @@ else {
     }
     else if `"`role_lower'"' == "bnr analyst" {
         local approver_role "BNR Analyst"
-    }
-    else {
-        local approver_role "BNR Developer"
     }
 }
 
@@ -346,7 +345,7 @@ log using `"`output_log'"', text replace name(step5)
 quietly {
 
 noisily display as text "BNR CVD STEP 5: HUMAN REVIEW AND APPROVAL"
-noisily display as result "  Script version:   2.6.1"
+noisily display as result "  Script version:   2.6.2"
 noisily display as result "  Selected release: `year4'-`month2'"
 noisily display as result "  Metric family:    burden"
 noisily display as result "  Action:           `action'"
@@ -1397,7 +1396,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 5: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             `summary_status'"
-noisily display as text   "  Script version:         2.6.1"
+noisily display as text   "  Script version:         2.6.2"
 noisily display as text   "  Selected release:       `release_id'"
 noisily display as text   "  Metric family:          burden"
 

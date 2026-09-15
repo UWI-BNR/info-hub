@@ -39,7 +39,7 @@ Steps 1–5 create private working files. Only Step 6 moves approved files into 
 ::: {.callout-note collapse="true" title="Details"}
 | Question | Details |
 |---|---|
-| What this step does | Joins the selected REDCap export to the fixed historical CVD dataset (January 2010–December 2023), creating one consistent confidential dataset. It contains personally identifiable information and must remain private. |
+| What this step does | Joins the selected REDCap export to the fixed historical CVD dataset (2009–2023), creating one consistent confidential dataset. It contains personally identifiable information and must remain private. |
 | How to run it | In the Stata CVD events menu, choose **Step 2: Build cumulative dataset**. Enter the same release year and month used in Step 1, then select **Build dataset**. |
 | What to check | Confirm that the summary says the step completed successfully. Check that the historical, newer and total record counts are plausible, and that the event-date range is correct. |
 | Files and location | Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`. Check that `bnr_cvd_confidential_YYYYMM_v01.dta` and its matching YAML receipt exist. The receipt should show the correct source files, release identity and record counts. The private Step 2 log is under `$BNR_PRIVATE_LOGS/`. |

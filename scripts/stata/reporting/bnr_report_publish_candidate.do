@@ -1,10 +1,13 @@
 /*******************************************************************************
 DO-FILE: bnr_report_publish_candidate.do
-VERSION: 1.2.0 (10 September 2026)
+VERSION: 1.2.1 (15 September 2026)
 PURPOSE: Promote one exact manifested report payload to public and site paths.
 
 This shared helper reads only public_ready. It never reads or alters candidate
 files and never renders, commits, pushes or deploys the Quarto site.
+
+CHANGE 1.2.1:
+  Accept only BNR Lead and BNR Analyst approval receipts for publication.
 
 CHANGE 1.2.0:
   Optionally publish one approved companion PDF and its landing QMD alongside
@@ -119,7 +122,7 @@ while r(eof) == 0 {
     if "`line'" == "`period_key': `period_value'" local period_ok 1
     if "`line'" == "report_version: v`version_num'" local version_ok 1
     if inlist("`line'", "approved_role: BNR Lead", ///
-            "approved_role: BNR Analyst", "approved_role: BNR Developer") local role_ok 1
+            "approved_role: BNR Analyst") local role_ok 1
     if "`line'" == "review_standard: bnr_report_review_v1" local review_ok 1
     if "`line'" == "disclosure_review: completed" local disclosure_ok 1
     if "`line'" == "candidate_reviewed: true" local candidate_ok 1

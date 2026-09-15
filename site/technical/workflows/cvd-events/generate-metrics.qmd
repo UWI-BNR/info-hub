@@ -1,47 +1,80 @@
-﻿---
-manual-review-status: not-reviewed
+---
 title: "Generate combined CVD metrics"
-description: "Step 4: calculate the private combined CVD count and annual-rate staging package."
+description: "CVD event Step 4: calculate and stage hospital-recorded and mortality-linked CVD statistics."
+manual-review-status: not-reviewed
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Purpose
+## What Step 4 does
 
-Step 4 combines the CVD Step 3 count input with a completed mortality release.
-It calculates and privately stages hospital-only burden results, annual
-hospital-plus-DCO rates, and the private DCO component evidence used by Step 5.
-It does not review, approve or publish.
+`scripts/stata/monthly/bnr_step4_metrics.do` is the routine controller. It uses the Step 3 count input for hospital-recorded counts, distributions and rates. It separately runs deterministic event-to-mortality linkage and DCO estimation using the Step 2 confidential event data and selected mortality release. It then stages burden, incidence-rate and private review evidence in one release package.
 
-## Required inputs
+Step 4 does not apply final disclosure control, record approval or publish.
+
+## Inputs
 
 | Input | Location |
 |---|---|
-| Step 3 count data and receipt | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/` |
-| Completed mortality-linked CVD calculations | `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/` |
+| Step 3 count data | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/bnr_cvd_input_count_YYYYMM_v01.dta` |
+| Step 3 count receipt | Same folder, `.yml` extension |
+| Step 2 confidential event data | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/bnr_cvd_confidential_YYYYMM_v01.dta` through the linkage subcontrollers |
+| Step 2 quarantine summary | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/review/bnr_cvd_step2_quarantine_summary_YYYYMM.csv` |
+| Selected mortality release and linkage inputs | Resolved by the linkage controllers for mortality `YYYY/MM` |
 
-## Run
+The mortality release cannot precede the event release. Keep the event and mortality identities together in review records.
+
+## Run Step 4
+
+Menu: **User > BNR > Update CVD events dashboard > Step 4: Calculate metrics for dashboards**
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2024 4 2026 7
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" ///
+    CVD_YEAR CVD_MONTH MORTALITY_YEAR MORTALITY_MONTH [replace]
 ```
 
-Use `replace` only to deliberately rebuild the same CVD release.
+Example:
 
-## Output and checks
+```stata
+do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2026 1 2026 7
+```
 
-The private staging package is:
+## Execution sequence
 
-`$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
+1. Validate periods, paths, Step 3 count files and the Step 2 quarantine summary.
+2. Prepare and profile linkage inputs.
+3. Run deterministic L01 and L02/L03 episode diagnostics.
+4. Create the private DCO review worklist and summary.
+5. Run unresolved-event, subtype and joint estimation controllers.
+6. Calculate incidence rates and private components.
+7. Calculate the hospital-recorded burden lattice from the Step 3 count input.
+8. Stage burden, rates, metadata and review material under one CVD release ID.
 
-Inspect its `datasets/`, `metadata/` and `review/` folders and confirm the
-controller reports successful combined calculation and staging. Do not alter
-generated products by hand. The following Step 5 preparation supplies the
-human review workbook and disclosure QA.
+Detailed linkage DTA/XLSX review files remain under:
 
-Annual DCO-facing public-shaped rows are limited to All CVD, Heart and Stroke;
-all, female and male; and Primary/Inclusive definitions. Additional-DCO counts
-are annual and all-age only; component accounting remains private.
+`$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/`
 
+Only the non-identifying DCO review summary is copied into the Step 4 staging review folder.
+
+## Staged outputs
+
+Root: `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
+
+Key files include:
+
+```text
+datasets/
+  cvd_burden_metrics_cvd_YYYY_MM.dta
+  cvd_incidence_rates_cvd_YYYY_MM.dta
+metadata/
+review/
+  cvd_incidence_rate_components_cvd_YYYY_MM.dta
+  cvd_dco_linkage_review_summary_cvd_YYYY_MM.csv
+  cvd_source_quarantine_summary_cvd_YYYY_MM.csv
+```
+
+Inspect the run summary for burden and rate row counts, quarantine status and DCO review volume. Confirm the event/mortality release pair, review the detailed private linkage evidence where required, and do not edit staged files.
+
+If an input or result is wrong, correct the earliest source or version-controlled controller and rerun Step 4. `replace` is only for a deliberate rebuild and requires a fresh Step 5 review.

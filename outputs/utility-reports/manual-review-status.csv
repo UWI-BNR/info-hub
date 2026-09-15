@@ -37,15 +37,21 @@ Operations Manual,Resolve record queries,site/operations/redcap/resolve-record-q
 Operations Manual,REDCap database maintenance,site/operations/redcap/database-maintenance.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Approve a data record,site/operations/redcap/approve-data-record.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redcap/section-index.qmd,reviewed-by-irh,Page YAML
-Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redcap/index.qmd,not-reviewed,Page YAML
+Operations Manual,Post-REDCap analytics and publishing,site/operations/post-redcap/index.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Extract data from REDCap,site/operations/release/data-release.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Run the CVD event release workflow,site/operations/post-redcap/cvd-events-workflow.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Run the CVD mortality release workflow,site/operations/post-redcap/mortality-workflow.qmd,reviewed-by-irh,Page YAML
-Operations Manual,Run BNR reporting workflows,site/operations/post-redcap/reporting-workflows.qmd,not-reviewed,Page YAML
-Operations Manual,"Review, approve and publish",site/operations/release/review-approve-publish.qmd,not-reviewed,Page YAML
-Operations Manual,Correct or replace a release,site/operations/release/correct-release.qmd,not-reviewed,Page YAML
-Operations Manual,BNR analysis framework,site/operations/data/section-index.qmd,not-reviewed,Page YAML
-Operations Manual,BNR analysis framework,site/operations/data/analysis-framework.qmd,not-reviewed,Page YAML
+Operations Manual,Refresh the CVD dashboards,site/operations/post-redcap/dashboard-regeneration.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Refresh the CVD tables,site/operations/post-redcap/tabulation-regeneration.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Refresh the Downloads page,site/operations/post-redcap/downloads-page-regeneration.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Refresh the report listings,site/operations/post-redcap/report-listings-regeneration.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Create a rolling three-month CVD update,site/operations/post-redcap/rolling-update.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Create the annual CVD report,site/operations/post-redcap/annual-report.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Publish a one-off CVD report,site/operations/post-redcap/one-off-report.qmd,reviewed-by-irh,Page YAML
+Operations Manual,"Review, approve and publish",site/operations/release/review-approve-publish.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Correct or replace a release,site/operations/release/correct-release.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR analysis framework,site/operations/data/section-index.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR analysis framework,site/operations/data/analysis-framework.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR Information Hub Statistical Analysis Plan,site/operations/data/sap.qmd,not-reviewed,Page YAML
 Operations Manual,BNR Metric Specification Register,site/operations/data/sap-metrics.qmd,not-reviewed,Page YAML
 Operations Manual,Data sharing and governance,site/operations/governance/section-index.qmd,not-reviewed,Page YAML
@@ -78,7 +84,11 @@ Technical Manual,Build mortality burden data,site/technical/workflows/mortality/
 Technical Manual,Review the mortality release,site/technical/workflows/mortality/review.qmd,not-reviewed,Page YAML
 Technical Manual,Approve the reviewed mortality release,site/technical/workflows/mortality/approve.qmd,not-reviewed,Page YAML
 Technical Manual,Publish approved mortality outputs,site/technical/workflows/mortality/publish.qmd,not-reviewed,Page YAML
-Technical Manual,BNR reporting workflows,site/technical/workflows/reporting/overview.qmd,not-reviewed,Page YAML
+Technical Manual,BNR reporting and presentation workflows,site/technical/workflows/reporting/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Refresh the CVD dashboards,site/technical/workflows/reporting/dashboard-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,Refresh the CVD tables,site/technical/workflows/reporting/tabulation-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,Rebuild the Downloads page,site/technical/workflows/reporting/downloads-page-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,Rebuild the report listings,site/technical/workflows/reporting/report-listings-regeneration.qmd,not-reviewed,Page YAML
 Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,not-reviewed,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,not-reviewed,Page YAML
@@ -89,9 +99,6 @@ Technical Manual,Approve and publish a release,site/technical/controls/approve-p
 Technical Manual,Operate the website,site/technical/website/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,not-reviewed,Page YAML
 Technical Manual,Update website content,site/technical/website/update-content.qmd,not-reviewed,Page YAML
-Technical Manual,CVD events dashboard transition note,site/technical/website/cvd-events-dashboard.qmd,not-reviewed,Page YAML
-Technical Manual,Maintain the CVD mortality dashboard,site/technical/website/cvd-mortality-dashboard.qmd,not-reviewed,Page YAML
-Technical Manual,Maintain the public CVD tables,site/technical/website/cvd-tables.qmd,not-reviewed,Page YAML
 Technical Manual,Maintain and recover,site/technical/maintenance/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-change.qmd,not-reviewed,Page YAML
 Technical Manual,"Files, releases and versions",site/technical/maintenance/files-releases-versions.qmd,not-reviewed,Page YAML

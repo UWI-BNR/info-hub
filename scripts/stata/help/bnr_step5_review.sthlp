@@ -5,7 +5,7 @@
 
 {title:Syntax}
 {phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:prepare} [{cmd:replace}]
-{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"|"BNR Developer"} [{cmd:replace}]
+{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"} [{cmd:replace}]
 
 {title:Prepare}
 {pstd}Prepare reads the combined private Step 4 package at {cmd:$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/}, creates a disclosure-controlled candidate and writes its review evidence to {cmd:review/}. Review {cmd:step5_review.xlsx}, {cmd:step5_disclosure_qa.csv}, {cmd:step5_equation_audit.csv}, {cmd:step5_row_audit.dta} and {cmd:step5_review_basis.csv}. Every automated result must be {cmd:PASS}.

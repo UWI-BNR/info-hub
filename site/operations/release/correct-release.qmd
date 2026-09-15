@@ -1,61 +1,104 @@
 ﻿---
 title: "Correct or replace a release"
-subtitle: "Correct the authoritative source, then repeat the controlled workflow"
-manual-review-status: not-reviewed
+subtitle: "Correct the source of the problem, then repeat the relevant checks"
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
 Operations Manual
 :::
 
-**Status:** Operational framework.  
 **Owner:** BNR Lead and BNR Analyst.
 
 ## Purpose
 
-Correct a published product transparently while preserving reproducibility, approval evidence and the distinction between Stata analytics and Quarto presentation.
+Use this page when a published result, report or website page needs correcting. The aim is to correct the problem openly, keep a clear record of what happened, and make sure that corrected results go through the same checks as the original release.
 
-## Step 1: Assess and contain
+Do not edit a generated dataset, receipt or published analytical file by hand to make it look correct.
 
-1. Record who identified the issue, when, and which release, files and pages are affected.
-2. Classify the cause as source data, analytical code, configuration, interpretation or website presentation.
-3. Decide whether statistics, conclusions, disclosure risk or users are affected.
-4. If confidentiality may have been breached, follow the authorised incident route and notify the BNR Lead immediately.
+## Step 1: Understand the problem
 
-## Step 2: Choose the correction point
+1. Record what was found, who found it and the date.
+2. Record which release, files, report or website pages may be affected.
+3. Decide where the problem began:
 
-| Problem | Correct here |
-|---|---|
-| Source data or source-record classification | Authoritative source system or controlled source dataset |
-| Calculation or programmed rule | Version-controlled Stata code or configuration |
-| Approved result described incorrectly | Quarto narrative, with substantive review if interpretation changes |
-| Typographical or layout problem only | Quarto source |
+   | If the problem is in… | Start by checking… |
+   |---|---|
+   | The original information | The source system or controlled source dataset |
+   | A calculation or automated rule | The approved Stata code or configuration |
+   | The wording or interpretation of an approved result | The Quarto page or report text |
+   | Spelling, layout or a broken website link | The Quarto page |
 
-Never edit a generated analytical output to make it appear correct.
+4. Decide whether the problem could affect published numbers, conclusions, confidentiality or people who use the information.
+5. If confidential information may have become public, tell the BNR Lead immediately and follow the approved incident process.
 
-## Step 3: Regenerate the analytical release
+Keep a short private note explaining what was found and why a correction is needed.
 
-1. Start from the earliest Stata step affected by the correction.
-2. Use a new identifiable package or an explicitly authorised replacement supported by the workflow.
-3. Repeat data-quality, analytical and disclosure review for every affected output.
-4. Record a new approval through the relevant Stata approval step.
-5. Publish through the relevant Stata publication step and verify both the authoritative package and website mirror.
+## Step 2: Correct the earliest affected point
 
-Use the [CVD event](../post-redcap/cvd-events-workflow.qmd), [CVD mortality](../post-redcap/mortality-workflow.qmd) or [reporting](../post-redcap/reporting-workflows.qmd) procedure as appropriate. Public tables, dashboards and downloads are regenerated from the corrected approved metric release.
+Correct the problem at its source wherever possible.
 
-## Step 4: Update the public presentation
+For example:
 
-1. In VS Code, update affected Quarto narrative, listings or links.
-2. Add a correction note when readers need to understand a material change.
-3. Preview the affected pages and run a complete Quarto render.
-4. Inspect Git changes, commit and push the public-safe correction.
-5. Check the live site and notify affected users where required.
+- correct a source-data problem in the controlled source data, then rerun the affected workflow;
+- correct a calculation problem in the version-controlled Stata code, then rerun the affected workflow;
+- correct a wording or layout problem in the Quarto source, then render the website again.
 
-## Replacement rule
+Do not change a later file if an earlier source, calculation or rule is the real cause.
 
-Do not overwrite an earlier release merely to hide an error. Preserve the superseded authoritative package and a record of what changed, why, who authorised it and which public product replaced it.
+## Step 3: Rebuild and review the affected release
+
+Start again from the earliest workflow step affected by the correction.
+
+1. Run the relevant workflow using its normal controlled process.
+2. Review the regenerated outputs and checks.
+3. Complete disclosure review again if published statistics have changed.
+4. Obtain a new approval where the workflow requires it.
+5. Publish the corrected approved package through the normal Stata publication step.
+6. Check both the authoritative public package and its website copy.
+
+Use the relevant workflow guide:
+
+- [CVD events](../post-redcap/cvd-events-workflow.qmd)
+- [CVD mortality](../post-redcap/mortality-workflow.qmd)
+- [Rolling monthly update](../post-redcap/rolling-update.qmd)
+- [Annual report](../post-redcap/annual-report.qmd)
+- [One-off report](../post-redcap/one-off-report.qmd)
+
+Then refresh any affected [dashboards](../post-redcap/dashboard-regeneration.qmd), [tables](../post-redcap/tabulation-regeneration.qmd), [Downloads page](../post-redcap/downloads-page-regeneration.qmd) or [report listings](../post-redcap/report-listings-regeneration.qmd).
+
+## Step 4: Update the website
+
+1. Update any affected Quarto wording, links, listings or correction note.
+2. Add a clear public correction note if readers need to understand a material change.
+3. Preview the affected pages and run a complete local Quarto render.
+4. Check that the corrected pages match the approved public package.
+5. Review the changed files in VS Code Source Control.
+6. Commit and push the correction to a working branch.
+7. Create a pull request on GitHub and merge it into `main` only when the change is ready.
+8. Check GitHub Actions and the live website after the merge.
+
+See [Render and publish the website](../../technical/website/render-publish.qmd) for the detailed branch, pull-request and GitHub Actions process.
+
+## Keep a clear history
+
+Keep:
+
+- the earlier authoritative package;
+- the corrected replacement;
+- a private note explaining what changed and why;
+- the new approval and publication records; and
+- any public correction note or communication.
+
+This makes it possible to understand which version was used at any point and why it was replaced.
 
 ::: {.callout-warning title="BNR confirmation required"}
-Confirm who can order urgent withdrawal, where superseded packages are retained, when a public correction notice is required and how affected data users are notified.
-:::
 
+BNR should agree and record:
+
+- who can order an urgent withdrawal from the public website;
+- where superseded packages are kept;
+- when a public correction note is needed; and
+- how affected data users are told about a material correction.
+
+:::

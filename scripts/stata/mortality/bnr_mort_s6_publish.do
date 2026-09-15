@@ -1,8 +1,11 @@
 /*******************************************************************************
 DO-FILE:     bnr_mort_s6_publish.do
-VERSION:     Pass 2 (21 August 2026)
+VERSION:     Pass 2.1 approval-role alignment (15 September 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Mortality Step 6 - publish an approved mortality package
+
+CHANGE 2.1: Require an authorised BNR Lead or BNR Analyst role in the Step 5
+            approval receipt.
 
 PURPOSE:     Promote the exact ten mortality burden payload files approved in
              Step 5:
@@ -74,7 +77,7 @@ program define _bnr_mort_s6_fail
     noisily display as error "============================================================================="
     noisily display as error "MORTALITY STEP 6: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         Pass 2"
+    noisily display as error "  Script version:         Pass 2.1 approval-role alignment"
     noisily display as error "  Selected release:       `release_id'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -302,7 +305,7 @@ log using `"`private_log'"', text replace name(mort_s6)
 quietly {
 
 noisily display as text "BNR MORTALITY STEP 6: PUBLISH APPROVED OUTPUTS"
-noisily display as result "  Script version:       Pass 2"
+noisily display as result "  Script version:       Pass 2.1 approval-role alignment"
 noisily display as result "  Selected release:     `release_id'"
 noisily display as result "  Replace authorised:   " ///
     cond(`replace_existing', "yes", "no")
@@ -412,8 +415,7 @@ while r(eof) == 0 {
     }
     if inlist(`"`approval_line'"', ///
             "approved_role: BNR Lead", ///
-            "approved_role: BNR Analyst", ///
-            "approved_role: BNR Developer") {
+            "approved_role: BNR Analyst") {
         local approval_role_ok 1
     }
     if `"`approval_line'"' == ///
@@ -1418,7 +1420,7 @@ noisily display as text ""
 noisily display as text "============================================================================="
 noisily display as text "MORTALITY STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as result "  Run status:             PUBLISHED"
-noisily display as result "  Script version:         Pass 2"
+noisily display as result "  Script version:         Pass 2.1 approval-role alignment"
 noisily display as result "  Selected release:       `release_id'"
 noisily display as result `"  Approved by:            `approved_by'"'
 noisily display as result "  Approved payload files: 10"

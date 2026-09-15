@@ -160,13 +160,14 @@ The technical manual documents the code, data processes and system design that s
 - [Rolling three-month update](workflows/reporting/rolling-update.qmd): one controlled build from approved standard releases.
 - [Annual CVD report](workflows/reporting/annual-report.qmd): build, approve and publish.
 - [One-off CVD report](workflows/reporting/one-off-report.qmd): prepare, approve and publish.
+- [Dashboards, tables, downloads and listings](workflows/reporting/overview.qmd): refresh approved public presentation products.
 
 ## Publication and maintenance
 
 - [Review an analytical release](controls/review-release.qmd)
 - [Apply disclosure control](controls/disclosure-control.qmd)
 - [Approve and publish a release](controls/approve-publish.qmd)
-- [Maintain public CVD tables](website/cvd-tables.qmd)
+- [Refresh public presentation products](workflows/reporting/overview.qmd)
 - [Render and publish the website](website/render-publish.qmd)
 - [Make a safe code change](maintenance/safe-code-change.qmd)
 - [Fix common problems](maintenance/troubleshooting.qmd)

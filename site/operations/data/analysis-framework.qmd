@@ -1,5 +1,5 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "BNR analysis framework"
 description: "The standing statistical rules and metric definitions used for routine BNR reporting."
 ---
@@ -12,21 +12,21 @@ Operations Manual
 
 ## Purpose
 
-This chapter records the agreed analytical rules that sit between the registry data and BNR public statistics. It governs definitions and calculations; the workflow pages explain how analysts run those calculations.
+This chapter details the agreed analyses we apply to registry data to create our BNR public statistics. It governs definitions and calculations; the workflow pages explain how the BNR analysts run those calculations.
 
 ## Documents
 
 - **[Statistical Analysis Plan](sap.qmd):** population, event definitions, measures, comparisons, uncertainty, quality checks and disclosure principles.
 - **[Metric specification register](sap-metrics.qmd):** implementation-ready definitions for each routine indicator.
 
-## Using the framework
+## When an analysis or definition changes
 
-1. Confirm that the proposed analysis is covered by the Statistical Analysis Plan.
-2. Use the metric register for the exact operational definition of an established indicator.
-3. Record and approve a methodological change before altering production code.
-4. Update the plan, metric register, analytical code and Public Methods Manual together when the public interpretation changes.
-5. Retain the change through normal Git version history and release evidence.
+Use this section before creating a new measure, changing an existing one or changing the way a result is described.
 
-The analytical code must implement the approved framework. A convenient code result does not override an agreed statistical definition.
-
-
+| Situation | What to do |
+|---|---|
+| You want to carry out an analysis | Check that it is covered by the Statistical Analysis Plan before starting work. |
+| You need the definition of an established indicator | Use the metric register. It gives the approved definition, population, time period and calculation. |
+| You think an existing definition or method needs to change | Discuss and record the proposed change before changing production code or publishing new results. |
+| A change affects what the public result means | Update the Statistical Analysis Plan, metric register, analytical code and Public Methods Manual together. |
+| A change has been agreed | Keep the decision and the related files in normal Git history and release records. |

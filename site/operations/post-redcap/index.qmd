@@ -1,7 +1,7 @@
 ﻿---
 title: "Post-REDCap analytics and publishing"
 description: "Choose the controlled route for CVD event, mortality and reporting products."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
@@ -10,45 +10,42 @@ Operations Manual
 
 ## Purpose
 
-Post-REDCap work turns authorised source releases into approved public metric
-datasets and reports. Stata computes and controls analytical publication;
-Quarto presents approved public outputs; GitHub deploys the static Info-Hub.
+Post-REDCap work turns authorised BNR data exports into approved public
+datasets, dashboards, tabulations and reports. Stata computes and controls analytical publication;
+Quarto presents approved public outputs; GitHub deploys the static Info-Hub website.
 
-Human analytical review, disclosure review, approval and publication are
-separate actions. Private data, staging packages, logs, credentials and review
-evidence remain outside Git.
+The BNR Info-Hub implements a number of different **workflows** to implement these separate website data products.
 
-## Choose the route
+## Choose the relevant workflow
 
-| Required product | Controlled route | Technical instructions |
+| Required product | Relevant workflow | Technical instructions |
 |---|---|---|
 | Approved CVD event metric release | [CVD event release workflow](cvd-events-workflow.qmd): six steps | [CVD event workflow](../../technical/workflows/cvd-events/overview.qmd) |
 | Approved CVD mortality metric release | [CVD mortality release workflow](mortality-workflow.qmd): six steps | [Mortality workflow](../../technical/workflows/mortality/overview.qmd) |
-| Rolling three-month CVD update | [Reporting workflows](reporting-workflows.qmd): one controlled build from approved releases | [Rolling update](../../technical/workflows/reporting/rolling-update.qmd) |
-| Annual CVD report | [Reporting workflows](reporting-workflows.qmd): build, approve and publish | [Annual report](../../technical/workflows/reporting/annual-report.qmd) |
-| One-off CVD report | [Reporting workflows](reporting-workflows.qmd): prepare, approve and publish | [One-off report](../../technical/workflows/reporting/one-off-report.qmd) |
+| Refresh the CVD dashboards | [Dashboard refresh](dashboard-regeneration.qmd) after an approved release | [Technical dashboard guide](../../technical/workflows/reporting/dashboard-regeneration.qmd) |
+| Refresh the CVD tables | [Table refresh](tabulation-regeneration.qmd) after an approved release | [Technical table guide](../../technical/workflows/reporting/tabulation-regeneration.qmd) |
+| Refresh Downloads | [Downloads refresh](downloads-page-regeneration.qmd) from approved catalogue records | [Technical catalogue guide](../../technical/workflows/reporting/downloads-page-regeneration.qmd) |
+| Refresh report listings | [Report-listing refresh](report-listings-regeneration.qmd) from published landing pages | [Technical listing guide](../../technical/workflows/reporting/report-listings-regeneration.qmd) |
+| Rolling three-month CVD update | [Create a rolling update](rolling-update.qmd) from approved releases | [Technical rolling-update guide](../../technical/workflows/reporting/rolling-update.qmd) |
+| Annual CVD report | [Create the annual report](annual-report.qmd): build, approve and publish | [Technical annual-report guide](../../technical/workflows/reporting/annual-report.qmd) |
+| One-off CVD report | [Publish a one-off report](one-off-report.qmd): prepare, approve and publish | [Technical one-off guide](../../technical/workflows/reporting/one-off-report.qmd) |
 
-Public CVD tables, dashboards and downloads are presentation products derived
-from approved public metric releases. They do not establish separate analytical
-workflows.
+Public CVD tables, dashboards, downloads and report listings are presentation products
+derived from approved public metric or report releases. They are all automated once a data release occurs, so the "workflow" only requires the user to verify any online updates. 
 
-## Common control sequence
+## Common workflow sequence
+For those workflows that are directly operated by the BNR team (release of new data, release of a new report), generally, the process will be something like this: 
 
 1. Confirm authority, reporting period and source identity.
 2. Build the private candidate through the relevant Stata workflow.
 3. Review analytical validity and disclosure safety.
 4. Record approval against the exact candidate where the workflow requires it.
-5. Publish only the approved payload.
+5. Publish only the approved products.
 6. Render and inspect the affected Quarto presentation.
-7. Deploy only reviewed, public-safe website source and approved public assets.
-
-The rolling update is the limited exception to a second report-level approval:
-its builder consumes already-approved event and mortality releases and permits
-only the authorised display transformations in the controlled template.
+7. Deploy only reviewed, public-safe products.
 
 ## Corrections
 
 Never edit a generated dataset, table, chart or report manually. Correct the
 source data or version-controlled code, assign the required new version, and
 rerun from the earliest affected step. See [Correct a release](../release/correct-release.qmd).
-

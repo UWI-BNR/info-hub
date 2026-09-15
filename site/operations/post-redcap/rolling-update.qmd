@@ -1,0 +1,31 @@
+---
+title: "Create a rolling three-month CVD update"
+description: "Build and check a dated online update from approved CVD event and mortality releases."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+Use this process to create a dated rolling CVD update from already approved event and mortality releases. The Stata report builder freezes the selected source files with the report, and creates the website page. Each new monthly release creates a new report, and older update reports remain listed on the CVD reports webpage.
+
+## Build the update
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Checks that the selected release files exist in both the authoritative public area and the website copy and that the two copies match. It then creates the dated report page, its metadata and complete frozen copies of both source CSVs. |
+| How to run it | In Stata, choose **User > BNR > Rolling three-month CVD update > Build dated online update**. Enter the report year and month, the event release, the mortality release and a positive report version. Leave replacement off for a new period. |
+| What to check | Confirm the summary names the intended report period, version and two source releases. Preview the page and check its headings, cards, charts, protected values, source links and coverage dates. |
+| Files and location | The authoritative package is under `$BNR_PUBLIC/reports/cvd/updates/YYYY-MM/`. The website page and frozen data are under `$BNR_REPO/site/surveillance/cvd/reports/updates/YYYY-MM/`. The private run log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: build a rolling three-month CVD update](../../technical/workflows/reporting/rolling-update.qmd) for arguments, version rules, checksums, template controls and recovery. |
+:::
+
+## Complete the website publication
+
+Run a complete Quarto render, check the dated page and both report listings, review the Git changes, then follow the normal branch and deployment process.
+
+A correction for the same report month must use a higher report version and deliberate replacement. Do not edit a generated dated page or frozen source file by hand.

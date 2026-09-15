@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "BNR analysis framework"
 description: "Choose an Operations Manual page in this section."
 ---
@@ -21,7 +21,7 @@ How agreed analytical rules govern routine reporting.
 ::: {.card-body}
 ### [Statistical Analysis Plan](sap.qmd) {.card-title}
 
-The standing statistical methods and decision rules.
+Our standing statistical methods.
 :::
 :::
 :::
@@ -31,7 +31,7 @@ The standing statistical methods and decision rules.
 ::: {.card-body}
 ### [Metric specification register](sap-metrics.qmd) {.card-title}
 
-Implementation-ready definitions for routine indicators.
+Definitions for our routine indicators.
 :::
 :::
 :::

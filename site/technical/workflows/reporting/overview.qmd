@@ -1,6 +1,6 @@
-﻿---
-title: "BNR reporting workflows"
-description: "Choose and operate the current rolling, annual and one-off CVD report routes."
+---
+title: "BNR reporting and presentation workflows"
+description: "Choose the technical guide for dashboards, tables, downloads, listings and public reports."
 manual-review-status: not-reviewed
 ---
 
@@ -8,28 +8,18 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## What this section covers
+## Choose the process
 
-BNR has three report products. They share publication principles but do not
-share one generic analysis dispatcher.
-
-| Product | Current route | Public form |
+| Process | Main source | Guide |
 |---|---|---|
-| Rolling three-month CVD update | One controlled build from approved public event and mortality releases | Dated HTML page |
-| Annual CVD report | Step 1 builds the report and extracts its final update appendix; Steps 2 and 3 approve and publish both together | Annual PDF, one-page update PDF and separate HTML landing pages |
-| One-off CVD report | Bespoke analysis, then Step 1 prepare, Step 2 approve, Step 3 publish | PDF and HTML landing page |
+| Refresh CVD dashboards | Approved current event and mortality files | [Dashboard regeneration](dashboard-regeneration.qmd) |
+| Refresh CVD tables | Approved current files and fixed monthly references | [Tabulation regeneration](tabulation-regeneration.qmd) |
+| Rebuild Downloads | Approved catalogue records and ZIP packages | [Downloads page regeneration](downloads-page-regeneration.qmd) |
+| Rebuild report listings | Published report landing-page metadata | [Report listings regeneration](report-listings-regeneration.qmd) |
+| Rolling three-month update | Exact approved event and mortality release CSVs | [Rolling update](rolling-update.qmd) |
+| Annual report and public health update | Approved releases plus year-specific analyst material | [Annual report](annual-report.qmd) |
+| One-off report | Finished bespoke PDF and its private analytical evidence | [One-off report](one-off-report.qmd) |
 
-The annual and one-off routes keep candidate preparation, approval and
-publication separate. The rolling update is a narrow one-step exception because
-it uses already-approved public releases and introduces no new surveillance
-metric.
+The first four are Quarto presentation or indexing processes. They do not have a separate Stata analytical workflow. The three report routes create public content: the rolling builder is a narrow one-step route using already-approved sources, while annual and one-off products separate candidate creation, approval and publication.
 
-## Run the correct route
-
-- [Build a rolling three-month CVD update](rolling-update.qmd)
-- [Build, approve and publish an annual CVD report](annual-report.qmd)
-- [Prepare, approve and publish a one-off CVD report](one-off-report.qmd)
-
-The optional [report disclosure screen](one-off-report.qmd#disclosure-screen)
-creates private review flags only. It does not apply secondary suppression or
-approve a report.
+All website work ends with a complete local render, review of Git changes and the normal branch-to-`main` deployment pathway. See [Render and publish the website](../../website/render-publish.qmd).

@@ -1,9 +1,12 @@
 /*******************************************************************************
 DO-FILE:     bnr_mort_s5_approve.do
-VERSION:     Pass 4.1 approved-reference metadata hardening
-             (21 August 2026)
+VERSION:     Pass 4.2 approval-role alignment
+             (15 September 2026)
 PROJECT:     BNR Refit Phase 2
 WORKFLOW:    Mortality Step 5 - record human approval
+
+CHANGE 4.2: Restrict production approval to authorised BNR Lead and BNR
+            Analyst roles.
 
 PURPOSE:     Record the authorised human approval of the exact mortality
              burden package prepared and reviewed in Step 4.
@@ -73,7 +76,7 @@ program define _bnr_mort_s5_fail
     noisily display as error "============================================================================="
     noisily display as error "MORTALITY STEP 5: OPERATIONAL RUN SUMMARY"
     noisily display as error "  Run status:             Did not complete"
-    noisily display as error "  Script version:         Pass 4.1 approved-reference metadata hardening"
+    noisily display as error "  Script version:         Pass 4.2 approval-role alignment"
     noisily display as error "  Selected release:       `release_id'"
     noisily display as error `"  Reason:                 `reason'"'
     noisily display as error `"  Private log:            `private_log'"'
@@ -176,13 +179,12 @@ if `"`confirm_release'"' != "release" | ///
 }
 
 local role_lower = lower(`"`approver_role'"')
-if !inlist(`"`role_lower'"', "bnr lead", "bnr analyst", "bnr developer") {
-    display as error "Approver role must be BNR Lead, BNR Analyst or BNR Developer."
+if !inlist(`"`role_lower'"', "bnr lead", "bnr analyst") {
+    display as error "Approver role must be BNR Lead or BNR Analyst."
     exit 198
 }
 if `"`role_lower'"' == "bnr lead" local approver_role "BNR Lead"
 if `"`role_lower'"' == "bnr analyst" local approver_role "BNR Analyst"
-if `"`role_lower'"' == "bnr developer" local approver_role "BNR Developer"
 
 * YAML uses the approver name as a plain scalar. Reject the few characters that
 * could make that small receipt ambiguous rather than hiding complex escaping.
@@ -281,7 +283,7 @@ log using `"`private_log'"', text replace name(mort_s5)
 quietly {
 
 noisily display as text "BNR MORTALITY STEP 5: RECORD HUMAN APPROVAL"
-noisily display as result "  Script version:       Pass 4.1 approved-reference metadata hardening"
+noisily display as result "  Script version:       Pass 4.2 approval-role alignment"
 noisily display as result "  Selected release:     `release_id'"
 noisily display as result "  Approver:             `approver_name' (`approver_role')"
 noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
@@ -1165,7 +1167,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "MORTALITY STEP 5: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:             APPROVED - PENDING STEP 6"
-noisily display as text   "  Script version:         Pass 4.1 approved-reference metadata hardening"
+noisily display as text   "  Script version:         Pass 4.2 approval-role alignment"
 noisily display as text   "  Selected release:       `release_id'"
 noisily display as text   `"  Approver:               `approver_name' (`approver_role')"'
 noisily display as text   "  Public candidate rows:  `public_rows'"

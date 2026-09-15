@@ -116,14 +116,14 @@ Then inspect the affected page and any linked page it influences.
 
 For example, a change to page metadata may also alter a Quarto listing; a change to `_quarto.yml` may alter navigation across the entire site.
 
-## Maintain a surveillance dashboard
+## Maintain a surveillance dashboard or table
 
-The CVD event and CVD mortality dashboards have dedicated maintenance pages because their Quarto/Observable controls must remain aligned with the approved public data structure.
+The CVD dashboards and tables have dedicated technical guides because their Quarto/Observable controls must remain aligned with the approved public data structure.
 
-- [Maintain the CVD events dashboard](cvd-events-dashboard.qmd)
-- [Maintain the CVD mortality dashboard](cvd-mortality-dashboard.qmd)
+- [Refresh the CVD dashboards](../workflows/reporting/dashboard-regeneration.qmd)
+- [Refresh the CVD tables](../workflows/reporting/tabulation-regeneration.qmd)
 
-The general rule remains that Quarto presents approved analytical products. The mortality dashboard year-to-date count is the one documented narrow presentation exception; its safeguards are defined on the mortality dashboard maintenance page. Do not extend that exception to other statistics without an explicit methods and architecture decision.
+The general rule remains that Quarto presents approved analytical products. Narrow presentation exceptions and their safeguards are defined in the dashboard guide. Do not extend them to other statistics without an explicit methods and architecture decision.
 
 ## Update a report page
 
@@ -140,14 +140,13 @@ to change its analytical result.
 
 The central Downloads catalogue is built automatically before each Quarto render.
 
-The builder reads the approved download records created by the publication workflows, including:
-
-- metric catalogue records; and
-- report catalogue records.
+The builder reads the approved metric download records created by the publication workflows.
 
 It then creates:
 
 `site/downloads/downloads.yml`
+
+See [Rebuild the Downloads page](../workflows/reporting/downloads-page-regeneration.qmd).
 
 ### Normal operator rule
 
@@ -253,4 +252,3 @@ Do not try to solve these problems in Quarto:
 - a website download points to an analytical package that was never approved and published.
 
 Correct the problem through the appropriate analytical workflow, publish the new approved package, and then return to the Quarto page.
-

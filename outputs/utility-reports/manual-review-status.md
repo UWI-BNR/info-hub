@@ -5,8 +5,8 @@
 | Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
-| Operations Manual | 0 | 19 | 16 | 0 | 0 | 35 |
-| Technical Manual | 0 | 41 | 0 | 0 | 0 | 41 |
+| Operations Manual | 0 | 13 | 28 | 0 | 0 | 41 |
+| Technical Manual | 0 | 42 | 0 | 0 | 0 | 42 |
 
 ## Public Methods Manual
 
@@ -55,15 +55,21 @@
 | REDCap database maintenance | `site/operations/redcap/database-maintenance.qmd` | Reviewed by IRH | Page YAML |
 | Approve a data record | `site/operations/redcap/approve-data-record.qmd` | Reviewed by IRH | Page YAML |
 | Post-REDCap analytics and publishing | `site/operations/post-redcap/section-index.qmd` | Reviewed by IRH | Page YAML |
-| Post-REDCap analytics and publishing | `site/operations/post-redcap/index.qmd` | Not reviewed | Page YAML |
+| Post-REDCap analytics and publishing | `site/operations/post-redcap/index.qmd` | Reviewed by IRH | Page YAML |
 | Extract data from REDCap | `site/operations/release/data-release.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD event release workflow | `site/operations/post-redcap/cvd-events-workflow.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD mortality release workflow | `site/operations/post-redcap/mortality-workflow.qmd` | Reviewed by IRH | Page YAML |
-| Run BNR reporting workflows | `site/operations/post-redcap/reporting-workflows.qmd` | Not reviewed | Page YAML |
-| Review, approve and publish | `site/operations/release/review-approve-publish.qmd` | Not reviewed | Page YAML |
-| Correct or replace a release | `site/operations/release/correct-release.qmd` | Not reviewed | Page YAML |
-| BNR analysis framework | `site/operations/data/section-index.qmd` | Not reviewed | Page YAML |
-| BNR analysis framework | `site/operations/data/analysis-framework.qmd` | Not reviewed | Page YAML |
+| Refresh the CVD dashboards | `site/operations/post-redcap/dashboard-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| Refresh the CVD tables | `site/operations/post-redcap/tabulation-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| Refresh the Downloads page | `site/operations/post-redcap/downloads-page-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| Refresh the report listings | `site/operations/post-redcap/report-listings-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| Create a rolling three-month CVD update | `site/operations/post-redcap/rolling-update.qmd` | Reviewed by IRH | Page YAML |
+| Create the annual CVD report | `site/operations/post-redcap/annual-report.qmd` | Reviewed by IRH | Page YAML |
+| Publish a one-off CVD report | `site/operations/post-redcap/one-off-report.qmd` | Reviewed by IRH | Page YAML |
+| Review, approve and publish | `site/operations/release/review-approve-publish.qmd` | Reviewed by IRH | Page YAML |
+| Correct or replace a release | `site/operations/release/correct-release.qmd` | Reviewed by IRH | Page YAML |
+| BNR analysis framework | `site/operations/data/section-index.qmd` | Reviewed by IRH | Page YAML |
+| BNR analysis framework | `site/operations/data/analysis-framework.qmd` | Reviewed by IRH | Page YAML |
 | BNR Information Hub Statistical Analysis Plan | `site/operations/data/sap.qmd` | Not reviewed | Page YAML |
 | BNR Metric Specification Register | `site/operations/data/sap-metrics.qmd` | Not reviewed | Page YAML |
 | Data sharing and governance | `site/operations/governance/section-index.qmd` | Not reviewed | Page YAML |
@@ -101,7 +107,11 @@
 | Review the mortality release | `site/technical/workflows/mortality/review.qmd` | Not reviewed | Page YAML |
 | Approve the reviewed mortality release | `site/technical/workflows/mortality/approve.qmd` | Not reviewed | Page YAML |
 | Publish approved mortality outputs | `site/technical/workflows/mortality/publish.qmd` | Not reviewed | Page YAML |
-| BNR reporting workflows | `site/technical/workflows/reporting/overview.qmd` | Not reviewed | Page YAML |
+| BNR reporting and presentation workflows | `site/technical/workflows/reporting/overview.qmd` | Not reviewed | Page YAML |
+| Refresh the CVD dashboards | `site/technical/workflows/reporting/dashboard-regeneration.qmd` | Not reviewed | Page YAML |
+| Refresh the CVD tables | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Not reviewed | Page YAML |
+| Rebuild the Downloads page | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Not reviewed | Page YAML |
+| Rebuild the report listings | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Not reviewed | Page YAML |
 | Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Not reviewed | Page YAML |
 | Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Not reviewed | Page YAML |
 | Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Not reviewed | Page YAML |
@@ -112,9 +122,6 @@
 | Operate the website | `site/technical/website/section-index.qmd` | Not reviewed | Page YAML |
 | Render and publish the website | `site/technical/website/render-publish.qmd` | Not reviewed | Page YAML |
 | Update website content | `site/technical/website/update-content.qmd` | Not reviewed | Page YAML |
-| CVD events dashboard transition note | `site/technical/website/cvd-events-dashboard.qmd` | Not reviewed | Page YAML |
-| Maintain the CVD mortality dashboard | `site/technical/website/cvd-mortality-dashboard.qmd` | Not reviewed | Page YAML |
-| Maintain the public CVD tables | `site/technical/website/cvd-tables.qmd` | Not reviewed | Page YAML |
 | Maintain and recover | `site/technical/maintenance/section-index.qmd` | Not reviewed | Page YAML |
 | Make a safe code change | `site/technical/maintenance/safe-code-change.qmd` | Not reviewed | Page YAML |
 | Files, releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Not reviewed | Page YAML |

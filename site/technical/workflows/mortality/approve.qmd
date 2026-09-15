@@ -40,7 +40,7 @@ If any confirmation is not true, stop and return to the appropriate earlier step
 6. Confirm the operational summary reports successful approval pending Step 6.
 7. Open `public_ready/approval.yml` and confirm the release, package, approver, role, disclosure status and manifest information are correct.
 
-Authorised technical roles are **BNR Lead**, **BNR Analyst** and **BNR Developer**. BNR retains responsibility for deciding who is authorised to approve dissemination.
+Authorised approval roles are **BNR Lead** and **BNR Analyst**. BNR retains responsibility for deciding which people in those roles are authorised to approve dissemination.
 
 ## Outputs
 
@@ -87,4 +87,3 @@ The dialog is the preferred routine route because it makes the five confirmation
 ## If Step 5 does not complete
 
 Do not edit the approval receipt, manifest or reviewed files. Restore the reviewed package or rerun Step 4 and complete the human review again.
-

@@ -7,7 +7,6 @@ LIST approval_roles
 BEGIN
 BNR Lead
 BNR Analyst
-BNR Developer
 END
 
 DIALOG main, label("BNR: Annual report Step 2 - approve candidate")

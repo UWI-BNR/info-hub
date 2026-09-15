@@ -76,7 +76,7 @@ assert _rc == 602
 
 * Existing public_ready evidence also checks approver-argument forwarding.
 capture noisily do "$BNR_STATA/monthly/bnr_step5_review.do" `year' `month' ///
-    approve "Controller smoke test" "BNR Developer"
+    approve "Controller smoke test" "BNR Analyst"
 assert _rc == 602
 
 * Existing authoritative outputs make Step 6 stop before any promotion/copy.

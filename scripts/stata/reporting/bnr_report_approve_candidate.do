@@ -1,11 +1,14 @@
 /*******************************************************************************
 DO-FILE: bnr_report_approve_candidate.do
-VERSION: 1.1.0 (10 September 2026)
+VERSION: 1.1.1 (15 September 2026)
 PURPOSE: Create an approved, manifested report payload in public_ready.
 
 This is a shared mechanical helper. Report-specific Step 2 wrappers supply the
 candidate and public_ready directories, identity, period and review evidence.
 The candidate itself is never edited. approval.yml is written last.
+
+CHANGE 1.1.1:
+  Restrict report approval to authorised BNR Lead and BNR Analyst roles.
 
 CHANGE 1.1.0:
   Optionally approve one companion PDF and its landing QMD in the same fixed
@@ -74,14 +77,12 @@ if strpos("`approver_name_clean'", char(34)) | ///
 }
 
 local approver_role_lower = lower(strtrim("`approver_role'"))
-if !inlist("`approver_role_lower'", "bnr lead", "bnr analyst", ///
-        "bnr developer") {
-    display as error "Approver role must be BNR Lead, BNR Analyst or BNR Developer."
+if !inlist("`approver_role_lower'", "bnr lead", "bnr analyst") {
+    display as error "Approver role must be BNR Lead or BNR Analyst."
     exit 198
 }
 if "`approver_role_lower'" == "bnr lead" local approver_role_clean "BNR Lead"
 if "`approver_role_lower'" == "bnr analyst" local approver_role_clean "BNR Analyst"
-if "`approver_role_lower'" == "bnr developer" local approver_role_clean "BNR Developer"
 
 if lower("`confirm_candidate'") != "candidate" | ///
         lower("`confirm_disclosure'") != "disclosure" | ///

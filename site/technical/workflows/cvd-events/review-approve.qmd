@@ -1,50 +1,85 @@
-﻿---
-manual-review-status: not-reviewed
+---
 title: "Review and approve combined CVD metrics"
-description: "Step 5: prepare disclosure-review evidence and record approval."
+description: "CVD event Step 5: prepare disclosure-review evidence and approve the exact reviewed candidate."
+manual-review-status: not-reviewed
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Prepare
+## Controller and boundary
+
+The canonical controller is `scripts/stata/monthly/bnr_step5_review.do`. It has two separate actions:
+
+- `prepare` applies the approved disclosure rules and creates private review evidence;
+- `approve` verifies that evidence has not changed and creates `public_ready`.
+
+Neither action publishes.
+
+## Prepare the review package
+
+Menu: **User > BNR > Update CVD events dashboard > Step 5: Review and approve package for release**, then select **Prepare the review package**.
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 prepare
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 prepare [replace]
 ```
 
-This reads `$BNR_STAGING/metrics/cvd/cvd_2024_04/` and writes private review
-evidence to its `review/` folder. Use `prepare replace` only to deliberately
-rebuild the review state.
+Prepare requires the Step 4 burden dataset, incidence-rate dataset, private rate components, DCO linkage summary and source-quarantine summary. It creates:
 
-Review, at minimum:
+```text
+$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/
+  step5_candidate.dta
+  step5_disclosure_qa.dta
+  step5_disclosure_qa.csv
+  step5_equation_audit.dta
+  step5_equation_audit.csv
+  step5_row_audit.dta
+  step5_review_basis.csv
+  step5_review.xlsx
+```
 
-- `step5_review.xlsx` â€” human review guide;
-- `step5_disclosure_qa.csv` â€” every row must be `PASS`;
-- `step5_equation_audit.csv` â€” annual count/rate representation closure;
-- `step5_row_audit.dta` â€” protection propagation and numeric blanking; and
-- `step5_review_basis.csv` â€” fingerprints of the reviewed evidence.
+`step5_review_basis.csv` fingerprints the exact candidate and supporting evidence. Do not alter any file after preparation.
 
-For annual DCO counts, check that the review records the protected identity
-`hospital only + additional DCO = hospital plus DCO`. Do not edit generated
-evidence, candidates or workbooks manually; correct code or input, rerun and
-review again.
+## Human review
 
-## Approve
+Open `step5_review.xlsx` first. At minimum:
 
-After an authorised BNR Lead, BNR Analyst or BNR Developer has completed the
-review, run:
+1. Confirm release identity, input row counts and intended reporting scope.
+2. Review source-quarantine and DCO linkage summaries and any detailed private linkage evidence.
+3. Confirm every row in `step5_disclosure_qa.csv` is `PASS`.
+4. Review `step5_equation_audit.csv` and the authoritative row audit DTA.
+5. For annual DCO counts, confirm `hospital only + additional DCO = hospital plus DCO` within the protected representation.
+6. Confirm protected rows have blank numeric fields and `display_value: *` and that no private linkage, allocation or suppression-decision fields enter the candidate.
+
+If review finds a problem, correct the earliest input or code and rerun `prepare`; do not edit the workbook or candidate.
+
+## Approve the reviewed candidate
+
+Only an authorised **BNR Lead** or **BNR Analyst** may approve.
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" 2024 4 approve "Full name" "BNR Developer"
+do "$BNR_STATA/monthly/bnr_step5_review.do" ///
+    2026 1 approve "Full Name" "BNR Analyst" [replace]
 ```
 
-Approval rechecks the review fingerprints and QA, then writes the private
-`public_ready/` package, `public_manifest.csv` and `approval.yml`. It does not
-publish. Use `replace` only for a deliberate re-approval of the same release.
+Approval rejects placeholder names, rechecks every saved fingerprint and requires all disclosure QA rows to pass. It creates:
 
-The public-ready candidate must not contain private linkage, component,
-allocation or suppression-decision fields. Protected rows remain in the public
-dataset with blank numeric fields and `display_value: *`.
+```text
+$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/
+  datasets/
+    cvd_metrics_cvd_YYYY_MM.dta
+    cvd_metrics_cvd_YYYY_MM.csv
+    cvd_metrics_current.dta
+    cvd_metrics_current.csv
+  metadata/
+    cvd_metrics_cvd_YYYY_MM.yml
+    cvd_metrics_current.yml
+    metric_package.yml
+  public_manifest.csv
+  approval.yml
+```
 
+The manifest contains exactly seven payload rows. `approval.yml` is written after the payload and manifest and records `promotion_status: pending_step_6`. It means approved, not published.
+
+Prepare and approve logs are under `$BNR_PRIVATE_LOGS/`. Use replacement only for a deliberate, governed rebuild or re-approval; complete human review again whenever the prepared evidence changes.

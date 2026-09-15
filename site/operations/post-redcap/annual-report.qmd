@@ -1,0 +1,55 @@
+---
+title: "Create the annual CVD report"
+description: "Build, review, approve and publish the annual report and its one-page public health update."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+This three-step process creates the annual CVD report and its one-page public health update from approved event and mortality releases. The two products are reviewed, approved and published together.
+
+## Before starting
+
+The BNR Lead or BNR Analyst (or another BNR team member) will complete the year-specific interpretation, key messages and Special chapter material. Confirm the report year, the two approved source releases and the next report version.
+
+## Step 1: build the candidate
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Checks the selected approved sources, builds the annual PDF, creates the public health summary page and extracts that page as a separate PDF. It also Quarto creates a landing page for each product and shared metadata. Nothing is published. |
+| How to run it | Choose **User > BNR > Annual CVD report > Step 1: Build annual report candidate**. Enter the report year, both source releases and report version. |
+| What to check | Read both PDFs from beginning to end. Check the results, interpretation, disclosure safety, contents and links. Confirm that the final annual-report page and the separate update have the same cards, graph and key messages. Preview both landing pages. You should be able to easily check the graphics and statistics against either the associated datasets or the dashboard displays. |
+| Files and location | The five candidate files are under `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vN/candidate/`. The Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: annual CVD report](../../technical/workflows/reporting/annual-report.qmd#step-1-build-the-candidate). |
+:::
+
+## Step 2: approve the candidate
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Records approval of the exact five files reviewed in Step 1. It creates a private public-ready copy, manifest and approval receipt. It does not rebuild or publish the report. |
+| How to run it | An authorised BNR Lead or BNR Analyst chooses **Step 2: Approve annual report candidate**, enters their full name and role, and confirms candidate review, disclosure review and publication readiness. |
+| What to check | Confirm the summary says the candidate was approved. Check that `public_manifest.csv` lists five files and that `approval.yml` records the intended year, version, approver and role. |
+| Files and location | Approval evidence and the exact approved payload are under the same package's `public_ready/` folder. The Step 2 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: annual CVD report](../../technical/workflows/reporting/annual-report.qmd#step-2-approve-the-candidate). |
+:::
+
+## Step 3: publish the approved report
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Verifies the approval, manifest and five approved files, then copies those exact files to the authoritative public area and website. Once copied, when the website is re-rendered, the new reports will be automatically listed on the reports pages.|
+| How to run it | Choose **Step 3: Publish approved annual report** and enter the approved report year and version. |
+| What to check | Confirm successful publication. Open the annual PDF, one-page update, both landing pages and shared metadata. Render the site and confirm both products appear correctly in the report listings. |
+| Files and location | Authoritative files are under `$BNR_PUBLIC/reports/cvd/annual/YYYY/`. Website PDFs are under `site/downloads/files/reports/cvd/annual/YYYY/`; landing pages are under `site/surveillance/cvd/reports/annual/YYYY/` and `briefings/YYYY/`. The Step 3 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: annual CVD report](../../technical/workflows/reporting/annual-report.qmd#step-3-publish-the-approved-report). |
+:::
+
+If any reviewed content changes, build a higher version and repeat review and approval. Never correct a generated or approved PDF by hand.
