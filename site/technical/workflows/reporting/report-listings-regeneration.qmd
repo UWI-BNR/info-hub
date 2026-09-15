@@ -1,0 +1,58 @@
+---
+title: "Rebuild the report listings"
+description: "Maintain the Quarto listings for CVD Reports and Studies and Latest Surveillance Outputs."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Listing sources
+
+| Public listing | Source QMD | Landing pages discovered at render time |
+|---|---|---|
+| CVD Reports and Studies | `site/surveillance/cvd/index.qmd` | `reports/updates/*/index.qmd`, `reports/annual/*/index.qmd`, `reports/briefings/*/index.qmd`, `reports/studies/*/index.qmd` |
+| Latest Surveillance Outputs | `site/news/index.qmd` | `../surveillance/*/reports/*/*/index.qmd` |
+
+Both listings sort landing pages by date in descending order. The first uses a table layout; Latest Surveillance Outputs uses a card/grid layout.
+
+## Required landing-page metadata
+
+Generated report landing pages supply YAML fields such as:
+
+```yaml
+title: "Reader-facing title"
+description: "Short public description"
+date: YYYY-MM-DD
+date-modified: YYYY-MM-DD
+report-id: stable_versioned_identifier
+report-type: Annual report
+report-version: v1
+image: /assets/images/listings/example.webp
+image-alt: Short image description.
+categories:
+  - CVD
+```
+
+Report-specific fields may add a coverage period, source-release IDs, study ID or related report ID. Keep machine identifiers stable and dates in ISO form.
+
+## Routine procedure
+
+1. Complete the rolling, annual or one-off publication route. Use only the generated website landing page, never a private candidate.
+2. Confirm the page is in the correct source folder and its linked PDF or data exists.
+3. Run `quarto render` from `site/`.
+4. Check both listings. Confirm the item appears once and in the expected date order.
+5. Check title, description, report type, image, image alternative text and categories.
+6. Open the listed page and all its public links.
+7. Review the QMD, PDF and metadata changes before commit.
+
+## Troubleshooting
+
+- Missing item: check the directory pattern, filename `index.qmd`, YAML delimiters and `date`.
+- Wrong order: check that `date` is a valid ISO date and describes the intended publication date.
+- Duplicate item: check for two landing pages matching the listing patterns.
+- Broken card or row: check `title`, `description`, `image` and `image-alt`.
+- Broken PDF link: return to the report publication output mapping; do not hard-code a second copy into the listing.
+
+The listings are indexes only. They do not approve, copy or transform reports.

@@ -49,9 +49,69 @@ Operational responsibilities for the six-step mortality release.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [BNR reporting workflows](reporting-workflows.qmd) {.card-title}
+### [Refresh the CVD dashboards](dashboard-regeneration.qmd) {.card-title}
 
-Responsibilities for rolling update report, annual report, and one-off reports.
+Check the event and mortality dashboards after an approved release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Refresh the CVD tables](tabulation-regeneration.qmd) {.card-title}
+
+Check the public tabulations after an approved release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Refresh Downloads](downloads-page-regeneration.qmd) {.card-title}
+
+Rebuild and check the public Downloads catalogue.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Refresh report listings](report-listings-regeneration.qmd) {.card-title}
+
+Check CVD Reports and Studies and Latest Surveillance Outputs.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Create a rolling update](rolling-update.qmd) {.card-title}
+
+Build a dated three-month update from approved releases.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Create the annual CVD report](annual-report.qmd) {.card-title}
+
+Build, approve and publish the annual report and one-page update.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Publish a one-off report](one-off-report.qmd) {.card-title}
+
+Prepare, approve and publish a completed bespoke report.
 :::
 :::
 :::
@@ -81,4 +141,3 @@ Correct source data or code and rerun the affected workflow.
 ::: {.bnr-manual-return}
 [Browse all Operations sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

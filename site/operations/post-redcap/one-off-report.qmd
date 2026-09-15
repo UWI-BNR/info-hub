@@ -1,0 +1,63 @@
+---
+title: "Publish a one-off CVD report"
+description: "Prepare, review, approve and publish a finished bespoke CVD report."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+Use this process after a one-off analysis and its PDF report have been completed and documented in Stata using the Stata `.do` file template. The controlled workflow packages, approves and publishes the finished PDF; it does not run or reproduce the bespoke analysis.
+
+## Before Step 1
+
+Complete the analytical and disclosure review. Keep the analysis code, source information and review evidence in the approved private locations. Choose an informative study ID using lowercase letters, numbers and underscores, beginning with a letter.
+
+Examples:
+
+```text
+cvd_readmissions_2026
+stroke_service_review
+mortality_methods_study
+```
+
+## Step 1: prepare the candidate
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Checks and copies the finished PDF, then creates its public landing page and metadata. Nothing is published. |
+| How to run it | Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**. Enter the study ID, version, PDF location, public title, description and report date. |
+| What to check | Read the copied PDF and preview the landing page. Check the title, description, date, study ID, version, link and disclosure safety. |
+| Files and location | The three candidate files are under `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/`. The Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-1-prepare-the-candidate). |
+:::
+
+## Step 2: approve the candidate
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Records approval of the exact PDF, landing page and metadata reviewed in Step 1. It creates a private public-ready copy, manifest and approval receipt. |
+| How to run it | An authorised BNR Lead or BNR Analyst chooses **Step 2: Approve one-off report candidate**, enters their full name and role, and makes all three review confirmations. |
+| What to check | Confirm the summary says the candidate was approved. Check that `public_manifest.csv` lists three files and that `approval.yml` records the intended study, version, approver and role. |
+| Files and location | The approved payload and controls are in the package's `public_ready/` folder. The Step 2 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-2-approve-the-candidate). |
+:::
+
+## Step 3: publish the report
+
+::: {.callout-note collapse="true" title="Details"}
+| Question | Details |
+|---|---|
+| What this step does | Verifies the approval and the three approved files, then copies those exact files to the authoritative public area and website. |
+| How to run it | Choose **Step 3: Publish approved one-off report** and enter the approved study ID and version. |
+| What to check | Open the public PDF and landing page, check the metadata, render the site and confirm that the report appears once in both report listings. |
+| Files and location | Authoritative files are under `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/`. The website PDF and metadata are under `site/downloads/files/reports/cvd/studies/STUDY_ID/`; the landing page is under `site/surveillance/cvd/reports/studies/STUDY_ID/`. The Step 3 log is under `$BNR_PRIVATE_LOGS/`. |
+| Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-3-publish-the-report). |
+:::
+
+A correction requires a higher approved version at the same stable study location. Do not edit an approved or published PDF by hand.

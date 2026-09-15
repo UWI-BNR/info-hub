@@ -1,0 +1,30 @@
+---
+title: "Refresh the CVD dashboards"
+description: "Check the CVD event and mortality dashboards after an approved data release."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+The dashboards refresh from the approved website data when the Info-Hub is rendered. The dashboard pages do not repeat the CVD calculations or decide which values may be shown.
+
+| Question | Details |
+|--|----|
+| What happens | CVD event Step 6 or mortality Step 6 updates the approved data in the website copy. Quarto then rebuilds the dashboard pages from those files. The available dates will extend automatically. |
+| What you do | Complete the relevant six-step release workflow. Start a local Info-Hub preview, run a complete Quarto render and open the affected dashboard. No dashboard-code edit should be needed for a routine release. |
+| What you check | Confirm the release date and latest data period, try the main filters and charts, inspect the Data tab, and check that incomplete or protected values are not shown as ordinary numbers. For mortality, check Primary and Inclusive views separately and together. |
+| Files to check | Event dashboard: `site/surveillance/cvd/metrics/burden/index.qmd`; event data: `site/downloads/files/metrics/cvd/cvd_metrics_current.csv`. Mortality dashboard: `site/surveillance/cvd/metrics/mortality/index.qmd`; mortality data and reference: `site/downloads/files/metrics/mortality/burden/datasets/`. |
+| If something is wrong | If an approved value or release file is wrong, return to the relevant data-release workflow. If the approved file is correct but the page fails to display it, seek technical support for the Quarto or Observable page. Do not type corrected results into the dashboard source. |
+
+## Before publishing the website
+
+- Check the dashboard in the local preview.
+- Run a complete Quarto render.
+- Review the Git changes and confirm that no private files are present.
+- After deployment, repeat the main checks on the live page.
+
+For file mappings, permitted display calculations and troubleshooting, see [Technical: refresh the CVD dashboards](../../technical/workflows/reporting/dashboard-regeneration.qmd).

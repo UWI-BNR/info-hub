@@ -246,8 +246,20 @@ website:
               href: operations/post-redcap/cvd-events-workflow.qmd
             - text: "CVD mortality workflow"
               href: operations/post-redcap/mortality-workflow.qmd
-            - text: "BNR reporting workflows"
-              href: operations/post-redcap/reporting-workflows.qmd
+            - text: "Refresh CVD dashboards"
+              href: operations/post-redcap/dashboard-regeneration.qmd
+            - text: "Refresh CVD tables"
+              href: operations/post-redcap/tabulation-regeneration.qmd
+            - text: "Refresh Downloads"
+              href: operations/post-redcap/downloads-page-regeneration.qmd
+            - text: "Refresh report listings"
+              href: operations/post-redcap/report-listings-regeneration.qmd
+            - text: "Rolling three-month update"
+              href: operations/post-redcap/rolling-update.qmd
+            - text: "Annual CVD report"
+              href: operations/post-redcap/annual-report.qmd
+            - text: "One-off CVD report"
+              href: operations/post-redcap/one-off-report.qmd
             - text: "Review, approve and publish"
               href: operations/release/review-approve-publish.qmd
             - text: "Correct a data release"
@@ -264,20 +276,14 @@ website:
             - text: "Metric specification register"
               href: operations/data/sap-metrics.qmd
 
-        - section: "Data sharing & governance"
+        - section: "Data sharing"
           contents:
             - text: "Section contents"
               href: operations/governance/section-index.qmd
-            - text: "Overview"
+            - text: "Manage a data-sharing request"
               href: operations/governance/data-sharing-governance.qmd
-            - text: "Handle a data request"
-              href: operations/governance/data-access-requests.qmd
-            - text: "Data sharing procedure"
-              href: operations/data/data-governance/sharing-sop.qmd
-            - section: "Governance documents"
-              contents:
-                - text: "Data Sharing Agreement"
-                  href: operations/data/data-governance/dsa-om.qmd
+            - text: "Ethics application wording"
+              href: operations/governance/ethics-application-wording.qmd
 
         - section: "Historical refit record"
           contents:
@@ -355,6 +361,14 @@ website:
               contents:
                 - text: "Overview"
                   href: technical/workflows/reporting/overview.qmd
+                - text: "Refresh CVD dashboards"
+                  href: technical/workflows/reporting/dashboard-regeneration.qmd
+                - text: "Refresh CVD tables"
+                  href: technical/workflows/reporting/tabulation-regeneration.qmd
+                - text: "Rebuild Downloads"
+                  href: technical/workflows/reporting/downloads-page-regeneration.qmd
+                - text: "Rebuild report listings"
+                  href: technical/workflows/reporting/report-listings-regeneration.qmd
                 - text: "Rolling three-month update"
                   href: technical/workflows/reporting/rolling-update.qmd
                 - text: "Annual CVD report"
@@ -379,16 +393,8 @@ website:
               href: technical/website/section-index.qmd
             - text: "Render and publish website"
               href: technical/website/render-publish.qmd
-            - section: "Update website content"
-              contents:
-                - text: "Overview"
-                  href: technical/website/update-content.qmd
-                - text: "Maintain the CVD events dashboard"
-                  href: technical/website/cvd-events-dashboard.qmd
-                - text: "Maintain the CVD mortality dashboard"
-                  href: technical/website/cvd-mortality-dashboard.qmd
-                - text: "Maintain the public CVD tables"
-                  href: technical/website/cvd-tables.qmd
+            - text: "Update website content"
+              href: technical/website/update-content.qmd
 
         - section: "Maintain and recover"
           contents:

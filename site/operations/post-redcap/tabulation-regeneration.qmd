@@ -1,0 +1,23 @@
+---
+title: "Refresh the CVD tables"
+description: "Check the public CVD tables after an approved event or mortality release."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+The public tables refresh from approved CVD event and mortality files when the Info-Hub is rendered. The page arranges and formats published results; it does not recalculate the underlying statistics.
+
+| Question | Details |
+|--|----|
+| What happens | The page reads the current approved event and mortality data and their fixed 2015–2019 monthly reference files. It builds the on-screen tables and browser downloads from those published values. |
+| What you do | Complete the relevant release workflow, start a local preview and run a complete Quarto render. Open the public CVD tables page. A routine release will not require an edit to the table page. |
+| What you check | Check event and mortality coverage separately. Try the controls and selected-view downloads. Confirm that unavailable, incomplete and protected results have not been treated as zero or reconstructed. |
+| Files to check | Page: `site/surveillance/cvd/tables/index.qmd`. Approved website files: `site/downloads/files/metrics/cvd/` and `site/downloads/files/metrics/mortality/burden/datasets/`. |
+| If something is wrong | If a published value is wrong, return to the relevant CVD event or mortality workflow. If the source files are correct but the table fails, seek technical support for the page code. Do not repair an analytical value in the QMD file. |
+
+For the exact inputs, allowed presentation behaviour and checks, see [Technical: refresh the CVD tables](../../technical/workflows/reporting/tabulation-regeneration.qmd).

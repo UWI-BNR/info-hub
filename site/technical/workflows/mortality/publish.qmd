@@ -84,11 +84,10 @@ The analytical publication is complete, but the website is not necessarily deplo
 
 Run the Downloads catalogue builder through the normal site-render pathway, inspect the mortality dashboard and Downloads page, complete a full local Quarto render, review Git changes and then deploy through the normal website procedure.
 
-See [Maintain the CVD mortality dashboard](../../website/cvd-mortality-dashboard.qmd) and [Render and publish the website](../../website/render-publish.qmd).
+See [Refresh the CVD dashboards](../reporting/dashboard-regeneration.qmd) and [Render and publish the website](../../website/render-publish.qmd).
 
 ## If Step 6 does not complete
 
 A filesystem failure may occur after an earlier copy has succeeded. Inspect both the authoritative public folder and website mirror before rerunning.
 
 Do not repair a partial publication by hand-copying individual files.
-

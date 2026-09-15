@@ -29,19 +29,9 @@ Maintain pages, listings, navigation and downloads.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Maintain the CVD events dashboard](cvd-events-dashboard.qmd) {.card-title}
+### [Refresh the CVD dashboards](../workflows/reporting/dashboard-regeneration.qmd) {.card-title}
 
-Current data and scope boundaries for the events dashboard.
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
-::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
-::: {.card-body}
-### [Maintain the CVD mortality dashboard](cvd-mortality-dashboard.qmd) {.card-title}
-
-Maintain the approved mortality dashboard presentation.
+Maintain the approved event and mortality presentation.
 :::
 :::
 :::
@@ -49,9 +39,19 @@ Maintain the approved mortality dashboard presentation.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Maintain the public CVD tables](cvd-tables.qmd) {.card-title}
+### [Refresh the CVD tables](../workflows/reporting/tabulation-regeneration.qmd) {.card-title}
 
-Present approved event and mortality metric releases.
+Maintain public tabulations of approved releases.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Reporting and presentation workflows](../workflows/reporting/overview.qmd) {.card-title}
+
+Technical guides for dashboards, tables, downloads, listings and reports.
 :::
 :::
 :::
@@ -61,4 +61,3 @@ Present approved event and mortality metric releases.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

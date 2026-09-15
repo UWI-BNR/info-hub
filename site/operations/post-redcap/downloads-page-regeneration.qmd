@@ -1,0 +1,23 @@
+---
+title: "Refresh the Downloads page"
+description: "Rebuild and check the public Downloads catalogue after approved files change."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+## Overview of the process
+
+The Downloads page is built automatically from the approved catalogue records stored with public download packages. It should not be edited by hand to add a routine release.
+
+| Question | Details |
+|--|----|
+| What happens | Before Quarto renders the site, a catalogue builder checks every supported release record and ZIP link. It then rebuilds `site/downloads/downloads.yml`, which supplies the public Downloads table. If a record or ZIP is invalid, the build stops and leaves the existing catalogue unchanged. |
+| What you do | After an approved publication step has refreshed the website download files, run a complete Quarto render from the `site` folder. This runs the catalogue builder automatically. |
+| What you check | Open the Downloads page, find the new or corrected entry, check its title, period and release date, and open every link. Confirm that only approved public files are offered. |
+| Files to check | Source records and packages are under `site/downloads/files/metrics/`. The generated catalogue is `site/downloads/downloads.yml`; the page is `site/downloads/index.qmd`. |
+| If something is wrong | Read the catalogue-builder error. Correct the approved catalogue record, package or path at its source, then render again. Do not add a row directly to `downloads.yml`. |
+
+For accepted catalogue fields, validation rules and the manual command, see [Technical: rebuild the Downloads page](../../technical/workflows/reporting/downloads-page-regeneration.qmd).

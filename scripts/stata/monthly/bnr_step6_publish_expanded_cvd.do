@@ -1,9 +1,12 @@
 /*******************************************************************************
 DO-FILE: bnr_step6_publish_expanded_cvd.do
-VERSION: 3.3.0 (2 September 2026)
+VERSION: 3.3.1 (15 September 2026)
 PURPOSE: Verify and publish an approved combined CVD package.
 USAGE:   do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2026 1
          do "$BNR_STATA/monthly/bnr_step6_publish_expanded_cvd.do" 2026 1 replace
+
+CHANGE 3.3.1:
+  Require an authorised BNR Lead or BNR Analyst role in approval.yml.
 
 CHANGE 3.2.1:
   Wrap the operational run-summary display block in quietly { } so Stata
@@ -108,6 +111,11 @@ if "`approved_by_lower'" == "" | inlist("`approved_by_lower'", "full name", "act
     display as error "Step 6 cannot promote a package with a missing or placeholder approver name."
     exit 459
 }
+local approved_role_lower = lower(strtrim("`approved_role'"))
+if !inlist("`approved_role_lower'", "bnr lead", "bnr analyst") {
+    display as error "Step 6 cannot promote a package approved under an unauthorised role."
+    exit 459
+}
 
 import delimited using "`manifest'", varnames(1) clear
 foreach variable in file_path file_size checksum {
@@ -203,7 +211,7 @@ tempname publish_handle
 file open `publish_handle' using "`publication_log'", write text replace
 file write `publish_handle' "BNR CVD STEP 6 PUBLICATION LOG" _n
 file write `publish_handle' "run_status: published_successfully" _n
-file write `publish_handle' "script_version: 3.3.0" _n
+file write `publish_handle' "script_version: 3.3.1" _n
 file write `publish_handle' "release_id: `release_id'" _n
 file write `publish_handle' "approved_by: `approved_by'" _n
 file write `publish_handle' "approved_role: `approved_role'" _n
@@ -226,7 +234,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 6: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:                 Published successfully"
-noisily display as text   "  Script version:             3.3.0"
+noisily display as text   "  Script version:             3.3.1"
 noisily display as text   "  Selected release:           `year4'-`month2'"
 noisily display as text  `"  Approved by:                `approved_by'"'
 noisily display as text   "  Approved payload verified:  `payload_files' files"

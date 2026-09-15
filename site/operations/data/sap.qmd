@@ -1,8 +1,8 @@
-﻿---
+---
 title: "BNR Information Hub Statistical Analysis Plan"
-manual-review-status: not-reviewed
-subtitle: "Standing analytical methods for BNR metrics and published analytical outputs"
-version: "Draft v0.1"
+manual-review-status: reviewed-by-irh
+subtitle: "Version 1 methods for routine CVD event and mortality surveillance"
+version: "Version 1"
 format:
   html:
     toc: true
@@ -19,432 +19,395 @@ Operations Manual
 
 | Item | Detail |
 |---|---|
-| Document name | BNR Information Hub Statistical Analysis Plan |
+| Document | BNR Information Hub Statistical Analysis Plan |
 | Short name | Info-hub SAP |
-| Version | Draft v0.1 |
-| Date | 15 May 2026 |
-| Owner | BNR Analytics Team |
+| Version | Version 1 |
+| Status | Approved |
+| Date | 15 September 2026 |
+| Owner | BNR Lead and BNR Analyst |
 | Companion document | [BNR Metric Specification Register](sap-metrics.qmd) |
 
 ## Purpose
 
-This Statistical Analysis Plan defines the standing analytical methods used to produce BNR information hub metrics and published analytical outputs.
+This plan explains how the BNR Information Hub calculates and presents its routine cardiovascular disease (CVD) event and mortality statistics. It provides one agreed set of methods so that successive releases are consistent, reproducible and open to review.
 
-The metric system is the reusable analytical foundation. Reports are
-publication products that consume approved metrics and may include separately
-documented bespoke analysis where their approved purpose requires it.
+It describes:
 
-This SAP exists to ensure that BNR outputs are reproducible, auditable, interpretable and consistent across data releases.
+- which events and deaths are included;
+- how CVD events and causes of death are classified;
+- how death-certificate-only (DCO) events are identified or estimated;
+- how counts, percentages and rates are calculated;
+- how missing data and different forms of uncertainty are handled; and
+- how results are checked, protected, approved and published.
+
+The companion [BNR Metric Specification Register](sap-metrics.qmd) gives the exact definition and reporting breakdowns for each routine metric.
+
+Version 1 is the first approved version. It describes the workflow at its initial handover to the BNR team.
 
 ## Scope
 
-This SAP applies to:
+### Included
 
-- routine surveillance metrics
-- data quality metrics
-- process monitoring metrics
-- public dashboards
-- static reports
-- downloadable analytical datasets
-- tables and figures derived from approved BNR data releases
+This plan covers six families of routine public statistics:
 
-Individual metric definitions are maintained in the companion [BNR Metric Specification Register](sap-metrics.qmd).
+- hospital-recorded and estimated national CVD event counts;
+- CVD event distributions;
+- crude and age-standardised CVD event incidence rates;
+- CVD mortality counts;
+- CVD mortality distributions; and
+- crude and age-standardised CVD mortality rates.
 
-## Core principles
+It also covers the five-year comparisons, fixed monthly reference values, disclosure control, approval and publication that support these statistics.
 
-All BNR information hub analytics follow these principles:
+### Not included
 
-1. Metrics are defined before routine production.
-2. Approved metric definitions are stable across data releases.
-3. Stratifications are dimensions, not separate metrics, unless the definition or method changes.
-4. Stata is the primary analytical engine for core surveillance computation.
-5. Stata controls analytical publication; Quarto presents approved outputs and
-   does not define core analytical logic.
-6. Outputs are deterministic and reproducible from approved data releases and versioned code.
-7. Metadata is part of the analytical product.
-8. Reports may interpret, combine or extend metrics, but do not redefine core metrics.
+Case-fatality, length-of-stay, bed-day and other bespoke analyses are not routine Information Hub metrics in Version 1. When required, they are produced as [one-off reports](../post-redcap/one-off-report.qmd), with methods written specifically for the question being addressed and with their own data checks, disclosure review and interpretation.
 
-## Data release model
+## Principles
 
-Routine metrics are calculated from approved BNR data releases.
+1. Stata creates the analytical results. Quarto presents the approved public files and does not recalculate or alter the statistics.
+2. Every result can be traced to the data releases, code, settings and review evidence used to create it.
+3. Hospital-recorded events, DCO estimates and deaths are different measures and are reported separately.
+4. Statistical uncertainty, uncertainty about the classification of a death, and uncertainty from DCO linkage are described separately.
+5. Missing or invalid information is handled using stated rules.
+6. Small values and related statistics are protected before files enter the public domain.
+7. A material change to a method must be approved, documented, implemented in the code and validated before the next release.
 
-Each analytical cycle uses an identified cumulative REDCap data release for a stated year and month. If the underlying data are corrected or updated after extraction, the change is handled as a new or explicitly authorised replacement analytical cycle.
+## Responsibilities
 
-Each metric run should record, at minimum:
-
-- data release identifier
-- source dataset version
-- run date
-- responsible Stata DO or ADO file
-- data status, such as final or provisional
-
-## Units of analysis
-
-BNR metrics may use different units of analysis. The unit must be explicit in the [BNR Metric Specification Register](sap-metrics.qmd).
-
-| Unit | Definition |
+| Role | Responsibility |
 |---|---|
-| Event | A registered CVD event, such as stroke or acute myocardial infarction |
-| Person | A unique individual in the registry or linked source system |
-| Admission | A hospital admission associated with a registered event |
-| Death | A death record or death outcome associated with a registered event |
-| Bed-day | One occupied hospital bed for one day |
-| Population | Resident population denominator used for rate calculation |
-| Record | A row in a registry or release dataset, usually used for data quality metrics |
+| BNR Lead | Owns the surveillance purpose and approves material changes, exceptions and publication. |
+| BNR Analyst | Runs or oversees the analysis, reviews data quality and results, records departures from this plan, and may approve a release. |
+| BNR data team | Investigates source-data questions and confirms corrections in REDCap or another approved source system. |
+| BNR Developer | Maintains the version-controlled code and tests. This technical role does not replace analytical or release approval. |
+| Quarto website maintainer | Presents the approved public outputs and checks that the rendered website agrees with them. |
 
-The same individual may contribute more than one event where the metric is event-based.
+The approval controls permit a BNR Lead or BNR Analyst to approve a release. The approver must be able to identify and review the exact package being approved.
 
-## Standard CVD data sources
+## Questions answered by routine reporting
 
-Current CVD metrics may use:
+The routine statistics answer the following questions:
 
-| Source | Use |
+1. How many eligible CVD events were recorded through the hospital-based registry?
+2. How are those events distributed by event type, sex and broad age group?
+3. What are the hospital-recorded crude and age-standardised event rates?
+4. After allowing for additional DCO events, what is the estimated national event burden and incidence?
+5. How many deaths meet the BNR Primary and Inclusive CVD mortality definitions?
+6. How are those deaths distributed, and what are the crude and age-standardised mortality rates?
+7. How do annual and quarterly counts compare with the equivalent periods in the previous five years?
+
+## Data sources and release selection
+
+| Source | How it is used |
+|---|----|
+| BNR CVD registry | Provides hospital-recorded heart attack and stroke events, event dates, residence, sex and age. |
+| Historical CVD data | Provides the frozen historical event series to the end of 2023. This is combined with later cumulative REDCap releases. Routine public reporting starts in 2010. |
+| Mortality REDCap release | Provides death records, identity information used privately for linkage, and the death-certificate information used to classify causes of death. |
+| UN World Population Prospects 2024 | Provides Barbados population estimates by year, sex and five-year age group for rate calculations. |
+| WHO World Standard Population 2000–2025 | Provides the standard age weights used to calculate age-standardised rates. |
+| Release receipts and metadata | Record the release, reporting period, source and code versions, and completed checks. |
+
+Each analysis uses clearly named cumulative CVD and mortality releases for a stated year and month. The CVD event workflow records both release identities. The selected mortality release must provide sufficient coverage for the required death period and must not predate the selected CVD event release.
+
+The source files used for all data releases are available as an archived record of past results. If source data are corrected, the workflow is repeated from the earliest affected step, either as a new release or as an explicitly authorised replacement. Generated analytical files are not corrected by hand.
+
+## Units, periods and populations
+
+### Units of analysis
+
+| Unit | Meaning in this plan |
 |---|---|
-| BNR CVD registry data | Case ascertainment, event characteristics, admissions and outcomes |
-| Death certificate data | Death certificate only cases and death outcomes where used |
-| Population denominator data | Crude and age-standardised rate calculation |
-| Data release metadata | Dataset versioning, release status and provenance |
+| Event | One eligible heart attack or stroke event. A person may contribute more than one event when the [separate-event rule](#standard-inclusion-rules) is met. |
+| Death | One registered death meeting a stated [mortality cause definition](#mortality-cause-definitions). |
+| Person | A person may contribute more than 1 event to the CVD event register. During event and death linkage, people are compared privately and securely. Public results remain event or death counts. |
+| Population | The estimated Barbados resident population used as the denominator for a rate. |
 
-Additional sources may be added for future surveillance domains.
+### Analysis population and sample size
 
-## Standard inclusion rules
+The analysis uses all eligible records in the selected releases rather than a sample. A formal sample-size calculation is therefore not required.
 
-Unless a metric-specific definition states otherwise, CVD metrics include:
+The routine workflow does not perform statistical significance tests or adjust for multiple comparisons. Confidence intervals describe the statistical uncertainty around rates. They are not used as a pass-or-fail test of whether a difference is important. Each cumulative release is treated as a new surveillance snapshot.
 
-- confirmed BNR events
-- Barbados residents
-- events occurring within the defined reporting period
-- records included in the approved analytical data release
-- hospital-registered stroke and acute myocardial infarction events for current CVD reporting
+### Reporting periods {#period-definitions}
 
-The [BNR Metric Specification Register](sap-metrics.qmd) must define whether a metric includes all events, first-ever events, hospitalised events, death certificate only events, or another specified event set.
+- Monthly counts are produced for monitoring and presentation.
+- Quarterly counts use calendar quarters.
+- Annual counts and rates use completed calendar years.
+- Routine public reporting starts in 2010.
+- Rates are produced only for complete years.
 
-## Standard exclusion rules
+A hospital-recorded event is assigned to its event date. A death is assigned to its date of death. A DCO event is assigned to the year of death.
 
-Unless a metric-specific definition states otherwise, CVD metrics exclude:
+## CVD event population and definitions
 
-- non-residents
-- duplicate records
-- records outside the reporting period
-- records failing the approved case definition
-- records with missing required values for the metric being calculated
+### Eligible hospital-recorded events {#standard-inclusion-rules}
 
-Death certificate only cases are included or excluded according to the metric definition. They must not be silently removed.
+An event is included in the routine hospital-recorded series when:
 
-## Standard dimensions
+- it meets the approved BNR definition for heart attack or stroke;
+- the person lived in Barbados for at least six months during the relevant year;
+- the event date falls within the reporting period; and
+- the record is included in the selected, quality-checked CVD release.
 
-Dimensions are the approved ways a metric may be stratified. Stratification does not create a new metric unless the definition or method changes.
+The current event definitions use ICD-10 I21–I22 for heart attack and I60–I64 for stroke within the approved BNR classification process. The public event label **Heart** refers to the heart-attack series. It should not be confused with the broader range of ischaemic and coronary disease evidence included in the mortality **Heart** category.
 
-Standard CVD dimensions include:
+Several records or admissions relating to the same clinical event count as one event. Two events for the same person are counted separately only when they are at least 28 days apart and each meets the relevant case definition.
 
-| Dimension | Example values |
-|---|---|
-| Period | Year, quarter, month, week, rolling period |
-| Event type | All CVD, stroke, acute myocardial infarction |
-| Sex | Female, male, all |
-| Age group | All ages, standard BNR age groups |
-| Source status | Hospital-registered, death certificate only, all sources |
-| Outcome status | Survived to discharge, died in hospital, unknown |
-| Data release | Current release, historical release |
+A record is excluded or set aside for review when essential information about residence, event date or event type is missing, invalid or ineligible. It is not forced into the analysis.
 
-A metric does not need to use every dimension.
+DCO events are added through the separate linkage process described below. 
 
-## Period definitions
+## Mortality cause definitions
 
-Calendar year is the standard annual reporting period.
+### Purpose and limits
 
-Monthly and weekly outputs may be produced for operational monitoring. Weekly metrics should use one documented week definition consistently.
+The mortality workflow applies a fixed set of BNR rules to the wording recorded on death certificates. The purpose is to classify deaths consistently for surveillance.
 
-Rolling periods may be used for smoothing, baseline comparison or small-number stability. The number of years in the rolling period must be recorded in the metric output.
+This is not a formal ICD-10 underlying-cause-of-death coding service. Instead, the BNR method considers:
 
-## Statistical methods
+- the terms recorded on the death certificate;
+- whether a term appears in Part I or Part II;
+- the order of the lines in Part I;
+- a small, documented set of [mortality-coding principles](../../technical/workflows/mortality/classify.qmd#classification-boundary); and
+- specific [evidence rules for All CVD, Heart and Stroke](../../technical/workflows/mortality/classify.qmd#classification-boundary).
 
-### Count metrics
+The rules do not learn from earlier records or change themselves. Any change to the terminology, evidence rules, causal rules or test cases requires a new method version, review and validation.
 
-Count metrics report the number of eligible units in a defined period and stratum.
+### Strength of the cause-of-death evidence
+
+Each death is placed in one of five evidence classes for the cause being considered:
+
+| Class | Meaning |
+|--|----|
+| Clear | The certificate provides strong evidence that the cause formed part of the sequence leading to death. |
+| Likely | The evidence is sufficient for the BNR surveillance definition, although it is less direct than Clear. |
+| Possible | Relevant CVD evidence is present, but its role or position in the sequence leading to death is less certain. |
+| Mention only | The condition is mentioned but does not meet the rules for inclusion in the Primary or Inclusive definition. |
+| No evidence | The certificate contains no qualifying evidence for that cause. |
+
+The public results use two related definitions:
+
+- **Primary:** includes deaths classified as Clear or Likely.
+- **Inclusive:** includes deaths classified as Clear, Likely or Possible.
+
+Every death in the Primary definition is also in the Inclusive definition. The two estimates show how results change when Possible evidence is included. They must not be added together, and they are not lower and upper confidence limits.
+
+### All CVD, Heart and Stroke
+
+- **All CVD** uses the final overall CVD classification. Each death is counted once within each of the two definitions.
+- **Heart** follows the established BNR fatal-event surveillance definition. It includes explicit heart attack and compatible ischaemic or coronary heart-disease evidence. This broader mortality definition is based on historical BNR case-definition material, including the BNR CVD Annual Report 2023 and Rose *et al.* (2016). Sudden cardiac death alone is treated as uncertain evidence unless stronger Heart wording is also present.
+- **Stroke** includes qualifying acute ischaemic stroke and non-traumatic cerebral haemorrhage. Haemorrhage recorded as traumatic, or otherwise excluded by the rules, is not classified as stroke.
+
+Where the evidence allows, each death is assigned to one subtype: **Heart** or **Stroke**. Deaths with mixed or unclear subtype evidence are not forced into either subtype. They remain classified only as a known CVD death. The evidence supporting the decision is kept for quality checks.
+
+BNR staff confirm Barbados residency eligibility while reviewing each death certificate, before the record enters this analytical workflow. A death also needs a valid date of death, a recorded female or male sex, and a death year within the analysis period. A death with missing age can remain in an all-age result but cannot contribute to an age-specific or age-standardised result.
+
+## DCO linkage and event creation
+
+### Why DCO events are included
+
+The hospital-recorded event series is not assumed to contain every CVD event occurring in Barbados. A person may die from an acute CVD event without a qualifying event having been recorded in the hospital registry.
+
+The DCO process uses mortality data to identify or estimate these additional events. This produces a broader estimated national series. The directly observed hospital series is retained and reported separately.
+
+### How deaths are matched to hospital records
+
+The linkage uses the confidential CVD event data created in Step 2 and identity information from the selected mortality release. It uses exact, rule-based matching rather than approximate or probability-based matching.
+
+A death is linked only when one of the following rules identifies one person:
+
+1. The death record and CVD record have the same unique, valid national registration number, and the other identity information contains no important contradiction, such as clearly different names.
+2. One person has the same full name, sex and exact date of birth. Before comparison, differences in capitalisation, punctuation and spacing are removed from the name.
+3. One person has the same first and last names, allowing the names to appear in either order, and also has the same sex and exact date of birth. Where an exact date of birth is unavailable, the approved comparison based on age in completed years may be used.
+
+If more than one person remains possible, or the identity information conflicts, the candidate remains unresolved. Names, registration numbers and detailed linkage worklists remain in the private environment and are not published.
+
+See [CVD events Step 4: Generate combined CVD metrics](../../technical/workflows/cvd-events/generate-metrics.qmd) for the technical linkage workflow and its private review files.
+
+### The 28-day event window
+
+The workflow first identifies deaths with sufficient certificate evidence to be a possible DCO event. For each of these deaths, it checks whether the same person had a qualifying hospital-recorded Heart or Stroke event in the 28 days ending on the date of death.
+
+- If there was a qualifying event in this period, it has already been counted in the hospital event series. It is not counted again as a DCO event.
+- If there was no qualifying event in this period, the death is counted as an additional DCO event.
+- An event occurring 28 or more days before death is treated as a separate earlier event. It does not prevent a DCO event being counted at death.
+
+This approach avoids counting the same acute event twice, while allowing the DCO series to include eligible events that were not recorded through the hospital registry.
+
+### Allowing for deaths that cannot be matched
+
+The workflow does not simply decide that an unresolved individual is a DCO event. An individual is unresolved when the available identity details do not identify one person with enough certainty—for example, when a name or date of birth is missing, details conflict across the records, or more than one hospital record could belong to the same person.
+
+Instead, the workflow estimates the number of additional DCO events among the unresolved group, using the results for deaths that were matched with sufficient certainty.
+
+The calculation uses three counts:
+
+| Symbol | Meaning |
+|--|----|
+| \(L\) | Matched deaths with a qualifying hospital event during the 0–27 days before death |
+| \(A\) | Matched deaths identified as additional DCO events |
+| \(U\) | Eligible deaths that remain unresolved |
+
+Among the resolved deaths, the observed proportion identified as additional DCO events is:
 
 $$
-\text{Count} = \sum_{i=1}^{n} I_i
+p = \frac{A}{L + A}
 $$
 
-where \(I_i = 1\) when record \(i\) meets the metric definition, and \(I_i = 0\) otherwise.
-
-Counts should normally be reported alongside relevant denominators, percentages or rates when used for interpretation.
-
-### Percentage metrics
-
-Percentage metrics report a numerator as a share of an eligible denominator.
+The central estimate adds that proportion of the unresolved group to the additional DCO events already identified:
 
 $$
-\text{Percentage} = \frac{x}{n} \times 100
+\text{estimated additional DCO events}=A+pU
 $$
 
-where \(x\) is the number meeting the metric condition and \(n\) is the eligible denominator.
+The workflow also gives a lower and upper value:
 
-Where appropriate, percentage metrics should include 95% confidence intervals using a documented binomial method.
+- the **lower value** is \(A\), which assumes that none of the unresolved deaths is an additional DCO event;
+- the **upper value** is \(A+U\), which assumes that all unresolved deaths are additional DCO events.
 
-### Rate metrics
+The proportion \(p\) is estimated from the target year when at least 20 deaths have been resolved. If fewer than 20 are available, the workflow first uses the target year together with the year before and the year after. If this is still insufficient, it uses all available years for the same mortality definition and, where relevant, the same CVD category. No central estimate is produced if there are still fewer than 20 resolved deaths.
 
-Rate metrics report the number of events relative to a population denominator.
+The workflow establishes the All CVD estimate first. It then divides the unresolved contribution across non-overlapping groups defined by cause, sex and five-year age group. Mixed or unclassifiable evidence is not silently assigned to Heart or Stroke. Because this estimate is made for a group rather than for named individuals, some reported counts may contain a decimal rather than being whole numbers.
+
+Only annual, all-age DCO estimates are published. Public outputs distinguish:
+
+- **additional DCO:** the estimated number of eligible events at death that were not already represented in the hospital event series; and
+- **hospital plus DCO:** the hospital-recorded count plus the estimated additional DCO count.
+
+Each DCO result includes a lower value, a central estimate and an upper value:
+
+- the **lower value** includes only the additional DCO events identified with sufficient certainty;
+- the **central estimate** also allows for the likely number of additional DCO events among deaths that could not be matched; and
+- the **upper value** shows the result if every unresolved eligible death were an additional DCO event.
+
+These values show the possible effect of incomplete linkage. They are not statistical confidence intervals, which describe a different type of uncertainty.
+
+## Routine statistical methods
+
+### Counts
+
+A count is the number of eligible events or deaths in a stated period and reporting group. Each eligible event or death contributes once to the relevant count.
+
+### Percentages
+
+Routine percentages describe how events or deaths are distributed across event or cause type, sex, or broad age group:
 
 $$
-\text{Rate per 100,000} = \frac{x}{N} \times 100{,}000
+\text{Percentage}
+=
+\frac{\text{number in the category}}
+{\text{number in the relevant parent group}}
+\times 100
 $$
 
-where \(x\) is the number of eligible events and \(N\) is the resident population denominator.
+For example, the percentage of Heart deaths is calculated using the relevant All CVD death count as its parent group. These are descriptive percentages; routine confidence intervals are not calculated for them.
 
-The denominator source, age bands and reference period must be documented.
+### Crude rates
 
-Current CVD reporting distinguishes two event-rate sources:
+A crude rate relates the number of eligible events or deaths to the corresponding Barbados population:
 
-- the **hospital-based event rate**, using recognised events from the Queen Elizabeth Hospital; and
-- the **estimated national event rate**, adding identified death-certificate-only (DCO) events to the hospital series.
+$$
+\text{Rate per 100,000}
+=
+\frac{\text{eligible events or deaths}}
+{\text{matching resident population}}
+\times 100,000
+$$
 
-The Queen Elizabeth Hospital is Barbados's only tertiary hospital. The hospital-based series is therefore expected to capture a substantial share of serious recognised CVD events and to provide a useful indicator of trends over time, particularly while referral, access, diagnostic and ascertainment practices remain reasonably stable. It is not treated as complete national ascertainment. The estimated national series has broader coverage but additional uncertainty because DCO ascertainment is imperfect.
+The population denominator is matched by year and, where relevant, sex.
+
+For hospital-recorded event rates and mortality rates, the 95% confidence interval uses the exact Poisson method, also known as the Garwood method. This method is suitable for counts and remains valid when the number of events or deaths is small.
+
+The hospital-plus-DCO rate may be based on an estimated count containing a decimal. Its 95% confidence interval therefore uses a conditional gamma method suited to that type of count. This interval is calculated around the central DCO estimate.
 
 ### Age-standardised rates
 
-Age-standardised rates are used when comparing populations or time periods with different age structures.
+Age-standardisation allows rates to be compared more fairly when the age structure of the populations being compared is different.
 
-Direct age-standardisation is the default method unless a metric-specific definition states otherwise.
-
-$$
-\text{Age-standardised rate} = \sum_{a=1}^{A} w_a r_a
-$$
-
-where \(r_a\) is the age-specific rate in age group \(a\), and \(w_a\) is the corresponding standard population weight.
-
-The [BNR Metric Specification Register](sap-metrics.qmd) must define the age bands, denominator source and standard population.
-
-### Ratio metrics
-
-Ratio metrics compare two rates, percentages or counts.
+The workflow first calculates separate rates for 21 five-year age groups, from ages 0–4 through to ages 100 and over. It then applies the corresponding weights from the WHO World Standard Population 2000–2025:
 
 $$
-\text{Ratio} = \frac{\text{comparison estimate}}{\text{reference estimate}}
+\text{Age-standardised rate}
+=
+\sum_{a=1}^{21} w_a r_a
 $$
 
-The comparison group and reference group must be explicit.
+Here, \(r_a\) is the Barbados rate for age group \(a\), and \(w_a\) is that age group's share of the standard population.
 
-Ratio metrics should only be added to the register when they are expected to be routinely produced and interpreted. Ad hoc ratios may appear in reports as research outputs.
+The 95% confidence intervals for hospital-recorded event and mortality age-standardised rates use the Fay–Feuer gamma method. The hospital-plus-DCO series uses the corresponding conditional Fay–Feuer method around the central DCO estimate.
 
-### Model-adjusted metrics
+### Comparisons with earlier years
 
-Model-adjusted metrics may be used where crude stratification is insufficient.
+An annual count is compared with the average for the preceding five completed calendar years for the same reporting group. A quarterly count is compared with the average for the same quarter in the preceding five years.
 
-Examples include:
+The comparison is not shown until all five earlier values are available.
 
-- age-adjusted case-fatality percentage
-- model-based rate ratio
-- trend estimate
+Monthly dashboards use separately approved fixed reference values. These are prepared and approved by Stata.
 
-The model form, adjustment variables, reference group and prediction method must be documented in the [BNR Metric Specification Register](sap-metrics.qmd).
+## Understanding uncertainty
 
-Model-adjusted metrics should be used sparingly and only when they add clear interpretive value.
+The outputs describe three different forms of uncertainty:
 
-### Length-of-stay metrics
+| Type | How it is shown | What it means |
+|---|---|---|
+| Statistical uncertainty | A 95% confidence interval around a crude or age-standardised rate | The uncertainty expected from the event or death count and its denominator under the stated statistical method |
+| Mortality-classification sensitivity | Separate Primary and Inclusive estimates | How the result changes when deaths with Possible CVD evidence are included |
+| DCO linkage and event-identification uncertainty | Lower, central and upper additional-DCO or hospital-plus-DCO values | How unresolved eligible deaths may affect the estimated number of additional events |
 
-Length of stay is calculated from admission and discharge dates.
+These measures answer different questions and should not be combined.
 
-$$
-\text{Length of stay}_i = \text{date of discharge}_i - \text{date of admission}_i
-$$
+The statistical confidence intervals do not describe every possible source of uncertainty. They do not allow for events missed by the source systems, changes in referral or diagnosis, variation in death-certificate wording, classification errors, uncertainty in the population estimates, or every effect of unresolved linkage. These limitations should be considered when interpreting changes over time.
 
-Same-day admission and discharge is retained as zero completed days. Completed stays ending in death are included in the primary measure. Records with a missing required date or an end date before admission are excluded and returned for correction. Unusually long but possible stays are flagged for source verification rather than automatically excluded; confirmed stays remain eligible.
+## Disclosure control
 
-Median and interquartile range are preferred for public reporting because length of stay is usually skewed.
+The current public-output rule is `bnr_sdc_v1`.
 
-### Bed-day metrics
+- Counts from 1 to 5 are always suppressed.
+- A true zero may be shown as zero.
+- Other values are also suppressed when they could be used to work out a protected small count.
+- Connected counts, percentages, rates, confidence limits and comparison values are protected together.
+- The exact value is left blank in the public data and shown as `*` where a display symbol is required.
 
-Bed-day metrics describe hospital service use.
+Disclosure control is applied to the complete proposed public package before approval. The reviewer checks both the data and how they appear when presented. Names, registration numbers, detailed linkage records, private logs and other confidential material must not enter Git or public website folders.
 
-$$
-\text{Total bed-days} = \sum_{i=1}^{n} \text{length of stay}_i
-$$
+See [Disclosure control](../../technical/controls/disclosure-control.qmd) for the implementation details.
 
-Bed-day metrics should be interpreted as service-use measures, not disease incidence measures.
+## Quality assurance, approval and publication
 
-## Data quality metrics
+Before a routine release can be approved, the workflow and reviewer check:
 
-Data quality metrics are part of the routine metric system.
+- that the intended source releases and reporting periods were used;
+- how many records were eligible or set aside for review;
+- the mortality-classification and DCO-linkage summaries, where applicable;
+- that every required population and standard-population value was found;
+- that every result has the required identifying and descriptive information and that no result is duplicated;
+- whether changes from earlier periods are plausible;
+- that disclosure control has protected connected results consistently;
+- that the proposed package contains the expected files and has not changed during review; and
+- that the authoritative public files and website copies are identical.
 
-They may describe:
+The CVD event and mortality workflows create a private package for review. Approval is restricted to the BNR Lead or BNR Analyst and records the exact package that was reviewed.
 
-- release size
-- missingness
-- duplicate candidates
-- invalid dates
-- implausible values
-- unknown outcomes
-- abstraction lag
-- release readiness
+Publication copies the unchanged approved files to the authoritative public location and then to the website source. Quarto presents those public files.
 
-Data quality metrics may be internal only, public, or partially public depending on governance decisions.
+Use the [CVD event workflow](../post-redcap/cvd-events-workflow.qmd) and [mortality workflow](../post-redcap/mortality-workflow.qmd) for the operator instructions. The corresponding Technical Manual pages describe the implementation in detail.
 
-## Uncertainty intervals
+## Departures and changes
 
-Uncertainty intervals should be produced when they support interpretation.
+A material departure from this plan must be agreed and recorded before the affected results are produced routinely. The record should state:
 
-| Metric type | Default uncertainty approach |
-|---|---|
-| Count | Usually none, unless modelled or compared |
-| Percentage | Binomial confidence interval |
-| Crude rate | Poisson or exact Poisson confidence interval |
-| Age-standardised rate | Standard direct standardisation confidence interval |
-| Model-adjusted estimate | Model-based confidence interval |
-| Median | Optional bootstrap or distribution-free interval, where needed |
+- why the change is needed;
+- which metrics, periods and releases are affected;
+- the revised definition or statistical method;
+- how the revised method was checked and, where relevant, compared with the previous method;
+- who approved the change and when; and
+- whether earlier public results need correction or whether the change creates a break in the series.
 
-The method used must be recorded in the output metadata or metric register.
-
-## Small numbers and disclosure control
-
-All public outputs must comply with agreed disclosure control rules.
-
-The operating requirement is defined here; the step-by-step implementation and review checks are maintained in the [Technical Manual disclosure-control chapter](../../technical/controls/disclosure-control.qmd).
-
-Metric values may be flagged as:
-
-- final
-- provisional
-- suppressed
-- low count
-- unstable
-- data quality warning
-- internal only
-
-Suppression rules should be implemented consistently in Stata wherever possible, not manually in Quarto.
-
-Where values are not suppressed but are unstable, public interpretation should avoid overstatement.
-
-## Missing data
-
-The handling of missing data must be explicit.
-
-Default rules are:
-
-- missing values in required numerator fields exclude a record from that metric
-- missing denominator fields exclude a record from denominator-based metrics
-- missing outcome values exclude records from outcome metrics unless unknown is a valid category
-- missingness should be reported as a data quality metric where it affects interpretation
-
-Imputation is not used for routine public metrics unless a metric-specific definition explicitly approves it.
-
-## Baseline comparisons
-
-Baseline comparisons may use historical reference periods such as a five-year average.
-
-The metric definition must state:
-
-- baseline years
-- inclusion rules for baseline data
-- whether the baseline is fixed or rolling
-- whether baseline values are means, medians, ranges or intervals
-- whether the comparison is descriptive or inferential
-
-Baseline metrics should not be confused with forecast or expected-value models unless such models are explicitly defined.
-
-## Output requirements
-
-Routine metric outputs should be written in long format wherever possible.
-
-The minimum preferred output structure is:
-
-| Field | Purpose |
-|---|---|
-| metric_id | Links the output row to the metric register |
-| release_id | Identifies the data release |
-| period | Reporting period |
-| strata | Compact description of the stratum, or separate dimension variables if easier |
-| statistic | Count, rate, percentage, median, mean or other statistic |
-| value | Main estimate |
-| unit | Count, percent, per 100,000, days, bed-days or ratio |
-| numerator | Numerator, where applicable |
-| denominator | Denominator, where applicable |
-| lower_ci | Lower confidence interval, where applicable |
-| upper_ci | Upper confidence interval, where applicable |
-| status_flag | Final, provisional, suppressed, low count, unstable or warning status |
-
-Other metadata should be stored once at dataset or build level rather than repeated unnecessarily in every row.
-
-## Metadata requirements
-
-Every routine metric output must include metadata describing:
-
-- metric definition
-- numerator
-- denominator
-- inclusion and exclusion rules
-- source dataset
-- data release
-- calculation method
-- standardisation method, where applicable
-- dimensions included
-- limitations
-- responsible code file
-- run date
-
-Where possible, metadata should be stored both in the Stata dataset and as a companion YAML file.
-
-## Quality assurance
-
-Each analytical cycle should include:
-
-- confirmation of approved data release
-- validation of required variables
-- dataset signature or release identifier check
-- comparison with previous release totals
-- review of data quality flags
-- review of suppressed or unstable outputs
-- Stata log review
-- human sign-off before public publication
-
-Any material difference from the approved metric definition must be documented before publication.
-
-## Publication rules
-
-The information hub publishes static outputs.
-
-Quarto pages may:
-
-- read approved metric outputs
-- present metric values
-- visualise approved data
-- provide interpretation
-- link to downloads
-
-Quarto pages must not silently redefine numerators, denominators, exclusions or statistical methods.
-
-## Reports
-
-Reports are narrative or research products.
-
-A report may:
-
-- use approved core metrics
-- combine several metrics
-- visualise selected metrics
-- interpret observed patterns
-- include additional bespoke analysis
-- explore research questions not covered by the metric register
-
-Where a report includes analysis outside the metric register, that analysis should be documented within the report materials and should not be treated as a new core metric unless it is later approved and added to the register.
-
-## Change control
-
-Changes to this SAP are required when:
-
-- a core analytical method changes
-- the data release model changes
-- disclosure rules change
-- standard dimensions change
-- a new surveillance domain introduces methods not covered here
-- output metadata requirements change
-
-Changes to individual metric definitions are recorded in the [BNR Metric Specification Register](sap-metrics.qmd).
+The SAP, metric register, relevant code, tests and public explanation of the methods should be updated together. A minor correction that does not change a result or its interpretation should still be visible in the normal Git history.
 
 ## Version history
 
-| Version | Date | Summary | Author |
-|---|---|---|---|
-| Draft v0.1 | 2026-05-15 | Initial draft SAP for the BNR information hub metric system |
-
+| Version | Date | Change |
+|--|---|----|
+| Version 1 | 15 September 2026 | First approved version aligned with the CVD event, mortality and DCO workflows. |

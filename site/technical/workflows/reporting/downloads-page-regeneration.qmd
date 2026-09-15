@@ -1,0 +1,53 @@
+---
+title: "Rebuild the Downloads page"
+description: "Run and maintain the failure-safe catalogue builder used by the public Downloads page."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## How the page is built
+
+`site/downloads/index.qmd` contains a Quarto listing over `site/downloads/downloads.yml`, using `site/downloads/downloads-table.ejs.md`. The YAML file is generated; do not maintain it manually.
+
+Before every site render, `_quarto.yml` runs:
+
+```powershell
+python scripts/build_download_catalogue.py
+```
+
+Because the command runs from `site/`, the repository script is `site/scripts/build_download_catalogue.py`. It uses only the Python standard library and resolves paths from its own location.
+
+## Inputs and output
+
+The builder scans `site/downloads/files/metrics/**/catalogue/{release_id}.yml`.
+
+It currently accepts `schema: bnr_download_manifest_v1` and `package_type: metric`. The central page lists entries whose download item has `include_in_listing: true`. Public links must remain under the permitted `files/` prefix and resolve to an existing ZIP package.
+
+The single generated output is `site/downloads/downloads.yml`. It is rewritten only when its complete generated content changes. An unchanged message is normal after a rebuild that does not change catalogue metadata.
+
+## Manual procedure
+
+From the repository root:
+
+```powershell
+.\venv-info-hub\Scripts\Activate.ps1
+python site/scripts/build_download_catalogue.py
+```
+
+Then:
+
+1. Review `git diff -- site/downloads/downloads.yml`.
+2. Start or refresh the Quarto preview.
+3. Open `/downloads/` and locate the expected release.
+4. Check its surveillance area, period, release date, description and ZIP link.
+5. Open the ZIP and confirm it is the approved public package.
+6. Run a complete site render.
+
+## Failure safety
+
+The script validates all source records and selected ZIPs before writing the central YAML. If any input fails, it exits without replacing an existing `downloads.yml`. Correct the source catalogue entry or package created by the publication workflow, then rerun. Never patch the generated central file to hide an invalid source record.
+
+The builder indexes public packages only. It does not validate analytical values, approve releases, render Quarto, commit or deploy.

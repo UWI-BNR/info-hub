@@ -1,10 +1,13 @@
 /*******************************************************************************
 DO-FILE: bnr_step5_review_expanded_cvd_approve.do
-VERSION: 3.3.1 (29 August 2026)
+VERSION: 3.3.2 (15 September 2026)
 PURPOSE: Verify the reviewed combined CVD candidate and create public_ready.
 USAGE:   do "$BNR_STATA/monthly/bnr_step5_review_expanded_cvd_approve.do" 2026 1 "<actual authorised name>" "BNR Analyst"
 
 This controller never promotes files to outputs/public or the website.
+
+CHANGE 3.3.2:
+  Restrict production approval to authorised BNR Lead and BNR Analyst roles.
 
 CHANGE 3.3.1:
   Wrap the operational run-summary display block in quietly { } so Stata
@@ -38,7 +41,10 @@ if inlist("`approver_name_lower'", "full name", "actual approver name", "approve
 
 local approver_role_clean = strtrim("`approver_role'")
 local role_lower = lower("`approver_role_clean'")
-if !inlist("`role_lower'", "bnr lead", "bnr analyst", "bnr developer") exit 198
+if !inlist("`role_lower'", "bnr lead", "bnr analyst") {
+    display as error "Approver role must be BNR Lead or BNR Analyst."
+    exit 198
+}
 if "$BNR_STATA" == "" capture noisily do "scripts/stata/config/bnr_paths_LOCAL.do"
 foreach path_name in BNR_STAGING BNR_PRIVATE_LOGS {
     if "$`path_name'" == "" exit 198
@@ -219,7 +225,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "STEP 5 APPROVE: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:                 Approved successfully"
-noisily display as text   "  Script version:             3.3.1"
+noisily display as text   "  Script version:             3.3.2"
 noisily display as text   "  Selected release:           `year4'-`month2'"
 noisily display as text  `"  Approved by:                `approver_name_clean'"'
 noisily display as text  `"  Approved role:              `approver_role_clean'"'

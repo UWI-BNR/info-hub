@@ -46,7 +46,6 @@ LIST approver_roles
 BEGIN
 BNR Lead
 BNR Analyst
-BNR Developer
 END
 
 DIALOG main, label("BNR Mortality Step 5: Record approval")

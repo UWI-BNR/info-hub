@@ -1,0 +1,48 @@
+---
+title: "Refresh the CVD tables"
+description: "Maintain and verify the public tabulations built from approved CVD event and mortality files."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Source and boundary
+
+The maintained page is `site/surveillance/cvd/tables/index.qmd`. It is a Quarto/Observable presentation of approved outputs, not a separate analytical workflow. It must not recalculate surveillance metrics, alter suppression or reconstruct protected values.
+
+## Inputs
+
+| Input | Website path | Origin |
+|---|---|---|
+| Current event metrics | `site/downloads/files/metrics/cvd/cvd_metrics_current.csv` | CVD event Step 6 |
+| Fixed event monthly reference | `site/downloads/files/metrics/cvd/cvd_monthly_reference_2015_2019.csv` | Controlled fixed public asset |
+| Current mortality metrics | `site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv` | Mortality Step 6 |
+| Fixed mortality monthly reference | `site/downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv` | Mortality Steps 4–6 |
+
+The page loads these files with `FileAttachment`, reorganises rows for display and creates browser-side convenience downloads. Those selected-view files are not authoritative releases.
+
+## Routine procedure
+
+1. Confirm the relevant Step 6 completed and the website file agrees with the authoritative public copy.
+2. Start a local Quarto preview and open `/surveillance/cvd/tables/`.
+3. Check event and mortality tabs separately.
+4. Exercise period, measure, definition and stratum controls.
+5. Confirm that protected, unavailable and incomplete values are labelled correctly and are never treated as zero.
+6. Download representative selected views and compare their rows and display values with the on-screen table.
+7. Run a complete `quarto render`, inspect local links and review Git changes.
+
+A routine release should require no QMD edit. The page discovers available periods from the approved data.
+
+## Maintenance rules
+
+- Keep `FileAttachment` paths relative to the QMD and within the public website tree.
+- Use public labels without changing stable machine values.
+- Preserve `suppression_status`, `display_value`, completeness fields and disclosure notes.
+- Do not derive a value from totals or related cells when an input is protected.
+- If a new public schema or measure is introduced, update the producer contract and the page together and test both dashboards and tables.
+
+## Troubleshooting
+
+If the published CSV is wrong or missing, correct the upstream release pathway. If the CSV is correct, inspect the browser console and check field names, filters, file paths and data types in `index.qmd`. Do not type an analytical correction into the QMD.

@@ -1,0 +1,126 @@
+---
+title: "Refresh the CVD dashboards"
+description: "Maintain and verify the Quarto/Observable dashboards that present approved CVD event and mortality releases."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## Publication boundary
+
+The dashboards are presentation code. They read approved website-mirror files created by the CVD event and mortality Step 6 controllers. They may filter, arrange and format published values, but they must not recreate surveillance measures, change disclosure decisions or infer protected values.
+
+## Source and input map
+
+| Dashboard | Maintained QMD | Browser inputs |
+|---|---|---|
+| CVD events | `site/surveillance/cvd/metrics/burden/index.qmd` | `site/downloads/files/metrics/cvd/cvd_metrics_current.csv`; fixed `cvd_monthly_reference_2015_2019.csv` |
+| CVD mortality | `site/surveillance/cvd/metrics/mortality/index.qmd` | `site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv`; fixed `mort_monthly_reference_2015_2019.csv`; matching catalogue record for release-date information |
+
+The authoritative analytical copies remain under `$BNR_PUBLIC/metrics/`. A dashboard must never read from raw data, derived private data, staging, review or `public_ready`.
+
+The event reference file is a fixed public presentation asset and is not rebuilt by every current combined-CVD release. The mortality reference is reviewed and published as part of the ten-file mortality package.
+
+## Stable inputs and dynamic timelines
+
+Interactive views use the stable `*_current.csv` files. Available years, quarters and months are derived from their published rows. Release-stamped CSVs remain available for dated reports and audit, but the live dashboards should not silently switch between releases.
+
+Display the **release date** separately from the **latest data period**: publication may occur after the observations it describes.
+
+## CVD event views
+
+The event dashboard presents the scopes already supplied by the combined public release:
+
+- hospital-recorded event counts, approved distributions and rates;
+- annual hospital-plus-DCO and additional-DCO results where published;
+- monthly, quarterly and annual controls only for rows that support them; and
+- published comparator, completeness and suppression fields.
+
+DCO-related display controls remain annual and all-age where that is the approved public scope. Do not reconstruct an additional-DCO value from hospital-only and hospital-plus-DCO rows when any component is protected.
+
+## Mortality views
+
+The **Mortality definition** control uses these stable machine values:
+
+```text
+primary_clear_likely
+upper_clear_likely_possible
+```
+
+Their public labels are **Primary** and **Inclusive**. Inclusive already contains Primary, so never add the two definitions.
+
+Monthly public rows are restricted to All CVD, both sexes, all ages and monthly count. Their chart uses the fixed 2015–2019 reference and must not construct a rolling five-year monthly comparator. Quarterly and annual controls show only supported published strata and comparators. The annual distribution view uses published `MORT-BURDEN-002` rows; Primary and Inclusive distributions remain visually distinct.
+
+## Suppression, completeness and downloads
+
+Use supplied fields such as `suppression_status`, `display_value`, completeness information and `disclosure_note`. A protected value is unavailable, not zero. It must not be plotted, summed or inferred from related totals.
+
+The Data tab shows published rows for the current selection. Full-download links point to approved files and ZIPs. **Download selected view (CSV)** creates a browser convenience file containing the selected published rows and display values; it is not an authoritative release and is not written back to `$BNR_PUBLIC` or `site/downloads/`.
+
+## Routine refresh
+
+1. Complete the relevant six-step Stata workflow.
+2. Confirm Step 6 reports successful publication and that the website-mirror current CSV matches the intended release.
+3. From the repository root, activate the Info-Hub Python environment and start a Quarto preview:
+
+   ```powershell
+   .\venv-info-hub\Scripts\Activate.ps1
+   cd site
+   quarto preview --host 127.0.0.1 --port 4200
+   ```
+
+4. Open the affected dashboard. Confirm the release date and latest data period are distinct and correct.
+5. Exercise every main control, card, chart and Data tab. Check narrow and wide browser layouts where practical.
+6. Confirm protected values remain unavailable and incomplete periods remain labelled as incomplete.
+7. Run `quarto render` from `site/`, inspect the rendered page and review `git diff` before commit.
+
+A normal release should extend period controls from the published rows. Do not hard-code a new end year simply to expose a new release.
+
+## Permitted presentation calculations
+
+Most values must come directly from the approved CSV. The present dashboards contain only these narrow browser-derived conveniences:
+
+- year-to-date totals may sum complete, present, numeric and unsuppressed monthly rows through the selected month; and
+- the mortality quality view may show `Inclusive - Primary` and its percentage of Inclusive when both inputs are present, complete and unsuppressed.
+
+If any required component is missing, incomplete or protected, the derived display must be unavailable. These conveniences are not new published metrics and must not be written back to release files. Any broader measure, comparator, rate, percentage or disclosure decision belongs in the controlled Stata workflow.
+
+## Dashboard-specific checks
+
+### CVD events
+
+- Confirm counts, distributions and annual rates cover the expected periods and strata.
+- Check hospital-only and hospital-plus-DCO views against the published release scope.
+- Confirm the fixed monthly reference loads and protected or incomplete rows do not contribute to YTD.
+- Test the full-download links and browser-created selected-view CSV.
+
+### CVD mortality
+
+- Check Primary, Inclusive and combined views; never add Primary to Inclusive.
+- Check monthly, quarterly and annual count views and annual distributions.
+- Confirm the fixed 2015–2019 reference has loaded for both definitions.
+- Check the catalogue-derived release date and all download links.
+
+## Public methods links
+
+Keep public interpretation in the Methods Manual rather than duplicating it in Observable code. Relevant pages include:
+
+- `site/methods/measures/cvd-event-counts.qmd`;
+- `site/methods/interpretation/classifying-cvd-events.qmd`;
+- `site/methods/measures/mortality.qmd`;
+- `site/methods/interpretation/classifying-cvd-deaths.qmd`;
+- `site/methods/interpretation/counts-percentages-rates.qmd`; and
+- `site/methods/interpretation/confidentiality.qmd`.
+
+## If a dashboard fails
+
+First inspect the input CSV in the website mirror.
+
+- If the input is absent or wrong, return to the relevant Step 6 publication route. Do not edit the CSV or dashboard to compensate.
+- If the input is correct but Observable fails, inspect the browser console, `FileAttachment` path, field names, filters and value types in the QMD.
+- If a release changed the public schema, treat that as a controlled interface change: update the producer, dashboards, tables, tests and manuals together.
+- If a protected value can be reconstructed, stop deployment and investigate disclosure control.
+
+See [Render and publish the website](../../website/render-publish.qmd) for the Git and deployment sequence.

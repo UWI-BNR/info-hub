@@ -1,40 +1,64 @@
-﻿---
-manual-review-status: not-reviewed
+---
 title: "Publish approved combined CVD metrics"
-description: "Step 6: verify and promote the approved combined CVD package."
+description: "CVD event Step 6: verify and promote the exact seven-file approved package."
+manual-review-status: not-reviewed
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
+## What Step 6 does
+
+The menu wrapper `scripts/stata/monthly/bnr_step6_publish.do` delegates to `bnr_step6_publish_expanded_cvd.do`. Step 6 reads only the approved `public_ready` package. It does not recalculate, suppress or approve results.
+
 ## Run
 
+Menu: **User > BNR > Update CVD events dashboard > Step 6: Publish approved outputs**
+
 ```stata
-do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 4
+do "$BNR_STATA/monthly/bnr_step6_publish.do" 2026 1 [replace]
 ```
 
-Use `replace` only for deliberate republication of the same approved release.
+## Verification before copying
 
-## What Step 6 verifies and creates
+Step 6 requires and checks:
 
-Step 6 verifies `approval.yml`, the seven-file `public_manifest.csv`, and each
-payload checksum. It writes the authoritative public package to:
+- `approval.yml` with the selected release, combined-CVD family, pending-Step-6 status, actual approver name and authorised BNR Lead or BNR Analyst role;
+- the stored manifest size and checksum;
+- exactly seven unique manifested payload files; and
+- each payload's current size and checksum.
 
-`$BNR_PUBLIC/metrics/cvd/`
+Any mismatch stops publication.
 
-It mirrors only the stable current CSV, release ZIP and catalogue record to:
+## Outputs
 
-`$BNR_REPO/site/downloads/files/metrics/cvd/`
+The seven approved files are copied to `$BNR_PUBLIC/metrics/cvd/`. Step 6 also creates:
 
-Private controls are not copied. Then run:
+- `$BNR_PUBLIC/metrics/cvd/releases/cvd_metrics_cvd_YYYY_MM.zip`;
+- `$BNR_PUBLIC/metrics/cvd/catalogue/cvd_YYYY_MM.yml`; and
+- `$BNR_PRIVATE_LOGS/bnr_cvd_publish_YYYYMM.log`.
 
-```powershell
-python site/scripts/build_download_catalogue.py
+The website mirror under `site/downloads/files/metrics/cvd/` receives:
+
+```text
+cvd_metrics_current.csv
+datasets/cvd_metrics_cvd_YYYY_MM.csv
+releases/cvd_metrics_cvd_YYYY_MM.zip
+catalogue/cvd_YYYY_MM.yml
 ```
 
-An unchanged catalogue is normal when Step 6 has replaced the contents of an
-existing release ZIP without changing the release identifier or its catalogue
-record. Inspect the output package and download links before the normal commit,
-render and deployment process.
+The release-stamped website CSV is verified against the authoritative public CSV after copying. Private `approval.yml`, `public_manifest.csv` and review material are not published.
 
+The fixed event monthly reference used by the dashboard is a separate controlled public presentation asset. It is not regenerated or packaged by this current combined-CVD Step 6.
+
+## Post-publication checks
+
+1. Confirm the operational summary reports successful publication.
+2. Inspect the authoritative current and release-stamped files, metadata and ZIP.
+3. Inspect the website current CSV, release CSV, ZIP and catalogue record.
+4. Run `python site/scripts/build_download_catalogue.py` from the repository root, or let the Quarto pre-render step run it.
+5. Preview and render the site; inspect the event dashboard, tables and Downloads page.
+6. Review all Git changes and confirm no private controls or data are present.
+
+For an existing release, `replace` is required. Inspect both authoritative and website locations before using it for recovery; do not hand-copy individual files.

@@ -38,7 +38,7 @@ REDCap is the authoritative location for record-level corrections. Data exported
 | **Prepare CVD event outputs** |Run the six-step event extraction, classification and publication pathway  | [CVD events workflow](../post-redcap/cvd-events-workflow.qmd) |
 | **Produce CVD mortality outputs** | Run the six-step mortality extraction, classification and publication pathway | [CVD mortality workflow](../post-redcap/mortality-workflow.qmd) |
 | **Update public dashboards, tables and downloads** | Use approved public data releases to update website dashboards, tabulations, and download pages | [Post-REDCap overview](../post-redcap/index.qmd) |
-| **Produce reports** | Build the monthly rolling update report. Build the annnual report and public health update. Prepare, approve and publish a one-off report | [BNR reporting workflows](../post-redcap/reporting-workflows.qmd) |
+| **Produce reports** | Build the monthly rolling update. Build the annual report and public health update. Prepare, approve and publish a one-off report. | [Post-REDCap overview](../post-redcap/index.qmd) |
 | **Review and publish the Info-hub site** | Complete human review, approval and Stata analytical publication, then inspect the Quarto website preview before GitHub deployment | [Review, approve and publish](../release/review-approve-publish.qmd) |
 | **Correct a data release** | Update an already public data-release | [Correct or replace a release](../release/correct-release.qmd) |
 
@@ -53,4 +53,3 @@ REDCap is the authoritative location for record-level corrections. Data exported
 - Stop whenever the source, responsibility, result, disclosure status or approval is unclear.
 
 See [BNR user roles](roles-decision-rights.qmd) for responsibility at each stage.
-
