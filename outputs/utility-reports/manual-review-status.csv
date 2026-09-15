@@ -24,7 +24,7 @@ Public Methods Manual,Reference and data access,site/methods/reference/index.qmd
 Public Methods Manual,Glossary,site/methods/reference/glossary.qmd,reviewed-by-irh,Page YAML
 Public Methods Manual,Research data access,site/methods/responsible-data-use/research-data-access.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Operations Manual,site/operations/index.qmd,reviewed-by-irh,Page YAML
-Operations Manual,How the registry works,site/operations/operating-model/section-index.qmd,not-reviewed,Page YAML
+Operations Manual,How the registry works,site/operations/operating-model/section-index.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Roles and decision rights,site/operations/operating-model/roles-decision-rights.qmd,reviewed-by-irh,Page YAML
 Operations Manual,From cases to statistics,site/operations/operating-model/routine-cycle.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR operations continuity,site/operations/operating-model/records-handover.qmd,reviewed-by-irh,Page YAML
@@ -52,18 +52,16 @@ Operations Manual,"Review, approve and publish",site/operations/release/review-a
 Operations Manual,Correct or replace a release,site/operations/release/correct-release.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR analysis framework,site/operations/data/section-index.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR analysis framework,site/operations/data/analysis-framework.qmd,reviewed-by-irh,Page YAML
-Operations Manual,BNR Information Hub Statistical Analysis Plan,site/operations/data/sap.qmd,not-reviewed,Page YAML
-Operations Manual,BNR Metric Specification Register,site/operations/data/sap-metrics.qmd,not-reviewed,Page YAML
-Operations Manual,Data sharing and governance,site/operations/governance/section-index.qmd,not-reviewed,Page YAML
-Operations Manual,Data sharing and governance,site/operations/governance/data-sharing-governance.qmd,not-reviewed,Page YAML
-Operations Manual,Handle a data-access request,site/operations/governance/data-access-requests.qmd,not-reviewed,Page YAML
-Operations Manual,Data-sharing procedure,site/operations/data/data-governance/sharing-sop.qmd,not-reviewed,Page YAML
-Operations Manual,Research Data Sharing Agreement,site/operations/data/data-governance/dsa-om.qmd,not-reviewed,Page YAML
-Operations Manual,Historical refit record,site/operations/bnr-refit/section-index.qmd,not-reviewed,Page YAML
-Operations Manual,BNR Refit Audit,site/operations/bnr-refit/index.qmd,not-reviewed,Page YAML
-Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,not-reviewed,Inherited from _metadata.yml
-Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,not-reviewed,Inherited from _metadata.yml
-Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,not-reviewed,Inherited from _metadata.yml
+Operations Manual,BNR Information Hub Statistical Analysis Plan,site/operations/data/sap.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR Metric Specification Register,site/operations/data/sap-metrics.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Data sharing,site/operations/governance/section-index.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Manage a data-sharing request,site/operations/governance/data-sharing-governance.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Standard text for ethics applications,site/operations/governance/ethics-application-wording.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Historical refit record,site/operations/bnr-refit/section-index.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR Refit Audit,site/operations/bnr-refit/index.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,reviewed-by-irh,Page YAML
+Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,reviewed-by-irh,Page YAML
+Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,reviewed-by-irh,Page YAML
 Technical Manual,BNR Technical Manual,site/technical/index.qmd,not-reviewed,Page YAML
 Technical Manual,Set up the environment,site/technical/getting-started/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,The BNR analytics and publishing environment,site/technical/getting-started/environment.qmd,not-reviewed,Page YAML

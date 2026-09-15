@@ -1,46 +1,106 @@
-﻿---
-title: "Data sharing and governance"
-description: "The authoritative Operations Manual route for requests to use non-public BNR data."
-manual-review-status: not-reviewed
+---
+title: "Manage a data-sharing request"
+description: "How BNR staff manage a request from application through agreement, release and closure."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}
 Operations Manual
 :::
 
-## Scope
+**Status:** Operational guidance. To be updated by BNR team.
 
-This section governs requests for BNR data that are not already available as
-approved public aggregate outputs. It does not change the analytical
-publication workflows for public statistics.
+**Owner:** BNR Lead and BNR Analyst.
 
-Use the least detailed data that can meet an approved purpose. Deidentified
-record-level data remain non-public and require a recorded decision and any
-applicable agreement, ethics and security controls.
+## Purpose
 
-## Authoritative route
+This page explains how BNR staff manage requests for data that are not already publicly available. The aim is to provide only the information needed for an approved purpose, under clear conditions, while protecting confidentiality.
 
-1. [Handle the data-access request](data-access-requests.qmd).
-2. Follow the [data-sharing procedure](../data/data-governance/sharing-sop.qmd).
-3. Complete the [Data Sharing Agreement](../data/data-governance/dsa-om.qmd)
-   where required.
+The full request is managed in the **BNR Data Sharing Requests REDCap project**. REDCap holds the application, BNR review, decision, Data Sharing Agreement, release record and closure record together. It is the authoritative record of the request.
 
-## Responsibilities
+For the public explanation of this process, see [Request access to BNR research data](../../methods/responsible-data-use/research-data-access.qmd).
 
-- The **BNR Lead** owns the governance decision and confirms the authorised
-  decision route.
-- The **BNR Analyst** defines and prepares the minimum approved dataset and
-  checks proposed outputs.
-- The **BNR Developer** supports secure, reproducible preparation and transfer
-  without placing confidential material in Git.
+## Before starting
 
-The person or body authorised to approve each access class is a BNR policy
-decision. Do not infer authority from technical access or from the ability to
-prepare a dataset.
+First check whether the researcher can use an existing public table, dashboard or download. Public data should be used whenever they answer the question adequately.
 
-## Public/private boundary
+If non-public data may be needed:
 
-Applications, requester details, agreements, ethics evidence, approval records,
-transfer logs and non-public datasets remain in authorised private systems.
-Only approved public-safe summaries or outputs may enter the Info-Hub.
+- direct the researcher to the public REDCap application form;
+- do not ask them to send record-level data requirements, confidential information or completed agreements by ordinary email; and
+- use email only for routine communication, such as confirming that an application has been received or asking the researcher to return to REDCap.
 
+Do not create a separate spreadsheet or informal register to track the request. Keep the record current in REDCap.
+
+## How the process works
+
+| Stage | What happens in REDCap | Main responsibility |
+|---|---|---|
+| 1. Application | The researcher describes the project, people involved, data needed, ethics position, storage, access controls and plans for outputs and retention. | Researcher |
+| 2. BNR review and decision | BNR checks whether public data are sufficient, whether the request is justified and limited to what is needed, and whether the proposed safeguards are suitable. The decision and any conditions are recorded. | BNR Lead or BNR Analyst |
+| 3. Data Sharing Agreement | For an approved request, REDCap presents the agreed scope and conditions to the researcher. The researcher confirms acceptance electronically. | BNR request owner and researcher |
+| 4. Release, monitoring and closure | BNR records the exact files released, checks and transfer route, then records required follow-up, outputs, incidents, and eventual destruction, return or extension. | BNR request owner and analyst |
+
+## Step 1: Check the application
+
+Open the application in the BNR Data Sharing Requests REDCap project and check that it explains:
+
+- who will use the data and for what purpose;
+- the public-health or research value of the work;
+- the population, time period, variables and file format requested;
+- whether linkage to other data is proposed;
+- the ethics and other approvals that apply;
+- where the data will be stored and who will have access; and
+- how long the data will be kept and what will happen at the end.
+
+Ask for clarification if important information is missing.
+
+## Step 2: Review and decide
+
+Begin with the option that reveals the least information while still meeting the stated purpose.
+
+| Possible route | When it is appropriate |
+|---|---|
+| Existing public output | A published table, dashboard or download already answers the question. No restricted-data release is needed. |
+| New aggregate output | BNR can answer the question by producing a checked summary without releasing record-level data. |
+| Restricted, de-identified record-level data | Record-level detail is necessary, direct identifiers are not required, and the purpose and safeguards are acceptable. |
+| Identifiable or linkable data | The work genuinely requires identifiers or linkage. Refer it through the additional approval route recorded in REDCap; do not treat it as a routine release. |
+
+For any non-public release, check that:
+
+- the purpose is clear and within BNR's remit;
+- only the people, records and variables needed are included;
+- the ethics position is adequate;
+- confidentiality and disclosure risks can be controlled;
+- the proposed storage, access and transfer arrangements are suitable; and
+- BNR can prepare, check and support the release safely.
+
+Record the decision in REDCap as approved, approved with conditions, referred for further review, declined or withdrawn. 
+
+## Step 3: Complete the Data Sharing Agreement
+
+Once the request is approved and ready to issue, use the agreement instrument in the same REDCap record. 
+
+The researcher reviews the agreement and confirms acceptance electronically. The final agreement record and its PDF become part of the REDCap application record. Release the data once the agreement is complete.
+
+## Step 4: Prepare, check and release the data
+
+The BNR Analyst prepares the smallest dataset that meets the approved purpose. Use controlled, reproducible Stata code wherever possible. Record who prepared and checked the release, the checks completed, the transfer date and method, and the exact files supplied.
+
+## Step 5: Monitor and close the request
+
+Use the same REDCap record throughout the approved period. If available, record any required progress checks, reviewed outputs, changes to the project, confidentiality concerns or incidents.
+
+At the agreed end date, confirm one of the following:
+
+- the data have been securely destroyed;
+- the data have been returned, where that was required; or
+- an extension has been reviewed and approved before continued use.
+
+Record closure in REDCap. A new research purpose, new research team, wider dataset, and so on will not be covered by the original agreement.
+
+## Related guidance
+
+- [Request access to BNR research data](../../methods/responsible-data-use/research-data-access.qmd) — the public description for researchers.
+- [Standard text for ethics applications](ethics-application-wording.qmd) — copyable descriptions of REDCap and the Info-Hub.
+- [Disclosure control](../../technical/controls/disclosure-control.qmd) — detailed technical guidance for checking proposed public outputs.

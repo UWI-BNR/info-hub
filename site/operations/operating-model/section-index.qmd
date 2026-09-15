@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "How the registry works"
 description: "Choose an Operations Manual page in this section."
 ---

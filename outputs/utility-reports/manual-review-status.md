@@ -5,7 +5,7 @@
 | Manual | Not used | Not reviewed | Reviewed by IRH | Approved by BNR | Needs attention | Total |
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
-| Operations Manual | 0 | 13 | 28 | 0 | 0 | 41 |
+| Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
 | Technical Manual | 0 | 42 | 0 | 0 | 0 | 42 |
 
 ## Public Methods Manual
@@ -42,7 +42,7 @@
 | Page | Path | Status | Source |
 |---|---|---|---|
 | Operations Manual | `site/operations/index.qmd` | Reviewed by IRH | Page YAML |
-| How the registry works | `site/operations/operating-model/section-index.qmd` | Not reviewed | Page YAML |
+| How the registry works | `site/operations/operating-model/section-index.qmd` | Reviewed by IRH | Page YAML |
 | Roles and decision rights | `site/operations/operating-model/roles-decision-rights.qmd` | Reviewed by IRH | Page YAML |
 | From cases to statistics | `site/operations/operating-model/routine-cycle.qmd` | Reviewed by IRH | Page YAML |
 | BNR operations continuity | `site/operations/operating-model/records-handover.qmd` | Reviewed by IRH | Page YAML |
@@ -70,18 +70,16 @@
 | Correct or replace a release | `site/operations/release/correct-release.qmd` | Reviewed by IRH | Page YAML |
 | BNR analysis framework | `site/operations/data/section-index.qmd` | Reviewed by IRH | Page YAML |
 | BNR analysis framework | `site/operations/data/analysis-framework.qmd` | Reviewed by IRH | Page YAML |
-| BNR Information Hub Statistical Analysis Plan | `site/operations/data/sap.qmd` | Not reviewed | Page YAML |
-| BNR Metric Specification Register | `site/operations/data/sap-metrics.qmd` | Not reviewed | Page YAML |
-| Data sharing and governance | `site/operations/governance/section-index.qmd` | Not reviewed | Page YAML |
-| Data sharing and governance | `site/operations/governance/data-sharing-governance.qmd` | Not reviewed | Page YAML |
-| Handle a data-access request | `site/operations/governance/data-access-requests.qmd` | Not reviewed | Page YAML |
-| Data-sharing procedure | `site/operations/data/data-governance/sharing-sop.qmd` | Not reviewed | Page YAML |
-| Research Data Sharing Agreement | `site/operations/data/data-governance/dsa-om.qmd` | Not reviewed | Page YAML |
-| Historical refit record | `site/operations/bnr-refit/section-index.qmd` | Not reviewed | Page YAML |
-| BNR Refit Audit | `site/operations/bnr-refit/index.qmd` | Not reviewed | Page YAML |
-| BNR audit summary | `site/operations/bnr-refit/audit-summary.qmd` | Not reviewed | Inherited from _metadata.yml |
-| BNR audit findings | `site/operations/bnr-refit/audit-full.qmd` | Not reviewed | Inherited from _metadata.yml |
-| CVD Dataset rebuild 2025 | `site/operations/bnr-refit/cvd-data-rebuild.qmd` | Not reviewed | Inherited from _metadata.yml |
+| BNR Information Hub Statistical Analysis Plan | `site/operations/data/sap.qmd` | Reviewed by IRH | Page YAML |
+| BNR Metric Specification Register | `site/operations/data/sap-metrics.qmd` | Reviewed by IRH | Page YAML |
+| Data sharing | `site/operations/governance/section-index.qmd` | Reviewed by IRH | Page YAML |
+| Manage a data-sharing request | `site/operations/governance/data-sharing-governance.qmd` | Reviewed by IRH | Page YAML |
+| Standard text for ethics applications | `site/operations/governance/ethics-application-wording.qmd` | Reviewed by IRH | Page YAML |
+| Historical refit record | `site/operations/bnr-refit/section-index.qmd` | Reviewed by IRH | Page YAML |
+| BNR Refit Audit | `site/operations/bnr-refit/index.qmd` | Reviewed by IRH | Page YAML |
+| BNR audit summary | `site/operations/bnr-refit/audit-summary.qmd` | Reviewed by IRH | Page YAML |
+| BNR audit findings | `site/operations/bnr-refit/audit-full.qmd` | Reviewed by IRH | Page YAML |
+| CVD Dataset rebuild 2025 | `site/operations/bnr-refit/cvd-data-rebuild.qmd` | Reviewed by IRH | Page YAML |
 
 ## Technical Manual
 

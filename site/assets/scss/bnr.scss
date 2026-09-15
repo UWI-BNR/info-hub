@@ -1177,3 +1177,13 @@ body.bnr-briefing-page .quarto-document-content h3 {
     text-align: left;
   }
 }
+
+
+/* data sharing - ethics text formatting */
+pre.copyable-wording,
+pre.copyable-wording code,
+.copyable-wording {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}

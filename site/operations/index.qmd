@@ -114,11 +114,11 @@ The standing analysis plan and metric specifications.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[Data governance]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[Data sharing]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Data sharing & governance {.card-title}
+### Data sharing procedure {.card-title}
 
-Requests, agreements, release procedures and responsible data reuse.
+How BNR manages restricted-data requests in REDCap.
 
 ::: {.mt-auto}
 [Explore section](governance/section-index.qmd){.btn .btn-outline-primary .btn-sm}
@@ -166,4 +166,3 @@ The manual is public by design. It explains BNR procedures and controls without 
 | **[Public Methods Manual](../methods/index.qmd)** | Explain what BNR statistics mean and how they should be interpreted. |
 
 The operations manual guides staff through the routine tasks needed to keep the BNR system running. The methods manual explains what the BNR measures and how its statistics should be understood. The technical manual documents the code, data processes and system design that support the BNR’s work. 
-

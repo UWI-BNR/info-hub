@@ -65,6 +65,8 @@ execute:
   warning: false
   message: false
   freeze: auto
+
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--operations}

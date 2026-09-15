@@ -276,20 +276,14 @@ website:
             - text: "Metric specification register"
               href: operations/data/sap-metrics.qmd
 
-        - section: "Data sharing & governance"
+        - section: "Data sharing"
           contents:
             - text: "Section contents"
               href: operations/governance/section-index.qmd
-            - text: "Overview"
+            - text: "Manage a data-sharing request"
               href: operations/governance/data-sharing-governance.qmd
-            - text: "Handle a data request"
-              href: operations/governance/data-access-requests.qmd
-            - text: "Data sharing procedure"
-              href: operations/data/data-governance/sharing-sop.qmd
-            - section: "Governance documents"
-              contents:
-                - text: "Data Sharing Agreement"
-                  href: operations/data/data-governance/dsa-om.qmd
+            - text: "Ethics application wording"
+              href: operations/governance/ethics-application-wording.qmd
 
         - section: "Historical refit record"
           contents:

@@ -1,8 +1,8 @@
-﻿---
+---
 title: "BNR Metric Specification Register"
-manual-review-status: not-reviewed
-subtitle: "Standing definitions for approved information hub metrics"
-version: "Draft v0.1"
+manual-review-status: reviewed-by-irh
+subtitle: "Version 1 definitions for routine CVD event and mortality metrics"
+version: "Version 1"
 format:
   html:
     toc: true
@@ -13,334 +13,304 @@ format:
 Operations Manual
 :::
 
+# BNR Metric Specification Register
+
 ## Document control
 
 | Item | Detail |
 |---|---|
-| Document name | BNR Metric Specification Register |
+| Document | BNR Metric Specification Register |
 | Short name | Metric register |
-| Version | Draft v0.1 |
-| Date | 15 May 2026 |
-| Owner | BNR Analytics Team |
+| Version | Version 1 |
+| Status | Development version; not yet approved for routine production |
+| Date | 15 September 2026 |
+| Owner | BNR Lead and BNR Analyst |
 | Companion document | [BNR Information Hub Statistical Analysis Plan](sap.qmd) |
 
 ## Purpose
 
-This register defines approved BNR information hub metrics.
+This register defines the routine public metrics created by the current BNR CVD event and mortality workflows. It gives each metric a stable identifier and states exactly what it measures.
 
-The metric system is the reusable analytical foundation. Reports are
-publication products that consume approved metrics and may include separately
-documented bespoke analysis where their approved purpose requires it.
+Version 1 contains six metric families. Event type, sex, period, age group, case definition and source scope are dimensions within those metrics; they are not separate metrics unless the analytical definition changes.
 
-This register is designed to be expanded over time. The first version focuses on core cardiovascular disease metrics required for routine surveillance, public reporting and operational monitoring.
+The [Statistical Analysis Plan](sap.qmd) gives the shared population, classification, DCO, statistical, missing-data and disclosure-control rules. Both documents must be read together.
 
-## How to read this register
+## Version 1 metric set
 
-Each metric has a stable identifier, a short definition, an equation, and a small set of required metadata.
+| Metric ID | Metric | Routine public result |
+|---|---|---|
+| `CVD-BURDEN-001` | CVD event count | Hospital-recorded counts and annual estimated national counts including DCO events |
+| `CVD-BURDEN-002` | CVD event distribution | Annual hospital-recorded event-type, sex and broad-age percentages |
+| `CVD-INCIDENCE-001` | CVD event incidence rate | Annual crude and age-standardised hospital-recorded and hospital-plus-DCO rates |
+| `MORT-BURDEN-001` | CVD mortality count | Monthly, quarterly and annual death counts under the Primary and Inclusive definitions |
+| `MORT-BURDEN-002` | CVD mortality distribution | Annual event-type, sex and broad-age percentages under both definitions |
+| `MORT-RATE-001` | CVD mortality rate | Annual crude and age-standardised mortality rates under both definitions |
 
-| Item | Meaning |
-|---|---|
-| Metric ID | Stable identifier, for example `CVD-RATE-001` |
-| Status | Draft, approved, pilot, retired or internal |
-| Metric type | Count, percentage, rate, ratio, distribution, descriptive summary or data quality metric |
-| Numerator | What is counted in the top line of the calculation |
-| Denominator | What is counted in the bottom line, where relevant |
-| Unit of analysis | Event, person, admission, death, bed-day, record or population |
-| Stratifications | Standard breakdowns such as period, event type, sex or age group |
-| Output | Metric outputs should include the metric ID, release, period, stratum, statistic, value, unit, numerator, denominator, confidence interval where relevant, and status flag |
+All six metrics are approved for the handover version of the BNR Info-Hub (version 1.0).
 
-Stratifications are dimensions of a metric. They do not create separate metrics unless the definition or method changes.
+## Shared fields and terms
 
-For example, stroke counts and AMI counts are both stratifications of the hospital-registered CVD event count metric. They do not need separate metric definitions.
+Routine metric files identify, as applicable:
 
-## CVD burden metrics
+- metric ID and metric name;
+- source-release identity;
+- reporting year, quarter or month;
+- event or cause type;
+- sex and age group;
+- mortality case definition;
+- source or ascertainment scope;
+- statistic and unit;
+- value, numerator and denominator;
+- confidence limits or DCO linkage bounds where relevant;
+- comparison-period information; and
+- disclosure and publication status.
 
-### CVD-BURDEN-001: Hospital-registered CVD event count
+Common labels mean:
 
-**Definition.**
-The number of eligible hospital-registered CVD events recorded by the BNR in a reporting period.
+| Term | Meaning |
+|---|----|
+| All CVD | The approved combined CVD category, with each eligible event or death counted once in the relevant definition. |
+| Heart | Heart attack in the hospital event series; the broader approved Heart cause category in the mortality series. |
+| Stroke | The approved stroke event or mortality category. |
+| Primary | Mortality evidence classified Clear or Likely. |
+| Inclusive | Mortality evidence classified Clear, Likely or Possible. It contains the Primary definition. |
+| Hospital only | Directly observed, eligible hospital-recorded events. |
+| Additional DCO | Estimated eligible events at death that are not represented by a qualifying hospital event in the preceding 0–27 days. |
+| Hospital plus DCO | Hospital-recorded events plus the estimated additional DCO events. |
 
-**Equation.**
+## CVD event metrics
+
+### CVD-BURDEN-001: CVD event count
+
+**Plain-language definition.** The number of eligible CVD events in a reporting period. The metric reports the hospital-recorded series and, for completed years, the estimated additional-DCO and hospital-plus-DCO series.
 
 $$
-\text{Count} = \sum_{i=1}^{n} I_i
+\text{Hospital-recorded event count}
+=
+\sum_{i=1}^{n} I_i
 $$
 
-where \(I_i = 1\) when record \(i\) is an eligible CVD event, and \(I_i = 0\) otherwise.
+Here, \(I_i=1\) when event \(i\) meets the eligibility rules and \(I_i=0\) when it does not.
+
+For the estimated national count:
+
+$$
+\text{Hospital-plus-DCO count}
+=
+\text{hospital-recorded count}
++
+\text{estimated additional-DCO count}
+$$
 
 | Field | Specification |
 |---|---|
-| Metric ID | CVD-BURDEN-001 |
-| Metric name | Hospital-registered CVD event count |
-| Status | Draft |
-| Priority | Core |
-| Plain-language description | The number of hospital-registered CVD events recorded by the BNR in a reporting period. |
+| Metric ID | `CVD-BURDEN-001` |
+| Status | Development |
 | Metric type | Count |
-| Numerator | Eligible hospital-registered CVD events |
+| Unit | Event |
+| Hospital numerator | Eligible hospital-recorded events among Barbados residents. Repeated records for one event are not counted again; distinct events for one person must be at least 28 days apart. |
+| DCO numerator | Additional DCO events created or estimated from eligible mortality candidates using the deterministic linkage and aggregate unresolved-candidate method in the SAP. |
 | Denominator | Not applicable |
-| Unit of analysis | Event |
-| Population and exclusions | Barbados residents with confirmed hospital-registered CVD events; exclude non-residents, duplicates and records outside the reporting period. DCO-only records are excluded unless source status explicitly includes them. |
-| Stratifications | Required: period, event type. Optional: sex, age group, source status. |
-| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `bnr_step4_cvd_burden.do` |
-| Notes | Stroke and AMI are stratifications of this metric, not separate metrics. |
+| Event types | All CVD, Heart and Stroke. In the hospital series, Heart means the approved heart-attack definition. |
+| Monthly public rows | Hospital only: All CVD, all sexes, all ages. |
+| Quarterly public rows | Hospital only: All CVD, Heart and Stroke by all sexes, female and male; all ages. Each row has a same-quarter previous-five-year mean when sufficient history exists. |
+| Annual public rows | Hospital only: All CVD, Heart and Stroke by all sexes, female and male; all ages. All CVD/all-sex rows are also produced for under 70 and 70 years and over. Each row has a previous-five-year mean when sufficient history exists. |
+| Annual DCO rows | Additional DCO and hospital plus DCO: All CVD, Heart and Stroke by all sexes, female and male, for Primary and Inclusive mortality evidence; all ages only. |
+| Uncertainty | No statistical confidence interval for counts. DCO rows carry separate linkage/ascertainment lower, central and upper values. Aggregate DCO values may be fractional. |
+| Missing data | Missing age does not remove an otherwise eligible event from an all-age count, but the event cannot enter an age-specific row. Essential missing or invalid eligibility fields cause exclusion or quarantine. |
+| Disclosure | Apply `bnr_sdc_v1` to the count and all connected public statistics. |
+| Implementation | `scripts/stata/metrics/cvd/bnr_step4_cvd_burden.do` and the CVD Step 4 DCO linkage workflow |
 
 ### CVD-BURDEN-002: CVD event distribution
 
-**Definition.**
-The percentage distribution of CVD events across event type, sex, age group or another standard dimension.
-
-**Equation.**
+**Plain-language definition.** The percentage distribution of eligible hospital-recorded CVD events across event type, sex or broad age group in a completed year.
 
 $$
-\text{Percentage} = \frac{x_c}{N_p} \times 100
+\text{Percentage}=\frac{\text{eligible events in the category}}{\text{eligible events in the parent group}}\times100
 $$
-
-where \(x_c\) is the number of events in the selected category, and \(N_p\) is the number of events in the parent group.
 
 | Field | Specification |
 |---|---|
-| Metric ID | CVD-BURDEN-002 |
-| Metric name | CVD event distribution |
-| Status | Draft |
-| Priority | Supporting |
-| Plain-language description | The percentage distribution of CVD events across event type, sex, age group or another standard dimension. |
-| Metric type | Distribution |
-| Numerator | Eligible CVD events in the selected category |
-| Denominator | Eligible CVD events in the parent group |
-| Unit of analysis | Event |
-| Population and exclusions | Same event set as CVD-BURDEN-001. |
-| Stratifications | Required: period and selected distribution dimension. Optional: event type, sex, age group, source status. |
-| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `bnr_step4_cvd_burden.do` |
-| Notes | Used for age, sex and event-type composition summaries. |
+| Metric ID | `CVD-BURDEN-002` |
+| Status | Development |
+| Metric type | Percentage distribution |
+| Unit | Event |
+| Event-type distribution | Heart and Stroke counts as percentages of the relevant All CVD parent count. |
+| Sex distribution | Female and male counts as percentages of the relevant event-type parent count. |
+| Broad-age distribution | Under 70 and 70 years and over as percentages of All CVD events with known eligible age. |
+| Period | Completed calendar year |
+| Source scope | Hospital only |
+| Confidence interval | Not routinely produced |
+| Missing data | Records with missing age are excluded from both the numerator and denominator of the broad-age distribution. They may remain in the all-age event count. |
+| Disclosure | Protect the numerator, parent count and percentage together under `bnr_sdc_v1`. |
+| Implementation | `scripts/stata/metrics/cvd/bnr_step4_cvd_burden.do` |
 
-## CVD rate metrics
+### CVD-INCIDENCE-001: CVD event incidence rate
 
-### CVD-RATE-001: Hospital-based CVD event rate
+**Plain-language definition.** The annual number of eligible CVD events per 100,000 Barbados residents. Hospital-recorded and estimated hospital-plus-DCO rates are two source scopes of the same metric.
 
-**Definition.**
-The crude and directly age-adjusted rates of eligible hospital-registered CVD events relative to the resident population.
-
-**Equations.**
-
-Crude event rate:
+Crude rate:
 
 $$
-\text{Crude rate per 100,000} = \frac{x}{N} \times 100{,}000
+\text{Rate per 100,000}=\frac{\text{eligible events}}{\text{matching resident population}}\times100,000
 $$
 
-where \(x\) is the number of eligible CVD events, and \(N\) is the resident population denominator for the same period and stratum.
-
-Age-adjusted event rate:
+Directly age-standardised rate:
 
 $$
-\text{Age-adjusted rate per 100,000} = \sum_{a=1}^{A} w_a r_a
+\text{Age-standardised rate}=\sum_{a=1}^{21}w_ar_a
 $$
-
-where \(r_a\) is the age-specific event rate in age group \(a\), and \(w_a\) is the standard population weight for age group \(a\).
 
 | Field | Specification |
 |---|---|
-| Metric ID | CVD-RATE-001 |
-| Metric name | Hospital-based CVD event rate |
-| Status | Draft |
-| Priority | Core |
-| Plain-language description | The crude event rate shows the number of recognised hospital CVD events relative to the resident population. The age-adjusted event rate applies standard age weights so that rates can be compared more fairly across groups or years with different age structures. |
-| Metric type | Rate / age-adjusted rate |
-| Numerator | Eligible hospital-registered CVD events in the reporting period; for age-adjusted rates, eligible events by age group |
-| Denominator | Resident population for the same period and stratum; for age-adjusted rates, resident population by age group |
-| Unit of analysis | Event and population |
-| Population and exclusions | Barbados residents; exclude non-residents, duplicates and DCO-only records unless explicitly included. |
-| Stratifications | Required: period, event type, rate type. Optional: sex, age group for crude age-specific rates, source status. |
-| Uncertainty / suppression | 95% confidence interval using Poisson or exact Poisson method for crude rates, and the approved direct standardisation method for age-adjusted rates. Suppress or flag low-count or unstable strata according to disclosure rules. |
-| Responsible code | `metric_cvd_rate.do` |
-| Notes | This is the primary event-rate series. The Queen Elizabeth Hospital is Barbados's only tertiary hospital, so the measure is expected to provide a useful indication of serious CVD burden and especially of trends over time, while hospital referral, access, diagnostic and ascertainment practices remain reasonably stable. It is not described as complete national ascertainment. Stroke and AMI rates are stratifications. Age adjustment uses the UN World Population Prospects denominator release and the approved standard population recorded in metadata. |
+| Metric ID | `CVD-INCIDENCE-001` |
+| Status | Development |
+| Metric type | Crude rate and directly age-standardised rate |
+| Units | Events per 100,000 population |
+| Numerator scopes | Hospital only; hospital plus DCO central estimate |
+| Denominator | UN World Population Prospects 2024 estimate for Barbados, matched by year, sex and five-year age group |
+| Standard population | WHO World Standard Population 2000–2025 |
+| Age bands | 21 five-year groups: 0–4 through 95–99, then 100 years and over |
+| Event types | All CVD, Heart and Stroke |
+| Sex | All sexes, female and male |
+| Period | Completed calendar year |
+| Hospital crude interval | Exact Poisson (Garwood) 95% confidence interval |
+| Hospital age-standardised interval | Fay–Feuer gamma 95% confidence interval |
+| Hospital-plus-DCO crude interval | Conditional gamma 95% confidence interval around the central aggregate DCO estimate |
+| Hospital-plus-DCO age-standardised interval | Conditional Fay–Feuer gamma 95% confidence interval around the central age-specific pseudo-counts |
+| DCO bounds | Linkage/ascertainment lower, central and upper rates are retained separately from statistical confidence limits. |
+| Missing data | Events without an eligible age cannot contribute to an age-specific or age-standardised rate. Missing population joins stop the rate calculation. |
+| Disclosure | Protect the underlying count, rate, confidence limits and DCO bounds together under `bnr_sdc_v1`. |
+| Implementation | `scripts/stata/metrics/cvd/bnr_cvd_run_incidence_rate_estimation.do` and `scripts/stata/metrics/cvd/bnr_cvd_construct_incidence_rates_core.do` |
 
-### CVD-RATE-002: Estimated national CVD event rate
+The hospital-only rate is a measure of serious events recognised through the hospital-based registry; it is not described as complete national ascertainment. The hospital-plus-DCO rate has broader estimated coverage but adds mortality-classification and linkage uncertainty.
 
-**Definition.**
-The crude and directly age-adjusted rates of eligible hospital-registered CVD events plus identified death-certificate-only events relative to the resident population.
+## CVD mortality metrics
 
-The equations and standardisation method are the same as CVD-RATE-001, but the numerator uses the broader event source.
+### MORT-BURDEN-001: CVD mortality count
+
+**Plain-language definition.** The number of registered deaths that meet the BNR Primary or Inclusive CVD mortality definition in a reporting period.
+
+$$
+\text{CVD mortality count}
+=
+\sum_{i=1}^{n} D_i
+$$
+
+Here, \(D_i=1\) when death \(i\) meets the selected Primary or Inclusive definition and the other eligibility rules, and \(D_i=0\) when it does not. Primary and Inclusive counts are calculated separately.
 
 | Field | Specification |
-|---|---|
-| Metric ID | CVD-RATE-002 |
-| Metric name | Estimated national CVD event rate |
-| Status | Draft |
-| Priority | Required supplementary measure |
-| Plain-language description | An estimate of the national event rate formed by adding identified death-certificate-only events to the recognised hospital-event series. |
-| Metric type | Rate / age-adjusted rate |
-| Numerator | Eligible hospital-registered CVD events plus identified DCO events in the reporting period |
-| Denominator | Resident population for the same period and stratum; for age-adjusted rates, resident population by age group |
-| Unit of analysis | Event and population |
-| Population and exclusions | Barbados residents; exclude non-residents, duplicates and records outside the reporting period. |
-| Stratifications | Required: period, event type, rate type. Optional: sex and source status. |
-| Uncertainty / suppression | Same statistical interval and disclosure rules as CVD-RATE-001. Interpretation must also acknowledge uncertainty from incomplete DCO ascertainment. |
-| Responsible code | `metrics/cvd/bnr_cvd_run_incidence_rate_estimation.do` |
-| Notes | Required as a supplementary national estimate. It has broader case coverage than CVD-RATE-001 but is not assumed to be inherently more accurate because DCO ascertainment is imperfect. |
+|---|----|
+| Metric ID | `MORT-BURDEN-001` |
+| Status | Development |
+| Metric type | Count |
+| Unit | Death |
+| Numerator | Deaths classified Clear or Likely for the Primary definition; deaths classified Clear, Likely or Possible for the Inclusive definition. |
+| Denominator | Not applicable |
+| Event types | All CVD, Heart and Stroke, based on the resolved mortality classification. |
+| Monthly public rows | All CVD, all sexes, all ages, for Primary and Inclusive definitions. |
+| Quarterly public rows | All CVD, Heart and Stroke by all sexes, female and male; all ages; for both definitions. Each row has a same-quarter previous-five-year mean when sufficient history exists. |
+| Annual public rows | All CVD, Heart and Stroke by all sexes, female and male; all ages; for both definitions. All CVD/all-sex rows are also produced for under 70 and 70 years and over. Each row has a previous-five-year mean when sufficient history exists. |
+| Uncertainty | No statistical confidence interval for counts. Primary and Inclusive are classification-sensitivity definitions, not confidence limits. |
+| Missing data | A valid death date and known female or male sex are required. Missing age does not remove an otherwise eligible death from an all-age count, but the death cannot enter an age-specific row. Records that cannot be safely classified are handled through the classification and review rules. |
+| Disclosure | Apply `bnr_sdc_v1` to the count and all connected public statistics. |
+| Implementation | `scripts/stata/mortality/bnr_mort_s3_calc.do` |
 
-## CVD outcome metrics
+### MORT-BURDEN-002: CVD mortality distribution
 
-### CVD-OUTCOME-001: In-hospital case fatality
-
-**Definition.**
-The percentage of eligible hospital-registered CVD events where the patient died before discharge.
-
-**Equation.**
+**Plain-language definition.** The percentage distribution of eligible CVD deaths across cause type, sex or broad age group in a completed year, shown separately for the Primary and Inclusive definitions.
 
 $$
-\text{Case fatality} = \frac{d}{n} \times 100
+\text{Percentage}=\frac{\text{eligible deaths in the category}}{\text{eligible deaths in the parent group}}\times100
 $$
-
-where \(d\) is the number of in-hospital deaths after eligible CVD events, and \(n\) is the number of eligible CVD events with known discharge outcome.
 
 | Field | Specification |
-|---|---|
-| Metric ID | CVD-OUTCOME-001 |
-| Metric name | In-hospital case fatality |
-| Status | Draft |
-| Priority | Core |
-| Plain-language description | The percentage of hospital-registered CVD events where the patient died before discharge. |
-| Metric type | Percentage |
-| Numerator | Eligible events where the patient died before discharge |
-| Denominator | Eligible hospital-registered events with known discharge outcome |
-| Unit of analysis | Hospital-registered event |
-| Population and exclusions | Hospital-registered CVD events among Barbados residents; exclude DCO-only records, non-residents, duplicates and records with unknown discharge outcome. |
-| Stratifications | Required: period, event type. Optional: sex, age group. |
-| Uncertainty / suppression | 95% binomial confidence interval for crude estimates. Model-based interval for age-adjusted estimates where used. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `metric_cvd_outcome.do` |
-| Notes | Stroke and AMI case fatality are stratifications of this metric. |
+|---|----|
+| Metric ID | `MORT-BURDEN-002` |
+| Status | Development |
+| Metric type | Percentage distribution |
+| Unit | Death |
+| Cause distribution | Heart and Stroke deaths as percentages of the relevant All CVD parent count. |
+| Sex distribution | Female and male deaths as percentages of the relevant cause parent count. |
+| Broad-age distribution | Under 70 and 70 years and over as percentages of All CVD deaths with known eligible age. |
+| Case definitions | Primary and Inclusive, reported separately |
+| Period | Completed calendar year |
+| Confidence interval | Not routinely produced |
+| Missing data | A valid death date and known female or male sex are required. Deaths with missing age are excluded from both the numerator and denominator of the broad-age distribution. They may remain in the all-age mortality count. |
+| Disclosure | Protect the numerator, parent count and percentage together under `bnr_sdc_v1`. |
+| Implementation | `scripts/stata/mortality/bnr_mort_s3_calc.do` |
 
-## CVD hospital-use metrics
+### MORT-RATE-001: CVD mortality rate
 
-### CVD-HOSP-001: Length of stay after hospital-registered CVD event
+**Plain-language definition.** The annual number of eligible CVD deaths per 100,000 Barbados residents, shown separately under the Primary and Inclusive mortality definitions.
 
-**Definition.**
-The number of days spent in hospital after a registered CVD event.
-
-**Equation.**
+The crude mortality rate is:
 
 $$
-\text{Length of stay}_i = \text{date of discharge}_i - \text{date of admission}_i
+\text{Crude mortality rate per 100,000}
+=
+\frac{\text{eligible CVD deaths}}
+{\text{matching Barbados resident population}}
+\times 100,000
 $$
 
-where \(i\) is an eligible hospital admission linked to a CVD event.
+The directly age-standardised mortality rate is:
+
+$$
+\text{Age-standardised mortality rate}
+=
+\sum_{a=1}^{21} w_a r_a
+$$
+
+Here, \(r_a\) is the mortality rate for age group \(a\), and \(w_a\) is that age group's weight in the WHO World Standard Population 2000–2025. Rates are calculated separately for the Primary and Inclusive mortality definitions.
 
 | Field | Specification |
+|---|----|
+| Metric ID | `MORT-RATE-001` |
+| Status | Development |
+| Metric type | Crude rate and directly age-standardised rate |
+| Units | Deaths per 100,000 population |
+| Numerator | Eligible deaths under the selected Primary or Inclusive definition |
+| Denominator | UN World Population Prospects 2024 estimate for Barbados, matched by year, sex and five-year age group |
+| Standard population | WHO World Standard Population 2000–2025 |
+| Age bands | 21 five-year groups: 0–4 through 95–99, then 100 years and over |
+| Event types | All CVD, Heart and Stroke |
+| Sex | All sexes, female and male |
+| Case definitions | Primary and Inclusive |
+| Period | Completed calendar year |
+| Crude interval | Exact Poisson (Garwood) 95% confidence interval |
+| Age-standardised interval | Fay–Feuer gamma 95% confidence interval |
+| Missing data | A valid death date and known female or male sex are required. Deaths without an eligible age cannot contribute to an age-specific or age-standardised rate. Missing population joins stop the rate calculation. |
+| Disclosure | If the underlying annual count is protected, the matching crude and age-standardised rates and confidence limits are also unavailable. Apply `bnr_sdc_v1`. |
+| Implementation | `scripts/stata/mortality/bnr_mort_construct_rates.do` |
+
+## Supporting analytical assets
+
+The following are controlled supporting outputs, not additional metric IDs:
+
+| Asset | Purpose |
 |---|---|
-| Metric ID | CVD-HOSP-001 |
-| Metric name | Length of stay after hospital-registered CVD event |
-| Status | Draft |
-| Priority | Core |
-| Plain-language description | The number of days spent in hospital after a registered CVD event. |
-| Metric type | Descriptive summary |
-| Numerator | Not applicable |
-| Denominator | Eligible admissions with valid admission and discharge dates |
-| Unit of analysis | Hospital admission linked to CVD event |
-| Population and exclusions | Completed hospital-registered CVD events with valid admission and hospital-end dates; exclude DCO-only records, missing required dates and end dates before admission. Include same-day stays as zero completed days and completed stays ending in death. Flag unusually long stays for source verification; retain them when confirmed. |
-| Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
-| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `metric_cvd_hosp.do` |
-| Notes | Median and interquartile range are preferred for public interpretation. An unusually long but verified stay is not excluded solely because it is extreme. |
+| Previous-five-year mean | Compares an annual value with the preceding five completed years, or a quarterly value with the same quarter in the preceding five years. It is unavailable until five prior values exist. |
+| Fixed monthly reference | Gives dashboards an approved month-specific reference, including fixed 2015–2019 values where used. |
+| DCO linkage summary and bounds | Records resolved and unresolved linkage evidence and the lower, central and upper ascertainment estimates used for annual national event results. Detailed worklists remain private. |
+| Release receipt, manifest and approval record | Identifies the source, code, settings and exact payload used for review and publication. |
 
-### CVD-HOSP-002: CVD hospital bed-days
+## Change control
 
-**Definition.**
-The total number of hospital bed-days used by people admitted with registered CVD events.
+A routine metric may be added, retired or materially changed only when the BNR records:
 
-**Equation.**
+- the reason and intended use;
+- the exact population, numerator, denominator and dimensions;
+- the statistical and disclosure methods;
+- the responsible implementation and tests;
+- validation against the previous method where relevant;
+- the effect on earlier releases and public interpretation; and
+- approval by the BNR Lead or BNR Analyst.
 
-$$
-\text{Total bed-days} = \sum_{i=1}^{n} \text{length of stay}_i
-$$
+Update this register, the SAP, code, tests and public methods explanation together. Preserve the previous definition in version history rather than silently overwriting the record of use.
 
-where \(n\) is the number of eligible admissions.
+## Version history
 
-| Field | Specification |
-|---|---|
-| Metric ID | CVD-HOSP-002 |
-| Metric name | CVD hospital bed-days |
-| Status | Draft |
-| Priority | Core for service planning |
-| Plain-language description | The total number of hospital bed-days used by people admitted with registered CVD events. |
-| Metric type | Count / service-use metric |
-| Numerator | Sum of length of stay across eligible admissions |
-| Denominator | Optional: eligible admissions, where reporting bed-days per event |
-| Unit of analysis | Bed-day |
-| Population and exclusions | Same event set as CVD-HOSP-001. |
-| Stratifications | Required: period, event type. Optional: sex, age group, outcome status. |
-| Uncertainty / suppression | No routine confidence interval. Suppress or flag low-count strata according to disclosure rules. |
-| Responsible code | `metric_cvd_hosp.do` |
-| Notes | This is a service-use metric, not an incidence metric. |
-
-## CVD data quality metrics
-
-### CVD-DQ-001: Completeness of key CVD variables
-
-**Definition.**
-The percentage of eligible records with complete values for key variables needed for analysis.
-
-**Equation.**
-
-$$
-\text{Completeness} = \frac{c}{n} \times 100
-$$
-
-where \(c\) is the number of records with a non-missing value for the selected variable, and \(n\) is the number of records eligible for completeness assessment.
-
-| Field | Specification |
-|---|---|
-| Metric ID | CVD-DQ-001 |
-| Metric name | Completeness of key CVD variables |
-| Status | Draft |
-| Priority | Core QA |
-| Plain-language description | The percentage of eligible records with complete values for key variables needed for analysis. |
-| Metric type | Data quality percentage |
-| Numerator | Records with non-missing value for the selected variable |
-| Denominator | Records eligible for completeness assessment |
-| Unit of analysis | Record |
-| Population and exclusions | Records in the approved release eligible for the assessed variable; exclude records where the variable is not applicable. |
-| Stratifications | Required: release ID, variable name. Optional: event type, source status. |
-| Uncertainty / suppression | No routine confidence interval. Flag variables below agreed completeness thresholds. |
-| Responsible code | `metric_cvd_dq.do` |
-| Notes | Key variables include event date, sex, age or date of birth, admission date, discharge date and discharge outcome. |
-
-### CVD-DQ-002: Timeliness of abstraction
-
-**Definition.**
-The time between event, discharge or source availability and completion of abstraction.
-
-**Equation.**
-
-$$
-\text{Abstraction lag}_i = \text{date abstraction completed}_i - \text{reference start date}_i
-$$
-
-where \(i\) is an eligible record with valid abstraction timing fields.
-
-| Field | Specification |
-|---|---|
-| Metric ID | CVD-DQ-002 |
-| Metric name | Timeliness of abstraction |
-| Status | Draft |
-| Priority | Process monitoring |
-| Plain-language description | The time between event, discharge or source availability and completion of abstraction. |
-| Metric type | Process monitoring summary |
-| Numerator | Not applicable |
-| Denominator | Records with required abstraction timing fields |
-| Unit of analysis | Record |
-| Population and exclusions | Records with valid abstraction timing fields; exclude records missing required dates. |
-| Stratifications | Required: release ID. Optional: event type, source status. |
-| Uncertainty / suppression | No routine confidence interval. Flag values outside agreed operational targets. |
-| Responsible code | `metric_cvd_dq.do` |
-| Notes | Reference start date and target threshold to be confirmed by BNR operations. |
-
-## Change history
-
-| Version | Date | Summary | Author |
-|---|---|---|---|
-| Draft v0.1 | 2026-05-15 | Initial draft metric register for the BNR Information Hub | BNR refit team |
-| Draft v0.2 | 2026-08-11 | Clarified event-rate sources, case-fatality denominator and length-of-stay validity rules | Ian Hambleton / BNR refit |
-
+| Version | Date | Change |
+|---|---|---|
+| Version 1 | 15 September 2026 | First development register aligned with the implemented CVD event, mortality and DCO workflows. Establishes six routine metric families and moves case-fatality and length-of-stay to bespoke one-off analyses. |

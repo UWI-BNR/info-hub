@@ -1,0 +1,25 @@
+---
+title: "Standard text for ethics applications"
+description: "Copyable wording describing BNR REDCap and Info-Hub arrangements."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--operations}
+Operations Manual
+:::
+
+**Owner:** BNR Lead and BNR Analyst.
+
+## Purpose
+
+The two passages below can be adapted for ethics applications, protocols and related governance forms. They summarise the security in place in our data systems. 
+
+## 1. BNR REDCap data system
+
+> The Barbados National Registry for Non-communicable Disease (BNR) manages confidential registry records in an approved, managed healthcare cloud environment. The underlying infrastructure provides protected data-centre facilities, encrypted web communications, managed server security, backup arrangements, and ongoing technical monitoring and support. These safeguards are intended to protect the confidentiality, integrity and availability of sensitive health information.
+> Access to the BNR REDCap system is limited to authorised users with named accounts and permissions appropriate to their role. REDCap maintains a record of data entry and changes, supporting accountability and review. Registry information is used only for approved public-health, surveillance and research purposes, in accordance with applicable data-protection, ethics and governance requirements.
+
+## 2. BNR Info-Hub system
+
+> The BNR Info-Hub is a controlled system for preparing and publishing approved surveillance information. Analysis involving confidential data takes place in a separate restricted working environment. Before any result is made public, it is checked for accuracy, confidentiality and disclosure risk.
+> The public Info-Hub and its website repository are designed to contain only information approved for public release. They do not store direct identifiers, record-level confidential data, private logs, linkage files or other restricted working material. Public pages, tables, dashboards, downloads and reports present only the approved public results.
