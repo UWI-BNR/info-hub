@@ -24,7 +24,7 @@ flowchart TB
     F --> G["GitHub deployment"]
 ```
 
-Each arrow is a separate control. A successful calculation is not approval. Analytical publication does not deploy the website, and a successful local Quarto render does not make a change live.
+Each box is a distinct stage. Each arrow shows the controlled move to the next stage. A successful calculation is not approval. Analytical publication does not deploy the website, and a successful local Quarto render does not make a change live.
 
 ## Choose the correct workflow
 
@@ -35,11 +35,23 @@ Each arrow is a separate control. A successful calculation is not approval. Anal
 | [Rolling three-month update](reporting/rolling-update.qmd) | Exact approved event and mortality data-release CSVs | Dated and versioned online update package |
 | [Annual CVD report](reporting/annual-report.qmd) | Approved data releases and year-specific analyst files | Approved annual PDF, companion Public Health Update and landing pages |
 | [One-off CVD report](reporting/one-off-report.qmd) | Finished analyst PDF | Approved report PDF and landing-page package |
-| [Public presentation refresh](reporting/overview.qmd) | Approved public metric or report files | Refreshed dashboards, tables, downloads and report listings |
 
 The CVD event and mortality data-release workflows remain separate. Dashboards, public tables and downloads reuse their approved public metric files; they do not rerun or redefine the analysis.
 
-## Follow the common control pattern
+## Refresh website products that use approved outputs
+
+A data-package release or report publication also prompts updates to several website products. These are not separate workflows, and they occur whener a new data release package arrive is published to the Info-Hub `site/` location. 
+
+| Website product | Approved input | Guide |
+|--|---|---|
+| CVD dashboards | Current approved CVD event or mortality files | [Refresh the CVD dashboards](reporting/dashboard-regeneration.qmd) |
+| CVD tables | Current approved CVD event and mortality files | [Refresh the CVD tables](reporting/tabulation-regeneration.qmd) |
+| Downloads page | Approved catalogue records and ZIP packages | [Rebuild the Downloads page](reporting/downloads-page-regeneration.qmd) |
+| Report listings | Published report landing-page metadata | [Rebuild the report listings](reporting/report-listings-regeneration.qmd) |
+
+These procedures do not prepare source data, calculate surveillance measures or approve and publish an analytical package. The [reporting and presentation overview](reporting/overview.qmd) brings all reporting and refresh procedures together.
+
+## Follow the common workflow control pattern
 
 1. Build analytical files and review candidates in the private workspace.
 2. Run the automated checks and complete the required human analytical and disclosure review.
@@ -48,8 +60,6 @@ The CVD event and mortality data-release workflows remain separate. Dashboards, 
 5. Run the separate Stata publication action, which verifies the approval and copies only the files listed in the approved manifest.
 6. Render and inspect the Info-Hub locally.
 7. Merge the reviewed website change into `main` through a GitHub pull request, allow GitHub Actions to deploy it and check the live website.
-
-The rolling three-month update is deliberately narrower. It verifies and freezes already-approved event and mortality data-release files and uses only the display calculations authorised in its controlled template. It does not create another analytical approval step.
 
 ## Know the responsibilities
 

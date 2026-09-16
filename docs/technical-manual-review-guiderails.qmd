@@ -8,7 +8,7 @@ toc-depth: 2
 
 ## Status
 
-This document consolidates the review approach agreed before the review with the refinements established through the pilot page and Stage 1. It is awaiting approval before Stage 2 begins.
+This document consolidates the review approach agreed before the review with the refinements established through the pilot page and Stages 1 and 2. It is the working standard for the remaining Technical Manual review.
 
 ## Review sequence and progress
 
@@ -16,9 +16,9 @@ This document consolidates the review approach agreed before the review with the
 
 | Stage | Scope | Progress | What remains |
 |---:|---|:---:|---|
-| **Pilot** | `extract-redcap.qmd` | 🟨 | Pilot content and style accepted. Apply two subsequently agreed conventions to the repository copy: remove the rule below **Technical Manual** and format the short failure guidance as a table. |
-| **1** | **Getting started**: section listing, analytics environment and workstation setup | 🟨 | All three pages revised and technically checked. Latest workstation revision awaits approval. Remove the rule from `environment.qmd`, complete the human edit, update review statuses and rebuild the folder-aware ZIP—the earlier ZIP is now superseded. |
-| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | ⬜ | Review six pages using the approved guiderails. |
+| **Pilot** | `extract-redcap.qmd` | ✅ | Revised, technically checked and reviewed by Ian. |
+| **1** | **Getting started**: section listing, analytics environment and workstation setup | ✅ | All three pages revised, technically checked and reviewed by Ian. |
+| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | 🟨 | All six pages revised and technically checked. The workflow section listing and overview have been reviewed by Ian; the four control pages still require human review. |
 | **3** | **CVD event workflow** | ⬜ | Review the overview and Steps 2–6; then check the accepted Step 1 pilot against the complete workflow. Seven pages in total, six requiring their first full review. |
 | **4** | **CVD mortality workflow** | ⬜ | Review the overview and six workflow steps: seven pages. |
 | **5** | **Reporting workflows** | ⬜ | Review the overview, dashboards, tables, Downloads, report listings, rolling update, annual report and one-off report: eight pages. |
@@ -131,3 +131,12 @@ This document consolidates the review approach agreed before the review with the
 | 60 | After each section, identify anything that still depends on human judgement, live credentials, authorised private data or a Windows-only test. |
 | 61 | During the whole-manual pass, standardise terminology and structure without erasing necessary differences between conceptual, procedural and reference pages. |
 | 62 | The final acceptance test is operational: configure a clean machine and perform the Common Tasks. Any point requiring undocumented prior knowledge is a documentation defect. |
+
+## Manual edits and system overviews
+
+| # | Guiderail |
+|---:|---|
+| 63 | When Ian supplies a manually revised page, use it as the authoritative starting copy. Preserve those edits unless they conflict with verified system operation or a later explicit instruction. |
+| 64 | When a new Technical Manual guiderail is agreed, add it to this document during the next implementation run and include the updated QMD in that run's folder-aware ZIP. |
+| 65 | On system overview pages, distinguish analytical workflows from presentation or indexing procedures that refresh website products after an approved data-package release or report publication. Link to the relevant downstream technical guides. |
+| 66 | In workflow diagrams, describe boxes as distinct stages and arrows as controlled moves between stages. Do not refer to an arrow itself as the control when the stage and transition both matter. |
