@@ -8,6 +8,7 @@ description: "Configure a Windows workstation to run the BNR Stata workflows and
 Technical Manual
 :::
 
+
 ## What this chapter does
 
 Use this chapter when setting up a new BNR analytics workstation or moving the environment to a replacement machine.
@@ -16,24 +17,11 @@ Use this chapter when setting up a new BNR analytics workstation or moving the e
 
 The repositories and workflow code already exist. Complete the following stages in order on a new machine.
 
-## Workstation requirements
-
-Use a workstation that meets this practical BNR baseline:
-
-| Item | Requirement |
-|---|---|
-| **Operating system** | 64-bit Windows 11 with current security updates. |
-| **Processor** | Modern Intel or AMD 64-bit processor with at least four logical cores. |
-| **Memory** | At least 8 GB RAM; 16 GB is recommended. |
-| **Storage** | At least 20 GB free for the software, repository and generated files, plus sufficient approved storage for the private data workspace and backups. |
-| **Network** | Reliable internet access for GitHub, REDCap, software installation and website checks. |
-| **Access** | Permission to install the approved software, a licensed Stata installation, BNR GitHub access and authorised access to the private workspace. |
-
 ::: {.callout-tip title="Procedure at a glance" appearance="simple"}
 
 | Stage | Task | Successful result |
-|---|---|---|
-| **1** | Install the supporting software | Git, Python 3.13, Quarto, VS Code and Firefox are available. |
+|--|---|----|
+| **1** | Install the supporting software | Git, Python, Quarto and VS Code are available. |
 | **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
 | **3** | Set up the private workspace | The authorised `info-hub-private` data and reference structure is available. |
 | **4** | Configure local paths and REDCap access | The public root, private root and required CVD/mortality token-file locations resolve correctly. |
@@ -48,43 +36,25 @@ Use a workstation that meets this practical BNR baseline:
 
 Stata is assumed to be installed and licensed. Install the remaining tools only if they are missing.
 
-To find the current installer whenever this manual is used, the links below point to **official landing or Marketplace pages**, rather than version-specific installer files.
-
-### Where to type the commands
-
-Before VS Code is installed:
-
-1. open the Windows **Start** menu;
-2. type `PowerShell`; and
-3. open **Windows PowerShell**.
-
-Type the first VS Code check in that window.
-
-Windows 11 normally includes WinGet through **App Installer**. Check whether it is ready:
-
-```powershell
-winget --version
-```
-
-If the command prints a version number, use the WinGet installation commands below. If Windows says that `winget` is not recognised, use the linked official installer page for each program instead.
+To always find a future later software version, the links below point to **official landing or Marketplace pages**, rather than version-specific installer files.
 
 ### 1. Install VS Code
 
 VS Code is the standard editor used for the BNR repository.
 
-In Windows PowerShell, type:
+Check first:
 
 ```powershell
 code --version
 ```
 
-If VS Code is installed, the command prints its version number. If PowerShell says that `code` is not recognised, install it with WinGet when available:
+If it is missing, use the [official VS Code Windows installation page](https://code.visualstudio.com/docs/setup/windows).
+
+Alternatively, if WinGet is available:
 
 ```powershell
 winget install --id Microsoft.VisualStudioCode -e --source winget
 ```
-
-If WinGet is unavailable, use the [official VS Code Windows installation page](https://code.visualstudio.com/docs/setup/windows).
 
 After installation, close and reopen PowerShell and check:
 
@@ -92,88 +62,77 @@ After installation, close and reopen PowerShell and check:
 code --version
 ```
 
-The command must now print the installed VS Code version.
-
-For the remaining PowerShell commands on this page:
-
-1. open VS Code;
-2. choose **Terminal > New Terminal**; and
-3. check that the terminal tab says **PowerShell**.
-
-If another shell opens, use the arrow beside the `+` in the Terminal panel and choose **PowerShell**. This manual calls this a **VS Code PowerShell terminal**.
-
 ### 2. Install Git
 
-In a VS Code PowerShell terminal, type:
+Check:
 
 ```powershell
 git --version
 ```
 
-If Git is installed, the command prints a version beginning with `git version`. If it is not recognised, install it with WinGet when available:
+If Git is missing, use the [official Git for Windows installation page](https://git-scm.com/install/windows).
+
+Or install with WinGet:
 
 ```powershell
 winget install --id Git.Git -e --source winget
 ```
 
-If WinGet is unavailable, use the [official Git for Windows installation page](https://git-scm.com/install/windows).
-
-Close and reopen the VS Code PowerShell terminal, then type:
+Close and reopen PowerShell, then confirm:
 
 ```powershell
 git --version
 ```
 
-The command must now print the installed Git version.
-
 VS Code already includes a useful Source Control interface for Git. No additional Git client is required for routine BNR work.
 
 ### 3. Install Python 3.13
 
-Python 3.13 is the version tested for the BNR Info-Hub. Do not substitute a later Python version until it has been tested with the repository packages and the tracked environment check has been updated.
+The current BNR workstation baseline is Python 3.13.
 
-In a VS Code PowerShell terminal, type:
+Check:
 
 ```powershell
-py -3.13 --version
+python --version
+py --version
 ```
 
-If Python 3.13 is installed, the command prints a version beginning with `Python 3.13`. If the requested version is not found, install it with WinGet when available:
+If Python 3.13 is missing, use the [official Python downloads for Windows](https://www.python.org/downloads/windows/).
+
+Or install the 3.13 series with WinGet:
 
 ```powershell
 winget install --id Python.Python.3.13 -e --source winget
 ```
 
-If WinGet is unavailable, install the current Python 3.13 release from the [official Python downloads for Windows](https://www.python.org/downloads/windows/).
-
-Close and reopen the VS Code PowerShell terminal, then type:
+After installation:
 
 ```powershell
-py -3.13 --version
-py -3.13 -m pip --version
-py -3.13 -c "import sys; print(sys.executable)"
+python --version
+python -m pip --version
+where.exe python
 ```
 
-The first two commands must report Python 3.13 and its `pip` installation. The final command prints the Python executable path. Record that path; Stage 5 creates the project virtual environment used by BNR.
+Record the installed Python path. Stage 5 creates the project virtual environment used by BNR.
 
 ### 4. Install Quarto
 
-In a VS Code PowerShell terminal, type:
+Check:
 
 ```powershell
 quarto --version
 quarto check
 ```
 
-If Quarto is installed, the first command prints its version and the second reports its configuration. If `quarto` is not recognised, install it with WinGet when available:
+If Quarto is missing, use the [official Quarto installation page](https://quarto.org/docs/get-started/).
+
+Or install with WinGet:
 
 ```powershell
 winget install --id Posit.Quarto -e --source winget
 ```
 
-If WinGet is unavailable, use the [official Quarto installation page](https://quarto.org/docs/get-started/).
-
-After installation, close and reopen the VS Code PowerShell terminal and type:
+After installation, close and reopen PowerShell and run:
 
 ```powershell
 quarto --version
@@ -181,33 +140,7 @@ quarto check
 where.exe quarto
 ```
 
-The commands must print the Quarto version, a completed configuration check and the installed executable path.
-
-### 5. Install Firefox
-
-Install 64-bit Firefox with WinGet when available:
-
-```powershell
-winget install --id Mozilla.Firefox -e --source winget
-```
-
-If WinGet is unavailable, use the [official Firefox download page](https://www.mozilla.org/firefox/new/). Keep the default installation location.
-
-The daily editing launcher expects Firefox here:
-
-```text
-C:\Program Files\Mozilla Firefox\firefox.exe
-```
-
-In a VS Code PowerShell terminal, type:
-
-```powershell
-Test-Path "C:\Program Files\Mozilla Firefox\firefox.exe"
-```
-
-The result must be `True`.
-
-### 6. Install the standard VS Code extensions
+### 5. Install the standard VS Code extensions
 
 Install the following small set.
 
@@ -220,7 +153,7 @@ Install the following small set.
 | [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Workflow YAML validation and completion, plus access to workflow runs and logs from VS Code. |
 | [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Validation, formatting and completion for the many `.yml` metadata and approval files used by BNR. |
 
-Install them from a VS Code PowerShell terminal:
+Install them from PowerShell:
 
 ```powershell
 code --install-extension quarto.quarto
@@ -231,29 +164,32 @@ code --install-extension GitHub.vscode-github-actions
 code --install-extension redhat.vscode-yaml
 ```
 
-In the same terminal, type:
+Check:
 
 ```powershell
 code --list-extensions
 ```
 
-Confirm that each of the six extension identifiers appears in the list.
-
 These are editor aids, not analytical runtime dependencies. A workstation can still run the Stata workflows if an editor extension is temporarily unavailable.
+
+### 6. Browser
+
+Any modern browser can be used for local Quarto review.
+
+The existing BNR edit-session launcher prefers Firefox when it is installed, but Firefox is not required for workstation acceptance.
 
 ### Final Stage 1 check
 
-In a VS Code PowerShell terminal, type:
+Run:
 
 ```powershell
 git --version
-py -3.13 --version
+python --version
 quarto --version
 code --version
-Test-Path "C:\Program Files\Mozilla Firefox\firefox.exe"
 ```
 
-Do not continue until the four version commands return normally and the Firefox check returns `True`.
+Do not continue until each required command returns normally.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -303,36 +239,30 @@ https://github.com/UWI-BNR/info-hub.git
 
 ### 4. Check Git identity
 
-Open a VS Code PowerShell terminal and type:
+Open **Terminal > New Terminal** in VS Code and run:
 
 ```powershell
 git config user.name
 git config user.email
 ```
 
-The commands print the name and email Git will attach to commits. If either command returns a blank line, set the user's normal professional Git identity:
+If either is blank, configure it using the user's normal professional Git identity:
 
 ```powershell
 git config --global user.name "Full name"
 git config --global user.email "name@example.org"
 ```
 
-Run the two check commands again and confirm that they print the intended name and email.
-
 ### 5. Check the repository
 
-In a VS Code PowerShell terminal, type:
+In the VS Code terminal:
 
 ```powershell
 git status
 git remote -v
 ```
 
-`git status` should begin with `On branch main` on a new clone and should not report unexplained changes. `git remote -v` should show this address for both fetch and push:
-
-```text
-https://github.com/UWI-BNR/info-hub.git
-```
+The remote should point to the UWI-BNR `info-hub` repository.
 
 The branch name is shown in the lower-left VS Code status bar.
 
@@ -351,51 +281,15 @@ The normal route is:
 
 GitHub cannot pull a branch from the workstation. The protected-branch control means that local work is pushed to a development branch, then merged into `main` through a GitHub pull request.
 
-#### Start a new change using VS Code
-
-1. Check that the **Changes** list in Source Control is empty. If files are listed unexpectedly, stop and investigate them before changing branches.
-2. Click the branch name in the lower-left status bar and select `main`.
-3. Open **Source Control**, select the `...` menu and choose **Pull, Push > Pull**.
-4. Wait for the pull to finish. VS Code should not report a conflict or error.
-5. Click the branch name again and choose **Create new branch**.
-6. Enter a short descriptive name, such as `update-technical-manual`.
-7. Confirm that the new branch name appears in the lower-left status bar.
-
-#### Equivalent PowerShell commands
-
-In a VS Code PowerShell terminal at the repository root, type:
-
-```powershell
-git status --short
-git switch main
-git pull --ff-only origin main
-git switch -c update-technical-manual
-git status
-```
-
-Expected results:
-
-- `git status --short` prints nothing when there are no uncommitted changes;
-- `git switch main` reports that `main` is active or already checked out;
-- `git pull --ff-only origin main` reports `Already up to date` or lists files updated from GitHub;
-- `git switch -c ...` reports that it switched to the new branch; and
-- the final `git status` begins with `On branch update-technical-manual`.
-
-Choose a branch name that describes the actual task; do not reuse the example name automatically.
-
-When the change has been checked and committed, push the development branch—not `main`—to GitHub. The later website procedure gives both the VS Code steps and commands for pushing, opening a pull request and merging.
-
 The exact daily procedure is in [Render and publish the website](../website/render-publish.qmd).
 
 ### 7. Create local setup notes
 
-In a VS Code PowerShell terminal at the repository root, type:
+At the repository root:
 
 ```powershell
 New-Item local-setup-notes.md
 ```
-
-PowerShell should report the new file. It will appear in the VS Code Explorer.
 
 `local-setup-notes.md` is machine-specific and should remain outside version control.
 
@@ -426,7 +320,7 @@ git clone https://github.com/UWI-BNR/info-hub.git
 cd info-hub
 ```
 
-Run these commands in a VS Code PowerShell terminal opened in the intended parent folder. Git should report that it is cloning `info-hub`; the second command moves the terminal into the new repository. The VS Code route above is the normal BNR team method.
+The VS Code route above is the normal BNR team method.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -485,7 +379,7 @@ The public repository contains the tracked path template:
 
 `scripts/stata/config/bnr_paths_TEMPLATE.do`
 
-In a VS Code PowerShell terminal at the repository root, copy it:
+Copy it:
 
 ```powershell
 Copy-Item `
@@ -493,7 +387,7 @@ Copy-Item `
   scripts/stata/config/bnr_paths_LOCAL.do
 ```
 
-The command normally prints nothing. Confirm that `bnr_paths_LOCAL.do` appears beside the template, then open it:
+Open the local copy:
 
 ```powershell
 code scripts/stata/config/bnr_paths_LOCAL.do
@@ -586,21 +480,19 @@ Using a project environment keeps BNR support packages separate from unrelated P
 
 ### 1. Create the environment
 
-In a VS Code PowerShell terminal at the repository root, type:
+From the repository root:
 
 ```powershell
-py -3.13 -m venv venv-info-hub
+python -m venv venv-info-hub
 ```
 
-The command may take a short time and normally prints nothing. Confirm that the environment was created:
+Confirm it exists:
 
 ```powershell
 dir venv-info-hub
 ```
 
 ### 2. Activate it
-
-In the same terminal, type:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
@@ -622,7 +514,7 @@ Then activate the environment again.
 
 ### 3. Install the project packages
 
-With the virtual environment active in the VS Code PowerShell terminal, type:
+With the virtual environment active:
 
 ```powershell
 python -m pip install --upgrade pip
@@ -634,7 +526,7 @@ REDCap extraction imports as `redcap`.
 
 ### 4. Check the environment
 
-From the repository root in the same terminal, run the tracked environment check:
+From the repository root, run the tracked environment check:
 
 ```powershell
 python scripts/python/check-python-environment.py
@@ -643,7 +535,7 @@ python scripts/python/check-python-environment.py
 It must report Python 3.13, list every required package and finish with
 `PASSED`. It does not connect to REDCap or read private data.
 
-Then type:
+Then:
 
 ```powershell
 where.exe python
@@ -783,13 +675,11 @@ After cloning, check that the folder exists:
 dir site\_extensions\quarto-ext\fontawesome
 ```
 
-Run this in a VS Code PowerShell terminal at the repository root. PowerShell should list the extension files.
-
 A normal workstation should **not** need to reinstall this extension because it is part of the committed site source.
 
 ### 2. Activate the Python environment
 
-In a VS Code PowerShell terminal at the repository root, type:
+From the repository root:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
@@ -798,8 +688,6 @@ In a VS Code PowerShell terminal at the repository root, type:
 The site has a Python pre-render step, so use the project environment when rendering locally.
 
 ### 3. Render the site
-
-In the same terminal, type:
 
 ```powershell
 cd site
@@ -812,8 +700,6 @@ A successful render creates or refreshes:
 `site/_site/`
 
 ### 4. Test preview
-
-In the same terminal, now inside the `site` folder, type:
 
 ```powershell
 quarto preview --host 127.0.0.1 --port 4200
@@ -863,25 +749,7 @@ It does **not** update Git, select a branch, commit changes or publish the websi
 4. create or switch to the development branch for the task; and
 5. make changes only after confirming that the intended development branch is active.
 
-The equivalent commands for new work are:
-
-```powershell
-git status --short
-git switch main
-git pull --ff-only origin main
-git switch -c update-technical-manual
-git status
-```
-
-Run them in a VS Code PowerShell terminal at the repository root. Replace `update-technical-manual` with a short name for the actual task. The first command should print nothing; the pull should complete without a conflict; and the final output should name the new branch.
-
-If you are continuing existing work, return to its development branch rather than creating another branch. In VS Code, click the branch name and select the existing branch. The equivalent command is:
-
-```powershell
-git switch update-technical-manual
-```
-
-Replace the example with the existing branch name. Git should report that it switched to that branch.
+If you are continuing existing work, return to its development branch rather than creating another branch.
 
 Keep the preview Command Prompt open while using the local site. Close it, or press `Ctrl + C`, to stop the preview server.
 
@@ -895,9 +763,7 @@ Finish with a human inspection of the complete environment.
 
 ### 1. Public repository
 
-In VS Code, confirm that the intended branch appears in the lower-left status bar. Open Source Control and check that every listed change is expected.
-
-Then, in a VS Code PowerShell terminal at the repository root, type:
+From the repository root:
 
 ```powershell
 git status

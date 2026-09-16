@@ -63,13 +63,13 @@ Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,
 Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,reviewed-by-irh,Page YAML
 Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,reviewed-by-irh,Page YAML
 Technical Manual,BNR Technical Manual,site/technical/index.qmd,not-reviewed,Page YAML
-Technical Manual,Set up the environment,site/technical/getting-started/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,The BNR analytics and publishing environment,site/technical/getting-started/environment.qmd,not-reviewed,Page YAML
+Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,not-reviewed,Page YAML
 Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,not-reviewed,Page YAML
 Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,not-reviewed,Page YAML
-Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,not-reviewed,Page YAML
+Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Prepare the confidential dataset,site/technical/workflows/cvd-events/prepare-confidential.qmd,not-reviewed,Page YAML
 Technical Manual,Create deidentified analytical inputs,site/technical/workflows/cvd-events/create-analysis-inputs.qmd,not-reviewed,Page YAML
 Technical Manual,Generate combined CVD metrics,site/technical/workflows/cvd-events/generate-metrics.qmd,not-reviewed,Page YAML
