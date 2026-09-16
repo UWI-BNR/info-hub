@@ -1,0 +1,134 @@
+---
+title: "CVD event–death linkage rules"
+description: "Reference register for deterministic event–death linkage, episode classification and aggregate unresolved-DCO estimation."
+manual-review-status: not-reviewed
+---
+
+**Technical Manual**
+
+## What this page records
+
+This page records the implemented rules that link classified CVD deaths to hospital-recorded CVD events and estimate additional death-certificate-only (DCO) events. It is a rules reference, not a procedure for running the workflow.
+
+::: {.callout-note appearance="simple"}
+## Rules at a glance
+
+- Link people only by the ordered deterministic rules **L01**, **L02** and **L03**.
+- Accept a match only when exactly one eligible CVD person is found.
+- After a person match, treat a Heart or Stroke event **0–27 days before death** as an already-recorded episode.
+- A matched death with no event in that window is a deterministic additional DCO; an unmatched death remains unresolved.
+- Estimate unresolved deaths only in aggregate. Never assign an estimated result to an individual record.
+:::
+
+## Scope and candidate pools
+
+| Rule | Implemented requirement |
+|---|---|
+| Mortality pool | Run linkage once against deaths in the **Inclusive** BNR-Heart-or-Stroke definition with a valid death date no later than the selected CVD event-data coverage end. Retain the Primary and Inclusive flags from that same linkage run. |
+| Event pool | Use hospital-recorded Heart and Stroke events (`dco == 0`) with valid event date and event type within the selected CVD coverage. Exclude legacy imported DCO rows (`dco == 1`) from the new linkage pool. |
+| Definition relationship | Primary is a subset of Inclusive. They are alternative mortality definitions, not lower and upper linkage confidence limits. |
+| Confidentiality | All person identifiers, possible matches, linkage reasons, episode dates and component evidence remain private. Only approved aggregate results may enter a public data package release. |
+
+## Identity preparation rules
+
+| Field | Implemented rule |
+|---|---|
+| National Registration Number (NRN) | Keep as text so leading zeroes are preserved. Remove spaces and hyphens. Require exactly 10 digits and a valid `YYMMDD` date prefix. |
+| NRN century | Resolve 1900/2000 only when one date is compatible with explicit CVD date of birth, or with age and event/death date within one year. An ambiguous NRN-derived date is not sufficient. |
+| Sex | CVD source `1 = female`, `2 = male`. Mortality source text `"1" = male`, `"2" = female`. Compare the canonical values. |
+| Names | Convert to upper case, trim repeated spaces and replace `. , - / ( )` and apostrophes with token boundaries. Do not use fuzzy, phonetic or partial-string similarity. |
+| Boundary names | For L03, compare the first and last normalised tokens in either order. |
+| Contradictory CVD identity | A valid NRN group with conflicting non-missing sex or explicit dates of birth is not rescued by a name match. |
+
+## Ordered person-linkage rules
+
+Apply the rules in order. A person accepted by an earlier rule is not reconsidered by a later rule.
+
+| Rule | Match requirement |
+|---|---|
+| **L01 — exact NRN** | One valid, unique death NRN has a valid CVD counterpart; the CVD NRN group has no conflicting sex or date of birth; and mortality sex and NRN-derived date of birth do not contradict the CVD identity. |
+| **L02 — full name, sex and date of birth** | L01 did not match because the mortality NRN is invalid or there is no valid CVD NRN counterpart; the normalised full name, canonical sex and exact resolved date of birth match; and exactly one CVD person proxy remains. Repeated events for that same person count as one candidate. |
+| **L03 — boundary names, sex and date/age** | L02 did not produce one match; first and surname boundary tokens match in either order; canonical sex matches; and either the resolved dates of birth match exactly or one date of birth is absent and the years-only age at death agrees within one year. Exactly one CVD person proxy must remain. |
+
+### Matches that are not accepted
+
+| Situation | Result |
+|---|---|
+| More than one eligible person | Leave unresolved; do not choose between candidates. |
+| Conflicting non-missing NRNs, sex values or explicit dates of birth | Leave unresolved; a shared name or date does not override the contradiction. |
+| Different known dates of birth | Do not use age to rescue the match. |
+| Age not explicitly recorded in years | Do not use the L03 age fallback. |
+| Approximate or fuzzy name similarity | No match. |
+
+## Episode and DCO rules
+
+| Rule | Implemented result |
+|---|---|
+| Person matched; qualifying event 0–27 days before death | `recorded_event_0_27_days`: the fatal episode is already represented in hospital event data. Day 0 and day 27 are included. |
+| Person matched; no qualifying event 0–27 days before death | `provisional_additional_dco`: deterministic additional DCO. |
+| Nearest qualifying event more than 27 days before death | Retain as a private remote-event diagnostic. It does not prevent provisional additional-DCO status. |
+| No unique person match | Unresolved candidate. Do not label the person as a DCO. |
+| Future event after death | Not a prior fatal episode. |
+
+## Aggregate unresolved-DCO estimation
+
+For each mortality definition and death year:
+
+| Step | Rule |
+|---|---|
+| Resolved fraction | Let `L` be resolved deaths with a recorded 0–27-day episode and `A` be deterministic additional DCOs. Calculate `p = A / (L + A)`. |
+| Minimum evidence | Use the target year's `p` only when `L + A >= 20`. Otherwise use the same definition pooled over target year ±1; if still below 20, use all available years. If the all-years pool is below 20, produce no central estimate. |
+| Unresolved application | Apply `p` to the aggregate unresolved count `U`. Do not apply it to individual records. |
+| Lower component | `A`. |
+| Central component | `A + (p × U)`. This may be fractional. |
+| Upper component | `A + U`. |
+| Definition check | For the same annual stratum, the Inclusive All-CVD lower, central and upper components must not be below the corresponding Primary components. |
+
+## Heart, Stroke and mixed allocation
+
+| Rule | Implemented requirement |
+|---|---|
+| Heart | Certificate and linked episode evidence follow the Heart attribution routes. |
+| Stroke | Certificate and linked episode evidence follow the Stroke attribution routes. |
+| Mixed/unallocated | Both families, discordant certificate and episode families, unclassified evidence and unresolved attribution remain in a separate private category. They are not forced into Heart or Stroke. |
+| Common allocation source | Use the observed deterministic additional-DCO composition from the same annual, three-year or all-years resolved pool selected for the target year. |
+| Joint allocation | Allocate the All-CVD unresolved central and upper components across Heart, Stroke and mixed/unallocated using `selected category A / selected total A`. |
+| Accounting check | Heart + Stroke + mixed/unallocated must equal All CVD at the lower, central and upper bounds. |
+| Independent subtype estimate | May be retained as private sensitivity evidence, but the joint allocation is the production result. |
+
+## Public aggregation boundaries
+
+- DCO enhancement starts with complete calendar year 2010; 2008–2009 are not included.
+- Unknown sex and age remain private allocation atoms. The all-sex value is calculated directly from all sex components.
+- Deaths without usable age remain in counts but are excluded from direct age standardisation and reported in private checks.
+- Hospital-only + additional DCO must equal hospital-plus-DCO for every matching annual stratum.
+- Lower and upper linkage values stay on the same aggregate row as the central estimate; they are not separate cases or statistical confidence intervals.
+
+## Where the rules are implemented
+
+The monthly controller is `scripts/stata/monthly/bnr_step4_metrics.do`. There is no single linkage-rules file: the ordered rules are implemented in these `.do` files.
+
+::: {.callout-note collapse="true"}
+## Linkage and estimation code
+
+| File | Rule set |
+|---|---|
+| `scripts/stata/metrics/cvd/bnr_cvd_prepare_linkage_inputs.do` | Builds the Inclusive death pool and hospital-event pool and applies coverage limits. |
+| `scripts/stata/metrics/cvd/bnr_cvd_l01_episode_core.do` | Applies L01 and the 0–27-day episode rule. |
+| `scripts/stata/metrics/cvd/bnr_cvd_l02_l03_episode_core.do` | Applies L02 and L03, then repeats the episode rule for all accepted matches. |
+| `scripts/stata/metrics/cvd/bnr_cvd_estimate_unresolved_core.do` | Applies the aggregate unresolved-DCO fraction and fallback hierarchy. |
+| `scripts/stata/metrics/cvd/bnr_cvd_profile_subtype_concordance_core.do` | Creates Heart/Stroke certificate-versus-episode attribution routes. |
+| `scripts/stata/metrics/cvd/bnr_cvd_estimate_joint_subtype_core.do` | Applies the production Heart/Stroke/mixed joint allocation. |
+| `scripts/stata/metrics/cvd/bnr_cvd_construct_incidence_rates_core.do` | Carries the aggregate DCO components into annual counts and rates. |
+:::
+
+## Change rule
+
+Do not change identity fields, normalisation, linkage order, uniqueness, contradiction handling, the 0–27-day window, the minimum resolved count, fallback hierarchy or joint allocation during a routine data release. Change the controlling contract, code, tests and this reference together.
+
+## Related procedures
+
+- [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd) — run the controlled metrics and linkage stages.
+- [CVD death-classification rules](cvd-death-classification-rules.qmd) — understand the Primary and Inclusive mortality inputs to linkage.
+- [Disclosure-control rules](disclosure-control-rules.qmd) — understand how the resulting aggregates are protected before publication.
+

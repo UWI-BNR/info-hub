@@ -18,13 +18,14 @@ This document consolidates the review approach agreed before the review with the
 |---:|---|:---:|---|
 | **Pilot** | `extract-redcap.qmd` | ✅ | Revised, technically checked and reviewed by Ian. |
 | **1** | **Getting started**: section listing, analytics environment and workstation setup | ✅ | All three pages revised, technically checked and reviewed by Ian. |
-| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | 🟨 | All six pages revised and technically checked. The workflow section listing and overview have been reviewed by Ian; the four control pages still require human review. |
+| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | ✅ | All six pages revised and technically checked. The control pages are retained temporarily as source material but have been removed from the final sidebar structure. |
+| **2A** | **Rules-reference architecture**: classification, linkage and disclosure-control registers; Reference listing; manual landing page and sidebar | 🟨 | First substantive versions created and technically checked. Ian’s human review remains. |
 | **3** | **CVD event workflow** | ⬜ | Review the overview and Steps 2–6; then check the accepted Step 1 pilot against the complete workflow. Seven pages in total, six requiring their first full review. |
 | **4** | **CVD mortality workflow** | ⬜ | Review the overview and six workflow steps: seven pages. |
 | **5** | **Reporting workflows** | ⬜ | Review the overview, dashboards, tables, Downloads, report listings, rolling update, annual report and one-off report: eight pages. |
 | **6** | **Operate the Info-Hub** | ⬜ | Review the section listing, website publication procedure and website-content procedure: three pages. |
 | **7** | **Maintain and recover** | ⬜ | Review the section listing, safe code changes, files/releases/versions and troubleshooting: four pages. |
-| **8** | **Quick reference and manual landing page** | ⬜ | Review the three reference pages and the main Technical Manual landing page: four pages. |
+| **8** | **Reference and manual landing page** | ⬜ | Review the five reference content pages, the Reference section listing and the main Technical Manual landing page: seven pages. The three substantive rules pages have an earlier Stage 2A review checkpoint. |
 | **9** | **Common Tasks walkthroughs** | ⬜ | Decide the required end-to-end tasks and create concise walkthrough pages linking the relevant technical procedures in sequence. |
 | **10** | **Whole-manual consistency pass** | ⬜ | Check terminology, page structure, links, workflow continuity, duplicated material and cross-manual implications across all 42 existing pages. |
 | **11** | **Info-Hub cheat sheet** | ⬜ | Build last, once the procedures and Common Tasks routes are stable. |
@@ -168,3 +169,24 @@ This document consolidates the review approach agreed before the review with the
 | 87 | Describe a generated file at the point when it first exists. For a procedure covering approval and publication, make clear that `approval.yml` and `public_manifest.csv` are outputs of approval and inputs to the later publication action. |
 | 88 | Prefer plain access and purpose descriptions such as **private proposed file**, **private approval record**, **official public analytical copy** and **public website copy**. Use terms such as **authoritative**, **payload**, **receipt**, **fingerprint**, **metadata** or **staging** only when their extra precision is necessary, and explain them. |
 | 89 | Review decision wording against the implemented automation. Tell the operator to decide, confirm or run the action; state separately which evidence file the workflow creates. Never imply a manual record-keeping step that does not exist. |
+
+## Workflow and reference architecture
+
+| # | Guiderail |
+|---:|---|
+| 90 | Product-specific workflow pages are the sole step-by-step operating guides. Do not maintain a second generic procedure that duplicates those steps. |
+| 91 | Use Reference pages for cross-cutting implemented rules that staff may need to inspect without running a procedure. Reference pages explain the rule and its scope, but link to workflow pages for commands, review and approval actions. |
+| 92 | The agreed rules registers are **CVD death-classification rules**, **CVD event–death linkage rules** and **Disclosure-control rules**. Keep the sidebar section name as **Reference**, not **Quick reference**. |
+| 93 | Reference pages are exempt from the numbered how-to structure and Input/Code/Output file-map callouts when they do not run a process. Use **Rules at a glance**, visible rule tables, a short visible **Where the rules are implemented** section and, where useful, one collapsed table of supporting implementation files. |
+| 94 | A rules reference must be checked directly against the implemented `.do` files, controlling dictionaries and contracts. List every named rule or complete decision branch needed to understand the implementation; do not infer completeness from an older manual page. |
+| 95 | Name the exact `.do` file location of each rule set. When the rules span several files, say that no single rules file exists and list the controller and ordered helpers. |
+| 96 | Keep core rules visible. Collapse only supporting implementation maps or detailed provenance that would otherwise make the page visually intimidating. |
+| 97 | When an implemented rule changes, update its code, tests, controlling contract or dictionary, workflow page and rules reference in the same controlled change. A routine data release must not alter fixed rules. |
+| 98 | The former `site/technical/controls/` pages remain temporarily in the repository but are not part of the final sidebar. During Stages 3–5, inspect them for unique content and move that content into the relevant CVD event, mortality or reporting workflow page rather than copying a generic procedure forward. |
+| 99 | After Stages 3–5, hold a retirement checkpoint: confirm all useful control-page content and inbound links have been migrated, then remove the obsolete control pages and section listing. Do not delete them before that check. |
+
+## Architecture decision register
+
+| Decision | Status | Agreed treatment |
+|---|:---:|---|
+| **TM-01 — Retire duplicated generic control pages** | Agreed; staged | Use the product-specific workflow pages as the operational instructions. Use the three rules registers for cross-cutting classification, linkage and disclosure rules. Keep the old control files temporarily as Stage 3–5 source material, remove them from navigation now, and retire them only after the migration checkpoint. |

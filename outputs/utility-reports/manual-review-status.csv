@@ -90,10 +90,6 @@ Technical Manual,Rebuild the report listings,site/technical/workflows/reporting/
 Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,not-reviewed,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,not-reviewed,Page YAML
-Technical Manual,Review and publication controls,site/technical/controls/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,Review an analytical package,site/technical/controls/review-release.qmd,not-reviewed,Page YAML
-Technical Manual,Review disclosure control,site/technical/controls/disclosure-control.qmd,not-reviewed,Page YAML
-Technical Manual,Approve and publish an analytical package,site/technical/controls/approve-publish.qmd,not-reviewed,Page YAML
 Technical Manual,Operate the website,site/technical/website/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,not-reviewed,Page YAML
 Technical Manual,Update website content,site/technical/website/update-content.qmd,not-reviewed,Page YAML
@@ -101,8 +97,15 @@ Technical Manual,Maintain and recover,site/technical/maintenance/section-index.q
 Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-change.qmd,not-reviewed,Page YAML
 Technical Manual,"Files, releases and versions",site/technical/maintenance/files-releases-versions.qmd,not-reviewed,Page YAML
 Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.qmd,not-reviewed,Page YAML
-Technical Manual,System reference,site/technical/reference/section-index.qmd,not-reviewed,Page YAML
+Technical Manual,Reference,site/technical/reference/section-index.qmd,not-reviewed,Page YAML
+Technical Manual,CVD death-classification rules,site/technical/reference/cvd-death-classification-rules.qmd,not-reviewed,Page YAML
+Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,not-reviewed,Page YAML
+Technical Manual,Disclosure-control rules,site/technical/reference/disclosure-control-rules.qmd,not-reviewed,Page YAML
 Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
 Technical Manual,Validation of BNR CVD Suppression Rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML
+Technical Manual,Approve and publish an analytical package,site/technical/controls/approve-publish.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Review disclosure control,site/technical/controls/disclosure-control.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Review an analytical package,site/technical/controls/review-release.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Review and publication controls,site/technical/controls/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup-pass1.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup-pass2.qmd,reviewed-by-irh,Page YAML

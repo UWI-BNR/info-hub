@@ -60,24 +60,6 @@ Follow the implemented CVD event, mortality and reporting routes.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[CONTROLS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
-
-### Review & publication controls {.card-title}
-
-Review releases, apply disclosure control and record approval.
-
-::: {.mt-auto}
-[Explore section](controls/section-index.qmd){.btn .btn-outline-primary .btn-sm}
-:::
-
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
-::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
-::: {.card-body .d-flex .flex-column}
-
 [INFO-HUB]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
 ### Operate the website {.card-title}
@@ -116,9 +98,9 @@ Make safe changes, manage versions and resolve common problems.
 
 [REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### System reference {.card-title}
+### Rules & reference {.card-title}
 
-Find the principal workflows, commands, files, folders and terms.
+Find the implemented classification, linkage and disclosure rules, together with key commands, files and system locations.
 
 ::: {.mt-auto}
 [Explore section](reference/section-index.qmd){.btn .btn-outline-primary .btn-sm}
@@ -151,6 +133,9 @@ The technical manual documents the code, data processes and system design that s
 - [Analytics environment](getting-started/environment.qmd)
 - [Set up a workstation](getting-started/workstation-setup.qmd)
 - [Analytical workflow map](workflows/overview.qmd)
+- [CVD death-classification rules](reference/cvd-death-classification-rules.qmd)
+- [CVD event–death linkage rules](reference/cvd-event-death-linkage-rules.qmd)
+- [Disclosure-control rules](reference/disclosure-control-rules.qmd)
 - [System reference](reference/index.qmd)
 
 ## Implemented analytical routes
@@ -164,9 +149,9 @@ The technical manual documents the code, data processes and system design that s
 
 ## Publication and maintenance
 
-- [Review an analytical release](controls/review-release.qmd)
-- [Apply disclosure control](controls/disclosure-control.qmd)
-- [Approve and publish a release](controls/approve-publish.qmd)
+- [Review and approve combined CVD metrics](workflows/cvd-events/review-approve.qmd)
+- [Review the mortality release](workflows/mortality/review.qmd)
+- [Approve the reviewed mortality release](workflows/mortality/approve.qmd)
 - [Refresh public presentation products](workflows/reporting/overview.qmd)
 - [Render and publish the website](website/render-publish.qmd)
 - [Make a safe code change](maintenance/safe-code-change.qmd)

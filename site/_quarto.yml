@@ -376,17 +376,6 @@ website:
                 - text: "One-off CVD report"
                   href: technical/workflows/reporting/one-off-report.qmd
 
-        - section: "Review and publication controls"
-          contents:
-            - text: "Section contents"
-              href: technical/controls/section-index.qmd
-            - text: "Review an analytical package"
-              href: technical/controls/review-release.qmd
-            - text: "Review disclosure control"
-              href: technical/controls/disclosure-control.qmd
-            - text: "Approve and publish an analytical package"
-              href: technical/controls/approve-publish.qmd
-
         - section: "Operate the Info-Hub"
           contents:
             - text: "Section contents"
@@ -407,10 +396,16 @@ website:
             - text: "Fix common problems"
               href: technical/maintenance/troubleshooting.qmd
 
-        - section: "Quick reference"
+        - section: "Reference"
           contents:
             - text: "Section contents"
               href: technical/reference/section-index.qmd
+            - text: "CVD death-classification rules"
+              href: technical/reference/cvd-death-classification-rules.qmd
+            - text: "CVD event-death linkage rules"
+              href: technical/reference/cvd-event-death-linkage-rules.qmd
+            - text: "Disclosure-control rules"
+              href: technical/reference/disclosure-control-rules.qmd
             - text: "System reference"
               href: technical/reference/index.qmd
             - text: "CVD suppression validation, 2024-2025"

@@ -1,10 +1,40 @@
 ---
 manual-review-status: not-reviewed
-title: "System reference"
+title: "Reference"
 description: "Choose a Technical Manual page in this section."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD death-classification rules](cvd-death-classification-rules.qmd) {.card-title}
+
+Implemented Heart, Stroke and combined death-classification rules.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [CVD event–death linkage rules](cvd-event-death-linkage-rules.qmd) {.card-title}
+
+Deterministic matching, episode and aggregate unresolved-DCO rules.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Disclosure-control rules](disclosure-control-rules.qmd) {.card-title}
+
+Small-number, reconstruction and public-file protection rules.
+:::
+:::
+:::
 
 ::: {.g-col-12 .g-col-md-6}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
@@ -19,7 +49,7 @@ Principal workflows, commands, files and publication boundaries.
 ::: {.g-col-12 .g-col-md-6}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Suppression validation, 2024–2025](bnr-suppression-validation-2024-2025.qmd) {.card-title}
+### [CVD suppression validation, 2024–2025](bnr-suppression-validation-2024-2025.qmd) {.card-title}
 
 Validation record for the BNR CVD suppression rules.
 :::
@@ -31,4 +61,3 @@ Validation record for the BNR CVD suppression rules.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-
