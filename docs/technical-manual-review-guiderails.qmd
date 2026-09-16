@@ -1,0 +1,133 @@
+---
+title: "BNR Technical Manual review guiderails"
+description: "Review sequence, page standards and validation rules for the section-by-section Technical Manual review."
+date: "2026-09-16"
+toc: true
+toc-depth: 2
+---
+
+## Status
+
+This document consolidates the review approach agreed before the review with the refinements established through the pilot page and Stage 1. It is awaiting approval before Stage 2 begins.
+
+## Review sequence and progress
+
+**Legend:** ✅ completed · 🟨 completed but awaiting approval or minor alignment · ⬜ not started
+
+| Stage | Scope | Progress | What remains |
+|---:|---|:---:|---|
+| **Pilot** | `extract-redcap.qmd` | 🟨 | Pilot content and style accepted. Apply two subsequently agreed conventions to the repository copy: remove the rule below **Technical Manual** and format the short failure guidance as a table. |
+| **1** | **Getting started**: section listing, analytics environment and workstation setup | 🟨 | All three pages revised and technically checked. Latest workstation revision awaits approval. Remove the rule from `environment.qmd`, complete the human edit, update review statuses and rebuild the folder-aware ZIP—the earlier ZIP is now superseded. |
+| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | ⬜ | Review six pages using the approved guiderails. |
+| **3** | **CVD event workflow** | ⬜ | Review the overview and Steps 2–6; then check the accepted Step 1 pilot against the complete workflow. Seven pages in total, six requiring their first full review. |
+| **4** | **CVD mortality workflow** | ⬜ | Review the overview and six workflow steps: seven pages. |
+| **5** | **Reporting workflows** | ⬜ | Review the overview, dashboards, tables, Downloads, report listings, rolling update, annual report and one-off report: eight pages. |
+| **6** | **Operate the Info-Hub** | ⬜ | Review the section listing, website publication procedure and website-content procedure: three pages. |
+| **7** | **Maintain and recover** | ⬜ | Review the section listing, safe code changes, files/releases/versions and troubleshooting: four pages. |
+| **8** | **Quick reference and manual landing page** | ⬜ | Review the three reference pages and the main Technical Manual landing page: four pages. |
+| **9** | **Common Tasks walkthroughs** | ⬜ | Decide the required end-to-end tasks and create concise walkthrough pages linking the relevant technical procedures in sequence. |
+| **10** | **Whole-manual consistency pass** | ⬜ | Check terminology, page structure, links, workflow continuity, duplicated material and cross-manual implications across all 42 existing pages. |
+| **11** | **Info-Hub cheat sheet** | ⬜ | Build last, once the procedures and Common Tasks routes are stable. |
+| **12** | **Final human acceptance test** | ⬜ | Use the Common Tasks material to configure the Info-Hub on a clean Windows 11 machine and perform the principal tasks end to end. Record and correct anything unclear or missing. |
+
+## Review process
+
+| # | Guiderail |
+|---:|---|
+| 1 | Review one coherent section at a time, followed by Ian’s human edit and approval checkpoint. |
+| 2 | Retain a whole-system view throughout. Check how each page fits into upstream and downstream workflows, even when reviewing it individually. |
+| 3 | Before making a Technical Manual change that implies a change to the Operations or Public Methods Manual, report that implication first. |
+| 4 | Keep the manual boundaries clear: **Operations** explains who acts and with what authority; **Technical** explains how to perform the task; **Public Methods** explains what measures mean and how to interpret them. |
+| 5 | Work locally during the review. Do not commit, push or deploy changes unless separately requested. |
+| 6 | After each approved section, provide a folder-aware ZIP using repository-relative paths. |
+| 7 | Preserve `manual-review-status`. Pages remain `not-reviewed` until the human review is complete; later states are `reviewed-by-irh` and, where applicable, `approved-by-bnr`. |
+| 8 | Build cross-system Common Tasks walkthroughs after the individual sections, then use them for the final clean-machine review. |
+| 9 | Build the cheat sheet last, from the stable and approved procedures. |
+
+## Standard page structure
+
+| # | Guiderail |
+|---:|---|
+| 10 | Write operational pages as concise, numbered, step-by-step how-to guides. |
+| 11 | Make every page usable on its own. State its purpose, prerequisites, command location, required inputs, expected result and next operational decision. |
+| 12 | Use **What this chapter does**, **What this step does** or **What this page explains**, according to the page type. |
+| 13 | Do not place a Markdown horizontal rule between the **Technical Manual** flag and the first second-level heading. The YAML `---` delimiters at the start of the source must remain. |
+| 14 | Add **Procedure at a glance** near the top of procedural pages using `appearance="simple"`. Use that simple callout style only for this top summary. |
+| 15 | Conceptual pages may use an appropriate alternative such as **System at a glance** rather than forcing a procedural summary. |
+| 16 | Keep core instructions visible. Do not collapse Stata command-line alternatives, menu alternatives or other routine operating routes. |
+| 17 | Use collapsed note callouts selectively for lengthy setup stages, secondary explanation, recovery guidance or genuinely complex sub-procedures. |
+| 18 | Where a long procedure has distinct stages, one collapsed note per stage is acceptable. Do not use callouts merely as decoration. |
+| 19 | End with only one to three genuinely useful related procedures. Do not link to the next page merely for navigation; Quarto already provides previous/next routing. |
+| 20 | Prefer tables where they make exact mappings, expected results, files, problems or actions easier to scan. |
+
+## Failure and recovery guidance
+
+| # | Guiderail |
+|---:|---|
+| 21 | Put **If X does not complete** guidance near the end of the page in a collapsed callout. |
+| 22 | Keep it subordinate to the normal procedure. Failure should not dominate the page or imply that routine failure is expected. |
+| 23 | State, where relevant, that the workflow should complete routinely while the REDCap structure remains unchanged and source data remain valid. |
+| 24 | Include only a small number of likely or consequential problems, particularly where the correct response may not be obvious. Do not catalogue generic or self-evident errors. |
+| 25 | A slightly fuller treatment is acceptable inside the collapsed callout, preferably as a compact **Situation / Action** table. |
+| 26 | Where unusual data cause a stop, direct the operator to correct the source record in REDCap and rerun the controlled process. Never instruct them to edit generated CSV, Stata, metadata or publication files. |
+| 27 | Provide a link to the central troubleshooting page for less common problems. |
+
+## Plain language and terminology
+
+| # | Guiderail |
+|---:|---|
+| 28 | Write to the person performing the task, not to the original developer. Remove internal design commentary unless the operator needs it to make a decision. |
+| 29 | Use short, direct, plain-language sentences while retaining exact technical meaning. |
+| 30 | Avoid unnecessarily computational or administrative wording. Prefer **set up** to **provision**, for example. |
+| 31 | Be explicit about **data release**, **data-package release**, **report publication** or **website deployment**. Do not use the unqualified word **release** where its meaning could be unclear. |
+| 32 | Replace jargon such as **manifested files** with plain wording such as **the files listed in the approved manifest**. |
+| 33 | Use UK English consistently: for example, *authorised*, *organisation* and *licence* as a noun. |
+| 34 | Link to current official landing pages rather than version-specific installer URLs. Explain the benefit to the operator—for example, that the link will lead to the current installer whenever the page is used. |
+| 35 | Keep filenames, script names, paths, menu labels, status messages and commands exact even when simplifying the surrounding explanation. |
+
+## Commands and operating instructions
+
+| # | Guiderail |
+|---:|---|
+| 36 | State exactly where every command must be entered: Stata command window, Windows PowerShell, VS Code PowerShell terminal or another named interface. |
+| 37 | Explain once how to open the standard **VS Code PowerShell terminal**; later pages may use that established shorthand. |
+| 38 | State what successful commands should print, create or change. A new operator should be able to recognise success without guessing. |
+| 39 | Show routine Stata command-line and menu routes together. Do not hide either route in a collapsed callout. |
+| 40 | When a command supports `replace`, show the complete routine command and a second complete command containing `replace`. Do not describe `replace` only as a bullet or fragment. |
+| 41 | For Git actions, provide both the VS Code interface route and equivalent commands, followed by the expected result. Do not assume prior Git knowledge. |
+| 42 | Routine changes use a development branch. Pull GitHub’s `main` into local `main`, create and work on a development branch, push that branch to GitHub, and merge it through a pull request. Do not describe GitHub as “pulling” a local branch. |
+| 43 | Do not instruct users to push directly to protected `main`. After a GitHub merge, update local `main` by pulling from GitHub. |
+| 44 | Treat `start-info-hub-edit.bat` as the normal Windows start-of-day route. Explain that it opens VS Code, activates the environment for Quarto preview and opens the local site, but does not update Git, choose a branch, commit, publish or deploy. |
+
+## Workstation and software conventions
+
+| # | Guiderail |
+|---:|---|
+| 45 | State the practical workstation baseline near the top of the setup page: 64-bit Windows 11, four logical processor cores, 8 GB RAM minimum with 16 GB recommended, sufficient storage, reliable internet and the necessary access and licences. |
+| 46 | Use WinGet as the preferred Windows 11 installation route. Always provide the official installer page as the fallback when WinGet is unavailable or does not complete. |
+| 47 | Require Firefox in its normal 64-bit installation location because the standard edit-session launcher is configured to use it. |
+| 48 | Keep Python 3.13 as the tested baseline. Do not recommend “the latest Python” until that version has been tested with the repository packages and the environment check, CI configuration and frozen requirements have been updated together. |
+| 49 | Distinguish required runtime software from optional editor aids. Explain whether the workflow can still operate when an extension is unavailable. |
+
+## Technical and operational accuracy
+
+| # | Guiderail |
+|---:|---|
+| 50 | Check every procedure against the actual scripts, dialogs, menus, configuration templates, paths, filenames and output messages. Do not rely solely on an earlier manual page. |
+| 51 | Preserve the system boundary: Stata owns surveillance preparation, analysis, disclosure processing and controlled analytical publication; Python performs defined support tasks; Quarto presents approved public products. |
+| 52 | Distinguish three separate events: Stata publishes the approved analytical package; Quarto renders the local static site; GitHub Actions deploys the live website. Success at one stage does not prove completion of the next. |
+| 53 | Keep confidential data, tokens, staging material and review evidence outside the public repository. Deidentified data are not automatically approved public data. |
+| 54 | Never recommend repairing generated outputs manually. Correct the earliest affected source data, configuration, reference file or code and rerun the controlled workflow. |
+| 55 | Automated success messages do not replace human review, disclosure assessment or publication approval. |
+| 56 | Prefer the simplest maintainable route that a future mixed-skill team can operate confidently. Avoid additional tooling or abstraction without a clear operational benefit. |
+
+## Validation and handover
+
+| # | Guiderail |
+|---:|---|
+| 57 | Check local links after each section and review whether each link is useful, not merely whether its target exists. |
+| 58 | Check callout and code-fence balance, Quarto syntax, paths and repository diffs. Run a complete local Quarto render whenever the executable is available. |
+| 59 | Keep related-procedure links descriptive and limited. Check links into the Operations and Public Methods manuals as part of the human review. |
+| 60 | After each section, identify anything that still depends on human judgement, live credentials, authorised private data or a Windows-only test. |
+| 61 | During the whole-manual pass, standardise terminology and structure without erasing necessary differences between conceptual, procedural and reference pages. |
+| 62 | The final acceptance test is operational: configure a clean machine and perform the Common Tasks. Any point requiring undocumented prior knowledge is a documentation defect. |
