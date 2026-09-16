@@ -67,7 +67,7 @@ Technical Manual,Getting started,site/technical/getting-started/section-index.qm
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,not-reviewed,Page YAML
+Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,not-reviewed,Page YAML
 Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Prepare the confidential dataset,site/technical/workflows/cvd-events/prepare-confidential.qmd,not-reviewed,Page YAML

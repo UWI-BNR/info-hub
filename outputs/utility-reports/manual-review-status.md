@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 37 | 7 | 0 | 0 | 44 |
+| Technical Manual | 0 | 36 | 8 | 0 | 0 | 44 |
 
 ## Public Methods Manual
 
@@ -90,7 +90,7 @@
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
 | Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
 | Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
-| Analytical workflows | `site/technical/workflows/overview.qmd` | Not reviewed | Page YAML |
+| Analytical workflows | `site/technical/workflows/overview.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Not reviewed | Page YAML |
 | Extract a REDCap release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
 | Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Not reviewed | Page YAML |

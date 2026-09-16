@@ -18,7 +18,7 @@ We use Stata to control the production of public release datasets. Using these p
 flowchart TB
     A["Authorised source data"] --> B["Private preparation and analysis"]
     B --> C["Automated checks and human review"]
-    C --> D["Approval of the exact candidate"]
+    C --> D["Approval of the exact reviewed files"]
     D --> E["Controlled analytical publication"]
     E --> F["Local Quarto render and review"]
     F --> G["GitHub deployment"]
@@ -40,26 +40,28 @@ The CVD event and mortality data-release workflows remain separate. Dashboards, 
 
 ## Refresh website products that use approved outputs
 
-A data-package release or report publication also prompts updates to several website products. These are not separate workflows, and they occur whener a new data release package arrive is published to the Info-Hub `site/` location. 
+A data-package release or report publication can also require one or more website products to be refreshed. These are presentation or indexing procedures, not separate analytical workflows.
 
 | Website product | Approved input | Guide |
 |--|---|---|
 | CVD dashboards | Current approved CVD event or mortality files | [Refresh the CVD dashboards](reporting/dashboard-regeneration.qmd) |
 | CVD tables | Current approved CVD event and mortality files | [Refresh the CVD tables](reporting/tabulation-regeneration.qmd) |
-| Downloads page | Approved catalogue records and ZIP packages | [Rebuild the Downloads page](reporting/downloads-page-regeneration.qmd) |
-| Report listings | Published report landing-page metadata | [Rebuild the report listings](reporting/report-listings-regeneration.qmd) |
+| Downloads page | Approved catalogue records—small `.yml` files that describe each download—and ZIP packages | [Rebuild the Downloads page](reporting/downloads-page-regeneration.qmd) |
+| Report listings | Published landing-page details, including each report's title, date and category | [Rebuild the report listings](reporting/report-listings-regeneration.qmd) |
 
 These procedures do not prepare source data, calculate surveillance measures or approve and publish an analytical package. The [reporting and presentation overview](reporting/overview.qmd) brings all reporting and refresh procedures together.
 
-## Follow the common workflow control pattern
+## Follow the common control pattern
 
-1. Build analytical files and review candidates in the private workspace.
+1. Create the proposed analytical files and their review evidence in the private workspace.
 2. Run the automated checks and complete the required human analytical and disclosure review.
-3. If a problem is found, correct the source data, configuration, reference file or version-controlled code and rerun from the earliest affected step.
-4. An authorised **BNR Lead or BNR Analyst** approves the exact reviewed candidate through its Stata approval action.
-5. Run the separate Stata publication action, which verifies the approval and copies only the files listed in the approved manifest.
+3. If a problem is found, correct the source data, local settings, reference file or code tracked by Git and rerun from the earliest affected step.
+4. An authorised **BNR Lead or BNR Analyst** approves the exact reviewed files through the product's Stata approval action.
+5. Run the separate Stata publication action. It verifies the approval and copies only the files listed in `public_manifest.csv`, the file list generated during approval.
 6. Render and inspect the Info-Hub locally.
 7. Merge the reviewed website change into `main` through a GitHub pull request, allow GitHub Actions to deploy it and check the live website.
+
+The rolling three-month update is deliberately narrower. It verifies and freezes already-approved event and mortality data-release files and uses only the display calculations authorised in its controlled template. It does not create another analytical approval step.
 
 ## Know the responsibilities
 
@@ -68,10 +70,10 @@ These procedures do not prepare source data, calculate surveillance measures or 
 | **BNR Analyst** | Runs the analytical workflow and reviews the results and supporting evidence. |
 | **BNR Lead** | Holds operational and governance responsibility. |
 | **Authorised BNR Lead or BNR Analyst** | Records approval of the exact analytical package. |
-| **BNR Developer** | Maintains the version-controlled analytical and publication implementation; this role does not replace analytical approval. |
+| **BNR Developer** | Maintains the analytical and publication code tracked by Git; this role does not replace analytical approval. |
 | **Publisher** | Runs the controlled publication action only after approval has been recorded. |
 
-One authorised person may perform more than one action where BNR governance permits, but preparation, review, approval, analytical publication and website deployment remain separate recorded actions.
+One authorised person may perform more than one action where BNR governance permits, but preparation, review, approval, analytical publication and website deployment remain separate actions with their own evidence.
 
 ## Related procedures
 

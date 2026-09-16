@@ -43,6 +43,47 @@ Use a workstation that meets this practical BNR baseline:
 | **8** | Record and verify the workstation setup | Git, private inputs, Stata and Quarto have all been inspected. |
 :::
 
+::: {.callout-note collapse="true" title="Input files and retained assets"}
+
+| File, asset or source | Purpose and required check |
+|---|---|
+| `https://github.com/UWI-BNR/info-hub.git` | Public Info-Hub project tracked by Git. Download a linked working copy and confirm that Git's normal name for the GitHub copy, `origin`, uses this address. |
+| `scripts/stata/config/bnr_paths_TEMPLATE.do` | Template for the standard public and private folder settings. Use the copy tracked in the current project version. |
+| `requirements.txt` | Direct Python packages installed for routine operation. Use Python 3.13 and install from the repository root. |
+| `requirements-freeze.txt` | Complete Windows/Python 3.13 environment tested at handover. Use for comparison or controlled reproduction, not routine installation. |
+| Location selected for `$BNR_REDCAP_TOKEN_FILE` | CVD REDCap token file used for authorised event extracts. Store outside Git with the token alone on one line. |
+| Location selected for `$BNR_MORT_REDCAP_TOKEN_FILE` | Mortality REDCap token file used for authorised mortality extracts. Store outside Git with the token alone on one line. |
+| `$BNR_PRIVATE/data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Retained historical CVD event source used by Step 2. Restore through the approved secure-storage process. |
+| `$BNR_PRIVATE/data/reference/population/wpp2024_brb_population_2010_2035_5y.dta` | Approved Barbados population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
+| `$BNR_PRIVATE/data/reference/population/who_world_standard_2000_2025.dta` | Approved standard-population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
+| `site/_extensions/quarto-ext/fontawesome/` | Committed Font Awesome extension used by the site. Confirm that the directory is present after cloning; do not reinstall it routinely. |
+:::
+
+::: {.callout-note collapse="true" title="Code and configuration files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/config/bnr_paths_TEMPLATE.do` | Defines and checks the standard workstation folder settings. Copy it to the local settings file that Git deliberately ignores, then enter the machine-specific public folder, private folder and token-file paths. |
+| `scripts/python/check-python-environment.py` | Checks Python 3.13 and the required project packages. Run it directly from the repository root after installing `requirements.txt`. |
+| `scripts/stata/menu/bnr_menu.do` | Builds the **User > BNR** workflow menu. The workstation's `profile.do` calls it automatically. |
+| `site/_quarto.yml` | Defines the Quarto website and the commands that run automatically before each site build. `quarto preview` and `quarto render` read it automatically. |
+| `start-info-hub-edit.bat` | Opens VS Code, activates the project environment for preview, starts Quarto and opens the local site in Firefox. Double-click it from the repository root for a normal editing session. |
+| Personal `profile.do` | Loads BNR paths and the menu and configures Stata's Python executable. Create it in Stata's personal directory; Stata runs it automatically at startup. |
+:::
+
+::: {.callout-note collapse="true" title="Output files and folders"}
+
+| File or folder | Purpose and access level |
+|---|---|
+| Local path selected for `$BNR_REPO` | Local working copy of the public Info-Hub project, containing code and approved public website files tracked by Git. Never add confidential material or credentials. |
+| Local path selected for `$BNR_PRIVATE` | Private companion workspace containing source data, derived data, reference files, proposed packages awaiting review or publication, work files and logs. Authorised private storage only. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Machine-specific public/private folder and token-file settings. Git deliberately ignores this local file; never commit it. |
+| `venv-info-hub/` | Workstation's installed Python packages and executable. This is a local generated folder; do not commit it. |
+| `profile.do` in Stata's `PERSONAL` directory | Personal Stata startup file that loads the BNR environment automatically. This is a machine-specific local file. |
+| `local-setup-notes.md` | Paths, versions and completed setup checks without token values. This is a machine-specific local file; do not commit it. |
+| `site/_site/` | Locally rendered static site used for inspection. This is generated local output; recreate it through Quarto. |
+:::
+
 ::: {.callout-note collapse="true"}
 ## Stage 1: Install the supporting software
 
@@ -216,9 +257,9 @@ Install the following small set.
 | [Quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto) | QMD editing, preview and Quarto authoring support. |
 | [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) | Python environment and code support. |
 | [Stata Enhanced](https://marketplace.visualstudio.com/items?itemName=kylebarron.stata-enhanced) | Stata syntax colouring, macros, comments and other language-aware highlighting. |
-| [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv) | Makes CSV manifests, QA files and review worklists much easier to inspect by visually separating columns. |
-| [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Workflow YAML validation and completion, plus access to workflow runs and logs from VS Code. |
-| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Validation, formatting and completion for the many `.yml` metadata and approval files used by BNR. |
+| [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv) | Makes generated file lists, automated-check files and review worklists easier to inspect by visually separating columns. |
+| [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Checks GitHub Actions workflow `.yml` files and provides access to workflow runs and logs from VS Code. |
+| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Checks and formats the `.yml` files used for descriptive information and approval records. |
 
 Install them from a VS Code PowerShell terminal:
 
@@ -259,7 +300,7 @@ Do not continue until the four version commands return normally and the Firefox 
 ::: {.callout-note collapse="true"}
 ## Stage 2: Join, clone and check the public repository
 
-The BNR `info-hub` repository is **public by design**. Anyone can read or clone it, but only people given suitable BNR repository permissions can push changes into it.
+The BNR `info-hub` repository—a project folder tracked by Git—is **public by design**. Anyone can read it or clone it, meaning download a working copy linked to GitHub. Only people given suitable BNR permissions can upload changes to it.
 
 A team member who will maintain the site therefore needs both:
 
@@ -328,7 +369,7 @@ git status
 git remote -v
 ```
 
-`git status` should begin with `On branch main` on a new clone and should not report unexplained changes. `git remote -v` should show this address for both fetch and push:
+`git status` should begin with `On branch main` on a new clone and should not report unexplained changes. `git remote -v` lists the linked GitHub location, which Git normally calls `origin`. It should show this address for both downloading (`fetch`) and uploading (`push`):
 
 ```text
 https://github.com/UWI-BNR/info-hub.git
@@ -531,7 +572,7 @@ The remaining standard globals are derived automatically, including:
 
 ### 2. Configure the REDCap token files
 
-Each token text file must:
+Each token is a secret key that allows the extraction software to connect to the relevant REDCap project. Each token text file must:
 
 - be stored outside the public repository;
 - contain only the API token on one line; and
@@ -582,7 +623,7 @@ The repository uses a local Python virtual environment called:
 
 `venv-info-hub`
 
-Using a project environment keeps BNR support packages separate from unrelated Python work.
+A virtual environment is a local folder containing the Python executable and packages used by this project. It keeps BNR support packages separate from unrelated Python work.
 
 ### 1. Create the environment
 
@@ -629,8 +670,8 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-This installs the supported analyst/notebook packages and **PyCap**, which the
-REDCap extraction imports as `redcap`.
+This installs the supported analyst/notebook packages and **PyCap**, the Python
+package used to connect to REDCap. The extraction code imports it as `redcap`.
 
 ### 4. Check the environment
 
@@ -662,11 +703,11 @@ The two requirement files have different purposes:
 - `requirements.txt` is the maintained list of direct project packages and
   compatible version ranges. Use it for routine workstation setup and CI.
 - `requirements-freeze.txt` records the exact full Windows/Python 3.13
-  environment that was tested at handover, including indirect dependencies.
+  environment that was tested at handover, including packages installed automatically by other packages.
   Use it to compare or reproduce a known environment when troubleshooting; it
   is not the routine cross-platform installation file.
 
-After an authorised dependency change has been installed and tested on the
+After an authorised Python package change has been installed and tested on the
 canonical BNR Windows workstation, refresh the frozen record from the repository
 root:
 
@@ -795,7 +836,7 @@ In a VS Code PowerShell terminal at the repository root, type:
 .\venv-info-hub\Scripts\Activate.ps1
 ```
 
-The site has a Python pre-render step, so use the project environment when rendering locally.
+The site runs a Python command automatically before each Quarto build, so use the project environment when rendering locally.
 
 ### 3. Render the site
 

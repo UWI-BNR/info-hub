@@ -1,7 +1,7 @@
 ---
 title: "Review disclosure control"
-description: "Check BNR's positive-count-below-six rule and related disclosure protection across a complete proposed public package."
-manual-review-status: not-reviewed
+description: "Check BNR's positive-count-below-six rule and related disclosure protection across all files proposed for publication."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,28 +10,101 @@ Technical Manual
 
 ## What this chapter does
 
-Use this chapter when reviewing the disclosure-controlled candidate produced by a BNR data-release or report workflow.
+Use this chapter when reviewing the disclosure-controlled files produced by a BNR data-release or report workflow.
 
-BNR applies primary suppression to every positive count from **1 to 5**. Zero is not automatically suppressed, but it must still be reviewed in context. Additional values are protected where totals, related breakdowns or repeated views could otherwise reveal a protected count.
+BNR applies **primary suppression** by withholding every positive count from **1 to 5**. Zero is not automatically suppressed, but it must still be reviewed in context. The workflow may also withhold related values where totals, breakdowns or repeated views could otherwise reveal a protected count.
 
 ::: {.callout-tip title="Procedure at a glance" appearance="simple"}
-1. Open the exact private review candidate and its disclosure evidence.
+1. Open the exact private files proposed for publication and their disclosure-review evidence.
 2. Confirm that every positive count from 1 to 5 is protected.
 3. Check that related values cannot reveal a protected count.
 4. Review every public dataset, table, chart, narrative and download together.
-5. Record the disclosure decision against the exact candidate.
+5. Decide whether the exact proposed files are ready for approval.
 :::
 
 ## Before you start
 
 Confirm that the workflow-specific disclosure-control step completed successfully and that you have:
 
-- the exact private candidate proposed for approval;
-- its manifest or fingerprint register;
+- the exact private files proposed for approval;
+- `step5_review_basis.csv` or its product-specific equivalent, which lists the proposed files and their recorded identities;
 - the disclosure worklist or review workbook; and
-- the QA summary produced by the workflow.
+- the automated-check results produced by the workflow.
 
 Do not perform disclosure review on a manually edited copy.
+
+Some exact folder and filenames below contain `candidate` or `qa`. In these names, `candidate` means **proposed for approval**, and `qa` means **quality assurance**, the automated checks created by the workflow.
+
+::: {.callout-note collapse="true" title="Input and disclosure-review files"}
+
+### CVD event data release
+
+**Review folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`
+
+| File | Purpose and required check |
+|---|---|
+| **`step5_review.xlsx`** | **Open this first.** Review the proposed results and disclosure evidence. |
+| `step5_candidate.dta` | Disclosure-controlled proposed dataset. Use it when a workbook check requires the underlying rows. |
+| `step5_disclosure_qa.csv` | Automated disclosure checks. Confirm that every check reports `PASS`. |
+| `step5_equation_audit.csv` | Automated checks of related values after disclosure protection. Confirm that every check reports `PASS`. |
+| `step5_row_audit.dta` | Detailed row-level record of the disclosure-control result. Use it to investigate a row identified in the workbook or automated checks. |
+| `step5_review_basis.csv` | List of the proposed files, with their sizes and SHA-256 change-detection values. Use it to confirm that the review evidence belongs to the files being reviewed. |
+
+### CVD mortality data release
+
+**Review folder:** `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`
+
+| File | Purpose and required check |
+|---|---|
+| **`mort_s4_review_mort_YYYY_MM.xlsx`** | **Open this first.** Review the proposed results and disclosure evidence. |
+| `mort_s4_candidate.dta` | Disclosure-controlled proposed mortality dataset. Use it when a workbook check requires the underlying rows. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Automated review checks. Confirm the workflow's successful result. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | List of the proposed files and their recorded identities. Use it to confirm that the evidence belongs to the files being reviewed. |
+| `mort_burden_suppression_review_mort_YYYY_MM.csv` | Row-level disclosure-review information in CSV format. |
+| `mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet view of the mortality disclosure-review information. Use it to inspect protected values. |
+| `mort_s4_monthly_reference_2015_2019.csv` | Fixed monthly comparison values supplied with the proposed public files. Review these values with the proposed dataset. |
+
+### Annual CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/candidate/`
+
+| File | Purpose and required check |
+|---|---|
+| **`bnr_cvd_annual_report_YYYY_vV.pdf`** | **Open this first.** Review every table, chart and narrative statement together. |
+| `bnr_cvd_public_health_update_YYYY_vV.pdf` | Companion Public Health Update. Confirm that it agrees with the full report. |
+| `index.qmd` | Proposed annual-report landing page and public links. |
+| `public_health_update.qmd` | Proposed Public Health Update landing page and public links. |
+| `report.yml` | Report details used by the workflow. Confirm the intended year, version and source data releases. |
+
+### One-off CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/candidate/`
+
+| File | Purpose and required check |
+|---|---|
+| **`bnr_cvd_oneoff_STUDY_vV.pdf`** | **Open this first.** Review every table, chart and narrative statement together. |
+| `index.qmd` | Proposed report landing page and public links. |
+| `report.yml` | Report details used by the workflow. Confirm the intended study, version and publication date. |
+
+### Structured report disclosure screen, when used
+
+**Review folder:** `$BNR_STAGING/report_reviews/disclosure/REVIEW_ID/`
+
+| File | Purpose and required check |
+|---|---|
+| `disclosure_screen.csv` | Flags obvious small positive counts in a structured count dataset before human review. |
+| `screen_summary.yml` | Identifies the screen and source dataset. Confirm the review identifier; the screen does not replace human disclosure review. |
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | How it is used |
+|---|---|
+| `scripts/stata/metrics/cvd/bnr_step5_suppress_expanded_cvd.do` | Applies the approved CVD event disclosure rules and creates the disclosure-controlled proposed dataset and detailed check files. |
+| `scripts/stata/monthly/bnr_step5_review_expanded_cvd_prepare.do` | Runs the CVD event suppression code and assembles the automated-check files, review file list and workbook. |
+| `scripts/stata/mortality/bnr_mort_s4_review.do` | Checks the mortality package, applies its approved suppression rules and creates the proposed dataset and review evidence. |
+| `scripts/stata/reporting/bnr_report_disclosure_screen.do` | Creates a private small-count screen and summary from a suitable structured count dataset when that utility is used. |
+:::
 
 ## Review the complete package
 
@@ -51,26 +124,26 @@ Check whether a protected value could be calculated from:
 - monthly, quarterly, annual or rolling-period relationships; or
 - another public dataset, table, chart, narrative statement or download.
 
-Confirm that the workflow's approved complementary or linked protection prevents each identified reconstruction route.
+Confirm that any additional values needed to protect the small count have also been withheld, so none of these routes can reveal it.
 
 ### 3. Check every presentation route
 
-Review chart labels, tooltips, annotations, tables, downloadable data and narrative together. Quarto may present the approved disclosure-controlled public files, but must not reverse suppression, infer unavailable components or introduce another disclosure-control rule.
+Review chart labels, tooltips, annotations, tables, downloadable data and narrative together. Quarto may present approved disclosure-controlled files, but must not show a withheld count, calculate it from other displayed values or apply a different disclosure rule.
 
-### 4. Record the decision
+### 4. Decide whether the files are ready
 
-Record whether disclosure review is complete for the exact candidate. Retain the review evidence in private controlled storage.
+If every check passes, continue to the product-specific approval action. That Stata action records approval of the exact reviewed files. Keep the workflow-generated review evidence in its private controlled folder.
 
 Do not approve or publish the package if a positive count from 1 to 5 is visible, a protected value can be derived or the disclosure evidence is incomplete.
 
-If the package is unsafe, correct the earliest affected source data or version-controlled code and rerun the workflow. Do not edit generated datasets, tables, charts, metadata, manifests or approval files.
+If the package is unsafe, correct the earliest affected source data or code tracked by Git and rerun the workflow. Do not edit generated datasets, tables, charts, descriptive `.yml` files, generated file lists or approval files.
 
 ::: {.callout-note collapse="true" title="If disclosure review does not pass"}
 | Situation | Action |
 |---|---|
-| A positive count from 1 to 5 is visible | Stop. Correct the disclosure-control implementation and rebuild the candidate. |
-| A protected count can be calculated from related public values | Return the issue for correction in version-controlled code. Rebuild the candidate, then repeat the complete review. |
-| The candidate or disclosure evidence has changed since it was created | Discard it as an approval candidate and rerun the producing workflow step. |
+| A positive count from 1 to 5 is visible | Stop. Correct the source data or disclosure-control code, rebuild the proposed files and repeat the complete review. |
+| A protected count can be calculated from related public values | Correct the code tracked by Git, rebuild the proposed files and repeat the complete review. |
+| A proposed file or its disclosure evidence has changed since it was created | Do not approve it. Rerun the workflow step that creates the proposed files and review evidence. |
 
 For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
 :::

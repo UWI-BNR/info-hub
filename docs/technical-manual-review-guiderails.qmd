@@ -8,7 +8,7 @@ toc-depth: 2
 
 ## Status
 
-This document consolidates the review approach agreed before the review with the refinements established through the pilot page and Stages 1 and 2. It is the working standard for the remaining Technical Manual review.
+This document consolidates the review approach agreed before the review with the refinements established through the pilot page and Stages 1 and 2, including the retrospective rendering and comprehension sweeps. It is the working standard for the remaining Technical Manual review.
 
 ## Review sequence and progress
 
@@ -140,3 +140,31 @@ This document consolidates the review approach agreed before the review with the
 | 64 | When a new Technical Manual guiderail is agreed, add it to this document during the next implementation run and include the updated QMD in that run's folder-aware ZIP. |
 | 65 | On system overview pages, distinguish analytical workflows from presentation or indexing procedures that refresh website products after an approved data-package release or report publication. Link to the relevant downstream technical guides. |
 | 66 | In workflow diagrams, describe boxes as distinct stages and arrows as controlled moves between stages. Do not refer to an arrow itself as the control when the stage and transition both matter. |
+
+## File maps on procedural pages
+
+| # | Guiderail |
+|---:|---|
+| 67 | Every procedural page that reads input files or external data, uses code or configuration files, or creates output files must provide a clear file map. Conceptual pages and section listings are exempt. |
+| 68 | Place the file map after **Before you start**, or after **Procedure at a glance** when the page has no separate prerequisites section, and before the detailed numbered procedure. |
+| 69 | Use separate collapsed note callouts titled **Input files**, **Code files** and **Output files** for the applicable parts of the process. A slightly expanded title such as **Input files and source** is acceptable when it improves accuracy. |
+| 70 | Do not add an empty callout. If a human-review procedure produces a decision but no separate file, describe the decision in the visible procedure and omit the **Output files** callout. |
+| 71 | Present each file map as a compact table. Input tables normally identify the file or source, location, purpose and required checks. Code tables identify the file, purpose and whether it is run directly or called automatically. Output tables identify the file, location, purpose and access level. |
+| 72 | Use exact filenames, repository paths, environment variables and folder patterns. Where names vary by data release, period or version, use an explained placeholder such as `YYYY`, `MM`, `V` or `STUDY`. |
+| 73 | Include the operationally relevant Stata, Python, PowerShell, batch, QMD, template and configuration files that an operator or future maintainer may need to locate, inspect, run or understand. Do not catalogue every imported software library or low-level transitive dependency. |
+| 74 | Distinguish files run directly by the operator from helpers, dialogs, templates and configuration files called automatically. Identify outputs accurately as private source data, review evidence, approval evidence, authoritative public output, website copy or another appropriate access category. |
+| 75 | Keep essential filenames and commands visible in the numbered procedure. The collapsed tables are a reference map and must not hide information required to perform the task. |
+| 76 | Apply this standard retrospectively to applicable pilot, Stage 1 and Stage 2 pages, and to every applicable procedural page in later review stages. |
+| 77 | Prefer ordinary operational language to internal development terms. Where a term such as **candidate**, **manifest**, **payload**, **fingerprint** or **QA** must appear because it is used in code or a filename, explain it in plain language at first use. |
+| 78 | Spell out abbreviations at first use and explain what they mean in the procedure. Do not assume that a new operator knows what an automated check does merely because its filename contains `qa`. |
+| 79 | Make the visible instructions and file-map tables work together. Name the exact file the operator should open or inspect, then state in plain language what that file contains and what the operator should check. |
+| 80 | Do not imply that an operator must manually record, create or edit a control file when the workflow creates it automatically. State the actual decision or action, name the controller that performs it and identify the generated evidence file. |
+| 81 | Tables containing filenames or paths should normally use no more than two columns. Put one file on each row and explain what the operator should check. Show a shared folder or log path once above the table instead of repeating it in table cells. |
+| 82 | Where a set of review files has a clear starting point, place that file first, mark it **Open this first**, and describe when the supporting files should be consulted. |
+| 83 | After the structural and rendering check, perform a separate comprehension sweep. Read the page as a new operator and remove any wording that depends on undocumented knowledge of the codebase or workflow history. |
+| 84 | Distinguish an internal name from the concept it represents. Keep `candidate`, `public_ready`, `qa`, `manifest` or similar text where it is part of an exact filename, folder, command or menu label, but immediately explain the name in ordinary operational language. |
+| 85 | Use the same plain description consistently in the visible steps and file map. A reader should be able to match an instruction to the exact filename and then understand what the file contains and why it must be checked. |
+| 86 | Do not use a generic table row such as **Review files** or **Proposed report files** when the procedure depends on named files. Put each required file on its own row, even when another page describes the same set in more detail. |
+| 87 | Describe a generated file at the point when it first exists. For a procedure covering approval and publication, make clear that `approval.yml` and `public_manifest.csv` are outputs of approval and inputs to the later publication action. |
+| 88 | Prefer plain access and purpose descriptions such as **private proposed file**, **private approval record**, **official public analytical copy** and **public website copy**. Use terms such as **authoritative**, **payload**, **receipt**, **fingerprint**, **metadata** or **staging** only when their extra precision is necessary, and explain them. |
+| 89 | Review decision wording against the implemented automation. Tell the operator to decide, confirm or run the action; state separately which evidence file the workflow creates. Never imply a manual record-keeping step that does not exist. |

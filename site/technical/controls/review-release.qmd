@@ -1,7 +1,7 @@
 ---
 title: "Review an analytical package"
-description: "Complete the common human checks on a private BNR data-release or report candidate before approval."
-manual-review-status: not-reviewed
+description: "Complete the common human checks on the private files proposed for a BNR data release or report publication."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,13 +10,13 @@ Technical Manual
 
 ## What this chapter does
 
-Use this chapter to review the exact private candidate produced by a CVD data-release or report workflow. A successful build is not approval.
+Use this chapter to review the exact private files proposed for a CVD data release or report publication. The workflow code calls this set of files a **candidate**, which is why `candidate` appears in some folder and filenames. A successful build is not approval.
 
 ::: {.callout-tip title="Procedure at a glance" appearance="simple"}
-1. Identify the intended candidate and its source data releases.
-2. Check the automated QA, logs, review evidence and required files.
+1. Identify the intended data-release package or report and its source data releases.
+2. Use the **Input and review files** table below to find the exact files to inspect.
 3. Review the results, disclosure protection, labels and proposed public files.
-4. Record either **Ready for approval** or **Not ready**.
+4. Decide whether the files are **Ready for approval** or **Not ready**.
 5. If ready, continue to the product-specific Stata approval action.
 :::
 
@@ -25,26 +25,102 @@ Use this chapter to review the exact private candidate produced by a CVD data-re
 Confirm that:
 
 - the product-specific build or preparation step completed successfully;
-- you have the private candidate, its manifest and the accompanying review evidence;
+- you have the private folder and review files listed in the table below;
 - the product, reporting period and version are the ones you intend to review; and
-- you are reviewing the candidate in the private workspace, not a website copy or an earlier public package.
+- you are reviewing the proposed files in the private workspace, not a website copy or an earlier public package.
 
-The exact workbook, QA summary, manifest and comparison files differ by workflow. Use the relevant CVD event, mortality, annual-report or one-off-report procedure to locate them.
+Some filenames contain `qa`. This means **quality assurance**: automated checks of expected structures, calculations or disclosure rules. A `PASS` result confirms that the programmed check succeeded; it does not replace human review.
 
-## Review the candidate
+The formal `public_manifest.csv` does not exist yet. The approval action creates this file as a list of the exact files approved for publication. Do not create or edit it during review.
 
-### 1. Confirm its identity
+::: {.callout-note collapse="true" title="Input and review files"}
+
+### CVD event data release
+
+**Review folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`
+
+**Private log:** `$BNR_PRIVATE_LOGS/bnr_cvd_review_prepare_YYYYMM.log`
+
+| File | What it contains and what to check |
+|---|---|
+| **`step5_review.xlsx`** | **Open this first.** Review its summaries of the proposed results, disclosure protection, death-certificate-only (DCO) linkage and excluded source rows. |
+| `step5_candidate.dta` | Private dataset proposed for conversion into public files after approval. Use it when a workbook check requires the underlying rows. |
+| `step5_disclosure_qa.csv` | Automated disclosure-check results. Confirm that every check reports `PASS`. |
+| `step5_equation_audit.csv` | Checks that related values remain mathematically consistent after disclosure protection. Confirm that every check reports `PASS`. |
+| `step5_row_audit.dta` | Detailed row-by-row record of the disclosure-control result. Use it to investigate a row identified in the workbook or automated checks. |
+| `step5_review_basis.csv` | Exact files included in the review, with their recorded sizes and change-detection values. Stata uses these details to detect a changed file at approval. |
+| `cvd_dco_linkage_review_summary_cvd_YYYY_MM.csv` | Non-identifying summary of death-certificate-only (DCO) linkage. Check the linkage results shown in the workbook against this file. |
+| `cvd_source_quarantine_summary_cvd_YYYY_MM.csv` | Summary of source rows excluded from the proposed package. Confirm that every exclusion is understood. |
+
+### CVD mortality data release
+
+**Review folder:** `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`
+
+**Private log:** `$BNR_PRIVATE_LOGS/bnr_mort_s4_review_mort_YYYY_MM.log`
+
+| File | What it contains and what to check |
+|---|---|
+| **`mort_s4_review_mort_YYYY_MM.xlsx`** | **Open this first.** Review the proposed mortality results, disclosure protection, descriptive information and files used. |
+| `mort_s4_candidate.dta` | Private disclosure-controlled dataset proposed for conversion into public files after approval. Use it when a workbook check requires the underlying rows. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Automated review checks. Confirm that every check reports the workflow's successful result. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | Exact files included in the review, with their recorded sizes and change-detection values. Stata uses these details to detect a changed file at approval. |
+| `mort_burden_suppression_review_mort_YYYY_MM.csv` | Row-level disclosure-review information in CSV format. Use it to investigate protected values. |
+| `mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet view of the mortality disclosure-review information. |
+| `mort_s4_monthly_reference_2015_2019.dta` | Private Stata copy of the fixed monthly comparison values. |
+| `mort_s4_monthly_reference_2015_2019.csv` | Proposed public CSV copy of the fixed monthly comparison values. Check the values against the workbook. |
+| `mort_s4_monthly_reference_2015_2019.yml` | Description of the fixed monthly comparison file, including its data-release details. |
+
+### Annual CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/candidate/`
+
+**Private log:** `$BNR_PRIVATE_LOGS/bnr_report_annual_s1_bnr_cvd_annual_report_YYYY_vV.log`
+
+| File | What it contains and what to check |
+|---|---|
+| **`bnr_cvd_annual_report_YYYY_vV.pdf`** | **Open this first.** Review the complete proposed annual report, including all tables, charts, explanations and disclosure protection. |
+| `bnr_cvd_public_health_update_YYYY_vV.pdf` | Proposed companion Public Health Update. Confirm that it agrees with the full report. |
+| `index.qmd` | Proposed annual-report landing page. Check its title, description, dates and PDF link. |
+| `public_health_update.qmd` | Proposed Public Health Update landing page. Check its title, description, dates and PDF link. |
+| `report.yml` | Report identity information. Confirm the report year, version and source data releases. |
+
+### One-off CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/candidate/`
+
+**Private log:** `$BNR_PRIVATE_LOGS/bnr_report_oneoff_s1_bnr_cvd_oneoff_STUDY_vV.log`
+
+| File | What it contains and what to check |
+|---|---|
+| **`bnr_cvd_oneoff_STUDY_vV.pdf`** | **Open this first.** Review the complete proposed report, including all tables, charts, explanations and disclosure protection. |
+| `index.qmd` | Proposed report landing page. Check its title, description, date and PDF link. |
+| `report.yml` | Report identity information. Confirm the study identifier, version and publication date. |
+:::
+
+::: {.callout-note collapse="true" title="Code files that create the review material"}
+
+| File | What it does |
+|---|---|
+| `scripts/stata/monthly/bnr_step5_review_expanded_cvd_prepare.do` | Creates the CVD event proposed dataset, automated-check files, file list and review workbook. |
+| `scripts/stata/mortality/bnr_mort_s4_review.do` | Checks the mortality Step 3 package and creates the disclosure-controlled proposed dataset and review files. |
+| `scripts/stata/reporting/bnr_report_annual_s1_build.do` | Builds the annual-report and Public Health Update files proposed for publication. |
+| `scripts/stata/reporting/bnr_report_oneoff_s1_prepare.do` | Checks and packages the finished one-off PDF with its proposed landing page and report identity file. |
+:::
+
+## Review the proposed private files
+
+### 1. Confirm the package details
 
 Check the product name, package or report identifier, reporting period, version, source data releases and method or code version.
 
-Confirm that these details agree across the manifest, QA evidence, logs and candidate files.
+For CVD event and mortality data releases, compare these details across the main review workbook, the review-basis CSV, the automated-check files and the private log. For reports, compare the PDF, QMD file and `report.yml`.
 
-### 2. Check completion and QA
+### 2. Check completion and automated checks
 
 Confirm that:
 
 - the workflow reports successful completion;
-- every required candidate and review file exists;
+- every file listed for that product in **Input and review files** exists;
 - automated checks report `PASS` or their workflow-specific successful result; and
 - every warning, exclusion, missing-data result or change from the previous public package is understood.
 
@@ -65,25 +141,40 @@ Confirm that positive counts from 1 to 5 and any related values that could revea
 
 Check datasets, tables, charts, labels, tooltips, narrative and downloads together. Follow [Review disclosure control](disclosure-control.qmd) for the full procedure.
 
-### 5. Check the proposed public files
+### 5. Check the files proposed for publication
 
-Confirm that the proposed public package contains only the intended files and contains no confidential records, private paths, credentials, private logs, review workbooks or other private evidence.
+At this stage, `public_manifest.csv` and the final `public_ready` folder do not yet exist. Review the proposed files in these private locations:
 
-## Record the outcome
-
-| Outcome | Action |
+| Product | Files to review |
 |---|---|
-| **Ready for approval** | Retain the private review evidence and proceed to the product-specific Stata approval action. |
-| **Not ready** | Stop. Correct the earliest affected source data, configuration, reference file or version-controlled code, then rebuild and review the new candidate. |
+| **CVD event data release** | `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/step5_candidate.dta` |
+| **CVD mortality data release** | `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/mort_s4_candidate.dta`, together with the proposed public reference CSV and `.yml` file in the same folder |
+| **Annual CVD report** | `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/candidate/` |
+| **One-off CVD report** | `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/candidate/` |
 
-Never edit a generated candidate to make it pass review. Any changed payload is a new candidate and requires a complete review.
+Use the **Input and review files** table above to identify the exact filenames and supporting review evidence.
+
+Confirm that the files proposed for publication contain only the intended information. They must not contain confidential records, direct identifiers, private file paths, credentials, private logs, review workbooks or other private evidence.
+
+For the CVD event and mortality data releases, the approval action later converts the reviewed dataset into the final public files and creates `public_manifest.csv`. For reports, the files in the `candidate` folder are the actual report and landing-page files proposed for publication.
+
+Do not inspect `$BNR_PUBLIC` or the website folders at this stage. Those locations are populated only by the later publication action.
+
+## Decide whether to continue
+
+| Decision | Action |
+|---|---|
+| **Ready for approval** | Continue to the product-specific Stata approval action. That action verifies the review files and creates `approval.yml`, the approval record, and `public_manifest.csv`, the list of files approved for publication. Do not create or change either file manually. |
+| **Not ready** | Stop. Correct the earliest affected source data, local path settings, reference file or code tracked by Git, then rebuild and review the new proposed package. |
+
+Never edit generated files to make them pass review. If any proposed file changes, rebuild it through the workflow and repeat the complete review.
 
 ::: {.callout-note collapse="true" title="If the review cannot be completed"}
 | Situation | Action |
 |---|---|
-| Candidate identity or source data release is unclear | Stop and return to the product-specific build procedure. Confirm which package was created before reviewing it. |
-| A required review file is absent or has changed | Rerun the producing workflow step. Do not reconstruct the evidence or manifest manually. |
-| A result is implausible or unexplained | Ask the appropriate data or analytical owner to investigate the source data, configuration or code. Rebuild from the earliest affected step. |
+| The product, reporting period, version or source data release is unclear | Stop and return to the product-specific build procedure. Confirm which package was created before reviewing it. |
+| A file listed in **Input and review files** is absent or has changed | Rerun the workflow step that creates the review files. Do not reconstruct a review file manually. |
+| A result is implausible or unexplained | Ask the appropriate data or analytical owner to investigate the source data, local settings or code. Rebuild from the earliest affected step. |
 
 For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
 :::
@@ -92,4 +183,4 @@ For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd
 
 - [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing review and decision process.
 - [Review disclosure control](disclosure-control.qmd) — check the complete proposed public package for disclosure risk.
-- [Approve and publish an analytical package](approve-publish.qmd) — continue after the candidate is ready.
+- [Approve and publish an analytical package](approve-publish.qmd) — continue after the proposed files are ready.

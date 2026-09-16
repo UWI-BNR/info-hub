@@ -23,24 +23,24 @@ Keeping these responsibilities separate protects confidential information and ma
 
 ```{mermaid}
 flowchart TB
-    A["REDCap and frozen sources"] --> B["Stata preparation and analysis"]
-    B --> C["Private staging and review"]
+    A["REDCap and fixed historical sources"] --> B["Stata preparation and analysis"]
+    B --> C["Private files prepared for review"]
     C --> D["Human approval"]
     D --> E["Controlled Stata publication"]
-    E --> F["Authoritative public package"]
-    F --> G["Website mirror and Quarto"]
+    E --> F["Official public analytical copy"]
+    F --> G["Website copies and Quarto"]
     G --> H["GitHub Pages"]
 ```
 
-The boundary between **Human approval** and **Controlled Stata publication** is deliberate. An `approval.yml` receipt records approval of an exact package; it does not itself publish that package.
+The boundary between **Human approval** and **Controlled Stata publication** is deliberate. `approval.yml` is the approval record for an exact package; creating it does not itself publish that package.
 
 ## Know which tool owns each task
 
 | Tool | Responsibility |
 |--|----|
 | **REDCap** | Operational source for current CVD event records and mortality death-certificate records. |
-| **Stata** | Extraction control, preparation, analytical derivation, surveillance metrics, disclosure-control processing, reports and controlled publication. |
-| **Python** | REDCap API access, checks that the required Python software is installed, and adds navigation and page formatting to annual-report PDFs created by Stata. It does not calculate surveillance measures. |
+| **Stata** | Extraction control, preparation, analytical calculations, surveillance measures, disclosure-control processing, reports and controlled publication. |
+| **Python** | Uses REDCap's secure software connection to obtain authorised extracts, checks that the required Python software is installed, and adds navigation and page formatting to annual-report PDFs created by Stata. It does not calculate surveillance measures. |
 | **Quarto** | Website pages, dashboards, tables, report landing pages and manuals using approved public information. |
 | **Git** | Local version control for code and website source. |
 | **GitHub** | Shared public repository and deployment of the static website. |
@@ -49,12 +49,12 @@ New analytical calculations belong in Stata code unless a formally approved desi
 
 ## Locate the two working roots
 
-Every workstation has a public repository root and a separate private root.
+Every workstation has a public project folder and a separate private folder. The public folder is a Git repository: a project folder whose changes are tracked by Git.
 
 | Global | Location | Contains |
 |--|---|---|
-| `$BNR_REPO` | Local clone of `info-hub` | Code, manuals, approved public packages and Quarto source. |
-| `$BNR_PRIVATE` | Authorised private companion workspace | Identifiable data, private derived data, reference assets, staging packages and logs. |
+| `$BNR_REPO` | Local working copy of `info-hub` | Code, manuals, approved public packages and Quarto source. |
+| `$BNR_PRIVATE` | Authorised private companion workspace | Identifiable data, private derived data, reference assets, proposed packages awaiting review or publication, and logs. |
 
 The machine-specific file `scripts/stata/config/bnr_paths_LOCAL.do` defines both roots and the paths to the two REDCap token files:
 
@@ -71,25 +71,25 @@ These commands display configured paths, not token contents. The private root, t
 
 | Global or path | Purpose |
 |---|----|
-| `$BNR_DATA_RAW` | Private REDCap source snapshots. |
+| `$BNR_DATA_RAW` | Private saved copies of REDCap source data. |
 | `$BNR_DATA_FROZEN` | Fixed historical source datasets. |
-| `$BNR_DATA_DERIVED` | Confidential cumulative data and deidentified analytical inputs. |
-| `$BNR_STAGING` | Exact candidate packages, review evidence and approval records. |
+| `$BNR_DATA_DERIVED` | Confidential cumulative data and analytical inputs with direct identifiers removed. |
+| `$BNR_STAGING` | Proposed files awaiting review or publication, together with private review and approval evidence. |
 | `$BNR_PRIVATE/data/reference/` | Controlled population and other analytical reference assets. |
 | `$BNR_PRIVATE_WORK` | Other controlled private working files. |
 | `$BNR_PRIVATE_LOGS` | Operational Stata logs. |
 
 Deidentified analytical data remain private until a product passes its disclosure, review, approval and publication pathway. **Deidentified does not mean approved for publication.**
 
-Do not correct generated private files by hand. Correct the earliest affected source record, reference asset, configuration or code, then rerun the controlled workflow.
+Do not correct generated private files by hand. Correct the earliest affected source record, reference file, local settings or code, then rerun the controlled workflow.
 
-## Distinguish staging, public output and website copies
+## Distinguish proposed files, public output and website copies
 
-### Private staging
+### Private files awaiting review or publication
 
-`$BNR_STAGING` holds proposed data releases. A staging package may contain exact small values, disclosure worklists, review workbooks and other material that must not become public.
+`$BNR_STAGING` is the private holding area for proposed data releases and reports. A proposed package may contain exact small values, disclosure worklists, review workbooks and other material that must not become public.
 
-### Authoritative public output
+### Official public analytical copy
 
 `$BNR_PUBLIC` resolves to:
 
@@ -97,7 +97,7 @@ Do not correct generated private files by hand. Correct the earliest affected so
 outputs/public/
 ```
 
-This is the authoritative approved analytical copy. When there is uncertainty about the official public data package, start here.
+This is the official approved analytical copy. When there is uncertainty about the official public data package, start here.
 
 ### Website copies
 
@@ -109,11 +109,11 @@ site/downloads/files/
 
 Report workflows may also create approved Quarto landing pages beneath `site/surveillance/cvd/reports/`.
 
-These website files are presentation copies. If one is missing or damaged, recreate it from the authoritative public package through the relevant controlled workflow. Do not reconstruct it manually from private staging.
+These website files are presentation copies. If one is missing or damaged, recreate it from the official public analytical copy through the relevant controlled workflow. Do not reconstruct it manually from the private holding area.
 
 ## Keep publication and deployment separate
 
-1. **Publish the analytical output.** Stata verifies the approved package and copies only the files listed in its approved manifest into `$BNR_PUBLIC` and the website mirror.
+1. **Publish the analytical output.** Stata verifies the approved package and copies only the files listed in `public_manifest.csv`—the generated list of approved files—into `$BNR_PUBLIC` and the website folders.
 2. **Render the website.** Quarto checks and builds the static site from public source files.
 3. **Deploy the website.** A reviewed change is merged into `main`; GitHub Actions renders and publishes it through GitHub Pages.
 
@@ -121,13 +121,7 @@ A successful Stata publication does not mean the website has been deployed. A su
 
 ## Apply the human controls
 
-The recognised technical approval roles are:
-
-- **BNR Lead**;
-- **BNR Analyst**; and
-- **BNR Developer**.
-
-Each product-specific procedure states which roles its controller accepts. BNR remains responsible for deciding who is authorised to approve dissemination.
+The production approval actions accept the roles **BNR Lead** and **BNR Analyst**. BNR remains responsible for deciding which named people are authorised to approve publication. A **BNR Developer** maintains the code but that role does not itself provide publication authority.
 
 Automated checks support human judgement; they do not replace review of analytical correctness, disclosure risk, interpretation and publication readiness.
 
@@ -135,8 +129,8 @@ Automated checks support human judgement; they do not replace review of analytic
 
 1. Do not manually correct generated analytical outputs.
 2. Do not treat deidentified data as public data.
-3. Do not copy files from staging into public folders by hand.
-4. Do not use Quarto or Python to recreate authoritative surveillance measures.
+3. Do not copy proposed files from `$BNR_STAGING` into public folders by hand.
+4. Do not use Quarto or Python to recreate the official surveillance measures calculated by Stata.
 5. Do not treat successful execution as human approval.
 
 ## Related procedures

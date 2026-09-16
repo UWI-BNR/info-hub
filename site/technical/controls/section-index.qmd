@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Review and publication controls"
 description: "Review an analytical package, confirm disclosure protection, then approve and publish it."
 ---
@@ -11,7 +11,7 @@ description: "Review an analytical package, confirm disclosure protection, then 
 ::: {.card-body}
 ### [Review an analytical package](review-release.qmd) {.card-title}
 
-Complete the required human checks on the exact private candidate.
+Complete the required human checks on the exact private files proposed for publication.
 :::
 :::
 :::
@@ -31,7 +31,7 @@ Check small-number protection across the complete proposed public package.
 ::: {.card-body}
 ### [Approve and publish an analytical package](approve-publish.qmd) {.card-title}
 
-Bind approval to the exact candidate, then publish only the approved files.
+Approve the exact reviewed files, then publish only those approved files.
 :::
 :::
 :::
