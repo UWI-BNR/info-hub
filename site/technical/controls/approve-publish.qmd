@@ -1,6 +1,6 @@
-﻿---
-title: "Approve and publish a release"
-description: "Bind approval to an exact candidate and publish only its controlled payload."
+---
+title: "Approve and publish an analytical package"
+description: "Approve the exact reviewed BNR data-release or report candidate, then publish only its approved files."
 manual-review-status: not-reviewed
 ---
 
@@ -8,47 +8,98 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Core rule
+## What this chapter does
 
-Approval and publication are separate actions. Approval identifies the exact
-reviewed candidate; publication verifies and promotes that payload without
-recalculation.
+Use this chapter after analytical and disclosure review is complete. Approval and analytical publication are separate Stata actions:
 
-## Current actions
+- **approval** binds the decision to the exact reviewed candidate; and
+- **publication** verifies that approval and copies only the approved files to the authoritative public location and website copy.
 
-| Workflow | Approval | Analytical publication |
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm that review is complete for the exact private candidate.
+2. An authorised BNR Lead or BNR Analyst records approval in Stata.
+3. Check the approval receipt and approved manifest.
+4. Run the separate Stata publication action for the same product and version.
+5. Check the authoritative public package and website copy.
+6. Render, review and deploy the website separately.
+:::
+
+## Before you start
+
+Confirm that:
+
+- the candidate has completed analytical, QA and disclosure review;
+- the product, reporting period, version and source data releases are correct;
+- the candidate, review evidence and manifest are complete and unchanged; and
+- the named approver is authorised by BNR and uses either the **BNR Lead** or **BNR Analyst** role accepted by the production controllers.
+
+Do not approve on the basis of a successful build alone.
+
+## Choose the product-specific actions
+
+Open Stata and use **User > BNR**.
+
+| Product | Approval action | Analytical publication action |
 |---|---|---|
-| CVD events | **Update CVD events dashboard > Step 5**, approval action | **Step 6: Publish approved outputs** |
-| CVD mortality | **Update CVD mortality dashboard > Step 5: Approve reviewed mortality release** | **Step 6: Publish approved mortality outputs** |
+| CVD event data release | **Update CVD events dashboard > Step 5: Review and approve package for release** | **Step 6: Publish approved outputs** |
+| CVD mortality data release | **Update CVD mortality dashboard > Step 5: Approve reviewed mortality release** | **Step 6: Publish approved mortality outputs** |
 | Annual CVD report | **Annual CVD report > Step 2: Approve annual report candidate** | **Step 3: Publish approved annual report** |
 | One-off CVD report | **One-off CVD report publication > Step 2: Approve one-off report candidate** | **Step 3: Publish approved one-off report** |
 
-The rolling three-month update is a one-step build from exact approved event and
-mortality releases. It does not introduce another analytical approval.
+The rolling three-month update has one controlled build action. It uses exact approved event and mortality data-release files and does not create another analytical approval.
 
-## Before approval
+## Record approval
 
-- Complete analytical, QA and disclosure review.
-- Confirm product identity, period, version and source releases.
-- Confirm the candidate and manifest are complete.
-- Identify the authorised approver using a standing BNR role.
-- Keep the candidate and review evidence in private controlled storage.
+1. Open the approval action for the correct product.
+2. Select the same product identity, reporting period and version that were reviewed.
+3. Enter the authorised approver's full name and choose **BNR Lead** or **BNR Analyst**.
+4. Complete every required confirmation only when it is true.
+5. Run the approval action.
+6. Confirm that the Stata operational summary reports the workflow-specific successful approval status.
+7. Open the resulting `approval.yml` and approved manifest. Confirm that they identify the intended package, approver, role and files.
 
-## Before publication
+Approval does not copy the package to the public folders or deploy the website.
 
-- Select the same identity and version that were approved.
-- Require a valid approval record and matching manifest or fingerprint.
-- Read from the controlled public-ready payload only.
-- Stop if a file, identity, checksum or required confirmation differs.
-- Confirm successful post-copy verification.
+## Publish the approved package
 
-## After analytical publication
+1. Open the separate publication action for the same product.
+2. Select the approved identity, reporting period and version.
+3. Run the publication action.
+4. Confirm that the Stata operational summary reports the workflow-specific successful publication status.
+5. Check that the authoritative public package contains the expected files.
+6. Check the website copy and any release-stamped or stable copy created by that workflow.
 
-Inspect the authoritative public package and its website mirror. Quarto may then
-present approved files, and GitHub may deploy reviewed public-safe website
-source. Neither action substitutes for analytical approval or publication.
+The publication controller verifies the approval record, manifest and file fingerprints before copying the files. It must stop if the identity, role, checksum, file count or required confirmation differs from the approved package.
 
-If any approved content must change, correct the source or version-controlled
-code, create the required new version or authorised replacement, and repeat
-review and approval. Never overwrite or manually repair the generated payload.
+## Complete website publication separately
 
+Analytical publication does not make the website change live.
+
+After the Stata publication succeeds:
+
+1. start the normal Info-Hub editing session;
+2. render and inspect the site locally;
+3. review the Git changes on a development branch;
+4. merge the reviewed branch into `main` through a GitHub pull request;
+5. confirm that the GitHub Actions build and deployment succeed; and
+6. check the affected live pages and downloads.
+
+Follow [Render and publish the website](../website/render-publish.qmd) for the exact VS Code, Git and deployment procedure.
+
+::: {.callout-note collapse="true" title="If approval or publication does not complete"}
+These actions should complete routinely when the reviewed candidate and its control files remain unchanged.
+
+| Situation | Action |
+|---|---|
+| The package identity, version or source data release is not the reviewed one | Stop and select the exact reviewed candidate. Do not approve or publish a different package. |
+| The manifest, fingerprint or candidate file has changed | Stop. Rebuild the candidate from the earliest affected step and repeat review and approval. Do not repair the control files manually. |
+| Public output already exists unexpectedly | Stop and confirm why it exists. Use a workflow's replacement route only for an explicitly authorised correction, recovery or higher version. |
+
+For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing responsibilities and decisions.
+- [Render and publish the website](../website/render-publish.qmd) — continue after analytical publication succeeds.
+- [Analytical workflows](../workflows/overview.qmd) — understand how the product-specific workflows fit together.

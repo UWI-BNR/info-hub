@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 39 | 3 | 0 | 0 | 42 |
+| Technical Manual | 0 | 37 | 7 | 0 | 0 | 44 |
 
 ## Public Methods Manual
 
@@ -88,8 +88,8 @@
 | BNR Technical Manual | `site/technical/index.qmd` | Not reviewed | Page YAML |
 | Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
-| Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Not reviewed | Page YAML |
-| Run analytical workflows | `site/technical/workflows/section-index.qmd` | Not reviewed | Page YAML |
+| Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
+| Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
 | Analytical workflows | `site/technical/workflows/overview.qmd` | Not reviewed | Page YAML |
 | Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Not reviewed | Page YAML |
 | Extract a REDCap release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
@@ -114,9 +114,9 @@
 | Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Not reviewed | Page YAML |
 | Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Not reviewed | Page YAML |
 | Review and publication controls | `site/technical/controls/section-index.qmd` | Not reviewed | Page YAML |
-| Review an analytical release | `site/technical/controls/review-release.qmd` | Not reviewed | Page YAML |
-| Disclosure control | `site/technical/controls/disclosure-control.qmd` | Not reviewed | Page YAML |
-| Approve and publish a release | `site/technical/controls/approve-publish.qmd` | Not reviewed | Page YAML |
+| Review an analytical package | `site/technical/controls/review-release.qmd` | Not reviewed | Page YAML |
+| Review disclosure control | `site/technical/controls/disclosure-control.qmd` | Not reviewed | Page YAML |
+| Approve and publish an analytical package | `site/technical/controls/approve-publish.qmd` | Not reviewed | Page YAML |
 | Operate the website | `site/technical/website/section-index.qmd` | Not reviewed | Page YAML |
 | Render and publish the website | `site/technical/website/render-publish.qmd` | Not reviewed | Page YAML |
 | Update website content | `site/technical/website/update-content.qmd` | Not reviewed | Page YAML |
@@ -127,3 +127,5 @@
 | System reference | `site/technical/reference/section-index.qmd` | Not reviewed | Page YAML |
 | System reference | `site/technical/reference/index.qmd` | Not reviewed | Page YAML |
 | Validation of BNR CVD Suppression Rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |
+| Set up a workstation | `site/technical/getting-started/workstation-setup-pass1.qmd` | Reviewed by IRH | Page YAML |
+| Set up a workstation | `site/technical/getting-started/workstation-setup-pass2.qmd` | Reviewed by IRH | Page YAML |

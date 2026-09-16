@@ -1,7 +1,7 @@
 ---
 manual-review-status: not-reviewed
 title: "Review and publication controls"
-description: "Choose a Technical Manual page in this section."
+description: "Review an analytical package, confirm disclosure protection, then approve and publish it."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
@@ -9,19 +9,9 @@ description: "Choose a Technical Manual page in this section."
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Review an analytical release](review-release.qmd) {.card-title}
+### [Review an analytical package](review-release.qmd) {.card-title}
 
-Complete the required human checks before approval.
-:::
-:::
-:::
-
-::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
-::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
-::: {.card-body}
-### [Disclosure control](disclosure-control.qmd) {.card-title}
-
-Apply small-number rules and human disclosure review.
+Complete the required human checks on the exact private candidate.
 :::
 :::
 :::
@@ -29,9 +19,19 @@ Apply small-number rules and human disclosure review.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Approve and publish a release](approve-publish.qmd) {.card-title}
+### [Review disclosure control](disclosure-control.qmd) {.card-title}
 
-Bind approval to the exact candidate and publish it.
+Check small-number protection across the complete proposed public package.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Approve and publish an analytical package](approve-publish.qmd) {.card-title}
+
+Bind approval to the exact candidate, then publish only the approved files.
 :::
 :::
 :::
@@ -41,4 +41,3 @@ Bind approval to the exact candidate and publish it.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

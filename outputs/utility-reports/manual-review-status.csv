@@ -65,8 +65,8 @@ Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-re
 Technical Manual,BNR Technical Manual,site/technical/index.qmd,not-reviewed,Page YAML
 Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,not-reviewed,Page YAML
-Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,not-reviewed,Page YAML
+Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,not-reviewed,Page YAML
 Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,not-reviewed,Page YAML
 Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,reviewed-by-irh,Page YAML
@@ -91,9 +91,9 @@ Technical Manual,Build a rolling three-month CVD update,site/technical/workflows
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,not-reviewed,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,not-reviewed,Page YAML
 Technical Manual,Review and publication controls,site/technical/controls/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,Review an analytical release,site/technical/controls/review-release.qmd,not-reviewed,Page YAML
-Technical Manual,Disclosure control,site/technical/controls/disclosure-control.qmd,not-reviewed,Page YAML
-Technical Manual,Approve and publish a release,site/technical/controls/approve-publish.qmd,not-reviewed,Page YAML
+Technical Manual,Review an analytical package,site/technical/controls/review-release.qmd,not-reviewed,Page YAML
+Technical Manual,Review disclosure control,site/technical/controls/disclosure-control.qmd,not-reviewed,Page YAML
+Technical Manual,Approve and publish an analytical package,site/technical/controls/approve-publish.qmd,not-reviewed,Page YAML
 Technical Manual,Operate the website,site/technical/website/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,not-reviewed,Page YAML
 Technical Manual,Update website content,site/technical/website/update-content.qmd,not-reviewed,Page YAML
@@ -104,3 +104,5 @@ Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.
 Technical Manual,System reference,site/technical/reference/section-index.qmd,not-reviewed,Page YAML
 Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
 Technical Manual,Validation of BNR CVD Suppression Rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML
+Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup-pass1.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup-pass2.qmd,reviewed-by-irh,Page YAML

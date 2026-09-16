@@ -1,6 +1,6 @@
-﻿---
-title: "Review an analytical release"
-description: "Common human checks before approval of a BNR metric or report candidate."
+---
+title: "Review an analytical package"
+description: "Complete the common human checks on a private BNR data-release or report candidate before approval."
 manual-review-status: not-reviewed
 ---
 
@@ -8,40 +8,88 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Review is a separate control
+## What this chapter does
 
-A successful build is not approval. Review the exact private candidate and its
-automated QA before an authorised approver records a decision.
+Use this chapter to review the exact private candidate produced by a CVD data-release or report workflow. A successful build is not approval.
 
-## Common checks
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Identify the intended candidate and its source data releases.
+2. Check the automated QA, logs, review evidence and required files.
+3. Review the results, disclosure protection, labels and proposed public files.
+4. Record either **Ready for approval** or **Not ready**.
+5. If ready, continue to the product-specific Stata approval action.
+:::
+
+## Before you start
 
 Confirm that:
 
-- the product, period, version, source releases and method are the intended ones;
-- logs and receipts report success and required files exist;
-- counts, proportions, rates, trends and denominators are plausible;
-- missingness, exclusions, warnings and changes from the prior release are understood;
-- labels, scope, notes and interpretations match the data;
-- the **n < 6** disclosure rule and any necessary complementary protection have
-  been applied across the complete release;
-- no combination of datasets, tables, charts, text or downloads reveals a
-  protected value; and
-- no confidential record, private path, credential, log or review file is in
-  the proposed public payload.
+- the product-specific build or preparation step completed successfully;
+- you have the private candidate, its manifest and the accompanying review evidence;
+- the product, reporting period and version are the ones you intend to review; and
+- you are reviewing the candidate in the private workspace, not a website copy or an earlier public package.
 
-Use the workflow-specific workbook, manifest, QA summary and comparison outputs;
-the exact files differ between event, mortality, annual and one-off candidates.
+The exact workbook, QA summary, manifest and comparison files differ by workflow. Use the relevant CVD event, mortality, annual-report or one-off-report procedure to locate them.
 
-## Outcomes
+## Review the candidate
 
-- **Ready:** retain the review evidence and proceed to the workflow's separate
-  approval action.
-- **Not ready:** stop, correct the authoritative data, code or configuration,
-  and rebuild from the earliest affected step.
+### 1. Confirm its identity
 
-Never change a generated candidate to make it pass review. A changed payload is
-a new candidate and requires renewed review.
+Check the product name, package or report identifier, reporting period, version, source data releases and method or code version.
 
-See [Disclosure control](disclosure-control.qmd) and
-[Approve and publish](approve-publish.qmd).
+Confirm that these details agree across the manifest, QA evidence, logs and candidate files.
 
+### 2. Check completion and QA
+
+Confirm that:
+
+- the workflow reports successful completion;
+- every required candidate and review file exists;
+- automated checks report `PASS` or their workflow-specific successful result; and
+- every warning, exclusion, missing-data result or change from the previous public package is understood.
+
+Do not treat an automated pass as proof that the results are analytically correct.
+
+### 3. Review the results
+
+Check that:
+
+- counts, percentages, rates, trends and denominators are plausible;
+- related totals and breakdowns are internally consistent;
+- labels, scope, notes, methods and interpretations agree with the data; and
+- unexpected changes have a documented explanation or are returned for investigation.
+
+### 4. Review disclosure protection
+
+Confirm that positive counts from 1 to 5 and any related values that could reveal them are protected across the complete proposed public package.
+
+Check datasets, tables, charts, labels, tooltips, narrative and downloads together. Follow [Review disclosure control](disclosure-control.qmd) for the full procedure.
+
+### 5. Check the proposed public files
+
+Confirm that the proposed public package contains only the intended files and contains no confidential records, private paths, credentials, private logs, review workbooks or other private evidence.
+
+## Record the outcome
+
+| Outcome | Action |
+|---|---|
+| **Ready for approval** | Retain the private review evidence and proceed to the product-specific Stata approval action. |
+| **Not ready** | Stop. Correct the earliest affected source data, configuration, reference file or version-controlled code, then rebuild and review the new candidate. |
+
+Never edit a generated candidate to make it pass review. Any changed payload is a new candidate and requires a complete review.
+
+::: {.callout-note collapse="true" title="If the review cannot be completed"}
+| Situation | Action |
+|---|---|
+| Candidate identity or source data release is unclear | Stop and return to the product-specific build procedure. Confirm which package was created before reviewing it. |
+| A required review file is absent or has changed | Rerun the producing workflow step. Do not reconstruct the evidence or manifest manually. |
+| A result is implausible or unexplained | Ask the appropriate data or analytical owner to investigate the source data, configuration or code. Rebuild from the earliest affected step. |
+
+For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing review and decision process.
+- [Review disclosure control](disclosure-control.qmd) — check the complete proposed public package for disclosure risk.
+- [Approve and publish an analytical package](approve-publish.qmd) — continue after the candidate is ready.

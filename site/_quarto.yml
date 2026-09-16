@@ -380,11 +380,11 @@ website:
           contents:
             - text: "Section contents"
               href: technical/controls/section-index.qmd
-            - text: "Review an analytical release"
+            - text: "Review an analytical package"
               href: technical/controls/review-release.qmd
-            - text: "Disclosure control"
+            - text: "Review disclosure control"
               href: technical/controls/disclosure-control.qmd
-            - text: "Approve and publish a release"
+            - text: "Approve and publish an analytical package"
               href: technical/controls/approve-publish.qmd
 
         - section: "Operate the Info-Hub"

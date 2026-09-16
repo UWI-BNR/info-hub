@@ -1,7 +1,7 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Run analytical workflows"
-description: "Choose a workflow family."
+description: "Understand the common Info-Hub workflows, choose a CVD data-release, or reporting procedure."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
@@ -11,7 +11,7 @@ description: "Choose a workflow family."
 ::: {.card-body}
 ### [Analytical workflow overview](overview.qmd) {.card-title}
 
-How the event, mortality and reporting routes fit together.
+Understand how preparation, review, approval, publication and website deployment fit together.
 :::
 :::
 :::
@@ -19,9 +19,9 @@ How the event, mortality and reporting routes fit together.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [CVD event release workflow](cvd-events/overview.qmd) {.card-title}
+### [CVD event data-release workflow](cvd-events/overview.qmd) {.card-title}
 
-Run the six-step CVD event release.
+Run the six-step workflow for CVD event data releases.
 :::
 :::
 :::
@@ -29,9 +29,9 @@ Run the six-step CVD event release.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [CVD mortality release workflow](mortality/overview.qmd) {.card-title}
+### [CVD mortality data-release workflow](mortality/overview.qmd) {.card-title}
 
-Run the six-step CVD mortality release.
+Run the six-step workflow for CVD mortality data releases.
 :::
 :::
 :::
@@ -41,7 +41,7 @@ Run the six-step CVD mortality release.
 ::: {.card-body}
 ### [BNR reporting workflows](reporting/overview.qmd) {.card-title}
 
-Run rolling, annual and one-off reporting routes.
+Refresh public presentation products or produce rolling, annual and one-off reports.
 :::
 :::
 :::
@@ -51,4 +51,3 @@ Run rolling, annual and one-off reporting routes.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

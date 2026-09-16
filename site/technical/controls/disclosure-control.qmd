@@ -1,6 +1,6 @@
-﻿---
-title: "Disclosure control"
-description: "Apply BNR's n < 6 small-number rule and complete human disclosure review."
+---
+title: "Review disclosure control"
+description: "Check BNR's positive-count-below-six rule and related disclosure protection across a complete proposed public package."
 manual-review-status: not-reviewed
 ---
 
@@ -8,42 +8,75 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Definitive small-number rule
+## What this chapter does
 
-BNR suppresses a count when **n < 6**. The directly identifying frequencies are
-therefore 1â€“5. Zero is not a small positive count, but it must still be reviewed
-in context.
+Use this chapter when reviewing the disclosure-controlled candidate produced by a BNR data-release or report workflow.
 
-Suppression is a release-level control, not only a cell-formatting rule. Review
-the complete set of related public datasets, tables, charts, narrative and
-downloads.
+BNR applies primary suppression to every positive count from **1 to 5**. Zero is not automatically suppressed, but it must still be reviewed in context. Additional values are protected where totals, related breakdowns or repeated views could otherwise reveal a protected count.
 
-## Required review
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Open the exact private review candidate and its disclosure evidence.
+2. Confirm that every positive count from 1 to 5 is protected.
+3. Check that related values cannot reveal a protected count.
+4. Review every public dataset, table, chart, narrative and download together.
+5. Record the disclosure decision against the exact candidate.
+:::
 
-1. Confirm that every count from 1 to 5 is suppressed in the proposed public output.
-2. Check whether totals, subtotals, percentages, rates, complements or repeated
-   views allow a suppressed count to be derived.
-3. Apply complementary suppression or remove a related calculated value where
-   needed to prevent deduction.
-4. Check chart labels, tooltips, annotations, downloadable data and narrative.
-5. Record the human disclosure decision against the exact candidate.
-6. Rebuild through code if the candidate is unsafe; do not edit the generated file.
+## Before you start
 
-## Workflow boundary
+Confirm that the workflow-specific disclosure-control step completed successfully and that you have:
 
-The event and mortality workflows implement product-specific deterministic
-suppression and create private review material. Annual and one-off reports
-require review of their complete PDF and landing-page candidate. The rolling
-update may display only the protected values supplied by approved public metric
-releases and the transformations authorised by its controlled template.
+- the exact private candidate proposed for approval;
+- its manifest or fingerprint register;
+- the disclosure worklist or review workbook; and
+- the QA summary produced by the workflow.
 
-Quarto must not reverse suppression, infer protected components or substitute a
-new disclosure-control rule. Public CVD tables reuse the disclosure-controlled
-approved metric releases.
+Do not perform disclosure review on a manually edited copy.
 
-## Stop conditions
+## Review the complete package
 
-Do not approve or publish when a value from 1 to 5 is visible, a protected value
-can be derived, an unavailable component has been inferred, or the disclosure
-review is incomplete.
+### 1. Check primary suppression
 
+Confirm that every positive count from 1 to 5 is withheld in the proposed public files.
+
+Check the workflow's suppression status and disclosure note, not only the displayed symbol. A suppressed value is not zero or missing analysis; it is a value deliberately withheld from publication.
+
+### 2. Check related values
+
+Check whether a protected value could be calculated from:
+
+- totals or subtotals;
+- percentages, rates or confidence-interval rows linked to a protected count;
+- sex, event-type, age or other category breakdowns;
+- monthly, quarterly, annual or rolling-period relationships; or
+- another public dataset, table, chart, narrative statement or download.
+
+Confirm that the workflow's approved complementary or linked protection prevents each identified reconstruction route.
+
+### 3. Check every presentation route
+
+Review chart labels, tooltips, annotations, tables, downloadable data and narrative together. Quarto may present the approved disclosure-controlled public files, but must not reverse suppression, infer unavailable components or introduce another disclosure-control rule.
+
+### 4. Record the decision
+
+Record whether disclosure review is complete for the exact candidate. Retain the review evidence in private controlled storage.
+
+Do not approve or publish the package if a positive count from 1 to 5 is visible, a protected value can be derived or the disclosure evidence is incomplete.
+
+If the package is unsafe, correct the earliest affected source data or version-controlled code and rerun the workflow. Do not edit generated datasets, tables, charts, metadata, manifests or approval files.
+
+::: {.callout-note collapse="true" title="If disclosure review does not pass"}
+| Situation | Action |
+|---|---|
+| A positive count from 1 to 5 is visible | Stop. Correct the disclosure-control implementation and rebuild the candidate. |
+| A protected count can be calculated from related public values | Return the issue for correction in version-controlled code. Rebuild the candidate, then repeat the complete review. |
+| The candidate or disclosure evidence has changed since it was created | Discard it as an approval candidate and rerun the producing workflow step. |
+
+For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Protecting confidentiality](../../methods/interpretation/confidentiality.qmd) — understand the public explanation of primary and secondary suppression.
+- [Review an analytical package](review-release.qmd) — complete the wider analytical and public-file checks.
+- [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing decision process.
