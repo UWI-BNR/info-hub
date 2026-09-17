@@ -1,14 +1,18 @@
 ---
 title: "CVD event–death linkage rules"
-description: "Reference register for deterministic event–death linkage, episode classification and aggregate unresolved-DCO estimation."
+description: "Check how deaths are linked to CVD events and how unresolved deaths are estimated."
 manual-review-status: not-reviewed
 ---
 
-**Technical Manual**
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
-## What this page records
+## What this page is for
 
-This page records the implemented rules that link classified CVD deaths to hospital-recorded CVD events and estimate additional death-certificate-only (DCO) events. It is a rules reference, not a procedure for running the workflow.
+Use this page to check how a classified CVD death is linked to a hospital event,
+or how unresolved deaths contribute to aggregate estimates. To run the process,
+follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd).
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
@@ -124,11 +128,11 @@ The monthly controller is `scripts/stata/monthly/bnr_step4_metrics.do`. There is
 
 ## Change rule
 
-Do not change identity fields, normalisation, linkage order, uniqueness, contradiction handling, the 0–27-day window, the minimum resolved count, fallback hierarchy or joint allocation during a routine data release. Change the controlling contract, code, tests and this reference together.
+Do not change these rules during a routine data release. For an agreed change,
+update the controlling contract, code, tests and this page together.
 
 ## Related procedures
 
 - [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd) — run the controlled metrics and linkage stages.
 - [CVD death-classification rules](cvd-death-classification-rules.qmd) — understand the Primary and Inclusive mortality inputs to linkage.
 - [Disclosure-control rules](disclosure-control-rules.qmd) — understand how the resulting aggregates are protected before publication.
-

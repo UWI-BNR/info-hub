@@ -977,6 +977,40 @@ body.bnr-tech-manual .bnr-manual-flag--technical {
   color: var(--bnr-manual-text);
 }
 
+/* Compact manual links used in Common Tasks tables. Visible text and colour
+   identify the source manual; colour is never the only cue. */
+.bnr-manual-link {
+  display: inline-block;
+  padding: 0.18rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.bnr-manual-link:hover,
+.bnr-manual-link:focus {
+  text-decoration: underline;
+}
+
+.bnr-manual-link--operations {
+  background: #faf0e8;
+  color: #70401e !important;
+}
+
+.bnr-manual-link--technical {
+  background: #f3eef6;
+  color: #4f3c60 !important;
+}
+
+.bnr-manual-link--methods {
+  background: #e9f3ec;
+  color: #2e593d !important;
+}
+
 
 /* =========================================================================
    BRIEFING PAGES

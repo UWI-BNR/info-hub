@@ -316,6 +316,13 @@ website:
             - text: "Set up a workstation"
               href: technical/getting-started/workstation-setup.qmd
 
+        - section: "Common tasks"
+          contents:
+            - text: "Section contents"
+              href: technical/common-tasks/section-index.qmd
+            - text: "Edit and publish website content"
+              href: technical/common-tasks/edit-publish-website-content.qmd
+
         - section: "Analytical workflows"
           contents:
             - text: "Section contents"

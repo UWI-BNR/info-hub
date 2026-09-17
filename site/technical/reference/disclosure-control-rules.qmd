@@ -1,14 +1,18 @@
 ---
 title: "Disclosure-control rules"
-description: "Reference register for the implemented BNR small-number, reconstruction and public-candidate protection rules."
+description: "Check how small or recoverable values are protected before publication."
 manual-review-status: not-reviewed
 ---
 
-**Technical Manual**
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
-## What this page records
+## What this page is for
 
-This page records the implemented rules that protect small or recoverable values in CVD event and mortality data package releases. Use the relevant workflow page to prepare, review, approve or publish a package.
+Use this page to check why a value in a proposed public CVD event or mortality
+file is protected. To prepare, review, approve or publish a package, follow the
+relevant workflow page.
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
@@ -126,7 +130,8 @@ Mortality rules are implemented in `scripts/stata/mortality/bnr_mort_s4_review.d
 
 ## Change rule
 
-Do not change the 1–5 threshold, public lattice, companion choices, time equations, rate inheritance or national DCO exception during a routine data release. An agreed change must update the controlling contract, implementation, synthetic tests and this reference together.
+Do not change these rules during a routine data release. For an agreed change,
+update the controlling contract, code, synthetic tests and this page together.
 
 ## Related procedures
 

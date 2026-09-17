@@ -1,0 +1,26 @@
+---
+manual-review-status: not-reviewed
+title: "Common tasks"
+description: "Follow a complete BNR task from its starting point to the final check."
+---
+
+Common Tasks are short routes through the detailed manuals. Use the linked
+instructions for commands, files and checks.
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Edit and publish website content](edit-publish-website-content.qmd) {.card-title}
+
+Edit a Quarto page, review it locally and publish it through a GitHub pull request.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

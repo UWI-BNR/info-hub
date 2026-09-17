@@ -1,14 +1,18 @@
 ---
 title: "CVD death-classification rules"
-description: "Reference register for the implemented BNR-Heart, BNR-Stroke and combined death-classification rules."
+description: "Check how death-certificate text is classified as Heart, Stroke or combined."
 manual-review-status: not-reviewed
 ---
 
-**Technical Manual**
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
 
-## What this page records
+## What this page is for
 
-This page is the plain-language reference for the rules used to classify death-certificate text as **BNR-Heart**, **BNR-Stroke** and the combined **BNR-Heart-or-Stroke** endpoint. Use the [classification procedure](../workflows/mortality/classify.qmd) to run the step.
+Use this page to check why death-certificate text received a **BNR-Heart**,
+**BNR-Stroke** or combined **BNR-Heart-or-Stroke** classification. To run the
+step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
@@ -151,7 +155,9 @@ These decisions explain the clinical and mortality-coding basis used by the name
 
 ## Change rule
 
-Do not change a term, evidence class, certificate-position rule, source-structure rule, scenario or combined-family rule during a routine data release. A substantive change requires a new classifier version, revised dictionaries and methods, regression testing, comparison with the frozen version and formal sign-off.
+Do not change these rules during a routine data release. A planned change needs
+a new classifier version, updated dictionaries and methods, regression tests,
+comparison with the frozen version and formal sign-off.
 
 ## Related procedures
 
