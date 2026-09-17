@@ -66,7 +66,7 @@ At the repository root, double-click:
 
 `start-info-hub-edit.bat`
 
-It checks the repository, site configuration and Python environment; opens the repository in VS Code; starts a **BNR info-hub Quarto Preview** Command Prompt; and opens `http://127.0.0.1:4200/` in Firefox.
+It checks that the repository, site configuration and local Python virtual environment exist; opens the repository in VS Code; starts a **BNR info-hub Quarto Preview** Command Prompt; and opens `http://127.0.0.1:4200/` in Firefox.
 
 Keep the preview Command Prompt open while editing. Closing it stops the preview. The launcher does not choose a branch, update Git, commit, publish or deploy anything.
 
@@ -163,6 +163,14 @@ On GitHub, open **Actions** and select the newest **Publish Quarto site** run. C
 Then open the [public Info-Hub](https://uwi-bnr.github.io/info-hub/){target="_blank"} and check the affected pages. For a data-package release or report publication, also check the expected dashboard, table or report page, download link, Downloads catalogue entry and any affected listing.
 
 The task is complete only after the live website is correct.
+
+::: {.callout-warning collapse="true"}
+## If rendering or deployment does not complete
+
+Do not edit generated files or bypass the failed check. Read the first meaningful render or GitHub Actions error, correct the public source, configuration or declared dependency, and repeat the render and deployment route.
+
+For the small number of consequential recovery cases, use [Fix common problems](../maintenance/troubleshooting.qmd#quarto-problems) and [GitHub Actions](../maintenance/troubleshooting.qmd#github-problems).
+:::
 
 ## Related procedures
 

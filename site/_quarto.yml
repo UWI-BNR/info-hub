@@ -391,7 +391,7 @@ website:
               href: technical/maintenance/section-index.qmd
             - text: "Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
-            - text: "Files, releases and versions"
+            - text: "Files, data releases and versions"
               href: technical/maintenance/files-releases-versions.qmd
             - text: "Fix common problems"
               href: technical/maintenance/troubleshooting.qmd

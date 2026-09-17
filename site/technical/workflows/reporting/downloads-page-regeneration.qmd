@@ -1,7 +1,7 @@
 ---
 title: "How the Downloads page refreshes"
-description: "Technical reference for the automatic, failure-safe catalogue builder used by the public Downloads page."
-manual-review-status: not-reviewed
+description: "Technical reference for the automatic catalogue builder used by the public Downloads page."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}

@@ -108,6 +108,14 @@ Do not hand-edit `site/downloads/downloads.yml`, generated listings or any file 
 
 When the local render and review are satisfactory, follow [Render and publish the website](render-publish.qmd) to inspect the Git changes, commit the development branch, merge the pull request and check the live site.
 
+::: {.callout-warning collapse="true"}
+## If the content update does not complete
+
+Do not repair `site/_site/`, generated listings or the central Downloads catalogue by hand. Correct the public source, page metadata, approved product record or Quarto configuration that owns the problem, then render again.
+
+See [Fix common problems](../maintenance/troubleshooting.qmd#quarto-problems) for the short recovery routes.
+:::
+
 ## Related procedures
 
 - [Render and publish the website](render-publish.qmd)

@@ -1,6 +1,6 @@
 ---
 title: "Build a rolling three-month CVD update"
-description: "Build and review a dated online update from exact approved CVD event and mortality data releases."
+description: "Build and review an online rolling update report, covering the latest 3-months."
 manual-review-status: not-reviewed
 ---
 
@@ -10,9 +10,9 @@ Technical Manual
 
 ## What this page does
 
-The rolling-update builder creates one dated online CVD update from exact approved CVD event and mortality data-release files. It freezes copies of those files with the report so the page does not change when a later data release replaces a `*_current.csv` file.
+The rolling-update builder creates an online CVD update from the approved CVD event and mortality data-release files. It freezes copies of those files with the report. The idea is that older rolling reports will remain available on the website. 
 
-This is a one-step report publication route. It does not recalculate metrics, apply disclosure control, render Quarto or deploy the website.
+This is a one-step report publication route.
 
 ::: {.callout-note appearance="simple" title="Procedure at a glance"}
 1. Select the report month, two approved source data releases and report version.
@@ -26,7 +26,7 @@ This is a one-step report publication route. It does not recalculate metrics, ap
 
 - Complete Step 6 for both source data releases.
 - Choose the month that the update will represent.
-- Start at report version 1. If the stable report address already exists, use a strictly higher version with `replace`.
+- Start at report version 1. If the stable report version already exists, use a higher version with `replace`.
 - Use source years of 2024 or later, months from 1 to 12 and a positive whole-number report version.
 
 In the file patterns below, `YYYY_MM` is the selected data-release year and month, and `N` is the report version.
@@ -50,7 +50,6 @@ In the file patterns below, `YYYY_MM` is the selected data-release year and mont
 | `scripts/stata/reporting/bnr_report_update_build.do` | Main builder; run directly by the menu, dialog or command. |
 | `scripts/stata/dialogs/bnr_report_update_build.dlg` | Stata dialog for the report period, source data releases, version and replacement choice. |
 | `scripts/stata/menu/bnr_menu.do` | Adds the rolling-update command to the BNR Stata menu. |
-| `scripts/stata/reporting/tests/bnr_report_test_update_lifecycle.do` | Developer regression test for the complete builder lifecycle; not a routine data-release input. |
 
 :::
 
@@ -106,16 +105,13 @@ Only the official public package carries `report.yml`.
 5. Open both source-data links and confirm they name the intended data releases.
 6. Check both frozen CSVs against the values displayed by the page.
 7. Complete a full local Quarto render and inspect both automatic report listings.
-8. Review the generated QMD and frozen-data Git changes before following the normal development-branch deployment route.
-
-The generated page is a dated report instance. For a future design change, edit and test the central template, then deliberately rebuild affected instances. Do not turn an earlier dated page into the template.
 
 ::: {.callout-note collapse="true" title="If the rolling update does not complete"}
 
 | Situation | Action |
 |---|---|
 | An official public file and its website copy differ | Rerun the relevant Step 6 analytical publication. Do not edit either CSV. |
-| Output already exists for the report month | Inspect the existing report, choose a strictly higher version and use the complete `replace` command. |
+| Output already exists for the report month | Inspect the existing report, choose a higher version number and use the complete `replace` command. |
 | A partial report lacks a consistent official `report.yml` | Inspect the complete official and website folders before recovery. Do not overwrite individual generated files. |
 
 For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).

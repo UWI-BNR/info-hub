@@ -1,7 +1,7 @@
 ---
 manual-review-status: not-reviewed
 title: "Maintain and recover"
-description: "Choose a Technical Manual page in this section."
+description: "Change maintained source safely, manage files and versions, and recover from common problems."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
@@ -19,9 +19,9 @@ Change analysis or publication code through a controlled route.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Files, releases and versions](files-releases-versions.qmd) {.card-title}
+### [Files, data releases and versions](files-releases-versions.qmd) {.card-title}
 
-Identify authoritative files and apply current version rules.
+Identify the authoritative copy and apply the correct rebuild, approval and version rule.
 :::
 :::
 :::
@@ -31,7 +31,7 @@ Identify authoritative files and apply current version rules.
 ::: {.card-body}
 ### [Fix common problems](troubleshooting.qmd) {.card-title}
 
-Recovery guidance for common system and workflow problems.
+Recover from common workstation, workflow, publication, Quarto, Git and deployment problems.
 :::
 :::
 :::
@@ -41,4 +41,3 @@ Recovery guidance for common system and workflow problems.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

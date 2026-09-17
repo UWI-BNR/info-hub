@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Fix common problems"
 manual-review-status: not-reviewed
-description: "Short recovery recipes for common BNR Stata, approval, publication, Quarto, Git and workstation problems."
+description: "Recover safely from common BNR workstation, Stata, approval, publication, Quarto, Git and deployment problems."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -12,61 +12,52 @@ Technical Manual
 
 Use this chapter when a normally working BNR task stops or produces an unexpected result.
 
-The basic recovery rule is:
-
 > **Fix the earliest underlying cause, then rerun forward through the controlled workflow.**
 
 Do not repair generated outputs one by one.
 
-## Start here
+::: {.callout-note appearance="simple" title="Recovery at a glance"}
+1. Stop before the next workflow step.
+2. Read the first meaningful error and the final run summary.
+3. Identify the earliest wrong or missing input, source, configuration or code.
+4. Correct that authoritative cause.
+5. Rerun from the earliest affected step.
+6. Repeat human review and approval when the rebuilt package requires them.
+7. Check every official public and website location affected.
+:::
+
+## Start with the symptom
 
 | Symptom | Go to |
 |---|---|
-| Menu/path/Python problem | [Workstation and Stata](#workstation-problems) |
-| Stata input/output problem | [Analytical workflow](#stata-problems) |
-| Approval/manifest/publication problem | [Approval and publication](#approval-problems) |
-| Quarto preview/render problem | [Quarto](#quarto-problems) |
-| Git surprise/conflict | [Git](#git-problems) |
-| GitHub deployment problem | [GitHub Actions](#github-problems) |
-| Publication stopped part-way | [Partial publication](#partial-publication) |
-
-## General recovery sequence
-
-1. Stop. Do not continue to the next step.
-2. Read the first useful error and the final run summary.
-3. Identify the earliest stage that is wrong.
-4. Check the relevant input/path/log.
-5. Correct the source, configuration or code.
-6. Rerun from the earliest affected step.
-7. Repeat review/approval where the rebuild requires it.
-8. Check the public result.
+| Menu, path, token-file or Python problem | [Workstation and Stata](#workstation-problems) |
+| Missing analytical input, blocked overwrite or implausible result | [Analytical workflow](#stata-problems) |
+| Approval, manifest, checksum or fingerprint problem | [Approval and publication](#approval-problems) |
+| Preview, render or Downloads problem | [Quarto](#quarto-problems) |
+| Unexpected change, conflict or confidential Git content | [Git](#git-problems) |
+| GitHub Pages build or deployment problem | [GitHub Actions](#github-problems) |
+| Publication stopped after copying some files | [Partial publication](#partial-publication) |
 
 ::: {.callout-tip}
 ## Read the final Stata summary first
 
-Current operational DO files are designed to report a concise final status and private log path.
-
-Start there before excavating the Results window line by line.
+Current operational DO files report a concise final status and private log path. Start there before searching the Results window line by line.
 :::
 
 ## Workstation and Stata {#workstation-problems}
 
 ### `User > BNR` is missing
 
-Restart Stata first.
-
-Check:
+Restart Stata. Then check in the Stata command window:
 
 ```stata
 display "$BNR_REPO"
 display "$BNR_STATA"
 ```
 
-If blank, the local configuration was not loaded.
+If either value is blank, the personal `profile.do` did not load the local configuration correctly. Check the `profile.do` in Stata's `PERSONAL` directory and `scripts/stata/config/bnr_paths_LOCAL.do`.
 
-Then check `profile.do` and `scripts/stata/config/bnr_paths_LOCAL.do`.
-
-Once paths are loaded:
+After the paths load, run:
 
 ```stata
 do "$BNR_STATA/menu/bnr_menu.do"
@@ -80,32 +71,32 @@ BNR menu loaded: User > BNR
 
 ### A required BNR path is not configured
 
-Check:
+Check in Stata:
 
 ```stata
 display "$BNR_REPO"
 display "$BNR_PRIVATE"
+display "$BNR_DATA_FROZEN"
 display "$BNR_DATA_DERIVED"
 display "$BNR_STAGING"
+display "$BNR_PRIVATE_LOGS"
 display "$BNR_PUBLIC"
 ```
 
-Fix `bnr_paths_LOCAL.do` or how `profile.do` loads it.
+Correct `bnr_paths_LOCAL.do` or the way `profile.do` loads it. Do not hard-code a workstation path in an operational DO file.
 
-Do not hard-code a new workstation path into the failing operational DO file.
+### A REDCap extract cannot find its token
 
-### REDCap Step 1 cannot find the token
-
-Check the **path**, not the token:
+Check the token-file path without displaying the secret. For a CVD event extract:
 
 ```stata
 display "$BNR_REDCAP_TOKEN_FILE"
 confirm file "$BNR_REDCAP_TOKEN_FILE"
 ```
 
-Correct the local path and secure token file. Never paste the token into tracked code or documentation.
+For mortality, use `$BNR_MORT_REDCAP_TOKEN_FILE`. Correct the secure local token file or its path. Never paste a token into tracked code, a log or this manual.
 
-### Python/PyCap is unavailable
+### Python or PyCap is unavailable
 
 In Stata:
 
@@ -113,107 +104,78 @@ In Stata:
 python query
 ```
 
-In a VS Code terminal:
+In a **VS Code PowerShell terminal** at the repository root:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
 python -c "from redcap import Project; print('PyCap available')"
+python scripts/python/check-python-environment.py
 ```
 
-If needed, repeat the Chapter 2 Python setup:
+If packages are missing, reinstall the maintained requirements:
 
 ```powershell
 python -m pip install -r requirements.txt
 python scripts/python/check-python-environment.py
 ```
 
-Restart Stata afterwards.
+Restart Stata afterwards. If setup remains incomplete, return to [Set up a workstation](../getting-started/workstation-setup.qmd).
 
 ## Analytical workflow {#stata-problems}
 
 ### An input file is missing
 
-Do not substitute a different release.
+Do not substitute a different data release or similarly named file.
 
-Check:
+1. Read the exact missing path.
+2. Confirm the selected year, month, report ID and version.
+3. Identify the earlier step that should create the file.
+4. Confirm whether that step completed successfully.
+5. Correct or rerun the earlier step, then rerun forward.
 
-1. the exact path in the error;
-2. selected year/month/version;
-3. which earlier step should create the file;
-4. whether that step completed.
+For example, CVD event Step 4 needs the authorised Step 3 analytical inputs. Public tables need the approved CVD event and mortality files produced by their publication workflows.
 
-Then run/correct the missing earlier step and rerun forward.
+### An output or package already exists
 
-Examples:
+This is normally deliberate overwrite protection. Do not add `replace` merely to clear the message.
 
-- Dashboard Step 4 needs Step 3 metric inputs.
-- Table Step 1 needs Step 3 `all_variables`.
-- Authorised downstream event analyses need their declared Step 3 input.
+Confirm that a rebuild or republication of the exact data release or report version is authorised, then follow [What `replace` means](files-releases-versions.qmd#what-replace-means) and the product-specific procedure.
 
-### An output/package already exists
+### The run completes but the result looks wrong
 
-This is usually overwrite protection.
+Treat this as a failed review. Check the selected source release, reporting period, totals and components, missing groups, quality outputs, disclosure status and recent code changes.
 
-Check whether the package is unapproved and deliberately being rebuilt, and whether that step permits `replace`.
-
-See [Chapter 13](files-releases-versions.qmd#what-replace-means).
-
-Do not add `replace` reflexively.
-
-### The run succeeds but the result looks wrong
-
-Treat this as a failed review.
-
-Check the reporting period, source release, totals/components, missing groups, QA outputs and recent code changes.
-
-Correct the earliest data/code cause and rebuild. Do not patch the CSV/workbook/figure.
+Correct the earliest data, reference, configuration or code cause and rebuild. Do not patch the CSV, workbook, figure or generated QMD.
 
 ### A generated figure is wrong
 
-Change the Stata source or data that creates it and rebuild the package.
-
-Do not edit the PNG as the correction.
+Correct the Stata source or data that creates it and rebuild the package. Do not edit the PNG or PDF as the analytical correction.
 
 ## Approval and publication {#approval-problems}
 
 ### `approval.yml` is missing
 
-The package has not completed approval, or approval was invalidated by a rebuild.
+The package has not completed approval, or a rebuild invalidated the previous approval. Complete the product-specific review and approval action. Do not create `approval.yml` manually.
 
-Complete the product-specific review and approval step.
+### A manifest, checksum or fingerprint does not match
 
-Do not create `approval.yml` manually.
+The publication controller cannot prove that it is reading the exact approved files.
 
-### Manifest/fingerprint mismatch
+Check whether a proposed public file changed after review, the package was rebuilt, the wrong identity was selected or a required file is missing. If the reviewed package changed, repeat its review and approval.
 
-The publication step cannot prove this is the exact approved package.
-
-Check whether:
-
-- a payload file changed after approval;
-- the manifest changed;
-- the package was rebuilt; or
-- the wrong release/package was selected.
-
-If the approved package changed, repeat review and approval.
-
-Do not edit checksums, fingerprints, manifests or approval receipts to make the check pass.
+Never edit a checksum, fingerprint, manifest or approval record to force a pass.
 
 ### A required approved file is missing
 
-Check the package ID, manifest entry and expected private package.
-
-Rebuild/reapprove as needed.
-
-Do not borrow a similarly named file from another release.
+Check the data-release or report identity, the generated manifest and the expected private approved-package folder. Rebuild and reapprove as needed. Do not borrow a similarly named file from another package.
 
 ## Quarto {#quarto-problems}
 
 ### `start-info-hub-edit.bat` does not start
 
-Read the launcher message.
+Read the launcher message. It explicitly checks the site configuration and local virtual environment.
 
-Manual check:
+In a VS Code PowerShell terminal at the repository root, test the manual route:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
@@ -222,60 +184,47 @@ quarto check
 quarto preview --host 127.0.0.1 --port 4200
 ```
 
-If setup is incomplete, return to Chapter 2.
+Stop the preview with `Ctrl+C`. If the environment is incomplete, repeat the relevant workstation setup stage.
 
 ### `quarto render` fails
 
-Start with the **first meaningful error**.
+From an activated environment in the `site` folder, run:
 
 ```powershell
 quarto check
 quarto render
 ```
 
-Common causes:
+Start with the first meaningful error. Likely causes include invalid YAML indentation, a missing QMD/include/image, an incorrect relative link, a malformed download record, a missing declared Python dependency or a source file that was not committed.
 
-- YAML indentation;
-- missing QMD/include/image;
-- wrong relative path;
-- malformed download record;
-- missing Python dependency; or
-- a source file that existed locally but was not committed.
+Correct the source and render again. Never edit `site/_site/`.
 
-Fix the source and render again. Never edit `site/_site/`.
+### A new package is missing from Downloads
 
-### A new download is missing from Downloads
+Check, in order:
 
-Check:
+1. the product's controlled Stata publication completed;
+2. its product-level catalogue record exists in the website copy;
+3. the automatic catalogue builder completed without an error; and
+4. the complete Quarto render completed.
 
-1. did the Stata publication step complete?
-2. does the product-level download record exist?
-3. did the catalogue builder report an error?
-4. did a full Quarto render run?
-
-Fix the product publication record/path and render again.
-
-Do not hand-edit the generated central catalogue.
+Correct the product publication record or source path and render again. Do not hand-edit `site/downloads/downloads.yml`.
 
 ## Git {#git-problems}
 
 ### VS Code shows unexpected changed files
 
-Do not stage them.
+Do not stage them. Open each file and read its difference. Use [System reference](../reference/index.qmd) if you do not recognise it.
 
-Click each file and read the diff. Use [System reference](../reference/index.qmd) if you do not recognise it.
+### `bnr_paths_LOCAL.do`, `venv-info-hub/` or `site/_site/` appears
 
-### `bnr_paths_LOCAL.do`, `venv-info-hub` or `site/_site/` appears
-
-Do not commit it.
-
-These are normally ignored. Check `.gitignore` and whether the file was historically tracked before changing any Git rules.
+Do not commit it. These paths are normally ignored. Check `.gitignore` and whether Git already tracks the file before changing any ignore rule.
 
 ### You edited the wrong file and have not committed
 
-Use VS Code **Discard Changes** for the specific file.
+After checking the filename carefully, use VS Code **Discard Changes** for that file.
 
-Equivalent:
+Equivalent command:
 
 ```powershell
 git restore path/to/file
@@ -283,104 +232,62 @@ git restore path/to/file
 
 ### Git reports a merge conflict
 
-If you understand both versions, use the VS Code merge editor and create one correct final version, then test it.
+If you understand both changes, use the VS Code merge editor to create one correct final version, then repeat the affected tests. If not, stop and obtain help. Do not select **Accept Current** or **Accept Incoming** merely to remove the warning.
 
-If not, stop and get help. Do not click **Accept Current** or **Accept Incoming** merely to remove the warning.
-
-### Confidential material may have been pushed
+### Confidential material may have entered Git
 
 Treat this as a security incident:
 
-1. stop further sharing;
-2. inform the BNR team lead;
-3. rotate/revoke exposed credentials;
-4. remove sensitive material using an appropriate Git-history cleanup; and
-5. confirm the correction before normal work resumes.
+1. stop further sharing and deployment;
+2. inform the BNR Lead;
+3. revoke or rotate any exposed credential;
+4. obtain suitable help to remove sensitive material from Git history; and
+5. confirm the repository and deployed site are clean before normal work resumes.
 
-Deleting the file in a later commit does not necessarily remove it from Git history.
+Deleting a file in a later commit does not remove it from earlier Git history.
 
 ## GitHub Actions {#github-problems}
 
-### Local render works but GitHub Actions fails
+### The local render works but GitHub Actions fails
 
-On GitHub:
+On GitHub, open **Actions**, select the newest **Publish Quarto site** run, open the failed build or deploy job and read the failed step.
 
-1. open **Actions**;
-2. open the newest **Publish Quarto site** run;
-3. open the failed build/deploy job;
-4. read the failed step.
+Confirm that every required public source file was committed, dependencies are declared in `requirements.txt`, and no private or workstation-specific path is used. Correct the source on a development branch, render locally and merge the correction through a pull request.
 
-Check whether every required source file was committed, required dependencies are declared, and no machine-specific/private path is being used.
+### GitHub Actions succeeds but the live page looks unchanged
 
-Fix on a branch, render locally, then merge the correction.
-
-### GitHub Actions succeeds but the page looks unchanged
-
-Check that:
-
-- the intended branch was merged to `main`;
-- the successful Action belongs to that merge;
-- the changed source is on `main`; and
-- you are viewing the correct live page.
-
-Then refresh the browser.
+Confirm that the intended development branch was merged into `main`, the successful action belongs to that merge, the changed source is visible on `main`, and you opened the correct live page. Then refresh the browser.
 
 ## Partial publication {#partial-publication}
 
-A publication command may fail after some file operations have succeeded.
+A controlled Stata publication can stop after some file operations have completed. Do not assume that nothing changed, and do not finish the copy manually.
 
-Do **not** assume nothing changed.
-
-Inspect:
-
-- `$BNR_PUBLIC`;
-- any `current`/`latest` copy;
-- the website mirror;
-- ZIP/catalogue/publication records; and
-- the private publication log.
+Inspect the official public folder, every `current` or `latest` copy, the website copy, ZIP and catalogue records, and the private publication log.
 
 Then:
 
-1. identify the publication failure;
-2. confirm the approved private package is still unchanged;
-3. fix the environmental/file problem;
-4. rerun the controlled publication step;
-5. inspect all public locations again.
+1. identify the earliest environmental or file-operation failure;
+2. confirm that the approved private package is unchanged;
+3. correct the underlying path, permission or file problem;
+4. rerun the controlled publication action; and
+5. inspect every public location again.
 
-If the approved payload itself changed, repeat review/approval instead.
-
-Do not repair a partial publication by manually copying missing files.
+If the approved private package changed, stop and repeat review and approval instead.
 
 ## Public output and website disagree
 
-If the website differs from `$BNR_PUBLIC`:
+Compare the official package under `$BNR_PUBLIC` with the website copy. If the official package is correct, refresh the website copy through the controlled Stata publication action, then render and deploy the site again.
 
-1. compare the authoritative product and website mirror;
-2. if `$BNR_PUBLIC` is correct, refresh the mirror through controlled publication;
-3. render again;
-4. check the live site.
-
-Do not change `$BNR_PUBLIC` to match a mistaken website copy.
+Do not change the official package to match a mistaken website copy.
 
 ## Stop troubleshooting when
 
-Stop and escalate when:
+Stop and escalate when confidentiality may be affected, an approved package may have changed after approval, fixed source data appear damaged, several workflows fail after one shared change, Git history may require specialist cleanup, the correct analytical result is unclear or repeated recovery attempts have no clear explanation.
 
-- confidentiality may be affected;
-- an approved package may have changed after approval;
-- several workflows fail after one shared-code change;
-- source/frozen data appear damaged;
-- Git history would need rewriting;
-- the correct analytical result is unclear; or
-- repeated recovery attempts have no clear explanation.
+Record the exact error, selected data release or report identity, relevant private log path and what has already been tried.
 
-Record the error, selected release/package, relevant log path and what has already been tried.
-
-## Related references
+## Related procedures
 
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
-- [Run the relevant analytical workflow](../workflows/section-index.qmd) — review, approve and publish the relevant data package.
-- [Render and publish the website](../website/render-publish.qmd)
-- [Understand files, releases and versions](files-releases-versions.qmd)
-- [System reference](../reference/index.qmd)
-
+- [Run the relevant analytical workflow](../workflows/section-index.qmd)
+- [Files, data releases and versions](files-releases-versions.qmd)

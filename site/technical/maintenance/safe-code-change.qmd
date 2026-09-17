@@ -1,7 +1,7 @@
-﻿---
+---
 title: "Make a safe code change"
 manual-review-status: not-reviewed
-description: "A simple, controlled method for changing BNR analysis or publication code without putting working workflows or public outputs at unnecessary risk."
+description: "Change BNR analytical or publication code on a branch, test the affected pathway and merge the reviewed change safely."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,136 +10,152 @@ Technical Manual
 
 ## What this chapter does
 
-Use this chapter when changing **Stata code, Quarto source, Python support code, configuration or another maintained project file**.
-
-The BNR approach is intentionally simple:
-
-```text
-start clean
-    -> make one focused change on a branch
-    -> inspect the change
-    -> test the affected pathway
-    -> review the result
-    -> commit and push
-    -> merge when satisfied
-```
+Use this chapter when changing Stata code, Quarto source, Python support code, configuration or another maintained project file.
 
 The aim is to make mistakes **small, visible and reversible**.
+
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Update local `main` and create a focused development branch.
+2. Make the smallest useful source change.
+3. Inspect the exact difference and test every affected pathway.
+4. Review the result, commit and push the branch.
+5. Merge through a pull request and check the resulting workflow or website.
+:::
 
 ::: {.callout-important}
 ## Do not test by editing generated outputs
 
-Do not experiment by editing an approved dataset, public CSV/workbook, `approval.yml`, `public_manifest.csv`, published figure or `site/_site/`.
+Do not experiment by editing a generated dataset, public CSV or workbook, `approval.yml`, `public_manifest.csv`, published figure or `site/_site/`.
 
-Generated analytical outputs should be recreated from data and code.
+Correct the authoritative data, reference data, configuration or source code and rerun.
 :::
 
 ## Before you start
 
-Be clear about:
+Define the problem, the files expected to change, the workflows that may be affected and what a successful test should show.
 
-- what problem the change should solve;
-- which source files should change;
-- which workflow could be affected; and
-- what success should look like.
+If the change affects an approved method, disclosure control, approval or publication rules, public output structure, required software or staff responsibilities, agree the intended change with the BNR Lead before coding it.
 
-If the change affects an approved method, disclosure control, approval/publication rules or staff responsibilities, agree the intended change with the BNR team lead before coding it.
+::: {.callout-note collapse="true"}
+## Input files
+
+| File or source | What to check |
+|---|---|
+| Maintained source file to be changed | It owns the behaviour that needs correction; it is not a generated output or disposable website copy. |
+| Current callers, dialogs, help and manual pages | Identify every route that depends on the changed file, especially before changing a shared helper. |
+| Existing test, synthetic fixture or previous expected result | It provides an appropriate comparison for the affected pathway. |
+:::
+
+::: {.callout-note collapse="true"}
+## Code and configuration files
+
+| File | Purpose |
+|---|---|
+| The selected tracked Stata, QMD, Python, PowerShell, batch or configuration source | Edit directly on the development branch. |
+| `.gitignore` | Protects local configuration, virtual environments, private material and generated output. Change only when the storage policy genuinely changes. |
+| `scripts/stata/README.qmd` | Current Stata entry points and maintenance rules; update when a Stata responsibility or dependency materially changes. |
+| `docs/bnr-refit-project-guiderails.md` | Project architecture and change-control boundary; update only for a material operating-model or architecture change. |
+:::
+
+::: {.callout-note collapse="true"}
+## Outputs and evidence
+
+| File or result | Purpose |
+|---|---|
+| Relevant workflow test, review package or full Quarto render | Shows whether the affected pathway still behaves correctly. Keep private evidence outside Git where required. |
+| Git diff and focused commit | Record the reviewed source change without unrelated edits. |
+| GitHub development branch and pull request | Provide the review and protected-`main` merge route. |
+:::
 
 ## Step 1: Start from an up-to-date `main`
 
 In VS Code:
 
 1. Open **Source Control**.
-2. Check there are no unexplained local changes.
-3. Switch to `main` using the branch name in the lower-left status bar.
-4. Use **Source Control > ... > Pull**.
+2. Check that there are no unexplained local changes.
+3. Click the branch name in the lower-left status bar and select `main`.
+4. Select **Source Control > ... > Pull**.
 
-If `main` already contains local changes you do not understand, stop and identify them first.
+If `main` contains local changes you do not understand, stop and identify them before pulling.
 
-::: {.callout-note collapse="true"}
-## Equivalent Git checks
+The equivalent commands, entered in a **VS Code PowerShell terminal**, are:
 
 ```powershell
 git status
-git branch --show-current
-git pull
+git switch main
+git pull origin main
 ```
-:::
 
-## Step 2: Create a working branch
+`git status` should show a clean working tree, and the pull should complete without a merge conflict.
 
-Do not make routine maintenance changes directly on `main`.
+## Step 2: Create a focused development branch
 
 In VS Code:
 
 1. click the branch name;
-2. choose **Create new branch**;
-3. use a short descriptive name.
+2. select **Create new branch**; and
+3. enter a short descriptive name, such as `fix-table-label` or `update-python-dependency`.
 
-Examples:
+The equivalent command is:
 
-```text
-fix-table-label
-update-annual-report
-revise-step5-check
-update-python-dependency
+```powershell
+git switch -c fix-table-label
 ```
 
-One branch should normally address one recognisable task.
+Replace the example name. The command should report that Git switched to the new branch. Do not make routine changes directly on `main`.
 
-## Step 3: Decide how widely to test
+## Step 3: Choose the required test scope
 
-Use the smallest test that gives reasonable confidence.
+Use the smallest test that gives reasonable confidence, but test every current caller of a changed shared helper.
 
 | Change | Minimum test |
 |---|---|
-| QMD wording/link/layout | Local preview + full `quarto render` |
-| One annual report analyst module | Build that report candidate and review affected outputs |
-| Table calculation | Run from the earliest affected table step |
-| Dashboard calculation | Run from the earliest affected dashboard step |
+| QMD wording, link or layout | Local preview, local-link check and complete `quarto render` |
+| Annual report analyst module | Build the candidate and review every affected output |
+| Dashboard or table presentation | Complete render and inspection against its approved public data |
+| Product-specific Stata calculation | Run from the earliest affected product step and inspect its quality and review outputs |
 | Shared Stata helper | Test every current workflow that calls it |
-| Menu/dialog/help | Open it and run the affected entry point |
-| Path/setup | Repeat the relevant Chapter 2 checks |
-| Python dependency/support | Test locally + full Quarto render |
-| Disclosure/approval/publication | Test the full affected control pathway |
-
-A shared helper needs wider testing than a spelling correction. This is not the moment to either under-test or recreate the Apollo programme for a label change.
+| Menu, dialog or help | Open the entry point and run the affected route |
+| Path or setup | Repeat the relevant [workstation checks](../getting-started/workstation-setup.qmd) |
+| Python dependency or support code | Run the environment check, affected utility and complete Quarto render |
+| Disclosure, approval or publication control | Test the full affected control pathway with suitable non-confidential test data |
 
 ## Step 4: Make the smallest useful change
 
-Keep the edit narrow:
+- Avoid unrelated cleanup and unnecessary renaming.
+- Avoid new dependencies when the existing tools can do the job.
+- Keep Stata readable for mixed-skill analysts.
+- Keep analytical calculations in Stata and presentation in Quarto.
+- Keep analytical decisions visible in analyst-owned or metric-specific DO files.
+- Update dependent dialogs, help, tests and authoritative manual pages in the same controlled change.
 
-- avoid unrelated cleanup;
-- do not rename files unless required;
-- avoid new dependencies when the existing tools can do the job;
-- keep Stata readable for mixed-skill analysts;
-- keep analytical calculations in Stata and presentation in Quarto; and
-- keep important analytical decisions visible in analyst-owned or metric-specific DO files.
+## Step 5: Inspect the difference
 
-## Step 5: Inspect the diff before running
+In VS Code Source Control, open each changed file and read the before-and-after comparison.
 
-Open **Source Control** and click each changed file.
+Check that only intended lines changed, no credentials or private paths were added, temporary files are absent and formatting changes have not obscured the substantive change.
 
-Check that:
+Equivalent commands:
 
-- only intended lines changed;
-- there are no accidental local paths or credentials;
-- temporary files are absent; and
-- unrelated formatting has not swamped the useful change.
+```powershell
+git status
+git diff --check
+git diff
+```
 
-## Step 6: Run the relevant test
+## Step 6: Run and review the required tests
 
-For analytical workflows:
+For an analytical pathway:
 
-1. rerun from the **earliest step affected**;
-2. read the final Stata run summary;
-3. inspect the QA/review outputs;
-4. compare the changed results with an appropriate previous or expected result; and
-5. complete human review before public promotion.
+1. rerun from the earliest affected step;
+2. read the final Stata summary and private log;
+3. inspect the quality and review outputs;
+4. compare the result with an appropriate expected or previous result; and
+5. complete human review before any approval or public promotion.
 
-A successful Stata run is not enough if the result itself looks wrong.
+A successful Stata run does not prove that the result is correct.
 
-For Quarto:
+For a complete Quarto render, enter in a VS Code PowerShell terminal at the repository root:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
@@ -147,17 +163,16 @@ cd site
 quarto render
 ```
 
-Then inspect the affected pages locally.
+Inspect the affected pages, neighbouring navigation and any changed listing or download.
 
 ## Step 7: Check the complete Git change
 
 Before committing, confirm that:
 
 - only intended files changed;
-- no confidential/private file is listed;
-- `bnr_paths_LOCAL.do` is not listed;
-- `site/_site/` is not staged;
-- approved outputs changed only where the controlled workflow intended; and
+- no confidential or private file is listed;
+- `bnr_paths_LOCAL.do`, `venv-info-hub/` and `site/_site/` are absent;
+- approved outputs changed only through the controlled workflow; and
 - temporary test files are absent.
 
 Use [System reference](../reference/index.qmd) if you do not recognise a file.
@@ -166,81 +181,57 @@ Use [System reference](../reference/index.qmd) if you do not recognise a file.
 
 In VS Code Source Control:
 
-1. stage the intended files;
+1. stage only the intended files;
 2. enter a short commit message;
-3. click **Commit**;
-4. choose **Push**, **Publish Branch** or **Sync Changes**.
+3. select **Commit**; and
+4. select **Publish Branch** or **Push**.
 
-A useful commit message describes the change:
+Equivalent commands:
 
-```text
-Fix annual table period label
-Update case-fatality calculation
-Add required Python dependency
+```powershell
+git add path/to/changed-file
+git commit -m "Fix table period label"
+git push -u origin fix-table-label
 ```
+
+Replace the path, message and branch name. The push should report the remote branch and normally provide a pull-request link.
 
 ## Step 9: Review and merge
 
-Create a pull request to `main`.
+On GitHub, create a pull request from the development branch to `main`.
 
-Before merging:
+Before merging, review the changed-file list, confirm the required tests passed, confirm the result still matches the task and obtain BNR review for any material method or governance change.
 
-- read the changed-file list;
-- confirm the relevant tests passed;
-- confirm the change still matches the original task; and
-- obtain any required BNR review for a material methodological/governance change.
+Merge through the pull request. Do not push directly to protected `main`. If the change affects the website, confirm the **Publish Quarto site** action and inspect the live result.
 
-After merge, check GitHub Actions. Changes to `main` trigger the site build.
+## Step 10: Update material documentation
 
-See [Render and publish the website](../website/render-publish.qmd).
+Git records the implementation history. Update an authoritative document only when the change materially affects the operating model, method, control, dependency or responsibility.
 
-## Step 10: Record material changes, not routine noise
+| Change | Documentation to consider |
+|---|---|
+| Stata responsibility, entry point or dependency | `scripts/stata/README.qmd` and the affected Technical page |
+| Operating model, architecture, role or product structure | `docs/bnr-refit-project-guiderails.md` |
+| Operator decision or authority | The relevant Operations Manual page |
+| Public measure or interpretation | The relevant Public Methods Manual page |
 
-Git already records committed changes.
+Routine data releases and minor wording changes need no separate changelog.
 
-Additional documentation is most useful when a change materially affects:
+::: {.callout-warning collapse="true"}
+## If the change does not complete safely
 
-- an approved metric definition/method;
-- disclosure control;
-- approval/publication;
-- public output structure;
-- a required dependency; or
-- staff responsibilities.
-
-Update the relevant manual page and, where appropriate, `DECISIONS.md` or `CHANGELOG.md`.
-
-Minor wording changes and routine releases do not need separate bureaucracy.
-
-## If the change goes wrong
-
-### Before commit
-
-Use VS Code **Discard Changes** for the specific file, after checking the filename carefully.
-
-Equivalent:
-
-```powershell
-git restore path/to/file
-```
-
-### After commit on the branch
-
-Prefer a corrective commit or abandon the branch. Do not rewrite `main` history to make Git look tidy.
-
-### After merge to `main`
-
-Create a correction branch from current `main`, correct/restore the source, test it, and merge the correction normally.
-
-If a public analytical output is affected, issue the correction through the controlled analytical workflow rather than hand-editing the live file.
-
-::: {.callout-tip collapse="true"}
-## Stop and get help when
-
-- a merge conflict contains changes you do not understand;
-- confidential material may have been committed;
-- an approved package may have changed after approval;
-- recovery appears to require rewriting Git history;
-- the methodological answer is unclear; or
-- several previously working workflows fail after one shared-code change.
+| Situation | Action |
+|---|---|
+| Wrong edit, not committed | In VS Code, discard only the confirmed file change; equivalent: `git restore path/to/file`. |
+| Wrong branch commit | Prefer a corrective commit or abandon the branch. Do not rewrite `main` history. |
+| Problem found after merge | Create a correction branch from current `main`, correct the source, retest and merge normally. |
+| Public analytical output is affected | Correct it through the controlled analytical workflow; never hand-edit the live file. |
+| Merge conflict or methodological answer is unclear | Stop and obtain help before accepting either version or continuing. |
+| Confidential material may have entered Git | Stop sharing and follow the security-incident guidance in [Fix common problems](troubleshooting.qmd#git-problems). |
 :::
 
+## Related procedures
+
+- [Files, data releases and versions](files-releases-versions.qmd)
+- [Fix common problems](troubleshooting.qmd)
+- [Render and publish the website](../website/render-publish.qmd)

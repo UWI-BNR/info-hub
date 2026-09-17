@@ -1,7 +1,7 @@
 ---
 title: "BNR reporting and presentation workflows"
 description: "Understand which reporting products refresh automatically and which reports require a controlled build, approval and publication process."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}

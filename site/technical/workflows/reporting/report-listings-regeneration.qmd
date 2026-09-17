@@ -1,7 +1,7 @@
 ---
 title: "How the report listings refresh"
 description: "Technical reference for the Quarto listings that discover published CVD report landing pages."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}

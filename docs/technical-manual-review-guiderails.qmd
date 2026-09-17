@@ -24,7 +24,7 @@ This document consolidates the review approach agreed before the review with the
 | **4** | **CVD mortality workflow** | ✅ | The overview and Steps 1–6 were revised, technically checked and reviewed by Ian. |
 | **5** | **Reporting workflows** | ✅ | All eight pages were revised, technically checked and reviewed by Ian. |
 | **6** | **Operate the Info-Hub** | 🟨 | The section listing, website publication procedure and website-content procedure have been revised and technically checked; Ian’s human review remains. |
-| **7** | **Maintain and recover** | ⬜ | Review the section listing, safe code changes, files/releases/versions and troubleshooting: four pages. |
+| **7** | **Maintain and recover** | 🟨 | The section listing, safe-code-change procedure, files/data-releases/version reference and troubleshooting page have been revised and technically checked; Ian’s human review remains. |
 | **8** | **Reference and manual landing page** | ⬜ | Review the five reference content pages, the Reference section listing and the main Technical Manual landing page: seven pages. The three substantive rules pages have an earlier Stage 2A review checkpoint. |
 | **9** | **Common Tasks walkthroughs** | ⬜ | Create concise, table-led end-to-end walkthroughs that link the required detailed pages in sequence. Use colour-coded Operations, Technical and Public Methods link-buttons; do not repeat detailed instructions or add a separate failure section. |
 | **10** | **Whole-manual consistency pass** | ⬜ | Check terminology, page structure, links, workflow continuity, duplicated material and cross-manual implications across all 42 existing pages. |

@@ -1,7 +1,7 @@
 ---
 title: "How the CVD dashboards refresh"
 description: "Technical reference for the approved inputs, presentation boundary and checks used by the CVD event and mortality dashboards."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -15,54 +15,25 @@ The CVD dashboards refresh automatically when Step 6 replaces their approved web
 This page is technical reference material for maintaining or checking the dashboards.
 
 ::: {.callout-note appearance="simple" title="No separate refresh action"}
-Do not edit a dashboard for a routine data release. Complete the relevant Step 6 analytical publication, then follow the normal website render and deployment process. The dashboard discovers the available periods from the approved data.
+Do not edit a dashboard for a routine data release. Complete the relevant Step 6 analytical publication, then follow the normal website render and deployment process. The dashboard discovers the available data release from the approved data.
 :::
 
 ## Dashboard files and approved inputs
 
 | File | Purpose |
 |---|---|
+|CVD Events dashboard| |
 | `site/surveillance/cvd/metrics/burden/index.qmd` | CVD event dashboard presentation code. |
 | `site/downloads/files/metrics/cvd/cvd_metrics_current.csv` | Current approved CVD event data read by the dashboard. |
 | `site/downloads/files/metrics/cvd/cvd_monthly_reference_2015_2019.csv` | Fixed approved CVD event monthly reference. |
 | `site/downloads/files/metrics/cvd/catalogue/cvd_YYYY_MM.yml` | Release date and download information for the current CVD event data release. |
 | `site/surveillance/cvd/metrics/mortality/index.qmd` | CVD mortality dashboard presentation code. |
+|CVD Mortality dashboard| |
 | `site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv` | Current approved mortality data read by the dashboard. |
 | `site/downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv` | Fixed approved mortality monthly reference. |
 | `site/downloads/files/metrics/mortality/burden/catalogue/mort_YYYY_MM.yml` | Release date and download information for the current mortality data release. |
 
 The official public analytical copies remain under `$BNR_PUBLIC/metrics/`. Dashboard code must never read raw data, private derived data, review files or `public_ready` files.
-
-## Presentation boundary
-
-The dashboards may filter, arrange and format approved public values. They must not:
-
-- recreate surveillance measures;
-- recalculate rates, confidence intervals or disclosure decisions;
-- treat a protected or unavailable value as zero;
-- infer protected values from totals or related cells; or
-- write browser calculations back to a published data file.
-
-The release date and latest data period are different concepts and must be displayed separately.
-
-## CVD event dashboard rules
-
-The event dashboard shows only the scopes supplied by the approved combined-CVD data release. Disease case ascertainment officer (DCO) controls remain annual and all-age where that is the approved scope.
-
-Do not calculate additional-DCO results from hospital-only and hospital-plus-DCO rows when any component is protected.
-
-## CVD mortality dashboard rules
-
-The mortality definition control uses these internal data values:
-
-```text
-primary_clear_likely
-upper_clear_likely_possible
-```
-
-Their public labels are **Primary** and **Inclusive**. The word `upper` in the internal Inclusive value means the broader Clear + Likely + Possible definition. It is not an upper confidence limit. Inclusive already contains Primary, so the two definitions must never be added together.
-
-Monthly public rows are restricted to All CVD, both sexes, all ages and monthly count. The dashboard uses the fixed 2015–2019 monthly reference and must not create a rolling monthly comparator.
 
 ## Limited browser calculations
 
@@ -85,13 +56,6 @@ After the normal site render, check the affected dashboard as part of website re
 - **Download selected view (CSV)** contains the displayed public rows only.
 
 The selected-view CSV is a browser convenience file, not an official data release.
-
-## If a dashboard is wrong
-
-- If an input CSV is absent or wrong, return to the relevant Step 6 publication. Do not edit the CSV or dashboard to compensate.
-- If the input is correct, inspect the browser console, `FileAttachment` path, field names, filters and value types in the QMD.
-- If a protected value can be reconstructed, stop deployment and investigate the disclosure-control implementation.
-- Treat a public schema change as a controlled interface change: update the producer, dashboards, tables, tests and manuals together.
 
 ## Related procedures
 
