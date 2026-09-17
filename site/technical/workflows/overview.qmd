@@ -77,6 +77,5 @@ One authorised person may perform more than one action where BNR governance perm
 
 ## Related procedures
 
-- [Review an analytical package](../controls/review-release.qmd) — complete the common human review before approval.
 - [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing responsibilities and decisions.
 - [The BNR Info-Hub analytics and publishing environment](../getting-started/environment.qmd) — understand the private and public locations used by the workflows.

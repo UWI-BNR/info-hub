@@ -1,7 +1,7 @@
 ---
 manual-review-status: not-reviewed
 title: "Operate the website"
-description: "Choose a Technical Manual page in this section."
+description: "Render, review and deploy public Info-Hub website changes."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
@@ -11,7 +11,7 @@ description: "Choose a Technical Manual page in this section."
 ::: {.card-body}
 ### [Render and publish the website](render-publish.qmd) {.card-title}
 
-Review and deploy the Quarto site through GitHub.
+Preview a change, render the complete site, use a development branch and confirm the live deployment.
 :::
 :::
 :::
@@ -21,7 +21,7 @@ Review and deploy the Quarto site through GitHub.
 ::: {.card-body}
 ### [Update website content](update-content.qmd) {.card-title}
 
-Maintain pages, listings, navigation and downloads.
+Edit public Quarto pages, links, navigation and ordinary public assets without changing analytical results.
 :::
 :::
 :::
@@ -29,9 +29,9 @@ Maintain pages, listings, navigation and downloads.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Refresh the CVD dashboards](../workflows/reporting/dashboard-regeneration.qmd) {.card-title}
+### [How CVD dashboards refresh](../workflows/reporting/dashboard-regeneration.qmd) {.card-title}
 
-Maintain the approved event and mortality presentation.
+Technical reference only. Dashboards use approved public data during the normal website render; no separate refresh action is required.
 :::
 :::
 :::
@@ -39,9 +39,9 @@ Maintain the approved event and mortality presentation.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Refresh the CVD tables](../workflows/reporting/tabulation-regeneration.qmd) {.card-title}
+### [How CVD tables refresh](../workflows/reporting/tabulation-regeneration.qmd) {.card-title}
 
-Maintain public tabulations of approved releases.
+Technical reference only. Tables refresh from approved public data during the normal website render; no separate refresh action is required.
 :::
 :::
 :::
@@ -51,7 +51,7 @@ Maintain public tabulations of approved releases.
 ::: {.card-body}
 ### [Reporting and presentation workflows](../workflows/reporting/overview.qmd) {.card-title}
 
-Technical guides for dashboards, tables, downloads, listings and reports.
+Technical reference for dashboards, tables, Downloads, listings and reports that follow an approved data-package release or report publication.
 :::
 :::
 :::

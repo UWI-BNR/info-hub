@@ -103,4 +103,4 @@ Record closure in REDCap. A new research purpose, new research team, wider datas
 
 - [Request access to BNR research data](../../methods/responsible-data-use/research-data-access.qmd) — the public description for researchers.
 - [Standard text for ethics applications](ethics-application-wording.qmd) — copyable descriptions of REDCap and the Info-Hub.
-- [Disclosure control](../../technical/controls/disclosure-control.qmd) — detailed technical guidance for checking proposed public outputs.
+- [Disclosure-control rules](../../technical/reference/disclosure-control-rules.qmd) — the checks that protect proposed public outputs.

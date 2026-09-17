@@ -379,7 +379,7 @@ Record the error, selected release/package, relevant log path and what has alrea
 ## Related references
 
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
-- [Approve and publish a release](../controls/approve-publish.qmd)
+- [Run the relevant analytical workflow](../workflows/section-index.qmd) — review, approve and publish the relevant data package.
 - [Render and publish the website](../website/render-publish.qmd)
 - [Understand files, releases and versions](files-releases-versions.qmd)
 - [System reference](../reference/index.qmd)
