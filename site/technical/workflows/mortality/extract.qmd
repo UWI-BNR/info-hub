@@ -1,7 +1,7 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Extract mortality data"
-description: "Mortality Step 1: create the private death-certificate source extract through a selected completed month."
+description: "Mortality Step 1: create the private death-certificate source extract from REDCap."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,9 +10,7 @@ Technical Manual
 
 ## What this step does
 
-Mortality Step 1 retrieves the authorised mortality REDCap project, keeps the approved death-certificate records and fields, and creates a private analytical source through the selected month-end.
-
-It does not classify deaths as Heart or Stroke.
+Mortality Step 1 retrieves the authorised mortality REDCap project, keeps the approved death-certificate records and fields, and creates a private analytical data source, including records to the end of the selected month. 
 
 ::: {.callout-note appearance="simple" title="Procedure at a glance"}
 1. Choose a completed calendar month.

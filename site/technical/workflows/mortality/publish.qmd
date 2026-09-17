@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Publish approved mortality outputs"
 description: "Mortality Step 6: verify and publish the exact ten mortality files approved in Step 5."
 ---

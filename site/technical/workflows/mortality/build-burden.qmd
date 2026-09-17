@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Build mortality burden data"
 description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the data-package folder for review."
 ---
@@ -25,9 +25,7 @@ It creates exact private values. It does not apply the final disclosure control,
 
 - Complete Step 2 successfully for the same data release.
 - Confirm the two private population reference files exist.
-- Remember that the selected `YYYY_MM` identifies the data freeze. Step 3 separately derives the completed analysis years, beginning in 2010 and ending before the release year.
-
-Step 3 carries both **Primary** and **Inclusive** mortality definitions. In generated data, `upper_clear_likely_possible` is the internal name for Inclusive; it is not a confidence limit or linkage estimate.
+- Remember that the selected `YYYY_MM` identifies the year and month of the data release. Step 3 separately derives the **completed** analysis years, beginning in 2010 and ending before the release year.
 
 ::: {.callout-note collapse="true" title="Input files"}
 

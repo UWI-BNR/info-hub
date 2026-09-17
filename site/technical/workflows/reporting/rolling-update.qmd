@@ -1,6 +1,6 @@
 ---
 title: "Build a rolling three-month CVD update"
-description: "Run and maintain the controlled one-step builder for a dated online update."
+description: "Build and review a dated online update from exact approved CVD event and mortality data releases."
 manual-review-status: not-reviewed
 ---
 
@@ -8,82 +8,122 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Workflow boundary
+## What this page does
 
-The controller is `scripts/stata/reporting/bnr_report_update_build.do`. It verifies two approved release-stamped CSVs, freezes exact copies with the dated report and instantiates the central Quarto/Observable template. It does not use mutable `*_current.csv` files, approve metrics, apply disclosure control, render Quarto, commit or deploy.
+The rolling-update builder creates one dated online CVD update from exact approved CVD event and mortality data-release files. It freezes copies of those files with the report so the page does not change when a later data release replaces a `*_current.csv` file.
 
-## Inputs
+This is a one-step report publication route. It does not recalculate metrics, apply disclosure control, render Quarto or deploy the website.
 
-| Input | Authoritative file | Required matching website file |
-|---|---|---|
-| CVD event release | `$BNR_PUBLIC/metrics/cvd/cvd_metrics_cvd_YYYY_MM.csv` | `$BNR_REPO/site/downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_YYYY_MM.csv` |
-| Mortality release | `$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` | `$BNR_REPO/site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` |
-| Central template | `$BNR_STATA/reporting/templates/bnr_report_update_template.qmd` | Not applicable |
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Select the report month, two approved source data releases and report version.
+2. Run the builder from the Stata menu or command window.
+3. Confirm `Published successfully`.
+4. Review the generated page, frozen data and source links.
+5. Render and review the website before deployment.
+:::
 
-For each release, the authoritative and website files must have identical size and Stata checksum. A mismatch stops the build and points back to the relevant Step 6.
+## Before you start
 
-## Run the builder
+- Complete Step 6 for both source data releases.
+- Choose the month that the update will represent.
+- Start at report version 1. If the stable report address already exists, use a strictly higher version with `replace`.
+- Use source years of 2024 or later, months from 1 to 12 and a positive whole-number report version.
 
-Preferred route:
+In the file patterns below, `YYYY_MM` is the selected data-release year and month, and `N` is the report version.
 
-**User > BNR > Rolling three-month CVD update > Build dated online update**
+::: {.callout-note collapse="true" title="Input files"}
 
-Command-line equivalent:
+| File | What the builder checks |
+|---|---|
+| `$BNR_PUBLIC/metrics/cvd/cvd_metrics_cvd_YYYY_MM.csv` | Official public CVD event data-release file. |
+| `$BNR_REPO/site/downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_YYYY_MM.csv` | Website copy; its size and checksum—a value used to detect a changed file—must match the official public file. |
+| `$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Official public mortality data-release file. |
+| `$BNR_REPO/site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Website copy; its size and checksum must match the official public file. |
+| `scripts/stata/reporting/templates/bnr_report_update_template.qmd` | Central report template used to create the dated page. |
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_update_build.do" ///
-    REPORT_YEAR REPORT_MONTH EVENT_YEAR EVENT_MONTH ///
-    MORTALITY_YEAR MORTALITY_MONTH REPORT_VERSION [replace]
-```
+:::
 
-Example:
+::: {.callout-note collapse="true" title="Code files"}
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 1 2026 1 2026 7 1
-```
+| File | How it is used |
+|---|---|
+| `scripts/stata/reporting/bnr_report_update_build.do` | Main builder; run directly by the menu, dialog or command. |
+| `scripts/stata/dialogs/bnr_report_update_build.dlg` | Stata dialog for the report period, source data releases, version and replacement choice. |
+| `scripts/stata/menu/bnr_menu.do` | Adds the rolling-update command to the BNR Stata menu. |
+| `scripts/stata/reporting/tests/bnr_report_test_update_lifecycle.do` | Developer regression test for the complete builder lifecycle; not a routine data-release input. |
 
-All periods and the version are whole numbers; years must be 2024 or later, months 1–12 and version at least 1.
+:::
 
-## What happens in order
+::: {.callout-note collapse="true" title="Output files"}
 
-1. Validate arguments and configured roots: `$BNR_REPO`, `$BNR_STATA`, `$BNR_PUBLIC` and `$BNR_PRIVATE_LOGS`.
-2. Require the central template, both authoritative release CSVs and both website mirrors.
-3. Compare each mirror with its authoritative source by size and checksum.
-4. Check the stable report location. If it already exists, require a strictly higher version and `replace`.
-5. Substitute report period, date, ID, version, source IDs and public links into the central template.
-6. Stage and verify complete copies of both release CSVs.
-7. Write `report.yml`, including source and template fingerprints.
-8. Copy the same QMD and frozen CSVs to the authoritative report package and website tree, then verify them.
+The builder creates the official public report under `$BNR_PUBLIC/reports/cvd/updates/YYYY-MM/`.
 
-## Outputs
+| File | Purpose |
+|---|---|
+| `index.qmd` | Generated dated report page. |
+| `report.yml` | Generated report identity, version, source IDs and file checksums. |
+| `data/event_release.csv` | Frozen exact copy of the selected CVD event data release. |
+| `data/mortality_release.csv` | Frozen exact copy of the selected mortality data release. |
 
-```text
-$BNR_PUBLIC/reports/cvd/updates/YYYY-MM/
-  index.qmd
-  report.yml
-  data/
-    event_release.csv
-    mortality_release.csv
+It creates the matching website report under `$BNR_REPO/site/surveillance/cvd/reports/updates/YYYY-MM/`.
 
-$BNR_REPO/site/surveillance/cvd/reports/updates/YYYY-MM/
-  index.qmd
-  data/
-    event_release.csv
-    mortality_release.csv
-```
+| File | Purpose |
+|---|---|
+| `index.qmd` | Website copy of the generated report page. |
+| `data/event_release.csv` | Website copy of the frozen event data. |
+| `data/mortality_release.csv` | Website copy of the frozen mortality data. |
+| `$BNR_PRIVATE_LOGS/bnr_report_update_bnr_cvd_update_YYYY_MM_vN.log` | Private build and publication log. |
 
-The private log is `$BNR_PRIVATE_LOGS/bnr_report_update_bnr_cvd_update_YYYY_MM_vN.log`.
+Only the official public package carries `report.yml`.
 
-The authoritative package alone carries `report.yml`; the website instance carries the QMD and its frozen data. The page links to the public release-stamped source downloads.
+:::
 
-## Review and publication
+## Build the update
 
-Preview the generated page and check the report identity, both release IDs, coverage, cards, charts, source links, protected values and incomplete periods. Then run a complete Quarto render and inspect both report listings.
+1. In Stata, choose **User > BNR > Rolling three-month CVD update > Build dated online update**.
+2. Enter the report year and month, CVD event data-release year and month, mortality data-release year and month, and report version.
+3. Leave the higher-version replacement box unticked for the first version and select **Build update page**.
+4. Alternatively, enter the complete routine command in the **Stata command window**:
 
-The generated `index.qmd` is an instance. For a future design change, edit the central template, test it and deliberately rebuild affected instances. Do not turn an earlier dated page into a template.
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 1 2026 1 2026 7 1
+   ```
 
-## Recovery and versioning
+5. To publish a strictly higher version at an existing month’s stable address, enter the complete replacement command:
 
-Once any output exists for a period, the next build must use a higher version and `replace`. A version is never silently reused or downgraded. If a partial output lacks a consistent authoritative `report.yml`, inspect the package before any recovery; do not overwrite files individually.
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 1 2026 1 2026 7 2 replace
+   ```
 
-Regression coverage is in `scripts/stata/reporting/tests/bnr_report_test_update_lifecycle.do`.
+6. In `ROLLING THREE-MONTH CVD UPDATE: OPERATIONAL RUN SUMMARY`, confirm `Run status: Published successfully` and check the report ID and output locations.
+
+## Review the update
+
+1. Open the generated website `index.qmd` in the local Quarto preview.
+2. Confirm the report month, version and both source data-release IDs.
+3. Check cards, charts, coverage notes, protected values and incomplete periods.
+4. Review tables, charts, explanatory text and downloads together to confirm that no protected value is shown or can be calculated.
+5. Open both source-data links and confirm they name the intended data releases.
+6. Check both frozen CSVs against the values displayed by the page.
+7. Complete a full local Quarto render and inspect both automatic report listings.
+8. Review the generated QMD and frozen-data Git changes before following the normal development-branch deployment route.
+
+The generated page is a dated report instance. For a future design change, edit and test the central template, then deliberately rebuild affected instances. Do not turn an earlier dated page into the template.
+
+::: {.callout-note collapse="true" title="If the rolling update does not complete"}
+
+| Situation | Action |
+|---|---|
+| An official public file and its website copy differ | Rerun the relevant Step 6 analytical publication. Do not edit either CSV. |
+| Output already exists for the report month | Inspect the existing report, choose a strictly higher version and use the complete `replace` command. |
+| A partial report lacks a consistent official `report.yml` | Inspect the complete official and website folders before recovery. Do not overwrite individual generated files. |
+
+For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
+
+:::
+
+## Related procedures
+
+- [Run the rolling three-month CVD update](../../../operations/post-redcap/rolling-update.qmd)
+- [Render and publish the website](../../website/render-publish.qmd)
+- [How the report listings refresh](report-listings-regeneration.qmd)

@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Run the CVD mortality workflow"
 description: "Run the six-step mortality workflow from the private death-certificate extract through classification, review, approval and controlled analytical publication."
 ---
@@ -10,7 +10,7 @@ Technical Manual
 
 ## What this workflow does
 
-The mortality workflow turns authorised mortality REDCap records into an approved public mortality data package. It is separate from the CVD event workflow and does not use the CVD event Steps 1–3 analytical files.
+The mortality workflow turns authorised mortality REDCap records into an approved public mortality data package. It is separate from the CVD event workflow.
 
 ::: {.callout-note appearance="simple" title="Workflow at a glance"}
 1. Extract private mortality data.
@@ -58,7 +58,7 @@ The public mortality data package contains:
 
 The **Primary** definition includes Clear and Likely CVD deaths. The broader **Inclusive** definition also includes Possible CVD deaths. Some generated files use `upper_clear_likely_possible` for the Inclusive definition. Here, *upper* means the broader classification definition; it is not an upper confidence limit or an upper estimate from record linkage.
 
-Disease case ascertainment officer (DCO) linkage is outside this mortality workflow. Mortality outputs enter that separate process through the CVD event workflow.
+Disease case ascertainment officer (DCO) linkage is in the CVD event workflow, not this mortality workflow.
 
 ## Publication boundary
 

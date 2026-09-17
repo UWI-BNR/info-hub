@@ -1,6 +1,6 @@
 ---
-title: "Refresh the CVD tables"
-description: "Maintain and verify the public tabulations built from approved CVD event and mortality files."
+title: "How the CVD tables refresh"
+description: "Technical reference for the approved inputs and presentation rules used by the public CVD tables."
 manual-review-status: not-reviewed
 ---
 
@@ -8,41 +8,60 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Source and boundary
+## What this page explains
 
-The maintained page is `site/surveillance/cvd/tables/index.qmd`. It is a Quarto/Observable presentation of approved outputs, not a separate analytical workflow. It must not recalculate surveillance metrics, alter suppression or reconstruct protected values.
+The CVD tables refresh automatically when the CVD event or mortality Step 6 replaces the approved website data files and the website is rendered and deployed. **No separate table-refresh action is required.**
 
-## Inputs
+This page is technical reference material for maintaining or checking the tables.
 
-| Input | Website path | Origin |
-|---|---|---|
-| Current event metrics | `site/downloads/files/metrics/cvd/cvd_metrics_current.csv` | CVD event Step 6 |
-| Fixed event monthly reference | `site/downloads/files/metrics/cvd/cvd_monthly_reference_2015_2019.csv` | Controlled fixed public asset |
-| Current mortality metrics | `site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv` | Mortality Step 6 |
-| Fixed mortality monthly reference | `site/downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv` | Mortality Steps 4–6 |
+::: {.callout-note appearance="simple" title="No separate refresh action"}
+Do not edit the tables page for a routine data release. Complete the relevant Step 6 analytical publication, then follow the normal website render and deployment process. The tables discover the available periods from the approved data.
+:::
 
-The page loads these files with `FileAttachment`, reorganises rows for display and creates browser-side convenience downloads. Those selected-view files are not authoritative releases.
+## Page and approved inputs
 
-## Routine procedure
+| File | Purpose |
+|---|---|
+| `site/surveillance/cvd/tables/index.qmd` | Quarto and Observable presentation code for the public CVD tables. |
+| `site/downloads/files/metrics/cvd/cvd_metrics_current.csv` | Current approved CVD event measures. |
+| `site/downloads/files/metrics/cvd/cvd_monthly_reference_2015_2019.csv` | Fixed approved CVD event monthly reference. |
+| `site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv` | Current approved mortality measures. |
+| `site/downloads/files/metrics/mortality/burden/datasets/mort_monthly_reference_2015_2019.csv` | Fixed approved mortality monthly reference. |
 
-1. Confirm the relevant Step 6 completed and the website file agrees with the authoritative public copy.
-2. Start a local Quarto preview and open `/surveillance/cvd/tables/`.
-3. Check event and mortality tabs separately.
-4. Exercise period, measure, definition and stratum controls.
-5. Confirm that protected, unavailable and incomplete values are labelled correctly and are never treated as zero.
-6. Download representative selected views and compare their rows and display values with the on-screen table.
-7. Run a complete `quarto render`, inspect local links and review Git changes.
+The page loads these files with `FileAttachment`, reorganises their approved rows for display and creates browser-side selected-view downloads. Those downloads are not official data releases.
 
-A routine release should require no QMD edit. The page discovers available periods from the approved data.
+## Presentation boundary
+
+The tables page may filter, arrange and format approved rows. It must not:
+
+- recalculate surveillance measures;
+- change disclosure protection;
+- treat a protected, unavailable or incomplete value as zero;
+- derive a value from totals or related cells when an input is protected; or
+- write a browser-created selected view back to an official public file.
+
+Stable internal values and supplied fields such as `suppression_status`, `display_value`, completeness indicators and disclosure notes must be preserved even when the page uses plainer public labels.
+
+## Checks during normal website review
+
+After the normal site render, check the tables as part of website review:
+
+- event and mortality tabs open correctly;
+- period, measure, definition and stratum controls show only supported choices;
+- protected, unavailable and incomplete values have the correct labels;
+- representative selected-view downloads agree with the on-screen rows; and
+- the page works at narrow and wide browser widths where practical.
 
 ## Maintenance rules
 
 - Keep `FileAttachment` paths relative to the QMD and within the public website tree.
-- Use public labels without changing stable machine values.
-- Preserve `suppression_status`, `display_value`, completeness fields and disclosure notes.
-- Do not derive a value from totals or related cells when an input is protected.
-- If a new public schema or measure is introduced, update the producer contract and the page together and test both dashboards and tables.
+- A routine data release should not require a QMD change.
+- If a new public schema or measure is introduced, update the producing workflow and tables together, then test both tables and dashboards.
+- If a published CSV is wrong or missing, correct the upstream data-release pathway. Do not type an analytical correction into the QMD.
+- If the CSV is correct but the page is wrong, inspect the browser console, file paths, field names, filters and data types.
 
-## Troubleshooting
+## Related procedures
 
-If the published CSV is wrong or missing, correct the upstream release pathway. If the CSV is correct, inspect the browser console and check field names, filters, file paths and data types in `index.qmd`. Do not type an analytical correction into the QMD.
+- [Render and publish the website](../../website/render-publish.qmd)
+- [CVD event Step 6: publish approved outputs](../cvd-events/publish-metrics.qmd)
+- [Mortality Step 6: publish approved outputs](../mortality/publish.qmd)

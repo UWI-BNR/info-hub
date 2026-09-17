@@ -1,6 +1,6 @@
 ---
 title: "BNR reporting and presentation workflows"
-description: "Choose the technical guide for dashboards, tables, downloads, listings and public reports."
+description: "Understand which reporting products refresh automatically and which reports require a controlled build, approval and publication process."
 manual-review-status: not-reviewed
 ---
 
@@ -8,18 +8,47 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Choose the process
+## What this chapter explains
 
-| Process | Main source | Guide |
-|---|---|---|
-| Refresh CVD dashboards | Approved current event and mortality files | [Dashboard regeneration](dashboard-regeneration.qmd) |
-| Refresh CVD tables | Approved current files and fixed monthly references | [Tabulation regeneration](tabulation-regeneration.qmd) |
-| Rebuild Downloads | Approved catalogue records and ZIP packages | [Downloads page regeneration](downloads-page-regeneration.qmd) |
-| Rebuild report listings | Published report landing-page metadata | [Report listings regeneration](report-listings-regeneration.qmd) |
-| Rolling three-month update | Exact approved event and mortality release CSVs | [Rolling update](rolling-update.qmd) |
-| Annual report and public health update | Approved releases plus year-specific analyst material | [Annual report](annual-report.qmd) |
-| One-off report | Finished bespoke PDF and its private analytical evidence | [One-off report](one-off-report.qmd) |
+The first four pages in this chapter are technical references for website products that refresh automatically during the normal publication and site-render process. They do not add a separate user task.
 
-The first four are Quarto presentation or indexing processes. They do not have a separate Stata analytical workflow. The three report routes create public content: the rolling builder is a narrow one-step route using already-approved sources, while annual and one-off products separate candidate creation, approval and publication.
+The final three pages are operating procedures for creating reports.
 
-All website work ends with a complete local render, review of Git changes and the normal branch-to-`main` deployment pathway. See [Render and publish the website](../../website/render-publish.qmd).
+::: {.callout-note appearance="simple" title="System at a glance"}
+
+| Product | Separate action required? |
+|---|---|
+| CVD dashboards | **No.** They read the current approved website data files. |
+| CVD tables | **No.** They read the same approved website data files. |
+| Downloads page | **No.** Its catalogue builder runs automatically before every Quarto render. |
+| Report listings | **No.** Quarto discovers published report landing pages during rendering. |
+| Rolling three-month update | **Yes.** Run its one-step report builder. |
+| Annual report and public health update | **Yes.** Build, review, approve and publish the report package. |
+| One-off report | **Yes.** Prepare, review, approve and publish the finished report. |
+
+:::
+
+## Technical reference pages
+
+| Page | What it documents |
+|---|---|
+| [CVD dashboards](dashboard-regeneration.qmd) | Approved inputs, allowed browser calculations and technical checks. |
+| [CVD tables](tabulation-regeneration.qmd) | Approved inputs, presentation boundary and maintenance rules. |
+| [Downloads page](downloads-page-regeneration.qmd) | Automatic catalogue construction and failure protection. |
+| [Report listings](report-listings-regeneration.qmd) | Automatic report discovery and required landing-page fields. |
+
+## Report procedures
+
+| Page | What the operator does |
+|---|---|
+| [Rolling three-month update](rolling-update.qmd) | Build a dated online update from two approved data releases. |
+| [Annual report](annual-report.qmd) | Build, review, approve and publish the annual report and one-page public health update. |
+| [One-off report](one-off-report.qmd) | Package, review, approve and publish a completed bespoke report. |
+
+All report publication is separate from website deployment. After a report is published, the site must still be rendered and checked locally, committed on a development branch and deployed through the normal GitHub pull-request route.
+
+## Related procedures
+
+- [Render and publish the website](../../website/render-publish.qmd)
+- [Run the CVD event workflow](../cvd-events/overview.qmd)
+- [Run the CVD mortality workflow](../mortality/overview.qmd)

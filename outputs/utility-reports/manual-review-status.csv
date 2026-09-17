@@ -75,18 +75,18 @@ Technical Manual,Create deidentified analytical inputs,site/technical/workflows/
 Technical Manual,Generate combined CVD metrics,site/technical/workflows/cvd-events/generate-metrics.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Review and approve combined CVD metrics,site/technical/workflows/cvd-events/review-approve.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Publish approved combined CVD metrics,site/technical/workflows/cvd-events/publish-metrics.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Run the CVD mortality workflow,site/technical/workflows/mortality/overview.qmd,not-reviewed,Page YAML
-Technical Manual,Extract mortality data,site/technical/workflows/mortality/extract.qmd,not-reviewed,Page YAML
-Technical Manual,Classify CVD deaths,site/technical/workflows/mortality/classify.qmd,not-reviewed,Page YAML
-Technical Manual,Build mortality burden data,site/technical/workflows/mortality/build-burden.qmd,not-reviewed,Page YAML
-Technical Manual,Review the mortality release,site/technical/workflows/mortality/review.qmd,not-reviewed,Page YAML
-Technical Manual,Approve the reviewed mortality release,site/technical/workflows/mortality/approve.qmd,not-reviewed,Page YAML
-Technical Manual,Publish approved mortality outputs,site/technical/workflows/mortality/publish.qmd,not-reviewed,Page YAML
+Technical Manual,Run the CVD mortality workflow,site/technical/workflows/mortality/overview.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Extract mortality data,site/technical/workflows/mortality/extract.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Classify CVD deaths,site/technical/workflows/mortality/classify.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Build mortality burden data,site/technical/workflows/mortality/build-burden.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Review the mortality data package,site/technical/workflows/mortality/review.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Approve the reviewed mortality data package,site/technical/workflows/mortality/approve.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Publish approved mortality outputs,site/technical/workflows/mortality/publish.qmd,reviewed-by-irh,Page YAML
 Technical Manual,BNR reporting and presentation workflows,site/technical/workflows/reporting/overview.qmd,not-reviewed,Page YAML
-Technical Manual,Refresh the CVD dashboards,site/technical/workflows/reporting/dashboard-regeneration.qmd,not-reviewed,Page YAML
-Technical Manual,Refresh the CVD tables,site/technical/workflows/reporting/tabulation-regeneration.qmd,not-reviewed,Page YAML
-Technical Manual,Rebuild the Downloads page,site/technical/workflows/reporting/downloads-page-regeneration.qmd,not-reviewed,Page YAML
-Technical Manual,Rebuild the report listings,site/technical/workflows/reporting/report-listings-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,How the CVD dashboards refresh,site/technical/workflows/reporting/dashboard-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,How the CVD tables refresh,site/technical/workflows/reporting/tabulation-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,How the Downloads page refreshes,site/technical/workflows/reporting/downloads-page-regeneration.qmd,not-reviewed,Page YAML
+Technical Manual,How the report listings refresh,site/technical/workflows/reporting/report-listings-regeneration.qmd,not-reviewed,Page YAML
 Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,not-reviewed,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,not-reviewed,Page YAML

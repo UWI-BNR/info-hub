@@ -361,13 +361,13 @@ website:
               contents:
                 - text: "Overview"
                   href: technical/workflows/reporting/overview.qmd
-                - text: "Refresh CVD dashboards"
+                - text: "How CVD dashboards refresh"
                   href: technical/workflows/reporting/dashboard-regeneration.qmd
-                - text: "Refresh CVD tables"
+                - text: "How CVD tables refresh"
                   href: technical/workflows/reporting/tabulation-regeneration.qmd
-                - text: "Rebuild Downloads"
+                - text: "How the Downloads page refreshes"
                   href: technical/workflows/reporting/downloads-page-regeneration.qmd
-                - text: "Rebuild report listings"
+                - text: "How report listings refresh"
                   href: technical/workflows/reporting/report-listings-regeneration.qmd
                 - text: "Rolling three-month update"
                   href: technical/workflows/reporting/rolling-update.qmd

@@ -1,6 +1,6 @@
 ---
 title: "Prepare, approve and publish a one-off CVD report"
-description: "Operate the controlled publication route for a completed bespoke analysis and PDF."
+description: "Package, review, approve and publish a completed bespoke CVD analysis and PDF."
 manual-review-status: not-reviewed
 ---
 
@@ -8,83 +8,203 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Boundary and prerequisites
+## What this page does
 
-The bespoke analysis, reproducibility record and finished PDF are completed before this workflow. These controllers do not run, standardise or verify the analysis method. Retain analytical code, sources and review evidence in the approved private locations.
+The one-off report workflow packages a completed analyst-produced PDF, creates its public landing page, records approval and publishes the exact approved files.
 
-Choose a stable `study_id` matching `^[a-z][a-z0-9_]*$`, for example `case_fatality_2025`. Use a positive integer version and an ISO report date (`YYYY-MM-DD`). Titles and descriptions cannot contain double quotation marks.
+The workflow does not run, standardise or verify the analysis method. Complete and retain the analysis code, sources, reproducibility record and review evidence in approved private locations before starting.
 
-## Optional disclosure screen {#disclosure-screen}
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Complete the analysis, PDF and disclosure review.
+2. Run Step 1 and review the three private proposed files.
+3. Run Step 2 to approve the unchanged three-file package.
+4. Run Step 3 to publish the approved report.
+5. Render and review the landing page, PDF and automatic report listings.
+:::
 
-Menu: **User > BNR > Report utilities > Screen report counts for disclosure review**
+## Before you start
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_disclosure_screen.do" INPUT_DTA REVIEW_ID [replace]
-```
+- Choose a stable study ID containing lowercase letters, numbers and underscores and beginning with a letter—for example, `case_fatality_2025`.
+- Choose a positive whole-number report version and an ISO `YYYY-MM-DD` report date.
+- Prepare a non-empty final PDF in an approved private location.
+- Prepare the public title and short description. Neither may contain a double quotation mark.
+- Complete and record the report’s analytical and disclosure review. The optional screening utility below supports review but does not replace it.
 
-The input must contain `output_id`, `cell_id` and numeric `cell_count`. The screen flags counts 0–5, missing, negative or non-integer counts and duplicate identifiers. It writes private review outputs under `$BNR_STAGING/report_reviews/` and a log under `$BNR_PRIVATE_LOGS/`.
+In the file patterns below, `STUDY_ID` is the chosen study ID, `REVIEW_ID` is the optional screen ID and `N` is the report version.
 
-This is a screen, not disclosure control. It does not alter the input, apply secondary suppression, assess a whole report or approve publication.
+::: {.callout-note collapse="true" title="Input files"}
 
-## Step 1: prepare the candidate
+| File | What the workflow uses or checks |
+|---|---|
+| Finished private report PDF | Step 1 checks that it exists and is non-empty, then copies it unchanged into the private proposed package. |
+| Optional private Stata count dataset | The disclosure-screen utility requires `output_id`, `cell_id` and numeric `cell_count`. It is not read by Steps 1–3. |
 
-Controller: `scripts/stata/reporting/bnr_report_oneoff_s1_prepare.do`
+:::
 
-Menu: **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**
+::: {.callout-note collapse="true" title="Code files"}
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
-    STUDY_ID REPORT_VERSION "C:\path\report.pdf" ///
-    "Public report title" "Public description" YYYY-MM-DD [replace]
-```
+| File | How it is used |
+|---|---|
+| `scripts/stata/reporting/bnr_report_disclosure_screen.do` | Optional utility that flags counts and structural issues for human disclosure review. |
+| `scripts/stata/reporting/bnr_report_oneoff_s1_prepare.do` | Step 1 controller; copies the PDF and creates the landing page and report description. |
+| `scripts/stata/reporting/bnr_report_oneoff_s2_approve.do` | Step 2 approval controller. |
+| `scripts/stata/reporting/bnr_report_approve_candidate.do` | Shared helper that verifies the three reviewed files and creates approval evidence. |
+| `scripts/stata/reporting/bnr_report_oneoff_s3_publish.do` | Step 3 publication controller. |
+| `scripts/stata/reporting/bnr_report_publish_candidate.do` | Shared helper that verifies and publishes the three approved files. |
+| `scripts/stata/dialogs/bnr_report_disclosure_screen.dlg` | Stata dialog for the optional disclosure screen. |
+| `scripts/stata/dialogs/bnr_report_oneoff_s1_prepare.dlg` | Step 1 Stata dialog. |
+| `scripts/stata/dialogs/bnr_report_oneoff_s2_approve.dlg` | Step 2 Stata dialog. |
+| `scripts/stata/dialogs/bnr_report_oneoff_s3_publish.dlg` | Step 3 Stata dialog. |
+| `scripts/stata/menu/bnr_menu.do` | Adds the screening utility and three one-off-report steps to the BNR Stata menu. |
 
-Step 1 requires a non-empty PDF, fingerprints it, copies it into the private candidate and creates `index.qmd` and `report.yml`. It does not inspect the PDF's analytical content.
+:::
 
-```text
-$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/
-  bnr_cvd_oneoff_STUDY_ID_vN.pdf
-  index.qmd
-  report.yml
-```
+::: {.callout-note collapse="true" title="Output files"}
 
-Review the copied PDF and preview the landing page. Confirm the study ID, title, description, date, version, image, PDF link and disclosure safety. The private log is under `$BNR_PRIVATE_LOGS/`.
+The optional screen writes private files under `$BNR_STAGING/report_reviews/disclosure/REVIEW_ID/`.
 
-`replace` may rebuild an unapproved candidate. If that version is approved, prepare a higher version.
+| File | Purpose |
+|---|---|
+| `disclosure_screen.csv` | Row-level screening results and reasons for human review. |
+| `screen_summary.yml` | Generated summary of the input file and screening counts. |
+| `$BNR_PRIVATE_LOGS/bnr_report_disclosure_screen_REVIEW_ID.log` | Private screening log. |
 
-## Step 2: approve the candidate
+Step 1 creates three private proposed files under `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/`.
 
-Controller: `scripts/stata/reporting/bnr_report_oneoff_s2_approve.do`
+| File | Purpose |
+|---|---|
+| `bnr_cvd_oneoff_STUDY_ID_vN.pdf` | Unchanged private copy of the finished PDF. **Open this first.** |
+| `index.qmd` | Generated proposed public landing page. |
+| `report.yml` | Generated report identity, study ID, version, date, public filename and PDF checksum—a value used to detect a changed file. |
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_oneoff_s2_approve.do" ///
-    STUDY_ID REPORT_VERSION "Full Name" "BNR Analyst" ///
-    candidate disclosure ready
-```
+Step 2 copies those three unchanged files into `public_ready/` and adds:
 
-Only an authorised **BNR Lead** or **BNR Analyst** may approve. All three confirmations are required. The shared approval helper validates identity and version, copies the exact PDF, QMD and metadata into `public_ready`, writes a three-row `public_manifest.csv`, and writes `approval.yml` last. Approval is immutable and has no `replace` option.
+| File | Purpose |
+|---|---|
+| `public_manifest.csv` | Private generated list of the exact three files Step 3 may publish, with file sizes and checksums. |
+| `approval.yml` | Private approval record, written last. Approval does not mean publication. |
 
-Check the approved package under:
+`public_ready` is the private folder holding the files authorised for Step 3. It is not a public location.
 
-`$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/public_ready/`
+Step 3 publishes stable public filenames:
 
-## Step 3: publish the report
+| File | Published location |
+|---|---|
+| `bnr_cvd_oneoff_STUDY_ID.pdf` | `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/` and `site/downloads/files/reports/cvd/studies/STUDY_ID/`. |
+| `index.qmd` | Official public study folder and `site/surveillance/cvd/reports/studies/STUDY_ID/`. |
+| `report.yml` | Official public study folder and website-download folder. |
 
-Controller: `scripts/stata/reporting/bnr_report_oneoff_s3_publish.do`
+Private Step 1–3 logs are written under `$BNR_PRIVATE_LOGS/` with the report ID in each filename.
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_oneoff_s3_publish.do" STUDY_ID REPORT_VERSION [replace]
-```
+:::
 
-The shared publisher verifies the approval identity and authorised role, the manifest fingerprint and all three file fingerprints before copying.
+## Optional: screen structured counts
 
-| Product | Authoritative location | Website location |
-|---|---|---|
-| PDF | `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/bnr_cvd_oneoff_STUDY_ID.pdf` | `site/downloads/files/reports/cvd/studies/STUDY_ID/` |
-| Landing page | `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/index.qmd` | `site/surveillance/cvd/reports/studies/STUDY_ID/index.qmd` |
-| Metadata | `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/report.yml` | Website download folder |
+This utility is an early-warning screen, not disclosure control. It flags integer counts from 0 to 5, missing or negative values, non-integer counts and duplicate cell IDs for human review. A flagged zero is not automatically suppressed under the BNR publication rule; positive counts from 1 to 5 require protection.
 
-Existing output requires `replace`. The publisher refuses a downgrade. Use a higher approved version for a correction; same-version replacement is only for controlled recovery.
+1. In Stata, choose **User > BNR > Report utilities > Screen report counts for disclosure review**.
+2. Select the private Stata dataset and enter a stable review ID. Leave replacement unticked for the first screen and select **Screen counts**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
 
-After Step 3, run a complete Quarto render. Open the PDF and landing page, check both report listings and review all Git changes. The publication log is under `$BNR_PRIVATE_LOGS/`.
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_disclosure_screen.do" ///
+       "$BNR_STAGING/report_inputs/report_counts.dta" case_fatality_2025
+   ```
 
-Regression coverage is in `scripts/stata/reporting/tests/bnr_report_test_oneoff_lifecycle.do`; disclosure-screen coverage is in `bnr_report_test_disclosure_screen.do`.
+4. To rebuild the same private screen deliberately, enter the complete replacement command:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_disclosure_screen.do" ///
+       "$BNR_STAGING/report_inputs/report_counts.dta" case_fatality_2025 replace
+   ```
+
+5. In `REPORT DISCLOSURE SCREEN: OPERATIONAL RUN SUMMARY`, confirm `Run status: Screening completed`.
+6. Review every row marked `REVIEW` in `disclosure_screen.csv`, then complete the whole-report disclosure assessment. The screen does not apply additional protection, alter the PDF, approve the report or publish anything.
+
+## Step 1: prepare and review the proposed report
+
+1. In Stata, choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**.
+2. Enter the study ID, report version, report date, finished PDF path, public title and description. Leave replacement unticked for the first build and select **Prepare candidate**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
+       case_fatality_2025 1 "C:\path\report.pdf" ///
+       "Public report title" "Public description" 2026-09-17
+   ```
+
+4. To rebuild the same unapproved version deliberately, enter the complete replacement command:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
+       case_fatality_2025 1 "C:\path\report.pdf" ///
+       "Public report title" "Public description" 2026-09-17 replace
+   ```
+
+5. In `ONE-OFF CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY`, confirm `Run status: Candidate prepared` and check the report ID and private folder.
+6. Open the copied PDF first and confirm it is the reviewed finished report and is disclosure-safe.
+7. Review every table, chart, explanatory statement and public download together to confirm that no protected value is shown or can be calculated.
+8. Preview `index.qmd` and check the study ID, title, description, date, version, image, alternative text and PDF link.
+9. Open `report.yml` and confirm the report identity and PDF information.
+
+If the version has already been approved, create and review a higher version instead of rebuilding it.
+
+## Step 2: approve the three reviewed files
+
+1. In Stata, choose **User > BNR > One-off CVD report publication > Step 2: Approve one-off report candidate**.
+2. Enter the study ID, version, approver’s full name and authorised role.
+3. Confirm that the complete proposed package was reviewed, disclosure review was completed and the exact files are ready for publication.
+4. Select **Approve candidate**.
+5. Alternatively, enter the complete command in the **Stata command window**:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_oneoff_s2_approve.do" ///
+       case_fatality_2025 1 "Full Name" "BNR Analyst" ///
+       candidate disclosure ready
+   ```
+
+6. In `ONE-OFF CVD REPORT STEP 2: OPERATIONAL RUN SUMMARY`, confirm `Run status: Candidate approved`.
+7. Confirm `public_manifest.csv` lists exactly the PDF, QMD and `report.yml`, and confirm `approval.yml` identifies the correct approver, role, study and version.
+
+Only an authorised **BNR Lead** or **BNR Analyst** may approve. Step 2 has no `replace` option.
+
+## Step 3: publish the approved report
+
+1. In Stata, choose **User > BNR > One-off CVD report publication > Step 3: Publish approved one-off report**.
+2. Enter the approved study ID and version. Leave replacement unticked for first publication and select **Publish one-off report**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_oneoff_s3_publish.do" case_fatality_2025 1
+   ```
+
+4. For controlled republication of an existing approved version, enter the complete replacement command:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_oneoff_s3_publish.do" case_fatality_2025 1 replace
+   ```
+
+5. In `ONE-OFF CVD REPORT STEP 3: OPERATIONAL RUN SUMMARY`, confirm `Run status: Published successfully` and check the public and website locations.
+6. Confirm the official public PDF, QMD and `report.yml` match the three approved files.
+7. Complete a full local Quarto render. Open the PDF and landing page and check both automatic report listings.
+8. Review all Git changes before following the normal development-branch deployment route.
+
+Use a higher approved version for a correction. Same-version `replace` is reserved for controlled recovery and the publisher refuses a downgrade.
+
+::: {.callout-note collapse="true" title="If a one-off-report step does not complete"}
+
+| Situation | Action |
+|---|---|
+| The proposed PDF does not match the supplied PDF | Stop and inspect both files. Recreate the Step 1 package; do not replace one generated file manually. |
+| A reviewed file changed before approval | Rerun Step 1 and repeat the complete review. |
+| Existing public output blocks Step 3 | Confirm the intended approved version. Use a higher version for a correction or `replace` only for controlled same-version recovery. |
+
+For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
+
+:::
+
+## Related procedures
+
+- [Publish a one-off CVD report](../../../operations/post-redcap/one-off-report.qmd)
+- [Disclosure-control rules](../../reference/disclosure-control-rules.qmd)
+- [How the report listings refresh](report-listings-regeneration.qmd)

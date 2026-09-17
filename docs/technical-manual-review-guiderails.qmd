@@ -22,7 +22,7 @@ This document consolidates the review approach agreed before the review with the
 | **2A** | **Rules-reference architecture**: classification, linkage and disclosure-control registers; Reference listing; manual landing page and sidebar | 🟨 | First substantive versions created and technically checked. Ian’s human review remains. |
 | **3** | **CVD event workflow** | ✅ | The overview and Steps 1–6 have been revised, technically checked and reviewed by Ian. |
 | **4** | **CVD mortality workflow** | 🟨 | The overview and Steps 1–6 have been revised and technically checked. Ian’s human review remains. |
-| **5** | **Reporting workflows** | ⬜ | Review the overview, dashboards, tables, Downloads, report listings, rolling update, annual report and one-off report: eight pages. |
+| **5** | **Reporting workflows** | 🟨 | All eight pages have been revised and technically checked. Ian’s human review remains. |
 | **6** | **Operate the Info-Hub** | ⬜ | Review the section listing, website publication procedure and website-content procedure: three pages. |
 | **7** | **Maintain and recover** | ⬜ | Review the section listing, safe code changes, files/releases/versions and troubleshooting: four pages. |
 | **8** | **Reference and manual landing page** | ⬜ | Review the five reference content pages, the Reference section listing and the main Technical Manual landing page: seven pages. The three substantive rules pages have an earlier Stage 2A review checkpoint. |
@@ -184,9 +184,10 @@ This document consolidates the review approach agreed before the review with the
 | 97 | When an implemented rule changes, update its code, tests, controlling contract or dictionary, workflow page and rules reference in the same controlled change. A routine data release must not alter fixed rules. |
 | 98 | The former `site/technical/controls/` pages remain temporarily in the repository but are not part of the final sidebar. During Stages 3–5, inspect them for unique content and move that content into the relevant CVD event, mortality or reporting workflow page rather than copying a generic procedure forward. |
 | 99 | After Stages 3–5, hold a retirement checkpoint: confirm all useful control-page content and inbound links have been migrated, then remove the obsolete control pages and section listing. Do not delete them before that check. |
+| 100 | Treat dashboard, table, Downloads and report-listing refresh pages as technical references, not user procedures. State prominently that no separate refresh action is required: the products use approved website files or refresh automatically during the normal Quarto render. Do not create an unnecessary manual refresh task. |
 
 ## Architecture decision register
 
 | Decision | Status | Agreed treatment |
 |---|:---:|---|
-| **TM-01 — Retire duplicated generic control pages** | Agreed; staged | Use the product-specific workflow pages as the operational instructions. Use the three rules registers for cross-cutting classification, linkage and disclosure rules. Stages 3 and 4 have migrated the useful CVD-event and mortality review, approval and publication detail into their product-specific steps. Keep the old control files temporarily as Stage 5 source material, remove them from navigation now, and retire them only after the migration checkpoint. |
+| **TM-01 — Retire duplicated generic control pages** | Agreed; migration complete | Use the product-specific workflow pages as the operational instructions. Use the three rules registers for cross-cutting classification, linkage and disclosure rules. Stages 3–5 have migrated the useful CVD-event, mortality and reporting review, approval and publication detail into their product-specific pages. Keep the old control files out of navigation until the retirement checkpoint confirms inbound links and remaining content, then remove them. |

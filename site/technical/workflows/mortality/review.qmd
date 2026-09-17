@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Review the mortality data package"
 description: "Mortality Step 4: check the Step 3 package, apply disclosure control and review the proposed public files."
 ---
@@ -26,9 +26,6 @@ The generated filename `mort_s4_candidate.dta` uses *candidate* to mean the priv
 
 - Complete Step 3 successfully for the same year and month.
 - Do not edit the Step 3 package before review.
-- For the first mortality data release, Step 4 builds the proposed fixed 2015–2019 monthly reference. Once BNR has approved that asset, later routine data releases must use and verify the approved fixed copy rather than recalculate it. Do not run an unchanged initial-build controller for a later data release until that change has been implemented and validated.
-
-For annual rate rows, Step 4 removes the exact rate, denominator and confidence limits when the matching annual count is protected. A rate never causes a new count to be protected.
 
 ::: {.callout-note collapse="true" title="Input files"}
 
@@ -42,8 +39,8 @@ Step 4 reads the following private files from `$BNR_STAGING/mortality/burden/mor
 | `datasets/mort_burden_metrics_current.csv` | Stable-name CSV copy; it must match the data-release CSV. |
 | `metadata/mort_burden_package.yml` | Package identity, reporting scope and source. |
 | `review/mort_burden_qa_mort_YYYY_MM.csv` | Step 3 automated-check results. |
-| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` | Step 3 disclosure-control worklist. |
-| `review/mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet copy of the Step 3 disclosure-control worklist. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` | Preliminary worklist created by Step 3 and used when Step 4 applies final disclosure control. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet copy of the preliminary Step 3 worklist. Step 4 applies the final disclosure-control rules and creates the human-review package. |
 | `readme.txt` | Step 3 package guide. |
 
 :::

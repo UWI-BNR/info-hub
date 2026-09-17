@@ -1,7 +1,7 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Classify CVD deaths"
-description: "Mortality Step 2: apply the fixed BNR Heart and Stroke classification rules to the private Step 1 source."
+description: "Mortality Step 2: apply the fixed BNR Heart and Stroke classification rules to the private Step 1 data source."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -11,8 +11,6 @@ Technical Manual
 ## What this step does
 
 Mortality Step 2 reads the private all-deaths dataset from Step 1 and applies the fixed BNR Heart and Stroke death-classification rules.
-
-The operational classifier definition is **v0.6.1**. The Step 2 controller is **v1.0.0**. The controller version changes the output structure and documentation, not the validated classification meaning.
 
 ::: {.callout-note appearance="simple" title="Procedure at a glance"}
 1. Run Step 2 for the same year and month as Step 1.
@@ -31,6 +29,8 @@ The evidence classes are Clear, Likely, Possible, Mention only and No evidence. 
 
 - **Primary:** Clear + Likely;
 - **Inclusive:** Clear + Likely + Possible.
+
+You can read more about the exact [CVD death-classification rules](../../reference/cvd-death-classification-rules.qmd) here.
 
 ::: {.callout-note collapse="true" title="Input files"}
 

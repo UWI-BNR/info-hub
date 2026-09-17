@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 28 | 19 | 0 | 0 | 47 |
+| Technical Manual | 0 | 21 | 26 | 0 | 0 | 47 |
 
 ## Public Methods Manual
 
@@ -98,18 +98,18 @@
 | Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Reviewed by IRH | Page YAML |
 | Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Reviewed by IRH | Page YAML |
 | Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Reviewed by IRH | Page YAML |
-| Run the CVD mortality workflow | `site/technical/workflows/mortality/overview.qmd` | Not reviewed | Page YAML |
-| Extract mortality data | `site/technical/workflows/mortality/extract.qmd` | Not reviewed | Page YAML |
-| Classify CVD deaths | `site/technical/workflows/mortality/classify.qmd` | Not reviewed | Page YAML |
-| Build mortality burden data | `site/technical/workflows/mortality/build-burden.qmd` | Not reviewed | Page YAML |
-| Review the mortality release | `site/technical/workflows/mortality/review.qmd` | Not reviewed | Page YAML |
-| Approve the reviewed mortality release | `site/technical/workflows/mortality/approve.qmd` | Not reviewed | Page YAML |
-| Publish approved mortality outputs | `site/technical/workflows/mortality/publish.qmd` | Not reviewed | Page YAML |
+| Run the CVD mortality workflow | `site/technical/workflows/mortality/overview.qmd` | Reviewed by IRH | Page YAML |
+| Extract mortality data | `site/technical/workflows/mortality/extract.qmd` | Reviewed by IRH | Page YAML |
+| Classify CVD deaths | `site/technical/workflows/mortality/classify.qmd` | Reviewed by IRH | Page YAML |
+| Build mortality burden data | `site/technical/workflows/mortality/build-burden.qmd` | Reviewed by IRH | Page YAML |
+| Review the mortality data package | `site/technical/workflows/mortality/review.qmd` | Reviewed by IRH | Page YAML |
+| Approve the reviewed mortality data package | `site/technical/workflows/mortality/approve.qmd` | Reviewed by IRH | Page YAML |
+| Publish approved mortality outputs | `site/technical/workflows/mortality/publish.qmd` | Reviewed by IRH | Page YAML |
 | BNR reporting and presentation workflows | `site/technical/workflows/reporting/overview.qmd` | Not reviewed | Page YAML |
-| Refresh the CVD dashboards | `site/technical/workflows/reporting/dashboard-regeneration.qmd` | Not reviewed | Page YAML |
-| Refresh the CVD tables | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Not reviewed | Page YAML |
-| Rebuild the Downloads page | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Not reviewed | Page YAML |
-| Rebuild the report listings | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Not reviewed | Page YAML |
+| How the CVD dashboards refresh | `site/technical/workflows/reporting/dashboard-regeneration.qmd` | Not reviewed | Page YAML |
+| How the CVD tables refresh | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Not reviewed | Page YAML |
+| How the Downloads page refreshes | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Not reviewed | Page YAML |
+| How the report listings refresh | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Not reviewed | Page YAML |
 | Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Not reviewed | Page YAML |
 | Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Not reviewed | Page YAML |
 | Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Not reviewed | Page YAML |

@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Approve the reviewed mortality data package"
 description: "Mortality Step 5: approve the exact Step 4 files and create the private files authorised for publication."
 ---
