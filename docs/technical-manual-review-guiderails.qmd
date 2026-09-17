@@ -1,7 +1,7 @@
 ---
 title: "BNR Technical Manual review guiderails"
 description: "Review sequence, page standards and validation rules for the section-by-section Technical Manual review."
-date: "2026-09-16"
+date: "2026-09-17"
 toc: true
 toc-depth: 2
 ---
@@ -20,7 +20,7 @@ This document consolidates the review approach agreed before the review with the
 | **1** | **Getting started**: section listing, analytics environment and workstation setup | ✅ | All three pages revised, technically checked and reviewed by Ian. |
 | **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | ✅ | All six pages revised and technically checked. The control pages are retained temporarily as source material but have been removed from the final sidebar structure. |
 | **2A** | **Rules-reference architecture**: classification, linkage and disclosure-control registers; Reference listing; manual landing page and sidebar | 🟨 | First substantive versions created and technically checked. Ian’s human review remains. |
-| **3** | **CVD event workflow** | ⬜ | Review the overview and Steps 2–6; then check the accepted Step 1 pilot against the complete workflow. Seven pages in total, six requiring their first full review. |
+| **3** | **CVD event workflow** | 🟨 | The overview and Steps 2–6 have been revised and technically checked; the accepted Step 1 pilot has been checked for workflow continuity. Ian’s human review remains. |
 | **4** | **CVD mortality workflow** | ⬜ | Review the overview and six workflow steps: seven pages. |
 | **5** | **Reporting workflows** | ⬜ | Review the overview, dashboards, tables, Downloads, report listings, rolling update, annual report and one-off report: eight pages. |
 | **6** | **Operate the Info-Hub** | ⬜ | Review the section listing, website publication procedure and website-content procedure: three pages. |
@@ -189,4 +189,4 @@ This document consolidates the review approach agreed before the review with the
 
 | Decision | Status | Agreed treatment |
 |---|:---:|---|
-| **TM-01 — Retire duplicated generic control pages** | Agreed; staged | Use the product-specific workflow pages as the operational instructions. Use the three rules registers for cross-cutting classification, linkage and disclosure rules. Keep the old control files temporarily as Stage 3–5 source material, remove them from navigation now, and retire them only after the migration checkpoint. |
+| **TM-01 — Retire duplicated generic control pages** | Agreed; staged | Use the product-specific workflow pages as the operational instructions. Use the three rules registers for cross-cutting classification, linkage and disclosure rules. Stage 3 has migrated the useful CVD-event review, approval and publication detail into Steps 5 and 6. Keep the old control files temporarily as Stage 4–5 source material, remove them from navigation now, and retire them only after the migration checkpoint. |

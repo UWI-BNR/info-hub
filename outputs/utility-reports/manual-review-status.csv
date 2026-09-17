@@ -62,19 +62,19 @@ Operations Manual,BNR Refit Audit,site/operations/bnr-refit/index.qmd,reviewed-b
 Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,reviewed-by-irh,Page YAML
 Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,reviewed-by-irh,Page YAML
-Technical Manual,BNR Technical Manual,site/technical/index.qmd,not-reviewed,Page YAML
+Technical Manual,BNR Technical Manual,site/technical/index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,not-reviewed,Page YAML
-Technical Manual,Extract a REDCap release,site/technical/workflows/cvd-events/extract-redcap.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Prepare the confidential dataset,site/technical/workflows/cvd-events/prepare-confidential.qmd,not-reviewed,Page YAML
-Technical Manual,Create deidentified analytical inputs,site/technical/workflows/cvd-events/create-analysis-inputs.qmd,not-reviewed,Page YAML
-Technical Manual,Generate combined CVD metrics,site/technical/workflows/cvd-events/generate-metrics.qmd,not-reviewed,Page YAML
-Technical Manual,Review and approve combined CVD metrics,site/technical/workflows/cvd-events/review-approve.qmd,not-reviewed,Page YAML
-Technical Manual,Publish approved combined CVD metrics,site/technical/workflows/cvd-events/publish-metrics.qmd,not-reviewed,Page YAML
+Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Extract a REDCap data release,site/technical/workflows/cvd-events/extract-redcap.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Prepare the confidential dataset,site/technical/workflows/cvd-events/prepare-confidential.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Create deidentified analytical inputs,site/technical/workflows/cvd-events/create-analysis-inputs.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Generate combined CVD metrics,site/technical/workflows/cvd-events/generate-metrics.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Review and approve combined CVD metrics,site/technical/workflows/cvd-events/review-approve.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Publish approved combined CVD metrics,site/technical/workflows/cvd-events/publish-metrics.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run the CVD mortality workflow,site/technical/workflows/mortality/overview.qmd,not-reviewed,Page YAML
 Technical Manual,Extract mortality data,site/technical/workflows/mortality/extract.qmd,not-reviewed,Page YAML
 Technical Manual,Classify CVD deaths,site/technical/workflows/mortality/classify.qmd,not-reviewed,Page YAML

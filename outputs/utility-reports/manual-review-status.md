@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 35 | 12 | 0 | 0 | 47 |
+| Technical Manual | 0 | 28 | 19 | 0 | 0 | 47 |
 
 ## Public Methods Manual
 
@@ -85,19 +85,19 @@
 
 | Page | Path | Status | Source |
 |---|---|---|---|
-| BNR Technical Manual | `site/technical/index.qmd` | Not reviewed | Page YAML |
+| BNR Technical Manual | `site/technical/index.qmd` | Reviewed by IRH | Page YAML |
 | Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
 | Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
 | Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
 | Analytical workflows | `site/technical/workflows/overview.qmd` | Reviewed by IRH | Page YAML |
-| Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Not reviewed | Page YAML |
-| Extract a REDCap release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
-| Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Not reviewed | Page YAML |
-| Create deidentified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Not reviewed | Page YAML |
-| Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Not reviewed | Page YAML |
-| Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Not reviewed | Page YAML |
-| Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Not reviewed | Page YAML |
+| Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Reviewed by IRH | Page YAML |
+| Extract a REDCap data release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
+| Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Reviewed by IRH | Page YAML |
+| Create deidentified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Reviewed by IRH | Page YAML |
+| Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Reviewed by IRH | Page YAML |
+| Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Reviewed by IRH | Page YAML |
+| Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD mortality workflow | `site/technical/workflows/mortality/overview.qmd` | Not reviewed | Page YAML |
 | Extract mortality data | `site/technical/workflows/mortality/extract.qmd` | Not reviewed | Page YAML |
 | Classify CVD deaths | `site/technical/workflows/mortality/classify.qmd` | Not reviewed | Page YAML |

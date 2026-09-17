@@ -1,35 +1,58 @@
 ---
 title: "Run the CVD events workflow"
-description: "Run the six-step workflow from REDCap extraction through controlled publication."
-manual-review-status: not-reviewed
+description: "Use the six controlled steps that take authorised CVD event data from REDCap to an approved public data package."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Workflow map
+## What this workflow does
 
-CVD event Steps 1–3 create the private extract, confidential cumulative dataset and deidentified analytical inputs. Steps 4–6 calculate, review, approve and publish the combined metric package.
+The CVD events workflow combines the fixed 2009–2023 history with an authorised cumulative REDCap extract from 2024 onwards. It creates private analytical inputs, calculates hospital-recorded and mortality-linked statistics, applies disclosure control, supports human review and approval, and publishes the approved data package.
 
-```text
-REDCap extract
-  -> frozen history + current records
-  -> purpose-specific private inputs
-  -> burden + mortality-linked/DCO calculations
-  -> disclosure review and approval
-  -> authoritative public package + website mirror
+::: {.callout-tip title="Workflow at a glance" appearance="simple"}
+1. Extract the authorised completed month from REDCap.
+2. Combine it with the fixed historical CVD data.
+3. Create private deidentified analytical inputs.
+4. Calculate hospital-recorded and death-certificate-only (DCO) statistics.
+5. Apply disclosure control, review the proposed public data and approve the exact files.
+6. Verify and publish only the approved files.
+:::
+
+## Workflow and control points
+
+```{mermaid}
+flowchart TB
+    A["1. Authorised REDCap extract"] --> B["2. Confidential cumulative data"]
+    B --> C["3. Deidentified analytical inputs"]
+    C --> D["4. Calculated private statistics"]
+    D --> E["5. Protected, reviewed and approved package"]
+    E --> F["6. Published analytical package"]
 ```
 
-| Step | Controller | Guide |
+Each box is a separate controlled stage. Each arrow is a controlled move to the next stage. Completion of one stage does not approve or publish the next stage’s files.
+
+Steps 1–5 remain private. Step 6 alone copies the approved analytical files into the official public-data area and the website’s data-file mirror. A successful Step 6 publication does not render or deploy the website; those are separate Quarto and GitHub procedures.
+
+| Step | What the operator does | Main result |
 |---|---|---|
-| 1. Extract REDCap | `monthly/bnr_step1_cvd_redcap_extract.do` | [Extract a REDCap release](extract-redcap.qmd) |
-| 2. Build cumulative data | `monthly/bnr_step2_cvd_confidential.do` | [Prepare the confidential dataset](prepare-confidential.qmd) |
-| 3. Build deidentified inputs | `monthly/bnr_step3_metric_inputs.do` | [Create analytical inputs](create-analysis-inputs.qmd) |
-| 4. Calculate dashboard metrics | `monthly/bnr_step4_metrics.do` | [Generate combined CVD metrics](generate-metrics.qmd) |
-| 5. Review and approve | `monthly/bnr_step5_review.do` | [Review and approve](review-approve.qmd) |
-| 6. Publish approved outputs | `monthly/bnr_step6_publish.do` | [Publish metrics](publish-metrics.qmd) |
+| [1. Extract REDCap](extract-redcap.qmd) | Select the authorised completed month and run the secure extract. | Private CSV, Stata copy and extraction record. |
+| [2. Prepare confidential data](prepare-confidential.qmd) | Combine the extract with the fixed historical data and review any quarantined source records. | Private cumulative event-level dataset. |
+| [3. Create analytical inputs](create-analysis-inputs.qmd) | Create the approved deidentified datasets for each type of analysis. | Private purpose-specific analytical datasets. |
+| [4. Generate metrics](generate-metrics.qmd) | Select the event and mortality data releases, run linkage and calculate the statistics. | Private calculated datasets and review evidence. |
+| [5. Review and approve](review-approve.qmd) | Prepare the proposed public file, review the evidence and record approval in Stata. | Exact approved seven-file package. |
+| [6. Publish metrics](publish-metrics.qmd) | Verify the approval and file checks, then publish the approved package. | Official public analytical copy and website data-file copy. |
 
-All Steps 1–5 material remains private. Step 6 alone crosses the private-to-public boundary. Dashboards, tables, downloads and standard reports consume the approved public release; they do not repeat the analysis.
+## Rules used by the workflow
 
-For the team-facing procedure, see [Operations: run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd).
+The procedure pages explain how to run each step. Use the Reference pages when you need the complete implemented rules:
+
+- [CVD death-classification rules](../../reference/cvd-death-classification-rules.qmd) define the mortality groups used by linkage.
+- [CVD event–death linkage rules](../../reference/cvd-event-death-linkage-rules.qmd) define person matching, the 0–27-day episode window and aggregate unresolved-DCO estimation.
+- [Disclosure-control rules](../../reference/disclosure-control-rules.qmd) define small-number protection and the checks applied before approval.
+
+## Related procedure
+
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the team-facing data-release procedure and authority checks.

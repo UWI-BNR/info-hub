@@ -1,7 +1,7 @@
 ﻿---
 manual-review-status: reviewed-by-irh
-title: "Extract a REDCap release"
-description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly release."
+title: "Extract a REDCap data release"
+description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly data release."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -15,13 +15,13 @@ Step 1 extracts CVD event records from REDCap from 1 January 2024 to the end of 
 ::: {.callout-tip title="Procedure at a glance" appearance="simple"}
 1. Confirm that the export is authorised and the selected month has ended.
 2. Run Step 1 from the Stata command line or BNR menu.
-3. In Stata, confirm that `STEP 1: OPERATIONAL RUN SUMMARY` reports `Completed successfully`, the intended release and a plausible record count.
-4. Check the three release files and private log, then continue to [Step 2: Prepare the confidential dataset](prepare-confidential.qmd).
+3. In Stata, confirm that `STEP 1: OPERATIONAL RUN SUMMARY` reports `Completed successfully`, the intended data release and a plausible record count.
+4. Check the three extract files and private log, then continue to [Step 2: Prepare the confidential dataset](prepare-confidential.qmd).
 :::
 
 ## Before you start
 
-- Use [Authorise a data export](../../../operations/release/data-release.qmd) to confirm the release year and month and authority to proceed.
+- Use [Authorise a data export](../../../operations/release/data-release.qmd) to confirm the data-release year and month and authority to proceed.
 - Use a completed month from January 2024 onwards. Step 1 will not extract an unfinished month.
 - Confirm that the private workspace and CVD REDCap token file are available through the local BNR path settings.
 - Leave replacement off unless replacing an existing extract has been explicitly authorised.
@@ -75,9 +75,9 @@ Both routes run the same Step 1 DO-file.
 ## Check successful completion
 
 1. Find `STEP 1: OPERATIONAL RUN SUMMARY` at the end of the Stata output.
-2. Confirm `Completed successfully`, the authorised release and coverage, a plausible record count and all four output paths.
+2. Confirm `Completed successfully`, the authorised data release and coverage, a plausible record count and all four output paths.
 3. Open `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` and confirm that the CSV, Stata dataset and `.yml` run record exist.
-4. Open `bnr_cvd_step1_YYYYMM_manifest.yml`. Despite `manifest` in its filename, this is a private run record, not an approved publication file list. Confirm the event-date range, record and field counts, event names and CSV filename.
+4. Open `bnr_cvd_step1_YYYYMM_manifest.yml`. Confirm the event-date range, record and field counts, event names and CSV filename.
 5. Open or inspect the Stata dataset and confirm that it contains records covering the expected event dates.
 
 Step 1 checks that the selected month is valid and complete, required fields are present, records were returned, event names are recognised, and every extracted event date is valid and within the selected cumulative period.

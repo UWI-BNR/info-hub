@@ -1,7 +1,7 @@
 ﻿---
 title: "BNR Technical Manual"
 description: "Run, validate, troubleshoot, recover and maintain the implemented BNR analytical and publication system."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 <!-- Remove Left-hand table of contents -->
