@@ -1,0 +1,140 @@
+---
+title: "Disclosure-control rules"
+description: "Check how small or recoverable values are protected before publication."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this page is for
+
+Use this page to check why a value in a proposed public CVD event or mortality
+file is protected. To prepare, review, approve or publish a package, follow the
+relevant workflow page.
+
+::: {.callout-note appearance="simple"}
+## Rules at a glance
+
+- Protect every positive supporting frequency from **1 to 5**. A true zero is not automatically protected.
+- Add deterministic protection wherever totals, related categories, time comparisons or derived measures could reveal a protected value.
+- Review the complete proposed public package, not one table in isolation.
+- Retain the row, show `*`, explain the protection and blank every numeric field that could reveal the value.
+- Never edit generated protection decisions by hand.
+:::
+
+## Terms used in the files
+
+| Term | Plain meaning |
+|---|---|
+| Primary suppression | The row itself contains a supporting frequency from 1 to 5. |
+| Secondary or complementary suppression | An additional row is protected so a primary-protected value cannot be calculated from related public values. |
+| Temporal suppression | A cumulative total is protected because comparison with the preceding public data release would reveal a small change, or because that comparison cannot be completed safely. |
+| Derived suppression | A percentage or rolling comparison is protected because it uses a protected count. |
+| Protection | The preferred plain-language term. Exact filenames and fields retain `suppression`. |
+
+## Rules shared by all analytical packages
+
+| Rule | Implemented requirement |
+|---|---|
+| Threshold | Positive supporting frequencies 1–5 receive primary protection. Zero is not automatically protected. The threshold is not changed during a routine data release. |
+| Complete-package test | Consider every public total, breakdown, comparator, percentage, rate and bound together. No published equation may contain exactly one protected term. |
+| Deterministic decisions | Code selects all additional protection. An analyst reviews the result but does not select extra cells or edit symbols, values or notes. |
+| Protected numeric fields | Blank `value`, `numerator`, `denominator`, linkage lower/upper values and numerical confidence limits wherever they exist on a protected row. |
+| Safe presentation | Retain the row, set `display_value` to `*`, give a controlled `suppression_status` and retain a non-blank `disclosure_note`. A protected value is not zero. |
+| Private evidence | Exact protected values, linkage components and detailed decision fields remain in private review evidence and never enter a public data package release. |
+| Fail closed | Stop before approval or publication when an automated equation or candidate check fails. Correct source data or version-controlled code and rerun; never repair generated files. |
+
+## Hospital-only CVD event rules
+
+These rules are applied by the shared CVD Step 5 protection engine.
+
+| Area | Implemented rule |
+|---|---|
+| Public monthly scope | Only All-CVD, all-sex, all-age monthly counts enter the proposed public package. Monthly subtype, sex, age and rolling-comparator rows do not. |
+| Temporal comparison | For incomplete quarterly and annual Heart/Stroke cumulative counts, protect a positive increase of 1–5 from the preceding approved public data release. Protect negative revisions and comparisons that cannot be completed safely. Do not carry protection forward solely because the preceding value was protected. |
+| Event-by-sex panel | If any annual or quarterly Heart/Stroke female/male interior cell is primary- or temporal-protected, protect all four interior cells in that panel. Do not extend this rule to unrelated totals, ages or periods. |
+| Time equations | Repeatedly close `quarter = three months`, `annual = four quarters` and `annual = twelve months`. When exactly one term is protected, select the earliest eligible component as the companion and repeat until no equation has one protected term. |
+| Rolling five-year comparison | Protect a rolling annual or same-quarter five-year mean when any contributing published count is protected. |
+| Percentages | Protect both values in a sex, event-type or age distribution when a count needed for that distribution is protected. |
+
+## Mortality-specific rules
+
+The mortality release has its own fixed public lattice and deterministic companion choices.
+
+| Area | Implemented rule |
+|---|---|
+| Monthly sex rows | Remove private monthly female and male values before creating the proposed public package. Quarterly and annual sex rows remain eligible. |
+| Sex companions | For observed counts: protected female → protect male; protected male → protect female; protected all-sex → protect male. Keep an already-primary cell classified as primary. |
+| Event companions | For annual and quarterly counts: protected Heart → protect Stroke; protected Stroke → protect Heart; protected all-CVD → protect Stroke. |
+| Age companions | For the annual under-70/70-plus pair, protect the other age group when one is primary-protected. |
+| Monthly-to-period protection | If a protected monthly count could be recovered from a quarterly or annual panel, protect the fixed minimal set: all-CVD female and male totals plus Heart female and male components. When the source month is all-sex, also protect the all-CVD and Heart all-sex totals. |
+| Annual percentages | Protect the complete related sex, event-type or age distribution when its annual count family contains a protected value. |
+| Five-year comparisons | Protect a comparator when any of its five historical observed counts is protected. |
+| Annual rates | A rate never starts a primary or companion decision. It inherits secondary protection from its matching protected annual count, including its numerical confidence limits. |
+
+## DCO-enhanced annual CVD rules
+
+| Area | Implemented rule |
+|---|---|
+| Propagated support | A small hospital count protects its annual count, crude-rate and age-standardised-rate representations. Outside the approved exception below, a small lower, central or upper DCO component also protects associated hospital-plus-DCO and additional-DCO representations. |
+| Approved national exception | A small **private DCO component alone** does not protect an otherwise releasable national aggregate when the row is complete/final, annual, all-age, for All CVD/Heart/Stroke, all/female/male, Primary/Inclusive, and is an approved additional-DCO or hospital-plus-DCO count, or hospital-plus-DCO crude/age-standardised rate. |
+| Exception limit | The exception never removes protection inherited from a small hospital-recorded count. Individual linkage evidence remains private. |
+| Structural companions outside exception | Non-zero unknown-sex DCO support protects the male companion. Non-zero mixed/unallocated subtype support protects the Stroke companion. These companions are not added solely for that reason inside the approved national exception lattice. |
+| Existing decisions | Carry established burden companion decisions into the linked annual count and rate representations. |
+| Representation consistency | Hospital annual count, crude rate and age-standardised rate share one protection decision. Hospital-plus-DCO annual count, crude rate and age-standardised rate also share one decision. |
+| DCO count identity | For `hospital-only + additional DCO = hospital-plus-DCO`, either no term or at least two terms must be protected. |
+| Bounds | When a DCO-enhanced parent row is protected, protect its central value, numerator, denominator, linkage lower/upper values and confidence limits together. |
+
+## Automated checks before approval
+
+| Check | Required result |
+|---|---|
+| Equation closure | No additive, time, comparator or derived equation has exactly one protected term. |
+| Candidate match | Every row marked for protection in private evidence is protected in the proposed public file. |
+| Numeric blanking | Protected rows contain no releasable numeric value, numerator, denominator, linkage bound or confidence limit. |
+| Field boundary | Private decision and component fields are absent from the proposed public file. |
+| Notes | Every row has the correct safe display and a non-blank disclosure note. |
+| Synthetic marker | Synthetic test packages cannot be approved or published. |
+
+## Where the rules are implemented
+
+The main hospital-only CVD rules are implemented in:
+
+```text
+scripts/stata/common/bnr_step5_suppress.do
+```
+
+Mortality rules are implemented in `scripts/stata/mortality/bnr_mort_s4_review.do`. DCO-enhanced annual CVD rules are coordinated by `scripts/stata/metrics/cvd/bnr_step5_suppress_expanded_cvd.do` and its nine helpers.
+
+::: {.callout-note collapse="true"}
+## Disclosure-control code
+
+| File | Rule set |
+|---|---|
+| `scripts/stata/common/bnr_step5_suppress.do` | Hospital-only CVD primary, temporal, panel, time-equation, rolling and derived protection. |
+| `scripts/stata/mortality/bnr_mort_s3_calc.do` | Flags mortality small counts and directly related rows for review. |
+| `scripts/stata/mortality/bnr_mort_s4_review.do` | Applies mortality companion, time, percentage, comparator and rate rules and creates the protected proposed file. |
+| `scripts/stata/metrics/cvd/bnr_step5_suppress_expanded_cvd.do` | Runs the DCO-enhanced annual CVD protection chain. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage1_combine.do` | Combines the burden and annual rate/count lattices in private staging. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage2_dco_support.do` | Builds private lower, central and upper DCO support counts. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage3_primary_flags.do` | Propagates small hospital and DCO support into annual representations. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage4_national_dco_exception.do` | Applies the approved national annual DCO aggregate exception. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do` | Applies unknown-sex and mixed-subtype structural companions outside the exception. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage6_existing_closure.do` | Carries established burden companion decisions into linked representations. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage7_rate_equation_audit.do` | Audits count/rate consistency and the three-term DCO count equation. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage8_full_projection.do` | Blanks protected numeric fields and writes the safe display and note. |
+| `scripts/stata/metrics/cvd/private/expanded_disclosure/bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do` | Confirms protection, numeric blanking, public fields, bounds and confidence-limit rules. |
+:::
+
+## Change rule
+
+Do not change these rules during a routine data release. For an agreed change,
+update the controlling contract, code, synthetic tests and this page together.
+
+## Related procedures
+
+- [Review and approve combined CVD metrics](../workflows/cvd-events/review-approve.qmd) — review the generated CVD protection evidence and approve the exact proposed file.
+- [Review the mortality release](../workflows/mortality/review.qmd) — review mortality protection and the proposed public file.
+- [CVD suppression validation, 2024–2025](bnr-suppression-validation-2024-2025.qmd) — see the historical validation record for the established CVD rules.

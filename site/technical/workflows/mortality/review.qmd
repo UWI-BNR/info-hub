@@ -1,91 +1,121 @@
-﻿---
-manual-review-status: not-reviewed
-title: "Review the mortality release"
-description: "Mortality Step 4: revalidate the Step 3 package, apply deterministic disclosure control and create the private human-review materials."
+---
+manual-review-status: reviewed-by-irh
+title: "Review the mortality data package"
+description: "Mortality Step 4: check the Step 3 package, apply disclosure control and review the proposed public files."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Mortality Step 4 revalidates the complete Step 3 burden package, applies the approved deterministic disclosure-control rules and creates the exact public candidate plus private review evidence.
+Mortality Step 4 checks the complete Step 3 data package, applies the fixed disclosure-control rules and creates the proposed public data plus the files needed for human review.
 
-It does **not** approve the release, create `public_ready`, publish files or calculate mortality rates.
+The generated filename `mort_s4_candidate.dta` uses *candidate* to mean the private proposed public data. Step 4 does not approve or publish it.
 
-For annual mortality-rate rows, it applies a one-way companion rule: if the
-matching annual observed count is protected (primary or secondary), its crude
-and age-standardised rates are marked **secondary** and their exact values,
-denominators and confidence limits are removed from the candidate. Rates never
-create a new primary or complementary suppression decision.
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Run Step 4 for the Step 3 data release.
+2. Confirm `READY FOR HUMAN REVIEW`.
+3. Open `mort_s4_review_mort_YYYY_MM.xlsx` first.
+4. Review definitions, results, disclosure protection and the proposed public data.
+5. Stop and correct the earliest affected source if anything is unexplained.
+:::
 
-## Input
+## Before you start
 
-Step 4 reads the complete package under:
+- Complete Step 3 successfully for the same year and month.
+- Do not edit the Step 3 package before review.
 
-`$BNR_STAGING/mortality/burden/mort_YYYY_MM/`
+::: {.callout-note collapse="true" title="Input files"}
 
-including the release/current datasets, package metadata, QA receipt, Step 3 suppression worklist and package readme.
+Step 4 reads the following private files from `$BNR_STAGING/mortality/burden/mort_YYYY_MM/`.
 
-## Run Step 4
+| File | What Step 4 uses or checks |
+|---|---|
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` | Exact data-release measures in Stata format. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.csv` | CSV copy of the exact data-release measures; it must agree with the DTA. |
+| `datasets/mort_burden_metrics_current.dta` | Stable-name copy in Stata format; it must match the data-release DTA. |
+| `datasets/mort_burden_metrics_current.csv` | Stable-name CSV copy; it must match the data-release CSV. |
+| `metadata/mort_burden_package.yml` | Package identity, reporting scope and source. |
+| `review/mort_burden_qa_mort_YYYY_MM.csv` | Step 3 automated-check results. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` | Preliminary worklist created by Step 3 and used when Step 4 applies final disclosure control. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet copy of the preliminary Step 3 worklist. Step 4 applies the final disclosure-control rules and creates the human-review package. |
+| `readme.txt` | Step 3 package guide. |
+
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | How it is used |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s4_review.do` | Main Step 4 controller; checks the package, applies protection and creates the review files. |
+| `scripts/stata/dialogs/bnr_mort_s4_review.dlg` | Stata dialog for the year, month and replacement choice. |
+| `scripts/stata/menu/bnr_menu.do` | Adds Step 4 to the BNR Stata menu. |
+
+:::
+
+::: {.callout-note collapse="true" title="Output and review files"}
+
+Step 4 writes private files to `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`.
+
+| File | What it contains or what to check |
+|---|---|
+| **`mort_s4_review_mort_YYYY_MM.xlsx` — Open this first** | Main human-review workbook. Work through its sheets in order, beginning with `Review summary`. |
+| `mort_s4_candidate.dta` | Private proposed public data after disclosure control. Use the workbook to inspect it; do not edit it. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Results of Step 4 automated checks. Use this when a workbook check needs more detail. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | Generated list of the exact files reviewed, with file sizes and checksums used by Step 5 to detect a change. |
+| `mort_s4_monthly_reference_2015_2019.dta` | Private proposed fixed monthly reference in Stata format: 12 calendar months × 2 definitions, with 2015–2019 minimum, maximum and mean. |
+| `mort_s4_monthly_reference_2015_2019.csv` | CSV copy of the proposed fixed monthly reference. |
+| `mort_s4_monthly_reference_2015_2019.yml` | Generated description and control status for the proposed reference file. |
+| `$BNR_PRIVATE_LOGS/bnr_mort_s4_review_mort_YYYY_MM.log` | Private run log. |
+
+:::
+
+## Create the review package
 
 1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 4: Review mortality release**.
-2. Enter the same release year and month.
-3. Leave replacement unticked for the first review build.
-4. Run the step.
-5. Confirm the operational summary reports that the review package was created successfully.
-6. Open the Step 4 workbook named in the summary.
+2. Enter the same year and month, leave replacement unticked for the first build, and select **Prepare candidate and review**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
 
-## Review the package
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 7
+   ```
 
-The reviewer must decide whether the release is analytically plausible, disclosure-safe and ready for approval.
+4. For a deliberate rebuild, enter the complete replacement command:
 
-Check:
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 7 replace
+   ```
 
-- the release identity and analysis period;
-- the expected count/distribution structure for both Primary and Inclusive definitions;
-- the annual crude and age-standardised rate lattice, including its WPP/WHO
-  metadata and confidence-interval methods;
-- the automated QA results;
-- private exact values for plausibility;
-- every protected row and its suppression reason;
-- the proposed public candidate, including absence of exact protected values;
-- the monthly publication restriction;
-- quarterly/annual comparator availability; and
-- the fixed 2015-2019 monthly historical-reference asset.
+5. In `MORTALITY STEP 4: OPERATIONAL RUN SUMMARY`, confirm `Run status: READY FOR HUMAN REVIEW`.
+6. Open the workbook named in the summary.
 
-The fixed monthly reference contains, for each calendar month and each public mortality definition, the 2015-2019 minimum, maximum and mean for All CVD, both sexes and all ages. After initial approval it is a fixed public analytical asset and must not be routinely recalculated.
+## Review the proposed public data
 
-For the common policy, see [Apply and review disclosure control](../../controls/disclosure-control.qmd).
+1. In `Review summary`, confirm the data release and completed analysis years.
+2. In `Definitions`, confirm the Primary and Inclusive definitions. Where the workbook says *Upper*, read this as the Inclusive definition—not an upper confidence limit or linkage estimate.
+3. In `QA`, confirm every automated quality-assurance check passed. Quality assurance here means the workflow’s programmed checks of file structure, calculations and publication rules.
+4. Review `Annual metrics`, `Quarterly metrics` and `Monthly metrics` for plausible private exact values and the expected reporting scope.
+5. In `Monthly reference`, confirm there are 24 rows: 12 months for each of the two definitions. Confirm no source count from 1 to 5 contributes to the public reference.
+6. In `Suppression review`, check every protected row and its reason. Positive supporting counts from 1 to 5 must be protected; additional rows are protected where needed to prevent calculation by subtraction.
+7. In `Public candidate`, confirm protected numbers are absent, display values use `*`, and no private-only monthly detail is present.
+8. In `Metadata` and `Files reviewed`, confirm the methods, sources and exact reviewed files match this data release.
+9. If every check is satisfactory, proceed to Step 5. The workflow records approval in Step 5; do not manually edit a status or control file.
 
-## Outputs
+::: {.callout-note collapse="true" title="If Step 4 does not complete or review finds a problem"}
 
-Step 4 writes private review files under the package `review/` folder:
-
-| Output | Purpose |
+| Situation | Action |
 |---|---|
-| `mort_s4_candidate.dta` | Exact disclosure-controlled candidate reviewed before Step 5. |
-| `mort_s4_review_mort_YYYY_MM.xlsx` | Main human-review workbook. |
-| `mort_s4_review_qa_mort_YYYY_MM.csv` | Machine-readable Step 4 QA receipt. |
-| `mort_s4_review_basis_mort_YYYY_MM.csv` | Fingerprints the reviewed basis used later by Step 5. |
-| `mort_s4_monthly_reference_2015_2019.dta` and `.csv` | Private copy/candidate of the fixed monthly reference asset. |
-| `mort_s4_monthly_reference_2015_2019.yml` | Reference-asset metadata and control information. |
-| Step 4 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
+| A required Step 3 file is missing or has changed | Recreate the complete Step 3 package. Do not copy or repair individual generated files. |
+| A result or protected row is unexplained | Correct the earliest affected REDCap record, reference file, configuration or version-controlled code; rerun from that point and repeat Step 4 review. |
+| Step 4 is deliberately rebuilt | Use the complete `replace` command, then repeat the entire human review. Any earlier Step 5 approval is no longer usable. |
 
-## Command-line equivalent
+For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
 
-```stata
-do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 7
-```
+:::
 
-Add `replace` only when a deliberate Step 4 rebuild is required. A rebuild means the human review must be completed again.
+## Related procedures
 
-## If review finds a problem
-
-Do not edit the workbook, candidate, suppression symbols or reference files.
-
-Correct the earliest affected source, reference, configuration or version-controlled code, rerun from that point and repeat Step 4 review before approval.
-
+- [Disclosure-control rules](../../reference/disclosure-control-rules.qmd)
+- [Run the CVD mortality data release](../../../operations/post-redcap/mortality-workflow.qmd)

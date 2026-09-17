@@ -1,89 +1,132 @@
-﻿---
-manual-review-status: not-reviewed
-title: "Approve the reviewed mortality release"
-description: "Mortality Step 5: record authorised human approval of the exact Step 4 candidate and create the private public_ready package."
+---
+manual-review-status: reviewed-by-irh
+title: "Approve the reviewed mortality data package"
+description: "Mortality Step 5: approve the exact Step 4 files and create the private files authorised for publication."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Mortality Step 5 records the authorised human approval of the exact package reviewed in Step 4.
+Mortality Step 5 records authorised human approval of the exact files reviewed in Step 4. It checks that those files have not changed, creates the private `public_ready` folder and writes the approval record last.
 
-It revalidates the Step 4 candidate and QA receipt, verifies the recorded fingerprints, creates the private `public_ready` payload and writes `approval.yml` last.
+`public_ready` means the files are authorised for Step 6 to publish. It does not mean they are already public.
 
-Step 5 does not calculate mortality metrics, alter suppression or publish files.
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Complete the Step 4 human review.
+2. Enter the approver’s name and authorised role.
+3. Confirm all five review statements.
+4. Run Step 5 and confirm `APPROVED - PENDING STEP 6`.
+5. Check `approval.yml`, `public_manifest.csv` and the ten authorised files.
+:::
 
-## Before approving
+## Before you start
 
-Complete the Step 4 workbook review first. Approval requires explicit confirmation that the reviewer has checked:
+- Complete Step 4 review for the same year and month.
+- Stop if any of the five confirmation statements is not true.
+- Use an authorised **BNR Lead** or **BNR Analyst** approver. BNR decides which people holding these roles may approve dissemination.
 
-- the release and period;
-- definitions and results;
-- disclosure control;
-- the candidate and review workbook; and
-- publication readiness, including the monthly reference asset.
+Step 5 checks the generated file list and checksums in `mort_s4_review_basis_mort_YYYY_MM.csv`. A checksum is a value used to detect whether a reviewed file has changed.
 
-If any confirmation is not true, stop and return to the appropriate earlier step.
+::: {.callout-note collapse="true" title="Input and review files"}
 
-## Run Step 5
+Step 5 reads the complete Step 3 package and these Step 4 files from `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`.
+
+| File | What Step 5 uses or checks |
+|---|---|
+| **`mort_s4_review_mort_YYYY_MM.xlsx` — Review this first** | Evidence of the completed human review. Step 5 confirms the file is unchanged; the approver confirms the review was satisfactory. |
+| `mort_s4_candidate.dta` | Private proposed public data that Step 5 converts into the authorised publication files. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Step 4 automated-check results. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | Exact file list, sizes and checksums recorded by Step 4. |
+| `mort_s4_monthly_reference_2015_2019.dta` | Proposed fixed monthly reference in Stata format. |
+| `mort_s4_monthly_reference_2015_2019.csv` | CSV copy of the proposed fixed monthly reference. |
+| `mort_s4_monthly_reference_2015_2019.yml` | Generated description and control status for the proposed reference. |
+
+Step 5 also rechecks the Step 3 data, metadata, automated-check files, suppression worklist and `readme.txt` listed on the Step 4 page.
+
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | How it is used |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s5_approve.do` | Main Step 5 controller; checks the reviewed files and creates the approval evidence and authorised files. |
+| `scripts/stata/dialogs/bnr_mort_s5_approve.dlg` | Preferred routine route because it displays all five confirmation statements. |
+| `scripts/stata/menu/bnr_menu.do` | Adds Step 5 to the BNR Stata menu. |
+
+:::
+
+::: {.callout-note collapse="true" title="Output files"}
+
+Step 5 creates `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`. All files remain private until Step 6.
+
+| File | What it contains |
+|---|---|
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` | Authorised data-release mortality measures in Stata format. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Authorised CSV copy of the data-release measures. |
+| `datasets/mort_burden_metrics_current.dta` | Authorised stable-name mortality measures in Stata format. |
+| `datasets/mort_burden_metrics_current.csv` | Authorised stable-name CSV copy. |
+| `datasets/mort_monthly_reference_2015_2019.dta` | Authorised fixed monthly reference in Stata format. |
+| `datasets/mort_monthly_reference_2015_2019.csv` | Authorised CSV copy of the fixed monthly reference. |
+| `metadata/mort_burden_metrics_mort_YYYY_MM.yml` | Generated description of the data-release measures. |
+| `metadata/mort_burden_metrics_current.yml` | Generated description of the stable-name measures. |
+| `metadata/mort_burden_package.yml` | Generated description of the complete public data package. |
+| `metadata/mort_monthly_reference_2015_2019.yml` | Generated description of the approved fixed monthly reference. |
+| `public_manifest.csv` | Private generated list of the exact ten files Step 6 is allowed to publish, with their sizes and checksums. |
+| `approval.yml` | Private approval record. It is written last and says publication remains pending Step 6. |
+| `$BNR_PRIVATE_LOGS/bnr_mort_s5_approve_mort_YYYY_MM.log` | Private run log. |
+
+:::
+
+## Approve the data package
 
 1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 5: Approve reviewed mortality release**.
-2. Enter the reviewed release year and month.
-3. Enter the approver's full name and select an authorised role.
-4. Complete every review confirmation.
-5. Run Step 5.
-6. Confirm the operational summary reports successful approval pending Step 6.
-7. Open `public_ready/approval.yml` and confirm the release, package, approver, role, disclosure status and manifest information are correct.
+2. Enter the reviewed year and month, the approver’s full name and the authorised role.
+3. Confirm that you checked:
 
-Authorised approval roles are **BNR Lead** and **BNR Analyst**. BNR retains responsibility for deciding which people in those roles are authorised to approve dissemination.
+   - the data release and reporting period;
+   - definitions and results;
+   - disclosure control;
+   - the proposed public data and review workbook; and
+   - publication readiness, including the monthly reference.
 
-## Outputs
+4. Select **Record approval**.
+5. Alternatively, enter the complete routine command in the **Stata command window**:
 
-Step 5 creates:
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" ///
+       2026 7 "Full name" "BNR Analyst" ///
+       release definitions disclosure candidate ready
+   ```
 
-`$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`
+6. For a deliberate replacement of an existing Step 5 approval, enter the complete replacement command:
 
-The approved payload contains exactly ten public files:
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" ///
+       2026 7 "Full name" "BNR Analyst" ///
+       release definitions disclosure candidate ready replace
+   ```
 
-```text
-datasets/
-  mort_burden_metrics_mort_YYYY_MM.dta
-  mort_burden_metrics_mort_YYYY_MM.csv
-  mort_burden_metrics_current.dta
-  mort_burden_metrics_current.csv
-  mort_monthly_reference_2015_2019.dta
-  mort_monthly_reference_2015_2019.csv
-metadata/
-  mort_burden_metrics_mort_YYYY_MM.yml
-  mort_burden_metrics_current.yml
-  mort_burden_package.yml
-  mort_monthly_reference_2015_2019.yml
-```
+7. In `MORTALITY STEP 5: OPERATIONAL RUN SUMMARY`, confirm `Run status: APPROVED - PENDING STEP 6`.
+8. Open `public_ready/approval.yml` and confirm the data release, approver, role, disclosure status and publication status are correct.
+9. Open `public_ready/public_manifest.csv` and confirm it lists exactly the ten dataset and metadata files described above.
+10. Confirm all ten authorised files exist. Do not edit any file in `public_ready/`.
 
-The private control files are:
+::: {.callout-note collapse="true" title="If Step 5 does not complete"}
 
-```text
-public_manifest.csv
-approval.yml
-```
+| Situation | Action |
+|---|---|
+| A Step 4 file has changed since review | Rerun Step 4 and repeat the human review. Do not approve a file different from the one reviewed. |
+| A confirmation cannot truthfully be made | Stop and return to the relevant review or earlier workflow step. |
+| An existing approval blocks an authorised replacement | Repeat the Step 4 checks, then use the complete Step 5 `replace` command. Do not edit `approval.yml` or `public_manifest.csv`. |
 
-`approval.yml` means **approved, not published**. Step 6 must still verify and promote the package.
+For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
 
-## Command-line equivalent
+:::
 
-```stata
-do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" ///
-    2026 7 "Full name" "BNR Analyst" ///
-    release definitions disclosure candidate ready
-```
+## Related procedures
 
-The dialog is the preferred routine route because it makes the five confirmations explicit.
-
-## If Step 5 does not complete
-
-Do not edit the approval receipt, manifest or reviewed files. Restore the reviewed package or rerun Step 4 and complete the human review again.
+- [Run the CVD mortality data release](../../../operations/post-redcap/mortality-workflow.qmd)
+- [Disclosure-control rules](../../reference/disclosure-control-rules.qmd)

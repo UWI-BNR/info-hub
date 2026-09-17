@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 42 | 0 | 0 | 0 | 42 |
+| Technical Manual | 0 | 24 | 27 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -85,45 +85,54 @@
 
 | Page | Path | Status | Source |
 |---|---|---|---|
-| BNR Technical Manual | `site/technical/index.qmd` | Not reviewed | Page YAML |
-| Set up the environment | `site/technical/getting-started/section-index.qmd` | Not reviewed | Page YAML |
-| The BNR analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Not reviewed | Page YAML |
-| Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Not reviewed | Page YAML |
-| Run analytical workflows | `site/technical/workflows/section-index.qmd` | Not reviewed | Page YAML |
-| Analytical workflows | `site/technical/workflows/overview.qmd` | Not reviewed | Page YAML |
-| Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Not reviewed | Page YAML |
-| Extract a REDCap release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Not reviewed | Page YAML |
-| Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Not reviewed | Page YAML |
-| Create deidentified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Not reviewed | Page YAML |
-| Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Not reviewed | Page YAML |
-| Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Not reviewed | Page YAML |
-| Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Not reviewed | Page YAML |
-| Run the CVD mortality workflow | `site/technical/workflows/mortality/overview.qmd` | Not reviewed | Page YAML |
-| Extract mortality data | `site/technical/workflows/mortality/extract.qmd` | Not reviewed | Page YAML |
-| Classify CVD deaths | `site/technical/workflows/mortality/classify.qmd` | Not reviewed | Page YAML |
-| Build mortality burden data | `site/technical/workflows/mortality/build-burden.qmd` | Not reviewed | Page YAML |
-| Review the mortality release | `site/technical/workflows/mortality/review.qmd` | Not reviewed | Page YAML |
-| Approve the reviewed mortality release | `site/technical/workflows/mortality/approve.qmd` | Not reviewed | Page YAML |
-| Publish approved mortality outputs | `site/technical/workflows/mortality/publish.qmd` | Not reviewed | Page YAML |
-| BNR reporting and presentation workflows | `site/technical/workflows/reporting/overview.qmd` | Not reviewed | Page YAML |
-| Refresh the CVD dashboards | `site/technical/workflows/reporting/dashboard-regeneration.qmd` | Not reviewed | Page YAML |
-| Refresh the CVD tables | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Not reviewed | Page YAML |
-| Rebuild the Downloads page | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Not reviewed | Page YAML |
-| Rebuild the report listings | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Not reviewed | Page YAML |
+| BNR Technical Manual | `site/technical/index.qmd` | Reviewed by IRH | Page YAML |
+| BNR Info-Hub cheat sheet | `site/technical/cheat-sheet/index.qmd` | Not reviewed | Page YAML |
+| Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
+| The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
+| Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
+| Common tasks | `site/technical/common-tasks/section-index.qmd` | Not reviewed | Page YAML |
+| Release CVD event data | `site/technical/common-tasks/release-cvd-event-data.qmd` | Not reviewed | Page YAML |
+| Release CVD mortality data | `site/technical/common-tasks/release-mortality-data.qmd` | Not reviewed | Page YAML |
+| Produce the annual CVD report | `site/technical/common-tasks/produce-annual-report.qmd` | Not reviewed | Page YAML |
+| Produce another CVD report | `site/technical/common-tasks/produce-other-reports.qmd` | Not reviewed | Page YAML |
+| Set up a new workstation | `site/technical/common-tasks/set-up-new-workstation.qmd` | Not reviewed | Page YAML |
+| Edit and publish website content | `site/technical/common-tasks/edit-publish-website-content.qmd` | Not reviewed | Page YAML |
+| Change maintained code safely | `site/technical/common-tasks/make-safe-code-change.qmd` | Not reviewed | Page YAML |
+| Check the manuals | `site/technical/common-tasks/check-manuals.qmd` | Not reviewed | Page YAML |
+| Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
+| Analytical workflows | `site/technical/workflows/overview.qmd` | Reviewed by IRH | Page YAML |
+| Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Reviewed by IRH | Page YAML |
+| Extract a REDCap data release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
+| Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Reviewed by IRH | Page YAML |
+| Create de-identified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Reviewed by IRH | Page YAML |
+| Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Reviewed by IRH | Page YAML |
+| Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Reviewed by IRH | Page YAML |
+| Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Reviewed by IRH | Page YAML |
+| Run the CVD mortality workflow | `site/technical/workflows/mortality/overview.qmd` | Reviewed by IRH | Page YAML |
+| Extract mortality data | `site/technical/workflows/mortality/extract.qmd` | Reviewed by IRH | Page YAML |
+| Classify CVD deaths | `site/technical/workflows/mortality/classify.qmd` | Reviewed by IRH | Page YAML |
+| Build mortality burden data | `site/technical/workflows/mortality/build-burden.qmd` | Reviewed by IRH | Page YAML |
+| Review the mortality data package | `site/technical/workflows/mortality/review.qmd` | Reviewed by IRH | Page YAML |
+| Approve the reviewed mortality data package | `site/technical/workflows/mortality/approve.qmd` | Reviewed by IRH | Page YAML |
+| Publish approved mortality outputs | `site/technical/workflows/mortality/publish.qmd` | Reviewed by IRH | Page YAML |
+| BNR reporting and presentation workflows | `site/technical/workflows/reporting/overview.qmd` | Reviewed by IRH | Page YAML |
+| How the CVD dashboards refresh | `site/technical/workflows/reporting/dashboard-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| How the CVD tables refresh | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| How the Downloads page refreshes | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Reviewed by IRH | Page YAML |
+| How the report listings refresh | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Reviewed by IRH | Page YAML |
 | Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Not reviewed | Page YAML |
-| Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Not reviewed | Page YAML |
-| Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Not reviewed | Page YAML |
-| Review and publication controls | `site/technical/controls/section-index.qmd` | Not reviewed | Page YAML |
-| Review an analytical release | `site/technical/controls/review-release.qmd` | Not reviewed | Page YAML |
-| Disclosure control | `site/technical/controls/disclosure-control.qmd` | Not reviewed | Page YAML |
-| Approve and publish a release | `site/technical/controls/approve-publish.qmd` | Not reviewed | Page YAML |
+| Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Reviewed by IRH | Page YAML |
+| Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Reviewed by IRH | Page YAML |
 | Operate the website | `site/technical/website/section-index.qmd` | Not reviewed | Page YAML |
 | Render and publish the website | `site/technical/website/render-publish.qmd` | Not reviewed | Page YAML |
 | Update website content | `site/technical/website/update-content.qmd` | Not reviewed | Page YAML |
 | Maintain and recover | `site/technical/maintenance/section-index.qmd` | Not reviewed | Page YAML |
 | Make a safe code change | `site/technical/maintenance/safe-code-change.qmd` | Not reviewed | Page YAML |
-| Files, releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Not reviewed | Page YAML |
+| Files, data releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Not reviewed | Page YAML |
 | Fix common problems | `site/technical/maintenance/troubleshooting.qmd` | Not reviewed | Page YAML |
-| System reference | `site/technical/reference/section-index.qmd` | Not reviewed | Page YAML |
+| Reference | `site/technical/reference/section-index.qmd` | Not reviewed | Page YAML |
+| CVD death-classification rules | `site/technical/reference/cvd-death-classification-rules.qmd` | Not reviewed | Page YAML |
+| CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Not reviewed | Page YAML |
+| Disclosure-control rules | `site/technical/reference/disclosure-control-rules.qmd` | Not reviewed | Page YAML |
 | System reference | `site/technical/reference/index.qmd` | Not reviewed | Page YAML |
-| Validation of BNR CVD Suppression Rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |
+| Validation of BNR CVD suppression rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |

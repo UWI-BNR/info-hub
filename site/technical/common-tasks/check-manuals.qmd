@@ -1,0 +1,46 @@
+---
+title: "Check the manuals"
+description: "Check manual links, review statuses and rendering before publication."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this task achieves
+
+Use this route to check the three manuals before publishing a documentation
+change.
+
+## Before you start
+
+- Put all intended manual changes on one development branch.
+- Activate the project Python environment.
+- Know which pages have completed human review.
+
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+Check links → check review statuses → review manual boundaries → render the full
+site → publish and inspect the live pages.
+:::
+
+## Complete the following steps
+
+| Order | Manual | Task | Detailed guidance |
+|---:|---|---|---|
+| 1 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Check every local manual link** — source and destination pages; missing targets; link purpose; generated Markdown and CSV register | Follow the repository [local-link checker guide](https://github.com/UWI-BNR/info-hub/blob/main/scripts/python/check-local-links-README.md). Resolve broken or inappropriate links before publication. |
+| 2 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Check every manual review status** — page title; manual; inherited or explicit status; totals requiring attention | Follow the repository [manual-review status guide](https://github.com/UWI-BNR/info-hub/blob/main/scripts/python/manual-review-status-README.md). Change a status only after the corresponding human review. |
+| 3 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Check that each manual still answers its own question** — who acts and decides; what the statistics mean; how the system is operated | Review the affected [Operations](../../operations/index.qmd), [Public Methods](../../methods/index.qmd) and [Technical](../index.qmd) pages together. Remove unnecessary duplication and retain deliberate cross-links. |
+| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Render and inspect the complete website** — render warnings; headings; tables; manual labels; navigation; affected neighbouring pages | Follow [Run a complete local render](../website/render-publish.qmd#step-4-run-a-complete-local-render), then inspect every affected manual page. |
+| 5 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Publish the checked documentation change** — intended files only; focused commit; pull-request review; successful deployment; correct live pages | Follow [Edit and publish website content](edit-publish-website-content.qmd). |
+
+## How to confirm completion
+
+There are no unresolved broken links, review statuses are accurate, the full
+render succeeds, and the intended manual pages are correct on the live site.
+
+## Related guidance
+
+- [Edit and publish website content](edit-publish-website-content.qmd)
+- [Make a safe code change](../maintenance/safe-code-change.qmd)
+- [Fix common problems](../maintenance/troubleshooting.qmd)

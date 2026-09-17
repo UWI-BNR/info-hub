@@ -99,7 +99,7 @@ See [Counts, percentages and rates](../interpretation/counts-percentages-rates.q
 
 ## Protected values
 
-BNR applies disclosure control before mortality data are published. Any period containing a count of 5 or smaller will be suppressed, and is shown using an asterisk (**\***). See more on [protecting confidentiality](../interpretation/confidentiality.qmd).
+BNR applies disclosure control before mortality data are published. Positive counts from 1 to 5 are automatically suppressed and shown using an asterisk (**\***). Other values may also be hidden where needed to prevent a protected count being calculated; a true zero is not automatically suppressed. See more on [protecting confidentiality](../interpretation/confidentiality.qmd).
 
 ## How the BNR death classification system differs from official cause-of-death statistics
 

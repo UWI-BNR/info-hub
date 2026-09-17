@@ -307,6 +307,9 @@ website:
         - text: "Home"
           href: technical/index.qmd
 
+        - text: "Info-Hub cheat sheet"
+          href: technical/cheat-sheet/index.qmd
+
         - section: "Getting started"
           contents:
             - text: "Section contents"
@@ -315,6 +318,33 @@ website:
               href: technical/getting-started/environment.qmd
             - text: "Set up a workstation"
               href: technical/getting-started/workstation-setup.qmd
+
+        - section: "Common tasks"
+          contents:
+            - text: "Section contents"
+              href: technical/common-tasks/section-index.qmd
+
+            - section: "Analytical and reporting tasks"
+              contents:
+                - text: "Release CVD event data"
+                  href: technical/common-tasks/release-cvd-event-data.qmd
+                - text: "Release CVD mortality data"
+                  href: technical/common-tasks/release-mortality-data.qmd
+                - text: "Produce the annual CVD report"
+                  href: technical/common-tasks/produce-annual-report.qmd
+                - text: "Produce another CVD report"
+                  href: technical/common-tasks/produce-other-reports.qmd
+
+            - section: "Website and maintenance tasks"
+              contents:
+                - text: "Set up a new workstation"
+                  href: technical/common-tasks/set-up-new-workstation.qmd
+                - text: "Edit and publish website content"
+                  href: technical/common-tasks/edit-publish-website-content.qmd
+                - text: "Change maintained code safely"
+                  href: technical/common-tasks/make-safe-code-change.qmd
+                - text: "Check the manuals"
+                  href: technical/common-tasks/check-manuals.qmd
 
         - section: "Analytical workflows"
           contents:
@@ -361,13 +391,13 @@ website:
               contents:
                 - text: "Overview"
                   href: technical/workflows/reporting/overview.qmd
-                - text: "Refresh CVD dashboards"
+                - text: "How CVD dashboards refresh"
                   href: technical/workflows/reporting/dashboard-regeneration.qmd
-                - text: "Refresh CVD tables"
+                - text: "How CVD tables refresh"
                   href: technical/workflows/reporting/tabulation-regeneration.qmd
-                - text: "Rebuild Downloads"
+                - text: "How the Downloads page refreshes"
                   href: technical/workflows/reporting/downloads-page-regeneration.qmd
-                - text: "Rebuild report listings"
+                - text: "How report listings refresh"
                   href: technical/workflows/reporting/report-listings-regeneration.qmd
                 - text: "Rolling three-month update"
                   href: technical/workflows/reporting/rolling-update.qmd
@@ -375,17 +405,6 @@ website:
                   href: technical/workflows/reporting/annual-report.qmd
                 - text: "One-off CVD report"
                   href: technical/workflows/reporting/one-off-report.qmd
-
-        - section: "Review and publication controls"
-          contents:
-            - text: "Section contents"
-              href: technical/controls/section-index.qmd
-            - text: "Review an analytical release"
-              href: technical/controls/review-release.qmd
-            - text: "Disclosure control"
-              href: technical/controls/disclosure-control.qmd
-            - text: "Approve and publish a release"
-              href: technical/controls/approve-publish.qmd
 
         - section: "Operate the Info-Hub"
           contents:
@@ -402,15 +421,21 @@ website:
               href: technical/maintenance/section-index.qmd
             - text: "Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
-            - text: "Files, releases and versions"
+            - text: "Files, data releases and versions"
               href: technical/maintenance/files-releases-versions.qmd
             - text: "Fix common problems"
               href: technical/maintenance/troubleshooting.qmd
 
-        - section: "Quick reference"
+        - section: "Reference"
           contents:
             - text: "Section contents"
               href: technical/reference/section-index.qmd
+            - text: "CVD death-classification rules"
+              href: technical/reference/cvd-death-classification-rules.qmd
+            - text: "CVD event-death linkage rules"
+              href: technical/reference/cvd-event-death-linkage-rules.qmd
+            - text: "Disclosure-control rules"
+              href: technical/reference/disclosure-control-rules.qmd
             - text: "System reference"
               href: technical/reference/index.qmd
             - text: "CVD suppression validation, 2024-2025"

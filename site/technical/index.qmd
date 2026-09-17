@@ -1,7 +1,7 @@
-﻿---
+---
 title: "BNR Technical Manual"
 description: "Run, validate, troubleshoot, recover and maintain the implemented BNR analytical and publication system."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 <!-- Remove Left-hand table of contents -->
@@ -42,14 +42,15 @@ Understand the system and prepare a workstation for BNR analytical work.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[WORKFLOWS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[COMMON TASKS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Run analytical workflows {.card-title}
+### Complete a task from start to finish {.card-title}
 
-Follow the implemented CVD event, mortality and reporting routes.
+Follow a short route through the detailed manuals in the correct order.
 
 ::: {.mt-auto}
-[Explore section](workflows/section-index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](common-tasks/section-index.qmd){.btn .btn-outline-primary .btn-sm}
+[Open cheat sheet](cheat-sheet/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -60,14 +61,14 @@ Follow the implemented CVD event, mortality and reporting routes.
 ::: {.card .h-100 .border-top .border-4 .border-primary .bg-light .shadow-sm}
 ::: {.card-body .d-flex .flex-column}
 
-[CONTROLS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
+[WORKFLOWS]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Review & publication controls {.card-title}
+### Run analytical workflows {.card-title}
 
-Review releases, apply disclosure control and record approval.
+Follow the implemented CVD event, mortality and reporting routes.
 
 ::: {.mt-auto}
-[Explore section](controls/section-index.qmd){.btn .btn-outline-primary .btn-sm}
+[Explore section](workflows/section-index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::
@@ -98,7 +99,7 @@ Render, check, publish and maintain the public Info-Hub.
 
 [MAINTENANCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### Maintain & recover {.card-title}
+### Maintain and recover {.card-title}
 
 Make safe changes, manage versions and resolve common problems.
 
@@ -116,9 +117,9 @@ Make safe changes, manage versions and resolve common problems.
 
 [REFERENCE]{.small .fw-bold style="color:#d89c60; letter-spacing:0.08em;"}
 
-### System reference {.card-title}
+### Rules & reference {.card-title}
 
-Find the principal workflows, commands, files, folders and terms.
+Check classification, linkage and disclosure rules, or find a command, file or system location.
 
 ::: {.mt-auto}
 [Explore section](reference/section-index.qmd){.btn .btn-outline-primary .btn-sm}
@@ -133,45 +134,16 @@ Find the principal workflows, commands, files, folders and terms.
 
 <br>
 
-## What this manual is for
+## How to use this manual
 
-Use this manual for exact menus, parameters, files, checks, failure conditions
-and recovery procedures. 
+Use this manual when you need to run, check or repair the BNR analytical and
+publishing system. Start with the section above that matches your task.
 
 | Manual | Main question answered |
 |---|---|
-| **Public Methods Manual** | What does this statistic mean, and how should I interpret it? |
+| **Public Methods Manual** | What does a statistic mean, and how should I interpret it? |
 | **[Operations Manual](../operations/index.qmd)** | What must BNR staff do, who decides and what evidence is retained? |
-| **[Technical Manual](../technical/index.qmd)** | How do staff operate the analytics and publishing environment? |
+| **Technical Manual** | How do I run and maintain the system? |
 
-The technical manual documents the code, data processes and system design that support the BNR’s work. The methods manual explains what the BNR measures and how its statistics should be understood. The operations manual guides staff through the routine tasks needed to keep the BNR system running. 
-
-## Start here
-
-- [Analytics environment](getting-started/environment.qmd)
-- [Set up a workstation](getting-started/workstation-setup.qmd)
-- [Analytical workflow map](workflows/overview.qmd)
-- [System reference](reference/index.qmd)
-
-## Implemented analytical routes
-
-- [CVD event release](workflows/cvd-events/overview.qmd): separate six-step workflow.
-- [CVD mortality release](workflows/mortality/overview.qmd): separate six-step workflow.
-- [Rolling three-month update](workflows/reporting/rolling-update.qmd): one controlled build from approved standard releases.
-- [Annual CVD report](workflows/reporting/annual-report.qmd): build, approve and publish.
-- [One-off CVD report](workflows/reporting/one-off-report.qmd): prepare, approve and publish.
-- [Dashboards, tables, downloads and listings](workflows/reporting/overview.qmd): refresh approved public presentation products.
-
-## Publication and maintenance
-
-- [Review an analytical release](controls/review-release.qmd)
-- [Apply disclosure control](controls/disclosure-control.qmd)
-- [Approve and publish a release](controls/approve-publish.qmd)
-- [Refresh public presentation products](workflows/reporting/overview.qmd)
-- [Render and publish the website](website/render-publish.qmd)
-- [Make a safe code change](maintenance/safe-code-change.qmd)
-- [Fix common problems](maintenance/troubleshooting.qmd)
-
-Public tables, dashboards, downloads and reports reuse approved public metric
-releases wherever their purpose permits. New presentation components must not
-establish a second calculation or approval route.
+The analytical workflows create and approve results in Stata. Quarto presents
+those approved results; it must not recalculate or silently change them.

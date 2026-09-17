@@ -31,12 +31,12 @@ Confirm that:
 2. Open Stata on the authorised workstation and load the BNR menu if it is not already available.
    - For events, choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**.
    - For deaths, choose **User > BNR > Update CVD mortality dashboard > Step 1: Extract REDCap data**.
-4. Enter the authorised export year and month. Leave replacement (`replace`) off for a first extraction.
-5. Select **Run extract**.
-6. Confirm that the Stata summary reports `Completed successfully`, the intended period and a plausible record count.
-7. Check that the raw CSV, Stata copy and YAML extraction receipt were created in the private release folder, `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`, and that the private log was created under `$BNR_PRIVATE_LOGS/`.
-8. Open the receipt and confirm its dates and record count. Stop if they do not match the authorised export.
-9. Record that the export is ready for CVD events Step 2.
+3. Enter the authorised export year and month. Leave replacement (`replace`) off for a first extraction.
+4. Select **Run extract**.
+5. Confirm that the Stata summary reports `Completed successfully`, the intended period and a plausible record count.
+6. Check that the raw CSV, Stata copy and YAML extraction receipt were created in the private release folder, `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`, and that the private log was created under `$BNR_PRIVATE_LOGS/`.
+7. Open the receipt and confirm its dates and record count. Stop if they do not match the authorised export.
+8. Record that the export is ready for CVD events Step 2.
 
 Later REDCap corrections belong to a subsequent export month, or an explicitly authorised replacement export for the same month. Do not alter the already exported data.
 

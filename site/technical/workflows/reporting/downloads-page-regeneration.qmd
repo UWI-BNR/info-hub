@@ -1,53 +1,73 @@
 ---
-title: "Rebuild the Downloads page"
-description: "Run and maintain the failure-safe catalogue builder used by the public Downloads page."
-manual-review-status: not-reviewed
+title: "How the Downloads page refreshes"
+description: "Technical reference for the automatic catalogue builder used by the public Downloads page."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## How the page is built
+## What this page explains
 
-`site/downloads/index.qmd` contains a Quarto listing over `site/downloads/downloads.yml`, using `site/downloads/downloads-table.ejs.md`. The YAML file is generated; do not maintain it manually.
+The Downloads page refreshes automatically before every Quarto render. **No separate Downloads-refresh action is required.**
 
-Before every site render, `_quarto.yml` runs:
+This page is technical reference material for maintaining or checking the catalogue builder.
 
-```powershell
-python scripts/build_download_catalogue.py
-```
+::: {.callout-note appearance="simple" title="No separate refresh action"}
+The `pre-render` setting in `site/_quarto.yml` runs the catalogue builder automatically. Complete the normal website render and deployment process; do not maintain `site/downloads/downloads.yml` by hand.
+:::
 
-Because the command runs from `site/`, the repository script is `site/scripts/build_download_catalogue.py`. It uses only the Python standard library and resolves paths from its own location.
+## Files and data flow
 
-## Inputs and output
+| File | Purpose |
+|---|---|
+| `site/_quarto.yml` | Runs `python scripts/build_download_catalogue.py` before every site render. Because Quarto runs from `site/`, this resolves to the repository script below. |
+| `site/scripts/build_download_catalogue.py` | Finds and validates approved metric-package catalogue records, then builds the central list. It uses only the Python standard library. |
+| `site/downloads/files/metrics/**/catalogue/{release_id}.yml` | Public catalogue records created by the CVD event and mortality Step 6 publication controllers. |
+| Approved ZIP named by each catalogue record | Public package that must exist before its entry can be listed. |
+| `site/downloads/downloads.yml` | Generated central catalogue read by the Downloads page. Never edit it manually. |
+| `site/downloads/index.qmd` | Public Downloads page and Quarto listing definition. |
+| `site/downloads/downloads-table.ejs.md` | Table template used to display the generated listing. |
 
-The builder scans `site/downloads/files/metrics/**/catalogue/{release_id}.yml`.
+## Accepted catalogue records
 
-It currently accepts `schema: bnr_download_manifest_v1` and `package_type: metric`. The central page lists entries whose download item has `include_in_listing: true`. Public links must remain under the permitted `files/` prefix and resolve to an existing ZIP package.
+The builder currently accepts:
 
-The single generated output is `site/downloads/downloads.yml`. It is rewritten only when its complete generated content changes. An unchanged message is normal after a rebuild that does not change catalogue metadata.
+- `schema: bnr_download_manifest_v1`;
+- `package_type: metric`;
+- download items marked `include_in_listing: true`;
+- public links beneath the permitted `files/` prefix; and
+- ZIP files that exist at the recorded public path.
 
-## Manual procedure
+It indexes public packages only. It does not check analytical results, approve a data release, publish files, render Quarto or deploy the website.
 
-From the repository root:
+## Automatic result
 
-```powershell
-.\venv-info-hub\Scripts\Activate.ps1
-python site/scripts/build_download_catalogue.py
-```
+During a normal render, the builder prints:
 
-Then:
+- `Catalogue status: written` when the generated content changes; or
+- `Catalogue status: unchanged` when the current file is already correct.
 
-1. Review `git diff -- site/downloads/downloads.yml`.
-2. Start or refresh the Quarto preview.
-3. Open `/downloads/` and locate the expected release.
-4. Check its surveillance area, period, release date, description and ZIP link.
-5. Open the ZIP and confirm it is the approved public package.
-6. Run a complete site render.
+Both are successful results. Writing only when content changes prevents the Quarto preview from entering a live-reload loop.
 
-## Failure safety
+## Failure protection
 
-The script validates all source records and selected ZIPs before writing the central YAML. If any input fails, it exits without replacing an existing `downloads.yml`. Correct the source catalogue entry or package created by the publication workflow, then rerun. Never patch the generated central file to hide an invalid source record.
+The builder validates every source record and selected ZIP before replacing `site/downloads/downloads.yml`. If validation fails, it prints `CATALOGUE BUILD STOPPED` and retains the existing central catalogue.
 
-The builder indexes public packages only. It does not validate analytical values, approve releases, render Quarto, commit or deploy.
+Correct the catalogue record or ZIP through the relevant Step 6 publication route, then run the normal render again. Never patch `downloads.yml` to conceal an invalid source record.
+
+## Checks during normal website review
+
+After the normal render, check the Downloads page as part of website review:
+
+- the expected data release appears once;
+- surveillance area, period, release date and description are correct;
+- the ZIP link opens the approved public package; and
+- the ZIP contains the expected approved files.
+
+## Related procedures
+
+- [Render and publish the website](../../website/render-publish.qmd)
+- [CVD event Step 6: publish approved outputs](../cvd-events/publish-metrics.qmd)
+- [Mortality Step 6: publish approved outputs](../mortality/publish.qmd)

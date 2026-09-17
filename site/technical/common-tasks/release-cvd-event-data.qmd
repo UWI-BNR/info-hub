@@ -1,0 +1,49 @@
+---
+title: "Release CVD event data"
+description: "Create, approve and publish a routine CVD event data-package release."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this task achieves
+
+Use this route to create an authorised CVD event data release and publish its
+approved results on the Info-Hub.
+
+## Before you start
+
+- Confirm the release year and month and authority to proceed.
+- Use the authorised workstation, private workspace and BNR Stata menu.
+- Identify the completed mortality release needed for death-certificate-only
+  linkage.
+
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+Authorise → prepare private data → calculate metrics → review and approve →
+publish the data package → deploy the website.
+:::
+
+## Complete the following steps
+
+| Order | Manual | Task | Detailed guidance |
+|---:|---|---|---|
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Authorise one consistent data release** — reporting period; authority; workstation; replacement decision | Follow [Authorise a data export](../../operations/release/data-release.qmd), then check [Before starting the CVD event workflow](../../operations/post-redcap/cvd-events-workflow.qmd#before-starting). |
+| 2 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Prepare the private analytical inputs** — cumulative REDCap extract; confidential historical join; de-identified datasets | Complete [Step 1](../workflows/cvd-events/extract-redcap.qmd), [Step 2](../workflows/cvd-events/prepare-confidential.qmd) and [Step 3](../workflows/cvd-events/create-analysis-inputs.qmd) with the same release year and month. |
+| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Calculate and stage the CVD event metrics** — hospital results; selected mortality release; linkage evidence; private proposed package | Follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd). |
+| 4 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Review, protect and approve the exact proposed package** — plausibility; disclosure control; automated checks; named approval | Use the [Operations review and approval route](../../operations/post-redcap/cvd-events-workflow.qmd#step-5-review-and-approve-the-release) and the detailed [Technical Step 5 procedure](../workflows/cvd-events/review-approve.qmd). |
+| 5 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Publish the unchanged approved data package** — approval verification; official public copy; website mirror | Follow [Publish CVD event metrics](../workflows/cvd-events/publish-metrics.qmd). |
+| 6 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Check the public meaning of the results** — event definition; counts; rates; interpretation | Use [How CVD events are classified](../../methods/interpretation/classifying-cvd-events.qmd), [Number of CVD events](../../methods/measures/cvd-event-counts.qmd) and [CVD incidence and event rates](../../methods/measures/incidence.qmd). |
+| 7 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Render and deploy the website** — dashboards; tables; Downloads catalogue; Git review; pull request; live-site check | Follow [Edit and publish website content](edit-publish-website-content.qmd). Dashboards, tables and Downloads refresh from the approved files during the normal render; no separate refresh action is required. |
+
+## How to confirm completion
+
+Step 6 reports successful publication, the website deployment succeeds, and the
+live CVD event dashboard, tables and Downloads entry use the intended release.
+
+## Related guidance
+
+- [Operations: CVD event workflow](../../operations/post-redcap/cvd-events-workflow.qmd)
+- [Technical: CVD event workflow overview](../workflows/cvd-events/overview.qmd)
+- [Disclosure-control rules](../reference/disclosure-control-rules.qmd)

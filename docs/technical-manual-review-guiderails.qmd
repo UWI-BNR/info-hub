@@ -1,0 +1,219 @@
+---
+title: "BNR Technical Manual review guiderails"
+description: "Review sequence, page standards and validation rules for the section-by-section Technical Manual review."
+date: "2026-09-17"
+toc: true
+toc-depth: 2
+---
+
+## Status
+
+This document consolidates the review approach agreed before the review with the refinements established through the pilot page and completed review stages, including the retrospective rendering and comprehension sweeps. It is the working standard for the remaining Technical Manual review.
+
+## Review sequence and progress
+
+**Legend:** ✅ completed · 🟨 completed but awaiting approval or minor alignment · ⬜ not started
+
+| Stage | Scope | Progress | What remains |
+|---:|---|:---:|---|
+| **Pilot** | `extract-redcap.qmd` | ✅ | Revised, technically checked and reviewed by Ian. |
+| **1** | **Getting started**: section listing, analytics environment and workstation setup | ✅ | All three pages revised, technically checked and reviewed by Ian. |
+| **2** | **Workflow foundations and controls**: two workflow overview pages and four review/publication-control pages | ✅ | Useful content and inbound links were migrated to the product-specific workflow and Reference pages. The duplicate control pages have been retired to `docs/deprecated/`. |
+| **2A** | **Rules-reference architecture**: classification, linkage and disclosure-control registers; Reference listing; manual landing page and sidebar | 🟨 | The substantive rules pages have received their Stage 8 accuracy and usability review. Ian’s human review of Stage 8 remains. |
+| **3** | **CVD event workflow** | ✅ | The overview and Steps 1–6 have been revised, technically checked and reviewed by Ian. |
+| **4** | **CVD mortality workflow** | ✅ | The overview and Steps 1–6 were revised, technically checked and reviewed by Ian. |
+| **5** | **Reporting workflows** | ✅ | All eight pages were revised, technically checked and reviewed by Ian. |
+| **6** | **Operate the Info-Hub** | 🟨 | The section listing, website publication procedure and website-content procedure have been revised and technically checked; Ian’s human review remains. |
+| **7** | **Maintain and recover** | 🟨 | The section listing, safe-code-change procedure, files/data-releases/version reference and troubleshooting page have been revised and technically checked; Ian’s human review remains. |
+| **8** | **Reference and manual landing page** | 🟨 | All seven pages have been revised and technically checked. Ian’s human review remains. |
+| **9** | **Common Tasks walkthroughs** | 🟨 | All eight walkthroughs and the grouped section index have been created and technically checked. Ian’s human review of the completed section remains. |
+| **10** | **Whole-manual consistency pass** | 🟨 | All 50 Technical Manual pages have been checked for terminology, structure, links, navigation, workflow continuity, duplication and cross-manual implications. Ian’s human review of the bounded corrections remains. |
+| **11** | **Info-Hub cheat sheet** | 🟨 | The complete screen and A3-print QMD now covers analytical, reporting, website and maintenance work, key locations, routine checks and non-Stata terminology. Ian’s final content and rendering review remains. |
+| **12** | **Final human acceptance test** | ⬜ | Use the Common Tasks material to configure the Info-Hub on a clean Windows 11 machine and perform the principal tasks end to end. Record and correct anything unclear or missing. |
+
+## Review process
+
+| # | Guiderail |
+|---:|---|
+| 1 | Review one coherent section at a time, followed by Ian’s human edit and approval checkpoint. |
+| 2 | Retain a whole-system view throughout. Check how each page fits into upstream and downstream workflows, even when reviewing it individually. |
+| 3 | Before making a Technical Manual change that implies a change to the Operations or Public Methods Manual, report that implication first. |
+| 4 | Keep the manual boundaries clear: **Operations** explains who acts and with what authority; **Technical** explains how to perform the task; **Public Methods** explains what measures mean and how to interpret them. |
+| 5 | Work locally during the review. Do not commit, push or deploy changes unless separately requested. |
+| 6 | After each approved section, provide a folder-aware ZIP using repository-relative paths. |
+| 7 | Preserve `manual-review-status`. Pages remain `not-reviewed` until the human review is complete; later states are `reviewed-by-irh` and, where applicable, `approved-by-bnr`. |
+| 8 | Build cross-system Common Tasks walkthroughs after the individual sections, then use them for the final clean-machine review. |
+| 9 | Build the cheat sheet last, from the stable and approved procedures. |
+
+## Standard page structure
+
+| # | Guiderail |
+|---:|---|
+| 10 | Write operational pages as concise, numbered, step-by-step how-to guides. |
+| 11 | Make every page usable on its own. State its purpose, prerequisites, command location, required inputs, expected result and next operational decision. |
+| 12 | Use **What this chapter does**, **What this step does** or **What this page explains**, according to the page type. |
+| 13 | Do not place a Markdown horizontal rule between the **Technical Manual** flag and the first second-level heading. The YAML `---` delimiters at the start of the source must remain. |
+| 14 | Add **Procedure at a glance** near the top of procedural pages using `appearance="simple"`. Use that simple callout style only for this top summary. |
+| 15 | Conceptual pages may use an appropriate alternative such as **System at a glance** rather than forcing a procedural summary. |
+| 16 | Keep core instructions visible. Do not collapse Stata command-line alternatives, menu alternatives or other routine operating routes. |
+| 17 | Use collapsed note callouts selectively for lengthy setup stages, secondary explanation, recovery guidance or genuinely complex sub-procedures. |
+| 18 | Where a long procedure has distinct stages, one collapsed note per stage is acceptable. Do not use callouts merely as decoration. |
+| 19 | End with only one to three genuinely useful related procedures. Do not link to the next page merely for navigation; Quarto already provides previous/next routing. |
+| 20 | Prefer tables where they make exact mappings, expected results, files, problems or actions easier to scan. |
+
+## Failure and recovery guidance
+
+| # | Guiderail |
+|---:|---|
+| 21 | Put **If X does not complete** guidance near the end of the page in a collapsed callout. |
+| 22 | Keep it subordinate to the normal procedure. Failure should not dominate the page or imply that routine failure is expected. |
+| 23 | State, where relevant, that the workflow should complete routinely while the REDCap structure remains unchanged and source data remain valid. |
+| 24 | Include only a small number of likely or consequential problems, particularly where the correct response may not be obvious. Do not catalogue generic or self-evident errors. |
+| 25 | A slightly fuller treatment is acceptable inside the collapsed callout, preferably as a compact **Situation / Action** table. |
+| 26 | Where unusual data cause a stop, direct the operator to correct the source record in REDCap and rerun the controlled process. Never instruct them to edit generated CSV, Stata, metadata or publication files. |
+| 27 | Provide a link to the central troubleshooting page for less common problems. |
+
+## Plain language and terminology
+
+| # | Guiderail |
+|---:|---|
+| 28 | Write to the person performing the task, not to the original developer. Remove internal design commentary unless the operator needs it to make a decision. |
+| 29 | Use short, direct, plain-language sentences while retaining exact technical meaning. |
+| 30 | Avoid unnecessarily computational or administrative wording. Prefer **set up** to **provision**, for example. |
+| 31 | Be explicit about **data release**, **data-package release**, **report publication** or **website deployment**. Do not use the unqualified word **release** where its meaning could be unclear. |
+| 32 | Replace jargon such as **manifested files** with plain wording such as **the files listed in the approved manifest**. |
+| 33 | Use UK English consistently: for example, *authorised*, *organisation* and *licence* as a noun. |
+| 34 | Link to current official landing pages rather than version-specific installer URLs. Explain the benefit to the operator—for example, that the link will lead to the current installer whenever the page is used. |
+| 35 | Keep filenames, script names, paths, menu labels, status messages and commands exact even when simplifying the surrounding explanation. |
+
+## Commands and operating instructions
+
+| # | Guiderail |
+|---:|---|
+| 36 | State exactly where every command must be entered: Stata command window, Windows PowerShell, VS Code PowerShell terminal or another named interface. |
+| 37 | Explain once how to open the standard **VS Code PowerShell terminal**; later pages may use that established shorthand. |
+| 38 | State what successful commands should print, create or change. A new operator should be able to recognise success without guessing. |
+| 39 | Show routine Stata command-line and menu routes together. Do not hide either route in a collapsed callout. |
+| 40 | When a command supports `replace`, show the complete routine command and a second complete command containing `replace`. Do not describe `replace` only as a bullet or fragment. |
+| 41 | For Git actions, provide both the VS Code interface route and equivalent commands, followed by the expected result. Do not assume prior Git knowledge. |
+| 42 | Routine changes use a development branch. Pull GitHub’s `main` into local `main`, create and work on a development branch, push that branch to GitHub, and merge it through a pull request. Do not describe GitHub as “pulling” a local branch. |
+| 43 | Do not instruct users to push directly to protected `main`. After a GitHub merge, update local `main` by pulling from GitHub. |
+| 44 | Treat `start-info-hub-edit.bat` as the normal Windows start-of-day route. Explain that it opens VS Code, activates the environment for Quarto preview and opens the local site, but does not update Git, choose a branch, commit, publish or deploy. |
+
+## Workstation and software conventions
+
+| # | Guiderail |
+|---:|---|
+| 45 | State the practical workstation baseline near the top of the setup page: 64-bit Windows 11, four logical processor cores, 8 GB RAM minimum with 16 GB recommended, sufficient storage, reliable internet and the necessary access and licences. |
+| 46 | Use WinGet as the preferred Windows 11 installation route. Always provide the official installer page as the fallback when WinGet is unavailable or does not complete. |
+| 47 | Require Firefox in its normal 64-bit installation location because the standard edit-session launcher is configured to use it. |
+| 48 | Keep Python 3.13 as the tested baseline. Do not recommend “the latest Python” until that version has been tested with the repository packages and the environment check, CI configuration and frozen requirements have been updated together. |
+| 49 | Distinguish required runtime software from optional editor aids. Explain whether the workflow can still operate when an extension is unavailable. |
+
+## Technical and operational accuracy
+
+| # | Guiderail |
+|---:|---|
+| 50 | Check every procedure against the actual scripts, dialogs, menus, configuration templates, paths, filenames and output messages. Do not rely solely on an earlier manual page. |
+| 51 | Preserve the system boundary: Stata owns surveillance preparation, analysis, disclosure processing and controlled analytical publication; Python performs defined support tasks; Quarto presents approved public products. |
+| 52 | Distinguish three separate events: Stata publishes the approved analytical package; Quarto renders the local static site; GitHub Actions deploys the live website. Success at one stage does not prove completion of the next. |
+| 53 | Keep confidential data, tokens, staging material and review evidence outside the public repository. De-identified data are not automatically approved public data. |
+| 54 | Never recommend repairing generated outputs manually. Correct the earliest affected source data, configuration, reference file or code and rerun the controlled workflow. |
+| 55 | Automated success messages do not replace human review, disclosure assessment or publication approval. |
+| 56 | Prefer the simplest maintainable route that a future mixed-skill team can operate confidently. Avoid additional tooling or abstraction without a clear operational benefit. |
+
+## Validation and handover
+
+| # | Guiderail |
+|---:|---|
+| 57 | Check local links after each section and review whether each link is useful, not merely whether its target exists. |
+| 58 | Check callout and code-fence balance, Quarto syntax, paths and repository diffs. Run a complete local Quarto render whenever the executable is available. |
+| 59 | Keep related-procedure links descriptive and limited. Check links into the Operations and Public Methods manuals as part of the human review. |
+| 60 | After each section, identify anything that still depends on human judgement, live credentials, authorised private data or a Windows-only test. |
+| 61 | During the whole-manual pass, standardise terminology and structure without erasing necessary differences between conceptual, procedural and reference pages. |
+| 62 | The final acceptance test is operational: configure a clean machine and perform the Common Tasks. Any point requiring undocumented prior knowledge is a documentation defect. |
+
+## Manual edits and system overviews
+
+| # | Guiderail |
+|---:|---|
+| 63 | When Ian supplies a manually revised page, use it as the authoritative starting copy. Preserve those edits unless they conflict with verified system operation or a later explicit instruction. |
+| 64 | When a new Technical Manual guiderail is agreed, add it to this document during the next implementation run and include the updated QMD in that run's folder-aware ZIP. |
+| 65 | On system overview pages, distinguish analytical workflows from presentation or indexing procedures that refresh website products after an approved data-package release or report publication. Link to the relevant downstream technical guides. |
+| 66 | In workflow diagrams, describe boxes as distinct stages and arrows as controlled moves between stages. Do not refer to an arrow itself as the control when the stage and transition both matter. |
+
+## File maps on procedural pages
+
+| # | Guiderail |
+|---:|---|
+| 67 | Every procedural page that reads input files or external data, uses code or configuration files, or creates output files must provide a clear file map. Conceptual pages and section listings are exempt. |
+| 68 | Place the file map after **Before you start**, or after **Procedure at a glance** when the page has no separate prerequisites section, and before the detailed numbered procedure. |
+| 69 | Use separate collapsed note callouts titled **Input files**, **Code files** and **Output files** for the applicable parts of the process. A slightly expanded title such as **Input files and source** is acceptable when it improves accuracy. |
+| 70 | Do not add an empty callout. If a human-review procedure produces a decision but no separate file, describe the decision in the visible procedure and omit the **Output files** callout. |
+| 71 | Present each file map as a compact table. Input tables normally identify the file or source, location, purpose and required checks. Code tables identify the file, purpose and whether it is run directly or called automatically. Output tables identify the file, location, purpose and access level. |
+| 72 | Use exact filenames, repository paths, environment variables and folder patterns. Where names vary by data release, period or version, use an explained placeholder such as `YYYY`, `MM`, `V` or `STUDY`. |
+| 73 | Include the operationally relevant Stata, Python, PowerShell, batch, QMD, template and configuration files that an operator or future maintainer may need to locate, inspect, run or understand. Do not catalogue every imported software library or low-level transitive dependency. |
+| 74 | Distinguish files run directly by the operator from helpers, dialogs, templates and configuration files called automatically. Identify outputs accurately as private source data, review evidence, approval evidence, authoritative public output, website copy or another appropriate access category. |
+| 75 | Keep essential filenames and commands visible in the numbered procedure. The collapsed tables are a reference map and must not hide information required to perform the task. |
+| 76 | Apply this standard retrospectively to applicable pilot, Stage 1 and Stage 2 pages, and to every applicable procedural page in later review stages. |
+| 77 | Prefer ordinary operational language to internal development terms. Where a term such as **candidate**, **manifest**, **payload**, **fingerprint** or **QA** must appear because it is used in code or a filename, explain it in plain language at first use. |
+| 78 | Spell out abbreviations at first use and explain what they mean in the procedure. Do not assume that a new operator knows what an automated check does merely because its filename contains `qa`. |
+| 79 | Make the visible instructions and file-map tables work together. Name the exact file the operator should open or inspect, then state in plain language what that file contains and what the operator should check. |
+| 80 | Do not imply that an operator must manually record, create or edit a control file when the workflow creates it automatically. State the actual decision or action, name the controller that performs it and identify the generated evidence file. |
+| 81 | Tables containing filenames or paths should normally use no more than two columns. Put one file on each row and explain what the operator should check. Show a shared folder or log path once above the table instead of repeating it in table cells. |
+| 82 | Where a set of review files has a clear starting point, place that file first, mark it **Open this first**, and describe when the supporting files should be consulted. |
+| 83 | After the structural and rendering check, perform a separate comprehension sweep. Read the page as a new operator and remove any wording that depends on undocumented knowledge of the codebase or workflow history. |
+| 84 | Distinguish an internal name from the concept it represents. Keep `candidate`, `public_ready`, `qa`, `manifest` or similar text where it is part of an exact filename, folder, command or menu label, but immediately explain the name in ordinary operational language. |
+| 85 | Use the same plain description consistently in the visible steps and file map. A reader should be able to match an instruction to the exact filename and then understand what the file contains and why it must be checked. |
+| 86 | Do not use a generic table row such as **Review files** or **Proposed report files** when the procedure depends on named files. Put each required file on its own row, even when another page describes the same set in more detail. |
+| 87 | Describe a generated file at the point when it first exists. For a procedure covering approval and publication, make clear that `approval.yml` and `public_manifest.csv` are outputs of approval and inputs to the later publication action. |
+| 88 | Prefer plain access and purpose descriptions such as **private proposed file**, **private approval record**, **official public analytical copy** and **public website copy**. Use terms such as **authoritative**, **payload**, **receipt**, **fingerprint**, **metadata** or **staging** only when their extra precision is necessary, and explain them. |
+| 89 | Review decision wording against the implemented automation. Tell the operator to decide, confirm or run the action; state separately which evidence file the workflow creates. Never imply a manual record-keeping step that does not exist. |
+
+## Workflow and reference architecture
+
+| # | Guiderail |
+|---:|---|
+| 90 | Product-specific workflow pages are the sole step-by-step operating guides. Do not maintain a second generic procedure that duplicates those steps. |
+| 91 | Use Reference pages for cross-cutting implemented rules that staff may need to inspect without running a procedure. Reference pages explain the rule and its scope, but link to workflow pages for commands, review and approval actions. |
+| 92 | The agreed rules registers are **CVD death-classification rules**, **CVD event–death linkage rules** and **Disclosure-control rules**. Keep the sidebar section name as **Reference**, not **Quick reference**. |
+| 93 | Reference pages are exempt from the numbered how-to structure and Input/Code/Output file-map callouts when they do not run a process. Use **Rules at a glance**, visible rule tables, a short visible **Where the rules are implemented** section and, where useful, one collapsed table of supporting implementation files. |
+| 94 | A rules reference must be checked directly against the implemented `.do` files, controlling dictionaries and contracts. List every named rule or complete decision branch needed to understand the implementation; do not infer completeness from an older manual page. |
+| 95 | Name the exact `.do` file location of each rule set. When the rules span several files, say that no single rules file exists and list the controller and ordered helpers. |
+| 96 | Keep core rules visible. Collapse only supporting implementation maps or detailed provenance that would otherwise make the page visually intimidating. |
+| 97 | When an implemented rule changes, update its code, tests, controlling contract or dictionary, workflow page and rules reference in the same controlled change. A routine data release must not alter fixed rules. |
+| 98 | The former `site/technical/controls/` pages were reviewed during Stages 3–5. Move any useful content into the relevant CVD event, mortality or reporting workflow page rather than recreating a generic procedure. |
+| 99 | The retirement checkpoint is complete: useful control-page content and inbound links were migrated, and the obsolete control pages and section listing were moved to `docs/deprecated/site/technical/controls/`. Keep the archive out of the rendered website and navigation. |
+| 100 | Treat dashboard, table, Downloads and report-listing refresh pages as technical references, not user procedures. State prominently that no separate refresh action is required: the products use approved website files or refresh automatically during the normal Quarto render. Do not create an unnecessary manual refresh task. |
+
+## Common Tasks walkthroughs
+
+| # | Guiderail |
+|---:|---|
+| 101 | Create Common Tasks only after the detailed procedures are stable. They are short end-to-end routes, not a second version of the Technical Manual. |
+| 102 | Use a short purpose statement, a **Procedure at a glance** summary, a compact task table, a completion check and up to three related links. Do not add a separate **If the task does not complete** section; detailed linked pages already provide that guidance. |
+| 103 | Make the task table the main content. Link directly to the relevant detailed procedure, file table or stable page section rather than restating commands, filenames or recovery guidance. Where one detailed page already contains several consecutive actions, summarise them as one informative task row and link to that page. |
+| 104 | In each task table, identify the source manual with compact non-link labels: **Operations** in the established Operations colour, **Technical** in the Technical colour and **Public Methods** in the Public Methods colour. Keep the manual name visible so meaning does not depend on colour, and place the working link in the detailed-guidance column. |
+| 105 | State clearly when a website product refreshes automatically from approved public files during the normal Quarto render. Do not create a manual task for dashboards, tables, Downloads or report listings when no separate user action is required. |
+| 106 | Do not create a general **Diagnose a failed run** walkthrough unless routine experience reveals a small number of recurring, useful recovery routes. Keep current recovery guidance on the detailed procedure and troubleshooting pages. |
+| 107 | Use **Edit and publish website content** as the Stage 9 design pilot. It covers ordinary Quarto editing, local preview and rendering, a development branch, pull-request review, merge, automated deployment and the live-site check. |
+| 108 | Use **Complete the following steps** above the task table. Keep **What this task achieves** and **Before you start** short, direct and in plain language. |
+| 109 | Group the completed walkthroughs as **Analytical and reporting tasks**—CVD event release, mortality release, annual report and other reports—and **Website and maintenance tasks**—new workstation, website content, safe code change and manual checks. |
+
+## Stage 11 cheat-sheet design
+
+| # | Guiderail |
+|---:|---|
+| 110 | Maintain the cheat sheet as a QMD source that works on screen and can later produce a two-sided A3 landscape PDF. Do not maintain separate website and PDF wording. |
+| 111 | Write primarily for the BNR Lead and BNR Analyst. Assume routine Stata knowledge, but explain other packages, platforms, languages and dependencies in plain language. |
+| 112 | Organise the content by the task the user needs to complete. Show what the user supplies, what they run, the decision or check before moving on and a direct link to the full procedure. |
+| 113 | Keep exact Stata menu labels, status messages and workflow boundaries. Omit exhaustive file inventories, supporting implementation files and unusual recovery scenarios. |
+| 114 | Use compact panels and tables with the Technical Manual colour. Keep the source responsive on screen and suitable for A3 landscape printing; do not rely on colour alone. |
+| 115 | Build Pass 1 around analytical and reporting work. Add website operation, key folders, routine checks, safe changes and a plain-language non-Stata glossary only after the first layout has been reviewed. |
+| 116 | Keep panels in the same row equal in height. Give short report-stage columns a fixed narrow width, and move multi-column layouts to fewer columns before their tables or instructions become cramped. |
+
+## Architecture decision register
+
+| Decision | Status | Agreed treatment |
+|---|:---:|---|
+| **TM-01 — Retire duplicated generic control pages** | Complete | Use the product-specific workflow pages as the operational instructions and the three rules registers for cross-cutting classification, linkage and disclosure rules. The former generic control pages are archived in `docs/deprecated/site/technical/controls/` and are not part of the website navigation. |

@@ -1,25 +1,35 @@
 ---
-title: "Rebuild the report listings"
-description: "Maintain the Quarto listings for CVD Reports and Studies and Latest Surveillance Outputs."
-manual-review-status: not-reviewed
+title: "How the report listings refresh"
+description: "Technical reference for the Quarto listings that discover published CVD report landing pages."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Listing sources
+## What this page explains
 
-| Public listing | Source QMD | Landing pages discovered at render time |
-|---|---|---|
-| CVD Reports and Studies | `site/surveillance/cvd/index.qmd` | `reports/updates/*/index.qmd`, `reports/annual/*/index.qmd`, `reports/briefings/*/index.qmd`, `reports/studies/*/index.qmd` |
-| Latest Surveillance Outputs | `site/news/index.qmd` | `../surveillance/*/reports/*/*/index.qmd` |
+The CVD report listings refresh automatically when Quarto renders the website. **No separate report-listing action is required.**
 
-Both listings sort landing pages by date in descending order. The first uses a table layout; Latest Surveillance Outputs uses a card/grid layout.
+This page is technical reference material for maintaining or checking the listing definitions and generated report landing pages.
 
-## Required landing-page metadata
+::: {.callout-note appearance="simple" title="No separate refresh action"}
+Complete the rolling, annual or one-off report publication route, then follow the normal website render and deployment process. Quarto discovers the new published landing page automatically.
+:::
 
-Generated report landing pages supply YAML fields such as:
+## Listings and discovery rules
+
+| File | What Quarto discovers |
+|---|---|
+| `site/surveillance/cvd/index.qmd` | `reports/updates/*/index.qmd`, `reports/annual/*/index.qmd`, `reports/briefings/*/index.qmd` and `reports/studies/*/index.qmd`. This creates **CVD Reports and Studies**. |
+| `site/news/index.qmd` | `../surveillance/*/reports/*/*/index.qmd`. This creates **Latest Surveillance Outputs**. |
+
+Both listings sort published landing pages by `date` in descending order. The CVD listing uses a table; Latest Surveillance Outputs uses cards.
+
+## Required landing-page fields
+
+Published report landing pages provide fields such as:
 
 ```yaml
 title: "Reader-facing title"
@@ -35,24 +45,33 @@ categories:
   - CVD
 ```
 
-Report-specific fields may add a coverage period, source-release IDs, study ID or related report ID. Keep machine identifiers stable and dates in ISO form.
+Report-specific fields may also identify the coverage period, source data releases, study ID or related report. Keep machine identifiers stable and use ISO `YYYY-MM-DD` dates.
 
-## Routine procedure
+The date is the publication date used for listing order; it does not rename the surveillance year covered by a report.
 
-1. Complete the rolling, annual or one-off publication route. Use only the generated website landing page, never a private candidate.
-2. Confirm the page is in the correct source folder and its linked PDF or data exists.
-3. Run `quarto render` from `site/`.
-4. Check both listings. Confirm the item appears once and in the expected date order.
-5. Check title, description, report type, image, image alternative text and categories.
-6. Open the listed page and all its public links.
-7. Review the QMD, PDF and metadata changes before commit.
+## Checks during normal website review
 
-## Troubleshooting
+After the normal site render, check both listings as part of website review:
 
-- Missing item: check the directory pattern, filename `index.qmd`, YAML delimiters and `date`.
-- Wrong order: check that `date` is a valid ISO date and describes the intended publication date.
-- Duplicate item: check for two landing pages matching the listing patterns.
-- Broken card or row: check `title`, `description`, `image` and `image-alt`.
-- Broken PDF link: return to the report publication output mapping; do not hard-code a second copy into the listing.
+- the report appears once and in the expected date order;
+- title, description, report type, image, alternative text and categories are correct;
+- the listed landing page opens; and
+- every PDF and public data link works.
+
+## If a listing is wrong
+
+| Situation | What to check |
+|---|---|
+| Report is missing | The published folder matches a discovery pattern, the file is named `index.qmd`, and its YAML has valid delimiters and `date`. |
+| Order is wrong | `date` is valid ISO format and records the intended publication date. |
+| Report appears twice | Two landing pages may match the discovery patterns. Remove the unintended published copy through the controlled report route. |
+| Card or table row is incomplete | Check `title`, `description`, `image` and `image-alt` in the generated landing page. |
+| PDF link fails | Return to the report publication output mapping. Do not create an extra manually linked copy. |
 
 The listings are indexes only. They do not approve, copy or transform reports.
+
+## Related procedures
+
+- [Render and publish the website](../../website/render-publish.qmd)
+- [Build a rolling three-month CVD update](rolling-update.qmd)
+- [Build, approve and publish an annual CVD report](annual-report.qmd)

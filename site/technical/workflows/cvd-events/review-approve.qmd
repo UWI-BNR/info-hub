@@ -1,85 +1,176 @@
 ---
 title: "Review and approve combined CVD metrics"
-description: "CVD event Step 5: prepare disclosure-review evidence and approve the exact reviewed candidate."
-manual-review-status: not-reviewed
+description: "Step 5: prepare, review and approve the exact proposed public CVD event data package."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Controller and boundary
+## What this step does
 
-The canonical controller is `scripts/stata/monthly/bnr_step5_review.do`. It has two separate actions:
+Step 5 has three separate parts:
 
-- `prepare` applies the approved disclosure rules and creates private review evidence;
-- `approve` verifies that evidence has not changed and creates `public_ready`.
+1. **Prepare** applies the approved disclosure-control rules and creates the private proposed public dataset and review evidence.
+2. **Human review** checks the data-release identity, source issues, linkage summary, disclosure results, equations and plausibility.
+3. **Approve** verifies that the reviewed files have not changed and creates the exact seven-file package allowed to proceed to Step 6.
 
-Neither action publishes.
+The code calls the proposed public dataset the **candidate**. It is still private and unapproved. Neither preparation nor approval publishes any file.
 
-## Prepare the review package
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Run Step 5 `prepare` for the intended CVD event data release.
+2. Open `step5_review.xlsx` first and complete the human review using the named supporting files.
+3. If anything is wrong, correct the earliest source or code and rebuild; never edit generated review files.
+4. An authorised BNR Lead or BNR Analyst runs the separate `approve` action.
+5. Check `approval.yml`, `public_manifest.csv` and all seven approved files before Step 6.
+:::
 
-Menu: **User > BNR > Update CVD events dashboard > Step 5: Review and approve package for release**, then select **Prepare the review package**.
+## Before you start
+
+- Confirm that Step 4 completed successfully for the intended CVD event and mortality data-release pair.
+- Keep every Step 4 and Step 5 file private.
+- The person approving must be an authorised **BNR Lead** or **BNR Analyst** and must enter their actual name.
+- Leave replacement off for a first preparation or approval. Use it only for a deliberate rebuild or reapproval; repeat the complete human review whenever prepared evidence changes.
+
+::: {.callout-note collapse="true" title="Input files"}
+
+**Private staging folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/`
+
+| File | Purpose and required check |
+|---|---|
+| `datasets/cvd_burden_metrics_cvd_YYYY_MM.dta` | Step 4 hospital-recorded burden statistics. Confirm the CVD event data release and plausible scope. |
+| `datasets/cvd_incidence_rates_cvd_YYYY_MM.dta` | Step 4 mortality-linked counts and rates. Confirm the event/mortality data-release pair. |
+| `review/cvd_incidence_rate_components_cvd_YYYY_MM.dta` | Private components used to check calculated count and rate relationships. |
+| `review/cvd_dco_linkage_review_summary_cvd_YYYY_MM.csv` | Non-identifying summary of DCO linkage cases requiring attention. Open the detailed private linkage workbook if the summary reports review cases. |
+| `review/cvd_source_quarantine_summary_cvd_YYYY_MM.csv` | Step 2 source-quarantine summary. Open the detailed Step 2 workbook if its status is `review_pending`. |
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/monthly/bnr_step5_review.do` | Main Step 5 controller. Routes the operator’s `prepare` or `approve` action. Run directly or through the dialog. |
+| `scripts/stata/monthly/bnr_step5_review_expanded_cvd_prepare.do` | Applies disclosure control, creates review evidence and records the exact files supplied for human review. Called automatically. |
+| `scripts/stata/metrics/cvd/bnr_step5_suppress_expanded_cvd.do` | Runs the nine-stage CVD disclosure-control chain. Called automatically during preparation. |
+| `scripts/stata/monthly/bnr_step5_review_expanded_cvd_approve.do` | Rechecks the reviewed evidence and creates the approved seven-file package. Called automatically. |
+| `scripts/stata/dialogs/bnr_step5_review.dlg` | Collects the data release, action, replacement choice and, for approval, the approver’s name and role. |
+
+The full protection rules and implementation map are in [Disclosure-control rules](../../reference/disclosure-control-rules.qmd).
+:::
+
+## 1. Prepare the review files
+
+In the Stata command window, replace `YYYY` and `M` with the CVD event data-release period:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 prepare [replace]
+do "$BNR_STATA/monthly/bnr_step5_review.do" YYYY M prepare
 ```
 
-Prepare requires the Step 4 burden dataset, incidence-rate dataset, private rate components, DCO linkage summary and source-quarantine summary. It creates:
+Only for an authorised rebuild, enter:
 
-```text
-$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/
-  step5_candidate.dta
-  step5_disclosure_qa.dta
-  step5_disclosure_qa.csv
-  step5_equation_audit.dta
-  step5_equation_audit.csv
-  step5_row_audit.dta
-  step5_review_basis.csv
-  step5_review.xlsx
+```stata
+do "$BNR_STATA/monthly/bnr_step5_review.do" YYYY M prepare replace
 ```
 
-`step5_review_basis.csv` fingerprints the exact candidate and supporting evidence. Do not alter any file after preparation.
+Alternatively:
 
-## Human review
+1. Choose **User > BNR > Update CVD events dashboard > Step 5: Review and approve package for release**.
+2. Enter the CVD event data-release year and month.
+3. Select **Prepare the review package**.
+4. Leave replacement unticked for a first preparation. Tick it only for an authorised rebuild.
+5. Run Step 5.
 
-Open `step5_review.xlsx` first. At minimum:
+Find `STEP 5 PREPARE: OPERATIONAL RUN SUMMARY`. Confirm it reports completion and the intended data release, candidate rows, protected rows, disclosure checks, equation failures, DCO review count, quarantine status, review workbook, exact-files register and preparation log.
 
-1. Confirm release identity, input row counts and intended reporting scope.
-2. Review source-quarantine and DCO linkage summaries and any detailed private linkage evidence.
-3. Confirm every row in `step5_disclosure_qa.csv` is `PASS`.
-4. Review `step5_equation_audit.csv` and the authoritative row audit DTA.
-5. For annual DCO counts, confirm `hospital only + additional DCO = hospital plus DCO` within the protected representation.
-6. Confirm protected rows have blank numeric fields and `display_value: *` and that no private linkage, allocation or suppression-decision fields enter the candidate.
+Do not continue unless all automated disclosure checks pass and equation failures are zero. An automated pass is necessary, but it does not replace human review.
 
-If review finds a problem, correct the earliest input or code and rerun `prepare`; do not edit the workbook or candidate.
+## 2. Review the proposed public data
 
-## Approve the reviewed candidate
+Open `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/step5_review.xlsx` first.
 
-Only an authorised **BNR Lead** or **BNR Analyst** may approve.
+1. On **Review**, confirm the intended data release and read the instructions.
+2. On **Source quarantine**, confirm whether Step 2 reported any protected source records. If the status is `review_pending`, open the detailed Step 2 quarantine workbook and resolve any source correction before approval.
+3. On **DCO linkage summary**, check the categories and number of records requiring review. When needed, open the identifiable workbook under `$BNR_PRIVATE/data/derived/cvd/yYYYY/mMM/linkage/mort_yYYYY_mMM/review/` and resolve source issues before approval.
+4. On **Disclosure QA**, confirm every automated disclosure quality-assurance check is `PASS`. Quality assurance (QA) means the automated checks that the proposed public data obey the disclosure rules.
+5. On **Equation audit**, confirm that no equation is marked `FAIL`. For annual DCO counts, check that hospital-only plus additional DCO equals hospital-plus-DCO.
+6. On **Row audit summary**, review the protected-row totals. Open `step5_row_audit.dta` only when a detailed row needs investigation.
+7. Check the proposed public dataset, `step5_candidate.dta`. Confirm plausible counts, percentages, rates, trends and denominators; check related totals and breakdowns; and understand any unexpected change from the preceding public data release.
+8. Confirm that labels, scope, notes and limitations are accurate. Protected rows must have blank numeric fields, `display_value` equal to `*`, and a clear disclosure note. Direct identifiers, private paths, credentials, logs, linkage evidence and disclosure-decision fields must be absent.
+9. On **Fingerprint register**, confirm that `step5_review_basis.csv` lists the exact six files reviewed. The stored size and checksum act as change-detection values; approval will stop if any listed file changes.
+
+If any check is unsatisfactory, stop. Correct the authoritative REDCap or mortality source, configuration or version-controlled code, then rerun from the earliest affected step and prepare a new review package. Notes or edits in a generated workbook do not correct the source.
+
+## 3. Approve the exact reviewed files
+
+Only after the complete review is satisfactory, enter the full approval command in the Stata command window:
 
 ```stata
 do "$BNR_STATA/monthly/bnr_step5_review.do" ///
-    2026 1 approve "Full Name" "BNR Analyst" [replace]
+    YYYY M approve "Full Name" "BNR Analyst"
 ```
 
-Approval rejects placeholder names, rechecks every saved fingerprint and requires all disclosure QA rows to pass. It creates:
+Use the actual authorised role: `BNR Analyst` or `BNR Lead`. Only for a deliberate reapproval, enter:
 
-```text
-$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/
-  datasets/
-    cvd_metrics_cvd_YYYY_MM.dta
-    cvd_metrics_cvd_YYYY_MM.csv
-    cvd_metrics_current.dta
-    cvd_metrics_current.csv
-  metadata/
-    cvd_metrics_cvd_YYYY_MM.yml
-    cvd_metrics_current.yml
-    metric_package.yml
-  public_manifest.csv
-  approval.yml
+```stata
+do "$BNR_STATA/monthly/bnr_step5_review.do" ///
+    YYYY M approve "Full Name" "BNR Analyst" replace
 ```
 
-The manifest contains exactly seven payload rows. `approval.yml` is written after the payload and manifest and records `promotion_status: pending_step_6`. It means approved, not published.
+Alternatively, reopen the Step 5 dialog, select the separate approval action, enter the actual approver name and authorised role, complete the confirmations, and run Step 5.
 
-Prepare and approve logs are under `$BNR_PRIVATE_LOGS/`. Use replacement only for a deliberate, governed rebuild or re-approval; complete human review again whenever the prepared evidence changes.
+Find `STEP 5 APPROVE: OPERATIONAL RUN SUMMARY` and confirm `Approved successfully`. Then open the `public_ready/` folder:
+
+1. Confirm that `approval.yml` names the intended data release, approver and role and contains `promotion_status: pending_step_6`.
+2. Confirm that `public_manifest.csv` lists exactly seven files. A **manifest** is the generated list of files approved for Step 6, together with their sizes and change-detection values.
+3. Confirm that all seven listed dataset and metadata files exist. These are the proposed public files to inspect; there is no earlier formal `public_manifest.csv` during human review because approval creates it.
+
+Approval means that the exact package may proceed to Step 6. It does not mean that the analytical package or website has been published.
+
+::: {.callout-note collapse="true" title="Output files"}
+
+**Private review folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`
+
+**Private approved-package folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/`
+
+**Private preparation log folder:** `$BNR_PRIVATE_LOGS/`
+
+| File | Purpose and access |
+|---|---|
+| **In Private Review Folder**| |
+| `step5_review.xlsx` | **Open this first.** Concise private workbook bringing the main review evidence together. |
+| `step5_candidate.dta` | Private proposed public dataset after disclosure control. It is not approved until the approval action completes. |
+| `step5_disclosure_qa.dta` and `.csv` | Automated disclosure quality-assurance results; every row must be `PASS`. |
+| `step5_equation_audit.dta` and `.csv` | Checks of additive, comparator and count/rate relationships; no row may fail. |
+| `step5_row_audit.dta` | Full private row-level disclosure audit, used for detailed investigation. |
+| `step5_review_basis.csv` | Register of the exact six files supplied for review and their change-detection values. |
+| `bnr_cvd_review_prepare_YYYYMM.log` | Private operational log for the preparation action. Approval does not create a separate log. |
+| **In Approved-Package Folder**| |
+| `datasets/cvd_metrics_cvd_YYYY_MM.dta` and `.csv` | **Approved** release-stamped data files created by the approval action. |
+| `datasets/cvd_metrics_current.dta` and `.csv` | **Approved** current data files created by the approval action. |
+| `metadata/cvd_metrics_cvd_YYYY_MM.yml` | **Approved** release-stamped data description. |
+| `metadata/cvd_metrics_current.yml` | **Approved** current data description. |
+| `metadata/metric_package.yml` | **Approved** package description. |
+| `public_manifest.csv` | Generated list of the seven approved files, sizes and change-detection values used by Step 6. |
+| `approval.yml` | Generated approval record binding the approver and exact manifest to this data release. |
+
+All Step 5 files remain private, including the seven approved files, until Step 6 publishes the permitted copies.
+:::
+
+::: {.callout-note collapse="true" title="If Step 5 does not complete"}
+Step 5 should complete routinely when the Step 4 package is complete and the proposed public data pass the fixed rules.
+
+| Situation | What to do |
+|---|---|
+| A source-quarantine, linkage, disclosure or equation check is unresolved | Do not approve. Correct the earliest affected source or code, rerun the required steps and complete human review again. |
+| Approval reports that a reviewed file changed | Do not bypass the check. Reprepare the review package, review the new files and approve only that exact version. |
+| The approver name or role is rejected | Enter the actual authorised person’s name and use exactly `BNR Lead` or `BNR Analyst`. |
+| Review or approved-package files already exist | Confirm that a governed rebuild or reapproval is intended before using the complete `replace` command. Never replace files merely to clear an unexpected stop. |
+
+For other uncommon problems, see [Fix common problems](../../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Disclosure-control rules](../../reference/disclosure-control-rules.qmd) — inspect the exact protection and automated-check rules.
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the team-facing review and authority process.

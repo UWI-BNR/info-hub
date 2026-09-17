@@ -1,72 +1,119 @@
 ﻿---
-manual-review-status: not-reviewed
-title: "Extract a REDCap release"
-description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly release."
+manual-review-status: reviewed-by-irh
+title: "Extract a REDCap data release"
+description: "Step 1: create and check the private cumulative REDCap snapshot for a completed monthly data release."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Extracts CVD records from REDCap from 1 January 2024 to the end of the selected month, checks the returned structure and saves the private source snapshot.
+Step 1 extracts CVD event records from REDCap from 1 January 2024 to the end of an authorised completed month. It checks the returned fields and event dates, then saves the private source copy used by Step 2.
 
-## Inputs
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm that the export is authorised and the selected month has ended.
+2. Run Step 1 from the Stata command line or BNR menu.
+3. In Stata, confirm that `STEP 1: OPERATIONAL RUN SUMMARY` reports `Completed successfully`, the intended data release and a plausible record count.
+4. Check the three extract files and private log, then continue to [Step 2: Prepare the confidential dataset](prepare-confidential.qmd).
+:::
 
-| Input | What it is |
+## Before you start
+
+- Use [Authorise a data export](../../../operations/release/data-release.qmd) to confirm the data-release year and month and authority to proceed.
+- Use a completed month from January 2024 onwards. Step 1 will not extract an unfinished month.
+- Confirm that the private workspace and CVD REDCap token file are available through the local BNR path settings.
+- Leave replacement off unless replacing an existing extract has been explicitly authorised.
+
+`$BNR_REDCAP_TOKEN_FILE` defines the token-file location. The token remains outside Git and is not stored in Stata or written to the log.
+
+::: {.callout-note collapse="true" title="Input files and source"}
+
+| File or source | Purpose and required check |
 |---|---|
-| Release year and month | The completed monthly release to extract. |
-| REDCap CVD project | Source patient-level CVD records. |
-| `$BNR_REDCAP_TOKEN_FILE` | Local text file containing the REDCap API token. |
+| BNR CVD REDCap records at `https://caribdata.org/redcap/api/` | Supplies the cumulative CVD event records from 1 January 2024 through the selected completed month. The API is the secure connection used by the extraction software. Confirm that the data export is authorised and the intended month has ended. |
+| CVD REDCap token file at `$BNR_REDCAP_TOKEN_FILE` | Holds the secret key that authorises the Python request to REDCap. Confirm that the file is outside Git, contains only the token on one line and is readable by the authorised user. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Defines the private raw-data, log and token-file locations. Confirm that the local path settings load without error and point to the authorised private workspace. |
+:::
 
-The token file location is defined in `scripts/stata/config/bnr_paths_LOCAL.do`.
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/monthly/bnr_step1_cvd_redcap_extract.do` | Validates the requested period, calls REDCap through embedded Python, checks the returned structure and dates, and writes the private extract. Run directly from the Stata command window or automatically through the dialog. |
+| `scripts/stata/dialogs/bnr_step1_cvd_redcap_extract.dlg` | Collects the year, month and optional replacement choice. The BNR menu opens it and constructs the same Stata command shown on this page. |
+| `scripts/stata/menu/bnr_menu.do` | Adds the Step 1 dialog to **User > BNR**. The workstation's `profile.do` loads it automatically. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Loads the machine-specific private paths and REDCap token-file location. Stata loads it at startup; the Step 1 DO-file also loads it when the BNR paths are not already available. |
+:::
 
 ## Run Step 1
 
-1. **Open Step 1.** In Stata, choose User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data.
-2. **Select the release.** Enter the release year and release month.
-3. **Choose replacement behaviour.** For a first run, leave Replace an existing extract unticked.
-4. **Run the extract.** Select Run extract.
-5. **Check the run summary.** Confirm that `STEP 1: OPERATIONAL RUN SUMMARY` shows `Completed successfully` and the expected release period and record count.
-6. **Inspect the output.**
-   - Open `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`.
-   - Confirm that all three release files exist.
-   - Open the YAML receipt and confirm the release dates and record count.
-   - Open or inspect the Stata dataset and confirm that it contains records and the expected event-date coverage.
+From the `info-hub` repository root, replace `YYYY` and `M` with the authorised year and month.
 
-## Outputs
-
-| File | Private location | Purpose |
-|---|---|---|
-| `bnr_cvd_step1_YYYYMM.csv` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Complete private REDCap source snapshot in CSV format. Retained as the raw extracted source. |
-| `bnr_cvd_step1_YYYYMM.dta` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Stata copy of the same private source snapshot, used by Step 2. |
-| `bnr_cvd_step1_YYYYMM_manifest.yml` | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` | Extraction receipt recording the release period, row and field counts, source information and file fingerprint. |
-| Step 1 log | `$BNR_PRIVATE_LOGS/` | Operational record of the run, including the completion or failure message. |
-
-See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for how the private data and log locations fit into the wider environment.
-
-To see a configured local path in Stata:
+For a routine first extract, run:
 
 ```stata
-display "$BNR_DATA_RAW"
+do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" YYYY M
 ```
 
-## Command-line equivalent
+Only when replacement of an existing extract has been explicitly authorised, run:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2024 1
+do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" YYYY M replace
 ```
 
-Add `replace` only when deliberately replacing an existing release.
+Alternatively:
 
-## If Step 1 does not complete
+1. Choose **User > BNR > Update CVD events dashboard > Step 1: Extract REDCap data**.
+2. Enter the authorised year and month.
+3. Leave **Replace an existing extract for this month** unticked for a first extract. Tick it only when replacement has been explicitly authorised.
+4. Select **Run extract**.
 
-Read the **Reason** and **Log** lines in the operational summary.
+Both routes run the same Step 1 DO-file.
 
-Check the selected month, network access and REDCap token-file location. If the release already exists, confirm that replacement is genuinely intended before rerunning with `replace`.
+## Check successful completion
 
-Do not use an extract from an incomplete run.
+1. Find `STEP 1: OPERATIONAL RUN SUMMARY` at the end of the Stata output.
+2. Confirm `Completed successfully`, the authorised data release and coverage, a plausible record count and all four output paths.
+3. Open `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/` and confirm that the CSV, Stata dataset and `.yml` run record exist.
+4. Open `bnr_cvd_step1_YYYYMM_manifest.yml`. Confirm the event-date range, record and field counts, event names and CSV filename.
+5. Open or inspect the Stata dataset and confirm that it contains records covering the expected event dates.
 
+Step 1 checks that the selected month is valid and complete, required fields are present, records were returned, event names are recognised, and every extracted event date is valid and within the selected cumulative period.
+
+::: {.callout-note collapse="true" title="Output files"}
+
+**Release folder:** `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/`
+
+**Private log folder:** `$BNR_PRIVATE_LOGS/`
+
+| File | Purpose |
+|---|---|
+| `bnr_cvd_step1_YYYYMM.csv` | Private cumulative copy of the REDCap source records in CSV format. |
+| `bnr_cvd_step1_YYYYMM.dta` | Stata copy of the same private source records, used by Step 2. |
+| `bnr_cvd_step1_YYYYMM_manifest.yml` | Private run record containing the data-release period, row and field counts, event names, extraction time and the CSV's SHA-256 change-detection value. |
+| `bnr_cvd_step1_YYYYMM.log` | Private operational log containing the completion or stop message. |
+
+All four files are private. Do not place them in Git or a public website folder.
+:::
+
+**Do not continue to Step 2 or use files from a run that did not complete successfully.**
+
+::: {.callout-note collapse="true" title="If Step 1 does not complete"}
+Step 1 should complete routinely while the REDCap structure and source data remain valid.
+
+| Reported problem | What to do |
+|---|---|
+| Missing expected field or unexpected REDCap event name | Ask the REDCap data manager to investigate. Correct an unintended change to the REDCap fields or events before rerunning. If the change was intentional, stop and review the workflow. |
+| Missing, invalid or out-of-period event date | Correct the source record in REDCap, then rerun Step 1. Do not edit the generated CSV or Stata extract. |
+| No records returned | Check the selected period and the REDCap source records before rerunning. |
+| An extract already exists | Confirm that replacement has been explicitly authorised before using the replacement command or dialog option. |
+
+Read the **Reason** and **Log** lines in `STEP 1 DID NOT COMPLETE` before taking action. For access, local-settings or other problems, see [Fix common problems](../../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the complete team-facing release process.
+- [The BNR analytics and publishing environment](../../getting-started/environment.qmd) — understand the private locations and workflow boundaries.

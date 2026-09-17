@@ -1,64 +1,153 @@
 ---
 title: "Publish approved combined CVD metrics"
-description: "CVD event Step 6: verify and promote the exact seven-file approved package."
-manual-review-status: not-reviewed
+description: "Step 6: verify and publish the exact approved seven-file CVD event data package."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## What Step 6 does
+## What this step does
 
-The menu wrapper `scripts/stata/monthly/bnr_step6_publish.do` delegates to `bnr_step6_publish_expanded_cvd.do`. Step 6 reads only the approved `public_ready` package. It does not recalculate, suppress or approve results.
+Step 6 verifies the Step 5 approval, the approved file list and every approved file. It then copies only those seven files into the official public analytical area, creates a release ZIP and catalogue record, and refreshes the website’s public data-file copy.
 
-## Run
+Step 6 does not recalculate, protect or approve results. It also does not render or deploy the website.
 
-Menu: **User > BNR > Update CVD events dashboard > Step 6: Publish approved outputs**
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm the intended `public_ready/` folder contains `approval.yml`, `public_manifest.csv` and all seven approved files.
+2. Run Step 6 from the Stata command window or BNR menu.
+3. Confirm `STEP 6: OPERATIONAL RUN SUMMARY` reports `Published successfully`.
+4. Check the official public analytical files, release ZIP, catalogue record and website data-file copy.
+5. Rebuild the Downloads catalogue, render the site locally and follow the separate GitHub deployment procedure.
+:::
+
+## Before you start
+
+- Complete Step 5 human review and approval for the exact CVD event data release.
+- Check that `approval.yml` names the actual authorised approver and reports `promotion_status: pending_step_6`.
+- Leave replacement off for a first publication. Use it only for an explicitly authorised correction or republication after checking both public locations.
+
+::: {.callout-note collapse="true" title="Input files"}
+
+**Private approved-package folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/`
+
+| File | Purpose and required check |
+|---|---|
+| `approval.yml` | Private approval record. Confirm the data release, metric family, actual approver, authorised role, approval date and pending-Step-6 status. |
+| `public_manifest.csv` | Generated list of exactly seven approved files. Step 6 checks its stored size and checksum before reading it. |
+| `datasets/cvd_metrics_cvd_YYYY_MM.dta` and `.csv` | **Approved** release-stamped data files. |
+| `datasets/cvd_metrics_current.dta` and `.csv` | **Approved** current data files. |
+| `metadata/cvd_metrics_cvd_YYYY_MM.yml` | **Approved** release-stamped data description. |
+| `metadata/cvd_metrics_current.yml` | **Approved** current data description. |
+| `metadata/metric_package.yml` | **Approved** package description. |
+
+Step 6 checks the size and checksum of every file against `public_manifest.csv`. Any change after approval stops publication.
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/monthly/bnr_step6_publish.do` | Canonical Step 6 wrapper. Run directly or through the dialog. |
+| `scripts/stata/monthly/bnr_step6_publish_expanded_cvd.do` | Verifies the approval and seven files, then creates and checks the public copies. Called automatically. |
+| `scripts/stata/dialogs/bnr_step6_publish.dlg` | Collects the data-release period and replacement choice when Step 6 is run from the BNR menu. |
+| `site/scripts/build_download_catalogue.py` | Rebuilds the website Downloads listing from public catalogue records after Stata publication. Run separately from the VS Code PowerShell terminal, or allow Quarto pre-render to run it. |
+:::
+
+## Run Step 6
+
+In the Stata command window, replace `YYYY` and `M` with the approved CVD event data-release period:
 
 ```stata
-do "$BNR_STATA/monthly/bnr_step6_publish.do" 2026 1 [replace]
+do "$BNR_STATA/monthly/bnr_step6_publish.do" YYYY M
 ```
 
-## Verification before copying
+Only for an authorised republication, enter:
 
-Step 6 requires and checks:
-
-- `approval.yml` with the selected release, combined-CVD family, pending-Step-6 status, actual approver name and authorised BNR Lead or BNR Analyst role;
-- the stored manifest size and checksum;
-- exactly seven unique manifested payload files; and
-- each payload's current size and checksum.
-
-Any mismatch stops publication.
-
-## Outputs
-
-The seven approved files are copied to `$BNR_PUBLIC/metrics/cvd/`. Step 6 also creates:
-
-- `$BNR_PUBLIC/metrics/cvd/releases/cvd_metrics_cvd_YYYY_MM.zip`;
-- `$BNR_PUBLIC/metrics/cvd/catalogue/cvd_YYYY_MM.yml`; and
-- `$BNR_PRIVATE_LOGS/bnr_cvd_publish_YYYYMM.log`.
-
-The website mirror under `site/downloads/files/metrics/cvd/` receives:
-
-```text
-cvd_metrics_current.csv
-datasets/cvd_metrics_cvd_YYYY_MM.csv
-releases/cvd_metrics_cvd_YYYY_MM.zip
-catalogue/cvd_YYYY_MM.yml
+```stata
+do "$BNR_STATA/monthly/bnr_step6_publish.do" YYYY M replace
 ```
 
-The release-stamped website CSV is verified against the authoritative public CSV after copying. Private `approval.yml`, `public_manifest.csv` and review material are not published.
+Alternatively:
 
-The fixed event monthly reference used by the dashboard is a separate controlled public presentation asset. It is not regenerated or packaged by this current combined-CVD Step 6.
+1. Choose **User > BNR > Update CVD events dashboard > Step 6: Publish approved outputs**.
+2. Enter the approved data-release year and month.
+3. Leave replacement unticked for a first publication. Tick it only for an authorised republication.
+4. Select **Publish Step 6**.
 
-## Post-publication checks
+Both routes run the same Step 6 wrapper and verification controller.
 
-1. Confirm the operational summary reports successful publication.
-2. Inspect the authoritative current and release-stamped files, metadata and ZIP.
-3. Inspect the website current CSV, release CSV, ZIP and catalogue record.
-4. Run `python site/scripts/build_download_catalogue.py` from the repository root, or let the Quarto pre-render step run it.
-5. Preview and render the site; inspect the event dashboard, tables and Downloads page.
-6. Review all Git changes and confirm no private controls or data are present.
+## Check successful publication
 
-For an existing release, `replace` is required. Inspect both authoritative and website locations before using it for recovery; do not hand-copy individual files.
+1. Find `STEP 6: OPERATIONAL RUN SUMMARY` at the end of the Stata output.
+2. Confirm `Published successfully`, the intended data release, approved file count, approver and public output locations.
+3. Open `$BNR_PUBLIC/metrics/cvd/` and confirm the release-stamped files, current files, three metadata files, ZIP and catalogue record listed below.
+4. Open `$BNR_REPO/site/downloads/files/metrics/cvd/` and confirm the release CSV, current CSV, ZIP and catalogue record.
+5. Confirm that `approval.yml`, `public_manifest.csv`, review files, private paths and confidential data are absent from both website and Git changes.
+
+## Refresh and check the website
+
+After Stata reports successful publication:
+
+1. In the VS Code PowerShell terminal at the repository root, run:
+
+   ```powershell
+   python site/scripts/build_download_catalogue.py
+   ```
+
+   A normal Quarto pre-render also runs this script automatically.
+2. Preview the affected CVD dashboard, tables and Downloads pages.
+3. Run a complete local Quarto render and inspect the output.
+4. Review every Git change before committing to the development branch.
+5. Follow [Render and publish the website](../../website/render-publish.qmd) to create and merge a pull request and check GitHub Actions.
+
+A successful Stata publication means the analytical files were copied and verified. A successful local Quarto render means the local website was built. The change becomes live only after the GitHub deployment succeeds.
+
+::: {.callout-note collapse="true" title="Output files"}
+
+**Official public analytical folder:** `$BNR_PUBLIC/metrics/cvd/`
+
+| File | Purpose and access |
+|---|---|
+| `cvd_metrics_cvd_YYYY_MM.dta` and `.csv` | Official public release-stamped analytical files. |
+| `cvd_metrics_current.dta` and `.csv` | Official public current analytical files. |
+| `metadata/cvd_metrics_cvd_YYYY_MM.yml` | Official public description of the release-stamped data. |
+| `metadata/cvd_metrics_current.yml` | Official public description of the current data. |
+| `metadata/metric_package.yml` | Official public package description. |
+| `releases/cvd_metrics_cvd_YYYY_MM.zip` | Official public ZIP containing the seven approved files. |
+| `catalogue/cvd_YYYY_MM.yml` | Official public catalogue record used by the Downloads listing. |
+
+**Public website data-file folder:** `$BNR_REPO/site/downloads/files/metrics/cvd/`
+
+| File | Purpose and access |
+|---|---|
+| `datasets/cvd_metrics_cvd_YYYY_MM.csv` | Website copy of the release-stamped CSV. |
+| `cvd_metrics_current.csv` | Website copy of the current CSV. |
+| `releases/cvd_metrics_cvd_YYYY_MM.zip` | Website copy of the release ZIP. |
+| `catalogue/cvd_YYYY_MM.yml` | Website copy of the catalogue record. |
+
+**Private log folder:** `$BNR_PRIVATE_LOGS/`
+
+| File | Purpose and access |
+|---|---|
+| `bnr_cvd_publish_YYYYMM.log` | Private operational publication log. |
+:::
+
+::: {.callout-note collapse="true" title="If Step 6 does not complete"}
+Step 6 should complete routinely when the approved package is unchanged and the output locations are available.
+
+| Situation | What to do |
+|---|---|
+| `approval.yml` or `public_manifest.csv` is missing or invalid | Return to Step 5. Do not create or edit either file manually. |
+| An approved file’s size or checksum no longer matches | Stop. Rebuild and review the package from the earliest affected step, then approve it again. |
+| Public files already exist | Confirm that an authorised republication is intended and inspect both public locations before using the complete `replace` command. |
+| Stata succeeds but the website is unchanged | Complete the separate local render, Git review, pull-request and GitHub deployment steps. Do not rerun Step 6 merely to deploy the site. |
+
+For other uncommon problems, see [Fix common problems](../../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Render and publish the website](../../website/render-publish.qmd) — move the reviewed website change through Quarto, GitHub and deployment.
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the team-facing publication checks.

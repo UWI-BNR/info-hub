@@ -1,75 +1,116 @@
-﻿---
-manual-review-status: not-reviewed
-title: "Create deidentified analytical inputs"
-description: "Step 3: create the private deidentified datasets used by authorised downstream analyses."
+---
+manual-review-status: reviewed-by-irh
+title: "Create de-identified analytical inputs"
+description: "Step 3: create the private de-identified datasets used by authorised downstream analyses."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Removes direct identifiers using approved positive variable lists and creates purpose-specific analytical datasets. These outputs are deidentified but remain private.
+Step 3 uses approved variable lists to create five purpose-specific analytical datasets, without direct identifiers.
 
-## Inputs
+These datasets are de-identified, but they are still private and are not approved public data.
 
-| Input | Private location | Purpose |
-|---|---|---|
-| Step 2 confidential dataset | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/bnr_cvd_confidential_YYYYMM_v01.dta` | Source event-level dataset. |
-| Step 2 YAML receipt | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/bnr_cvd_confidential_YYYYMM_v01.yml` | Confirms the source release and provenance. |
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm that the Step 2 dataset and run record are for the intended CVD event data release.
+2. For a routine full refresh, select all five analytical datasets.
+3. Run Step 3 from the Stata command window or BNR menu.
+4. Confirm `STEP 3: OPERATIONAL RUN SUMMARY` reports `Completed successfully` and lists every selected dataset.
+5. Check each `.dta` file against its matching `.yml` run record.
+:::
+
+## Before you start
+
+- Complete Step 2 and resolve any unexpected source quarantine before creating new analytical inputs.
+- Use the same `YYYY` and `M` as Steps 1 and 2.
+- Leave replacement off for a first run. Use it only for a deliberate rebuild, then rerun every affected downstream step.
+
+::: {.callout-note collapse="true" title="Input files"}
+
+**Private source folder:** `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`
+
+| File | Purpose and required check |
+|---|---|
+| `bnr_cvd_confidential_YYYYMM_v01.dta` | Confidential cumulative event-level source. Confirm that the data release and record count match Step 2. |
+| `bnr_cvd_confidential_YYYYMM_v01.yml` | Step 2 run record. Confirm the source files, data release and quarantine status before continuing. |
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/monthly/bnr_step3_metric_inputs.do` | Applies the approved variable lists, checks the selected outputs and writes each dataset and run record. Run directly or through the dialog. |
+| `scripts/stata/dialogs/bnr_step3_metric_inputs.dlg` | Collects the year, month, dataset selections and replacement choice when Step 3 is run from the BNR menu. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Supplies the workstation’s private input, output and log locations. |
+:::
 
 ## Run Step 3
 
-1. **Open Step 3.** In Stata, choose User > BNR > Update CVD events dashboard > Step 3: Build deidentified datasets.
-2. **Select the release.** Enter the release year and release month.
-3. **Select datasets.** For a routine full refresh, leave Counts and incidence, Case fatality, Length of stay, Care performance, and All approved variables selected.
-4. **Choose replacement behaviour.** For a first run, leave Replace selected existing datasets unticked.
-5. **Run Step 3.** Select Run Step 3.
-6. **Check the run summary.** Confirm the summary shows `Completed successfully`, the expected record count and the datasets you intended to create.
-7. **Inspect the output.**
-   - Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`.
-   - Confirm that every selected dataset has both a `.dta` file and matching `.yml` receipt.
-   - Open the receipts and check the source release, record count and variable list.
-   - Confirm that direct identifiers are absent from the generated analytical datasets.
-
-## Outputs
-
-All selected datasets are written to:
-
-`$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`
-
-| Output | Purpose |
-|---|---|
-| `bnr_cvd_input_count_YYYYMM_v01.dta` + `.yml` | Counts and incidence input. The current dashboard burden workflow uses this dataset. |
-| `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` + `.yml` | Input for authorised case-fatality analyses. |
-| `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` + `.yml` | Input for authorised hospital length-of-stay analyses. |
-| `bnr_cvd_input_performance_YYYYMM_v01.dta` + `.yml` | Input for care-performance measures. |
-| `bnr_cvd_input_all_variables_YYYYMM_v01.dta` + `.yml` | Union of all approved deidentified analytical fields, used where a broader input is required. |
-| Step 3 log | Operational record stored under `$BNR_PRIVATE_LOGS/`. |
-
-See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for how the private derived-data area relates to later staging and publication locations.
-
-To see the local derived-data root:
-
-```stata
-display "$BNR_DATA_DERIVED"
-```
-
-## Command-line equivalent
+For a routine full refresh, enter this complete command in the Stata command window, replacing `YYYY` and `M`:
 
 ```stata
 do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
-    2024 1 count case_fatality length_of_stay performance all_variables
+    YYYY M count case_fatality length_of_stay performance all_variables
 ```
 
-Add `replace` as the final word only for a deliberate rebuild.
+Only for an authorised rebuild, enter:
 
-## If Step 3 does not complete
+```stata
+do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" ///
+    YYYY M count case_fatality length_of_stay performance all_variables replace
+```
 
-Read the **Reason** and **Log** lines in the operational summary.
+Alternatively:
 
-First check that the Step 2 dataset and YAML receipt exist for the selected release. If an output already exists, use replacement only after confirming that a rebuild is intended.
+1. Choose **User > BNR > Update CVD events dashboard > Step 3: Build deidentified datasets**.
+2. Enter the CVD event data-release year and month.
+3. For a routine full refresh, leave **Counts and incidence**, **Case fatality**, **Length of stay**, **Care performance** and **All approved variables** selected.
+4. Leave **Replace selected existing datasets** unticked for a first run. Tick it only for an authorised rebuild.
+5. Select **Run Step 3**.
 
+Both routes run the same Step 3 DO-file. A specialised analysis may select fewer datasets, but the routine CVD event workflow creates all five.
+
+## Check successful completion
+
+1. Find `STEP 3: OPERATIONAL RUN SUMMARY` at the end of the Stata output.
+2. Confirm `Completed successfully`, the intended data release, a plausible record count and the five requested dataset names.
+3. Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`.
+4. Confirm that every selected `.dta` file has a matching `.yml` run record.
+5. Open each run record and confirm the source data release, row count and approved variable list.
+6. Confirm that direct identifiers are absent. Do not treat this check as approval for publication; all Step 3 files remain private.
+
+::: {.callout-note collapse="true" title="Output files"}
+
+**Private output folder:** `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/`
+
+**Private log folder:** `$BNR_PRIVATE_LOGS/`
+
+| File | Purpose and access |
+|---|---|
+| `bnr_cvd_input_count_YYYYMM_v01.dta` and `.yml` | Private counts-and-incidence input and its run record. Step 4 uses this dataset for the routine hospital-recorded statistics. |
+| `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` and `.yml` | Private case-fatality input and run record. |
+| `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` and `.yml` | Private length-of-stay input and run record. |
+| `bnr_cvd_input_performance_YYYYMM_v01.dta` and `.yml` | Private care-performance input and run record. |
+| `bnr_cvd_input_all_variables_YYYYMM_v01.dta` and `.yml` | Private union of all approved de-identified analytical fields and its run record. |
+| `bnr_cvd_create_metric_inputs_YYYYMM.log` | Private operational log for the Step 3 run. |
+:::
+
+::: {.callout-note collapse="true" title="If Step 3 does not complete"}
+Step 3 should complete routinely when the Step 2 files and approved variable lists are unchanged.
+
+| Situation | What to do |
+|---|---|
+| A Step 2 dataset or `.yml` run record is missing | Complete and check Step 2 for the same `YYYYMM`; do not copy a file from another data release. |
+| An expected source variable is missing or an event value is invalid | Stop and investigate the authoritative REDCap data and the earlier steps. Correct the source or approved code, then rerun from the earliest affected step. |
+| A selected output already exists | Confirm that a rebuild is intended before using the complete `replace` command or dialog option. |
+
+For other uncommon problems, see [Fix common problems](../../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the complete team-facing process.
+- [The BNR analytics and publishing environment](../../getting-started/environment.qmd) — understand why de-identified analytical inputs remain private.

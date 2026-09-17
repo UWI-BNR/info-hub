@@ -1,270 +1,139 @@
-﻿---
-manual-review-status: not-reviewed
-title: "The BNR analytics and publishing environment"
-description: "How the BNR analytical system fits together: tools, data locations, review boundaries, public outputs and publication."
+---
+manual-review-status: reviewed-by-irh
+title: "The BNR Info-Hub analytics and publishing environment"
+description: "Understand the tools, file locations and boundaries used to create and publish BNR products."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
 
-## What this chapter explains
+## What this page explains
 
-The BNR analytics and publishing environment turns registry data into controlled public surveillance products.
+Use this page to understand where work takes place and which system is responsible for each part of an Info-Hub data release.
 
-The system is intentionally divided into stages. **Stata performs the analytical work. People review and approve the outputs. Quarto presents approved products. GitHub deploys the static website.**
+The operating model is:
 
-That separation is not administrative decoration. It makes it possible to answer four basic questions for any public release:
+> **Stata computes. People review and approve. Quarto presents approved products. GitHub deploys the static website.**
 
-1. What source data were used?
-2. What code created the analytical product?
-3. Who reviewed and approved it?
-4. Which exact files were allowed to become public?
+Keeping these responsibilities separate protects confidential information and makes each data release traceable.
 
-The design also keeps confidential patient-level data away from the public website and public Git repository.
-
-## The system at a glance
-
-The environment is easiest to understand as two connected spaces: a **private analytical environment** and a **public interface**.
-
-::: {.columns}
-
-::: {.column width="49%"}
-
-### Private analytical environment
+## System at a glance
 
 ```{mermaid}
-%%{init: {"theme":"base","themeVariables":{
-  "background":"transparent",
-  "primaryColor":"#ffffff",
-  "primaryTextColor":"#212529",
-  "primaryBorderColor":"#6c757d",
-  "lineColor":"#6c757d"
-}}}%%
 flowchart TB
-    A["REDCap + frozen source data"]
-    B["Stata preparation + analysis"]
-    C["Private derived data"]
-    D["Private staging package"]
-    E["Human review + approval controls"]
-
-    A --> B --> C --> D --> E
+    A["REDCap and fixed historical sources"] --> B["Stata preparation and analysis"]
+    B --> C["Private files prepared for review"]
+    C --> D["Human approval"]
+    D --> E["Controlled Stata publication"]
+    E --> F["Official public analytical copy"]
+    F --> G["Website copies and Quarto"]
+    G --> H["GitHub Pages"]
 ```
 
-:::
+The boundary between **Human approval** and **Controlled Stata publication** is deliberate. `approval.yml` is the approval record for an exact package; creating it does not itself publish that package.
 
-::: {.column width="49%"}
+## Know which tool owns each task
 
-### Public interface
+| Tool | Responsibility |
+|--|----|
+| **REDCap** | Operational source for current CVD event records and mortality death-certificate records. |
+| **Stata** | Extraction control, preparation, analytical calculations, surveillance measures, disclosure-control processing, reports and controlled publication. |
+| **Python** | Uses REDCap's secure software connection to obtain authorised extracts, checks that the required Python software is installed, and adds navigation and page formatting to annual-report PDFs created by Stata. It does not calculate surveillance measures. |
+| **Quarto** | Website pages, dashboards, tables, report landing pages and manuals using approved public information. |
+| **Git** | Local version control for code and website source. |
+| **GitHub** | Shared public repository and deployment of the static website. |
 
-```{mermaid}
-%%{init: {"theme":"base","themeVariables":{
-  "background":"transparent",
-  "primaryColor":"#ffffff",
-  "primaryTextColor":"#212529",
-  "primaryBorderColor":"#6c757d",
-  "lineColor":"#6c757d"
-}}}%%
-flowchart TB
-    F["Authoritative approved public package"]
-    G["Disposable website mirror"]
-    H["Quarto publication layer"]
-    I["GitHub Pages"]
+New analytical calculations belong in Stata code unless a formally approved design says otherwise.
 
-    F --> G --> H --> I
-```
+## Locate the two working roots
 
-:::
+Every workstation has a public project folder and a separate private folder. The public folder is a Git repository: a project folder whose changes are tracked by Git.
 
-:::
+| Global | Location | Contains |
+|--|---|---|
+| `$BNR_REPO` | Local working copy of `info-hub` | Code, manuals, approved public packages and Quarto source. |
+| `$BNR_PRIVATE` | Authorised private companion workspace | Identifiable data, private derived data, reference assets, proposed packages awaiting review or publication, and logs. |
 
-**Controlled publication boundary.** Files move from the private environment to the public interface only after the required human review and approval. The controlled Stata publication step verifies the approval receipt and manifest before promoting the permitted files to the authoritative public package.
-
-The public side never needs access to confidential source data or the private review workspace.
-
-## The main tools
-
-| Tool | Main responsibility |
-|---|---|
-| **Stata** | Data preparation, analytical derivation, metrics, report computation, disclosure-control processing, release checks and controlled promotion. |
-| **Python** | Lightweight support where Stata is not the simplest tool, including the REDCap API connection and small publication utilities. |
-| **Quarto** | Public website pages, dashboards, tables, report landing pages, manuals and other presentation-layer content. |
-| **Git** | Local version control for code and publication source. |
-| **GitHub** | Shared remote repository and deployment of the static public site. |
-| **REDCap** | Operational source for current CVD event records and the mortality death-certificate form used by the mortality workflow. |
-
-Stata remains the main analytical language because the system is intended to be maintainable by a Stata-skilled registry team. Python is deliberately a supporting dependency rather than a second analytical platform.
-
-Quarto is equally deliberately **not** an analytical engine in this system. A public page may format, describe or link to an approved result, but it should not quietly recalculate the surveillance statistic behind it.
-
-## Two working roots
-
-A workstation uses two main root locations.
-
-| Stata global | Meaning | Public? |
-|---|---|---|
-| `$BNR_REPO` | Root of the `info-hub` repository. Contains shared code, authoritative approved public outputs and the Quarto site. | Yes, subject to the controlled repository contents. |
-| `$BNR_PRIVATE` | Root of the private companion workspace. Contains identifiable data, deidentified analytical inputs, private staging, review material and private logs. | **No.** |
-| `$BNR_REDCAP_TOKEN_FILE` | Location of the separately secured CVD REDCap token file. The global never contains the token itself. | **No.** |
-| `$BNR_MORT_REDCAP_TOKEN_FILE` | Location of the separately secured mortality REDCap token file required by Mortality Step 1. | **No.** |
-
-The exact local folders differ by workstation. They are defined in the machine-specific:
-
-`scripts/stata/config/bnr_paths_LOCAL.do`
-
-To see the actual location on the current machine, use Stata. For example:
+The machine-specific file `scripts/stata/config/bnr_paths_LOCAL.do` defines both roots and the paths to the two REDCap token files:
 
 ```stata
 display "$BNR_REPO"
 display "$BNR_PRIVATE"
+display "$BNR_REDCAP_TOKEN_FILE"
+display "$BNR_MORT_REDCAP_TOKEN_FILE"
 ```
 
-The local path file is not committed to Git because workstation paths and secure local configuration are machine-specific.
+These commands display configured paths, not token contents. The private root, token files and `bnr_paths_LOCAL.do` must remain outside Git.
 
-## Important private locations
+## Use the private locations correctly
 
-The private root is divided by purpose.
+| Global or path | Purpose |
+|---|----|
+| `$BNR_DATA_RAW` | Private saved copies of REDCap source data. |
+| `$BNR_DATA_FROZEN` | Fixed historical source datasets. |
+| `$BNR_DATA_DERIVED` | Confidential cumulative data and analytical inputs with direct identifiers removed. |
+| `$BNR_STAGING` | Proposed files awaiting review or publication, together with private review and approval evidence. |
+| `$BNR_PRIVATE/data/reference/` | Controlled population and other analytical reference assets. |
+| `$BNR_PRIVATE_WORK` | Other controlled private working files. |
+| `$BNR_PRIVATE_LOGS` | Operational Stata logs. |
 
-| Global | Main content | Why it exists |
-|---|---|---|
-| `$BNR_DATA_RAW` | Private REDCap extracts | Retains the source snapshot used for a release. |
-| `$BNR_DATA_FROZEN` | Frozen historical source datasets | Protects fixed historical inputs from accidental change. |
-| `$BNR_DATA_DERIVED` | Confidential cumulative data and deidentified analytical inputs | Holds reusable analytical datasets produced after source preparation. |
-| `$BNR_STAGING` | Review packages awaiting approval | Gives analysts an exact private package to inspect before anything is published. |
-| `$BNR_PRIVATE_WORK` | Controlled private reference and working files | Holds items such as population reference datasets used by analyses. |
-| `$BNR_PRIVATE_LOGS` | Stata operational logs | Preserves a readable record of each controlled run. |
-| `$BNR_SITE` | Quarto source root under the public repository | Provides the controlled website-mirror destination. |
+De-identified analytical data remain private until a product passes its disclosure, review, approval and publication pathway. **De-identified does not mean approved for publication.**
 
-These folders are private even when a particular file is deidentified. **Deidentified does not automatically mean approved for public release.**
+Do not correct generated private files by hand. Correct the earliest affected source record, reference file, local settings or code, then rerun the controlled workflow.
 
-That distinction matters especially after CVD event Step 3. Step 3 creates
-deidentified analytical inputs for authorised analysis, but those datasets
-remain private. Mortality has its own extraction, classification and staging
-pathway.
+## Distinguish proposed files, public output and website copies
 
-See [Analytical workflows](../workflows/overview.qmd) for the shared CVD Steps 1-3 preparation layer and the separate mortality route.
+### Private files awaiting review or publication
 
-## Private staging is the review workspace
+`$BNR_STAGING` is the private holding area for proposed data releases and reports. A proposed package may contain exact small values, disclosure worklists, review workbooks and other material that must not become public.
 
-`$BNR_STAGING` is where a proposed analytical release becomes inspectable.
+### Official public analytical copy
 
-A staging package may contain:
+`$BNR_PUBLIC` resolves to:
 
-- calculated datasets;
-- figures;
-- metadata;
-- QA files;
-- disclosure-control worklists;
-- human review workbooks;
-- proposed public files;
-- manifests; and
-- approval records.
+```text
+outputs/public/
+```
 
-The staging area is intentionally **not public**. It can contain exact small values, supporting counts and other information used to decide whether a public output is safe.
+This is the official approved analytical copy. When there is uncertainty about the official public data package, start here.
 
-The workflow pages in Chapters 3-5 therefore ask analysts to inspect actual staging files, not merely trust a successful Stata completion message.
+### Website copies
 
-## Approval creates a controlled publication boundary
-
-Approval is recorded in a small machine-readable receipt, normally `approval.yml`.
-
-The exact fields vary by workflow, but the principle is the same: the receipt records the approved package, the reviewer and role, and the manifest or file fingerprints covered by that decision.
-
-The manifest answers a different question: **which exact files are permitted to cross the publication boundary?**
-
-The publication step checks those controls before copying anything. This means approval attaches to a specific reviewed package rather than to a vague idea that "the numbers looked about right on Tuesday".
-
-Human responsibility remains central. The automated checks make mistakes easier to detect; they do not transfer professional responsibility from the analyst to Stata.
-
-## The authoritative public area
-
-Approved analytical releases are promoted to:
-
-`$BNR_PUBLIC`
-
-This resolves under the public repository root, normally within:
-
-`outputs/public/`
-
-This is the **authoritative approved public copy**. If there is ever uncertainty about which approved analytical package is the official public release, start here.
-
-A release may include:
-
-- public datasets;
-- metadata;
-- figures;
-- workbooks;
-- ZIP download packages; and
-- catalogue information.
-
-Private review workbooks, exact suppression worklists, confidential datasets and other internal control material must not be copied into the public package unless the workflow explicitly defines them as public products.
-
-## The website mirror is disposable
-
-Quarto does not normally consume the private staging package.
-
-Instead, the controlled publication steps refresh public-facing copies beneath `site/`, for example:
+Controlled publication also writes disposable website copies, principally beneath:
 
 ```text
 site/downloads/files/
-site/downloads/annual/
 ```
 
-The exact mirror path differs by product type.
+Report workflows may also create approved Quarto landing pages beneath `site/surveillance/cvd/reports/`.
 
-These copies are **website mirrors**, not the authoritative analytical release. They exist so Quarto can render and link to public files without needing access to private storage.
+These website files are presentation copies. If one is missing or damaged, recreate it from the official public analytical copy through the relevant controlled workflow. Do not reconstruct it manually from the private holding area.
 
-If a website mirror is lost or damaged, the preferred repair is to recreate it from the authoritative `$BNR_PUBLIC` package. Do not reconstruct the release from private staging by hand.
+## Keep publication and deployment separate
 
-## Compute, publish and deploy are different actions
+1. **Publish the analytical output.** Stata verifies the approved package and copies only the files listed in `public_manifest.csv`—the generated list of approved files—into `$BNR_PUBLIC` and the website folders.
+2. **Render the website.** Quarto checks and builds the static site from public source files.
+3. **Deploy the website.** A reviewed change is merged into `main`; GitHub Actions renders and publishes it through GitHub Pages.
 
-The final part of the pathway has three deliberately separate meanings:
+A successful Stata publication does not mean the website has been deployed. A successful local Quarto render does not mean the change is live. Follow [Render and publish the website](../website/render-publish.qmd) to complete and check the website deployment.
 
-**Publish analytical output**  
-Stata verifies an approved package and promotes the permitted files to the authoritative public area and website mirror.
+## Apply the human controls
 
-**Render the website**  
-Quarto reads the publication source and approved mirrored products and creates the static site.
+The production approval actions accept the roles **BNR Lead** and **BNR Analyst**. BNR remains responsible for deciding which named people are authorised to approve publication. A **BNR Developer** maintains the code but that role does not itself provide publication authority.
 
-**Deploy the website**  
-Git/GitHub move the reviewed publication-source changes through version control and GitHub Pages.
+Automated checks support human judgement; they do not replace review of analytical correctness, disclosure risk, interpretation and publication readiness.
 
-Keeping these actions separate makes failures easier to locate. A correct Stata release can exist even if Quarto has not yet been rendered. A correct local Quarto render can exist even if the latest Git commit has not yet been deployed.
+## Rules to retain
 
-## Roles and human responsibility
+1. Do not manually correct generated analytical outputs.
+2. Do not treat de-identified data as public data.
+3. Do not copy proposed files from `$BNR_STAGING` into public folders by hand.
+4. Do not use Quarto or Python to recreate the official surveillance measures calculated by Stata.
+5. Do not treat successful execution as human approval.
 
-The controlled dialogs currently recognise three BNR roles:
+## Related procedures
 
-- **BNR Lead**
-- **BNR Analyst**
-- **BNR Developer**
-
-The role recorded in a receipt identifies the capacity in which an approval was made. The detailed organisational authority for those roles remains a BNR governance decision.
-
-Whatever the role, the person approving a release is expected to review the analytical content, disclosure risk and publication readiness. The system is designed to support that judgement with reproducible files and clear checks, not to replace it.
-
-## The analytical workflows
-
-The current system has two metric-release workflows and three reporting routes.
-The CVD event and mortality releases remain separate.
-
-| Workflow | Main product | Manual chapter |
-|---|---|---|
-| **CVD events** | Approved event metric release | [CVD event workflow](../workflows/cvd-events/overview.qmd) |
-| **CVD mortality** | Approved mortality metric release | [Mortality workflow](../workflows/mortality/overview.qmd) |
-| **Rolling update** | Dated online update from approved releases | [Rolling update](../workflows/reporting/rolling-update.qmd) |
-| **Annual report** | Controlled annual PDF, one-page update and landing pages | [Annual report](../workflows/reporting/annual-report.qmd) |
-| **One-off report** | Controlled publication of a finished bespoke PDF | [One-off report](../workflows/reporting/one-off-report.qmd) |
-
-## A few rules worth remembering
-
-1. **Do not manually correct generated analytical outputs.** Fix the source data or code and rerun.
-2. **Do not equate deidentified with public.** Deidentified analytical inputs remain private until a product has passed its own disclosure and approval pathway.
-3. **Do not publish from staging by hand.** Use the controlled promotion step.
-4. **Do not make Quarto responsible for surveillance calculations.** Keep compute in Stata and presentation in Quarto.
-5. **Do not treat a success message as a human review.** Inspect the generated products at the points specified in the workflow.
-6. **Prefer the simplest maintainable solution.** New tools or automation layers create future handover work as well as present-day convenience.
-
-The rest of this manual turns those principles into task-by-task instructions.
+- [Set up a workstation](workstation-setup.qmd) — create and verify this environment on Windows.
+- [Analytical workflows](../workflows/overview.qmd) — understand the controlled workflow pattern.

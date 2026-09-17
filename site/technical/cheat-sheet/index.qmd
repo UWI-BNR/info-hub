@@ -1,0 +1,348 @@
+---
+title: "BNR Info-Hub cheat sheet"
+description: "Quick reference for routine BNR analytical, reporting, website and maintenance work."
+manual-review-status: not-reviewed
+page-layout: full
+toc: false
+page-navigation: false
+format:
+  html:
+    css: cheat-sheet.css
+---
+
+::: {.bnr-cheat-sheet}
+
+::: {.bnr-cheat-heading}
+::: {.bnr-cheat-heading__label}
+QUICK REFERENCE · DRAFT
+:::
+
+Use this page to choose and complete a routine analytical or reporting task.
+Open the linked procedure whenever you need full inputs, commands, files or
+recovery guidance.
+:::
+
+::: {.bnr-cheat-rule}
+**Keep these boundaries clear:** Stata calculates and publishes approved
+analytical products. A named person reviews and approves them. Quarto presents
+approved products, and GitHub deploys the website. Completion of one action
+does not complete the next.
+:::
+
+## Start here
+
+| I need to… | Start with | Main Stata menu |
+|---|---|---|
+| Release CVD event data | [Common Task: Release CVD event data](../common-tasks/release-cvd-event-data.qmd) | **User > BNR > Update CVD events dashboard** |
+| Release CVD mortality data | [Common Task: Release CVD mortality data](../common-tasks/release-mortality-data.qmd) | **User > BNR > Update CVD mortality dashboard** |
+| Produce the annual CVD report | [Common Task: Produce the annual CVD report](../common-tasks/produce-annual-report.qmd) | **User > BNR > Annual CVD report** |
+| Produce a rolling update or one-off report | [Common Task: Produce another CVD report](../common-tasks/produce-other-reports.qmd) | **User > BNR > Rolling three-month CVD update** or **One-off CVD report publication** |
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two}
+
+::: {.bnr-cheat-panel}
+
+## CVD event data release
+
+**Before starting:** confirm the authorised reporting month and the completed
+mortality release required for death-certificate-only linkage. Use the same
+event-release year and month throughout Steps 1–6.
+
+| Step | What you do | Check before moving on |
+|---:|---|---|
+| [1](../workflows/cvd-events/extract-redcap.qmd) | Select the authorised completed month and extract REDCap data. | The private CSV, Stata copy and extraction record identify the intended release. |
+| [2](../workflows/cvd-events/prepare-confidential.qmd) | Join the extract to the fixed historical data. | Review any quarantined records; correct source data and rerun when needed. |
+| [3](../workflows/cvd-events/create-analysis-inputs.qmd) | Create the private de-identified analytical inputs. | All expected purpose-specific datasets and run records were created. |
+| [4](../workflows/cvd-events/generate-metrics.qmd) | Select the event and mortality releases, then calculate the metrics. | Review linkage, DCO and automated-check evidence for the selected releases. |
+| [5](../workflows/cvd-events/review-approve.qmd) | Apply disclosure control, review the proposed public package and record approval. | The exact seven-file package is plausible, protected and approved by an authorised person. |
+| [6](../workflows/cvd-events/publish-metrics.qmd) | Publish the unchanged approved package. | Stata reports successful publication and the official and website copies agree. |
+
+::: {.bnr-cheat-stop}
+**Private/public boundary:** Steps 1–5 remain private. Only Step 6 copies the
+approved analytical package into public locations.
+:::
+
+:::
+
+::: {.bnr-cheat-panel}
+
+## CVD mortality data release
+
+**Before starting:** confirm the authorised reporting cut-off and release year
+and month. Leave replacement controls off unless a controlled rerun has been
+agreed.
+
+| Step | What you do | Check before moving on |
+|---:|---|---|
+| [1](../workflows/mortality/extract.qmd) | Select the completed month and extract the private mortality records. | The extract, metadata and log identify the intended release. |
+| [2](../workflows/mortality/classify.qmd) | Apply the fixed CVD death-classification rules. | Review the classification summaries and cases requiring attention. |
+| [3](../workflows/mortality/build-burden.qmd) | Calculate private counts, distributions and mortality rates. | Review the automated checks and preliminary disclosure worklist. |
+| [4](../workflows/mortality/review.qmd) | Apply final disclosure control and review the proposed public files. | The proposed release and human-review package are complete and plausible. |
+| [5](../workflows/mortality/approve.qmd) | Approve the exact reviewed package. | The approval identifies the correct files, release and authorised approver. |
+| [6](../workflows/mortality/publish.qmd) | Publish the unchanged approved package. | Stata reports successful publication and the official and website copies agree. |
+
+::: {.bnr-cheat-definitions}
+**Primary** includes Clear and Likely CVD deaths. **Inclusive** also includes
+Possible CVD deaths. Positive supporting counts from **1 to 5** are protected;
+zero is not automatically protected.
+:::
+
+:::
+
+:::
+
+## Reports
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--three .bnr-cheat-grid--reports}
+
+::: {.bnr-cheat-panel}
+
+### Annual CVD report
+
+**You provide:** report year; approved event and mortality releases; report
+version; and the three reviewed year-specific content files.
+
+| Stage | What you do |
+|--:|----|
+| Prepare | Update the year-specific interpretation, Special chapter and Special-chapter contents files. |
+| Step 1 | Build the five-file candidate. Review both PDFs, both landing pages and `report.yml`. |
+| Step 2 | Enter the authorised approver and confirm candidate, disclosure and publication-readiness review. |
+| Step 3 | Publish the unchanged approved five-file package. |
+| Finish | Render and check both landing pages, PDFs, listings and download links. |
+
+[Open the complete annual-report procedure](../workflows/reporting/annual-report.qmd)
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### Rolling three-month update
+
+**You provide:** report month; approved event and mortality releases; and
+report version.
+
+1. Choose **User > BNR > Rolling three-month CVD update > Build dated online update**.
+2. Enter the report and source-release periods and version.
+3. Confirm **Published successfully**.
+4. Review the generated page, frozen source files and source links.
+5. Render and check the website.
+
+This is a one-step report-publication route. Use a higher version for a
+correction; do not edit its generated page or frozen data.
+
+[Open the complete rolling-update procedure](../workflows/reporting/rolling-update.qmd)
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### One-off CVD report
+
+**You provide:** stable study ID; report version and date; finished reviewed
+PDF; public title and description; and completed disclosure review.
+
+| Step | What you do |
+|--:|----|
+| 1 | Prepare the three-file candidate and review its PDF, landing page and `report.yml`. |
+| 2 | Record approval of the exact reviewed package. |
+| 3 | Publish the unchanged approved package. |
+| Finish | Render and check the landing page, PDF, listing and download link. |
+
+[Open the complete one-off-report procedure](../workflows/reporting/one-off-report.qmd)
+
+:::
+
+:::
+
+## Rules to retain
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--rules}
+
+::: {.bnr-cheat-rule-card}
+**Do not repair generated files.** Correct the earliest affected source data,
+reference file, configuration or maintained code, then rerun the workflow.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Approval is not publication.** Approve only the exact reviewed package, then
+use its publication step without changing the approved files.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Analytical publication is not website deployment.** After publication,
+render, review and deploy the website through the controlled GitHub route.
+:::
+
+::: {.bnr-cheat-rule-card}
+**No separate refresh is required.** Dashboards, tables, Downloads and report
+listings update from approved files during the normal site render.
+:::
+
+:::
+
+## Website and maintenance {.bnr-cheat-print-page-break}
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two}
+
+::: {.bnr-cheat-panel}
+
+### Edit and publish website content
+
+Use this route for ordinary public wording, links, images, page details or
+navigation. Do not use it to correct published statistics or generated files.
+
+| Order | What you do |
+|--:|------|
+| 1 | Double-click `start-info-hub-edit.bat` at the repository root. Keep its preview window open. |
+| 2 | In VS Code, switch to `main`, pull from GitHub and create a short development branch. |
+| 3 | Edit the public QMD, Markdown, configuration or asset source. Save and check the local preview. |
+| 4 | Activate `venv-info-hub`, change to `site`, and run `quarto render`. |
+| 5 | Inspect every Git change. Stage only the intended public-safe files. |
+| 6 | Commit and push the development branch. The live website has not changed yet. |
+| 7 | Open a pull request on GitHub. Review and merge it into protected `main`. |
+| 8 | Confirm the **Publish Quarto site** action succeeded, then check the live page and links. |
+
+[Open the complete website-publication procedure](../website/render-publish.qmd)
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### Change maintained code safely
+
+Use this route for Stata, Python, Quarto configuration, templates or another
+maintained source—not for a routine data release or report.
+
+1. Define the problem, intended change and successful test.
+2. Agree any change to public meaning, disclosure rules or responsibilities.
+3. Start from current `main` on a focused development branch.
+4. Change the maintained source, not a generated output.
+5. Run proportionate tests and the affected workflow or website check.
+6. Update dependent manual pages when needed.
+7. Inspect the complete diff, then use pull-request review and merge.
+8. Check the affected system after merge.
+
+**If a routine run stops:** read the first meaningful error and final Stata
+summary, correct the earliest authoritative cause, then rerun forward. Repeat
+review and approval when the rebuilt package requires them.
+
+[Open the safe-code-change procedure](../maintenance/safe-code-change.qmd) ·
+[Fix common problems](../maintenance/troubleshooting.qmd)
+
+:::
+
+:::
+
+## Files and routine checks
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two}
+
+::: {.bnr-cheat-panel}
+
+### Know which copy has authority
+
+| Location | What it is for | Rule |
+|---|---|---|
+| REDCap or approved source | Original registry or mortality records | Correct source-record errors here, then rerun from extraction. |
+| `$BNR_DATA_FROZEN` | Approved fixed historical or reference inputs | Change only through an agreed reference-data update. |
+| `$BNR_DATA_RAW` and `$BNR_DATA_DERIVED` | Private extracts, cumulative data and analytical inputs | Keep outside Git; recreate through the workflow. |
+| `$BNR_STAGING` and `$BNR_PRIVATE_LOGS` | Proposed packages, checks, review evidence, approvals and logs | Private even when direct identifiers are absent. |
+| `$BNR_PUBLIC` | Official approved public analytical and report packages | Write only through the controlled publication step. |
+| `site/downloads/` and public report folders | Website copies of approved products | Recreate from the official package; do not repair by hand. |
+| Git repository | Public-safe code, documentation and website source | Never commit private data, tokens, local settings or review evidence. |
+| `site/_site/` | Generated local website | Inspect it; never edit or commit it. |
+
+[Open the full files-and-versions reference](../maintenance/files-releases-versions.qmd)
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### Check at each boundary
+
+| Before… | Confirm… |
+|---|---|
+| Running a workflow | Authority, reporting period, release identity, required upstream step and replacement decision are correct. |
+| Moving to the next step | The final Stata summary reports success and the expected private inputs or evidence exist. |
+| Approving | The complete proposed package is plausible, disclosure-safe and unchanged since review. |
+| Publishing | The selected package and approval identify the same exact files and version. |
+| Committing | Git lists only intended public-safe source and approved website assets. |
+| Merging | The local render and required checks pass, and the pull-request diff contains only the intended change. |
+| Finishing | GitHub Actions succeeded and the live page, dashboard, table, listing and downloads are correct. |
+
+Dashboards, tables, Downloads and report listings refresh during the normal
+render when their approved files or metadata are present. Do not run or edit a
+separate refresh product.
+
+:::
+
+:::
+
+## Non-Stata tools in plain language
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--three .bnr-cheat-grid--glossary}
+
+::: {.bnr-cheat-rule-card}
+**QMD and Markdown**  
+A QMD file is an editable website source page. Markdown is its simple text
+format for headings, links, lists and tables. Edit these in VS Code.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Quarto**  
+Builds the website from QMD files and approved public assets. Preview shows a
+working page; render checks and builds the complete local site.
+:::
+
+::: {.bnr-cheat-rule-card}
+**VS Code**  
+The main editor for public website and maintained code files. It also shows the
+current Git branch and every file changed by the task.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Git branch and commit**  
+A branch keeps proposed work separate from `main`. A commit records one checked
+set of changes on that branch.
+:::
+
+::: {.bnr-cheat-rule-card}
+**GitHub pull request**  
+Shows the proposed changes for review. Merging the reviewed branch into
+protected `main` starts live website deployment.
+:::
+
+::: {.bnr-cheat-rule-card}
+**GitHub Actions**  
+The automatic online process that builds and deploys the website after `main`
+changes. Check both build and deploy before checking the live site.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Python environment**  
+The maintained support environment in `venv-info-hub`. It provides REDCap,
+report-finishing and website-support packages; activate it before a full render.
+:::
+
+::: {.bnr-cheat-rule-card}
+**YAML**  
+Short structured page or package information, usually at the top of a QMD file
+or in a `.yml` file. Spacing matters; do not edit generated YAML evidence.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Generated file**  
+An output created from an authoritative source. Inspect it, but correct its
+source and rerun rather than changing the generated copy.
+:::
+
+:::
+
+::: {.bnr-cheat-next}
+**Need the complete route?** Start with [Common Tasks](../common-tasks/section-index.qmd).
+Use the [Operations Manual](../../operations/index.qmd) for responsibilities and
+decisions, the [Technical Manual](../index.qmd) for exact procedures, and the
+[Public Methods Manual](../../methods/index.qmd) for statistical meaning.
+:::
+
+:::

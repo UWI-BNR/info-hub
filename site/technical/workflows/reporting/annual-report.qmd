@@ -1,120 +1,259 @@
 ---
 title: "Build, approve and publish an annual CVD report"
-description: "Operate and maintain the controlled annual report and one-page public health update workflow."
-manual-review-status: not-reviewed
+description: "Create, review, approve and publish the annual report and its one-page public health update."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
-## Architecture
+## What this page does
 
-The annual route has three invariant controllers:
+The annual-report workflow creates two linked products from approved CVD event and mortality data releases:
 
-```text
-Step 1 approved sources + analyst-owned year files
-  -> five-file private candidate
-Step 2 human review and approval
-  -> manifested five-file public_ready payload
-Step 3 approval and checksum verification
-  -> authoritative public files + website mirrors
-```
+- the full annual CVD report; and
+- a one-page public health update containing the same headline analytical content as the report’s final page.
 
-Routine annual content belongs in the year-specific files, not in the controllers:
+Step 1 builds five private proposed files. Step 2 records human approval of those exact files. Step 3 publishes only the approved files.
 
-```text
-scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do
-scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do
-scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_toc.csv
-```
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Prepare and review the three year-specific content files.
+2. Run Step 1 and review all five private proposed files.
+3. Run Step 2 to approve the unchanged five-file package.
+4. Run Step 3 to publish the approved package.
+5. Render and review both landing pages, both PDFs and both report listings.
+:::
 
-The interpretation file supplies reviewed narrative and the three concise key messages used in the public health update. The Focus file composes the year-specific Special chapter. Create these from the maintained pattern and review their sources before Step 1.
+## Before you start
 
-## Step 1: build the candidate
+- Complete Step 6 for the selected CVD event and mortality data releases.
+- Choose the surveillance year shown on the report cover. The later publication date is stored separately in the landing-page fields.
+- Start with report version 1. Use a higher version for a correction after approval or publication.
+- Prepare the interpretation, Special chapter and Special-chapter contents files for the report year.
+- You do not need to edit the three workflow Stata controllers during routine report production.
 
-Controller: `scripts/stata/reporting/bnr_report_annual_s1_build.do`
+In the file patterns below, `YYYY` is the report year and `N` is the report version.
 
-Menu: **User > BNR > Annual CVD report > Step 1: Build annual report candidate**
+::: {.callout-note collapse="true" title="Input files"}
 
-```stata
-do "scripts/stata/reporting/bnr_report_annual_s1_build.do" ///
-    REPORT_YEAR EVENT_YEAR EVENT_MONTH MORTALITY_YEAR MORTALITY_MONTH ///
-    REPORT_VERSION [replace]
-```
+| File | What Step 1 uses or checks |
+|---|----|
+| `$BNR_PUBLIC/metrics/cvd/cvd_metrics_cvd_YYYY_MM.csv` | Official approved CVD event data-release file. |
+| `$BNR_REPO/site/downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_YYYY_MM.csv` | Website copy; it must match the official event file by size and checksum—a value used to detect a changed file. |
+| `$BNR_PUBLIC/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Official approved mortality data-release file. |
+| `$BNR_REPO/site/downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Website copy; it must match the official mortality file by size and checksum. |
+| `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do` | Reviewed year-specific narrative and the three concise messages used in the public health update. |
+| `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do` | Composes the year-specific Special chapter. |
+| `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_toc.csv` | Reader-facing contents entries for the Special chapter. |
 
-The controller requires release-stamped event and mortality CSVs in both `$BNR_PUBLIC` and the website mirror, then checks each pair by size and checksum. It also requires the year-specific interpretation and Focus files.
+:::
 
-The reusable composition is `scripts/stata/reporting/bnr_report_annual_standard.do`. Stata `putpdf` creates the report body and appends the one-page public health update from `templates/bnr_report_annual_public_health_update.do`. `scripts/python/stamp_annual_report_pdf.py` performs presentation-only PDF finishing: page furniture, a linked two-level contents page and extraction/stamping of the final update page. The Python helper does not read data or alter analytical content.
+::: {.callout-note collapse="true" title="Code files"}
 
-Step 1 writes:
+| File | How it is used |
+|---|---|
+| `scripts/stata/menu/bnr_menu.do` | **NO ANNUAL INPUT.** This creates the three annual-report menu entries under **User > BNR**. Use those menu entries to open the appropriate dialog; do not edit this file for a routine annual report. |
+| `scripts/stata/dialogs/bnr_report_annual_s1_build.dlg` | **USER INPUT REQUIRED — STEP 1.** Enter the report year, CVD event data-release year and month, mortality data-release year and month, report version and, when authorised, the replacement option. The dialog passes these values to the Step 1 controller. |
+| `scripts/stata/reporting/bnr_report_annual_s1_build.do` | **USER INPUT REQUIRED — STEP 1.** This is the main build controller. Run it through the menu and dialog, or supply the same report year, source-release periods, version and optional `replace` argument in the Stata command. It checks the approved source data and year-specific content files, then builds the five-file private candidate package. Do not edit the controller for each report. |
+| `scripts/stata/reporting/bnr_report_annual_standard.do` | **NO ANNUAL INPUT — CALLED AUTOMATICALLY.** Step 1 calls this file to compose the standard report chapters, tables, charts and explanatory content from the selected approved data releases. Edit it only through a controlled change to the standard annual-report design or analysis, not to enter content for one reporting year. |
+| `scripts/stata/reporting/templates/bnr_report_annual_public_health_update.do` | **NO ANNUAL INPUT — CALLED AUTOMATICALLY.** Step 1 calls this template to compose the report’s final one-page public health update. The year-specific headline messages come from `bnr_report_annual_YYYY_interpretation.do`; do not enter them directly in this template. |
+| `scripts/stata/reporting/templates/bnr_report_annual_toc.csv` | **NO ANNUAL INPUT — STANDARD TEMPLATE.** This lists the titles and destinations used to create linked contents entries for the standard report chapters. Edit it only when the standard chapter structure changes, not for each annual report. |
+| `scripts/stata/reporting/templates/bnr_report_annual_appendix_toc.csv` | **NO ANNUAL INPUT — STANDARD TEMPLATE.** This lists the titles and destinations used to create linked contents entries for the standard appendices. Edit it only when the appendix structure changes, not for each annual report. |
+| `scripts/python/stamp_annual_report_pdf.py` | **NO USER INPUT — CALLED AUTOMATICALLY.** Step 1 runs this helper after Stata has composed the report. It adds presentation-only page furniture and linked contents, extracts the final page as the separate public health update, and finishes both PDFs. It does not read source data, calculate statistics or change analytical content. |
+| `scripts/stata/dialogs/bnr_report_annual_s2_approve.dlg` | **USER INPUT REQUIRED — STEP 2.** Enter the report year, version, approver’s name and authorised role, then provide the three required confirmations that the candidate, disclosure review and publication readiness have been checked. The dialog passes these values to the Step 2 controller. |
+| `scripts/stata/reporting/bnr_report_annual_s2_approve.do` | **USER INPUT REQUIRED — STEP 2.** This is the approval controller. Run it through the menu and dialog, or supply the report year, version, approver details and required confirmation words in the Stata command. It approves the exact five files reviewed by the user; do not edit the controller for each report. |
+| `scripts/stata/reporting/bnr_report_approve_candidate.do` | **NO USER INPUT — CALLED AUTOMATICALLY.** Step 2 calls this shared helper to verify that the reviewed files are unchanged, copy the exact five-file package into `public_ready/`, create `public_manifest.csv` and write `approval.yml`. Do not run or edit it for an individual report. |
+| `scripts/stata/dialogs/bnr_report_annual_s3_publish.dlg` | **USER INPUT REQUIRED — STEP 3.** Enter the approved report year and version and select the replacement option only for an authorised same-version recovery. The dialog passes these values to the Step 3 controller. |
+| `scripts/stata/reporting/bnr_report_annual_s3_publish.do` | **USER INPUT REQUIRED — STEP 3.** This is the publication controller. Run it through the menu and dialog, or supply the approved report year, version and optional `replace` argument in the Stata command. It verifies the approval evidence and starts publication of the exact approved package; do not edit the controller for each report. |
+| `scripts/stata/reporting/bnr_report_publish_candidate.do` | **NO USER INPUT — CALLED AUTOMATICALLY.** Step 3 calls this shared helper to verify the manifest, file sizes and checksums before copying the approved files to the official public and website locations. Do not run it separately or edit it for an individual report. |
 
-```text
-$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vN/candidate/
-  bnr_cvd_annual_report_YYYY_vN.pdf
-  bnr_cvd_public_health_update_YYYY_vN.pdf
-  index.qmd
-  public_health_update.qmd
-  report.yml
-```
+:::
 
-`report.yml` records the report IDs, version, source release IDs and fingerprints, output names and build time. The private log is under `$BNR_PRIVATE_LOGS/`.
+::: {.callout-note collapse="true" title="Output files"}
 
-Review all five files. Check the full PDF, contents links, Special chapter, methods material and the final update page. Check the separate update is exactly one page and has the same analytical content as the final page. Preview both QMDs and verify public PDF links.
+Step 1 creates five private proposed files under `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vN/candidate/`.
 
-`replace` may rebuild an unapproved candidate deliberately. If `approval.yml` already exists for that version, Step 1 stops; create a higher version.
+| File | Purpose |
+|---|---|
+| `bnr_cvd_annual_report_YYYY_vN.pdf` | Complete proposed annual report. **Open this first.** |
+| `bnr_cvd_public_health_update_YYYY_vN.pdf` | Proposed one-page public health update extracted from the report. |
+| `index.qmd` | Proposed annual-report landing page. |
+| `public_health_update.qmd` | Proposed one-page-update landing page. |
+| `report.yml` | Generated report identity, version, source data releases, filenames and build information. |
 
-## Step 2: approve the candidate
+Step 2 copies those five unchanged files into `public_ready/` and adds:
 
-Controller: `scripts/stata/reporting/bnr_report_annual_s2_approve.do`
+| File | Purpose |
+|---|---|
+| `public_manifest.csv` | Private generated list of the exact five files Step 3 may publish, with file sizes and checksums. |
+| `approval.yml` | Private approval record, written last. Approval does not mean publication. |
 
-Menu: **Step 2: Approve annual report candidate**
+`public_ready` is the private folder holding the files authorised for Step 3. It is not a public location.
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_annual_s2_approve.do" ///
-    REPORT_YEAR REPORT_VERSION "Full Name" "BNR Analyst" ///
-    candidate disclosure ready
-```
+Step 3 publishes the stable public files below. The public filenames omit the version; `report.yml` retains it.
 
-Only an authorised **BNR Lead** or **BNR Analyst** may approve. All three literal confirmations are required. The wrapper calls `bnr_report_approve_candidate.do`, which validates candidate identity and version, copies the exact five files into `public_ready`, fingerprints them in `public_manifest.csv`, and writes `approval.yml` last. There is no approval `replace` option.
+| File | Published location |
+|---|---|
+| `bnr_cvd_annual_report_YYYY.pdf` | `$BNR_PUBLIC/reports/cvd/annual/YYYY/` and `site/downloads/files/reports/cvd/annual/YYYY/`. |
+| `bnr_cvd_public_health_update_YYYY.pdf` | The same official public and website-download folders. |
+| `index.qmd` | `$BNR_PUBLIC/reports/cvd/annual/YYYY/` and `site/surveillance/cvd/reports/annual/YYYY/`. |
+| `public_health_update.qmd` | Official public annual folder and `site/surveillance/cvd/reports/briefings/YYYY/index.qmd`. |
+| `report.yml` | Official public annual folder and website-download folder. |
 
-Check:
+Private logs are written under `$BNR_PRIVATE_LOGS/` with `bnr_report_annual_s1_`, `bnr_report_annual_s2_` and `bnr_report_annual_s3_` prefixes followed by the report ID.
 
-```text
-$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vN/public_ready/
-  bnr_cvd_annual_report_YYYY_vN.pdf
-  bnr_cvd_public_health_update_YYYY_vN.pdf
-  index.qmd
-  public_health_update.qmd
-  report.yml
-  public_manifest.csv
-  approval.yml
-```
+:::
 
-The manifest must contain exactly five payload rows. The approval records candidate, disclosure and readiness confirmation and means approved, not published.
+## Step 1: Build and check the report
 
-## Step 3: publish the approved report
+Before running Step 1, prepare and review these three files for the report year:
 
-Controller: `scripts/stata/reporting/bnr_report_annual_s3_publish.do`
+- `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_interpretation.do`
+- `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_focus.do`
+- `scripts/stata/reporting/annual/YYYY/bnr_report_annual_YYYY_toc.csv`
 
-Menu: **Step 3: Publish approved annual report**
+Replace `YYYY` with the year shown on the report cover.
 
-```stata
-do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" REPORT_YEAR REPORT_VERSION [replace]
-```
+1. In Stata, choose **User > BNR > Annual CVD report > Step 1: Build annual report candidate**.
+2. Enter:
+   - the report year;
+   - the year and month of the approved CVD event data release;
+   - the year and month of the approved mortality data release; and
+   - the report version.
+3. For the first build, leave the replacement option unticked and select **Build candidate**.
+4. Alternatively, enter the complete command in the **Stata command window**:
 
-The wrapper calls `bnr_report_publish_candidate.do`. It reads only `public_ready`, validates the approval role and identity, verifies the manifest fingerprint and all five payload fingerprints, and copies the exact approved files.
+   ```stata
+   do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1
+   ```
 
-| Product | Authoritative location | Website location |
-|---|---|---|
-| Full PDF | `$BNR_PUBLIC/reports/cvd/annual/YYYY/bnr_cvd_annual_report_YYYY.pdf` | `site/downloads/files/reports/cvd/annual/YYYY/` |
-| One-page PDF | Same authoritative annual folder | Same website download folder |
-| Annual landing page | `$BNR_PUBLIC/reports/cvd/annual/YYYY/index.qmd` | `site/surveillance/cvd/reports/annual/YYYY/index.qmd` |
-| Update landing page | `$BNR_PUBLIC/reports/cvd/annual/YYYY/public_health_update.qmd` | `site/surveillance/cvd/reports/briefings/YYYY/index.qmd` |
-| Shared metadata | `$BNR_PUBLIC/reports/cvd/annual/YYYY/report.yml` | Website download folder |
+5. To rebuild the same unapproved version, use the complete command with `replace`:
 
-The stable public filenames omit the version; `report.yml` retains it. Existing output requires `replace`. The publisher refuses a downgrade; use a higher approved version for a correction. `replace` with the same approved version is reserved for controlled recovery.
+   ```stata
+   do "scripts/stata/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1 replace
+   ```
 
-After Step 3, run a complete Quarto render, check both landing pages and PDFs, and confirm the annual report and public health update appear correctly in both listings. The private Step 3 log is under `$BNR_PRIVATE_LOGS/`.
+6. In the final Stata summary, confirm:
 
-Regression coverage is in `scripts/stata/reporting/tests/bnr_report_test_annual_lifecycle.do`.
+   ```text
+   Run status: Candidate created
+   ```
+
+   Also check the report year, version, source data releases and proposed-report folder.
+
+7. Review the five proposed files:
+
+   - Open the full annual-report PDF first. Check every page, table, chart, explanation, contents link and the final public health update.
+   - Open the separate public-health-update PDF. Confirm that it is one page and matches the final page of the full report.
+   - Preview `index.qmd` and `public_health_update.qmd`. Check their titles, descriptions, dates, images, categories and PDF links.
+   - Open `report.yml`. Check the report year, version, source data releases and five filenames.
+   - Confirm that the report and its public downloads do not show, or allow someone to calculate, a protected value.
+
+Do not edit the generated PDFs, QMD files or `report.yml`. Correct the year-specific source file, data source or report code and run Step 1 again.
+
+Once a version has been approved, Step 1 will not replace it. Use a higher version for any later correction.
+
+## Step 2: Approve the report
+
+Step 2 approves the five files created by Step 1. It does not rebuild or publish them.
+
+1. Confirm that you have reviewed:
+   - the full annual-report PDF;
+   - the one-page public-health-update PDF;
+   - both landing-page QMD files; and
+   - `report.yml`.
+2. In Stata, choose **User > BNR > Annual CVD report > Step 2: Approve annual report candidate**.
+3. Enter:
+   - the report year;
+   - the report version;
+   - the approver’s full name; and
+   - the approver’s authorised role: **BNR Lead** or **BNR Analyst**.
+4. Confirm that:
+   - all five proposed files were reviewed;
+   - the disclosure review was completed; and
+   - the files are ready for publication.
+5. Select **Approve candidate**.
+6. Alternatively, enter the complete command in the **Stata command window**:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_annual_s2_approve.do" ///
+       2025 1 "Full Name" "BNR Analyst" ///
+       candidate disclosure ready
+   ```
+
+7. In the final Stata summary, confirm:
+
+   ```text
+   Run status: Candidate approved
+   Approval scope: Annual report + one-page update
+   Publication boundary: Nothing published
+   ```
+
+8. Check that:
+   - `public_manifest.csv` lists exactly five files; and
+   - `approval.yml` contains the correct report, version, approver and role.
+
+Step 2 has no `replace` option. If an approved file needs to change, return to Step 1 and build a higher report version.
+
+## Step 3: Publish the report
+
+Step 3 publishes the five files approved in Step 2. It does not rebuild the report or make a new approval decision.
+
+1. In Stata, choose **User > BNR > Annual CVD report > Step 3: Publish approved annual report**.
+2. Enter the approved report year and version.
+3. For the first publication, leave the replacement option unticked and select **Publish annual report**.
+4. Alternatively, enter the complete command in the **Stata command window**:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 1
+   ```
+
+5. Use `replace` only to recover the same approved version after an interrupted or incomplete publication:
+
+   ```stata
+   do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 1 replace
+   ```
+
+6. In the final Stata summary, confirm:
+
+   ```text
+   Run status: Published successfully
+   ```
+
+7. Check that the following five approved files appear in the correct official public and website locations:
+
+   - the full annual-report PDF;
+   - the one-page public-health-update PDF;
+   - the annual-report landing page;
+   - the public-health-update landing page; and
+   - `report.yml`.
+
+8. Run a complete local Quarto render. Check:
+   - both landing pages;
+   - both PDFs;
+   - both automatic report listings; and
+   - all report and download links.
+
+9. Review the Git changes and use the normal development-branch and pull-request route to deploy the website.
+
+Use a higher approved version to correct a published report. Use same-version `replace` only to recover an unchanged approved version; it cannot be used to publish changed files or downgrade the report.
+
+::: {.callout-note collapse="true" title="If an annual-report step does not complete"}
+
+| Situation | Action |
+|---|---|
+| An official source CSV and its website copy differ | Rerun the relevant analytical Step 6. Do not edit either source file. |
+| PDF finishing or one-page extraction stops | Confirm the repository Python environment, helper, logo and three contents-specification files are present. Rerun Step 1 after correcting the missing dependency. |
+| A reviewed file changed before approval | Rebuild and review the complete Step 1 package; do not approve a different file. |
+| Existing public output blocks Step 3 | Confirm the intended approved version. Use a higher version for a correction or `replace` only for controlled same-version recovery. |
+
+For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
+
+:::
+
+## Related procedures
+
+- [Publish the annual CVD report](../../../operations/post-redcap/annual-report.qmd)
+- [How the report listings refresh](report-listings-regeneration.qmd)
+- [Render and publish the website](../../website/render-publish.qmd)

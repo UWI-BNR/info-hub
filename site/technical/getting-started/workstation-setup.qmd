@@ -1,5 +1,5 @@
 ﻿---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Set up a workstation"
 description: "Configure a Windows workstation to run the BNR Stata workflows and maintain the Quarto Info-Hub."
 ---
@@ -8,62 +8,124 @@ description: "Configure a Windows workstation to run the BNR Stata workflows and
 Technical Manual
 :::
 
----
-
 ## What this chapter does
 
 Use this chapter when setting up a new BNR analytics workstation or moving the environment to a replacement machine.
 
 **Stata is assumed to be installed and licensed.** Do not assume that Git, Python, Quarto, VS Code or the supporting tools are already present.
 
-The repositories and workflow code already exist. A workstation setup therefore has four broad jobs:
+The repositories and workflow code already exist. Complete the following stages in order on a new machine.
 
-1. install the supporting software;
-2. obtain the public and authorised private project files;
-3. configure the machine-specific paths and Stata startup; and
-4. prove that the complete environment works before using it for a live release.
+## Workstation requirements
 
-The detailed instructions are kept inside the stage callouts below so that the overall setup pathway remains easy to scan.
+Use a workstation that meets this practical BNR baseline:
 
-## Setup stages
+| Item | Requirement |
+|---|---|
+| **Operating system** | 64-bit Windows 11 with current security updates. |
+| **Processor** | Modern Intel or AMD 64-bit processor with at least four logical cores. |
+| **Memory** | At least 8 GB RAM; 16 GB is recommended. |
+| **Storage** | At least 20 GB free for the software, repository and generated files, plus sufficient approved storage for the private data workspace and backups. |
+| **Network** | Reliable internet access for GitHub, REDCap, software installation and website checks. |
+| **Access** | Permission to install the approved software, a licensed Stata installation, BNR GitHub access and authorised access to the private workspace. |
+
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
 
 | Stage | Task | Successful result |
 |---|---|---|
-| **1** | Install the supporting software | Git, Python, Quarto and VS Code are available. |
+| **1** | Install the supporting software | Git, Python 3.13, Quarto, VS Code and Firefox are available. |
 | **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
-| **3** | Provision the private workspace | The authorised `info-hub-private` data and reference structure is available. |
+| **3** | Set up the private workspace | The authorised `info-hub-private` data and reference structure is available. |
 | **4** | Configure local paths and REDCap access | The public root, private root and required CVD/mortality token-file locations resolve correctly. |
 | **5** | Create the Python environment | The project Python packages and PyCap are available. |
 | **6** | Configure Stata startup with `profile.do` | Paths, Python, dialogs and the BNR menu load automatically when Stata starts. |
-| **7** | Check the Quarto project | Quarto extensions are present and the site renders and previews locally. |
+| **7** | Check Quarto and start an editing session | The site previews locally using `start-info-hub-edit.bat`. |
 | **8** | Record and verify the workstation setup | Git, private inputs, Stata and Quarto have all been inspected. |
+:::
 
-Complete the stages in order on a new machine.
+::: {.callout-note collapse="true" title="Input files and retained assets"}
+
+| File, asset or source | Purpose and required check |
+|---|---|
+| `https://github.com/UWI-BNR/info-hub.git` | Public Info-Hub project tracked by Git. Download a linked working copy and confirm that Git's normal name for the GitHub copy, `origin`, uses this address. |
+| `scripts/stata/config/bnr_paths_TEMPLATE.do` | Template for the standard public and private folder settings. Use the copy tracked in the current project version. |
+| `requirements.txt` | Direct Python packages installed for routine operation. Use Python 3.13 and install from the repository root. |
+| `requirements-freeze.txt` | Complete Windows/Python 3.13 environment tested at handover. Use for comparison or controlled reproduction, not routine installation. |
+| Location selected for `$BNR_REDCAP_TOKEN_FILE` | CVD REDCap token file used for authorised event extracts. Store outside Git with the token alone on one line. |
+| Location selected for `$BNR_MORT_REDCAP_TOKEN_FILE` | Mortality REDCap token file used for authorised mortality extracts. Store outside Git with the token alone on one line. |
+| `$BNR_PRIVATE/data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Retained historical CVD event source used by Step 2. Restore through the approved secure-storage process. |
+| `$BNR_PRIVATE/data/reference/population/wpp2024_brb_population_2010_2035_5y.dta` | Approved Barbados population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
+| `$BNR_PRIVATE/data/reference/population/who_world_standard_2000_2025.dta` | Approved standard-population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
+| `site/_extensions/quarto-ext/fontawesome/` | Committed Font Awesome extension used by the site. Confirm that the directory is present after cloning; do not reinstall it routinely. |
+:::
+
+::: {.callout-note collapse="true" title="Code and configuration files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/config/bnr_paths_TEMPLATE.do` | Defines and checks the standard workstation folder settings. Copy it to the local settings file that Git deliberately ignores, then enter the machine-specific public folder, private folder and token-file paths. |
+| `scripts/python/check-python-environment.py` | Checks Python 3.13 and the required project packages. Run it directly from the repository root after installing `requirements.txt`. |
+| `scripts/stata/menu/bnr_menu.do` | Builds the **User > BNR** workflow menu. The workstation's `profile.do` calls it automatically. |
+| `site/_quarto.yml` | Defines the Quarto website and the commands that run automatically before each site build. `quarto preview` and `quarto render` read it automatically. |
+| `start-info-hub-edit.bat` | Opens VS Code, activates the project environment for preview, starts Quarto and opens the local site in Firefox. Double-click it from the repository root for a normal editing session. |
+| Personal `profile.do` | Loads BNR paths and the menu and configures Stata's Python executable. Create it in Stata's personal directory; Stata runs it automatically at startup. |
+:::
+
+::: {.callout-note collapse="true" title="Output files and folders"}
+
+| File or folder | Purpose and access level |
+|---|---|
+| Local path selected for `$BNR_REPO` | Local working copy of the public Info-Hub project, containing code and approved public website files tracked by Git. Never add confidential material or credentials. |
+| Local path selected for `$BNR_PRIVATE` | Private companion workspace containing source data, derived data, reference files, proposed packages awaiting review or publication, work files and logs. Authorised private storage only. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Machine-specific public/private folder and token-file settings. Git deliberately ignores this local file; never commit it. |
+| `venv-info-hub/` | Workstation's installed Python packages and executable. This is a local generated folder; do not commit it. |
+| `profile.do` in Stata's `PERSONAL` directory | Personal Stata startup file that loads the BNR environment automatically. This is a machine-specific local file. |
+| `local-setup-notes.md` | Paths, versions and completed setup checks without token values. This is a machine-specific local file; do not commit it. |
+| `site/_site/` | Locally rendered static site used for inspection. This is generated local output; recreate it through Quarto. |
+:::
 
 ::: {.callout-note collapse="true"}
 ## Stage 1: Install the supporting software
 
 Stata is assumed to be installed and licensed. Install the remaining tools only if they are missing.
 
-The links below point to **official landing or Marketplace pages**, rather than version-specific installer files. This makes the manual less likely to become stale when a new software version is released.
+To find the current installer whenever this manual is used, the links below point to **official landing or Marketplace pages**, rather than version-specific installer files.
+
+### Where to type the commands
+
+Before VS Code is installed:
+
+1. open the Windows **Start** menu;
+2. type `PowerShell`; and
+3. open **Windows PowerShell**.
+
+Type the first VS Code check in that window.
+
+Windows 11 normally includes WinGet through **App Installer**. Check whether it is ready:
+
+```powershell
+winget --version
+```
+
+If the command prints a version number, use the WinGet installation commands below. If Windows says that `winget` is not recognised, use the linked official installer page for each program instead.
 
 ### 1. Install VS Code
 
 VS Code is the standard editor used for the BNR repository.
 
-Check first:
+In Windows PowerShell, type:
 
 ```powershell
 code --version
 ```
 
-If it is missing, use the [official VS Code Windows installation page](https://code.visualstudio.com/docs/setup/windows).
-
-Alternatively, if WinGet is available:
+If VS Code is installed, the command prints its version number. If PowerShell says that `code` is not recognised, install it with WinGet when available:
 
 ```powershell
 winget install --id Microsoft.VisualStudioCode -e --source winget
 ```
+
+If WinGet is unavailable, use the [official VS Code Windows installation page](https://code.visualstudio.com/docs/setup/windows).
 
 After installation, close and reopen PowerShell and check:
 
@@ -71,77 +133,88 @@ After installation, close and reopen PowerShell and check:
 code --version
 ```
 
+The command must now print the installed VS Code version.
+
+For the remaining PowerShell commands on this page:
+
+1. open VS Code;
+2. choose **Terminal > New Terminal**; and
+3. check that the terminal tab says **PowerShell**.
+
+If another shell opens, use the arrow beside the `+` in the Terminal panel and choose **PowerShell**. This manual calls this a **VS Code PowerShell terminal**.
+
 ### 2. Install Git
 
-Check:
+In a VS Code PowerShell terminal, type:
 
 ```powershell
 git --version
 ```
 
-If Git is missing, use the [official Git for Windows installation page](https://git-scm.com/install/windows).
-
-Or install with WinGet:
+If Git is installed, the command prints a version beginning with `git version`. If it is not recognised, install it with WinGet when available:
 
 ```powershell
 winget install --id Git.Git -e --source winget
 ```
 
-Close and reopen PowerShell, then confirm:
+If WinGet is unavailable, use the [official Git for Windows installation page](https://git-scm.com/install/windows).
+
+Close and reopen the VS Code PowerShell terminal, then type:
 
 ```powershell
 git --version
 ```
 
+The command must now print the installed Git version.
+
 VS Code already includes a useful Source Control interface for Git. No additional Git client is required for routine BNR work.
 
 ### 3. Install Python 3.13
 
-The current BNR workstation baseline is Python 3.13.
+Python 3.13 is the version tested for the BNR Info-Hub. Do not substitute a later Python version until it has been tested with the repository packages and the tracked environment check has been updated.
 
-Check:
+In a VS Code PowerShell terminal, type:
 
 ```powershell
-python --version
-py --version
+py -3.13 --version
 ```
 
-If Python 3.13 is missing, use the [official Python downloads for Windows](https://www.python.org/downloads/windows/).
-
-Or install the 3.13 series with WinGet:
+If Python 3.13 is installed, the command prints a version beginning with `Python 3.13`. If the requested version is not found, install it with WinGet when available:
 
 ```powershell
 winget install --id Python.Python.3.13 -e --source winget
 ```
 
-After installation:
+If WinGet is unavailable, install the current Python 3.13 release from the [official Python downloads for Windows](https://www.python.org/downloads/windows/).
+
+Close and reopen the VS Code PowerShell terminal, then type:
 
 ```powershell
-python --version
-python -m pip --version
-where.exe python
+py -3.13 --version
+py -3.13 -m pip --version
+py -3.13 -c "import sys; print(sys.executable)"
 ```
 
-Record the installed Python path. Stage 5 creates the project virtual environment used by BNR.
+The first two commands must report Python 3.13 and its `pip` installation. The final command prints the Python executable path. Record that path; Stage 5 creates the project virtual environment used by BNR.
 
 ### 4. Install Quarto
 
-Check:
+In a VS Code PowerShell terminal, type:
 
 ```powershell
 quarto --version
 quarto check
 ```
 
-If Quarto is missing, use the [official Quarto installation page](https://quarto.org/docs/get-started/).
-
-Or install with WinGet:
+If Quarto is installed, the first command prints its version and the second reports its configuration. If `quarto` is not recognised, install it with WinGet when available:
 
 ```powershell
 winget install --id Posit.Quarto -e --source winget
 ```
 
-After installation, close and reopen PowerShell and run:
+If WinGet is unavailable, use the [official Quarto installation page](https://quarto.org/docs/get-started/).
+
+After installation, close and reopen the VS Code PowerShell terminal and type:
 
 ```powershell
 quarto --version
@@ -149,23 +222,31 @@ quarto check
 where.exe quarto
 ```
 
-### 5. Install TinyTeX
+The commands must print the Quarto version, a completed configuration check and the installed executable path.
 
-TinyTeX is required when Quarto needs to render PDF outputs.
+### 5. Install Firefox
 
-Check:
-
-```powershell
-quarto list tools
-```
-
-If TinyTeX is not installed:
+Install 64-bit Firefox with WinGet when available:
 
 ```powershell
-quarto install tinytex
+winget install --id Mozilla.Firefox -e --source winget
 ```
 
-See the [Quarto tool-installation documentation](https://quarto.org/docs/cli/install.html) if installation needs troubleshooting.
+If WinGet is unavailable, use the [official Firefox download page](https://www.mozilla.org/firefox/new/). Keep the default installation location.
+
+The daily editing launcher expects Firefox here:
+
+```text
+C:\Program Files\Mozilla Firefox\firefox.exe
+```
+
+In a VS Code PowerShell terminal, type:
+
+```powershell
+Test-Path "C:\Program Files\Mozilla Firefox\firefox.exe"
+```
+
+The result must be `True`.
 
 ### 6. Install the standard VS Code extensions
 
@@ -176,11 +257,11 @@ Install the following small set.
 | [Quarto](https://marketplace.visualstudio.com/items?itemName=quarto.quarto) | QMD editing, preview and Quarto authoring support. |
 | [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python) | Python environment and code support. |
 | [Stata Enhanced](https://marketplace.visualstudio.com/items?itemName=kylebarron.stata-enhanced) | Stata syntax colouring, macros, comments and other language-aware highlighting. |
-| [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv) | Makes CSV manifests, QA files and review worklists much easier to inspect by visually separating columns. |
-| [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Workflow YAML validation and completion, plus access to workflow runs and logs from VS Code. |
-| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Validation, formatting and completion for the many `.yml` metadata and approval files used by BNR. |
+| [Rainbow CSV](https://marketplace.visualstudio.com/items?itemName=mechatroner.rainbow-csv) | Makes generated file lists, automated-check files and review worklists easier to inspect by visually separating columns. |
+| [GitHub Actions](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-github-actions) | Checks GitHub Actions workflow `.yml` files and provides access to workflow runs and logs from VS Code. |
+| [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) | Checks and formats the `.yml` files used for descriptive information and approval records. |
 
-Install them from PowerShell:
+Install them from a VS Code PowerShell terminal:
 
 ```powershell
 code --install-extension quarto.quarto
@@ -191,38 +272,35 @@ code --install-extension GitHub.vscode-github-actions
 code --install-extension redhat.vscode-yaml
 ```
 
-Check:
+In the same terminal, type:
 
 ```powershell
 code --list-extensions
 ```
 
+Confirm that each of the six extension identifiers appears in the list.
+
 These are editor aids, not analytical runtime dependencies. A workstation can still run the Stata workflows if an editor extension is temporarily unavailable.
-
-### 7. Browser
-
-Any modern browser can be used for local Quarto review.
-
-The existing BNR edit-session launcher prefers Firefox when it is installed, but Firefox is not required for workstation acceptance.
 
 ### Final Stage 1 check
 
-Run:
+In a VS Code PowerShell terminal, type:
 
 ```powershell
 git --version
-python --version
+py -3.13 --version
 quarto --version
 code --version
+Test-Path "C:\Program Files\Mozilla Firefox\firefox.exe"
 ```
 
-Do not continue until each required command returns normally.
+Do not continue until the four version commands return normally and the Firefox check returns `True`.
 :::
 
 ::: {.callout-note collapse="true"}
 ## Stage 2: Join, clone and check the public repository
 
-The BNR `info-hub` repository is **public by design**. Anyone can read or clone it, but only people given suitable BNR repository permissions can push changes into it.
+The BNR `info-hub` repository—a project folder tracked by Git—is **public by design**. Anyone can read it or clone it, meaning download a working copy linked to GitHub. Only people given suitable BNR permissions can upload changes to it.
 
 A team member who will maintain the site therefore needs both:
 
@@ -231,11 +309,11 @@ A team member who will maintain the site therefore needs both:
 
 ### 1. Obtain BNR GitHub access
 
-If the user does not already have a GitHub account, create one at the official GitHub website.
+If the user does not already have a GitHub account, create one at [GitHub](https://github.com/).
 
 Give the GitHub username to the BNR team lead. The team lead decides who should be authorised to maintain the repository; a BNR GitHub repository or organisation administrator then grants the required access.
 
-For routine maintainers, **Write** access is normally sufficient.
+For routine maintainers, **Write** access is normally sufficient. It allows them to push a working branch and open a pull request; `main` remains protected from routine direct pushes.
 
 Accept the GitHub invitation if one is sent.
 
@@ -266,40 +344,99 @@ https://github.com/UWI-BNR/info-hub.git
 
 ### 4. Check Git identity
 
-Open **Terminal > New Terminal** in VS Code and run:
+Open a VS Code PowerShell terminal and type:
 
 ```powershell
 git config user.name
 git config user.email
 ```
 
-If either is blank, configure it using the user's normal professional Git identity:
+The commands print the name and email Git will attach to commits. If either command returns a blank line, set the user's normal professional Git identity:
 
 ```powershell
 git config --global user.name "Full name"
 git config --global user.email "name@example.org"
 ```
 
+Run the two check commands again and confirm that they print the intended name and email.
+
 ### 5. Check the repository
 
-In the VS Code terminal:
+In a VS Code PowerShell terminal, type:
 
 ```powershell
 git status
 git remote -v
 ```
 
-The remote should point to the UWI-BNR `info-hub` repository.
+`git status` should begin with `On branch main` on a new clone and should not report unexplained changes. `git remote -v` lists the linked GitHub location, which Git normally calls `origin`. It should show this address for both downloading (`fetch`) and uploading (`push`):
+
+```text
+https://github.com/UWI-BNR/info-hub.git
+```
 
 The branch name is shown in the lower-left VS Code status bar.
 
-### 6. Create local setup notes
+### 6. Understand the branch route
 
-At the repository root:
+Use a short development branch for routine changes. Do not edit or push directly to `main`.
+
+The normal route is:
+
+1. switch to local `main`;
+2. pull the current `main` branch **from GitHub to the workstation**;
+3. create and work on a development branch;
+4. push the development branch to GitHub;
+5. create a pull request on GitHub; and
+6. merge the pull request into `main` after review.
+
+GitHub cannot pull a branch from the workstation. The protected-branch control means that local work is pushed to a development branch, then merged into `main` through a GitHub pull request.
+
+#### Start a new change using VS Code
+
+1. Check that the **Changes** list in Source Control is empty. If files are listed unexpectedly, stop and investigate them before changing branches.
+2. Click the branch name in the lower-left status bar and select `main`.
+3. Open **Source Control**, select the `...` menu and choose **Pull, Push > Pull**.
+4. Wait for the pull to finish. VS Code should not report a conflict or error.
+5. Click the branch name again and choose **Create new branch**.
+6. Enter a short descriptive name, such as `update-technical-manual`.
+7. Confirm that the new branch name appears in the lower-left status bar.
+
+#### Equivalent PowerShell commands
+
+In a VS Code PowerShell terminal at the repository root, type:
+
+```powershell
+git status --short
+git switch main
+git pull --ff-only origin main
+git switch -c update-technical-manual
+git status
+```
+
+Expected results:
+
+- `git status --short` prints nothing when there are no uncommitted changes;
+- `git switch main` reports that `main` is active or already checked out;
+- `git pull --ff-only origin main` reports `Already up to date` or lists files updated from GitHub;
+- `git switch -c ...` reports that it switched to the new branch; and
+- the final `git status` begins with `On branch update-technical-manual`.
+
+Choose a branch name that describes the actual task; do not reuse the example name automatically.
+
+When the change has been checked and committed, push the development branch—not `main`—to GitHub. The later website procedure gives both the VS Code steps and commands for pushing, opening a pull request and merging.
+
+The exact daily procedure is in [Render and publish the website](../website/render-publish.qmd).
+
+### 7. Create local setup notes
+
+In a VS Code PowerShell terminal at the repository root, type:
 
 ```powershell
 New-Item local-setup-notes.md
 ```
+
+PowerShell should report the new file. It will appear in the VS Code Explorer.
 
 `local-setup-notes.md` is machine-specific and should remain outside version control.
 
@@ -321,8 +458,7 @@ Confirm:
 - the remote points to `UWI-BNR/info-hub`; and
 - `local-setup-notes.md` is not staged for Git.
 
-::: {.callout-note collapse="true"}
-## Command-line clone alternative
+### Command-line clone alternative
 
 A user who prefers the terminal can clone the same public repository with:
 
@@ -331,12 +467,11 @@ git clone https://github.com/UWI-BNR/info-hub.git
 cd info-hub
 ```
 
-The VS Code route above is the normal BNR team method.
-:::
+Run these commands in a VS Code PowerShell terminal opened in the intended parent folder. Git should report that it is cloning `info-hub`; the second command moves the terminal into the new repository. The VS Code route above is the normal BNR team method.
 :::
 
 ::: {.callout-note collapse="true"}
-## Stage 3: Provision the private companion workspace
+## Stage 3: Set up the private companion workspace
 
 The public repository is not enough to run the BNR analytical workflows.
 
@@ -351,6 +486,8 @@ data/
   raw/
   frozen/
   derived/
+  reference/
+    population/
 
 outputs/
   staging/
@@ -361,18 +498,21 @@ logs/
 work/
 ```
 
-Provision or restore this workspace using the organisation's approved secure-storage process.
+Set up or restore this workspace using the organisation's approved secure-storage process.
 
 Do **not** copy private registry data from an informal or unapproved source simply to make the workstation run.
 
 ### Required retained inputs
 
-Check that the authorised private workspace includes the current retained inputs needed by the workflows, including where applicable:
+Check that the authorised private workspace includes these retained inputs:
 
-- the frozen historical CVD dataset under `$BNR_DATA_FROZEN`;
-- Barbados population reference data under `$BNR_PRIVATE_WORK`;
-- the WHO standard-population reference under `$BNR_PRIVATE_WORK`; and
-- any other controlled reference files required by the current analytical code.
+```text
+data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta
+data/reference/population/wpp2024_brb_population_2010_2035_5y.dta
+data/reference/population/who_world_standard_2000_2025.dta
+```
+
+The first file is the frozen historical CVD source used by CVD event Step 2. The two population files are the approved inputs used by the CVD event and mortality rate workflows.
 
 The exact machine path is configured in Stage 4.
 
@@ -382,11 +522,11 @@ See [The BNR analytics and publishing environment](environment.qmd) for the purp
 ::: {.callout-note collapse="true"}
 ## Stage 4: Configure local paths and REDCap access
 
-The public repository contains a path template:
+The public repository contains the tracked path template:
 
 `scripts/stata/config/bnr_paths_TEMPLATE.do`
 
-Copy it:
+In a VS Code PowerShell terminal at the repository root, copy it:
 
 ```powershell
 Copy-Item `
@@ -394,13 +534,13 @@ Copy-Item `
   scripts/stata/config/bnr_paths_LOCAL.do
 ```
 
-Open the local copy:
+The command normally prints nothing. Confirm that `bnr_paths_LOCAL.do` appears beside the template, then open it:
 
 ```powershell
 code scripts/stata/config/bnr_paths_LOCAL.do
 ```
 
-### 1. Set the two roots
+### 1. Set the four machine-specific paths
 
 Edit:
 
@@ -409,14 +549,14 @@ global BNR_REPO    "C:/your/path/info-hub"
 global BNR_PRIVATE "C:/your/secure/path/info-hub-private"
 ```
 
-Also set the pathsâ€”not the valuesâ€”of the REDCap tokens used by the authorised workflows:
+Set the paths—not the values—of the REDCap tokens used by the authorised workflows:
 
 ```stata
 global BNR_REDCAP_TOKEN_FILE      "C:/your/secure/path/bnr_redcap_token.txt"
 global BNR_MORT_REDCAP_TOKEN_FILE "C:/your/secure/path/bnr_mort_redcap_token.txt"
 ```
 
-The mortality token setting is required by Mortality Step 1. If the current tracked path template does not yet contain that line, add it to the local file and update the tracked template through the normal code-change process before handover.
+The CVD token is used by CVD event Step 1. The mortality token is used by Mortality Step 1.
 
 The remaining standard globals are derived automatically, including:
 
@@ -432,7 +572,7 @@ The remaining standard globals are derived automatically, including:
 
 ### 2. Configure the REDCap token files
 
-Each token text file must:
+Each token is a secret key that allows the extraction software to connect to the relevant REDCap project. Each token text file must:
 
 - be stored outside the public repository;
 - contain only the API token on one line; and
@@ -483,23 +623,25 @@ The repository uses a local Python virtual environment called:
 
 `venv-info-hub`
 
-Using a project environment keeps BNR support packages separate from unrelated Python work.
+A virtual environment is a local folder containing the Python executable and packages used by this project. It keeps BNR support packages separate from unrelated Python work.
 
 ### 1. Create the environment
 
-From the repository root:
+In a VS Code PowerShell terminal at the repository root, type:
 
 ```powershell
-python -m venv venv-info-hub
+py -3.13 -m venv venv-info-hub
 ```
 
-Confirm it exists:
+The command may take a short time and normally prints nothing. Confirm that the environment was created:
 
 ```powershell
 dir venv-info-hub
 ```
 
 ### 2. Activate it
+
+In the same terminal, type:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
@@ -521,19 +663,19 @@ Then activate the environment again.
 
 ### 3. Install the project packages
 
-With the virtual environment active:
+With the virtual environment active in the VS Code PowerShell terminal, type:
 
 ```powershell
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-This installs the supported analyst/notebook packages and **PyCap**, which the
-REDCap extraction imports as `redcap`.
+This installs the supported analyst/notebook packages and **PyCap**, the Python
+package used to connect to REDCap. The extraction code imports it as `redcap`.
 
 ### 4. Check the environment
 
-From the repository root, run the tracked environment check:
+From the repository root in the same terminal, run the tracked environment check:
 
 ```powershell
 python scripts/python/check-python-environment.py
@@ -542,7 +684,7 @@ python scripts/python/check-python-environment.py
 It must report Python 3.13, list every required package and finish with
 `PASSED`. It does not connect to REDCap or read private data.
 
-Then:
+Then type:
 
 ```powershell
 where.exe python
@@ -561,11 +703,11 @@ The two requirement files have different purposes:
 - `requirements.txt` is the maintained list of direct project packages and
   compatible version ranges. Use it for routine workstation setup and CI.
 - `requirements-freeze.txt` records the exact full Windows/Python 3.13
-  environment that was tested at handover, including indirect dependencies.
+  environment that was tested at handover, including packages installed automatically by other packages.
   Use it to compare or reproduce a known environment when troubleshooting; it
   is not the routine cross-platform installation file.
 
-After an authorised dependency change has been installed and tested on the
+After an authorised Python package change has been installed and tested on the
 canonical BNR Windows workstation, refresh the frozen record from the repository
 root:
 
@@ -581,12 +723,7 @@ Review and commit changes to both requirement files together.
 
 Stata is assumed to be installed. The workstation still needs the BNR project configuration to load automatically at startup.
 
-The current BNR `profile.do` performs four jobs:
-
-1. adds the BNR ado and dialog directories;
-2. loads `bnr_paths_LOCAL.do`;
-3. builds the **User > BNR** menu; and
-4. tells Stata which Python executable to use.
+The BNR `profile.do` loads the local path configuration, builds the **User > BNR** menu and tells Stata which Python executable to use. The path configuration adds the BNR ado and dialog directories automatically.
 
 ### 1. Find the personal Stata directory
 
@@ -609,10 +746,6 @@ in that personal directory so Stata runs it automatically at startup.
 The current workstation profile follows this pattern:
 
 ```stata
-* BNR INFO-HUB ADO AND DIALOG DIRECTORIES
-capture adopath + "C:/your/path/info-hub/scripts/stata/ado"
-capture noisily adopath + "C:/your/path/info-hub/scripts/stata/dialogs"
-
 * Load BNR workstation configuration
 do "C:/your/path/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
 
@@ -625,7 +758,7 @@ python set exec ///
 noisily python query
 ```
 
-The machine-specific parts are the repository path and Python executable.
+Replace both example paths with the paths on the new workstation.
 
 This is based on the active BNR workstation `profile.do`; do not copy another user's absolute paths unchanged.
 
@@ -677,7 +810,7 @@ Loading paths, dialogs, the BNR menu and Python at Stata startup makes the works
 :::
 
 ::: {.callout-note collapse="true"}
-## Stage 7: Check the Quarto project
+## Stage 7: Check Quarto and start an editing session
 
 ### 1. Check the committed Quarto extension
 
@@ -691,19 +824,23 @@ After cloning, check that the folder exists:
 dir site\_extensions\quarto-ext\fontawesome
 ```
 
+Run this in a VS Code PowerShell terminal at the repository root. PowerShell should list the extension files.
+
 A normal workstation should **not** need to reinstall this extension because it is part of the committed site source.
 
 ### 2. Activate the Python environment
 
-From the repository root:
+In a VS Code PowerShell terminal at the repository root, type:
 
 ```powershell
 .\venv-info-hub\Scripts\Activate.ps1
 ```
 
-The site has a Python pre-render step, so use the project environment when rendering locally.
+The site runs a Python command automatically before each Quarto build, so use the project environment when rendering locally.
 
 ### 3. Render the site
+
+In the same terminal, type:
 
 ```powershell
 cd site
@@ -716,6 +853,8 @@ A successful render creates or refreshes:
 `site/_site/`
 
 ### 4. Test preview
+
+In the same terminal, now inside the `site` folder, type:
 
 ```powershell
 quarto preview --host 127.0.0.1 --port 4200
@@ -738,13 +877,13 @@ Stop preview with:
 Ctrl + C
 ```
 
-### 5. Test the standard edit-session launcher
+### 5. Start the standard editing session
 
 The repository includes:
 
 `start-info-hub-edit.bat`
 
-This is the normal convenience tool for starting a local Info-Hub editing session.
+Use this file to start a normal Info-Hub editing session on Windows. It is designed to be run at the beginning of the working day, before changing files.
 
 Double-click the BAT file from the repository root.
 
@@ -757,9 +896,37 @@ It should:
 
 The launcher works out the repository path from its own location, so it should not need machine-specific editing.
 
+It does **not** update Git, select a branch, commit changes or publish the website. After it opens VS Code:
+
+1. check the current branch in the lower-left status bar;
+2. open Source Control and confirm there are no unexplained changes;
+3. when starting new work, switch to `main` and use **Pull** to update it from GitHub;
+4. create or switch to the development branch for the task; and
+5. make changes only after confirming that the intended development branch is active.
+
+The equivalent commands for new work are:
+
+```powershell
+git status --short
+git switch main
+git pull --ff-only origin main
+git switch -c update-technical-manual
+git status
+```
+
+Run them in a VS Code PowerShell terminal at the repository root. Replace `update-technical-manual` with a short name for the actual task. The first command should print nothing; the pull should complete without a conflict; and the final output should name the new branch.
+
+If you are continuing existing work, return to its development branch rather than creating another branch. In VS Code, click the branch name and select the existing branch. The equivalent command is:
+
+```powershell
+git switch update-technical-manual
+```
+
+Replace the example with the existing branch name. Git should report that it switched to that branch.
+
 Keep the preview Command Prompt open while using the local site. Close it, or press `Ctrl + C`, to stop the preview server.
 
-If the launcher fails, use the manual preview commands above and investigate the message shown by the launcher. Chapter 10 describes normal daily use.
+If the launcher fails, use the manual preview commands above and investigate the message shown by the launcher. See [Render and publish the website](../website/render-publish.qmd) for the complete daily editing and publication procedure.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -769,7 +936,9 @@ Finish with a human inspection of the complete environment.
 
 ### 1. Public repository
 
-From the repository root:
+In VS Code, confirm that the intended branch appears in the lower-left status bar. Open Source Control and check that every listed change is expected.
+
+Then, in a VS Code PowerShell terminal at the repository root, type:
 
 ```powershell
 git status
@@ -861,7 +1030,6 @@ Python executable used by Stata:
 Quarto version:
 Git version:
 VS Code version:
-TinyTeX check:
 
 BNR menu startup check:
 Quarto render check:
@@ -892,5 +1060,9 @@ Machine-specific:
 - `local-setup-notes.md`; and
 - the authorised private workspace.
 
-Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live analytical release.
+Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live data or report publication.
 
+## Related procedures
+
+- [Fix common problems](../maintenance/troubleshooting.qmd) — recover from setup, Stata, Quarto or Git problems.
+- [Render and publish the website](../website/render-publish.qmd) — begin normal Info-Hub editing after setup is complete.

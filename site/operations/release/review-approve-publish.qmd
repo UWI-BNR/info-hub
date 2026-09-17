@@ -27,7 +27,7 @@ Open the review workbook or equivalent review material created by the relevant S
 - the complete set of tables, figures and datasets has been checked for residual disclosure risk; and
 - no patient data, private paths, logs or review files are proposed for publication.
 
-Use the product-specific Operations page for the correct Stata step and the [Technical Manual review guide](../../technical/controls/review-release.qmd) for detailed checks.
+Use the product-specific Operations page for the correct Stata step. Then open the matching [Technical Manual workflow](../../technical/workflows/section-index.qmd) for the checks and approval steps.
 
 ## Step 2: Correct before approval
 

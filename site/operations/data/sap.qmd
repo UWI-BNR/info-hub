@@ -371,7 +371,7 @@ The current public-output rule is `bnr_sdc_v1`.
 
 Disclosure control is applied to the complete proposed public package before approval. The reviewer checks both the data and how they appear when presented. Names, registration numbers, detailed linkage records, private logs and other confidential material must not enter Git or public website folders.
 
-See [Disclosure control](../../technical/controls/disclosure-control.qmd) for the implementation details.
+See [Disclosure-control rules](../../technical/reference/disclosure-control-rules.qmd) for the checks applied before public release.
 
 ## Quality assurance, approval and publication
 

@@ -18,9 +18,9 @@ toc: false
 
 ::: {.bnr-home-section .bnr-intro-section}
 
-<p class="bnr-intro-main">Explore timely national evidence on cardiovascular events, deaths, and patterns of care in Barbados.</p>
+<p class="bnr-intro-main">Clear evidence on cardiovascular health in Barbados.</p>
 
-<p class="bnr-intro-sub">BNR brings together surveillance data, transparent methods, and public reports to support prevention, service planning, and accountability.</p>
+<p class="bnr-intro-sub">Data, methods and public reporting to support prevention, planning and accountability.</p>
 
 ::: {.d-flex .gap-3 .justify-content-center .flex-wrap .mt-4 .bnr-home-actions}
 [View latest outputs](news/index.qmd){.btn .btn-outline-primary}

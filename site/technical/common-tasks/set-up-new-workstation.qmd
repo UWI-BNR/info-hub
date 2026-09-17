@@ -1,0 +1,44 @@
+---
+title: "Set up a new workstation"
+description: "Prepare and verify a Windows 11 workstation for authorised BNR work."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this task achieves
+
+Use this route to prepare one authorised Windows 11 workstation for BNR
+analysis, website editing and publication.
+
+## Before you start
+
+- Confirm the person, computer and required access are authorised.
+- Have the GitHub, REDCap and Stata access details available.
+- Know where the separate public repository and private workspace will be kept.
+
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+Confirm access → understand the public/private boundary → install and configure
+the workstation → verify the complete setup.
+:::
+
+## Complete the following steps
+
+| Order | Manual | Task | Detailed guidance |
+|---:|---|---|---|
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm authorised responsibility and access** — named BNR role; appropriate accounts; approved computer; public and private information kept separate | Check [Roles and decision rights](../../operations/operating-model/roles-decision-rights.qmd#core-roles) and the [BNR Info-Hub system boundary](../../operations/governance/ethics-application-wording.qmd#bnr-info-hub-system). |
+| 2 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Understand where each part of the system belongs** — Stata; Python; Quarto; Git; GitHub; public repository; private workspace | Read [The BNR Info-Hub analytics and publishing environment](../getting-started/environment.qmd). |
+| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Install, configure and verify the complete workstation** — supporting software; repository; private workspace; local paths; REDCap access; Python; Stata profile; Quarto preview; setup record | Follow [Set up a BNR workstation](../getting-started/workstation-setup.qmd) from Stage 1 through the final verification. |
+
+## How to confirm completion
+
+The final workstation checks pass, Stata can see the BNR menu and configured
+paths, and `start-info-hub-edit.bat` opens the local website preview.
+
+## Related guidance
+
+- [Analytics and publishing environment](../getting-started/environment.qmd)
+- [Set up a workstation](../getting-started/workstation-setup.qmd)
+- [Fix common problems](../maintenance/troubleshooting.qmd)

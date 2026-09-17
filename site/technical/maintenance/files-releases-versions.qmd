@@ -1,6 +1,6 @@
-﻿---
-title: "Files, releases and versions"
-description: "Identify authoritative, private, public and mirrored BNR files and apply current version rules."
+---
+title: "Files, data releases and versions"
+description: "Identify authoritative, private, public and mirrored BNR files and apply the correct rebuild and version rules."
 manual-review-status: not-reviewed
 ---
 
@@ -8,62 +8,91 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
+## What this page explains
+
+Use this page to decide which copy of a file has authority, whether an existing package may be rebuilt, and when a report needs a higher version.
+
+The central rule is:
+
+> **Correct the earliest authoritative source, then rerun the controlled workflow. Never repair a generated output by hand.**
+
+::: {.callout-note appearance="simple" title="System at a glance"}
+- REDCap and approved retained source files own the source records.
+- Private folders hold extracts, analytical inputs, proposed public files and review evidence.
+- `$BNR_PUBLIC` holds the official public analytical packages.
+- `site/downloads/` is a replaceable website copy of approved public files.
+- Git holds public-safe code, documentation, website source and approved website assets.
+:::
+
 ## Location determines authority
 
-| Location type | Contents | Rule |
+| Location | What belongs there | Operating rule |
 |---|---|---|
-| Authoritative source | REDCap or another approved controlled source | Correct records here, never in an extract. |
-| Private working storage | extracts, confidential and deidentified inputs, candidates, logs, QA and review evidence | Keep outside Git and limit to authorised users. |
-| Authoritative public storage | approved published metric and report packages | Publication controllers write and verify these packages. |
-| Website mirror | approved public datasets, reports and metadata consumed by Quarto | Replaceable from the authoritative public package. |
-| Git repository | code, Quarto source and public-safe static assets | Never store confidential or private control material. |
+| REDCap or another approved controlled source | Original registry or mortality records | Correct a source-record error here, then rerun from extraction. |
+| `$BNR_DATA_FROZEN` | Approved fixed historical or reference inputs | Replace only through an explicitly governed reference-data change. |
+| `$BNR_DATA_RAW` and `$BNR_DATA_DERIVED` | Private extracts, confidential cumulative data and purpose-limited analytical inputs | Keep outside Git. Recreate through the documented upstream step. |
+| `$BNR_STAGING` and `$BNR_PRIVATE_LOGS` | Proposed public packages, quality checks, review evidence, approval records and private logs | Keep outside Git and restrict to authorised staff. These files are not public merely because direct identifiers are absent. |
+| `$BNR_PUBLIC` | Official approved public analytical and report packages | Write only through the controlled publication step. Use this location to restore a damaged website copy. |
+| `$BNR_REPO/site/downloads/` and public report folders | Website copies of approved datasets, metadata, ZIPs and reports | Rebuild through controlled publication. Do not treat the website copy as the official analytical archive. |
+| Git repository | Public-safe code, Quarto source, documentation and approved website assets | Never commit confidential data, tokens, private paths, logs, review workbooks or approval evidence. |
+| `site/_site/` | Generated local Quarto website | Inspect it, but never edit or commit it. |
 
-## Release identity
+For the full folder contract, see [The BNR analytics and publishing environment](../getting-started/environment.qmd).
 
-Use the complete workflow identityâ€”product, reporting period, source release and
-versionâ€”at every step. Do not rely on a filename containing `current` to
-identify the source of a reproducible build.
+## Identify a data release or report
 
-Event and mortality workflows create release-stamped public packages and a
-controlled current mirror where required. The rolling update freezes complete
-copies of its exact event and mortality source CSVs inside the dated report
-package.
+Use the complete identity needed by its workflow. This may include the product, reporting period, source data-release period, report ID and version.
 
-## Report version rules
+A filename containing `current` or `latest` is a convenience copy. It does not by itself identify the source of a reproducible calculation. Use the release-stamped file or the exact source identity recorded in the report package.
 
-- Rolling updates use a positive version. Replacing an existing period requires
-  an explicitly authorised, strictly higher version.
-- Annual reports use an identity such as
-  `bnr_cvd_annual_report_2025_v1`; corrections use a higher version while the
-  public period location remains stable.
-- One-off reports use a controlled report ID and positive version; a changed
-  approved PDF requires a new candidate and version.
-- Never reuse a version number for different content.
-
-## Approval binding
-
-An approval applies only to the exact candidate identified by its manifest,
-fingerprint or equivalent workflow controls. Publication must read the
-controlled approved payload. If any payload file changes, rebuild and obtain a
-new approval.
-
-## Corrections and recovery
-
-| Problem | Action |
+| Product | Identity and correction rule |
 |---|---|
-| Source record wrong | Correct the authoritative source and rerun from extraction. |
-| Calculation or suppression wrong | Correct version-controlled Stata code and rerun. |
-| Report result wrong | Correct its source or analytical code, rebuild and issue the required higher version. |
-| Quarto wording or layout wrong | Correct Quarto source; repeat substantive review if interpretation changes. |
-| Website mirror missing or damaged | Recreate it from the authoritative approved package. |
+| CVD event data | The release is identified by its CVD year and month. A correction requires a governed rebuild from the earliest affected step, renewed review and approval, and an authorised Step 6 republication. |
+| Mortality data | The release is identified by its mortality year and month. A correction requires a governed rebuild, renewed disclosure review and approval, and an authorised Step 6 republication. |
+| Rolling three-month update | Use the report period and a positive version. Replacement for the same period must use a strictly higher version and the explicit `replace` argument. The package freezes exact copies of its declared event and mortality source CSVs. |
+| Annual CVD report | Use an identity such as `bnr_cvd_annual_report_2025_v1`. A published correction uses a strictly higher version at the same stable year location. Never downgrade or reuse a published version. |
+| One-off CVD report | Use the controlled study ID and a positive version. A changed approved PDF requires a new candidate, renewed approval and a higher version. |
 
-Do not retain duplicate â€œnewâ€ pages or manually patched generated files.
-Use Git history to recover version-controlled source and the controlled
-authoritative stores to recover approved public packages.
+## What `replace` means {#what-replace-means}
 
-## Before deployment
+`replace` is an overwrite safeguard, not a correction method and not an approval bypass.
 
-Check that Git status contains only intended public-safe source and approved
-public assets. Private paths, tokens, logs, approval evidence, workbooks and
-staging files must not be committed.
+- Leave it off for a first run or first publication.
+- Use it only when a rebuild or republication of that exact identity has been authorised.
+- Correct the underlying source, configuration or code before using it.
+- Rerun from the earliest affected step and repeat all downstream review and approval required by that workflow.
+- Inspect every public location after an authorised republication.
 
+Some procedures rebuild their own intermediate files without a separate `replace` option. Follow the product-specific page rather than adding `replace` to a command that does not accept it.
+
+## Approval binds an exact package
+
+Approval applies only to the exact proposed public files checked by the workflow. `approval.yml`, `public_manifest.csv`, saved sizes, checksums or fingerprints provide the binding evidence used by the relevant publication controller.
+
+An `approval.yml` file means **approved, not published**. Publication remains a separate action.
+
+If an approved file changes, or a required file is missing, do not edit the evidence files. Rebuild the package and obtain a new approval.
+
+## Correct or recover a file
+
+| Problem | Correct route |
+|---|---|
+| Source record is wrong | Correct the authorised source and rerun from extraction. |
+| Fixed reference data are wrong | Stop and agree the governed reference-data change before replacing the fixed asset and rerunning affected products. |
+| Calculation or disclosure decision is wrong | Correct version-controlled Stata code or configuration, rerun from the earliest affected step, and repeat review and approval. |
+| Published report result is wrong | Correct its declared source or analytical code, rebuild, approve and publish the required higher report version. |
+| Quarto wording or layout is wrong | Correct the QMD or site configuration and render again; repeat substantive review if meaning changes. |
+| Website copy is missing or damaged | Recreate it from the official approved package through the controlled publication step, then render and deploy the site. |
+| Version-controlled source is damaged | Restore or correct it through Git on a development branch, test it and merge through a pull request. |
+
+Do not keep parallel files named `new`, `final-final` or similar. Git records source history; controlled public packages record analytical and report releases.
+
+## Before committing or deploying
+
+Check that Git lists only intended public-safe source and approved website assets. Stop if it shows private paths, tokens, confidential data, logs, review evidence, approval records, workbooks, staging files, `bnr_paths_LOCAL.do` or `site/_site/`.
+
+## Related procedures
+
+- [Make a safe code change](safe-code-change.qmd)
+- [Fix common problems](troubleshooting.qmd)
+- [Render and publish the website](../website/render-publish.qmd)

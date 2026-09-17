@@ -1,0 +1,104 @@
+---
+manual-review-status: not-reviewed
+title: "Common tasks"
+description: "Follow a complete BNR task from its starting point to the final check."
+---
+
+Common Tasks are short routes through the detailed manuals. Use the linked
+guidance for commands, files and checks.
+
+## Analytical and reporting tasks
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Release CVD event data](release-cvd-event-data.qmd) {.card-title}
+
+Prepare, approve and publish a CVD event data release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Release CVD mortality data](release-mortality-data.qmd) {.card-title}
+
+Classify deaths, then prepare, approve and publish a mortality data release.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Produce the annual CVD report](produce-annual-report.qmd) {.card-title}
+
+Build, approve and publish the annual report and public health update.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Produce another CVD report](produce-other-reports.qmd) {.card-title}
+
+Choose and complete a rolling update or one-off report.
+:::
+:::
+:::
+
+:::
+
+## Website and maintenance tasks
+
+::: {.grid .bnr-manual-section-listing}
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Set up a new workstation](set-up-new-workstation.qmd) {.card-title}
+
+Prepare and verify an authorised Windows 11 workstation.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Edit and publish website content](edit-publish-website-content.qmd) {.card-title}
+
+Edit a Quarto page, review it locally and publish it through a pull request.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Change maintained code safely](make-safe-code-change.qmd) {.card-title}
+
+Change maintained code on a branch, test it and merge the reviewed result.
+:::
+:::
+:::
+
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [Check the manuals](check-manuals.qmd) {.card-title}
+
+Check links, review statuses and rendering before publication.
+:::
+:::
+:::
+
+:::
+
+::: {.bnr-manual-return}
+[Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
+:::

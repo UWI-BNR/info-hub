@@ -1,65 +1,117 @@
-﻿---
-manual-review-status: not-reviewed
+---
+manual-review-status: reviewed-by-irh
 title: "Prepare the confidential dataset"
-description: "Step 2: combine the selected REDCap release with the frozen historical CVD dataset."
+description: "Step 2: combine the selected REDCap data release with the fixed historical CVD dataset."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Appends the selected post-2023 REDCap release to the frozen 2009-2023 CVD dataset, harmonises the two data eras and creates the shared analytical variables.
+Step 2 combines the authorised post-2023 REDCap extract with the fixed 2009–2023 CVD dataset. It harmonises the two data periods and creates the confidential cumulative dataset used by Step 3.
 
-## Inputs
+Step 2 also protects the analysis from unusual source records. It excludes an unusable event completely, or keeps the event but sets an unsafe field to missing. It records every such action in private quarantine review files. Here, **quarantine** means that the workflow has kept questionable source information out of the affected analysis until it can be checked.
 
-| Input | Private location | Purpose |
-|---|---|---|
-| Frozen historical CVD dataset | `$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Fixed 2009-2023 historical source. |
-| Step 1 Stata dataset | `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/bnr_cvd_step1_YYYYMM.dta` | Selected cumulative post-2023 REDCap release. |
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm that Step 1 completed for the intended CVD event data release.
+2. Run Step 2 using the same year and month.
+3. Check `STEP 2: OPERATIONAL RUN SUMMARY` and the cumulative dataset.
+4. If the summary says `Completed with quarantine review`, check the private quarantine workbook and correct the source data where required.
+5. Continue to Step 3 only when the output and any quarantine action are understood.
+:::
 
-Step 1 must have completed successfully for the same release year and month.
+## Before you start
+
+- Use the same `YYYY` and `M` selected in Step 1.
+- Confirm that the Step 1 summary reported `Completed successfully`.
+- Rerunning Step 2 replaces the existing Step 2 dataset, run record and quarantine files for that month. Rerun only as a deliberate rebuild, then rerun the downstream steps.
+
+::: {.callout-note collapse="true" title="Input files"}
+
+| File | Purpose and required check |
+|---|---|
+| `$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Fixed confidential history for 2009–2023. Confirm that this controlled file is present; do not replace it with a current extract. |
+| `$BNR_DATA_RAW/redcap/cvd/yYYYY/mMM/bnr_cvd_step1_YYYYMM.dta` | Authorised cumulative REDCap extract from 1 January 2024 through the selected month. Confirm that `YYYYMM` matches this Step 2 run. |
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | Purpose and use |
+|---|---|
+| `scripts/stata/monthly/bnr_step2_cvd_confidential.do` | Runs Step 2, checks and harmonises the source records, appends the fixed history and writes the outputs. Run it directly or through the dialog. |
+| `scripts/stata/metrics/cvd/bnr_step2_write_quarantine_report.do` | Called automatically to create the detailed private quarantine files and one-row summary. |
+| `scripts/stata/dialogs/bnr_step2_cvd_confidential.dlg` | Collects the year and month when Step 2 is run from the BNR menu. |
+| `scripts/stata/config/bnr_paths_LOCAL.do` | Supplies the workstation’s private input, output and log locations. |
+:::
 
 ## Run Step 2
 
-1. **Open Step 2.** In Stata, choose User > BNR > Update CVD events dashboard > Step 2: Build cumulative dataset.
-2. **Select the release.** Enter the same release year and release month used in Step 1.
-3. **Build the dataset.** Select Build dataset.
-4. **Check the run summary.** Confirm the run completed successfully, the historical and post-2023 record counts are plausible, the date range is correct, and the displayed DCO limitation is expected.
-5. **Inspect the output.**
-   - Open `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`.
-   - Confirm that the dataset and YAML receipt exist.
-   - Open the YAML receipt and check the selected release, source files and record counts.
-   - Open the Stata dataset and confirm that the total record count and event-date range agree with the run summary.
-
-## Outputs
-
-| File | Private location | Purpose |
-|---|---|---|
-| `bnr_cvd_confidential_YYYYMM_v01.dta` | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/` | Confidential cumulative event-level dataset used as the source for Step 3. |
-| `bnr_cvd_confidential_YYYYMM_v01.yml` | `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/` | Receipt recording release identity, source files, record counts, QA information and the core data signature. |
-| Step 2 log | `$BNR_PRIVATE_LOGS/` | Operational record of the Step 2 run. |
-
-See [The BNR analytics and publishing environment](../../getting-started/environment.qmd) for the role of the frozen, raw and derived private-data locations.
-
-To see the local derived-data root:
+In the Stata command window, replace `YYYY` and `M` with the CVD event data-release year and month:
 
 ```stata
-display "$BNR_DATA_DERIVED"
+do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" YYYY M
 ```
 
-## Command-line equivalent
+Alternatively:
 
-```stata
-do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2024 1
-```
+1. Choose **User > BNR > Update CVD events dashboard > Step 2: Build cumulative dataset**.
+2. Enter the same year and month used in Step 1.
+3. Select **Build dataset**.
 
-## If Step 2 does not complete
+Both routes run the same Step 2 DO-file. Step 2 has no separate `replace` option: a deliberate rerun rebuilds and replaces that month’s Step 2 files.
 
-Read the **Reason** and **Log** lines in the operational summary.
+## Check successful completion
 
-First check that the frozen historical file exists and that Step 1 was completed for the same year and month. Correct the reported problem and rerun Step 2. Do not use output from an incomplete run.
+1. Find `STEP 2: OPERATIONAL RUN SUMMARY` at the end of the Stata output.
+2. Confirm the selected data release, historical and post-2023 record counts, total record count and event-date range.
+3. Confirm the reported output dataset, `.yml` run record and private log paths.
+4. Open `bnr_cvd_confidential_YYYYMM_v01.yml` and confirm the source filenames, counts and quarantine status.
+5. Open the Stata dataset and confirm that its row count and event-date range match the summary.
 
+The summary will report either:
+
+| Run status | Meaning and action |
+|---|---|
+| `Completed successfully` | No source record required full or partial quarantine. Continue to Step 3 after the usual checks. |
+| `Completed with quarantine review` | Step 2 created its outputs but protected one or more records or fields. Open `bnr_cvd_step2_quarantine_YYYYMM.xlsx`, understand every listed action and correct the authoritative REDCap record where necessary before rerunning. |
+
+The summary also states that post-2023 death-certificate-only records are not included in this event extract. Step 4 adds the approved DCO enhancement using the selected mortality data release; this message is therefore an expected coverage note, not an error.
+
+::: {.callout-note collapse="true" title="Output files"}
+
+**Private derived-data folder:** `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/`
+
+**Private review folder:** `$BNR_DATA_DERIVED/cvd/yYYYY/mMM/review/`
+
+**Private log folder:** `$BNR_PRIVATE_LOGS/`
+
+| File | Purpose and access |
+|---|---|
+| `bnr_cvd_confidential_YYYYMM_v01.dta` | Confidential cumulative event-level dataset used by Step 3 and the Step 4 linkage process. |
+| `bnr_cvd_confidential_YYYYMM_v01.yml` | Private run record naming the sources, data release, counts, checks and quarantine files. |
+| `bnr_cvd_step2_quarantine_YYYYMM.xlsx` | **Open this first when quarantine is reported.** Private workbook explaining the affected source records, fields and analytical effect. |
+| `bnr_cvd_step2_quarantine_YYYYMM.dta` | Detailed machine-readable private quarantine evidence. |
+| `bnr_cvd_step2_quarantine_summary_YYYYMM.csv` | One-row non-identifying summary carried into Steps 4 and 5. |
+| `bnr_cvd_step2_YYYYMM.log` | Private operational log for this Step 2 run. |
+
+All files remain private. Do not place them in Git or a website folder.
+:::
+
+::: {.callout-note collapse="true" title="If Step 2 does not complete"}
+Step 2 should complete routinely while the expected input files and source structure remain valid.
+
+| Situation | What to do |
+|---|---|
+| The fixed historical file or Step 1 dataset is missing | Confirm the exact reported path. Restore the controlled historical file or complete Step 1 for the same `YYYYMM`; do not substitute or rename a different file. |
+| All post-2023 events are fully quarantined | Open the quarantine workbook, correct the authoritative REDCap records and rerun Step 1 and Step 2. Do not edit the generated extract or quarantine files. |
+| A count, date range or quarantine action is unexpected | Stop before Step 3. Use the private workbook and log to identify the source record, correct REDCap if required and rerun from Step 1. |
+
+For local-settings or other uncommon problems, see [Fix common problems](../../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the complete team-facing process.
+- [CVD event–death linkage rules](../../reference/cvd-event-death-linkage-rules.qmd) — understand how the later mortality linkage adds DCO estimates.

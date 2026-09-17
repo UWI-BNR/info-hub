@@ -1,7 +1,7 @@
 ---
-manual-review-status: not-reviewed
-title: "Set up the environment"
-description: "Choose a Technical Manual page in this section."
+manual-review-status: reviewed-by-irh
+title: "Getting started"
+description: "Understand the BNR Info-Hub environment or configure a new workstation."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
@@ -9,9 +9,9 @@ description: "Choose a Technical Manual page in this section."
 ::: {.g-col-12 .g-col-md-6}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Analytics environment](environment.qmd) {.card-title}
+### [Info-Hub analytics environment](environment.qmd) {.card-title}
 
-How the analytical and publishing system fits together.
+Understand the tools, file locations and controlled publication boundary.
 :::
 :::
 :::
@@ -21,7 +21,7 @@ How the analytical and publishing system fits together.
 ::: {.card-body}
 ### [Set up a workstation](workstation-setup.qmd) {.card-title}
 
-Configure Windows for the BNR workflows and Info-Hub.
+Install and verify the complete BNR Info-Hub environment on Windows.
 :::
 :::
 :::
@@ -31,4 +31,3 @@ Configure Windows for the BNR workflows and Info-Hub.
 ::: {.bnr-manual-return}
 [Browse all Technical sections](../index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
-

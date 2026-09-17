@@ -1,0 +1,249 @@
+---
+title: "Approve and publish an analytical package"
+description: "Approve the exact reviewed BNR data-release or report files, then publish only those approved files."
+manual-review-status: reviewed-by-irh
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this chapter does
+
+Use this chapter after analytical and disclosure review is complete. Approval and analytical publication are separate Stata actions:
+
+- **approval** records the decision against the exact reviewed files; and
+- **publication** verifies that approval and copies only those files to the official public analytical folder and the website folders.
+
+Some generated folder names and menu labels use `candidate` for files proposed for approval and `public_ready` for the private approved copy that is ready for publication. These names do not mean that publication or website deployment has already happened.
+
+::: {.callout-tip title="Procedure at a glance" appearance="simple"}
+1. Confirm that review is complete for the exact private files proposed for approval.
+2. An authorised BNR Lead or BNR Analyst runs the Stata approval action.
+3. Check `approval.yml`, the approval record, and `public_manifest.csv`, the generated list of approved files.
+4. Run the separate Stata publication action for the same product and version.
+5. Check the official public analytical copy and the website copies.
+6. Render, review and deploy the website separately.
+:::
+
+## Before you start
+
+Confirm that:
+
+- the proposed files have completed analytical review, automated checks and disclosure review;
+- the product, reporting period, version and source data releases are correct;
+- the proposed files and review evidence are complete and unchanged; and
+- the named approver is authorised by BNR and uses either the **BNR Lead** or **BNR Analyst** role accepted by the production approval actions.
+
+Do not approve on the basis of a successful build alone.
+
+::: {.callout-note collapse="true" title="Input files"}
+
+### CVD event data release
+
+**Review folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/review/`
+
+**Approved files folder:** `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/`
+
+| Input | Required check |
+|---|---|
+| `step5_review.xlsx` | Confirm that this is the completed workbook for the intended data release. |
+| `step5_candidate.dta` | Confirm that this is the exact proposed dataset reviewed in the workbook. |
+| `step5_disclosure_qa.csv` | Confirm that every automated disclosure check reports `PASS`. |
+| `step5_equation_audit.csv` | Confirm that every automated related-value check reports `PASS`. |
+| `step5_row_audit.dta` | Confirm that any row investigated during review has the expected disclosure result. |
+| `step5_review_basis.csv` | Confirm the data-release identifier and the recorded file sizes and SHA-256 change-detection values. |
+| `approval.yml` | Created by the approval action. Before publication, confirm that it records approval of the intended data-release package and named approver. |
+| `public_manifest.csv` | Created by the approval action. Before publication, confirm that it lists the exact approved files. |
+| Files listed in `public_manifest.csv` | Confirm that every listed file remains present and unchanged. |
+
+### CVD mortality data release
+
+**Review folder:** `$BNR_STAGING/mortality/burden/mort_YYYY_MM/review/`
+
+**Approved files folder:** `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`
+
+| Input | Required check |
+|---|---|
+| `mort_s4_review_mort_YYYY_MM.xlsx` | Confirm that this is the completed workbook for the intended data release. |
+| `mort_s4_candidate.dta` | Confirm that this is the exact proposed dataset reviewed in the workbook. |
+| `mort_s4_review_qa_mort_YYYY_MM.csv` | Confirm the workflow's successful automated-check result. |
+| `mort_s4_review_basis_mort_YYYY_MM.csv` | Confirm the data-release identifier and the recorded identities of the reviewed files. |
+| `mort_s4_monthly_reference_2015_2019.dta` | Confirm the private fixed monthly comparison values used during review. |
+| `mort_s4_monthly_reference_2015_2019.csv` | Confirm the proposed public copy of the fixed monthly comparison values. |
+| `mort_s4_monthly_reference_2015_2019.yml` | Confirm that this descriptive file identifies the fixed comparison CSV correctly. |
+| `approval.yml` | Created by the approval action. Before publication, confirm that it records approval of the intended data-release package and named approver. |
+| `public_manifest.csv` | Created by the approval action. Before publication, confirm that it lists the exact approved files. |
+| Files listed in `public_manifest.csv` | Confirm that every listed file remains present and unchanged. |
+
+### Annual CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/candidate/`
+
+**Approved files folder:** `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/public_ready/`
+
+| Input | Required check |
+|---|---|
+| `bnr_cvd_annual_report_YYYY_vV.pdf` | Confirm the report year and version and that this is the complete reviewed annual report. |
+| `bnr_cvd_public_health_update_YYYY_vV.pdf` | Confirm that this is the reviewed companion Public Health Update. |
+| `index.qmd` | Confirm the reviewed annual-report landing-page title, dates and PDF link. |
+| `public_health_update.qmd` | Confirm the reviewed companion landing-page title, dates and PDF link. |
+| `report.yml` | Confirm that it identifies the intended report, version and source data releases. |
+| `approval.yml` | Created by the approval action. Before publication, confirm that it records approval of the intended annual report and named approver. |
+| `public_manifest.csv` | Created by the approval action. Before publication, confirm that it lists the exact approved files. |
+| Files listed in `public_manifest.csv` | Confirm that every listed file remains present and unchanged. |
+
+### One-off CVD report
+
+**Proposed files folder:** `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/candidate/`
+
+**Approved files folder:** `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/public_ready/`
+
+| Input | Required check |
+|---|---|
+| `bnr_cvd_oneoff_STUDY_vV.pdf` | Confirm the study identifier and version and that this is the complete reviewed report. |
+| `index.qmd` | Confirm the reviewed landing-page title, date and PDF link. |
+| `report.yml` | Confirm that it identifies the intended study, version and publication date. |
+| `approval.yml` | Created by the approval action. Before publication, confirm that it records approval of the intended one-off report and named approver. |
+| `public_manifest.csv` | Created by the approval action. Before publication, confirm that it lists the exact approved files. |
+| Files listed in `public_manifest.csv` | Confirm that every listed file remains present and unchanged. |
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | How it is used |
+|---|---|
+| `scripts/stata/monthly/bnr_step5_review_expanded_cvd_approve.do` | Approves the reviewed CVD event data-release package. |
+| `scripts/stata/monthly/bnr_step6_publish_expanded_cvd.do` | Publishes the approved CVD event files. |
+| `scripts/stata/mortality/bnr_mort_s5_approve.do` | Approves the reviewed CVD mortality data-release package. |
+| `scripts/stata/mortality/bnr_mort_s6_publish.do` | Publishes the approved CVD mortality files. |
+| `scripts/stata/reporting/bnr_report_annual_s2_approve.do` | Approves the reviewed annual CVD report. |
+| `scripts/stata/reporting/bnr_report_annual_s3_publish.do` | Publishes the approved annual CVD report and companion Public Health Update. |
+| `scripts/stata/reporting/bnr_report_oneoff_s2_approve.do` | Approves the reviewed one-off CVD report. |
+| `scripts/stata/reporting/bnr_report_oneoff_s3_publish.do` | Publishes the approved one-off CVD report. |
+
+The two report approval DO-files call `scripts/stata/reporting/bnr_report_approve_candidate.do`. The two report publication DO-files call `scripts/stata/reporting/bnr_report_publish_candidate.do`. These shared helper files enforce the common report checks; run the product-specific DO-files from the BNR menu, not the shared helpers directly.
+:::
+
+::: {.callout-note collapse="true" title="Output files"}
+
+### CVD event data release
+
+| File or folder | Purpose and access level |
+|---|---|
+| `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/approval.yml` | Private record of who approved the exact files and when. |
+| `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/public_manifest.csv` | Private list of files approved for publication. |
+| `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/datasets/` | Private approved datasets. |
+| `$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/public_ready/metadata/` | Private approved descriptive files for the datasets and data-release package. |
+| `$BNR_PUBLIC/metrics/cvd/` | Official public data-release copies: dated and current datasets, descriptive files, ZIP package and Downloads-page record. |
+| `site/downloads/files/metrics/cvd/` | Public website copies. |
+
+### CVD mortality data release
+
+| File or folder | Purpose and access level |
+|---|---|
+| `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/approval.yml` | Private record of who approved the exact files and when. |
+| `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/public_manifest.csv` | Private list of files approved for publication. |
+| `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/datasets/` | Private approved datasets. |
+| `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/metadata/` | Private approved descriptive files for the datasets and data-release package. |
+| `$BNR_PUBLIC/metrics/mortality/burden/` | Official public datasets, descriptive files, fixed reference files, ZIP package and Downloads-page record. |
+| `site/downloads/files/metrics/mortality/burden/` | Public website copies. |
+
+### Annual CVD report
+
+| File or folder | Purpose and access level |
+|---|---|
+| `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/public_ready/approval.yml` | Private record of who approved the exact report files and when. |
+| `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/public_ready/public_manifest.csv` | Private list of files approved for publication. |
+| `$BNR_STAGING/reports/cvd/annual/bnr_cvd_annual_report_YYYY_vV/public_ready/` | Private approved report files ready for the publication action. |
+| `$BNR_PUBLIC/reports/cvd/annual/YYYY/` | Official public annual report, companion update, landing pages and descriptive files. |
+| `site/downloads/files/reports/cvd/annual/YYYY/` | Public website report PDFs and descriptive files. |
+| `site/surveillance/cvd/reports/annual/YYYY/` | Public annual-report landing page. |
+| `site/surveillance/cvd/reports/briefings/YYYY/` | Public Health Update landing page. |
+
+### One-off CVD report
+
+| File or folder | Purpose and access level |
+|---|---|
+| `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/public_ready/approval.yml` | Private record of who approved the exact report files and when. |
+| `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/public_ready/public_manifest.csv` | Private list of files approved for publication. |
+| `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_vV/public_ready/` | Private approved report files ready for the publication action. |
+| `$BNR_PUBLIC/reports/cvd/studies/STUDY/` | Official public report, landing page and descriptive files. |
+| `site/downloads/files/reports/cvd/studies/STUDY/` | Public website PDF and descriptive files. |
+| `site/surveillance/cvd/reports/studies/STUDY/` | Public website landing page. |
+
+### All products
+
+| File or folder | Purpose and access level |
+|---|---|
+| Workflow-specific approval and publication logs under `$BNR_PRIVATE_LOGS/` | Private operational evidence recording the result and resolved paths. These logs are not copied to the website. |
+:::
+
+## Choose the product-specific actions
+
+Open Stata and use **User > BNR**.
+
+| Product | Approval action | Analytical publication action |
+|---|---|---|
+| CVD event data release | **Update CVD events dashboard > Step 5: Review and approve package for release** | **Step 6: Publish approved outputs** |
+| CVD mortality data release | **Update CVD mortality dashboard > Step 5: Approve reviewed mortality release** | **Step 6: Publish approved mortality outputs** |
+| Annual CVD report | **Annual CVD report > Step 2: Approve annual report candidate** | **Step 3: Publish approved annual report** |
+| One-off CVD report | **One-off CVD report publication > Step 2: Approve one-off report candidate** | **Step 3: Publish approved one-off report** |
+
+The rolling three-month update has one controlled build action. It uses exact approved event and mortality data-release files and does not create another analytical approval.
+
+## Run the approval action
+
+1. Open the approval action for the correct product.
+2. Select the same product, reporting period and version that were reviewed.
+3. Enter the authorised approver's full name and choose **BNR Lead** or **BNR Analyst**.
+4. Complete every required confirmation only when it is true.
+5. Run the approval action.
+6. Confirm that the Stata operational summary reports the workflow-specific successful approval status.
+7. Open the resulting `approval.yml` and `public_manifest.csv`. Confirm that they identify the intended package, approver, role and files. Do not create or edit either file manually.
+
+Approval does not copy the package to the public folders or deploy the website.
+
+## Publish the approved package
+
+1. Open the separate publication action for the same product.
+2. Select the approved product, reporting period and version.
+3. Run the publication action.
+4. Confirm that the Stata operational summary reports the workflow-specific successful publication status.
+5. Check that the official public analytical folder contains the expected files.
+6. Check the website copy and any release-stamped or stable copy created by that workflow.
+
+The publication DO-file verifies `approval.yml`, `public_manifest.csv` and each approved file's recorded SHA-256 change-detection value before copying anything. It must stop if the product details, role, recorded file values, file count or required confirmation differ from the approved package.
+
+## Complete website publication separately
+
+Analytical publication does not make the website change live.
+
+After the Stata publication succeeds:
+
+1. start the normal Info-Hub editing session;
+2. render and inspect the site locally;
+3. review the Git changes on a development branch;
+4. merge the reviewed branch into `main` through a GitHub pull request;
+5. confirm that the GitHub Actions build and deployment succeed; and
+6. check the affected live pages and downloads.
+
+Follow [Render and publish the website](../website/render-publish.qmd) for the exact VS Code, Git and deployment procedure.
+
+::: {.callout-note collapse="true" title="If approval or publication does not complete"}
+These actions should complete routinely when the reviewed files and their automatically generated control files remain unchanged.
+
+| Situation | Action |
+|---|---|
+| The product, version or source data release is not the reviewed one | Stop and select the exact reviewed files. Do not approve or publish a different package. |
+| `public_manifest.csv`, a recorded size or SHA-256 value, or a proposed file has changed | Stop. Rebuild the proposed files from the earliest affected step and repeat review and approval. Do not repair the control files manually. |
+| Public output already exists unexpectedly | Stop and confirm why it exists. Use a workflow's replacement route only for an explicitly authorised correction, recovery or higher version. |
+
+For other problems, see [Fix common problems](../maintenance/troubleshooting.qmd).
+:::
+
+## Related procedures
+
+- [Review, approve and publish](../../operations/release/review-approve-publish.qmd) — follow the team-facing responsibilities and decisions.
+- [Render and publish the website](../website/render-publish.qmd) — continue after analytical publication succeeds.
+- [Analytical workflows](../workflows/overview.qmd) — understand how the product-specific workflows fit together.

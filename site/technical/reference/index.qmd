@@ -1,6 +1,6 @@
-﻿---
+---
 title: "System reference"
-description: "Current BNR Stata entry points, workflow controllers and publication boundaries."
+description: "Find the correct BNR Stata menu, workflow controller or system location."
 manual-review-status: not-reviewed
 ---
 
@@ -8,20 +8,25 @@ manual-review-status: not-reviewed
 Technical Manual
 :::
 
-## Architecture and locations
+## What this page is for
 
-| Area | Current responsibility |
+Use this page to find a menu action, controller or system location. Follow the
+workflow pages for the steps you need to perform.
+
+## Main locations
+
+| Location | What you use it for |
 |---|---|
-| `scripts/stata/config/` | Version-controlled path template; the populated local configuration remains untracked. |
-| `scripts/stata/menu/bnr_menu.do` | The authoritative **User > BNR** menu. |
-| `scripts/stata/monthly/` | Six-step CVD event release controllers. |
-| `scripts/stata/mortality/` | Six-step CVD mortality release controllers and supporting implementation. |
-| `scripts/stata/reporting/` | Rolling, annual and one-off report controllers and shared report controls. |
-| `site/surveillance/` and `site/downloads/` | Public presentation and approved public-data mirrors. |
-| `site/methods/`, `site/operations/`, `site/technical/` | The three manuals, with distinct methods, governance and run-instruction responsibilities. |
+| `scripts/stata/config/` | Start from the path template when configuring a workstation. Keep the completed local configuration outside Git. |
+| `scripts/stata/menu/bnr_menu.do` | Check the current **User > BNR** menu labels. |
+| `scripts/stata/monthly/` | Find the six CVD event release controllers. |
+| `scripts/stata/mortality/` | Find the six mortality release controllers and supporting code. |
+| `scripts/stata/reporting/` | Find the rolling, annual and one-off report controllers. |
+| `site/surveillance/` and `site/downloads/` | Find public pages and approved public-data copies. |
+| `site/methods/`, `site/operations/`, `site/technical/` | Find the Public Methods, Operations and Technical manuals. |
 
-Confidential data, staging packages, local configuration, credentials, logs and
-review evidence belong in configured private locations outside Git.
+Keep confidential data, staging packages, local configuration, credentials,
+logs and review evidence in the configured private locations outside Git.
 
 ## Current Stata menu
 
@@ -48,9 +53,11 @@ review evidence belong in configured private locations outside Git.
 |  | Step 3: Publish approved one-off report |
 | **Report utilities** | Screen report counts for disclosure review |
 
-The menu labels above are controlled by `scripts/stata/menu/bnr_menu.do`.
+The menu labels are controlled by `scripts/stata/menu/bnr_menu.do`.
 
-## CVD event controllers
+## Workflow controllers
+
+### CVD event release
 
 | Step | Controller |
 |---:|---|
@@ -61,10 +68,10 @@ The menu labels above are controlled by `scripts/stata/menu/bnr_menu.do`.
 | 5 | `monthly/bnr_step5_review.do` |
 | 6 | `monthly/bnr_step6_publish.do` |
 
-Step 5 contains separate preparation and approval actions. Step 6 reads the
-approved payload and performs publication verification.
+Step 5 has separate preparation and approval actions. Step 6 publishes the
+approved files and checks the result.
 
-## CVD mortality controllers
+### Mortality release
 
 | Step | Controller |
 |---:|---|
@@ -75,45 +82,37 @@ approved payload and performs publication verification.
 | 5 | `mortality/bnr_mort_s5_approve.do` |
 | 6 | `mortality/bnr_mort_s6_publish.do` |
 
-The authoritative technical contract is
+The technical contract is
 `scripts/stata/mortality/BNR_MORTALITY_WORKFLOW_CONTRACT.md`.
 
-## Reporting controllers
+### Reports
 
-| Route | Controllers |
+| Route | Controller or controllers |
 |---|---|
 | Rolling update | `reporting/bnr_report_update_build.do` |
-| Annual report | `bnr_report_annual_s1_build.do`, `bnr_report_annual_s2_approve.do`, `bnr_report_annual_s3_publish.do` |
-| One-off report | `bnr_report_oneoff_s1_prepare.do`, `bnr_report_oneoff_s2_approve.do`, `bnr_report_oneoff_s3_publish.do` |
-| Disclosure utility | `bnr_report_disclosure_screen.do` |
+| Annual report | `reporting/bnr_report_annual_s1_build.do`, `reporting/bnr_report_annual_s2_approve.do`, `reporting/bnr_report_annual_s3_publish.do` |
+| One-off report | `reporting/bnr_report_oneoff_s1_prepare.do`, `reporting/bnr_report_oneoff_s2_approve.do`, `reporting/bnr_report_oneoff_s3_publish.do` |
+| Disclosure check | `reporting/bnr_report_disclosure_screen.do` |
 
 The reporting contract is
-`scripts/stata/reporting/BNR_REPORTING_WORKFLOW_CONTRACT.md`. The rolling
-builder uses the single controlled template under `reporting/templates/`.
-Annual reports require year-specific interpretation and Focus On analyst files.
-The one-off route begins with a finished analyst PDF and does not run the
-bespoke analysis.
+`scripts/stata/reporting/BNR_REPORTING_WORKFLOW_CONTRACT.md`.
 
-## Public output rules
+## Publication boundaries
 
-- Public event and mortality packages are release-stamped and controlled.
-- Public tables read approved metric datasets; there is no tables workflow.
-- Dashboards and downloads present the same approved releases.
-- Standard reports reuse approved releases wherever their purpose permits.
-- Quarto must not reproduce or silently change the Stata analysis.
-- Corrections use a higher version or the workflow's explicit replacement
-  control and are regenerated from source or code.
+- Stata creates and approves release-stamped event and mortality packages.
+- Tables, dashboards and Downloads use the approved public files; they do not
+  have separate analytical workflows.
+- Standard reports reuse approved releases where their purpose allows.
+- Quarto presents approved results. It must not recalculate or silently change them.
+- Correct a release through the version or replacement controls in its workflow;
+  do not edit generated files.
 
-## Disclosure rule
+Positive counts from **1 to 5** are protected. Zero is not automatically
+protected. Product-specific code applies the full rules, and a person reviews
+the complete proposed public package before approval.
 
-The BNR rule is **n < 6**: positive counts 1â€“5 are suppressed. Product-specific
-code applies deterministic protection, and a human reviewer checks the complete
-candidate for residual and complementary disclosure risk.
+## After a code change
 
-## Maintenance checks
-
-After a workflow change, compare labels with `bnr_menu.do`, run the relevant
-workflow tests, search for retired commands and filenames, check local links,
-render the full Quarto site and inspect Git status for private or unintended
-files.
-
+Follow [Make a safe code change](../maintenance/safe-code-change.qmd). Check the
+menu labels, run the relevant tests, check links, render the full site and make
+sure Git does not contain private or unintended files.

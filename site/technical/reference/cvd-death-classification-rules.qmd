@@ -1,0 +1,165 @@
+---
+title: "CVD death-classification rules"
+description: "Check how death-certificate text is classified as Heart, Stroke or combined."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this page is for
+
+Use this page to check why death-certificate text received a **BNR-Heart**,
+**BNR-Stroke** or combined **BNR-Heart-or-Stroke** classification. To run the
+step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
+
+::: {.callout-note appearance="simple"}
+## Rules at a glance
+
+- The classifier is a fixed, deterministic approximation. It is not formal ICD-10 underlying-cause coding.
+- Part I is the stated causal sequence. Part II contains other contributing conditions.
+- Evidence is assigned as **Clear**, **Likely**, **Possible**, **Mention only** or **No evidence**.
+- The **Primary** scenario includes Clear and Likely evidence. The **Inclusive** scenario also includes Possible evidence.
+- Heart and Stroke are classified independently before the combined endpoint and reporting family are derived.
+:::
+
+## Scope and fixed interpretation
+
+| Rule | Implemented meaning |
+|---|---|
+| Method | Fixed text and certificate-position rules; no machine learning, fuzzy matching or manual editing of generated results. |
+| Part I | The sequence of conditions reported as leading to death. The lowest used line is important, but it is not accepted automatically when the sequence or source structure is unclear. |
+| Part II | Other contributing conditions outside the stated Part I sequence. A target condition found only here normally remains **Mention only**. |
+| Source structure | `1` means certificate lines are preserved; `2` means known BNR-concatenated text; `3` means uncertain structure. A result that would otherwise be Clear is capped at Likely when the line structure is not preserved. |
+| Combined endpoint | BNR-Heart or BNR-Stroke evidence. This is **not** a measure of all cardiovascular mortality. |
+| Human review | The code creates private review evidence. Any future adjudication belongs in a controlled source-data process, not an edit to the classified dataset. |
+
+## Evidence classes and scenarios
+
+| Class or scenario | Rule |
+|---|---|
+| Clear | Strongest available certificate evidence: one clean Part I line with direct target wording and no competing Heart/Stroke ambiguity. |
+| Likely | Strong evidence whose position or documented causal relationship supports the target, but which does not meet the narrow Clear rule. |
+| Possible | Relevant current evidence remains, but the approximate underlying cause or surveillance family cannot be resolved confidently. |
+| Mention only | Context, history or Part-II-only evidence that does not support the approximate underlying cause. |
+| No evidence | No approved qualifying evidence was detected. |
+| Conservative | Clear only. |
+| Primary | Clear + Likely. This is the principal reporting definition. |
+| Inclusive | Clear + Likely + Possible. This is a broader sensitivity definition, not a confidence limit. |
+
+## BNR-Heart rules
+
+| Rule and class | Implemented requirement |
+|---|---|
+| `HRT_N000` — No evidence | No explicit acute myocardial infarction (AMI), qualifying ischaemic/coronary Heart wording or qualifying sudden-cardiac-death evidence. Not included. |
+| `HRT_M001` — Mention only | Heart-related context is present but does not support BNR-Heart as the approximate underlying cause. Not included. |
+| `HRT_M002` — Mention only | Current direct Heart wording appears only in Part II. Not included. |
+| `HRT_M003` — Mention only | Only previous, prior, remote or old Heart evidence is present outside a current Part I Heart sequence. Not included. |
+| `HRT_M004` — Mention only | Sudden cardiac death is above another Part I cause and line order is preserved. Not included. |
+| `HRT_P001` — Possible | Current direct Heart evidence is somewhere in Part I, but another lower condition or a structural issue prevents a stronger decision. Inclusive only. |
+| `HRT_P002` — Possible | Heart and Stroke are stated as alternatives, such as “heart attack or stroke”. Inclusive only. |
+| `HRT_P003` — Possible | Current Heart and Stroke evidence both appear in Part I. Inclusive only. |
+| `HRT_P005` — Possible | Sudden cardiac death is alone, is the lowest Part I condition, or the original line order is not preserved. Inclusive only. |
+| `HRT_P006` — Possible | Historical-only Heart evidence appears in Part I with no separate current Heart evidence. Inclusive only. |
+| `HRT_L001` — Likely | Current direct Heart evidence is on the lowest used Part I line of a reasonably formed multi-line certificate. Primary and Inclusive. |
+| `HRT_L010` — Likely | Explicit AMI is above a lowest Part I ischaemic/coronary Heart condition. Primary and Inclusive. |
+| `HRT_L011` — Likely | Current Heart evidence is above hypertension on the lowest used Part I line. Primary and Inclusive. |
+| `HRT_L012` — Likely | Current Heart evidence is above atherosclerosis on the lowest used Part I line. Primary and Inclusive. |
+| `HRT_L020` — Likely | The record would otherwise be Clear, but concatenated or uncertain source structure caps the result at Likely. Primary and Inclusive. |
+| `HRT_C001` — Clear | One clean Part I line contains current direct Heart evidence with no competing Heart/Stroke ambiguity. Conservative, Primary and Inclusive. |
+
+## BNR-Stroke rules
+
+| Rule and class | Implemented requirement |
+|---|---|
+| `STR_N000` — No evidence | No approved direct or contextual Stroke evidence. Not included. |
+| `STR_M001` — Mention only | Stroke-related context is present but does not support BNR-Stroke as the approximate underlying cause. Not included. |
+| `STR_M002` — Mention only | Current direct Stroke wording appears only in Part II. Not included. |
+| `STR_M003` — Mention only | Only historical or post-stroke evidence is present, with no separate current Stroke evidence. Not included. |
+| `STR_P001` — Possible | Current direct Stroke evidence is somewhere in Part I, but another lower condition or a structural issue prevents a stronger decision. Inclusive only. |
+| `STR_P002` — Possible | Stroke and Heart are stated as alternatives, such as “stroke or heart attack”. Inclusive only. |
+| `STR_P003` — Possible | Current Stroke and Heart evidence both appear in Part I. Inclusive only. |
+| `STR_P010` — Possible | Generic non-traumatic intracranial haemorrhage or bleed appears in Part I without more specific direct Stroke wording. Inclusive only. |
+| `STR_P011` — Possible | Current Stroke is in Part II and the only Part I condition is simple aspiration pneumonia or pneumonitis. Inclusive only. |
+| `STR_L001` — Likely | Current direct Stroke evidence is on the lowest used Part I line of a reasonably formed multi-line certificate. Primary and Inclusive. |
+| `STR_L010` — Likely | Current Stroke evidence is above hypertension on the lowest used Part I line. Primary and Inclusive. |
+| `STR_L011` — Likely | Current Stroke evidence is above atherosclerosis on the lowest used Part I line. Primary and Inclusive. |
+| `STR_L012` — Likely | Current Stroke is immediately above a final simple aspiration pneumonia or pneumonitis line and the certificate structure is preserved. Primary and Inclusive. |
+| `STR_L020` — Likely | The record would otherwise be Clear, but concatenated or uncertain source structure caps the result at Likely. Primary and Inclusive. |
+| `STR_C001` — Clear | One clean Part I line contains current direct Stroke evidence with no competing Heart/Stroke ambiguity. Conservative, Primary and Inclusive. |
+
+## Terminology boundaries
+
+| Family | Included or excluded rule |
+|---|---|
+| BNR-Heart | Includes explicit AMI/STEMI/NSTEMI, coronary thrombosis and approved ischaemic/coronary Heart wording. Cardiac arrest and heart failure alone do not qualify. Sudden cardiac death alone is treated cautiously. |
+| BNR-Stroke | Includes approved acute Stroke/CVA, cerebral infarction or thrombosis and qualifying non-traumatic cerebral haemorrhage wording. Excludes heat stroke, trauma, subdural, epidural and extradural haemorrhage, and historical/post-stroke wording without current evidence. |
+| Uncertain intracranial bleed | Generic non-traumatic intracranial bleeding is Possible, not automatically Primary, because the wording may not distinguish an included Stroke from every excluded haemorrhage type. |
+
+## Combined endpoint and reporting family
+
+1. The combined evidence class is the stronger of the Heart and Stroke classes.
+2. An explicit Heart-or-Stroke alternative is treated as Clear combined evidence, then capped at Likely if source line structure is not preserved.
+3. The same Clear/Likely/Possible scenario thresholds are applied to the combined endpoint.
+4. Within each scenario, a death is reported as Heart when only Heart qualifies, Stroke when only Stroke qualifies, and **Heart/Stroke unresolved** when neither family can be selected uniquely.
+
+## Where the rules are implemented
+
+The classifier is run by `scripts/stata/mortality/bnr_mort_s2_classify.do`. The classification rules themselves are implemented in:
+
+```text
+scripts/stata/mortality/bnr_mort_s2_rules.do
+```
+
+::: {.callout-note collapse="true"}
+## Supporting rule files
+
+| File | What it records |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s2_rule_dictionary.csv` | The definitive plain-language register of every named Heart and Stroke rule listed above. |
+| `scripts/stata/mortality/bnr_mort_s2_nosology.csv` | The clinical and mortality-coding sources used to justify the rules. |
+| `scripts/stata/mortality/bnr_mort_s2_methods.md` | Detailed method, scope, limitations and worked rule explanations. |
+| `scripts/stata/mortality/bnr_mort_s2_variable_dictionary.csv` | Output-variable meanings and permitted values. |
+:::
+
+::: {.callout-note collapse="true"}
+## Supporting nosology decisions
+
+These decisions explain the clinical and mortality-coding basis used by the named rules. They do not turn the classifier into formal ICD coding.
+
+| Decision | Use in the classifier |
+|---|---|
+| `NOS001` — Certificate structure | Treat Part I as the causal sequence and Part II as other contributing conditions. |
+| `NOS002` — Lowest used line | Allow a direct target on the lowest used Part I line to reach Likely, but not automatically Clear. |
+| `NOS003` — Accepted sequences | Add stronger causal rules only when an approved mortality-coding source supports them. |
+| `NOS004` — ACME decision table | Use ACME only as supplementary provenance when WHO guidance is not explicit enough. |
+| `NOS005` — Uncertain wording | Words such as probable, possible or presumed do not by themselves remove direct disease evidence. |
+| `NOS006` — Heart-or-Stroke alternative | Keep the combined endpoint while leaving the individual family unresolved. |
+| `NOS007` — Target above another cause | Normally retain the target as Possible unless a documented rule supports promotion. |
+| `NOS008` — Stroke sequence exceptions | Require an explicit approved source before adding a Stroke causal exception. |
+| `NOS009` — Single Part I line | Permit Clear only for direct target wording with no competing ambiguity or structural concern. |
+| `NOS010` — IHD with AMI | Promote explicit AMI above a lowest ischaemic/coronary Heart condition to Likely. |
+| `NOS011` — Hypertension with Heart disease | Promote qualifying Heart evidence above a lowest hypertension line to Likely. |
+| `NOS012` — Atherosclerosis with Heart disease | Promote qualifying Heart evidence above a lowest atherosclerosis line to Likely. |
+| `NOS013` — Hypertension with Stroke | Promote qualifying Stroke evidence above a lowest hypertension line to Likely. |
+| `NOS014` — Atherosclerosis with Stroke | Promote qualifying Stroke evidence above a lowest atherosclerosis line to Likely. |
+| `NOS015` — Coronary thrombosis | Treat the approved wording as direct AMI evidence for mortality classification. |
+| `NOS016` — Specified cerebral haemorrhage | Treat clearly non-traumatic intraventricular or intraparenchymal cerebral haemorrhage as direct Stroke evidence. |
+| `NOS017` — BNR-Heart scope | Include approved ischaemic/coronary Heart evidence; retain sudden cardiac death alone as uncertain evidence. |
+| `NOS018` — BNR-Stroke scope | Include acute vascular Stroke/infarction and approved haemorrhage; exclude TIA, traumatic, subdural and epidural causes. |
+| `NOS019` — Specified non-traumatic bleed | Treat anatomically specified non-traumatic bleeding within the brain as direct Stroke evidence. |
+| `NOS020` — Generic intracranial bleed | Retain an unspecified non-traumatic intracranial bleed as Possible rather than Primary. |
+| `NOS021` — Stroke with aspiration | Apply only the two narrow aspiration pneumonia/pneumonitis certificate patterns in `STR_P011` and `STR_L012`. |
+:::
+
+## Change rule
+
+Do not change these rules during a routine data release. A planned change needs
+a new classifier version, updated dictionaries and methods, regression tests,
+comparison with the frozen version and formal sign-off.
+
+## Related procedures
+
+- [Classify CVD deaths](../workflows/mortality/classify.qmd) — run the implemented classifier and review its outputs.
+- [Build mortality burden data](../workflows/mortality/build-burden.qmd) — use the scenario and reporting-family variables in the mortality metrics.

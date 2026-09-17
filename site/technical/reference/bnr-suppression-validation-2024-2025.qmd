@@ -1,7 +1,8 @@
-﻿---
+---
 manual-review-status: not-reviewed
-title: "Validation of BNR CVD Suppression Rules"
-subtitle: "Review of 24 monthly releases, 2024â€“2025"
+title: "Validation of BNR CVD suppression rules"
+subtitle: "Review of 24 monthly releases, 2024–2025"
+description: "Review the evidence used to test the CVD disclosure-control rules across 24 monthly releases."
 format:
   html:
     toc: true
@@ -14,29 +15,33 @@ format:
 Technical Manual
 :::
 
-## Purpose
+## What this page is for
 
-This report records the practical validation of the BNR CVD disclosure-control rules using two complete years of monthly outputs.
+Use this page to review the evidence used to test the CVD disclosure-control
+rules. No routine action is required here.
 
-The review covered **24 consecutive releases**, from January 2024 to December 2025. Each Step 5 candidate dataset was checked against its private Step 4 source and, where relevant, the preceding monthly release.
+The review covered **24 consecutive releases**, from January 2024 to December
+2025. Each proposed public file was checked against its private source and,
+where relevant, the preceding monthly release.
 
-The companion guide, *BNR Suppression and Statistical Disclosure Control*, explains the rules in plain language.
+For the current rules, see [Disclosure-control rules](disclosure-control-rules.qmd).
 
 ## Validation approach
 
-For each monthly release, the review checked:
+For each release, the reviewer checked:
 
 - every suppressed row;
 - the private pre-suppression value;
 - the primary small-count rule;
-- the previous monthâ€™s equivalent value;
+- the previous month’s equivalent value;
 - whether the previous value had been public;
 - any release-to-release increment;
 - complementary suppression within event-by-sex panels;
 - suppression of dependent percentages;
 - whether unrelated age and total rows remained available.
 
-The review focused on whether each suppression was necessary and whether any unsafe value remained reconstructable from published margins or percentages.
+The aim was to confirm that protected values could not be recovered from public
+totals, comparisons or percentages, while safe values remained available.
 
 ## Results
 
@@ -96,9 +101,9 @@ The four annual AMI/stroke by sex cells were suppressed, together with the four 
 
 In April, no suppression was carried forward because the equivalent March values were not public. This confirmed that the process protects small changes without creating an indefinite chain of hidden results.
 
-## Rules demonstrated by the tests
+## Rules covered by the tests
 
-The two-year review demonstrated that the workflow can correctly handle:
+The two-year review covered:
 
 - primary suppression of counts from 1 to 5;
 - protection of percentages based on suppressed counts;
@@ -110,27 +115,14 @@ The two-year review demonstrated that the workflow can correctly handle:
 - age-specific annual outputs that are unrelated to the protected panel;
 - months where no disclosure restriction is required.
 
-## Overall conclusion
+## Finding
 
 No erroneous suppressions or missed suppressions were identified in the final 2024 and 2025 test outputs under the agreed BNR policy.
 
-The final rule set was found to be:
-
-- **protective**, because small and reconstructable values were withheld;
-- **proportionate**, because unrelated totals, age outputs and safe periods remained public;
-- **consistent**, because the same logic was applied across 24 releases;
-- **auditable**, because every row contains a disclosure status and plain-language note;
-- **operationally manageable**, because automated checks are followed by human review and approval.
-
-::: {.callout-note}
-## Validation statement
-
-The disclosure-control workflow was validated against 24 monthly CVD releases covering two complete calendar years. Testing included primary small-cell suppression, release-to-release differencing risk, complementary suppression, derived percentage protection, quarter transitions and completed annual outputs. All final suppression decisions were reviewed and found to be consistent with the agreed disclosure-control policy.
-:::
-
 ## Limits of this validation
 
-This review provides strong evidence for the observed CVD release structure, but it is not a proof against every possible future data pattern.
+This review covers the observed 2024–2025 release structure. It does not test
+every possible future data pattern.
 
 Future review should pay particular attention to:
 
@@ -140,13 +132,14 @@ Future review should pay particular attention to:
 - new stratifications or new metric families;
 - changes to the BNR disclosure threshold or risk policy.
 
-Material changes to the output structure or disclosure rules should trigger renewed validation.
+Repeat the validation after a material change to the output structure or rules.
 
 ## Technical basis
 
-The BNR rules draw on the principles in the *Handbook on Statistical Disclosure Control for Outputs*, Version 2.0. The Handbook emphasises thresholds, secondary disclosure, differencing across outputs, protection of percentages based on small counts, and the value of clear audit processes.
+The BNR rules draw on the *Handbook on Statistical Disclosure Control for
+Outputs*, Version 2.0.
 
-BNR has adopted a local primary threshold of fewer than 6 events. This differs from the threshold of 10 used in the Handbookâ€™s examples and reflects the BNRâ€™s agreed output policy and context.
+BNR protects positive counts from 1 to 5. This differs from the threshold of 10
+used in the Handbook’s examples and reflects the agreed BNR policy.
 
 [Open the Handbook on Statistical Disclosure Control for Outputs](https://ukdataservice.ac.uk/app/uploads/sdc-handbook-v2.0.pdf)
-

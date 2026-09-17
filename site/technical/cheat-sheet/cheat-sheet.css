@@ -1,0 +1,221 @@
+.bnr-cheat-sheet {
+  --cheat-accent: #6c557f;
+  --cheat-tint: #f3eef6;
+  --cheat-border: #d1c0dc;
+  --cheat-ink: #212529;
+  max-width: 1500px;
+  margin: 0 auto;
+  color: var(--cheat-ink);
+}
+
+.bnr-cheat-heading {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1.15rem;
+  border-left: 0.45rem solid var(--cheat-accent);
+  background: var(--cheat-tint);
+  font-size: 1.02rem;
+}
+
+.bnr-cheat-heading p:last-child {
+  margin-bottom: 0;
+}
+
+.bnr-cheat-heading__label {
+  margin-bottom: 0.25rem;
+  color: #4f3c60;
+  font-size: 0.76rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+}
+
+.bnr-cheat-rule,
+.bnr-cheat-next {
+  margin: 0.8rem 0 1.25rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--cheat-border);
+  background: #fbf9fc;
+}
+
+.bnr-cheat-rule p:last-child,
+.bnr-cheat-next p:last-child,
+.bnr-cheat-stop p:last-child,
+.bnr-cheat-definitions p:last-child,
+.bnr-cheat-rule-card p:last-child {
+  margin-bottom: 0;
+}
+
+.bnr-cheat-grid {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.bnr-cheat-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.bnr-cheat-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bnr-cheat-grid--rules {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.bnr-cheat-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: 0.9rem 1rem 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-top: 0.32rem solid var(--cheat-accent);
+  border-radius: 0.25rem;
+  background: #ffffff;
+  box-shadow: 0 0.12rem 0.35rem rgba(0, 0, 0, 0.06);
+}
+
+.bnr-cheat-grid--reports .bnr-cheat-panel > p:last-child {
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
+.bnr-cheat-grid--reports table {
+  table-layout: fixed;
+}
+
+.bnr-cheat-grid--reports table th:first-child,
+.bnr-cheat-grid--reports table td:first-child {
+  width: 4.8rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.bnr-cheat-panel > h2:first-child,
+.bnr-cheat-panel > h3:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-bottom: 0;
+}
+
+.bnr-cheat-panel h2 {
+  font-size: 1.35rem;
+}
+
+.bnr-cheat-panel h3 {
+  font-size: 1.16rem;
+}
+
+.bnr-cheat-sheet table {
+  width: 100%;
+  margin-bottom: 0.8rem;
+  font-size: 0.86rem;
+  line-height: 1.3;
+}
+
+.bnr-cheat-sheet th {
+  background: var(--cheat-tint);
+  color: #382a44;
+}
+
+.bnr-cheat-sheet th,
+.bnr-cheat-sheet td {
+  padding: 0.42rem 0.48rem;
+  vertical-align: top;
+}
+
+.bnr-cheat-stop,
+.bnr-cheat-definitions {
+  margin-top: 0.75rem;
+  padding: 0.62rem 0.75rem;
+  border-left: 0.28rem solid var(--cheat-accent);
+  background: var(--cheat-tint);
+  font-size: 0.9rem;
+}
+
+.bnr-cheat-rule-card {
+  padding: 0.72rem 0.8rem;
+  border-top: 0.22rem solid var(--cheat-accent);
+  background: var(--cheat-tint);
+  font-size: 0.88rem;
+}
+
+.bnr-cheat-next {
+  margin-top: 1.2rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 1320px) {
+  .bnr-cheat-grid--three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1180px) {
+  .bnr-cheat-grid--two,
+  .bnr-cheat-grid--rules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .bnr-cheat-grid--three,
+  .bnr-cheat-grid--rules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  @page {
+    size: A3 landscape;
+    margin: 10mm;
+  }
+
+  #quarto-header,
+  #quarto-sidebar,
+  #quarto-margin-sidebar,
+  .page-navigation,
+  .nav-footer,
+  .manual-review-banner {
+    display: none !important;
+  }
+
+  .bnr-cheat-sheet {
+    max-width: none;
+    font-size: 8.5pt;
+  }
+
+  .bnr-cheat-heading,
+  .bnr-cheat-rule,
+  .bnr-cheat-panel,
+  .bnr-cheat-rule-card,
+  .bnr-cheat-next {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .bnr-cheat-print-page-break {
+    break-before: page;
+  }
+
+  .bnr-cheat-grid--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bnr-cheat-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bnr-cheat-grid--rules {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .bnr-cheat-sheet table {
+    font-size: 7.7pt;
+  }
+
+  .bnr-cheat-sheet a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
