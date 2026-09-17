@@ -2,6 +2,7 @@
 manual-review-status: not-reviewed
 title: "Validation of BNR CVD suppression rules"
 subtitle: "Review of 24 monthly releases, 2024–2025"
+description: "Review the evidence used to test the CVD disclosure-control rules across 24 monthly releases."
 format:
   html:
     toc: true

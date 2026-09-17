@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 23 | 27 | 0 | 0 | 50 |
+| Technical Manual | 0 | 24 | 27 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -86,6 +86,7 @@
 | Page | Path | Status | Source |
 |---|---|---|---|
 | BNR Technical Manual | `site/technical/index.qmd` | Reviewed by IRH | Page YAML |
+| BNR Info-Hub cheat sheet | `site/technical/cheat-sheet/index.qmd` | Not reviewed | Page YAML |
 | Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
 | Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
@@ -96,14 +97,14 @@
 | Produce another CVD report | `site/technical/common-tasks/produce-other-reports.qmd` | Not reviewed | Page YAML |
 | Set up a new workstation | `site/technical/common-tasks/set-up-new-workstation.qmd` | Not reviewed | Page YAML |
 | Edit and publish website content | `site/technical/common-tasks/edit-publish-website-content.qmd` | Not reviewed | Page YAML |
-| Make a safe code change | `site/technical/common-tasks/make-safe-code-change.qmd` | Not reviewed | Page YAML |
+| Change maintained code safely | `site/technical/common-tasks/make-safe-code-change.qmd` | Not reviewed | Page YAML |
 | Check the manuals | `site/technical/common-tasks/check-manuals.qmd` | Not reviewed | Page YAML |
 | Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
 | Analytical workflows | `site/technical/workflows/overview.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Reviewed by IRH | Page YAML |
 | Extract a REDCap data release | `site/technical/workflows/cvd-events/extract-redcap.qmd` | Reviewed by IRH | Page YAML |
 | Prepare the confidential dataset | `site/technical/workflows/cvd-events/prepare-confidential.qmd` | Reviewed by IRH | Page YAML |
-| Create deidentified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Reviewed by IRH | Page YAML |
+| Create de-identified analytical inputs | `site/technical/workflows/cvd-events/create-analysis-inputs.qmd` | Reviewed by IRH | Page YAML |
 | Generate combined CVD metrics | `site/technical/workflows/cvd-events/generate-metrics.qmd` | Reviewed by IRH | Page YAML |
 | Review and approve combined CVD metrics | `site/technical/workflows/cvd-events/review-approve.qmd` | Reviewed by IRH | Page YAML |
 | Publish approved combined CVD metrics | `site/technical/workflows/cvd-events/publish-metrics.qmd` | Reviewed by IRH | Page YAML |

@@ -1,5 +1,5 @@
 ---
-title: "Make a safe code change"
+title: "Change maintained code safely"
 description: "Change maintained BNR code on a branch, test it and merge the reviewed result."
 manual-review-status: not-reviewed
 ---

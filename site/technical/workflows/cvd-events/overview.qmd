@@ -15,7 +15,7 @@ The CVD events workflow combines the fixed 2009–2023 history with an authorise
 ::: {.callout-tip title="Workflow at a glance" appearance="simple"}
 1. Extract the authorised completed month from REDCap.
 2. Combine it with the fixed historical CVD data.
-3. Create private deidentified analytical inputs.
+3. Create private de-identified analytical inputs.
 4. Calculate hospital-recorded and death-certificate-only (DCO) statistics.
 5. Apply disclosure control, review the proposed public data and approve the exact files.
 6. Verify and publish only the approved files.
@@ -26,7 +26,7 @@ The CVD events workflow combines the fixed 2009–2023 history with an authorise
 ```{mermaid}
 flowchart TB
     A["1. Authorised REDCap extract"] --> B["2. Confidential cumulative data"]
-    B --> C["3. Deidentified analytical inputs"]
+    B --> C["3. De-identified analytical inputs"]
     C --> D["4. Calculated private statistics"]
     D --> E["5. Protected, reviewed and approved package"]
     E --> F["6. Published analytical package"]
@@ -40,7 +40,7 @@ Steps 1–5 remain private. Step 6 alone copies the approved analytical files in
 |---|---|---|
 | [1. Extract REDCap](extract-redcap.qmd) | Select the authorised completed month and run the secure extract. | Private CSV, Stata copy and extraction record. |
 | [2. Prepare confidential data](prepare-confidential.qmd) | Combine the extract with the fixed historical data and review any quarantined source records. | Private cumulative event-level dataset. |
-| [3. Create analytical inputs](create-analysis-inputs.qmd) | Create the approved deidentified datasets for each type of analysis. | Private purpose-specific analytical datasets. |
+| [3. Create analytical inputs](create-analysis-inputs.qmd) | Create the approved de-identified datasets for each type of analysis. | Private purpose-specific analytical datasets. |
 | [4. Generate metrics](generate-metrics.qmd) | Select the event and mortality data releases, run linkage and calculate the statistics. | Private calculated datasets and review evidence. |
 | [5. Review and approve](review-approve.qmd) | Prepare the proposed public file, review the evidence and record approval in Stata. | Exact approved seven-file package. |
 | [6. Publish metrics](publish-metrics.qmd) | Verify the approval and file checks, then publish the approved package. | Official public analytical copy and website data-file copy. |

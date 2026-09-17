@@ -80,7 +80,7 @@ Edit a Quarto page, review it locally and publish it through a pull request.
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Make a safe code change](make-safe-code-change.qmd) {.card-title}
+### [Change maintained code safely](make-safe-code-change.qmd) {.card-title}
 
 Change maintained code on a branch, test it and merge the reviewed result.
 :::

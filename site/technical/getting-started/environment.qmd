@@ -79,7 +79,7 @@ These commands display configured paths, not token contents. The private root, t
 | `$BNR_PRIVATE_WORK` | Other controlled private working files. |
 | `$BNR_PRIVATE_LOGS` | Operational Stata logs. |
 
-Deidentified analytical data remain private until a product passes its disclosure, review, approval and publication pathway. **Deidentified does not mean approved for publication.**
+De-identified analytical data remain private until a product passes its disclosure, review, approval and publication pathway. **De-identified does not mean approved for publication.**
 
 Do not correct generated private files by hand. Correct the earliest affected source record, reference file, local settings or code, then rerun the controlled workflow.
 
@@ -128,7 +128,7 @@ Automated checks support human judgement; they do not replace review of analytic
 ## Rules to retain
 
 1. Do not manually correct generated analytical outputs.
-2. Do not treat deidentified data as public data.
+2. Do not treat de-identified data as public data.
 3. Do not copy proposed files from `$BNR_STAGING` into public folders by hand.
 4. Do not use Quarto or Python to recreate the official surveillance measures calculated by Stata.
 5. Do not treat successful execution as human approval.

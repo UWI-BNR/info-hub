@@ -37,7 +37,7 @@ After the normal site render, check the tables as part of website review:
 - event and mortality tabs open correctly;
 - period, measure, definition and stratum controls show only supported choices;
 - protected, unavailable and incomplete values have the correct labels;
-- compare a small selected of tabulation cells with the same values on the dashboard or in the public release dataset; and
+- compare a small selection of tabulation cells with the same values on the dashboard or in the public release dataset; and
 - the page works at narrow and wide browser widths where practical.
 
 ## Related procedures

@@ -1,7 +1,7 @@
 ---
 manual-review-status: reviewed-by-irh
-title: "Create deidentified analytical inputs"
-description: "Step 3: create the private deidentified datasets used by authorised downstream analyses."
+title: "Create de-identified analytical inputs"
+description: "Step 3: create the private de-identified datasets used by authorised downstream analyses."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -12,7 +12,7 @@ Technical Manual
 
 Step 3 uses approved variable lists to create five purpose-specific analytical datasets, without direct identifiers.
 
-These datasets are deidentified, but they are still private and are not approved public data.
+These datasets are de-identified, but they are still private and are not approved public data.
 
 ::: {.callout-tip title="Procedure at a glance" appearance="simple"}
 1. Confirm that the Step 2 dataset and run record are for the intended CVD event data release.
@@ -94,7 +94,7 @@ Both routes run the same Step 3 DO-file. A specialised analysis may select fewer
 | `bnr_cvd_input_case_fatality_YYYYMM_v01.dta` and `.yml` | Private case-fatality input and run record. |
 | `bnr_cvd_input_length_of_stay_YYYYMM_v01.dta` and `.yml` | Private length-of-stay input and run record. |
 | `bnr_cvd_input_performance_YYYYMM_v01.dta` and `.yml` | Private care-performance input and run record. |
-| `bnr_cvd_input_all_variables_YYYYMM_v01.dta` and `.yml` | Private union of all approved deidentified analytical fields and its run record. |
+| `bnr_cvd_input_all_variables_YYYYMM_v01.dta` and `.yml` | Private union of all approved de-identified analytical fields and its run record. |
 | `bnr_cvd_create_metric_inputs_YYYYMM.log` | Private operational log for the Step 3 run. |
 :::
 
@@ -113,4 +113,4 @@ For other uncommon problems, see [Fix common problems](../../maintenance/trouble
 ## Related procedures
 
 - [Run the CVD event release workflow](../../../operations/post-redcap/cvd-events-workflow.qmd) — follow the complete team-facing process.
-- [The BNR analytics and publishing environment](../../getting-started/environment.qmd) — understand why deidentified analytical inputs remain private.
+- [The BNR analytics and publishing environment](../../getting-started/environment.qmd) — understand why de-identified analytical inputs remain private.

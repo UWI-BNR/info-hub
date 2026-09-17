@@ -107,8 +107,8 @@ The reporting contract is
 - Correct a release through the version or replacement controls in its workflow;
   do not edit generated files.
 
-Positive counts from **1 to 5** are protected. Zero is not protected only because
-it is zero. Product-specific code applies the full rules, and a person reviews
+Positive counts from **1 to 5** are protected. Zero is not automatically
+protected. Product-specific code applies the full rules, and a person reviews
 the complete proposed public package before approval.
 
 ## After a code change

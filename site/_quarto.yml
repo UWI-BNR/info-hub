@@ -307,6 +307,9 @@ website:
         - text: "Home"
           href: technical/index.qmd
 
+        - text: "Info-Hub cheat sheet"
+          href: technical/cheat-sheet/index.qmd
+
         - section: "Getting started"
           contents:
             - text: "Section contents"
@@ -338,7 +341,7 @@ website:
                   href: technical/common-tasks/set-up-new-workstation.qmd
                 - text: "Edit and publish website content"
                   href: technical/common-tasks/edit-publish-website-content.qmd
-                - text: "Make a safe code change"
+                - text: "Change maintained code safely"
                   href: technical/common-tasks/make-safe-code-change.qmd
                 - text: "Check the manuals"
                   href: technical/common-tasks/check-manuals.qmd

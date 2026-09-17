@@ -27,8 +27,8 @@ This document consolidates the review approach agreed before the review with the
 | **7** | **Maintain and recover** | 🟨 | The section listing, safe-code-change procedure, files/data-releases/version reference and troubleshooting page have been revised and technically checked; Ian’s human review remains. |
 | **8** | **Reference and manual landing page** | 🟨 | All seven pages have been revised and technically checked. Ian’s human review remains. |
 | **9** | **Common Tasks walkthroughs** | 🟨 | All eight walkthroughs and the grouped section index have been created and technically checked. Ian’s human review of the completed section remains. |
-| **10** | **Whole-manual consistency pass** | ⬜ | Check terminology, page structure, links, workflow continuity, duplicated material and cross-manual implications across all 42 existing pages. |
-| **11** | **Info-Hub cheat sheet** | ⬜ | Build last, once the procedures and Common Tasks routes are stable. |
+| **10** | **Whole-manual consistency pass** | 🟨 | All 50 Technical Manual pages have been checked for terminology, structure, links, navigation, workflow continuity, duplication and cross-manual implications. Ian’s human review of the bounded corrections remains. |
+| **11** | **Info-Hub cheat sheet** | 🟨 | The complete screen and A3-print QMD now covers analytical, reporting, website and maintenance work, key locations, routine checks and non-Stata terminology. Ian’s final content and rendering review remains. |
 | **12** | **Final human acceptance test** | ⬜ | Use the Common Tasks material to configure the Info-Hub on a clean Windows 11 machine and perform the principal tasks end to end. Record and correct anything unclear or missing. |
 
 ## Review process
@@ -117,7 +117,7 @@ This document consolidates the review approach agreed before the review with the
 | 50 | Check every procedure against the actual scripts, dialogs, menus, configuration templates, paths, filenames and output messages. Do not rely solely on an earlier manual page. |
 | 51 | Preserve the system boundary: Stata owns surveillance preparation, analysis, disclosure processing and controlled analytical publication; Python performs defined support tasks; Quarto presents approved public products. |
 | 52 | Distinguish three separate events: Stata publishes the approved analytical package; Quarto renders the local static site; GitHub Actions deploys the live website. Success at one stage does not prove completion of the next. |
-| 53 | Keep confidential data, tokens, staging material and review evidence outside the public repository. Deidentified data are not automatically approved public data. |
+| 53 | Keep confidential data, tokens, staging material and review evidence outside the public repository. De-identified data are not automatically approved public data. |
 | 54 | Never recommend repairing generated outputs manually. Correct the earliest affected source data, configuration, reference file or code and rerun the controlled workflow. |
 | 55 | Automated success messages do not replace human review, disclosure assessment or publication approval. |
 | 56 | Prefer the simplest maintainable route that a future mixed-skill team can operate confidently. Avoid additional tooling or abstraction without a clear operational benefit. |
@@ -199,6 +199,18 @@ This document consolidates the review approach agreed before the review with the
 | 107 | Use **Edit and publish website content** as the Stage 9 design pilot. It covers ordinary Quarto editing, local preview and rendering, a development branch, pull-request review, merge, automated deployment and the live-site check. |
 | 108 | Use **Complete the following steps** above the task table. Keep **What this task achieves** and **Before you start** short, direct and in plain language. |
 | 109 | Group the completed walkthroughs as **Analytical and reporting tasks**—CVD event release, mortality release, annual report and other reports—and **Website and maintenance tasks**—new workstation, website content, safe code change and manual checks. |
+
+## Stage 11 cheat-sheet design
+
+| # | Guiderail |
+|---:|---|
+| 110 | Maintain the cheat sheet as a QMD source that works on screen and can later produce a two-sided A3 landscape PDF. Do not maintain separate website and PDF wording. |
+| 111 | Write primarily for the BNR Lead and BNR Analyst. Assume routine Stata knowledge, but explain other packages, platforms, languages and dependencies in plain language. |
+| 112 | Organise the content by the task the user needs to complete. Show what the user supplies, what they run, the decision or check before moving on and a direct link to the full procedure. |
+| 113 | Keep exact Stata menu labels, status messages and workflow boundaries. Omit exhaustive file inventories, supporting implementation files and unusual recovery scenarios. |
+| 114 | Use compact panels and tables with the Technical Manual colour. Keep the source responsive on screen and suitable for A3 landscape printing; do not rely on colour alone. |
+| 115 | Build Pass 1 around analytical and reporting work. Add website operation, key folders, routine checks, safe changes and a plain-language non-Stata glossary only after the first layout has been reviewed. |
+| 116 | Keep panels in the same row equal in height. Give short report-stage columns a fixed narrow width, and move multi-column layouts to fewer columns before their tables or instructions become cramped. |
 
 ## Architecture decision register
 
