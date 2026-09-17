@@ -977,9 +977,9 @@ body.bnr-tech-manual .bnr-manual-flag--technical {
   color: var(--bnr-manual-text);
 }
 
-/* Compact manual links used in Common Tasks tables. Visible text and colour
+/* Compact manual labels used in Common Tasks tables. Visible text and colour
    identify the source manual; colour is never the only cue. */
-.bnr-manual-link {
+.bnr-manual-label {
   display: inline-block;
   padding: 0.18rem 0.5rem;
   border: 1px solid currentColor;
@@ -991,22 +991,17 @@ body.bnr-tech-manual .bnr-manual-flag--technical {
   white-space: nowrap;
 }
 
-.bnr-manual-link:hover,
-.bnr-manual-link:focus {
-  text-decoration: underline;
-}
-
-.bnr-manual-link--operations {
+.bnr-manual-label--operations {
   background: #faf0e8;
   color: #70401e !important;
 }
 
-.bnr-manual-link--technical {
+.bnr-manual-label--technical {
   background: #f3eef6;
   color: #4f3c60 !important;
 }
 
-.bnr-manual-link--methods {
+.bnr-manual-label--methods {
   background: #e9f3ec;
   color: #2e593d !important;
 }

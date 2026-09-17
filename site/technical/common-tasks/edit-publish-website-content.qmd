@@ -26,23 +26,19 @@ navigation, then review and publish the change.
   protected `main`.
 
 ::: {.callout-note appearance="simple" title="Procedure at a glance"}
-Confirm the scope → start an editing session and branch → edit and preview →
-render the full site → review and merge → check the live website.
+Confirm responsibility, scope and wording → prepare a development branch → edit,
+preview and render → review and merge → check the live website.
 :::
 
-## Follow the task
+## Complete the following steps
 
-| Order | Manual | Task | Instructions | Expected result |
-|---:|---|---|---|---|
-| 1 | [Operations](../../operations/operating-model/roles-decision-rights.qmd#core-roles){.bnr-manual-link .bnr-manual-link--operations} | Confirm responsibility | Check the [BNR Developer and Publisher responsibilities](../../operations/operating-model/roles-decision-rights.qmd#core-roles). | An authorised person owns the change and its publication. |
-| 2 | [Technical](../website/update-content.qmd#what-this-page-does){.bnr-manual-link .bnr-manual-link--technical} | Confirm the correct route | Check [what may be edited directly](../website/update-content.qmd#what-this-page-does). | The change is ordinary public content, not an analytical correction. |
-| 3 | [Public Methods](../../methods/index.qmd){.bnr-manual-link .bnr-manual-link--methods} | Check statistical wording, if relevant | If the change explains a statistic, use the [Public Methods Manual](../../methods/index.qmd) as the source. | The public explanation retains its approved meaning. |
-| 4 | [Technical](../website/render-publish.qmd#step-1-start-the-editing-session){.bnr-manual-link .bnr-manual-link--technical} | Start an editing session and branch | [Start the editing session](../website/render-publish.qmd#step-1-start-the-editing-session), then [update local `main` and create a development branch](../website/render-publish.qmd#step-2-update-main-and-create-a-development-branch). | The preview is running and the current branch has a short, task-specific name. |
-| 5 | [Technical](../website/update-content.qmd#step-1-open-the-source-page){.bnr-manual-link .bnr-manual-link--technical} | Edit and preview | [Open the source page](../website/update-content.qmd#step-1-open-the-source-page), [make the change](../website/update-content.qmd#step-2-make-the-smallest-required-change) and [check the preview](../website/update-content.qmd#step-3-save-and-check-the-local-preview). | The local preview shows the intended change correctly. |
-| 6 | [Technical](../website/update-content.qmd#step-4-run-a-complete-local-render){.bnr-manual-link .bnr-manual-link--technical} | Render the complete site | [Run the complete local render](../website/update-content.qmd#step-4-run-a-complete-local-render). | The render finishes without an error and the affected pages are correct. |
-| 7 | [Technical](../website/render-publish.qmd#step-5-inspect-the-files-to-commit){.bnr-manual-link .bnr-manual-link--technical} | Review and push | [Inspect the changed files](../website/render-publish.qmd#step-5-inspect-the-files-to-commit), then [commit and push the branch](../website/render-publish.qmd#step-6-commit-and-push-the-development-branch). | GitHub contains only the intended public change. |
-| 8 | [Technical](../website/render-publish.qmd#step-7-merge-the-pull-request-on-github){.bnr-manual-link .bnr-manual-link--technical} | Review and merge | [Create, review and merge the pull request](../website/render-publish.qmd#step-7-merge-the-pull-request-on-github). | The approved branch is merged into `main` and deployment starts automatically. |
-| 9 | [Technical](../website/render-publish.qmd#step-8-confirm-deployment-and-check-the-live-site){.bnr-manual-link .bnr-manual-link--technical} | Check deployment | [Confirm GitHub Actions and check the live site](../website/render-publish.qmd#step-8-confirm-deployment-and-check-the-live-site). | The build and deployment succeed, and the live page is correct. |
+| Order | Manual | Task | Detailed guidance |
+|---:|---|---|---|
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Confirm authorised responsibility and the correct change route** — named owner; ordinary public content; analytical corrections excluded | Check the [BNR Developer and Publisher responsibilities](../../operations/operating-model/roles-decision-rights.qmd#core-roles) and [what may be edited directly](../website/update-content.qmd#what-this-page-does). |
+| 2 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Preserve approved statistical meaning, where relevant** — definitions; interpretation; limitations; public wording | Use the [Public Methods Manual](../../methods/index.qmd) when the change explains a statistic or method. |
+| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Prepare a current development branch** — local editing session; latest protected `main`; short task-specific branch name | Follow [Start the editing session, update `main` and create a development branch](../website/render-publish.qmd#step-1-start-the-editing-session). |
+| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Edit and test the public source** — smallest required QMD or Markdown change; local preview; complete site render; affected pages and links checked | Follow [Update website content](../website/update-content.qmd) from opening the source page through the complete local render. |
+| 5 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Review and publish the controlled change** — intended files only; commit and push; pull-request review and merge; successful deployment; correct live page | Continue with [Inspect the files to commit, then publish and check the website](../website/render-publish.qmd#step-5-inspect-the-files-to-commit). |
 
 ## How to confirm completion
 

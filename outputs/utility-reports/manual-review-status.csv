@@ -66,6 +66,15 @@ Technical Manual,BNR Technical Manual,site/technical/index.qmd,reviewed-by-irh,P
 Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Common tasks,site/technical/common-tasks/section-index.qmd,not-reviewed,Page YAML
+Technical Manual,Release CVD event data,site/technical/common-tasks/release-cvd-event-data.qmd,not-reviewed,Page YAML
+Technical Manual,Release CVD mortality data,site/technical/common-tasks/release-mortality-data.qmd,not-reviewed,Page YAML
+Technical Manual,Produce the annual CVD report,site/technical/common-tasks/produce-annual-report.qmd,not-reviewed,Page YAML
+Technical Manual,Produce another CVD report,site/technical/common-tasks/produce-other-reports.qmd,not-reviewed,Page YAML
+Technical Manual,Set up a new workstation,site/technical/common-tasks/set-up-new-workstation.qmd,not-reviewed,Page YAML
+Technical Manual,Edit and publish website content,site/technical/common-tasks/edit-publish-website-content.qmd,not-reviewed,Page YAML
+Technical Manual,Make a safe code change,site/technical/common-tasks/make-safe-code-change.qmd,not-reviewed,Page YAML
+Technical Manual,Check the manuals,site/technical/common-tasks/check-manuals.qmd,not-reviewed,Page YAML
 Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,reviewed-by-irh,Page YAML
@@ -102,4 +111,4 @@ Technical Manual,CVD death-classification rules,site/technical/reference/cvd-dea
 Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,not-reviewed,Page YAML
 Technical Manual,Disclosure-control rules,site/technical/reference/disclosure-control-rules.qmd,not-reviewed,Page YAML
 Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
-Technical Manual,Validation of BNR CVD Suppression Rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML
+Technical Manual,Validation of BNR CVD suppression rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML

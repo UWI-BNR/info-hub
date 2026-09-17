@@ -320,8 +320,28 @@ website:
           contents:
             - text: "Section contents"
               href: technical/common-tasks/section-index.qmd
-            - text: "Edit and publish website content"
-              href: technical/common-tasks/edit-publish-website-content.qmd
+
+            - section: "Analytical and reporting tasks"
+              contents:
+                - text: "Release CVD event data"
+                  href: technical/common-tasks/release-cvd-event-data.qmd
+                - text: "Release CVD mortality data"
+                  href: technical/common-tasks/release-mortality-data.qmd
+                - text: "Produce the annual CVD report"
+                  href: technical/common-tasks/produce-annual-report.qmd
+                - text: "Produce another CVD report"
+                  href: technical/common-tasks/produce-other-reports.qmd
+
+            - section: "Website and maintenance tasks"
+              contents:
+                - text: "Set up a new workstation"
+                  href: technical/common-tasks/set-up-new-workstation.qmd
+                - text: "Edit and publish website content"
+                  href: technical/common-tasks/edit-publish-website-content.qmd
+                - text: "Make a safe code change"
+                  href: technical/common-tasks/make-safe-code-change.qmd
+                - text: "Check the manuals"
+                  href: technical/common-tasks/check-manuals.qmd
 
         - section: "Analytical workflows"
           contents:

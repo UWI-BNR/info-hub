@@ -1,0 +1,46 @@
+---
+title: "Produce the annual CVD report"
+description: "Build, approve and publish the annual report and one-page public health update."
+manual-review-status: not-reviewed
+---
+
+::: {.bnr-manual-flag .bnr-manual-flag--technical}
+Technical Manual
+:::
+
+## What this task achieves
+
+Use this route to publish the annual CVD report and its one-page public health
+update from approved CVD event and mortality releases.
+
+## Before you start
+
+- Confirm the report year, source data releases and next report version.
+- Complete and review the year-specific interpretation and Special chapter files.
+- Identify the authorised reviewer and approver.
+
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+Confirm the report inputs and wording → build and review → approve and publish →
+render and deploy the website.
+:::
+
+## Complete the following steps
+
+| Order | Manual | Task | Detailed guidance |
+|---:|---|---|---|
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm the report scope and authority** — report year; approved source releases; next version; year-specific content; authorised approver | Check [Before starting the annual report](../../operations/post-redcap/annual-report.qmd#before-starting). |
+| 2 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Preserve the approved public meaning** — event and mortality definitions; counts; rates; interpretation; limitations | Check the relevant pages under [What BNR reports](../../methods/measures/index.qmd) and [Interpreting the measures](../../methods/interpretation/index.qmd) while reviewing the year-specific wording. |
+| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Build, review, approve and publish the complete report package** — annual PDF; one-page update; two landing pages; shared report record; unchanged approved files | Follow the complete [Technical annual-report procedure](../workflows/reporting/annual-report.qmd), using the [Operations annual-report route](../../operations/post-redcap/annual-report.qmd) for responsibilities and decisions. |
+| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Render and deploy the two report pages** — full report; public health update; automatic report listings; Git review; pull request; live-site check | Follow [Edit and publish website content](edit-publish-website-content.qmd). Quarto discovers both published landing pages during the normal render; no separate listing-refresh action is required. |
+
+## How to confirm completion
+
+Both PDFs and landing pages are published, the website deployment succeeds,
+and the annual report and public health update appear correctly in the live
+report listings.
+
+## Related guidance
+
+- [Operations: annual CVD report](../../operations/post-redcap/annual-report.qmd)
+- [Technical: annual CVD report](../workflows/reporting/annual-report.qmd)
+- [Disclosure-control rules](../reference/disclosure-control-rules.qmd)

@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 14 | 27 | 0 | 0 | 41 |
+| Technical Manual | 0 | 23 | 27 | 0 | 0 | 50 |
 
 ## Public Methods Manual
 
@@ -89,6 +89,15 @@
 | Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
 | Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |
+| Common tasks | `site/technical/common-tasks/section-index.qmd` | Not reviewed | Page YAML |
+| Release CVD event data | `site/technical/common-tasks/release-cvd-event-data.qmd` | Not reviewed | Page YAML |
+| Release CVD mortality data | `site/technical/common-tasks/release-mortality-data.qmd` | Not reviewed | Page YAML |
+| Produce the annual CVD report | `site/technical/common-tasks/produce-annual-report.qmd` | Not reviewed | Page YAML |
+| Produce another CVD report | `site/technical/common-tasks/produce-other-reports.qmd` | Not reviewed | Page YAML |
+| Set up a new workstation | `site/technical/common-tasks/set-up-new-workstation.qmd` | Not reviewed | Page YAML |
+| Edit and publish website content | `site/technical/common-tasks/edit-publish-website-content.qmd` | Not reviewed | Page YAML |
+| Make a safe code change | `site/technical/common-tasks/make-safe-code-change.qmd` | Not reviewed | Page YAML |
+| Check the manuals | `site/technical/common-tasks/check-manuals.qmd` | Not reviewed | Page YAML |
 | Run analytical workflows | `site/technical/workflows/section-index.qmd` | Reviewed by IRH | Page YAML |
 | Analytical workflows | `site/technical/workflows/overview.qmd` | Reviewed by IRH | Page YAML |
 | Run the CVD events workflow | `site/technical/workflows/cvd-events/overview.qmd` | Reviewed by IRH | Page YAML |
@@ -125,4 +134,4 @@
 | CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Not reviewed | Page YAML |
 | Disclosure-control rules | `site/technical/reference/disclosure-control-rules.qmd` | Not reviewed | Page YAML |
 | System reference | `site/technical/reference/index.qmd` | Not reviewed | Page YAML |
-| Validation of BNR CVD Suppression Rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |
+| Validation of BNR CVD suppression rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |

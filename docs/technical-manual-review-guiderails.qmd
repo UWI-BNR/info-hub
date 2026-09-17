@@ -26,7 +26,7 @@ This document consolidates the review approach agreed before the review with the
 | **6** | **Operate the Info-Hub** | 🟨 | The section listing, website publication procedure and website-content procedure have been revised and technically checked; Ian’s human review remains. |
 | **7** | **Maintain and recover** | 🟨 | The section listing, safe-code-change procedure, files/data-releases/version reference and troubleshooting page have been revised and technically checked; Ian’s human review remains. |
 | **8** | **Reference and manual landing page** | 🟨 | All seven pages have been revised and technically checked. Ian’s human review remains. |
-| **9** | **Common Tasks walkthroughs** | 🟨 | The section index and **Edit and publish website content** pilot have been created and technically checked. Ian’s pilot review remains before the other walkthroughs are written. |
+| **9** | **Common Tasks walkthroughs** | 🟨 | All eight walkthroughs and the grouped section index have been created and technically checked. Ian’s human review of the completed section remains. |
 | **10** | **Whole-manual consistency pass** | ⬜ | Check terminology, page structure, links, workflow continuity, duplicated material and cross-manual implications across all 42 existing pages. |
 | **11** | **Info-Hub cheat sheet** | ⬜ | Build last, once the procedures and Common Tasks routes are stable. |
 | **12** | **Final human acceptance test** | ⬜ | Use the Common Tasks material to configure the Info-Hub on a clean Windows 11 machine and perform the principal tasks end to end. Record and correct anything unclear or missing. |
@@ -192,11 +192,13 @@ This document consolidates the review approach agreed before the review with the
 |---:|---|
 | 101 | Create Common Tasks only after the detailed procedures are stable. They are short end-to-end routes, not a second version of the Technical Manual. |
 | 102 | Use a short purpose statement, a **Procedure at a glance** summary, a compact task table, a completion check and up to three related links. Do not add a separate **If the task does not complete** section; detailed linked pages already provide that guidance. |
-| 103 | Make the task table the main content. Link directly to the relevant detailed procedure, file table or stable page section wherever practical, rather than restating commands, filenames or recovery guidance. |
-| 104 | In each task table, identify the source manual with compact named link-buttons: **Operations** in the established Operations colour, **Technical** in the Technical colour and **Public Methods** in the Public Methods colour. Keep the manual name visible so meaning does not depend on colour. |
+| 103 | Make the task table the main content. Link directly to the relevant detailed procedure, file table or stable page section rather than restating commands, filenames or recovery guidance. Where one detailed page already contains several consecutive actions, summarise them as one informative task row and link to that page. |
+| 104 | In each task table, identify the source manual with compact non-link labels: **Operations** in the established Operations colour, **Technical** in the Technical colour and **Public Methods** in the Public Methods colour. Keep the manual name visible so meaning does not depend on colour, and place the working link in the detailed-guidance column. |
 | 105 | State clearly when a website product refreshes automatically from approved public files during the normal Quarto render. Do not create a manual task for dashboards, tables, Downloads or report listings when no separate user action is required. |
 | 106 | Do not create a general **Diagnose a failed run** walkthrough unless routine experience reveals a small number of recurring, useful recovery routes. Keep current recovery guidance on the detailed procedure and troubleshooting pages. |
 | 107 | Use **Edit and publish website content** as the Stage 9 design pilot. It covers ordinary Quarto editing, local preview and rendering, a development branch, pull-request review, merge, automated deployment and the live-site check. |
+| 108 | Use **Complete the following steps** above the task table. Keep **What this task achieves** and **Before you start** short, direct and in plain language. |
+| 109 | Group the completed walkthroughs as **Analytical and reporting tasks**—CVD event release, mortality release, annual report and other reports—and **Website and maintenance tasks**—new workstation, website content, safe code change and manual checks. |
 
 ## Architecture decision register
 
