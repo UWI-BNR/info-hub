@@ -1,90 +1,124 @@
-﻿---
+---
 manual-review-status: not-reviewed
 title: "Build mortality burden data"
-description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the staging package."
+description: "Mortality Step 3: calculate private mortality counts, distributions and annual rates, then create the data-package folder for review."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Mortality Step 3 reads the classified Step 2 dataset, calculates the approved mortality burden measures and creates the private staging package.
+Mortality Step 3 reads the classified Step 2 data, calculates the approved mortality measures and creates a private data-package folder for Step 4.
 
-It creates exact private values. It does not apply the final public disclosure-control candidate, approve a release, copy files to the public repository or link DCO events.
+It creates exact private values. It does not apply the final disclosure control, approve the data package, publish files or link DCO events.
 
-## Input
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Run Step 3 for the same year and month as Steps 1–2.
+2. Confirm `Completed successfully`.
+3. Check the analysis years and row counts.
+4. Confirm the datasets, supporting information and review files are present.
+:::
 
-`$BNR_DATA_DERIVED/mortality/yYYYY/mMM/bnr_mort_s2_YYYYMM.dta`
+## Before you start
 
-The selected year/month identifies the **data freeze**. Step 3 derives the analysis period separately. The current dashboard series begins in 2010 and Step 3 includes completed calendar years only.
+- Complete Step 2 successfully for the same data release.
+- Confirm the two private population reference files exist.
+- Remember that the selected `YYYY_MM` identifies the data freeze. Step 3 separately derives the completed analysis years, beginning in 2010 and ending before the release year.
 
-## Published reporting structure prepared by Step 3
+Step 3 carries both **Primary** and **Inclusive** mortality definitions. In generated data, `upper_clear_likely_possible` is the internal name for Inclusive; it is not a confidence limit or linkage estimate.
 
-The staged release contains three metric IDs:
+::: {.callout-note collapse="true" title="Input files"}
 
-| Metric | Purpose |
+| File | What Step 3 uses or checks |
 |---|---|
-| `MORT-BURDEN-001` | Mortality counts and approved rolling-comparator rows |
-| `MORT-BURDEN-002` | Annual percentage distributions |
-| `MORT-RATE-001` | Annual crude and directly age-standardised mortality rates per 100,000 |
+| `$BNR_DATA_DERIVED/mortality/yYYYY/mMM/bnr_mort_s2_YYYYMM.dta` | Classified private mortality data from Step 2. |
+| `$BNR_PRIVATE/data/reference/population/wpp2024_brb_population_2010_2035_5y.dta` | Approved private Barbados population denominators from UN World Population Prospects 2024. |
+| `$BNR_PRIVATE/data/reference/population/who_world_standard_2000_2025.dta` | Fixed WHO World Standard Population weights used for direct age standardisation. |
 
-Both Primary and Inclusive mortality definitions are carried through the reporting lattice.
+:::
 
-`MORT-RATE-001` is annual only: All CVD, Heart and Stroke; both sexes, women
-and men; and crude/all-age plus directly age-standardised forms. It uses the
-approved private UN WPP 2024 Barbados denominator asset and fixed WHO World
-Standard Population. Step 3 also supplies 95% statistical CIs (Garwood for
-crude rates; Fay-Feuer gamma for ASRs). The dashboard must display supplied
-rows only; it must never calculate a rate or CI.
+::: {.callout-note collapse="true" title="Code files"}
 
-The public monthly scope is deliberately restricted to All CVD, both sexes, all ages and monthly count. Quarterly and annual rows contain the additional approved event-type and sex detail; annual All-CVD rows also contain the approved broad age groups.
+| File | How it is used |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s3_burden.do` | Main Step 3 controller; run directly by the menu, dialog or command. |
+| `scripts/stata/mortality/bnr_mort_s3_calc.do` | Calculates the mortality reporting rows automatically. |
+| `scripts/stata/mortality/bnr_mort_construct_rates.do` | Calculates annual crude and directly age-standardised rates automatically. |
+| `scripts/stata/mortality/bnr_mort_s3_stage.do` | Checks the calculated data and creates the Step 3 package automatically. |
+| `scripts/stata/dialogs/bnr_mort_s3_burden.dlg` | Stata dialog for the year, month and replacement choice. |
+| `scripts/stata/menu/bnr_menu.do` | Adds Step 3 to the BNR Stata menu. |
+
+:::
+
+::: {.callout-note collapse="true" title="Output files"}
+
+Step 3 creates the private folder `$BNR_STAGING/mortality/burden/mort_YYYY_MM/`.
+
+| File | What it contains or what to check |
+|---|---|
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` | Exact private mortality measures labelled with the selected data release; Stata format. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.csv` | CSV copy of the exact data-release measures. |
+| `datasets/mort_burden_metrics_current.dta` | Exact private measures using the stable filename; Stata format. |
+| `datasets/mort_burden_metrics_current.csv` | CSV copy using the stable filename read by later processes. |
+| `metadata/mort_burden_package.yml` | Generated description of the package, reporting scope and source. |
+| `review/mort_burden_qa_mort_YYYY_MM.csv` | Results of the automated calculation and package checks. `qa` means quality assurance. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` | Private worklist used when Step 4 applies disclosure control. |
+| `review/mort_burden_suppression_review_mort_YYYY_MM.xlsx` | Spreadsheet copy of the same Step 3 worklist. This is not the Step 4 human-review workbook. |
+| `readme.txt` | Short private guide to the package. |
+| `$BNR_PRIVATE_LOGS/bnr_mort_s3_burden_mort_YYYY_MM.log` | Private run log. |
+
+Do not edit any generated package file.
+
+:::
+
+## Measures prepared by Step 3
+
+| Metric | What it contains |
+|---|---|
+| `MORT-BURDEN-001` | Mortality counts and approved rolling-comparison rows. |
+| `MORT-BURDEN-002` | Annual percentage distributions. |
+| `MORT-RATE-001` | Annual crude and directly age-standardised mortality rates per 100,000. |
+
+Annual rates cover All CVD, Heart and Stroke; both sexes, women and men; and crude and directly age-standardised forms. Step 3 supplies 95% confidence intervals: exact Poisson/Garwood intervals for crude rates and Fay–Feuer gamma intervals for age-standardised rates. The dashboard displays these supplied rows and must not recalculate rates or intervals.
+
+The proposed public monthly scope is All CVD, both sexes, all ages and monthly count. Quarterly and annual rows include the additional approved event-type and sex detail; annual All-CVD rows also include the approved broad age groups.
 
 ## Run Step 3
 
 1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 3: Build mortality burden data**.
-2. Enter the Step 2 release year and month.
-3. Leave replacement unticked for a first run.
-4. Run the step.
-5. Confirm the summary reports `Completed successfully`.
-6. Check the reported analysis years and metric row counts.
-7. Open the staging package and confirm the datasets, metadata and review material are present.
-8. Do not treat the suppression-review workbook as the Step 4 human review package. Step 4 owns the public-candidate disclosure control and review materials.
+2. Enter the same year and month used in Steps 1–2, leave replacement unticked for the first run, and select **Run Step 3**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
 
-## Outputs
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 7
+   ```
 
-The package is staged under:
+4. For a deliberate rebuild, enter the complete replacement command:
 
-`$BNR_STAGING/mortality/burden/mort_YYYY_MM/`
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 7 replace
+   ```
 
-| Output | Purpose |
+5. In `MORTALITY STEP 3: OPERATIONAL RUN SUMMARY`, confirm `Run status: Completed successfully`.
+6. Check the reported first and final analysis years and the metric row counts.
+7. Confirm all files listed above are present in `mort_YYYY_MM/`.
+8. Continue to Step 4. Do not treat the Step 3 suppression-review spreadsheet as the completed human review.
+
+::: {.callout-note collapse="true" title="If Step 3 does not complete"}
+
+| Situation | Action |
 |---|---|
-| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` and `.csv` | Exact private release-stamped burden data. |
-| `datasets/mort_burden_metrics_current.dta` and `.csv` | Exact private stable-name copies for the selected staging package. |
-| `metadata/mort_burden_package.yml` | Package identity, scope and provenance. |
-| `review/mort_burden_qa_mort_YYYY_MM.csv` | Automated calculation/staging QA. |
-| `review/mort_burden_suppression_review_mort_YYYY_MM.csv` and `.xlsx` | Step 3 disclosure worklist feeding Step 4. |
-| `readme.txt` | Short private package guide. |
-| Step 3 log | Private operational record under `$BNR_PRIVATE_LOGS/`. |
+| The matching Step 2 DTA is missing | Complete Steps 1–2 for the same year and month; do not substitute a differently dated file. |
+| A population reference file is missing or fails its checks | Restore the approved reference file. Do not replace it with an unapproved download or edit generated rates. |
+| Existing Step 3 files block an authorised rebuild | Use the complete `replace` command. Step 3 removes any earlier `public_ready` approval for that data release, so Step 4 review and Step 5 approval must be repeated. |
 
-Do not edit any generated package file.
+Read `$BNR_PRIVATE_LOGS/bnr_mort_s3_burden_mort_YYYY_MM.log` before acting. For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
 
-Step 4 applies rate protection only as a secondary companion to a protected
-matching annual death count. Rate rows do not create additional count
-suppression decisions.
+:::
 
-## Command-line equivalent
+## Related procedures
 
-```stata
-do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 7
-```
-
-Use `replace` only for a deliberate rebuild. The optional `debug` word exposes detailed child-script output for development/troubleshooting and is not needed in routine use.
-
-## If Step 3 does not complete
-
-Check that the matching Step 2 DTA exists and that the selected release produces the expected completed-year analysis range. Read the private log before authorising replacement.
-
+- [Mortality measures](../../../methods/measures/mortality.qmd)
+- [Run the CVD mortality data release](../../../operations/post-redcap/mortality-workflow.qmd)

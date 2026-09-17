@@ -1,93 +1,145 @@
-﻿---
+---
 manual-review-status: not-reviewed
 title: "Publish approved mortality outputs"
-description: "Mortality Step 6: verify and promote the exact ten-file mortality payload approved in Step 5."
+description: "Mortality Step 6: verify and publish the exact ten mortality files approved in Step 5."
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
 Technical Manual
 :::
 
----
-
 ## What this step does
 
-Mortality Step 6 validates `approval.yml`, `public_manifest.csv` and every approved payload fingerprint before copying the exact ten approved files across the private/public boundary.
+Mortality Step 6 checks `approval.yml`, `public_manifest.csv` and every approved file before copying the exact ten authorised files across the private/public boundary.
 
-It then creates the release ZIP and catalogue record and refreshes the website mirror from the authoritative public package.
+It creates the data-release ZIP and catalogue record, then refreshes the website copy from the official public analytical package. It does not rebuild the central Downloads catalogue, render Quarto or deploy the website.
 
-Step 6 does not calculate metrics, apply suppression, approve results, rebuild the central Downloads catalogue, render Quarto, commit Git changes or deploy the site.
+::: {.callout-note appearance="simple" title="Procedure at a glance"}
+1. Run Step 6 for the approved year and month.
+2. Confirm `PUBLISHED` and `Verification: PASSED`.
+3. Check the official public analytical package and website copy.
+4. Rebuild the Downloads catalogue, render the site locally and review it.
+5. Deploy the approved website changes through GitHub.
+:::
 
-## Inputs
+## Before you start
 
-Step 6 reads:
+- Complete Step 5 successfully for the same data release.
+- Confirm `approval.yml` says `promotion_status: pending_step_6`.
+- Do not edit `approval.yml`, `public_manifest.csv` or any of the ten authorised files.
+- Leave replacement unticked unless a deliberate republication has been authorised.
 
-`$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`
+::: {.callout-note collapse="true" title="Input files"}
 
-including:
+Step 6 reads `$BNR_STAGING/mortality/burden/mort_YYYY_MM/public_ready/`.
 
-- `approval.yml`;
-- `public_manifest.csv`; and
-- the ten approved dataset/metadata payload files.
+| File | What Step 6 uses or checks |
+|---|---|
+| `approval.yml` | Private approval record: identity, authorised approver, five human confirmations and the approved file-list checksum. |
+| `public_manifest.csv` | Private generated list of the exact ten files authorised for publication, with sizes and checksums. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` | Approved data-release mortality measures in Stata format. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Approved CSV copy of the data-release measures. |
+| `datasets/mort_burden_metrics_current.dta` | Approved stable-name measures in Stata format. |
+| `datasets/mort_burden_metrics_current.csv` | Approved stable-name CSV copy. |
+| `datasets/mort_monthly_reference_2015_2019.dta` | Approved fixed monthly reference in Stata format. |
+| `datasets/mort_monthly_reference_2015_2019.csv` | Approved CSV copy of the fixed monthly reference. |
+| `metadata/mort_burden_metrics_mort_YYYY_MM.yml` | Approved description of the data-release measures. |
+| `metadata/mort_burden_metrics_current.yml` | Approved description of the stable-name measures. |
+| `metadata/mort_burden_package.yml` | Approved description of the complete data package. |
+| `metadata/mort_monthly_reference_2015_2019.yml` | Approved description of the fixed monthly reference. |
 
-## Run Step 6
+Only the ten files listed in `public_manifest.csv` may cross the private/public boundary. The approval record, file list and private review evidence remain private.
+
+:::
+
+::: {.callout-note collapse="true" title="Code files"}
+
+| File | How it is used |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s6_publish.do` | Main Step 6 controller; verifies and publishes the approved files. |
+| `scripts/stata/dialogs/bnr_mort_s6_publish.dlg` | Stata dialog for the year, month and republication choice. |
+| `scripts/stata/menu/bnr_menu.do` | Adds Step 6 to the BNR Stata menu. |
+| `site/scripts/build_download_catalogue.py` | Run after Step 6 to rebuild the website’s central Downloads catalogue. |
+
+:::
+
+::: {.callout-note collapse="true" title="Output files"}
+
+The official public analytical folder is `$BNR_PUBLIC/metrics/mortality/burden/`. The matching public website copy is `$BNR_REPO/site/downloads/files/metrics/mortality/burden/`.
+
+| File | What Step 6 creates or refreshes |
+|---|---|
+| `datasets/mort_burden_metrics_mort_YYYY_MM.dta` | Official public data-release measures in Stata format. |
+| `datasets/mort_burden_metrics_mort_YYYY_MM.csv` | Official public CSV copy of the data-release measures. |
+| `datasets/mort_burden_metrics_current.dta` | Official public stable-name measures in Stata format. |
+| `datasets/mort_burden_metrics_current.csv` | Official public stable-name CSV used by the dashboard. |
+| `datasets/mort_monthly_reference_2015_2019.dta` | Official public fixed monthly reference in Stata format. |
+| `datasets/mort_monthly_reference_2015_2019.csv` | Official public fixed-reference CSV used by the dashboard. |
+| `metadata/mort_burden_metrics_mort_YYYY_MM.yml` | Public description of the data-release measures. |
+| `metadata/mort_burden_metrics_current.yml` | Public description of the stable-name measures. |
+| `metadata/mort_burden_package.yml` | Public description of the complete data package. |
+| `metadata/mort_monthly_reference_2015_2019.yml` | Public description of the fixed monthly reference. |
+| `bnr_mort_burden_mort_YYYY_MM.zip` | Download package containing the same ten approved files. |
+| `catalogue/mort_YYYY_MM.yml` | Data-release record read by the central Downloads catalogue builder. |
+| `$BNR_PRIVATE_LOGS/bnr_mort_s6_publish_mort_YYYY_MM.log` | Private publication log. |
+
+The stable dashboard data file is `datasets/mort_burden_metrics_current.csv`. The fixed reference is `datasets/mort_monthly_reference_2015_2019.csv`.
+
+:::
+
+## Publish the approved files
 
 1. In Stata, choose **User > BNR > Update CVD mortality dashboard > Step 6: Publish approved mortality outputs**.
-2. Enter the approved release year and month.
-3. Leave republication/replacement unticked for a first publication.
-4. Run Step 6.
-5. Confirm `Run status: PUBLISHED` and `Verification: PASSED`.
-6. Inspect the authoritative public package.
-7. Inspect the website mirror.
-8. Open the release ZIP and confirm it contains the expected ten approved payload files.
-9. Confirm the catalogue record identifies the selected release.
-10. Confirm `approval.yml`, `public_manifest.csv` and private review files were **not** published.
+2. Enter the approved year and month, leave republication/replacement unticked for a first publication, and select **Publish Step 6**.
+3. Alternatively, enter the complete routine command in the **Stata command window**:
 
-## Outputs
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 7
+   ```
 
-Authoritative public location:
+4. For a deliberate authorised republication, enter the complete replacement command:
 
-`$BNR_PUBLIC/metrics/mortality/burden/`
+   ```stata
+   do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 7 replace
+   ```
 
-Website mirror:
+5. In `MORTALITY STEP 6: OPERATIONAL RUN SUMMARY`, confirm `Run status: PUBLISHED` and `Verification: PASSED`.
+6. Check the official public analytical folder contains the ten approved files, ZIP and `catalogue/mort_YYYY_MM.yml`.
+7. Check the website folder contains matching copies.
+8. Open the ZIP and confirm it contains the ten approved dataset and metadata files.
+9. Confirm `approval.yml`, `public_manifest.csv` and all private review files are absent from both public locations.
 
-`$BNR_REPO/site/downloads/files/metrics/mortality/burden/`
+## Update and check the website
 
-The public structure contains:
+Step 6 completes analytical publication only. It does not make the website change live.
 
-```text
-datasets/
-metadata/
-catalogue/
-bnr_mort_burden_mort_YYYY_MM.zip
-```
+1. In VS Code, open **Terminal > New Terminal**. Confirm the prompt is a PowerShell terminal at the repository root.
+2. Run the Downloads catalogue builder:
 
-The stable dashboard data file is:
+   ```powershell
+   python site/scripts/build_download_catalogue.py
+   ```
 
-`datasets/mort_burden_metrics_current.csv`
+3. Confirm the command completes without an error and review the resulting Git changes.
+4. Use the normal local Quarto route to inspect the mortality dashboard and Downloads page, then complete a full local render.
+5. Commit the approved changes on the development branch, push that branch and deploy through the normal GitHub pull-request process.
 
-The fixed monthly reference is:
+A successful Step 6 publication does not mean the website has been deployed. A successful local render also does not make the change live.
 
-`datasets/mort_monthly_reference_2015_2019.csv`
+::: {.callout-note collapse="true" title="If Step 6 does not complete"}
 
-## Command-line equivalent
+| Situation | Action |
+|---|---|
+| Approval, file-list or checksum validation fails | Return to Step 5 or the earliest changed workflow step. Do not alter the private control files. |
+| Publication stops after some copies were made | Inspect both the official public folder and website copy before rerunning. Use `replace` only after deliberate republication is authorised. |
+| The catalogue or website check fails after `PUBLISHED` | Keep the analytical publication intact. Correct the website-side problem, rerun the catalogue builder or render, and do not recalculate the mortality data package. |
 
-```stata
-do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 7
-```
+Never repair a partial publication by hand-copying individual files. For other problems, see [Troubleshoot the workflow](../../maintenance/troubleshooting.qmd).
 
-Add `replace` only for deliberate republication of an existing release.
+:::
 
-## After Step 6
+## Related procedures
 
-The analytical publication is complete, but the website is not necessarily deployed.
-
-Run the Downloads catalogue builder through the normal site-render pathway, inspect the mortality dashboard and Downloads page, complete a full local Quarto render, review Git changes and then deploy through the normal website procedure.
-
-See [Refresh the CVD dashboards](../reporting/dashboard-regeneration.qmd) and [Render and publish the website](../../website/render-publish.qmd).
-
-## If Step 6 does not complete
-
-A filesystem failure may occur after an earlier copy has succeeded. Inspect both the authoritative public folder and website mirror before rerunning.
-
-Do not repair a partial publication by hand-copying individual files.
+- [Refresh the CVD dashboards](../reporting/dashboard-regeneration.qmd)
+- [Render and publish the website](../../website/render-publish.qmd)
+- [Run the CVD mortality data release](../../../operations/post-redcap/mortality-workflow.qmd)
