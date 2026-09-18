@@ -108,8 +108,8 @@ Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-ch
 Technical Manual,"Files, data releases and versions",site/technical/maintenance/files-releases-versions.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Reference,site/technical/reference/section-index.qmd,reviewed-by-irh,Page YAML
-Technical Manual,CVD death-classification rules,site/technical/reference/cvd-death-classification-rules.qmd,not-reviewed,Page YAML
-Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,not-reviewed,Page YAML
+Technical Manual,CVD death-classification rules,site/technical/reference/cvd-death-classification-rules.qmd,reviewed-by-irh,Page YAML
+Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Disclosure-control rules,site/technical/reference/disclosure-control-rules.qmd,not-reviewed,Page YAML
 Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
 Technical Manual,Validation of BNR CVD suppression rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML

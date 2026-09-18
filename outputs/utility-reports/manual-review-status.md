@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 15 | 36 | 0 | 0 | 51 |
+| Technical Manual | 0 | 13 | 38 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -131,8 +131,8 @@
 | Files, data releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Reviewed by IRH | Page YAML |
 | Fix common problems | `site/technical/maintenance/troubleshooting.qmd` | Reviewed by IRH | Page YAML |
 | Reference | `site/technical/reference/section-index.qmd` | Reviewed by IRH | Page YAML |
-| CVD death-classification rules | `site/technical/reference/cvd-death-classification-rules.qmd` | Not reviewed | Page YAML |
-| CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Not reviewed | Page YAML |
+| CVD death-classification rules | `site/technical/reference/cvd-death-classification-rules.qmd` | Reviewed by IRH | Page YAML |
+| CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Reviewed by IRH | Page YAML |
 | Disclosure-control rules | `site/technical/reference/disclosure-control-rules.qmd` | Not reviewed | Page YAML |
 | System reference | `site/technical/reference/index.qmd` | Not reviewed | Page YAML |
 | Validation of BNR CVD suppression rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |
