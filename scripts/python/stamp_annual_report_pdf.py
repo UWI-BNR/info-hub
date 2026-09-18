@@ -23,7 +23,9 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.annotations import Link
 from reportlab.lib.colors import Color
 from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
 
@@ -32,6 +34,10 @@ TEAL = Color(4 / 255, 81 / 255, 116 / 255)
 MUTED = Color(102 / 255, 102 / 255, 102 / 255)
 RULE = Color(222 / 255, 226 / 255, 230 / 255)
 WHITE = Color(1, 1, 1)
+TOC_FONT_REGULAR = "BNR-Montserrat"
+TOC_FONT_MEDIUM = "BNR-Montserrat-Medium"
+TOC_FONT_DIR = Path(__file__).resolve().parent / "fonts"
+_toc_fonts_registered = False
 
 
 @dataclass(frozen=True)
@@ -42,6 +48,7 @@ class TocEntry:
     title: str
     anchor_text: str
     required_full_report: bool
+    destination: str = "anchor"
     target_page_index: int | None = None
 
 
@@ -84,7 +91,8 @@ def parse_args() -> argparse.Namespace:
         action="append",
         type=Path,
         help=(
-            "contents CSV with level, title, anchor_text and required_full_report; "
+            "contents CSV with level, title, anchor_text, required_full_report "
+            "and optional destination; "
             "may be supplied once for the standard report and once for the "
             "year-specific Special chapter"
         ),
@@ -177,6 +185,24 @@ def parse_required(value: str, row_number: int) -> bool:
     )
 
 
+def register_toc_fonts() -> None:
+    """Register the report's Montserrat fonts used on the generated TOC."""
+    global _toc_fonts_registered
+    if _toc_fonts_registered:
+        return
+    regular = TOC_FONT_DIR / "Montserrat-Regular.ttf"
+    medium = TOC_FONT_DIR / "Montserrat-Medium.ttf"
+    missing = [str(path) for path in (regular, medium) if not path.is_file()]
+    if missing:
+        raise FileNotFoundError(
+            "The generated contents page requires these font files: "
+            + ", ".join(missing)
+        )
+    pdfmetrics.registerFont(TTFont(TOC_FONT_REGULAR, str(regular)))
+    pdfmetrics.registerFont(TTFont(TOC_FONT_MEDIUM, str(medium)))
+    _toc_fonts_registered = True
+
+
 def substitute_report_year(value: str, report_year: str) -> str:
     try:
         return value.format(report_year=report_year)
@@ -205,9 +231,18 @@ def read_toc_spec(path: Path, report_year: str) -> list[TocEntry]:
                 raise ValueError(f"Contents row {row_number}: level must be 1 or 2.")
             title = substitute_report_year(row["title"].strip(), report_year)
             anchor = substitute_report_year(row["anchor_text"].strip(), report_year)
-            if not title or not anchor:
+            destination = (row.get("destination") or "anchor").strip().casefold()
+            if destination not in {"anchor", "penultimate"}:
+                raise ValueError(
+                    f"Contents row {row_number}: destination must be anchor or penultimate."
+                )
+            if destination == "anchor" and (not title or not anchor):
                 raise ValueError(
                     f"Contents row {row_number}: title and anchor_text cannot be empty."
+                )
+            if destination == "penultimate" and not title:
+                raise ValueError(
+                    f"Contents row {row_number}: title cannot be empty."
                 )
             entries.append(
                 TocEntry(
@@ -217,6 +252,7 @@ def read_toc_spec(path: Path, report_year: str) -> list[TocEntry]:
                     required_full_report=parse_required(
                         row["required_full_report"], row_number
                     ),
+                    destination=destination,
                 )
             )
     if not entries:
@@ -275,7 +311,12 @@ def locate_toc_entries(
     searchable_text[placeholder_page_index] = ()
 
     for entry in entries:
-        target = find_unique_page(searchable_text, entry.anchor_text)
+        if entry.destination == "penultimate":
+            target = len(page_text) - 2
+            if target < 0 or target == placeholder_page_index:
+                target = None
+        else:
+            target = find_unique_page(searchable_text, entry.anchor_text)
         if entry.level == 1:
             current_level_one_present = target is not None
         elif not current_level_one_present:
@@ -296,6 +337,7 @@ def locate_toc_entries(
                 title=entry.title,
                 anchor_text=entry.anchor_text,
                 required_full_report=entry.required_full_report,
+                destination=entry.destination,
                 target_page_index=target,
             )
         )
@@ -319,6 +361,7 @@ def render_toc_page(
     skipped_pages: int,
 ) -> TocLayout:
     """Render one restrained contents page and capture its link areas."""
+    register_toc_fonts()
     packet = BytesIO()
     page_canvas = canvas.Canvas(packet, pagesize=(width, height))
     left = 47.0
@@ -326,7 +369,7 @@ def render_toc_page(
     y = height - 78.0
 
     page_canvas.setFillColor(INK)
-    page_canvas.setFont("Helvetica-Bold", 19)
+    page_canvas.setFont(TOC_FONT_MEDIUM, 19)
     page_canvas.drawString(left, y, "Contents")
     y -= 28
     page_canvas.setStrokeColor(TEAL)
@@ -340,10 +383,10 @@ def render_toc_page(
             raise RuntimeError("An unresolved contents entry reached the renderer.")
 
         if entry.level == 1:
-            font_name, font_size = "Helvetica-Bold", 10.2
+            font_name, font_size = TOC_FONT_MEDIUM, 10.2
             title_x, row_height, fill = left, 25, INK
         else:
-            font_name, font_size = "Helvetica", 9.0
+            font_name, font_size = TOC_FONT_REGULAR, 9.0
             title_x, row_height, fill = left + 18, 20, MUTED
 
         if y - row_height < 50:

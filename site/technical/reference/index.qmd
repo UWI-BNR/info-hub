@@ -14,13 +14,12 @@ Use this page to find the code behind a BNR workflow or website function. It is
 an inventory, not a procedure: follow the linked workflow pages when you need
 to run, review, approve or publish work.
 
-This inventory reflects branch `cvd-workflow-hardening` at commit
-`a40055288cfa34ef328d39fe8c080425091a80c1`.
+This inventory reflects branch `main` at commit `abf386d80690bd9e65a2a6c8cd44decb8d023901`.
 
 ## What is included
 
 This reference identifies **160 unique tracked files** at commit
-`a40055288cfa34ef328d39fe8c080425091a80c1`.
+`abf386d80690bd9e65a2a6c8cd44decb8d023901`.
 
 A file may appear in more than one table when it supports several parts of the
 system. The counts below use each repository path only once.

@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_2025_focus.do
-VERSION: 1.4.0 (6 September 2026)
+VERSION: 1.4.1 (18 September 2026)
 PURPOSE: Compose the 2025 year-specific Special chapter.
 
 CHANGE 1.3.0:
@@ -17,6 +17,12 @@ CHANGE 1.4.0:
   - Emphasise separation of data management, analytics and publication, rapid
     digital reporting, reproducibility and plain-language disclosure protection.
   - Align delivery wording with the December 2026 timeline position.
+
+CHANGE 1.4.1:
+  - Move the dated programme position to 30 November 2026 without changing the
+    established timeline design or the wider Special-chapter structure.
+  - Draw the position date from the year-specific interpretation file.
+  - Correct minor spacing and copy defects in the current-position narrative.
 
 SPECIAL CHAPTER:
   The BNR Refit - strengthening cardiovascular surveillance from data capture
@@ -96,10 +102,14 @@ if "`bnr_area_governance'" == ""   local bnr_area_governance   "169 111 0"
 if "`bnr_area_reporting'" == ""    local bnr_area_reporting    "47 126 96"
 if "`font_title'" == ""    local font_title    "Montserrat Medium"
 if "`font_body'" == ""     local font_body     "Montserrat"
+if "`refit_position_date'" == "" {
+    display as error "The 2025 Special chapter requires local refit_position_date."
+    exit 198
+}
 
 * These are public, static report assets. They contain no confidential data.
 * Replace the files only after confirming their dates and status labels.
-local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-12_web.png"
+local refit_timeline "$BNR_REPO/scripts/stata/reporting/assets/bnr_refit_timeline_2026-11_web.png"
 local refit_system "$BNR_REPO/scripts/stata/reporting/assets/bnr_reporting_system_2026-12_web.png"
 
 foreach required_asset in "`refit_timeline'" "`refit_system'" {
@@ -177,7 +187,7 @@ putpdf table refit_scope(4,5) = ("Connected dashboards, monthly updates, annual 
 putpdf paragraph
 putpdf table refit_period = (2,1), width(100%) border(all, nil)
 putpdf table refit_period(1,1) = ("THE REFIT PERIOD"), bold font("`font_title'", 8.2, "`bnr_teal'")
-putpdf table refit_period(2,1) = ("The main refit programme runs from April 2026 to March 2027. As of December 2026, core data, event, mortality and dashboard workflows are operating. Report workflows, final testing, manuals and handover continue into early 2027; later analytical modules remain future work."), font("`font_body'", 7.4, "`bnr_ink'")
+putpdf table refit_period(2,1) = ("The main refit programme runs from April 2026 to March 2027. As of `refit_position_date', core data, event, mortality and dashboard workflows are operating. Report workflows, final testing, manuals and handover continue into early 2027; later analytical modules remain future work."), font("`font_body'", 7.4, "`bnr_ink'")
 putpdf table refit_period(.,.), bgcolor("`bnr_white'") border(top, single, "`bnr_teal'")
 
 
@@ -343,7 +353,7 @@ putpdf table refit_response(8/9,1), bold font("`font_title'", 7.1, "`bnr_area_go
 putpdf table refit_response(10/11,1), bold font("`font_title'", 7.1, "`bnr_area_reporting'") halign(center)
 
 putpdf paragraph
-putpdf text ("The overall redesign is structural, from the ground-up. The new system replaces the repeated manual preparation of  separate (hard-copy only) reports with one controlled route from managed data to approved public information."), font("`font_title'", 8.2, "`bnr_ink'")
+putpdf text ("The overall redesign is structural, from the ground up. The new system replaces the repeated manual preparation of separate hard-copy reports with one controlled route from managed data to approved public information."), font("`font_title'", 8.2, "`bnr_ink'")
 
 
 
@@ -432,14 +442,14 @@ putpdf table timeline_guide(1,1) = ("WHAT HAS CHANGED")
 putpdf table timeline_guide(1,2) = ("WHAT IS OPERATING")
 putpdf table timeline_guide(1,3) = ("WHAT COMES NEXT")
 putpdf table timeline_guide(2,1) = ("Managed data now feed separate, controlled analytics and publication workflows.")
-putpdf table timeline_guide(2,2) = ("Core event, mortality, DCO and dashboard outputs were operating by December 2026.")
+putpdf table timeline_guide(2,2) = ("Core event, mortality, DCO and dashboard outputs were operating by `refit_position_date'.")
 putpdf table timeline_guide(2,3) = ("Annual and one-off reporting, testing and manuals complete in early 2027; later analytics remain future work.")
 putpdf table timeline_guide(1,.), bold font("`font_title'", 6.5, "`bnr_teal'") border(top, single, "`bnr_teal'")
 putpdf table timeline_guide(2,.), font("`font_body'", 6.2, "`bnr_muted'")
 putpdf table refit_timeline_fig = (1,1), width(80%) border(all, nil) halign(center)
 putpdf table refit_timeline_fig(1,1) = image("`refit_timeline'"), halign(center)
 putpdf paragraph
-putpdf text ("Programme view at December 2026. The annual report workflow is scheduled for January 2027 and the one-off report workflow for February 2027. Testing, manuals and handover continue to March."), italic font("`font_body'", 7.2, "`bnr_muted'")
+putpdf text ("Programme view at `refit_position_date'. The annual report workflow is scheduled for January 2027 and the one-off report workflow for February 2027. Testing, manuals and handover continue to March."), italic font("`font_body'", 7.2, "`bnr_muted'")
 
 * -----------------------------------------------------------------------------
 * 6. Landscape figure - the reporting system
@@ -488,7 +498,7 @@ putpdf sectionbreak, pagesize(A4) margin(top, 0.55) margin(bottom, 0.55) margin(
 putpdf paragraph
 putpdf text ("The BNR refit: current progress"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("The core data, event, mortality, DCO and dashboard architecture is operating. The annual and one-off report workflows will be completedin early 2027, and testing, manuals and handover continue to March. Later analytical modules remain ongoing work  outside this delivery timetable."), font("`font_body'", 8.5, "`bnr_ink'")
+putpdf text ("The core data, event, mortality, DCO and dashboard architecture is operating. The annual and one-off report workflows will be completed in early 2027, and testing, manuals and handover continue to March. Later analytical modules remain ongoing work outside this delivery timetable."), font("`font_body'", 8.5, "`bnr_ink'")
 
 
 
