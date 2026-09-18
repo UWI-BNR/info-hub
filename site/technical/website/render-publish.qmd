@@ -1,6 +1,6 @@
 ---
 title: "Render and publish the website"
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 description: "Preview, review and deploy a public Info-Hub website change through GitHub."
 ---
 
@@ -12,7 +12,9 @@ Technical Manual
 
 Use this page to preview, review and deploy a public Info-Hub website change.
 
-The sequence is: edit locally → render locally → review the exact changes → push a development branch → merge it into `main` on GitHub → check the deployed website.
+The sequence is: 
+
+> edit locally → render locally → review the exact changes → push a development branch → merge it into `main` on GitHub → check the deployed website.
 
 A successful Stata publication does not deploy the website. A successful local Quarto render does not make a change live.
 
@@ -35,9 +37,7 @@ Confirm that the workstation is set up, the required analytical data package or 
 
 | File or source | What to check |
 |---|---|
-| Intended changed QMD, configuration or public asset | It is the correct public source file and belongs to the task. |
-| Approved files in `site/downloads/` or another website mirror | If the task includes analytical content, only approved public copies are present. |
-| VS Code Source Control changes list | No private data, credentials, local configuration or unrelated files are proposed for commit. |
+| Intended changed QMD, configuration or public asset | It is the correct and approved public source for publication. These show up as files under `source control` in *VS Code*|
 :::
 
 ::: {.callout-note collapse="true"}
@@ -56,7 +56,7 @@ Confirm that the workstation is set up, the required analytical data package or 
 
 | File or folder | Result |
 |---|---|
-| `site/_site/` | Generated local website. Review it but do not edit or commit it. |
+| `site/_site/` | Generated local website. You can review it, but do not edit. |
 | `site/downloads/downloads.yml` | Generated central Downloads catalogue. It changes only when the approved catalogue records change; do not edit it by hand. |
 :::
 
@@ -68,7 +68,7 @@ At the repository root, double-click:
 
 It checks that the repository, site configuration and local Python virtual environment exist; opens the repository in VS Code; starts a **BNR info-hub Quarto Preview** Command Prompt; and opens `http://127.0.0.1:4200/` in Firefox.
 
-Keep the preview Command Prompt open while editing. Closing it stops the preview. The launcher does not choose a branch, update Git, commit, publish or deploy anything.
+Keep the preview Command Prompt window open while editing. Closing it stops the preview. The launcher does not choose a branch, update Git, commit, publish or deploy anything.
 
 ## Step 2: Update `main` and create a development branch
 
@@ -128,10 +128,10 @@ git diff
 
 In VS Code Source Control:
 
-1. Click `+` beside each intended file.
+1. Click `+` beside each intended file. You can commit all files in one go, using the `+` at the top of the file list.
 2. Enter a short commit message.
 3. Select **Commit**.
-4. Select **Publish Branch** or **Push**.
+4. Select **Push** or **Publish Branch**.
 
 The branch is now on GitHub, but the public website has not changed.
 

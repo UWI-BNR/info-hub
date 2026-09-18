@@ -1,7 +1,7 @@
 ---
 title: "CVD death-classification rules"
 description: "Check how death-certificate text is classified as Heart, Stroke or combined."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -11,16 +11,15 @@ Technical Manual
 ## What this page is for
 
 Use this page to check why death-certificate text received a **BNR-Heart**,
-**BNR-Stroke** or combined **BNR-Heart-or-Stroke** classification. To run the
-step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
+**BNR-Stroke** or combined **BNR-Heart-or-Stroke** classification. The mortality workflow step that performs this classification is described here, [Classify CVD deaths](../workflows/mortality/classify.qmd).
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
 
 - The classifier is a fixed, deterministic approximation. It is not formal ICD-10 underlying-cause coding.
-- Part I is the stated causal sequence. Part II contains other contributing conditions.
+- Part I of the death certificate is the stated causal sequence. Part II contains other contributing conditions.
 - Evidence is assigned as **Clear**, **Likely**, **Possible**, **Mention only** or **No evidence**.
-- The **Primary** scenario includes Clear and Likely evidence. The **Inclusive** scenario also includes Possible evidence.
+- Two broad classification scenarios are used on the Info-Hub website. The **Primary** scenario includes Clear and Likely evidence. The **Inclusive** scenario also includes Possible evidence.
 - Heart and Stroke are classified independently before the combined endpoint and reporting family are derived.
 :::
 
@@ -31,7 +30,7 @@ step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
 | Method | Fixed text and certificate-position rules; no machine learning, fuzzy matching or manual editing of generated results. |
 | Part I | The sequence of conditions reported as leading to death. The lowest used line is important, but it is not accepted automatically when the sequence or source structure is unclear. |
 | Part II | Other contributing conditions outside the stated Part I sequence. A target condition found only here normally remains **Mention only**. |
-| Source structure | `1` means certificate lines are preserved; `2` means known BNR-concatenated text; `3` means uncertain structure. A result that would otherwise be Clear is capped at Likely when the line structure is not preserved. |
+| Source structure | `1` means certificate lines are preserved in REDCap; `2` means known the mortality causes have been concatenated historically; `3` means uncertain structure. A result that would otherwise be Clear is capped at Likely when the death certificate line structure is not preserved. |
 | Combined endpoint | BNR-Heart or BNR-Stroke evidence. This is **not** a measure of all cardiovascular mortality. |
 | Human review | The code creates private review evidence. Any future adjudication belongs in a controlled source-data process, not an edit to the classified dataset. |
 
@@ -45,8 +44,8 @@ step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
 | Mention only | Context, history or Part-II-only evidence that does not support the approximate underlying cause. |
 | No evidence | No approved qualifying evidence was detected. |
 | Conservative | Clear only. |
-| Primary | Clear + Likely. This is the principal reporting definition. |
-| Inclusive | Clear + Likely + Possible. This is a broader sensitivity definition, not a confidence limit. |
+| **Primary** | Clear + Likely. This is the principal reporting definition. |
+| **Inclusive** | Clear + Likely + Possible. This is a broader sensitivity definition, not a confidence limit. |
 
 ## BNR-Heart rules
 
@@ -99,10 +98,20 @@ step, follow [Classify CVD deaths](../workflows/mortality/classify.qmd).
 
 ## Combined endpoint and reporting family
 
-1. The combined evidence class is the stronger of the Heart and Stroke classes.
-2. An explicit Heart-or-Stroke alternative is treated as Clear combined evidence, then capped at Likely if source line structure is not preserved.
-3. The same Clear/Likely/Possible scenario thresholds are applied to the combined endpoint.
-4. Within each scenario, a death is reported as Heart when only Heart qualifies, Stroke when only Stroke qualifies, and **Heart/Stroke unresolved** when neither family can be selected uniquely.
+1. For the combined Heart-or-Stroke endpoint, use the stronger of the two
+   separate assessments. For example, Clear Heart evidence and Possible Stroke
+   evidence give a Clear combined endpoint.
+
+2. If a source record explicitly gives a Heart-or-Stroke alternative, treat it
+   as Clear evidence for the combined endpoint. Reduce this to Likely when the
+   original source-line structure cannot be retained.
+
+3. Apply the same Clear, Likely and Possible thresholds to the combined endpoint
+   as to the separate Heart and Stroke assessments.
+
+4. For reporting, assign the death to Heart when only Heart qualifies, and to
+   Stroke when only Stroke qualifies. Use **Heart/Stroke unresolved** when one
+   reporting family cannot be selected uniquely.
 
 ## Where the rules are implemented
 

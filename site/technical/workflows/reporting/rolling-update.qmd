@@ -1,7 +1,7 @@
 ---
 title: "Build a rolling three-month CVD update"
 description: "Build and review an online rolling update report, covering the latest 3-months."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}

@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Operate the website"
 description: "Render, review and deploy public Info-Hub website changes."
 ---

@@ -1,7 +1,7 @@
 ---
 title: "CVD event–death linkage rules"
 description: "Check how deaths are linked to CVD events and how unresolved deaths are estimated."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -11,20 +11,42 @@ Technical Manual
 ## What this page is for
 
 Use this page to check how a classified CVD death is linked to a hospital event,
-or how unresolved deaths contribute to aggregate estimates. To run the process,
-follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd).
+and how deaths that cannot be linked uniquely contribute to aggregate event
+estimates. The process has two broad procedures:
+
+1. **Link individual records.** The workflow tries to connect each classified
+   CVD death to one person in the hospital-event data. When it finds one unique
+   person, it checks whether a Heart or Stroke event occurred during the 0–27
+   days before death.
+
+2. **Estimate the remaining contribution in aggregate**. A death remains unresolved when the workflow cannot match it reliably to exactly one person in the hospital-event data. This includes deaths with no acceptable person match, more than one possible match, or contradictory identity information. It is different from a directly identified additional DCO: where one person is matched but that person has no qualifying Heart or Stroke event in the 0–27 days before death, the workflow classifies the death directly as an additional DCO. The unresolved group may contain both additional DCOs and deaths whose hospital event could not be linked reliably. The workflow therefore estimates their contribution only within group totals; it never assigns an estimated outcome to an individual death.
+
+The associated CVD event workflow is [Step 4: Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd).
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
 
-- Link people only by the ordered deterministic rules **L01**, **L02** and **L03**.
+**Procedure 1 — link individual records**
+
+- Try the ordered person-linkage rules **L01**, **L02** and **L03**.
 - Accept a match only when exactly one eligible CVD person is found.
-- After a person match, treat a Heart or Stroke event **0–27 days before death** as an already-recorded episode.
-- A matched death with no event in that window is a deterministic additional DCO; an unmatched death remains unresolved.
-- Estimate unresolved deaths only in aggregate. Never assign an estimated result to an individual record.
+- For a matched person, treat a Heart or Stroke event **0–27 days before death**
+  as an already-recorded episode.
+- Treat a matched death with no event in that window as an additional DCO.
+- Leave a death unresolved when one person cannot be identified uniquely.
+
+**Procedure 2 — estimate unresolved deaths in aggregate**
+
+- Use the resolved deaths to estimate what proportion of unresolved deaths are
+  likely to represent additional DCOs.
+- Apply that proportion only to group totals. Never assign an estimated result
+  to an individual record.
 :::
 
 ## Scope and candidate pools
+
+This table defines which death and hospital-event records enter the linkage
+process and which information must remain private.
 
 | Rule | Implemented requirement |
 |---|---|
@@ -34,6 +56,9 @@ follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.
 | Confidentiality | All person identifiers, possible matches, linkage reasons, episode dates and component evidence remain private. Only approved aggregate results may enter a public data package release. |
 
 ## Identity preparation rules
+
+Before any records are compared, the workflow standardises the identifiers used
+for matching and rejects identity information that is ambiguous or contradictory.
 
 | Field | Implemented rule |
 |---|---|
@@ -46,7 +71,10 @@ follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.
 
 ## Ordered person-linkage rules
 
-Apply the rules in order. A person accepted by an earlier rule is not reconsidered by a later rule.
+This table shows how the workflow tries to identify one person, starting with
+the strongest identifier and moving to names, sex and date or age only when the
+earlier rule does not produce a match. A person accepted by an earlier rule is
+not reconsidered by a later rule.
 
 | Rule | Match requirement |
 |---|---|
@@ -55,6 +83,9 @@ Apply the rules in order. A person accepted by an earlier rule is not reconsider
 | **L03 — boundary names, sex and date/age** | L02 did not produce one match; first and surname boundary tokens match in either order; canonical sex matches; and either the resolved dates of birth match exactly or one date of birth is absent and the years-only age at death agrees within one year. Exactly one CVD person proxy must remain. |
 
 ### Matches that are not accepted
+
+This table lists the circumstances in which a possible match must remain
+unresolved rather than being selected automatically.
 
 | Situation | Result |
 |---|---|
@@ -66,6 +97,10 @@ Apply the rules in order. A person accepted by an earlier rule is not reconsider
 
 ## Episode and DCO rules
 
+After the linkage rules have been tried, this table shows how a unique person
+match and the timing of any qualifying event determine whether the death is
+already represented, is an additional DCO or remains unresolved.
+
 | Rule | Implemented result |
 |---|---|
 | Person matched; qualifying event 0–27 days before death | `recorded_event_0_27_days`: the fatal episode is already represented in hospital event data. Day 0 and day 27 are included. |
@@ -76,7 +111,9 @@ Apply the rules in order. A person accepted by an earlier rule is not reconsider
 
 ## Aggregate unresolved-DCO estimation
 
-For each mortality definition and death year:
+After individual linkage is complete, this table shows how the workflow uses
+resolved deaths to estimate the additional DCO contribution from unresolved
+deaths for each mortality definition and death year.
 
 | Step | Rule |
 |---|---|
@@ -89,6 +126,9 @@ For each mortality definition and death year:
 | Definition check | For the same annual stratum, the Inclusive All-CVD lower, central and upper components must not be below the corresponding Primary components. |
 
 ## Heart, Stroke and mixed allocation
+
+Once the All-CVD aggregate has been estimated, this table shows how the total is
+divided between Heart, Stroke and cases that cannot be assigned to one family.
 
 | Rule | Implemented requirement |
 |---|---|
@@ -103,10 +143,8 @@ For each mortality definition and death year:
 ## Public aggregation boundaries
 
 - DCO enhancement starts with complete calendar year 2010; 2008–2009 are not included.
-- Unknown sex and age remain private allocation atoms. The all-sex value is calculated directly from all sex components.
-- Deaths without usable age remain in counts but are excluded from direct age standardisation and reported in private checks.
+- Deaths without usable age remain in counts but are excluded from direct age standardisation.
 - Hospital-only + additional DCO must equal hospital-plus-DCO for every matching annual stratum.
-- Lower and upper linkage values stay on the same aggregate row as the central estimate; they are not separate cases or statistical confidence intervals.
 
 ## Where the rules are implemented
 
@@ -114,6 +152,9 @@ The monthly controller is `scripts/stata/monthly/bnr_step4_metrics.do`. There is
 
 ::: {.callout-note collapse="true"}
 ## Linkage and estimation code
+
+This table identifies the maintained Stata files that implement each part of
+the individual-linkage and aggregate-estimation process.
 
 | File | Rule set |
 |---|---|

@@ -1,7 +1,7 @@
 ---
 title: "Files, data releases and versions"
 description: "Identify authoritative, private, public and mirrored BNR files and apply the correct rebuild and version rules."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -17,11 +17,11 @@ The central rule is:
 > **Correct the earliest authoritative source, then rerun the controlled workflow. Never repair a generated output by hand.**
 
 ::: {.callout-note appearance="simple" title="System at a glance"}
-- REDCap and approved retained source files own the source records.
-- Private folders hold extracts, analytical inputs, proposed public files and review evidence.
+- REDCap and approved retained source files own the source data records.
+- INfo-Hub private folders hold extracts, analytical inputs, proposed public files and review evidence.
 - `$BNR_PUBLIC` holds the official public analytical packages.
 - `site/downloads/` is a replaceable website copy of approved public files.
-- Git holds public-safe code, documentation, website source and approved website assets.
+- Git holds **only** public-safe code, documentation, website source and approved website assets.
 :::
 
 ## Location determines authority
@@ -37,7 +37,7 @@ The central rule is:
 | Git repository | Public-safe code, Quarto source, documentation and approved website assets | Never commit confidential data, tokens, private paths, logs, review workbooks or approval evidence. |
 | `site/_site/` | Generated local Quarto website | Inspect it, but never edit or commit it. |
 
-For the full folder contract, see [The BNR analytics and publishing environment](../getting-started/environment.qmd).
+For more on the Info-Hub folder setup, see [The BNR analytics and publishing environment](../getting-started/environment.qmd).
 
 ## Identify a data release or report
 
@@ -55,7 +55,7 @@ A filename containing `current` or `latest` is a convenience copy. It does not b
 
 ## What `replace` means {#what-replace-means}
 
-`replace` is an overwrite safeguard, not a correction method and not an approval bypass.
+`replace` is used as a Stata overwrite safeguard, during the CVD event and mortality workflows.
 
 - Leave it off for a first run or first publication.
 - Use it only when a rebuild or republication of that exact identity has been authorised.
@@ -67,11 +67,11 @@ Some procedures rebuild their own intermediate files without a separate `replace
 
 ## Approval binds an exact package
 
-Approval applies only to the exact proposed public files checked by the workflow. `approval.yml`, `public_manifest.csv`, saved sizes, checksums or fingerprints provide the binding evidence used by the relevant publication controller.
+Approval covers only the exact proposed files that were reviewed. The workflow records those files in `approval.yml`, `public_manifest.csv` or similar checks. These records let the publication step confirm that it is publishing the same files that were approved.
 
-An `approval.yml` file means **approved, not published**. Publication remains a separate action.
+`approval.yml` means the package is **approved and ready to publish**. It does not mean the files are public yet.
 
-If an approved file changes, or a required file is missing, do not edit the evidence files. Rebuild the package and obtain a new approval.
+If an approved file changes or is missing, do not alter the approval record or file list by hand. Rebuild the package, review it again and obtain a new approval.
 
 ## Correct or recover a file
 

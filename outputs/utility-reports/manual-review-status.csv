@@ -97,19 +97,19 @@ Technical Manual,How the CVD dashboards refresh,site/technical/workflows/reporti
 Technical Manual,How the CVD tables refresh,site/technical/workflows/reporting/tabulation-regeneration.qmd,reviewed-by-irh,Page YAML
 Technical Manual,How the Downloads page refreshes,site/technical/workflows/reporting/downloads-page-regeneration.qmd,reviewed-by-irh,Page YAML
 Technical Manual,How the report listings refresh,site/technical/workflows/reporting/report-listings-regeneration.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
+Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,reviewed-by-irh,Page YAML
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,reviewed-by-irh,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Operate the website,site/technical/website/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,not-reviewed,Page YAML
-Technical Manual,Update website content,site/technical/website/update-content.qmd,not-reviewed,Page YAML
-Technical Manual,Maintain and recover,site/technical/maintenance/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-change.qmd,not-reviewed,Page YAML
-Technical Manual,"Files, data releases and versions",site/technical/maintenance/files-releases-versions.qmd,not-reviewed,Page YAML
-Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.qmd,not-reviewed,Page YAML
-Technical Manual,Reference,site/technical/reference/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,CVD death-classification rules,site/technical/reference/cvd-death-classification-rules.qmd,not-reviewed,Page YAML
-Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,not-reviewed,Page YAML
-Technical Manual,Disclosure-control rules,site/technical/reference/disclosure-control-rules.qmd,not-reviewed,Page YAML
-Technical Manual,System reference,site/technical/reference/index.qmd,not-reviewed,Page YAML
-Technical Manual,Validation of BNR CVD suppression rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,not-reviewed,Page YAML
+Technical Manual,Operate the website,site/technical/website/section-index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Render and publish the website,site/technical/website/render-publish.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Update website content,site/technical/website/update-content.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Maintain and recover,site/technical/maintenance/section-index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Make a safe code change,site/technical/maintenance/safe-code-change.qmd,reviewed-by-irh,Page YAML
+Technical Manual,"Files, data releases and versions",site/technical/maintenance/files-releases-versions.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Fix common problems,site/technical/maintenance/troubleshooting.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Reference,site/technical/reference/section-index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,CVD death-classification rules,site/technical/reference/cvd-death-classification-rules.qmd,reviewed-by-irh,Page YAML
+Technical Manual,CVD event–death linkage rules,site/technical/reference/cvd-event-death-linkage-rules.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Disclosure-control rules,site/technical/reference/disclosure-control-rules.qmd,reviewed-by-irh,Page YAML
+Technical Manual,System and code reference,site/technical/reference/index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Validation of BNR CVD suppression rules,site/technical/reference/bnr-suppression-validation-2024-2025.qmd,reviewed-by-irh,Page YAML

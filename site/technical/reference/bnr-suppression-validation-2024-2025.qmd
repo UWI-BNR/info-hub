@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Validation of BNR CVD suppression rules"
 subtitle: "Review of 24 monthly releases, 2024–2025"
 description: "Review the evidence used to test the CVD disclosure-control rules across 24 monthly releases."
@@ -55,10 +55,10 @@ totals, comparisons or percentages, while safe values remained available.
 
 | Release | Suppressed rows | Main reason | Assessment |
 |---|---:|---|---|
-| January | 12 | Female AMI count of 5 in annual and Q1 panels | Correct |
-| February | 0 | Previous female AMI value was not public, so no public differencing risk | Correct |
+| January | 12 | Primary protection in the annual and Q1 event-by-sex panels | Correct |
+| February | 0 | The preceding equivalent value was protected, so no public difference could be calculated | Correct |
 | March | 0 | Relevant increments exceeded 5 | Correct |
-| April | 12 | Annual female AMI increase of 3 and Q2 female AMI count of 3 | Correct |
+| April | 12 | Temporal protection in the annual panel and primary protection in the Q2 panel | Correct |
 | May | 0 | No small counts or increments | Correct |
 | June | 0 | No small counts or increments | Correct |
 | July | 0 | Q3 began with all event-by-sex counts above 5 | Correct |
@@ -70,11 +70,19 @@ totals, comparisons or percentages, while safe values remained available.
 
 ### Key 2024 tests
 
-In January, the female AMI count was 5. The value was suppressed in both the annual and Q1 panels. The complete four-cell AMI/stroke by sex panel was then suppressed to prevent reconstruction from published margins.
+In January, an event-by-sex count fell within the protected range. The value
+was protected in both the annual and Q1 panels. The complete four-cell
+event-by-sex panel was then protected to prevent reconstruction from published
+totals.
 
-In February, the female AMI cumulative count increased from 5 to 10. The previous value had not been public, so the public could not calculate the increment. February was correctly released without suppression.
+In February, the cumulative count was above the protection threshold. Because
+the preceding protected value had not been published, readers could not
+calculate the intervening change. The February value could therefore be
+released.
 
-In April, the annual female AMI count increased from a public March value of 18 to 21. The difference of 3 required temporal suppression. April also began Q2 with a female AMI count of 3, requiring primary suppression in the quarterly panel.
+In April, an annual cumulative count increased by a protected amount from the
+preceding public release, requiring temporal protection. A Q2 event-by-sex
+count also fell within the protected range and required primary protection.
 
 ## 2025 month-by-month summary
 
@@ -82,7 +90,7 @@ In April, the annual female AMI count increased from a public March value of 18 
 |---|---:|---|---|
 | January | 0 | All annual and Q1 counts exceeded 5 | Correct |
 | February | 0 | Relevant increments exceeded 5 | Correct |
-| March | 8 | Female AMI annual increase of 4 | Correct |
+| March | 8 | Temporal protection in the annual event-by-sex panel | Correct |
 | April | 0 | March value was not public; Q2 counts exceeded 5 | Correct |
 | May | 0 | No small counts or increments | Correct |
 | June | 0 | No small counts or increments | Correct |
@@ -95,9 +103,11 @@ In April, the annual female AMI count increased from a public March value of 18 
 
 ### Key 2025 test
 
-In March, the public female AMI annual count rose from 26 in February to 30 in March. The increase of 4 required temporal suppression.
+In March, an annual cumulative count increased by a protected amount from the
+preceding public release. This required temporal protection.
 
-The four annual AMI/stroke by sex cells were suppressed, together with the four dependent annual sex-distribution percentages.
+The four related annual event-by-sex cells were protected, together with the
+four dependent annual sex-distribution percentages.
 
 In April, no suppression was carried forward because the equivalent March values were not public. This confirmed that the process protects small changes without creating an indefinite chain of hidden results.
 

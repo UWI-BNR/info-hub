@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 24 | 27 | 0 | 0 | 51 |
+| Technical Manual | 0 | 10 | 41 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -120,19 +120,19 @@
 | How the CVD tables refresh | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Reviewed by IRH | Page YAML |
 | How the Downloads page refreshes | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Reviewed by IRH | Page YAML |
 | How the report listings refresh | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Reviewed by IRH | Page YAML |
-| Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Not reviewed | Page YAML |
+| Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Reviewed by IRH | Page YAML |
 | Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Reviewed by IRH | Page YAML |
 | Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Reviewed by IRH | Page YAML |
-| Operate the website | `site/technical/website/section-index.qmd` | Not reviewed | Page YAML |
-| Render and publish the website | `site/technical/website/render-publish.qmd` | Not reviewed | Page YAML |
-| Update website content | `site/technical/website/update-content.qmd` | Not reviewed | Page YAML |
-| Maintain and recover | `site/technical/maintenance/section-index.qmd` | Not reviewed | Page YAML |
-| Make a safe code change | `site/technical/maintenance/safe-code-change.qmd` | Not reviewed | Page YAML |
-| Files, data releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Not reviewed | Page YAML |
-| Fix common problems | `site/technical/maintenance/troubleshooting.qmd` | Not reviewed | Page YAML |
-| Reference | `site/technical/reference/section-index.qmd` | Not reviewed | Page YAML |
-| CVD death-classification rules | `site/technical/reference/cvd-death-classification-rules.qmd` | Not reviewed | Page YAML |
-| CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Not reviewed | Page YAML |
-| Disclosure-control rules | `site/technical/reference/disclosure-control-rules.qmd` | Not reviewed | Page YAML |
-| System reference | `site/technical/reference/index.qmd` | Not reviewed | Page YAML |
-| Validation of BNR CVD suppression rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Not reviewed | Page YAML |
+| Operate the website | `site/technical/website/section-index.qmd` | Reviewed by IRH | Page YAML |
+| Render and publish the website | `site/technical/website/render-publish.qmd` | Reviewed by IRH | Page YAML |
+| Update website content | `site/technical/website/update-content.qmd` | Reviewed by IRH | Page YAML |
+| Maintain and recover | `site/technical/maintenance/section-index.qmd` | Reviewed by IRH | Page YAML |
+| Make a safe code change | `site/technical/maintenance/safe-code-change.qmd` | Reviewed by IRH | Page YAML |
+| Files, data releases and versions | `site/technical/maintenance/files-releases-versions.qmd` | Reviewed by IRH | Page YAML |
+| Fix common problems | `site/technical/maintenance/troubleshooting.qmd` | Reviewed by IRH | Page YAML |
+| Reference | `site/technical/reference/section-index.qmd` | Reviewed by IRH | Page YAML |
+| CVD death-classification rules | `site/technical/reference/cvd-death-classification-rules.qmd` | Reviewed by IRH | Page YAML |
+| CVD event–death linkage rules | `site/technical/reference/cvd-event-death-linkage-rules.qmd` | Reviewed by IRH | Page YAML |
+| Disclosure-control rules | `site/technical/reference/disclosure-control-rules.qmd` | Reviewed by IRH | Page YAML |
+| System and code reference | `site/technical/reference/index.qmd` | Reviewed by IRH | Page YAML |
+| Validation of BNR CVD suppression rules | `site/technical/reference/bnr-suppression-validation-2024-2025.qmd` | Reviewed by IRH | Page YAML |

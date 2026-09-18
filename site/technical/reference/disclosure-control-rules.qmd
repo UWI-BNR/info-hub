@@ -1,7 +1,7 @@
 ---
 title: "Disclosure-control rules"
 description: "Check how small or recoverable values are protected before publication."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,15 +10,16 @@ Technical Manual
 
 ## What this page is for
 
-Use this page to check why a value in a proposed public CVD event or mortality
-file is protected. To prepare, review, approve or publish a package, follow the
-relevant workflow page.
+Use this page to understand why a value in a proposed public CVD event or mortality
+file is hidden, and how the workflow prevents that value from being calculated from
+other published results. To prepare, review, approve or publish a data package, follow
+the relevant workflow page.
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
 
-- Protect every positive supporting frequency from **1 to 5**. A true zero is not automatically protected.
-- Add deterministic protection wherever totals, related categories, time comparisons or derived measures could reveal a protected value.
+- Protect every underlying count from **1 to 5**. A true zero is not automatically protected.
+- Apply additional protection wherever totals, related categories, time comparisons or calculated measures could reveal a protected value.
 - Review the complete proposed public package, not one table in isolation.
 - Retain the row, show `*`, explain the protection and blank every numeric field that could reveal the value.
 - Never edit generated protection decisions by hand.
@@ -26,73 +27,86 @@ relevant workflow page.
 
 ## Terms used in the files
 
+The files use the following terms to describe why a value has been protected.
+
 | Term | Plain meaning |
-|---|---|
-| Primary suppression | The row itself contains a supporting frequency from 1 to 5. |
+|--|---|
+| Primary suppression | The row itself is protected because its underlying count is from 1 to 5. |
 | Secondary or complementary suppression | An additional row is protected so a primary-protected value cannot be calculated from related public values. |
 | Temporal suppression | A cumulative total is protected because comparison with the preceding public data release would reveal a small change, or because that comparison cannot be completed safely. |
 | Derived suppression | A percentage or rolling comparison is protected because it uses a protected count. |
+| Companion protection | Another value is protected because it would otherwise help reveal an already-protected value. The code chooses the companion using fixed rules. |
 | Protection | The preferred plain-language term. Exact filenames and fields retain `suppression`. |
 
 ## Rules shared by all analytical packages
 
+These basic rules apply to every proposed public CVD event and mortality data package.
+
 | Rule | Implemented requirement |
-|---|---|
-| Threshold | Positive supporting frequencies 1–5 receive primary protection. Zero is not automatically protected. The threshold is not changed during a routine data release. |
-| Complete-package test | Consider every public total, breakdown, comparator, percentage, rate and bound together. No published equation may contain exactly one protected term. |
-| Deterministic decisions | Code selects all additional protection. An analyst reviews the result but does not select extra cells or edit symbols, values or notes. |
-| Protected numeric fields | Blank `value`, `numerator`, `denominator`, linkage lower/upper values and numerical confidence limits wherever they exist on a protected row. |
-| Safe presentation | Retain the row, set `display_value` to `*`, give a controlled `suppression_status` and retain a non-blank `disclosure_note`. A protected value is not zero. |
-| Private evidence | Exact protected values, linkage components and detailed decision fields remain in private review evidence and never enter a public data package release. |
-| Fail closed | Stop before approval or publication when an automated equation or candidate check fails. Correct source data or version-controlled code and rerun; never repair generated files. |
+|--|---|
+| Threshold | Protect every underlying count from 1 to 5. Zero is not automatically protected. Do not change the threshold during a routine data release. |
+| Complete-package test | Review all public totals, breakdowns, comparisons, percentages, rates and bounds together. A published calculation must not allow the reader to recover one protected value from the remaining values. |
+| Fixed decisions | The code selects all additional protection using fixed rules. The analyst reviews the result but does not select extra cells or edit symbols, values or notes. |
+| Protected numeric fields | On a protected row, blank `value`, `numerator`, `denominator`, linkage lower and upper values, and numerical confidence limits wherever they occur. |
+| Safe presentation | Keep the row, show `*` in `display_value`, record the approved `suppression_status`, and include a `disclosure_note`. A protected value must not appear to be zero. |
+| Private evidence | Keep the exact protected values, linkage components and detailed decision fields in the private review files. Do not include them in the public data package. |
 
 ## Hospital-only CVD event rules
 
-These rules are applied by the shared CVD Step 5 protection engine.
+These rules protect CVD event results that use hospital-recorded events only. They are
+applied automatically by the shared CVD Step 5 protection code.
 
 | Area | Implemented rule |
-|---|---|
-| Public monthly scope | Only All-CVD, all-sex, all-age monthly counts enter the proposed public package. Monthly subtype, sex, age and rolling-comparator rows do not. |
-| Temporal comparison | For incomplete quarterly and annual Heart/Stroke cumulative counts, protect a positive increase of 1–5 from the preceding approved public data release. Protect negative revisions and comparisons that cannot be completed safely. Do not carry protection forward solely because the preceding value was protected. |
-| Event-by-sex panel | If any annual or quarterly Heart/Stroke female/male interior cell is primary- or temporal-protected, protect all four interior cells in that panel. Do not extend this rule to unrelated totals, ages or periods. |
-| Time equations | Repeatedly close `quarter = three months`, `annual = four quarters` and `annual = twelve months`. When exactly one term is protected, select the earliest eligible component as the companion and repeat until no equation has one protected term. |
+|--|---|
+| Public monthly scope | The public package contains only All-CVD, all-sex, all-age monthly counts. It excludes monthly breakdowns by event type, sex and age, and monthly rolling comparisons, because these could reveal small numbers. |
+| Temporal comparison | For incomplete quarterly and annual Heart/Stroke totals, protect an increase of 1–5 since the preceding approved public data release. Also protect negative revisions and comparisons that cannot be completed safely. Do not protect the new value solely because the preceding value was protected. |
+| Event-by-sex panel | An interior cell is a value inside a table that contributes to one or more displayed totals. If any annual or quarterly Heart/Stroke female/male interior cell has primary or temporal protection, protect all four interior cells in that panel. Do not extend this rule to unrelated totals, ages or periods. |
+| Time equations | Check `quarter = three months`, `annual = four quarters` and `annual = twelve months`. If the published values would reveal one protected value, protect the earliest eligible component as its companion. Repeat the checks until no protected value can be recovered. |
 | Rolling five-year comparison | Protect a rolling annual or same-quarter five-year mean when any contributing published count is protected. |
 | Percentages | Protect both values in a sex, event-type or age distribution when a count needed for that distribution is protected. |
 
 ## Mortality-specific rules
 
-The mortality release has its own fixed public lattice and deterministic companion choices.
+Mortality results use a fixed set of published breakdowns. The code uses the rules
+below to choose the additional values that must be protected.
 
 | Area | Implemented rule |
-|---|---|
+|--|---|
 | Monthly sex rows | Remove private monthly female and male values before creating the proposed public package. Quarterly and annual sex rows remain eligible. |
 | Sex companions | For observed counts: protected female → protect male; protected male → protect female; protected all-sex → protect male. Keep an already-primary cell classified as primary. |
 | Event companions | For annual and quarterly counts: protected Heart → protect Stroke; protected Stroke → protect Heart; protected all-CVD → protect Stroke. |
 | Age companions | For the annual under-70/70-plus pair, protect the other age group when one is primary-protected. |
-| Monthly-to-period protection | If a protected monthly count could be recovered from a quarterly or annual panel, protect the fixed minimal set: all-CVD female and male totals plus Heart female and male components. When the source month is all-sex, also protect the all-CVD and Heart all-sex totals. |
+| Monthly-to-period protection | If quarterly or annual values could reveal a protected monthly count, protect the fixed minimum set: all-CVD female and male totals plus Heart female and male values. When the protected monthly count is for all sexes, also protect the all-CVD and Heart all-sex totals. |
 | Annual percentages | Protect the complete related sex, event-type or age distribution when its annual count family contains a protected value. |
 | Five-year comparisons | Protect a comparator when any of its five historical observed counts is protected. |
 | Annual rates | A rate never starts a primary or companion decision. It inherits secondary protection from its matching protected annual count, including its numerical confidence limits. |
 
 ## DCO-enhanced annual CVD rules
 
+These rules apply when annual CVD results combine hospital-recorded events with
+additional death-certificate-only (DCO) events. They keep the hospital and combined
+results consistent while protecting the private DCO components.
+
 | Area | Implemented rule |
 |---|---|
-| Propagated support | A small hospital count protects its annual count, crude-rate and age-standardised-rate representations. Outside the approved exception below, a small lower, central or upper DCO component also protects associated hospital-plus-DCO and additional-DCO representations. |
-| Approved national exception | A small **private DCO component alone** does not protect an otherwise releasable national aggregate when the row is complete/final, annual, all-age, for All CVD/Heart/Stroke, all/female/male, Primary/Inclusive, and is an approved additional-DCO or hospital-plus-DCO count, or hospital-plus-DCO crude/age-standardised rate. |
+| Protection across related results | A small hospital count protects its annual count, crude rate and age-standardised rate. Outside the approved exception below, a small lower, central or upper DCO component also protects the related hospital-plus-DCO and additional-DCO results. |
+| Approved national exception | A small **private DCO component alone** does not protect an otherwise safe national result. The exception applies only to complete annual, all-age results for All CVD, Heart or Stroke; all persons, females or males; and the Primary or Inclusive definition. It covers approved additional-DCO or hospital-plus-DCO counts, and hospital-plus-DCO crude or age-standardised rates. |
 | Exception limit | The exception never removes protection inherited from a small hospital-recorded count. Individual linkage evidence remains private. |
-| Structural companions outside exception | Non-zero unknown-sex DCO support protects the male companion. Non-zero mixed/unallocated subtype support protects the Stroke companion. These companions are not added solely for that reason inside the approved national exception lattice. |
-| Existing decisions | Carry established burden companion decisions into the linked annual count and rate representations. |
-| Representation consistency | Hospital annual count, crude rate and age-standardised rate share one protection decision. Hospital-plus-DCO annual count, crude rate and age-standardised rate also share one decision. |
-| DCO count identity | For `hospital-only + additional DCO = hospital-plus-DCO`, either no term or at least two terms must be protected. |
+| Additional companions outside the exception | A non-zero unknown-sex DCO component protects the male result. A non-zero mixed or unallocated event-type component protects the Stroke result. Do not add these companions for this reason alone within the approved national results covered by the exception. |
+| Existing decisions | Apply existing companion-protection decisions from the burden results to the related annual counts and rates. |
+| Consistent protection | Give the hospital annual count, crude rate and age-standardised rate the same protection decision. Do the same for the hospital-plus-DCO annual count and its two rates. |
+| DCO count relationship | For `hospital-only + additional DCO = hospital-plus-DCO`, protect either none of the three values or at least two of them. This prevents one protected value from being calculated from the other two. |
 | Bounds | When a DCO-enhanced parent row is protected, protect its central value, numerator, denominator, linkage lower/upper values and confidence limits together. |
 
 ## Automated checks before approval
 
+Before approval, the workflow checks that every required value is protected and that
+the proposed public file contains no value or private field that could reveal it.
+
 | Check | Required result |
 |---|---|
-| Equation closure | No additive, time, comparator or derived equation has exactly one protected term. |
-| Candidate match | Every row marked for protection in private evidence is protected in the proposed public file. |
+| Totals and calculations | No total, time comparison or calculated measure allows a single protected value to be recovered. |
+| Public-file match | Every row marked for protection in the private review files is also protected in the proposed public file. |
 | Numeric blanking | Protected rows contain no releasable numeric value, numerator, denominator, linkage bound or confidence limit. |
 | Field boundary | Private decision and component fields are absent from the proposed public file. |
 | Notes | Every row has the correct safe display and a non-blank disclosure note. |
@@ -110,6 +124,9 @@ Mortality rules are implemented in `scripts/stata/mortality/bnr_mort_s4_review.d
 
 ::: {.callout-note collapse="true"}
 ## Disclosure-control code
+
+This table shows which code file applies each group of rules. Analysts normally run
+the workflow controller rather than these files individually.
 
 | File | Rule set |
 |---|---|
