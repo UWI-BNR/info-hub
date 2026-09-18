@@ -1,7 +1,7 @@
 ---
-title: "System reference"
-description: "Find the correct BNR Stata menu, workflow controller or system location."
-manual-review-status: not-reviewed
+title: "System and code reference"
+description: "Find every maintained BNR code file, workflow controller and supporting system file."
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -10,28 +10,74 @@ Technical Manual
 
 ## What this page is for
 
-Use this page to find a menu action, controller or system location. Follow the
-workflow pages for the steps you need to perform.
+Use this page to find the code behind a BNR workflow or website function. It is
+an inventory, not a procedure: follow the linked workflow pages when you need
+to run, review, approve or publish work.
+
+This inventory reflects branch `cvd-workflow-hardening` at commit
+`a40055288cfa34ef328d39fe8c080425091a80c1`.
+
+## What is included
+
+This reference identifies **160 unique tracked files** at commit
+`a40055288cfa34ef328d39fe8c080425091a80c1`.
+
+A file may appear in more than one table when it supports several parts of the
+system. The counts below use each repository path only once.
+
+| File type | Unique files | What they include |
+|--|--:|------|
+| Stata `.do` | 98 | 97 maintained Stata scripts and one generated synthetic workflow command file. |
+| Stata dialog `.dlg` | 20 | Forms opened through the **User > BNR** menu. |
+| Stata help `.sthlp` | 12 | Help files for the CVD event and mortality dialogs. |
+| Python `.py` | 8 | Seven current utilities and one retained first-pass link checker. |
+| CSS `.css` | 5 | BNR display styles and three Font Awesome stylesheets from the vendor. |
+| PowerShell `.ps1` | 5 | Four current maintenance utilities and one deprecated first-pass reset script. |
+| YAML `.yml` | 3 | Quarto configuration, GitHub deployment and the vendored extension definition. |
+| CSV `.csv` | 2 | Annual-report contents specifications. |
+| Lua `.lua` | 2 | The BNR manual-status filter and the vendored Font Awesome filter. |
+| Dependency `.txt` | 2 | Direct Python requirements and the exact tested environment. |
+| Windows batch `.bat` | 1 | The local website editing and preview launcher. |
+| Quarto template `.qmd` | 1 | The rolling-update landing-page template. |
+| SCSS `.scss` | 1 | The main BNR website theme and responsive layout rules. |
+| **Total** | **160** | Unique files within the inventory boundary. |
+
+The inventory separates current BNR-maintained code from help files, retained
+or deprecated utilities, generated test evidence and third-party extension
+code. It excludes ordinary Quarto content pages, published datasets and
+metadata, images, fonts, ZIP files and other generated outputs.
 
 ## Main locations
 
-| Location | What you use it for |
-|---|---|
-| `scripts/stata/config/` | Start from the path template when configuring a workstation. Keep the completed local configuration outside Git. |
-| `scripts/stata/menu/bnr_menu.do` | Check the current **User > BNR** menu labels. |
-| `scripts/stata/monthly/` | Find the six CVD event release controllers. |
-| `scripts/stata/mortality/` | Find the six mortality release controllers and supporting code. |
-| `scripts/stata/reporting/` | Find the rolling, annual and one-off report controllers. |
-| `site/surveillance/` and `site/downloads/` | Find public pages and approved public-data copies. |
-| `site/methods/`, `site/operations/`, `site/technical/` | Find the Public Methods, Operations and Technical manuals. |
+Use these folders as the first level of the code map.
+
+::: {.callout-note collapse="true" title="Show main code locations"}
+| Location | What it contains |
+|--|----|
+| `scripts/stata/config/` | The workstation path template. The completed local file stays outside Git. |
+| `scripts/stata/menu/` | The **User > BNR** menu definition. |
+| `scripts/stata/dialogs/` | The forms opened from the Stata menu. |
+| `scripts/stata/monthly/` | The six CVD event workflow controllers. |
+| `scripts/stata/metrics/cvd/` | CVD metric, linkage, DCO-estimation, staging and disclosure-control code. |
+| `scripts/stata/mortality/` | Mortality workflow controllers and calculation code. |
+| `scripts/stata/reporting/` | Rolling, annual and one-off report code. |
+| `scripts/python/` | Environment, path, link, manual-status and PDF utilities. |
+| `scripts/powershell/` and `scripts/maintenance/` | Controlled reset, clean-up and retirement utilities. |
+| `site/scripts/`, `site/_filters/` and `site/assets/` | Website build, display and styling code. |
+| `.github/workflows/` | Live website build and deployment automation. |
+:::
 
 Keep confidential data, staging packages, local configuration, credentials,
 logs and review evidence in the configured private locations outside Git.
 
 ## Current Stata menu
 
+These are the actions that a user sees under **User > BNR**. Each dialog listed
+later passes the user's entries to the corresponding controller.
+
+::: {.callout-note collapse="true" title="Show current Stata menu"}
 | Menu | Action |
-|---|---|
+|---|----|
 | **Update CVD events dashboard** | Step 1: Extract REDCap data |
 |  | Step 2: Build cumulative dataset |
 |  | Step 3: Build deidentified datasets |
@@ -52,60 +98,363 @@ logs and review evidence in the configured private locations outside Git.
 |  | Step 2: Approve one-off report candidate |
 |  | Step 3: Publish approved one-off report |
 | **Report utilities** | Screen report counts for disclosure review |
+:::
 
-The menu labels are controlled by `scripts/stata/menu/bnr_menu.do`.
+The menu labels and links are controlled by
+`scripts/stata/menu/bnr_menu.do`.
 
-## Workflow controllers
+## Shared Stata setup and controls
 
-### CVD event release
+These files provide the paths, menu and shared event-workflow functions used by
+the main controllers.
 
-| Step | Controller |
-|---:|---|
-| 1 | `monthly/bnr_step1_cvd_redcap_extract.do` |
-| 2 | `monthly/bnr_step2_cvd_confidential.do` |
-| 3 | `monthly/bnr_step3_metric_inputs.do` |
-| 4 | `monthly/bnr_step4_metrics.do` |
-| 5 | `monthly/bnr_step5_review.do` |
-| 6 | `monthly/bnr_step6_publish.do` |
+::: {.callout-note collapse="true" title="Show shared Stata files"}
+| File | What it does |
+|---|----|
+| `scripts/stata/config/bnr_paths_TEMPLATE.do` | Defines the path settings that each workstation must copy into its untracked local configuration. |
+| `scripts/stata/menu/bnr_menu.do` | Adds the BNR menus and opens the current dialogs. |
+| `scripts/stata/common/bnrcvd_globals.do` | Defines shared Stata globals used by briefing workflows. |
+| `scripts/stata/common/bnr_step4_stage_metric.do` | Applies the shared checks and staging structure for a Step 4 metric dataset. |
+| `scripts/stata/common/bnr_step5_suppress.do` | Applies the shared hospital-only CVD disclosure-control rules. |
+:::
 
-Step 5 has separate preparation and approval actions. Step 6 publishes the
-approved files and checks the result.
+## CVD event workflow controllers
 
-### Mortality release
+These are the routine CVD event entry points. Run the controller for the step;
+do not run its internal helpers separately unless a test or maintenance page
+instructs you to do so.
 
-| Step | Controller |
-|---:|---|
-| 1 | `mortality/bnr_mort_s1_extract.do` |
-| 2 | `mortality/bnr_mort_s2_classify.do` |
-| 3 | `mortality/bnr_mort_s3_burden.do` |
-| 4 | `mortality/bnr_mort_s4_review.do` |
-| 5 | `mortality/bnr_mort_s5_approve.do` |
-| 6 | `mortality/bnr_mort_s6_publish.do` |
+::: {.callout-note collapse="true" title="Show CVD event controllers"}
+| Step or action | File | What it does |
+|---|---|---|
+| 1 | `scripts/stata/monthly/bnr_step1_cvd_redcap_extract.do` | Extracts the authorised CVD event records from REDCap. |
+| 2 | `scripts/stata/monthly/bnr_step2_cvd_confidential.do` | Builds the confidential cumulative event dataset and records quarantine decisions. |
+| 3 | `scripts/stata/monthly/bnr_step3_metric_inputs.do` | Creates the deidentified inputs used for metric calculation. |
+| 4 | `scripts/stata/monthly/bnr_step4_metrics.do` | Calculates and privately stages the combined CVD metrics and linkage-review package. |
+| 5 | `scripts/stata/monthly/bnr_step5_review.do` | Routes the separate preparation and approval actions for the proposed release. |
+| 5: prepare | `scripts/stata/monthly/bnr_step5_review_expanded_cvd_prepare.do` | Creates the protected proposed public file and human-review evidence. |
+| 5: approve | `scripts/stata/monthly/bnr_step5_review_expanded_cvd_approve.do` | Confirms the reviewed files are unchanged and records approval. |
+| 6 | `scripts/stata/monthly/bnr_step6_publish.do` | Routes publication of the approved event package. |
+| 6: combined release | `scripts/stata/monthly/bnr_step6_publish_expanded_cvd.do` | Promotes the approved combined hospital-and-DCO package and checks the result. |
+:::
+
+The event workflow contract is implemented across these controllers and the
+specialist modules below.
+
+## CVD calculation, linkage and review modules
+
+The files in `scripts/stata/metrics/cvd/` perform the specialist work called by
+Steps 2, 4 and 5. Their names are shown without the common folder prefix to
+make the list easier to scan.
+
+::: {.callout-note collapse="true" title="Show CVD calculation and linkage modules"}
+| File | What it does |
+|---|---|
+| `bnr_step2_write_quarantine_report.do` | Writes the Step 2 quarantine report and summary used in later review. |
+| `bnr_step4_cvd_burden.do` | Calculates the hospital-recorded CVD count and distribution metrics. |
+| `bnr_cvd_prepare_linkage_inputs.do` | Prepares the private event and death records used for deterministic linkage. |
+| `bnr_cvd_profile_linkage_inputs.do` | Profiles linkage inputs and records data-quality evidence. |
+| `bnr_cvd_l01_episode_core.do` | Applies the first, unique-NRN person-linkage rule and episode decision. |
+| `bnr_cvd_l02_l03_episode_core.do` | Applies the name, sex and date-of-birth linkage rules and episode decision. |
+| `bnr_cvd_run_l01_episode_diagnostic.do` | Runs and records the L01 diagnostic. |
+| `bnr_cvd_run_l02_l03_episode_diagnostic.do` | Runs and records the L02/L03 diagnostic. |
+| `bnr_cvd_estimate_unresolved_core.do` | Estimates the aggregate DCO contribution of deaths without one reliable person match. |
+| `bnr_cvd_run_unresolved_estimation.do` | Runs the unresolved-linkage estimator and writes its private outputs. |
+| `bnr_cvd_profile_subtype_concordance_core.do` | Compares event and death-certificate Heart/Stroke classifications among resolved records. |
+| `bnr_cvd_run_subtype_concordance_profile.do` | Runs and records the subtype-concordance profile. |
+| `bnr_cvd_estimate_subtype_unresolved_core.do` | Estimates aggregate Heart/Stroke composition where subtype remains unresolved. |
+| `bnr_cvd_run_subtype_unresolved_estimation.do` | Runs the unresolved-subtype estimator and writes its private outputs. |
+| `bnr_cvd_estimate_joint_subtype_core.do` | Produces joint aggregate estimates for unresolved linkage and subtype. |
+| `bnr_cvd_run_joint_subtype_estimation.do` | Runs the joint estimator and writes its private outputs. |
+| `bnr_cvd_construct_incidence_rates_core.do` | Constructs annual hospital and hospital-plus-DCO incidence rates. |
+| `bnr_cvd_run_incidence_rate_estimation.do` | Runs the incidence-rate calculation and its checks. |
+| `bnr_cvd_add_rate_confidence_intervals.do` | Adds confidence intervals to CVD rate results. |
+| `bnr_cvd_prepare_rate_reference.do` | Builds or validates the population and standard-population inputs used for rates. |
+| `bnr_cvd_create_dco_review_report.do` | Creates the private workbook and summary used to review linkage and DCO estimation. |
+| `bnr_step4_stage_expanded_cvd.do` | Combines and stages the hospital, linkage and annual rate results. |
+| `bnr_step5_cvd_monthly_reference.do` | Builds or checks the fixed monthly reference used in disclosure comparisons. |
+| `bnr_step5_review.do` | Applies the established review checks to the hospital-only metric package. |
+| `bnr_step5_suppress_expanded_cvd.do` | Runs the nine-stage disclosure-control process for combined annual CVD results. |
+:::
+
+## Combined CVD disclosure-control modules
+
+The wrapper above calls these files in order from
+`scripts/stata/metrics/cvd/private/expanded_disclosure/`. They operate only on
+private staging data and together create and audit the protected public view.
+
+::: {.callout-note collapse="true" title="Show combined CVD disclosure modules"}
+| Stage | File | What it does |
+|---:|---|---|
+| 1 | `bnr_step5_suppress_expanded_cvd_stage1_combine.do` | Combines the burden results with the annual count and rate results. |
+| 2 | `bnr_step5_suppress_expanded_cvd_stage2_dco_support.do` | Builds the private lower, central and upper DCO supporting counts. |
+| 3 | `bnr_step5_suppress_expanded_cvd_stage3_primary_flags.do` | Carries small hospital and DCO components into the related annual results. |
+| 4 | `bnr_step5_suppress_expanded_cvd_stage4_national_dco_exception.do` | Applies the approved exception for specified national annual DCO aggregates. |
+| 5 | `bnr_step5_suppress_expanded_cvd_stage5_structural_secondary.do` | Applies fixed companion protection for unknown sex and mixed event type outside the exception. |
+| 6 | `bnr_step5_suppress_expanded_cvd_stage6_existing_closure.do` | Carries existing companion decisions into linked count and rate results. |
+| 7 | `bnr_step5_suppress_expanded_cvd_stage7_rate_equation_audit.do` | Checks count/rate consistency and the three-part DCO count relationship. |
+| 8 | `bnr_step5_suppress_expanded_cvd_stage8_full_projection.do` | Blanks protected numeric fields and writes the safe display and note. |
+| 9 | `bnr_step5_suppress_expanded_cvd_stage9_candidate_audit.do` | Confirms that every required row and field is protected in the proposed public file. |
+:::
+
+## Mortality workflow code
+
+The six numbered files are the routine mortality entry points. The other four
+files perform classification, calculation, staging and rate construction when
+called by those controllers.
+
+::: {.callout-note collapse="true" title="Show mortality workflow code"}
+| File | What it does |
+|---|---|
+| `scripts/stata/mortality/bnr_mort_s1_extract.do` | Extracts and standardises the authorised mortality source data. |
+| `scripts/stata/mortality/bnr_mort_s2_classify.do` | Applies the CVD death-classification workflow. |
+| `scripts/stata/mortality/bnr_mort_s2_rules.do` | Contains the individual classification and supporting nosology rules used by Step 2. |
+| `scripts/stata/mortality/bnr_mort_s3_burden.do` | Controls mortality burden calculation and private staging. |
+| `scripts/stata/mortality/bnr_mort_s3_calc.do` | Calculates mortality counts, percentages and supporting review fields. |
+| `scripts/stata/mortality/bnr_mort_construct_rates.do` | Calculates crude and age-standardised mortality rates and confidence intervals. |
+| `scripts/stata/mortality/bnr_mort_s3_stage.do` | Writes the complete private mortality package for review. |
+| `scripts/stata/mortality/bnr_mort_s4_review.do` | Applies final disclosure control and creates the proposed public mortality package. |
+| `scripts/stata/mortality/bnr_mort_s5_approve.do` | Records approval of the exact reviewed mortality files. |
+| `scripts/stata/mortality/bnr_mort_s6_publish.do` | Publishes the unchanged approved mortality package and checks the result. |
+:::
 
 The technical contract is
 `scripts/stata/mortality/BNR_MORTALITY_WORKFLOW_CONTRACT.md`.
 
-### Reports
+## Reporting workflow code
 
-| Route | Controller or controllers |
+These files create, check, approve and publish rolling, annual and one-off
+reports. Approval and publication remain separate actions.
+
+::: {.callout-note collapse="true" title="Show reporting workflow code"}
+| File | What it does |
 |---|---|
-| Rolling update | `reporting/bnr_report_update_build.do` |
-| Annual report | `reporting/bnr_report_annual_s1_build.do`, `reporting/bnr_report_annual_s2_approve.do`, `reporting/bnr_report_annual_s3_publish.do` |
-| One-off report | `reporting/bnr_report_oneoff_s1_prepare.do`, `reporting/bnr_report_oneoff_s2_approve.do`, `reporting/bnr_report_oneoff_s3_publish.do` |
-| Disclosure check | `reporting/bnr_report_disclosure_screen.do` |
+| `scripts/stata/reporting/bnr_report_update_build.do` | Builds and publishes a dated rolling three-month website update from approved releases. |
+| `scripts/stata/reporting/bnr_report_annual_s1_build.do` | Builds the five-file annual-report candidate from selected approved releases and reviewed content. |
+| `scripts/stata/reporting/bnr_report_annual_s2_approve.do` | Records approval of the exact annual-report candidate. |
+| `scripts/stata/reporting/bnr_report_annual_s3_publish.do` | Publishes the unchanged approved annual-report package. |
+| `scripts/stata/reporting/bnr_report_annual_standard.do` | Composes the standard annual CVD report pages, figures and tables. |
+| `scripts/stata/reporting/bnr_report_oneoff_s1_prepare.do` | Prepares the landing page and package for a reviewed one-off report. |
+| `scripts/stata/reporting/bnr_report_oneoff_s2_approve.do` | Records approval of the exact one-off report candidate. |
+| `scripts/stata/reporting/bnr_report_oneoff_s3_publish.do` | Publishes the unchanged approved one-off report package. |
+| `scripts/stata/reporting/bnr_report_approve_candidate.do` | Provides the shared approval checks used by report workflows. |
+| `scripts/stata/reporting/bnr_report_publish_candidate.do` | Provides the shared publication checks used by report workflows. |
+| `scripts/stata/reporting/bnr_report_disclosure_screen.do` | Screens report counts and supporting values for disclosure review. |
+:::
 
 The reporting contract is
 `scripts/stata/reporting/BNR_REPORTING_WORKFLOW_CONTRACT.md`.
 
+## Annual-report content and templates
+
+These files supply the editable 2025 content and the reusable report layouts.
+The annual workflow controller calls them; they are not separate menu actions.
+
+::: {.callout-note collapse="true" title="Show annual-report content and templates"}
+| File | What it does |
+|---|---|
+| `scripts/stata/reporting/annual/2025/bnr_report_annual_2025_interpretation.do` | Holds the reviewed year-specific interpretation and other analyst-maintained annual content. |
+| `scripts/stata/reporting/annual/2025/bnr_report_annual_2025_focus.do` | Composes the 2025 special chapter on the BNR refit. |
+| `scripts/stata/reporting/templates/bnr_report_annual_stage3_sections.do` | Builds the standard event and mortality chapters from approved results. |
+| `scripts/stata/reporting/templates/bnr_report_annual_public_health_update.do` | Builds the short public-health-update appendix. |
+| `scripts/stata/reporting/templates/bnr_report_update_template.qmd` | Provides the Quarto landing-page template for a rolling update. |
+| `scripts/stata/reporting/templates/bnr_report_annual_toc.csv` | Defines the annual report contents entries and destinations. |
+| `scripts/stata/reporting/templates/bnr_report_annual_appendix_toc.csv` | Defines the public-health-update contents entries and destinations. |
+:::
+
+## Stata dialogs
+
+The files in `scripts/stata/dialogs/` collect user entries and call the matching
+controller. They contain no analytical rules of their own.
+
+::: {.callout-note collapse="true" title="Show Stata dialogs"}
+| Dialog file | Opens the form for |
+|---|---|
+| `bnr_step1_cvd_redcap_extract.dlg` | CVD event Step 1 extraction. |
+| `bnr_step2_cvd_confidential.dlg` | CVD event Step 2 confidential preparation. |
+| `bnr_step3_metric_inputs.dlg` | CVD event Step 3 analysis inputs. |
+| `bnr_step4_metrics.dlg` | CVD event Step 4 metric calculation. |
+| `bnr_step5_review.dlg` | CVD event Step 5 preparation or approval. |
+| `bnr_step6_publish.dlg` | CVD event Step 6 publication. |
+| `bnr_mort_s1_extract.dlg` | Mortality Step 1 extraction. |
+| `bnr_mort_s2_classify.dlg` | Mortality Step 2 classification. |
+| `bnr_mort_s3_burden.dlg` | Mortality Step 3 burden calculation. |
+| `bnr_mort_s4_review.dlg` | Mortality Step 4 review and disclosure control. |
+| `bnr_mort_s5_approve.dlg` | Mortality Step 5 approval. |
+| `bnr_mort_s6_publish.dlg` | Mortality Step 6 publication. |
+| `bnr_report_update_build.dlg` | Rolling three-month update. |
+| `bnr_report_annual_s1_build.dlg` | Annual report Step 1 build. |
+| `bnr_report_annual_s2_approve.dlg` | Annual report Step 2 approval. |
+| `bnr_report_annual_s3_publish.dlg` | Annual report Step 3 publication. |
+| `bnr_report_oneoff_s1_prepare.dlg` | One-off report Step 1 preparation. |
+| `bnr_report_oneoff_s2_approve.dlg` | One-off report Step 2 approval. |
+| `bnr_report_oneoff_s3_publish.dlg` | One-off report Step 3 publication. |
+| `bnr_report_disclosure_screen.dlg` | Report disclosure screening. |
+:::
+
+## Automated Stata tests
+
+These tests use synthetic or controlled inputs. They check code behaviour
+without running a live data release.
+
+### CVD event, linkage and disclosure tests
+
+The CVD tests are stored in `scripts/stata/metrics/cvd/tests/` and cover each
+major calculation and the complete combined-release chain.
+
+::: {.callout-note collapse="true" title="Show CVD automated tests"}
+| Test file | What it checks |
+|---|---|
+| `test_bnr_cvd_step2_quarantine_report.do` | Step 2 quarantine-report creation. |
+| `test_bnr_cvd_stage2_disclosure.do` | Disclosure safety of Step 2 outputs. |
+| `test_bnr_cvd_stage4_l01_episode.do` | Unique-NRN person linkage and episode decisions. |
+| `test_bnr_cvd_stage4_l02_l03_episode.do` | Name, sex and date-of-birth linkage and episode decisions. |
+| `test_bnr_cvd_stage4_unresolved_estimation.do` | Aggregate unresolved-linkage estimation. |
+| `test_bnr_cvd_stage4_subtype_concordance.do` | Resolved Heart/Stroke concordance profiling. |
+| `test_bnr_cvd_stage4_subtype_unresolved_estimation.do` | Aggregate unresolved-subtype estimation. |
+| `test_bnr_cvd_stage4_joint_subtype_estimation.do` | Joint linkage and subtype estimation. |
+| `test_bnr_cvd_construct_incidence_rates.do` | Incidence-rate construction. |
+| `test_bnr_cvd_rate_confidence_intervals.do` | Rate confidence intervals. |
+| `test_bnr_cvd_prepare_rate_reference.do` | Population and standard-population reference preparation. |
+| `test_bnr_step4_stage_expanded_cvd.do` | Combined private Step 4 staging. |
+| `test_bnr_cvd_annual_dco_count_contract.do` | The three-part annual DCO count relationship. |
+| `test_bnr_cvd_national_dco_release_exception.do` | The approved national annual DCO disclosure exception. |
+| `test_bnr_cvd_stage5_expanded_end_to_end.do` | Complete combined Step 5 protection and audit chain. |
+| `test_cvd_workflow_consolidation_v1_0_0.do` | Consolidated event workflow behaviour and interfaces. |
+:::
+
+### Mortality tests
+
+The mortality tests are stored in `scripts/stata/mortality/tests/` and check
+the calculation and disclosure-control engines.
+
+::: {.callout-note collapse="true" title="Show mortality automated tests"}
+| Test file | What it checks |
+|---|---|
+| `test_bnr_mort_construct_rates.do` | Mortality crude and age-standardised rate construction. |
+| `bnr_mort_test_suppression.do` | Mortality primary and companion protection rules. |
+:::
+
+### Reporting tests
+
+The reporting tests are stored in `scripts/stata/reporting/tests/`. The two
+creation utilities make synthetic inputs used by the lifecycle tests.
+
+::: {.callout-note collapse="true" title="Show reporting automated tests"}
+| Test file | What it checks or creates |
+|---|---|
+| `bnr_report_create_disclosure_screen_input.do` | Creates controlled input for disclosure-screen testing. |
+| `bnr_report_create_oneoff_placeholder.do` | Creates a synthetic one-off report package for lifecycle testing. |
+| `bnr_report_test_update_lifecycle.do` | Rolling-update build and publication lifecycle. |
+| `bnr_report_test_annual_lifecycle.do` | Annual-report build, approval and publication lifecycle. |
+| `bnr_report_test_oneoff_lifecycle.do` | One-off report preparation, approval and publication lifecycle. |
+| `bnr_report_test_disclosure_screen.do` | Report disclosure-screen decisions. |
+:::
+
+## Python code
+
+These current Python files support workstation checks, documentation control,
+annual-report finishing and website rendering.
+
+::: {.callout-note collapse="true" title="Show Python code"}
+| File | What it does |
+|---|---|
+| `scripts/python/check-local-links.py` | Checks local links and anchors and writes review reports without editing source pages. |
+| `scripts/python/check-python-environment.py` | Confirms the supported Python version and required packages. |
+| `scripts/python/check-stata-path-contract.py` | Confirms that tracked Stata path globals are defined by the workstation template and that code contains no fixed local paths. |
+| `scripts/python/manual-review-status.py` | Creates a register of manual pages and their review status. |
+| `scripts/python/stamp_annual_report_pdf.py` | Finishes the Stata-produced annual PDF, adds linked contents and page furniture, and can extract the public-health update. |
+| `scripts/python/check-local-links-original.py` | Retains the earlier whole-repository link-checking behaviour for comparison; use `check-local-links.py` for current checks. |
+| `site/scripts/build_download_catalogue.py` | Builds the public Downloads catalogue from approved package catalogue records before Quarto renders the site. |
+:::
+
+## PowerShell and Windows launcher code
+
+These Windows utilities perform tightly bounded maintenance or start a normal
+website editing session. Read their dry-run output before allowing a change.
+
+::: {.callout-note collapse="true" title="Show PowerShell and launcher code"}
+| File | What it does |
+|---|---|
+| `scripts/powershell/annual-report-public-reset.ps1` | Audits, then optionally removes the specified 2025 annual-report development packages for a fresh controlled run. |
+| `scripts/maintenance/cleanup_reporting_hardening_test_artifacts.ps1` | Audits, then optionally removes named synthetic and superseded reporting-test artefacts. |
+| `scripts/maintenance/remove_superseded_cvd_step5_disclosure.ps1` | Audits, then optionally removes the named superseded Step 5 disclosure files after checking the replacement wrapper. |
+| `scripts/maintenance/retire_cvd_linkage_derived_tree.ps1` | Moves the retired private linkage tree to a recoverable private archive; it does not delete it. |
+| `start-info-hub-edit.bat` | Opens VS Code, activates the supported Python environment and starts the local Quarto preview. |
+:::
+
+## Website and deployment code
+
+These files control the site build, manual status display, appearance and live
+GitHub Pages deployment. They do not calculate surveillance statistics.
+
+::: {.callout-note collapse="true" title="Show website and deployment code"}
+| File | What it does |
+|---|---|
+| `site/_quarto.yml` | Defines the Quarto website, render scope, theme, navigation and pre-render catalogue build. |
+| `site/_filters/manual-review-status.lua` | Adds the centrally controlled review-status strip to manual pages. |
+| `site/assets/scss/bnr.scss` | Defines the main BNR website colours, layouts, cards and responsive behaviour. |
+| `site/assets/css/reveal-font.css` | Defines fonts for BNR reveal.js slide decks. |
+| `site/technical/cheat-sheet/cheat-sheet.css` | Defines the Technical Manual cheat-sheet layout and responsive breakpoints. |
+| `.github/workflows/publish-site.yml` | Builds the Quarto site on `main` and deploys the generated site through GitHub Pages. |
+| `requirements.txt` | Lists the direct Python packages and compatible versions for a supported workstation. |
+| `requirements-freeze.txt` | Records the exact tested Python environment for reproducibility. |
+:::
+
+## Stata help files
+
+These files provide command help for the current event and mortality dialogs.
+They explain interfaces but contain no analytical calculations.
+
+::: {.callout-note collapse="true" title="Show Stata help files"}
+| Folder | Help files |
+|---|---|
+| `scripts/stata/help/` | `bnr_step1_cvd_redcap_extract.sthlp` |
+|  | `bnr_step2_cvd_confidential.sthlp` |
+|  | `bnr_step3_metric_inputs.sthlp` |
+|  | `bnr_step4_metrics.sthlp` |
+|  | `bnr_step5_review.sthlp` |
+|  | `bnr_step6_publish.sthlp` |
+|  | `bnr_mort_s1_extract.sthlp` |
+|  | `bnr_mort_s2_classify.sthlp` |
+|  | `bnr_mort_s3_burden.sthlp` |
+|  | `bnr_mort_s4_review.sthlp` |
+|  | `bnr_mort_s5_approve.sthlp` |
+|  | `bnr_mort_s6_publish.sthlp` |
+:::
+
+## Retained, deprecated and generated code-like files
+
+These tracked files are kept for history, comparison or synthetic evidence.
+They are not current production entry points and are excluded from the
+maintained-code totals above.
+
+::: {.callout-note collapse="true" title="Show retained and third-party files"}
+| File | Why it remains |
+|---|---|
+| `docs/check-local-links-pass1.py` | Preserves the first-pass documentation link checker. |
+| `docs/deprecated/annual-report-public-reset-pass1.ps1` | Preserves the superseded first reset-script pass. |
+| `outputs/synthetic/workflow-test/metrics-workflow-commands.do` | Records generated commands used by the synthetic workflow test output. |
+| `site/_extensions/quarto-ext/fontawesome/_extension.yml` | Registers the vendored Font Awesome Quarto extension; not maintained by BNR. |
+| `site/_extensions/quarto-ext/fontawesome/fontawesome.lua` | Implements the vendored Font Awesome Quarto filter; not maintained by BNR. |
+| `site/_extensions/quarto-ext/fontawesome/assets/css/all.css` | Vendored Font Awesome stylesheet; not maintained by BNR. |
+| `site/_extensions/quarto-ext/fontawesome/assets/css/all.min.css` | Minified copy of the vendored Font Awesome stylesheet; not maintained by BNR. |
+| `site/_extensions/quarto-ext/fontawesome/assets/css/latex-fontsize.css` | Vendored extension stylesheet for LaTeX font sizing; not maintained by BNR. |
+:::
+
 ## Publication boundaries
 
-- Stata creates and approves release-stamped event and mortality packages.
-- Tables, dashboards and Downloads use the approved public files; they do not
-  have separate analytical workflows.
+- Stata creates, reviews, approves and publishes release-stamped event and
+  mortality packages.
+- Tables, dashboards and Downloads use approved public files; they do not have
+  separate analytical workflows.
 - Standard reports reuse approved releases where their purpose allows.
-- Quarto presents approved results. It must not recalculate or silently change them.
-- Correct a release through the version or replacement controls in its workflow;
-  do not edit generated files.
+- Quarto presents approved results. It must not recalculate or silently change
+  them.
+- A local Quarto render previews the site. Only the GitHub deployment workflow
+  places the merged website online.
+- Correct a release through the version or replacement controls in its
+  workflow; do not edit generated files.
 
 Positive counts from **1 to 5** are protected. Zero is not automatically
 protected. Product-specific code applies the full rules, and a person reviews
