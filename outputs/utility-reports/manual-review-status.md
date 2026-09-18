@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 24 | 27 | 0 | 0 | 51 |
+| Technical Manual | 0 | 23 | 28 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -120,7 +120,7 @@
 | How the CVD tables refresh | `site/technical/workflows/reporting/tabulation-regeneration.qmd` | Reviewed by IRH | Page YAML |
 | How the Downloads page refreshes | `site/technical/workflows/reporting/downloads-page-regeneration.qmd` | Reviewed by IRH | Page YAML |
 | How the report listings refresh | `site/technical/workflows/reporting/report-listings-regeneration.qmd` | Reviewed by IRH | Page YAML |
-| Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Not reviewed | Page YAML |
+| Build a rolling three-month CVD update | `site/technical/workflows/reporting/rolling-update.qmd` | Reviewed by IRH | Page YAML |
 | Build, approve and publish an annual CVD report | `site/technical/workflows/reporting/annual-report.qmd` | Reviewed by IRH | Page YAML |
 | Prepare, approve and publish a one-off CVD report | `site/technical/workflows/reporting/one-off-report.qmd` | Reviewed by IRH | Page YAML |
 | Operate the website | `site/technical/website/section-index.qmd` | Not reviewed | Page YAML |

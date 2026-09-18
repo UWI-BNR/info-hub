@@ -97,7 +97,7 @@ Technical Manual,How the CVD dashboards refresh,site/technical/workflows/reporti
 Technical Manual,How the CVD tables refresh,site/technical/workflows/reporting/tabulation-regeneration.qmd,reviewed-by-irh,Page YAML
 Technical Manual,How the Downloads page refreshes,site/technical/workflows/reporting/downloads-page-regeneration.qmd,reviewed-by-irh,Page YAML
 Technical Manual,How the report listings refresh,site/technical/workflows/reporting/report-listings-regeneration.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,not-reviewed,Page YAML
+Technical Manual,Build a rolling three-month CVD update,site/technical/workflows/reporting/rolling-update.qmd,reviewed-by-irh,Page YAML
 Technical Manual,"Build, approve and publish an annual CVD report",site/technical/workflows/reporting/annual-report.qmd,reviewed-by-irh,Page YAML
 Technical Manual,"Prepare, approve and publish a one-off CVD report",site/technical/workflows/reporting/one-off-report.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Operate the website,site/technical/website/section-index.qmd,not-reviewed,Page YAML

@@ -40,7 +40,7 @@ toc: false
 
 ### CVD events {.card-title}
 
-Track heart attacks and strokes over time, including counts, rates, and patterns by sex and age.
+Track heart attacks and strokes over time.
 
 [Explore CVD events](surveillance/cvd/metrics/burden/index.qmd){.btn .btn-primary}
  
@@ -54,7 +54,7 @@ Track heart attacks and strokes over time, including counts, rates, and patterns
 
 ### CVD deaths {.card-title}
 
-Explore deaths associated with heart disease and stroke, including mortality rates and uncertainty in cause-of-death classification.
+Explore deaths associated with heart disease and stroke.
 
 [Explore CVD deaths](surveillance/cvd/metrics/mortality/index.qmd){.btn .btn-primary}
 
@@ -68,7 +68,7 @@ Explore deaths associated with heart disease and stroke, including mortality rat
 
 ### Reports and updates {.card-title}
 
-Read public health updates, annual reports, and focused analyses that translate BNR data into useful evidence.
+Read public health updates, annual reports, data tables, and in-depth analyses.
 
 [View reports and updates](news/index.qmd){.btn .btn-primary}
 
@@ -84,7 +84,7 @@ Read public health updates, annual reports, and focused analyses that translate 
 
 ## Understand and use the data
 
-Explore definitions, methods, data-quality information and downloadable releases to understand and use BNR statistics appropriately.
+Explore definitions, methods, data-quality and downloadable releases. Understand and use BNR statistics.
 
 ::: {.bnr-utility-links}
 [Methods and definitions](./methods/index.qmd){.btn .btn-outline-primary}
