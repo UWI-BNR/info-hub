@@ -1,7 +1,7 @@
 ---
 title: "CVD event–death linkage rules"
 description: "Check how deaths are linked to CVD events and how unresolved deaths are estimated."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -11,8 +11,7 @@ Technical Manual
 ## What this page is for
 
 Use this page to check how a classified CVD death is linked to a hospital event,
-or how unresolved deaths contribute to aggregate estimates. To run the process,
-follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd).
+or how unresolved linkage contribute to aggregate event estimates. The associated CVD event workflow step (#4) can be found at, [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.qmd).
 
 ::: {.callout-note appearance="simple"}
 ## Rules at a glance
@@ -20,8 +19,8 @@ follow [Generate combined CVD metrics](../workflows/cvd-events/generate-metrics.
 - Link people only by the ordered deterministic rules **L01**, **L02** and **L03**.
 - Accept a match only when exactly one eligible CVD person is found.
 - After a person match, treat a Heart or Stroke event **0–27 days before death** as an already-recorded episode.
-- A matched death with no event in that window is a deterministic additional DCO; an unmatched death remains unresolved.
-- Estimate unresolved deaths only in aggregate. Never assign an estimated result to an individual record.
+- A matched death with no event in that window is an additional DCO; an unmatched death remains unresolved.
+- Estimate the number of additional DCOs that come from unresolved deaths only in aggregate. Never assign an estimated result to an individual record.
 :::
 
 ## Scope and candidate pools

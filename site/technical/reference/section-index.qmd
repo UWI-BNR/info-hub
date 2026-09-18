@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Reference"
 description: "Check an implemented rule or find a key system location."
 ---
@@ -11,7 +11,7 @@ description: "Check an implemented rule or find a key system location."
 ::: {.card-body}
 ### [CVD death-classification rules](cvd-death-classification-rules.qmd) {.card-title}
 
-Check why death-certificate text received a Heart, Stroke or combined classification.
+Check how death-certificate text received a Heart, Stroke or combined classification.
 :::
 :::
 :::
@@ -31,7 +31,7 @@ Check how deaths are linked to events and how unresolved deaths are estimated.
 ::: {.card-body}
 ### [Disclosure-control rules](disclosure-control-rules.qmd) {.card-title}
 
-Check why a proposed public value is protected.
+Check how a proposed public value is protected when it might identify an individual.
 :::
 :::
 :::
@@ -51,7 +51,7 @@ Find the correct Stata menu, controller or system location.
 ::: {.card-body}
 ### [CVD suppression validation, 2024–2025](bnr-suppression-validation-2024-2025.qmd) {.card-title}
 
-Review the evidence from 24 monthly releases used to test the protection rules.
+Review the evidence from 24 monthly releases (Jan 2024&mdash;Dec 2025) used to test the protection rules.
 :::
 :::
 :::

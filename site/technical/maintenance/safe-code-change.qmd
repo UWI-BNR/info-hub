@@ -1,6 +1,6 @@
 ---
 title: "Make a safe code change"
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 description: "Change BNR analytical or publication code on a branch, test the affected pathway and merge the reviewed change safely."
 ---
 
@@ -127,7 +127,7 @@ Use the smallest test that gives reasonable confidence, but test every current c
 - Keep Stata readable for mixed-skill analysts.
 - Keep analytical calculations in Stata and presentation in Quarto.
 - Keep analytical decisions visible in analyst-owned or metric-specific DO files.
-- Update dependent dialogs, help, tests and authoritative manual pages in the same controlled change.
+- Update dependent dialogs, help files, and authoritative manual pages in the same controlled change.
 
 ## Step 5: Inspect the difference
 
@@ -171,9 +171,9 @@ Before committing, confirm that:
 
 - only intended files changed;
 - no confidential or private file is listed;
-- `bnr_paths_LOCAL.do`, `venv-info-hub/` and `site/_site/` are absent;
+- `bnr_paths_LOCAL.do`, `venv-info-hub/` and `site/_site/` are not in the *VS Code* Source Control list;
 - approved outputs changed only through the controlled workflow; and
-- temporary test files are absent.
+- temporary test files are also not in the *VS Code* Source Control list.
 
 Use [System reference](../reference/index.qmd) if you do not recognise a file.
 

@@ -1,7 +1,8 @@
 ---
 title: "Fix common problems"
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 description: "Recover safely from common BNR workstation, Stata, approval, publication, Quarto, Git and deployment problems."
+toc-depth: 3
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -38,15 +39,19 @@ Do not repair generated outputs one by one.
 | GitHub Pages build or deployment problem | [GitHub Actions](#github-problems) |
 | Publication stopped after copying some files | [Partial publication](#partial-publication) |
 
-::: {.callout-tip}
 ## Read the final Stata summary first
 
+::: {.callout-tip}
+
 Current operational DO files report a concise final status and private log path. Start there before searching the Results window line by line.
+
 :::
 
 ## Workstation and Stata {#workstation-problems}
 
 ### `User > BNR` is missing
+
+::: {.callout-note collapse="true"}
 
 Restart Stata. Then check in the Stata command window:
 
@@ -69,7 +74,11 @@ Expected message:
 BNR menu loaded: User > BNR
 ```
 
+:::
+
 ### A required BNR path is not configured
+
+::: {.callout-note collapse="true"}
 
 Check in Stata:
 
@@ -85,7 +94,11 @@ display "$BNR_PUBLIC"
 
 Correct `bnr_paths_LOCAL.do` or the way `profile.do` loads it. Do not hard-code a workstation path in an operational DO file.
 
+:::
+
 ### A REDCap extract cannot find its token
+
+::: {.callout-note collapse="true"}
 
 Check the token-file path without displaying the secret. For a CVD event extract:
 
@@ -96,7 +109,11 @@ confirm file "$BNR_REDCAP_TOKEN_FILE"
 
 For mortality, use `$BNR_MORT_REDCAP_TOKEN_FILE`. Correct the secure local token file or its path. Never paste a token into tracked code, a log or this manual.
 
+:::
+
 ### Python or PyCap is unavailable
+
+::: {.callout-note collapse="true"}
 
 In Stata:
 
@@ -121,9 +138,13 @@ python scripts/python/check-python-environment.py
 
 Restart Stata afterwards. If setup remains incomplete, return to [Set up a workstation](../getting-started/workstation-setup.qmd).
 
+:::
+
 ## Analytical workflow {#stata-problems}
 
 ### An input file is missing
+
+::: {.callout-note collapse="true"}
 
 Do not substitute a different data release or similarly named file.
 
@@ -135,29 +156,49 @@ Do not substitute a different data release or similarly named file.
 
 For example, CVD event Step 4 needs the authorised Step 3 analytical inputs. Public tables need the approved CVD event and mortality files produced by their publication workflows.
 
+:::
+
 ### An output or package already exists
+
+::: {.callout-note collapse="true"}
 
 This is normally deliberate overwrite protection. Do not add `replace` merely to clear the message.
 
 Confirm that a rebuild or republication of the exact data release or report version is authorised, then follow [What `replace` means](files-releases-versions.qmd#what-replace-means) and the product-specific procedure.
 
+:::
+
 ### The run completes but the result looks wrong
+
+::: {.callout-note collapse="true"}
 
 Treat this as a failed review. Check the selected source release, reporting period, totals and components, missing groups, quality outputs, disclosure status and recent code changes.
 
 Correct the earliest data, reference, configuration or code cause and rebuild. Do not patch the CSV, workbook, figure or generated QMD.
 
+:::
+
 ### A generated figure is wrong
 
+::: {.callout-note collapse="true"}
+
 Correct the Stata source or data that creates it and rebuild the package. Do not edit the PNG or PDF as the analytical correction.
+
+:::
 
 ## Approval and publication {#approval-problems}
 
 ### `approval.yml` is missing
 
+::: {.callout-note collapse="true"}
+
 The package has not completed approval, or a rebuild invalidated the previous approval. Complete the product-specific review and approval action. Do not create `approval.yml` manually.
 
+:::
+
 ### A manifest, checksum or fingerprint does not match
+
+::: {.callout-note collapse="true"}
 
 The publication controller cannot prove that it is reading the exact approved files.
 
@@ -165,13 +206,21 @@ Check whether a proposed public file changed after review, the package was rebui
 
 Never edit a checksum, fingerprint, manifest or approval record to force a pass.
 
+:::
+
 ### A required approved file is missing
 
+::: {.callout-note collapse="true"}
+
 Check the data-release or report identity, the generated manifest and the expected private approved-package folder. Rebuild and reapprove as needed. Do not borrow a similarly named file from another package.
+
+:::
 
 ## Quarto {#quarto-problems}
 
 ### `start-info-hub-edit.bat` does not start
+
+::: {.callout-note collapse="true"}
 
 Read the launcher message. It explicitly checks the site configuration and local virtual environment.
 
@@ -186,7 +235,11 @@ quarto preview --host 127.0.0.1 --port 4200
 
 Stop the preview with `Ctrl+C`. If the environment is incomplete, repeat the relevant workstation setup stage.
 
+:::
+
 ### `quarto render` fails
+
+::: {.callout-note collapse="true"}
 
 From an activated environment in the `site` folder, run:
 
@@ -199,7 +252,11 @@ Start with the first meaningful error. Likely causes include invalid YAML indent
 
 Correct the source and render again. Never edit `site/_site/`.
 
+:::
+
 ### A new package is missing from Downloads
+
+::: {.callout-note collapse="true"}
 
 Check, in order:
 
@@ -210,17 +267,29 @@ Check, in order:
 
 Correct the product publication record or source path and render again. Do not hand-edit `site/downloads/downloads.yml`.
 
+:::
+
 ## Git {#git-problems}
 
 ### VS Code shows unexpected changed files
 
+::: {.callout-note collapse="true"}
+
 Do not stage them. Open each file and read its difference. Use [System reference](../reference/index.qmd) if you do not recognise it.
+
+:::
 
 ### `bnr_paths_LOCAL.do`, `venv-info-hub/` or `site/_site/` appears
 
+::: {.callout-note collapse="true"}
+
 Do not commit it. These paths are normally ignored. Check `.gitignore` and whether Git already tracks the file before changing any ignore rule.
 
+:::
+
 ### You edited the wrong file and have not committed
+
+::: {.callout-note collapse="true"}
 
 After checking the filename carefully, use VS Code **Discard Changes** for that file.
 
@@ -230,11 +299,19 @@ Equivalent command:
 git restore path/to/file
 ```
 
+:::
+
 ### Git reports a merge conflict
+
+::: {.callout-note collapse="true"}
 
 If you understand both changes, use the VS Code merge editor to create one correct final version, then repeat the affected tests. If not, stop and obtain help. Do not select **Accept Current** or **Accept Incoming** merely to remove the warning.
 
+:::
+
 ### Confidential material may have entered Git
+
+::: {.callout-note collapse="true"}
 
 Treat this as a security incident:
 
@@ -246,19 +323,31 @@ Treat this as a security incident:
 
 Deleting a file in a later commit does not remove it from earlier Git history.
 
+:::
+
 ## GitHub Actions {#github-problems}
 
 ### The local render works but GitHub Actions fails
+
+::: {.callout-note collapse="true"}
 
 On GitHub, open **Actions**, select the newest **Publish Quarto site** run, open the failed build or deploy job and read the failed step.
 
 Confirm that every required public source file was committed, dependencies are declared in `requirements.txt`, and no private or workstation-specific path is used. Correct the source on a development branch, render locally and merge the correction through a pull request.
 
+:::
+
 ### GitHub Actions succeeds but the live page looks unchanged
+
+::: {.callout-note collapse="true"}
 
 Confirm that the intended development branch was merged into `main`, the successful action belongs to that merge, the changed source is visible on `main`, and you opened the correct live page. Then refresh the browser.
 
+:::
+
 ## Partial publication {#partial-publication}
+
+::: {.callout-note collapse="true"}
 
 A controlled Stata publication can stop after some file operations have completed. Do not assume that nothing changed, and do not finish the copy manually.
 
@@ -274,11 +363,17 @@ Then:
 
 If the approved private package changed, stop and repeat review and approval instead.
 
+:::
+
 ## Public output and website disagree
+
+::: {.callout-note collapse="true"}
 
 Compare the official package under `$BNR_PUBLIC` with the website copy. If the official package is correct, refresh the website copy through the controlled Stata publication action, then render and deploy the site again.
 
 Do not change the official package to match a mistaken website copy.
+
+:::
 
 ## Stop troubleshooting when
 

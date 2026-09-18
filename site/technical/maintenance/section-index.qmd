@@ -1,7 +1,7 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Maintain and recover"
-description: "Change maintained source safely, manage files and versions, and recover from common problems."
+description: "Change Info-Hub code safely, manage files and versions, and recover from common problems."
 ---
 
 ::: {.grid .bnr-manual-section-listing}
