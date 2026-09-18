@@ -1,2 +1,3 @@
-level,title,anchor_text,required_full_report
-1,Public health update,Public health update | CVD in {report_year},yes
+level,title,anchor_text,destination,required_full_report
+1,The BNR Information Hub,,penultimate,yes
+1,Public health update,Public health update | CVD in {report_year},anchor,yes
