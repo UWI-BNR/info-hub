@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_standard.do
-VERSION: 2.5.1 (6 September 2026)
+VERSION: 2.6.1 (18 September 2026)
 PURPOSE: Reusable putpdf composition for the standard annual CVD surveillance
          section.
 
@@ -35,6 +35,19 @@ DESIGN PASS 2.5.1:
     by the controlled PDF-finishing helper.
   - The placeholder is presentation metadata only. It contains no analytical
     information and must remain unique within the report body.
+
+DESIGN PASS 2.6.0:
+  - Distinguish the reporting year from the publication date on the cover and
+    in compact international-agency-style publication information.
+  - Add a visual plain-language guide to the report's event, mortality, rate,
+    uncertainty and confidentiality conventions before the Contents page.
+  - Explain the historical lines in the within-year chart.
+  - Separate death-certificate evidence classification from record matching in
+    the Methods chapter without changing either analytical process.
+
+DESIGN PASS 2.6.1:
+  - Recompose About this report as a compact international-agency-style
+    colophon, with a quiet two-column publication record and citation panel.
 
 DESIGN PASS 2.2.0:
   - Keep summary-card backgrounds continuous behind labels and values.
@@ -113,6 +126,10 @@ if "`report_year4'" == "" {
 }
 if "`event_release'" == "" | "`mortality_release'" == "" {
     display as error "Annual standard composition requires declared public release IDs."
+    exit 198
+}
+if "`annual_publication_date'" == "" | "`annual_publication_date_iso'" == "" {
+    display as error "Annual standard composition requires valid annual publication-date locals."
     exit 198
 }
 
@@ -319,13 +336,18 @@ putpdf table cover(1,1) = (" ")
 putpdf table cover(2,1) = (" ")
 putpdf table cover(3,1) = ("BARBADOS NATIONAL REGISTRY"), ///
     halign(center) font("`font_title'", 10, "`bnr_teal'")
-putpdf table cover(4,1) = ("Annual cardiovascular disease report"), ///
-    halign(center) bold font("`font_title'", 24, "`bnr_ink'")
+/// putpdf table cover(4,1) = ("Annual cardiovascular disease report"), ///
+///    halign(center) bold font("`font_title'", 24, "`bnr_ink'")
+putpdf table cover(4,1) = ("Annual"), ///
+    halign(center) bold font("`font_title'", 24, "`bnr_ink'") linebreak
+putpdf table cover(4,1) = ("cardiovascular disease report"), ///
+    halign(center) bold font("`font_title'", 24, "`bnr_ink'") append
 putpdf table cover(5,1) = ("`report_year4'"), ///
     halign(center) bold font("`font_title'", 30, "`bnr_ink'")
-putpdf table cover(6,1) = ("Cardiovascular disease events and mortality in Barbados"), ///
+putpdf table cover(6,1) = ("Cardiovascular disease events and mortality in Barbados, 2010-`report_year4'"), ///
     halign(center) font("`font_body'", 11, "`bnr_muted'")
-putpdf table cover(7,1) = (" ")
+putpdf table cover(7,1) = ("Published `annual_publication_date'"), ///
+    halign(center) font("`font_body'", 8.5, "`bnr_muted'")
 putpdf table cover(8,1) = ("The University of the West Indies | Cave Hill Campus"), ///
     halign(center) font("`font_body'", 8, "`bnr_muted'")
 
@@ -345,106 +367,193 @@ putpdf table cover(8,1) = ("The University of the West Indies | Cave Hill Campus
 putpdf pagebreak
 
 putpdf paragraph, font("`font_body'", 1)
+putpdf text ("PUBLICATION INFORMATION"), ///
+    bold font("`font_title'", 7.4, "`bnr_teal'") linebreak
+
 putpdf text ("About this report"), ///
-    bold font("`font_title'", 19, "`bnr_ink'") linebreak
+    bold font("`font_title'", 18, "`bnr_ink'") linebreak
 
-putpdf text ("Annual cardiovascular disease report `report_year4'"), ///
-    bold font("`font_title'", 11, "`bnr_teal'") linebreak
-
-putpdf text ("Cardiovascular disease events and mortality in Barbados"), ///
+putpdf text ("Cardiovascular disease events and mortality in Barbados, 2010-`report_year4'"), ///
     font("`font_body'", 9, "`bnr_muted'")
 
 putpdf paragraph, font("`font_body'", 3)
+putpdf table report_colophon_rule = (1,1), width(100%) border(all, nil)
+putpdf table report_colophon_rule(1,1) = (" "), ///
+    border(top, single, "`bnr_teal'")
 
-putpdf text ("Purpose and scope"), ///
-    bold font("`font_title'", 11, "`bnr_ink'") linebreak
+matrix report_colophon_widths = (15, 44, 3, 13, 25)
+putpdf table report_colophon = (10,5), width(100%) ///
+    width(report_colophon_widths) border(all, nil)
 
-putpdf text ///
-    ("This report provides an annual overview of cardiovascular disease events and mortality in Barbados. It presents results on the burden of heart attacks and strokes in Barbados, together with selected sex and age summaries. The report is publically available, and is particularly aimed at supporting decision-making by government, hospitals, clinics, public-health teams, researchers and other partners."), ///
-    font("`font_body'", 8.5, "`bnr_ink'")
+putpdf table report_colophon(1,1), colspan(2)
+putpdf table report_colophon(1,4), colspan(2)
+foreach rr in 2 3 4 5 6 7 8 9 10 {
+    putpdf table report_colophon(`rr',1), colspan(2)
+}
 
-putpdf paragraph, font("`font_body'", 2)
+putpdf table report_colophon(1,1) = ("PURPOSE AND SCOPE"), ///
+    bold font("`font_title'", 7.5, "`bnr_teal'")
+putpdf table report_colophon(1,4) = ("PUBLICATION DETAILS"), ///
+    bold font("`font_title'", 7.5, "`bnr_teal'") bgcolor("`bnr_pale2'")
 
-putpdf text ///
-    ("The report presents a range of annual aggregated observations using the quality-controlled and approved BNR data releases. Estimates should be interpreted alongside the definitions, coverage notes and uncertainty information provided in the report. The report and the underlying data are available from the BNR Information Hub."), ///
-    font("`font_body'", 8.5, "`bnr_ink'")
+putpdf table report_colophon(2,1) = ///
+    ("This report provides an annual overview of cardiovascular disease events and mortality in Barbados. It presents results on heart attacks and strokes, with selected sex and age summaries, to support government, hospitals, clinics, public-health teams, researchers and other partners."), ///
+    font("`font_body'", 7.8, "`bnr_ink'")
+putpdf table report_colophon(2,4) = ("Report"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(2,5) = ///
+    ("Annual cardiovascular disease report `report_year4'"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf paragraph, font("`font_body'", 3)
+putpdf table report_colophon(3,1) = ///
+    ("The results come from quality-controlled and approved BNR data releases. They should be read alongside the definitions, coverage notes and uncertainty information in this report. The report and its public data are available from the BNR Information Hub."), ///
+    font("`font_body'", 7.8, "`bnr_ink'")
+putpdf table report_colophon(3,4) = ("Reporting period"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(3,5) = ("2010-`report_year4'"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf text ("Report information"), ///
-    bold font("`font_title'", 11, "`bnr_ink'") linebreak
+putpdf table report_colophon(4,1) = ("SUGGESTED CITATION"), ///
+    bold font("`font_title'", 7.2, "`bnr_teal'") ///
+    border(top, single, "`bnr_teal'")
+putpdf table report_colophon(4,4) = ("Publication date"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(4,5) = ("`annual_publication_date'"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_frontmatter = (6,2), width(100%) border(all, nil)
+putpdf table report_colophon(5,1) = ///
+    ("Howitt C, Campbell J, Hambleton I for the Barbados National Registry. Annual cardiovascular disease report `report_year4': cardiovascular disease events and mortality in Barbados, 2010-`report_year4'. The University of the West Indies, Cave Hill Campus, Bridgetown, Barbados; `annual_publication_date'."), ///
+    font("`font_body'", 7.2, "`bnr_teal'")
+putpdf table report_colophon(5,4) = ("Prepared by"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(5,5) = ///
+    ("Christina Howitt; Jacqueline Campbell; Ian Hambleton"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_frontmatter(1,1) = ("Report")
-putpdf table report_frontmatter(1,2) = ///
-    ("Annual cardiovascular disease report `report_year4'")
+putpdf table report_colophon(6,1) = ("ACKNOWLEDGEMENTS"), ///
+    bold font("`font_title'", 7.2, "`bnr_teal'")
+/// putpdf table report_colophon(6,4) = ("Corporate author"), ///
+///     bold font("`font_title'", 6.6, "`bnr_muted'")
+/// putpdf table report_colophon(6,5) = ///
+///     ("Barbados National Registry, The University of the West Indies, Cave Hill Campus"), ///
+///     font("`font_body'", 7, "`bnr_ink'")
 
-putpdf table report_frontmatter(2,1) = ("Prepared by")
-putpdf table report_frontmatter(2,2) = ///
-    ("Christina Howitt; Jacqueline Campbell; Ian Hambleton")
+putpdf table report_colophon(7,1) = ///
+    ("The Barbados National Registry acknowledges the clinical, hospital, registry, data-management and public-health teams whose work supports this report. Definitions, ascertainment rules, mortality classifications, uncertainty measures, data availability and disclosure controls are described in the online BNR Methods manual."), ///
+    font("`font_body'", 7.2, "`bnr_ink'")
+putpdf table report_colophon(7,4) = ("Published by"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(7,5) = ///
+    ("The University of the West Indies, Cave Hill Campus, Bridgetown, Barbados"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_frontmatter(3,1) = ("Institution")
-putpdf table report_frontmatter(3,2) = ///
-    ("Barbados National Registry | The University of the West Indies, Cave Hill Campus")
+putpdf table report_colophon(8,1) = ("PUBLICATION CONTROL"), ///
+    bold font("`font_title'", 7.2, "`bnr_teal'")
 
-putpdf table report_frontmatter(4,1) = ("Approved data releases")
-putpdf table report_frontmatter(4,2) = ///
-    ("CVD events: `event_release' | CVD mortality: `mortality_release'")
+putpdf table report_colophon(9,1) = ///
+    ("This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
+    italic font("`font_body'", 6.8, "`bnr_muted'")
+putpdf table report_colophon(9,4) = ("Online report and data"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(9,5) = ///
+    ("https://uwi-bnr.github.io/info-hub/"), ///
+    font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_frontmatter(5,1) = ("Online report")
-putpdf table report_frontmatter(5,2) = ///
-    ("https://uwi-bnr.github.io/info-hub/")
+putpdf table report_colophon(10,4) = ("Approved data releases"), ///
+    bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table report_colophon(10,5) = ///
+   ("CVD events: `event_release' | CVD mortality: `mortality_release'"), ///
+   font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_frontmatter(6,1) = ("Suggested citation")
-
-putpdf table report_frontmatter(6,2) = ///
-    ("Howitt C, Campbell J, Hambleton I for the Barbados National Registry. ")
-
-putpdf table report_frontmatter(6,2) = ///
-    ("Annual cardiovascular disease report `report_year4': cardiovascular disease events and mortality in Barbados. "), italic append
-
-putpdf table report_frontmatter(6,2) = ///
-    ("The University of the West Indies, Cave Hill Campus, Bridgetown, Barbados."), append
-
-putpdf table report_frontmatter(.,.), ///
-    font("`font_body'", 7.8, "`bnr_ink'") ///
-    bgcolor("`bnr_white'")
-
-putpdf table report_frontmatter(1,.), ///
-    bold font("`font_title'", 7.8, "`bnr_teal'") ///
-    border(top, single, "`bnr_teal'") ///
-    border(bottom, single, "`bnr_rule'")
-
-putpdf table report_frontmatter(2/6,1), ///
-    bold font("`font_title'", 7.8, "`bnr_ink'")
-
-putpdf paragraph, font("`font_body'", 3)
-
-putpdf text ("Acknowledgements"), ///
-    bold font("`font_title'", 11, "`bnr_ink'") linebreak
-
-putpdf text ///
-    ("The Barbados National Registry acknowledges the clinical, hospital, registry, data-management and public-health teams whose work supports the production of this surveillance report."), ///
-    font("`font_body'", 8.5, "`bnr_ink'")
-
-putpdf paragraph, font("`font_body'", 3)
-
-putpdf text ("Further information"), ///
-    bold font("`font_title'", 11, "`bnr_ink'") linebreak
-
-putpdf text ///
-    ("Definitions, ascertainment rules, mortality classifications, uncertainty measures, data availability and disclosure controls are described in the BNR Methods manual, available online. These methods, latest public report and associated data products are available at: https://uwi-bnr.github.io/info-hub/"), ///
-    font("`font_body'", 8.5, "`bnr_ink'")
-
-putpdf paragraph, font("`font_body'", 3)
-
-putpdf text ///
-    ("Publication note: This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
-    italic font("`font_body'", 7.4, "`bnr_muted'")
+putpdf table report_colophon(1,4), bgcolor("`bnr_pale2'")
+putpdf table report_colophon(2/10,4/5), bgcolor("`bnr_pale2'")
 
 * -----------------------------------------------------------------------------
-* 5B. Dynamic contents placeholder
+* 5B. How to read this report
+* -----------------------------------------------------------------------------
+* This front-matter page introduces the report's distinct event and mortality
+* views without duplicating the detailed Methods chapter.
+
+putpdf pagebreak
+putpdf paragraph, font("`font_body'", 1)
+putpdf text ("How to read this report"), ///
+    bold font("`font_title'", 19, "`bnr_ink'") linebreak
+putpdf text ("A short guide to the results used throughout the report"), ///
+    font("`font_body'", 9, "`bnr_muted'")
+
+putpdf paragraph, font("`font_body'", 2)
+putpdf text ("The report presents several related views of cardiovascular disease. They answer different questions and should not be treated as interchangeable."), ///
+    font("`font_body'", 8.1, "`bnr_ink'")
+
+matrix read_guide_widths = (25, 45, 30)
+putpdf table read_guide = (7,3), width(100%) width(read_guide_widths) border(all, nil)
+putpdf table read_guide(1,1) = ("RESULT")
+putpdf table read_guide(1,2) = ("WHAT IT COUNTS")
+putpdf table read_guide(1,3) = ("HOW TO USE IT")
+putpdf table read_guide(2,1) = ("Hospital-recorded events")
+putpdf table read_guide(2,2) = ("Eligible Heart and Stroke episodes identified through hospital information. One person may contribute more than one separate event.")
+putpdf table read_guide(2,3) = ("Describes serious events recognised through the hospital source.")
+putpdf table read_guide(3,1) = ("Primary national event estimate")
+putpdf table read_guide(3,2) = ("Hospital-recorded events plus the estimated contribution of additional death-certificate-only events using Clear and Likely evidence, after accounting for overlap.")
+putpdf table read_guide(3,3) = ("The main BNR national event estimate.")
+putpdf table read_guide(4,1) = ("Inclusive national event estimate")
+putpdf table read_guide(4,2) = ("The Primary estimate expanded to include Possible death-certificate evidence.")
+putpdf table read_guide(4,3) = ("Shows the effect of using the broader evidence definition.")
+putpdf table read_guide(5,1) = ("Primary death count")
+putpdf table read_guide(5,2) = ("Deaths with Clear or Likely cardiovascular evidence on the death certificate.")
+putpdf table read_guide(5,3) = ("The main BNR mortality estimate.")
+putpdf table read_guide(6,1) = ("Inclusive death count")
+putpdf table read_guide(6,2) = ("Primary deaths plus deaths with Possible cardiovascular evidence.")
+putpdf table read_guide(6,3) = ("Shows sensitivity to less-certain death-certificate evidence.")
+putpdf table read_guide(7,1) = ("Age-standardised rate")
+putpdf table read_guide(7,2) = ("A rate adjusted to a standard age structure.")
+putpdf table read_guide(7,3) = ("Supports fairer comparisons between populations or periods.")
+putpdf table read_guide(.,.), font("`font_body'", 6.9, "`bnr_ink'") bgcolor("`bnr_white'")
+putpdf table read_guide(1,.), bold font("`font_title'", 6.9, "`bnr_ink'") ///
+    border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
+putpdf table read_guide(2/4,1), bold font("`font_title'", 6.9, "`bnr_teal'")
+putpdf table read_guide(5/6,1), bold font("`font_title'", 6.9, "`bnr_secondary'")
+putpdf table read_guide(7,1), bold font("`font_title'", 6.9, "`bnr_amber_text'")
+
+putpdf paragraph, font("`font_body'", 1.5)
+putpdf table result_choice = (2,1), width(100%) border(all, nil)
+putpdf table result_choice(1,1) = ("WHICH RESULT SHOULD I USE?"), ///
+    bold font("`font_title'", 7.7, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table result_choice(2,1) = ("Use the Primary result as the main BNR estimate. The Inclusive result shows how the estimate changes when less-certain death-certificate evidence is included. Neither BNR mortality definition is equivalent to formally coded national underlying-cause-of-death statistics. See Section 4 | Methods."), ///
+    font("`font_body'", 7.5, "`bnr_ink'")
+
+putpdf paragraph, font("`font_body'", 1.5)
+putpdf text ("Six other features to notice"), ///
+    bold font("`font_title'", 9.5, "`bnr_ink'") linebreak
+matrix read_feature_widths = (31, 3.5, 31, 3.5, 31)
+putpdf table read_features = (4,5), width(100%) width(read_feature_widths) border(all, nil)
+putpdf table read_features(1,1) = ("CHARTS AND TABLES")
+putpdf table read_features(2,1) = ("Charts show the longer pattern over time; tables give exact results for the latest five complete years.")
+putpdf table read_features(1,3) = ("UNCERTAINTY")
+putpdf table read_features(2,3) = ("Whiskers show statistical 95% confidence intervals. Pale bands show uncertainty in the estimated DCO contribution.")
+putpdf table read_features(1,5) = ("PROTECTED VALUES")
+putpdf table read_features(2,5) = ("An asterisk marks a value withheld to protect confidentiality. It does not mean zero.")
+putpdf table read_features(3,1) = ("HOW COLOUR IS USED")
+putpdf table read_features(4,1) = ("Colour groups related measures and sections. It supports navigation and comparison; it does not judge performance.")
+putpdf table read_features(3,3) = ("WHAT THIS MEANS")
+putpdf table read_features(4,3) = ("These notes highlight the main message from each result and any important context needed to interpret it.")
+putpdf table read_features(3,5) = ("COMPANION PUBLICATIONS")
+putpdf table read_features(4,5) = ("Monthly updates provide the latest surveillance picture. Other BNR reports summarise key messages or explore selected topics in greater depth.")
+putpdf table read_features(1,1), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(1,3), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(1,5), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(2,1), font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(2,3), font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(2,5), font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(3,1), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(3,3), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(3,5), bold font("`font_title'", 6.8, "`bnr_teal'") border(top, single, "`bnr_teal'")
+putpdf table read_features(4,1), font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(4,3), font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(4,5), font("`font_body'", 6.8, "`bnr_ink'")
+
+* -----------------------------------------------------------------------------
+* 5C. Dynamic contents placeholder
 * -----------------------------------------------------------------------------
 * INVARIANT PRESENTATION HAND-OFF - DO NOT EDIT OR DUPLICATE.
 * Stata owns the position of the Contents page. The controlled Python finishing
@@ -458,7 +567,7 @@ putpdf text ("Contents"), bold font("`font_title'", 19, "`bnr_ink'") linebreak
 putpdf text ("BNR_TOC_PLACEHOLDER"), font("`font_body'", 1, "`bnr_white'")
 
 * -----------------------------------------------------------------------------
-* 5C. Year in brief - one-page visual summary
+* 5D. Year in brief - one-page visual summary
 * -----------------------------------------------------------------------------
 * MAINTAINED PRESENTATION AND METRIC-SELECTION BLOCK.
 * BNR ANALYST: do not change filters or calculations here. This block draws the
@@ -554,7 +663,7 @@ putpdf table yib_cards(5,3), border(top, single, "`bnr_secondary'")
 putpdf paragraph, font("`font_body'", 1)
 putpdf text ("How the year unfolded"), bold font("`font_title'", 10.5, "`bnr_ink'")
 putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Monthly hospital-recorded CVD events in `report_year4'. Unlike hospital events, national event estimates are updated annually because events captured only through death-record are added after each year closes."), font("`font_body'", 7.4, "`bnr_muted'")
+putpdf text ("Monthly hospital-recorded CVD events. The dark line shows `report_year4'; the lighter lines show earlier years. National estimates are updated annually after death records are added."), font("`font_body'", 7.4, "`bnr_muted'")
 capture confirm file "`yib_monthly_fig'"
 if !_rc {
     putpdf table yib_monthly = (1,1), width(100%) border(all, nil) halign(center)
@@ -961,16 +1070,17 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("Extending the picture using death records"), bold font("`font_title'", 14, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Some eligible cardiovascular events are identified through death information rather than hospital records. Bringing the two sources together broadens the national picture and requires careful classification and matching so that an event already represented in the hospital series is counted appropriately."), font("`font_body'", 8.4)
+putpdf text ("Some cardiovascular events are identified through death information rather than hospital records. To broaden the national picture, BNR first classifies the cardiovascular evidence on the death certificate, then matches hospital and death records so that the same event is not counted twice."), font("`font_body'", 8.4)
 
 putpdf paragraph
 putpdf text ("What is a DCO event?"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
 putpdf text ("A death-certificate-only (DCO) event is an eligible event identified from death information with no matched eligible hospital-recorded event. DCO-enhanced counts and rates are produced annually, after death-record ascertainment for the year is complete. Annual aggregation also supports safe reporting where monthly or quarterly DCO numbers may be small. Monthly and quarterly event views therefore describe hospital-recorded events."), font("`font_body'", 8.4)
 
+matrix linkage_widths = (25, 75)
 putpdf paragraph
 putpdf text ("How linkage is undertaken"), bold font("`font_title'", 11, "`bnr_ink'")
-putpdf table methods_linkage = (5,2), width(100%) border(all, nil)
+putpdf table methods_linkage = (5,2), border(all, nil) width(linkage_widths)
 putpdf table methods_linkage(1,1) = ("Stage")
 putpdf table methods_linkage(1,2) = ("What we do")
 putpdf table methods_linkage(2,1) = ("1  Prepare")
@@ -1004,17 +1114,19 @@ putpdf table event_scope(3,2) = ("Hospital events plus DCO contribution based on
 putpdf table event_scope(3,3) = ("Provides the main BNR annual national estimate. This is our primary or central estimate.")
 putpdf table event_scope(4,1) = ("Inclusive national")
 putpdf table event_scope(4,2) = ("Hospital events plus DCO contribution that also includes Possible mortality evidence")
-putpdf table event_scope(4,3) = ("Provides a broader estimate showing sensitivity to the wider evidence definition. This is our inclusive or upper estimate")
+putpdf table event_scope(4,3) = ("Provides a broader estimate showing sensitivity to the wider evidence definition. This is our inclusive or upper estimate.")
 putpdf table event_scope(.,.), font("`font_body'", 7.4)
 putpdf table event_scope(1,.), bold bgcolor("`bnr_white'") ///
     border(top, single, "`bnr_teal'") border(bottom, single, "`bnr_rule'")
 putpdf table event_scope(2/4,1), bold
 putpdf paragraph
-putpdf text ("During our matching process, we create 5 categories of matching: clear, likely, possible, mention only, no evidence. These uncertainty categories are described in detail on the next page."), font("`font_title'", 8.2)
+putpdf text ("Record matching and death-certificate classification answer different questions. Matching determines whether a hospital record and a death record relate to the same person and event. This prevents duplicate counting and helps identify additional death-certificate-only events."), font("`font_body'", 8.2)
+putpdf paragraph
+putpdf text ("Clear, Likely, Possible, Mention only and No evidence describe the strength of cardiovascular evidence on the death certificate; they are not categories of record matching. These evidence classes are defined on the next page and are used in the Primary and Inclusive event and mortality definitions."), font("`font_body'", 8.2)
 putpdf paragraph
 putpdf text ("Linkage uncertainty range"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("Where unresolved links could affect the national total, the public data provide three values. The lower value uses the more conservative interpretation, the central value is the main BNR estimate, and the upper value reflects the broader contribution supported by the approved linkage rules. Together they show how much the national estimate could change under the accepted interpretations of unresolved matches. Because the DCO contribution is estimated at aggregate level, national event estimates may contain decimal values before rounding for presentation."), font("`font_body'", 8.2)
+putpdf text ("Where unresolved links could affect the national total, the public data provide three values. The lower value uses the more conservative interpretation, the central value is the main BNR estimate, and the upper value reflects the broader contribution supported by the approved linkage rules. Because the DCO contribution is estimated at aggregate level, national event estimates may contain decimal values before rounding for presentation."), font("`font_body'", 8.2)
 
 putpdf table methods_linkage_note = (1,1), width(100%) border(all, nil)
 putpdf table methods_linkage_note(1,1) = ("WHEN READING THE REPORT | A wider linkage range means that unresolved matching has more influence on the national estimate. Statistical confidence intervals describe the precision of a rate and answer a different question."), font("`font_title'", 8.2, "`bnr_teal'")

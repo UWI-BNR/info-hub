@@ -388,6 +388,8 @@ foreach event in all_cvd heart stroke {
     quietly count
     if r(N) > 0 {
 
+    replace period_year = period_year + 0.05 if sex == "male"
+
     #delimit ; 
         twoway ///
           (rarea linkage_lower_value linkage_upper_value period_year if ascertainment_scope == "hospital_plus_dco" & mortality_definition == "primary" & sex=="female", 
@@ -1007,7 +1009,7 @@ foreach event in all_cvd heart stroke {
           xscale(noline range(2009(1)2026)) 
           yscale(noline) xtitle("") ytitle("") 
 
-          legend(order(5 "Women" 6 "Men" 4 "Rate 95% CI" 2 "DCO uncertainty") cols(4) size(5) region(lcolor(none)) position(12) ring(1)) 
+          legend(order(3 "Women" 4 "Men" - " " 1 " " 2 "95% CIs for rates") cols(5) size(5) region(lcolor(none)) position(12) ring(1)) 
 
           xsize(10.0) ysize(3.2)
           name(sex_mort_`event')

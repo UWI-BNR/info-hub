@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_2025_interpretation.do
-VERSION: 1.3.0 (10 September 2026)
+VERSION: 1.4.0 (18 September 2026)
 PURPOSE: Analyst-owned interpretation text for the 2025 annual CVD report.
 
 EDITING RULE:
@@ -31,6 +31,18 @@ STATA NAMING NOTE:
 * controls. If a number changes, correct the source release/workflow and rerun;
 * do not make the narrative contradict the published table.
 *******************************************************************************
+
+* -----------------------------------------------------------------------------
+* Publication information
+* -----------------------------------------------------------------------------
+* EDITABLE BLOCK.
+* Change these two dates when the publication date or the dated refit position
+* changes. They are presentation metadata only and do not alter data coverage,
+* release selection or the report identifier.
+
+local annual_publication_date "29 November 2026"
+local annual_publication_date_iso : display %tdCCYY-NN-DD daily("`annual_publication_date'", "DMY")
+local refit_position_date     "30 November 2026"
 
 * -----------------------------------------------------------------------------
 * Year in brief

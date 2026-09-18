@@ -1,7 +1,17 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.2.0 (10 September 2026)
+VERSION: 1.3.1 (18 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
+
+CHANGE 1.3.0:
+  - Insert the reusable BNR Information Hub page immediately before the public-
+    health update, preserving the update as the final extractable page.
+  - Write the approved publication date to the generated landing pages and
+    report metadata independently of the candidate build date.
+
+CHANGE 1.3.1:
+  - Require the controlled Information Hub promotional image before PDF
+    composition and pass it to the penultimate-page template.
 
 CHANGE 1.2.0:
   - Append a one-page public-health update composed in Stata from the same
@@ -259,6 +269,8 @@ local pdf_furniture_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
 local pdf_toc_standard_spec "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_toc.csv"
 local pdf_toc_special_spec "$BNR_REPO/scripts/stata/reporting/annual/`report_year4'/bnr_report_annual_`report_year4'_toc.csv"
 local pdf_toc_appendix_spec "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_appendix_toc.csv"
+local info_hub_template "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_info_hub_page.do"
+local info_hub_promo "$BNR_REPO/scripts/stata/reporting/assets/bnr_info_hub_promo_2026.png"
 local update_template "$BNR_REPO/scripts/stata/reporting/templates/bnr_report_annual_public_health_update.do"
 
 local reports_dir "$BNR_STAGING/reports"
@@ -282,7 +294,7 @@ foreach required_dir in reports_dir cvd_dir annual_dir package_dir ///
 * INVARIANT - DO NOT EDIT.
 * Require the controlled PDF-finishing helper, supported Python interpreter
 * and approved crest before composition begins.
-foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo pdf_toc_standard_spec pdf_toc_special_spec pdf_toc_appendix_spec update_template {
+foreach required_file in pdf_furniture_helper pdf_furniture_python pdf_furniture_logo pdf_toc_standard_spec pdf_toc_special_spec pdf_toc_appendix_spec info_hub_template info_hub_promo update_template {
     capture confirm file "``required_file''"
     if _rc {
         display as error "Annual report page-furniture requirement not found: ``required_file''"
@@ -342,6 +354,11 @@ include "$BNR_REPO/scripts/stata/reporting/bnr_report_annual_standard.do"
 * narrative. It remains visually continuous with the standard section but is
 * operationally separate.
 include "`focus'"
+
+* INVARIANT INCLUDE ORDER - DO NOT MOVE.
+* The reusable Information Hub page is deliberately penultimate. The public-
+* health update must remain the final physical page for controlled extraction.
+include "`info_hub_template'"
 
 * INVARIANT INCLUDE ORDER - DO NOT MOVE.
 * The maintained final appendix uses the same cached approved public releases
@@ -416,7 +433,7 @@ file open `qmd_handle' using "`candidate_qmd'", write text replace
 file write `qmd_handle' "---" _n
 file write `qmd_handle' `"title: "Annual CVD report: `report_year4'""' _n
 file write `qmd_handle' `"description: "Annual CVD surveillance report for Barbados, including the standard surveillance section and annual Special chapter.""' _n
-file write `qmd_handle' "date: `build_date'" _n
+file write `qmd_handle' "date: `annual_publication_date_iso'" _n
 file write `qmd_handle' "date-modified: `build_date'" _n
 file write `qmd_handle' "report-id: `report_id'" _n
 file write `qmd_handle' "report-type: Annual report" _n
@@ -446,7 +463,7 @@ file open `update_qmd_handle' using "`candidate_update_qmd'", write text replace
 file write `update_qmd_handle' "---" _n
 file write `update_qmd_handle' `"title: "CVD public health update: `report_year4'""' _n
 file write `update_qmd_handle' `"description: "One-page summary of the latest complete annual CVD event and mortality results for Barbados.""' _n
-file write `update_qmd_handle' "date: `build_date'" _n
+file write `update_qmd_handle' "date: `annual_publication_date_iso'" _n
 file write `update_qmd_handle' "date-modified: `build_date'" _n
 file write `update_qmd_handle' "report-id: `update_id'" _n
 file write `update_qmd_handle' "report-type: Public health update" _n
@@ -477,6 +494,7 @@ file write `metadata_handle' "report_id: `report_id'" _n
 file write `metadata_handle' "report_type: annual_cvd_report" _n
 file write `metadata_handle' "report_year: `report_year4'" _n
 file write `metadata_handle' "report_version: v`version_num'" _n
+file write `metadata_handle' "publication_date: `annual_publication_date_iso'" _n
 file write `metadata_handle' "public_name: `public_name'" _n
 file write `metadata_handle' "event_release_id: `event_release'" _n
 file write `metadata_handle' "event_source_size: `event_size'" _n
