@@ -1,7 +1,15 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_s1_build.do
-VERSION: 1.3.1 (18 September 2026)
+VERSION: 1.4.0 (20 September 2026)
 PURPOSE: Build a private annual CVD report candidate package.
+
+CHANGE 1.4.0:
+  - Define the annual-report website addresses once for the cover, Methods
+    chapter and public-health update.
+  - Stop when the separately maintained promotional image and QR code are
+    declared against a different website root.
+  - Add the approved report version to generated PDF-view URLs so a new
+    published version does not reuse an older browser-cached PDF.
 
 CHANGE 1.3.0:
   - Insert the reusable BNR Information Hub page immediately before the public-
@@ -156,6 +164,29 @@ foreach required_global in BNR_REPO BNR_STAGING BNR_PUBLIC ///
     }
 }
 
+* CONTROLLED ANNUAL-REPORT WEB ADDRESSES.
+* This is the single edit point for addresses printed as report text. Keep the
+* root without a trailing slash; the complete addresses below are derived from
+* it. This is a controlled system change, not routine annual narrative editing.
+local annual_web_root       "https://uwi-bnr.github.io/info-hub"
+local annual_web_home       "`annual_web_root'/"
+local annual_web_methods    "`annual_web_root'/methods/"
+local annual_web_operations "`annual_web_root'/operations/"
+local annual_web_technical  "`annual_web_root'/technical/"
+
+* CONTROLLED MANUAL-ASSET DECLARATION.
+* The promotional PNG contains two visible addresses and a QR code. It cannot
+* inherit the locals above. Change this declaration only after updating the
+* source SVG, regenerating the QR SVG, exporting the PNG and scan-testing it.
+local annual_promo_asset_root "https://uwi-bnr.github.io/info-hub"
+if "`annual_promo_asset_root'" != "`annual_web_root'" {
+    display as error "Annual report Step 1 stopped: the website root and promotional asset differ."
+    display as error "Website root:       `annual_web_root'"
+    display as error "Promotional asset:  `annual_promo_asset_root'"
+    display as error "Update and scan-test the promotional SVG, QR SVG and PNG before changing annual_promo_asset_root."
+    exit 459
+}
+
 * INVARIANT - DO NOT EDIT.
 * Construct stable release IDs, report IDs and the locations of the two
 * year-specific analyst files. These names bind the candidate to its inputs.
@@ -263,6 +294,8 @@ local approval "`ready_dir'/approval.yml"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_annual_s1_`report_id'.log"
 local site_pdf_href "../../../../../downloads/files/reports/cvd/annual/`report_year4'/`public_name'.pdf"
 local site_update_pdf_href "../../../../../downloads/files/reports/cvd/annual/`report_year4'/`update_public_name'.pdf"
+local site_pdf_url "`site_pdf_href'?v=`version_num'"
+local site_update_pdf_url "`site_update_pdf_href'?v=`version_num'"
 local pdf_furniture_helper "$BNR_REPO/scripts/python/stamp_annual_report_pdf.py"
 local pdf_furniture_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 local pdf_furniture_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
@@ -451,8 +484,8 @@ file write `qmd_handle' "  html:" _n
 file write `qmd_handle' "    toc: false" _n
 file write `qmd_handle' "    page-layout: article" _n
 file write `qmd_handle' "---" _n _n
-file write `qmd_handle' "[Open or download the PDF report](`site_pdf_href'){.btn .btn-primary} [Open the one-page public health update](`site_update_pdf_href'){.btn .btn-outline-primary}" _n _n
-file write `qmd_handle' `"<iframe src="`site_pdf_href'" title="Annual CVD report: `report_year4'" width="100%" height="900"></iframe>"' _n
+file write `qmd_handle' "[Open or download the PDF report](`site_pdf_url'){.btn .btn-primary} [Open the one-page public health update](`site_update_pdf_url'){.btn .btn-outline-primary}" _n _n
+file write `qmd_handle' `"<iframe src="`site_pdf_url'" title="Annual CVD report: `report_year4'" width="100%" height="900"></iframe>"' _n
 file close `qmd_handle'
 
 * INVARIANT GENERATED COMPANION LANDING PAGE.
@@ -483,8 +516,8 @@ file write `update_qmd_handle' "    toc: false" _n
 file write `update_qmd_handle' "    page-layout: article" _n
 file write `update_qmd_handle' "---" _n _n
 file write `update_qmd_handle' "This concise update accompanies the [complete Annual CVD report](../../annual/`report_year4'/index.qmd)." _n _n
-file write `update_qmd_handle' "[Open or download the one-page PDF](`site_update_pdf_href'){.btn .btn-primary} [Open the complete annual report](../../annual/`report_year4'/index.qmd){.btn .btn-outline-primary}" _n _n
-file write `update_qmd_handle' `"<iframe src="`site_update_pdf_href'" title="CVD public health update: `report_year4'" width="100%" height="900"></iframe>"' _n
+file write `update_qmd_handle' "[Open or download the one-page PDF](`site_update_pdf_url'){.btn .btn-primary} [Open the complete annual report](../../annual/`report_year4'/index.qmd){.btn .btn-outline-primary}" _n _n
+file write `update_qmd_handle' `"<iframe src="`site_update_pdf_url'" title="CVD public health update: `report_year4'" width="100%" height="900"></iframe>"' _n
 file close `update_qmd_handle'
 
 tempname metadata_handle
@@ -521,7 +554,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ANNUAL CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate created"
-noisily display as text   "  Script version:          1.2.0"
+noisily display as text   "  Script version:          1.4.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text   "  CVD-event release:       `event_release'"
 noisily display as text   "  Mortality release:       `mortality_release'"

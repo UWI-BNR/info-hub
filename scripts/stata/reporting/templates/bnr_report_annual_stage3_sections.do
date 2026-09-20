@@ -126,7 +126,7 @@ foreach event in all_cvd heart stroke {
         putpdf text ("1 | CVD events"), bold font("`font_title'", `size_chapter', "`bnr_ink'") linebreak
     }
     putpdf text ("`event_label' event counts"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
-    putpdf text ("Hospital-recorded events and published national estimates across the complete annual series."), font("`font_body'", 8, "`bnr_muted'")
+    putpdf text ("Hospital-recorded events and national estimates across the complete annual series."), font("`font_body'", 8, "`bnr_muted'")
 
     matrix evt_count_card_widths = (30, 5, 30, 5, 30)
 

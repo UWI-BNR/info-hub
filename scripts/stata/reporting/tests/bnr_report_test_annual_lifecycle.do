@@ -1,7 +1,11 @@
 /*******************************************************************************
 DO-FILE: bnr_report_test_annual_lifecycle.do
-VERSION: 1.1.0 (10 September 2026)
+VERSION: 1.2.0 (20 September 2026)
 PURPOSE: Read-only verification of the canonical annual-report lifecycle.
+
+CHANGE 1.2.0:
+  - Confirm that both generated landing pages use the approved report version
+    in their PDF-view URLs, preventing reuse of an older cached preview.
 
 USAGE:
   do "$BNR_STATA/reporting/tests/bnr_report_test_annual_lifecycle.do" 2025 1
@@ -192,6 +196,8 @@ foreach expected_path in "`report_id'.pdf" "index.qmd" "report.yml" "`update_id'
 local qmd_report_ok 0
 local qmd_version_ok 0
 local qmd_type_ok 0
+local qmd_pdf_url_ok 0
+local qmd_update_url_ok 0
 tempname qmd_handle
 file open `qmd_handle' using "`site_qmd'", read text
 file read `qmd_handle' line
@@ -201,16 +207,21 @@ while r(eof) == 0 {
     if "`line'" == "report-id: `report_id'" local qmd_report_ok 1
     if "`line'" == "report-version: v`version_num'" local qmd_version_ok 1
     if "`line'" == "report-type: Annual report" local qmd_type_ok 1
+    if strpos("`line'", "`stable_name'.pdf?v=`version_num'") > 0 local qmd_pdf_url_ok 1
+    if strpos("`line'", "`update_stable_name'.pdf?v=`version_num'") > 0 local qmd_update_url_ok 1
     file read `qmd_handle' line
 }
 file close `qmd_handle'
 assert `qmd_report_ok' == 1
 assert `qmd_version_ok' == 1
 assert `qmd_type_ok' == 1
+assert `qmd_pdf_url_ok' == 1
+assert `qmd_update_url_ok' == 1
 
 local update_qmd_report_ok 0
 local update_qmd_version_ok 0
 local update_qmd_type_ok 0
+local update_qmd_pdf_url_ok 0
 tempname update_qmd_handle
 file open `update_qmd_handle' using "`site_update_qmd'", read text
 file read `update_qmd_handle' line
@@ -220,12 +231,14 @@ while r(eof) == 0 {
     if "`line'" == "report-id: `update_id'" local update_qmd_report_ok 1
     if "`line'" == "report-version: v`version_num'" local update_qmd_version_ok 1
     if "`line'" == "report-type: Public health update" local update_qmd_type_ok 1
+    if strpos("`line'", "`update_stable_name'.pdf?v=`version_num'") > 0 local update_qmd_pdf_url_ok 1
     file read `update_qmd_handle' line
 }
 file close `update_qmd_handle'
 assert `update_qmd_report_ok' == 1
 assert `update_qmd_version_ok' == 1
 assert `update_qmd_type_ok' == 1
+assert `update_qmd_pdf_url_ok' == 1
 
 local metadata_report_ok 0
 local metadata_version_ok 0
