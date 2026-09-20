@@ -20,6 +20,6 @@ format:
     page-layout: article
 ---
 
-[Open or download the PDF report](../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf){.btn .btn-primary} [Open the one-page public health update](../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_public_health_update_2025.pdf){.btn .btn-outline-primary}
+[Open or download the PDF report](../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf?v=1){.btn .btn-primary} [Open the one-page public health update](../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_public_health_update_2025.pdf?v=1){.btn .btn-outline-primary}
 
-<iframe src="../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf" title="Annual CVD report: 2025" width="100%" height="900"></iframe>
+<iframe src="../../../../../downloads/files/reports/cvd/annual/2025/bnr_cvd_annual_report_2025.pdf?v=1" title="Annual CVD report: 2025" width="100%" height="900"></iframe>

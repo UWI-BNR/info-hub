@@ -1,8 +1,12 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_standard.do
-VERSION: 2.6.1 (18 September 2026)
+VERSION: 2.7.0 (20 September 2026)
 PURPOSE: Reusable putpdf composition for the standard annual CVD surveillance
          section.
+
+DESIGN PASS 2.7.0:
+  - Read all printed Info-Hub addresses from the controlled locals supplied by
+    the annual Step 1 builder.
 
 CALLER:
   bnr_report_annual_s1_build.do only.
@@ -131,6 +135,12 @@ if "`event_release'" == "" | "`mortality_release'" == "" {
 if "`annual_publication_date'" == "" | "`annual_publication_date_iso'" == "" {
     display as error "Annual standard composition requires valid annual publication-date locals."
     exit 198
+}
+foreach required_web_local in annual_web_home annual_web_methods annual_web_operations annual_web_technical {
+    if "``required_web_local''" == "" {
+        display as error "Annual standard composition requires local `required_web_local'."
+        exit 198
+    }
 }
 
 local uwi_crest "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
@@ -447,16 +457,16 @@ putpdf table report_colophon(7,5) = ///
     ("The University of the West Indies, Cave Hill Campus, Bridgetown, Barbados"), ///
     font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
-putpdf table report_colophon(8,1) = ("PUBLICATION CONTROL"), ///
-    bold font("`font_title'", 7.2, "`bnr_teal'")
+/// putpdf table report_colophon(8,1) = ("PUBLICATION CONTROL"), ///
+///     bold font("`font_title'", 7.2, "`bnr_teal'")
 
-putpdf table report_colophon(9,1) = ///
-    ("This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
-    italic font("`font_body'", 6.8, "`bnr_muted'")
+/// putpdf table report_colophon(9,1) = ///
+///     ("This edition is produced through the controlled BNR annual-report build, approval and publication workflow. The public version is the approved version deposited through that workflow."), ///
+///     italic font("`font_body'", 6.8, "`bnr_muted'")
 putpdf table report_colophon(9,4) = ("Online report and data"), ///
     bold font("`font_title'", 6.6, "`bnr_muted'") bgcolor("`bnr_pale2'")
 putpdf table report_colophon(9,5) = ///
-    ("https://uwi-bnr.github.io/info-hub/"), ///
+    ("`annual_web_home'"), ///
     font("`font_body'", 7, "`bnr_ink'") bgcolor("`bnr_pale2'")
 
 putpdf table report_colophon(10,4) = ("Approved data releases"), ///
@@ -468,6 +478,8 @@ putpdf table report_colophon(10,5) = ///
 putpdf table report_colophon(1,4), bgcolor("`bnr_pale2'")
 putpdf table report_colophon(2/10,4/5), bgcolor("`bnr_pale2'")
 
+
+
 * -----------------------------------------------------------------------------
 * 5B. How to read this report
 * -----------------------------------------------------------------------------
@@ -478,7 +490,7 @@ putpdf pagebreak
 putpdf paragraph, font("`font_body'", 1)
 putpdf text ("How to read this report"), ///
     bold font("`font_title'", 19, "`bnr_ink'") linebreak
-putpdf text ("A short guide to the results used throughout the report"), ///
+putpdf text ("A short guide to the information used in this report"), ///
     font("`font_body'", 9, "`bnr_muted'")
 
 putpdf paragraph, font("`font_body'", 2)
@@ -517,7 +529,7 @@ putpdf table read_guide(7,1), bold font("`font_title'", 6.9, "`bnr_amber_text'")
 
 putpdf paragraph, font("`font_body'", 1.5)
 putpdf table result_choice = (2,1), width(100%) border(all, nil)
-putpdf table result_choice(1,1) = ("WHICH RESULT SHOULD I USE?"), ///
+putpdf table result_choice(1,1) = ("Which BNR estimate should I use?"), ///
     bold font("`font_title'", 7.7, "`bnr_teal'") border(top, single, "`bnr_teal'")
 putpdf table result_choice(2,1) = ("Use the Primary result as the main BNR estimate. The Inclusive result shows how the estimate changes when less-certain death-certificate evidence is included. Neither BNR mortality definition is equivalent to formally coded national underlying-cause-of-death statistics. See Section 4 | Methods."), ///
     font("`font_body'", 7.5, "`bnr_ink'")
@@ -530,12 +542,24 @@ putpdf table read_features = (4,5), width(100%) width(read_feature_widths) borde
 putpdf table read_features(1,1) = ("CHARTS AND TABLES")
 putpdf table read_features(2,1) = ("Charts show the longer pattern over time; tables give exact results for the latest five complete years.")
 putpdf table read_features(1,3) = ("UNCERTAINTY")
-putpdf table read_features(2,3) = ("Whiskers show statistical 95% confidence intervals. Pale bands show uncertainty in the estimated DCO contribution.")
+putpdf table read_features(2,3) = ("Pale bands show uncertainty in the estimated DCO contribution. Whiskers show statistical 95% confidence intervals.")
 putpdf table read_features(1,5) = ("PROTECTED VALUES")
 putpdf table read_features(2,5) = ("An asterisk marks a value withheld to protect confidentiality. It does not mean zero.")
 putpdf table read_features(3,1) = ("HOW COLOUR IS USED")
-putpdf table read_features(4,1) = ("Colour groups related measures and sections. It supports navigation and comparison; it does not judge performance.")
-putpdf table read_features(3,3) = ("WHAT THIS MEANS")
+putpdf table read_features(4,1) = ("Colour groups related measures and sections.") , font("`font_body'", 6.8, "`bnr_ink'")
+putpdf table read_features(4,1) = ("Teal"), bold font("`font_body'", 6.8, "`bnr_teal'") append
+putpdf table read_features(4,1) = (" marks All CVD; "), font("`font_body'", 6.8, "`bnr_ink'") append
+putpdf table read_features(4,1) = ("rust"), bold font("`font_body'", 6.8, "`bnr_heart'") append
+putpdf table read_features(4,1) = (" marks Heart; "), font("`font_body'", 6.8, "`bnr_ink'") append
+putpdf table read_features(4,1) = ("green"), bold font("`font_body'", 6.8, "`bnr_stroke'") append
+putpdf table read_features(4,1) = (" marks Stroke; "), font("`font_body'", 6.8, "`bnr_ink'") append
+putpdf table read_features(4,1) = ("purple"), bold font("`font_body'", 6.8, "`bnr_women'") append
+putpdf table read_features(4,1) = (" marks women; and "), font("`font_body'", 6.8, "`bnr_ink'") append
+putpdf table read_features(4,1) = ("blue"), bold font("`font_body'", 6.8, "`bnr_men'") append
+putpdf table read_features(4,1) = (" marks men. Colours support navigation and comparison."), ///
+font("`font_body'", 6.8, "`bnr_ink'") append
+
+putpdf table read_features(3,3) = (`""WHAT THIS MEANS""')
 putpdf table read_features(4,3) = ("These notes highlight the main message from each result and any important context needed to interpret it.")
 putpdf table read_features(3,5) = ("COMPANION PUBLICATIONS")
 putpdf table read_features(4,5) = ("Monthly updates provide the latest surveillance picture. Other BNR reports summarise key messages or explore selected topics in greater depth.")
@@ -881,13 +905,6 @@ putpdf pagebreak
 putpdf paragraph
 putpdf text ("4 | Methods"), bold font("`font_title'", `size_chapter', "`bnr_ink'")
 
-* These are temporary web addresses. Keeping the common root in one local
-* means the final address can be updated once without searching this chapter.
-local methods_url_root      "https://uwi-bnr.github.io/info-hub"
-local methods_url_public    "`methods_url_root'/methods/"
-local methods_url_operations "`methods_url_root'/operations/"
-local methods_url_technical "`methods_url_root'/technical/"
-
 * Convert release IDs ending in YYYY_MM into a short readable date while
 * retaining the exact release ID required for reproducibility.
 local methods_months "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
@@ -993,6 +1010,7 @@ putpdf table methods_metric_map(2/5,1), bold
 
 
 
+
 ** NEW METHODS PAGE. How CVD events are identified
 putpdf pagebreak
 putpdf paragraph
@@ -1062,6 +1080,7 @@ putpdf paragraph
 putpdf text ("Hospital-recorded ascertainment"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
 putpdf text ("Hospital-recorded statistics use eligible events identified from hospital information. As Barbados's only tertiary hospital, the Queen Elizabeth Hospital provides an important view of serious recognised CVD events. Access to care, referral, diagnosis and recording all shape this view. The annual national reporting estimates extend it with eligible events identified through death records, as described next."), font("`font_body'", 8.4)
+
 
 
 
@@ -1241,6 +1260,8 @@ putpdf paragraph
 putpdf text ("The denominator defines the population or total to which a result refers. Counts have no population denominator. Percentages use the eligible total named with the result. Population rates pair events or deaths with the resident population for the same year and, where relevant, the same sex and age group."), font("`font_body'", 8.4)
 
 
+
+
 ** NEW METHODS PAGE. Population rates and fair comparisons
 putpdf pagebreak
 putpdf paragraph
@@ -1279,11 +1300,9 @@ putpdf paragraph
 putpdf text ("Cardiovascular disease is strongly related to age, and the age structure of a population can change over time. Direct age standardisation applies the WHO World Standard Population 2000-2025 to every comparison. This gives each year or group the same reference age structure, allowing differences in rates to be interpreted more fairly."), font("`font_body'", 8.4)
 
 putpdf table methods_measure_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_measure_note(1,1) = ("TECHNICAL DETAIL | Full formulas, denominator specifications and standard-population information are provided in the online BNR Methods manual: `methods_url_public'"), ///
-    font("`font_title'", 8.0, "`bnr_red_text'") bgcolor("`bnr_pale2'")
-putpdf table methods_measure_note(1,1), border(top, single, "`bnr_red_text'")
-
-
+putpdf table methods_measure_note(1,1) = ("TECHNICAL DETAIL | Full formulas, denominator specifications and standard-population information are provided in the online BNR Methods manual: `annual_web_methods'"), ///
+    font("`font_title'", 8.0, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table methods_measure_note(1,1), border(top, single, "`bnr_muted'")
 
 
 ** NEW METHODS PAGE. Understanding uncertainty and time
@@ -1379,9 +1398,9 @@ putpdf text ("The BNR publishes aggregate totals, rates and summaries. Exact cou
     font("`font_body'", 8.1)
 
 putpdf table methods_disclosure_note = (1,1), width(100%) border(all, nil)
-putpdf table methods_disclosure_note(1,1) = ("TECHNICAL DETAIL | A data completeness report and the complete disclosure-control method is documented in the online BNR Methods manual: `methods_url_public'"), ///
-    font("`font_title'", 8.0, "`bnr_red_text'") bgcolor("`bnr_pale2'")
-putpdf table methods_disclosure_note(1,1), border(top, single, "`bnr_red_text'")
+putpdf table methods_disclosure_note(1,1) = ("TECHNICAL DETAIL | A data completeness report and the complete disclosure-control method is documented in the online BNR Methods manual: `annual_web_methods'"), ///
+    font("`font_title'", 8.0, "`bnr_muted'") bgcolor("`bnr_pale2'")
+putpdf table methods_disclosure_note(1,1), border(top, single, "`bnr_muted'")
 
 putpdf paragraph
 putpdf text ("Before publication"), ///
@@ -1416,7 +1435,9 @@ putpdf table methods_final_note(2,1), ///
 putpdf paragraph
 putpdf text ("Further information"), bold font("`font_title'", 11, "`bnr_ink'")
 putpdf paragraph
-putpdf text ("TEMPORARY WEB ADDRESSES - VERIFY BEFORE PUBLICATION"), ///
-    bold font("`font_title'", 7.8, "`bnr_red_text'")
-putpdf text ("Public Methods manual: `methods_url_public'"), font("`font_body'", 7.8, "`bnr_red_text'")
-putpdf text ("Operations manual: `methods_url_operations'   Technical manual: `methods_url_technical'"), font("`font_body'", 7.8, "`bnr_red_text'")
+putpdf text ("Public Methods manual: "), bold font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("`annual_web_methods'"), linebreak font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("Operations manual: "), bold font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("`annual_web_operations'"), linebreak font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("Technical manual: "), bold font("`font_body'", 7.8, "`bnr_muted'")
+putpdf text ("`annual_web_technical'"), font("`font_body'", 7.8, "`bnr_muted'")

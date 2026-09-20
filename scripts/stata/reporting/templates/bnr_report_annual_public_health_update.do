@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_annual_public_health_update.do
-VERSION: 0.1.0 (10 September 2026)
+VERSION: 0.2.0 (20 September 2026)
 PURPOSE: Compose the one-page public-health update appended to the annual CVD
          report and later extracted as an approved companion PDF.
 
@@ -25,7 +25,7 @@ version 19.0
 * 1. Required report context
 * -----------------------------------------------------------------------------
 
-foreach required_local in report_year4 report_year_num event_release mortality_release annual_event_data annual_mortality_data annual_figure_dir {
+foreach required_local in report_year4 report_year_num event_release mortality_release annual_event_data annual_mortality_data annual_figure_dir annual_web_methods {
     if "``required_local''" == "" {
         display as error "Public-health update requires local `required_local'."
         exit 198
@@ -340,5 +340,5 @@ putpdf table phu_messages(2,2) = ("`annual_phu_message_2'"), font("`font_body'",
 putpdf table phu_messages(3,2) = ("`annual_phu_message_3'"), font("`font_body'", 7.0, "`bnr_ink'")
 
 putpdf paragraph, font("`font_body'", 1)
-putpdf text ("Source: BNR approved CVD-event release `event_release' and mortality release `mortality_release'. Rates are age-standardised and presented per 100,000. Methods: https://uwi-bnr.github.io/info-hub/methods/"), ///
+putpdf text ("Source: BNR approved CVD-event release `event_release' and mortality release `mortality_release'. Rates are age-standardised and presented per 100,000. Methods: `annual_web_methods'"), ///
     font("`font_body'", 6.0, "`bnr_muted'")

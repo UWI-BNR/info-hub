@@ -20,7 +20,7 @@ IMPORTANT:   Annual Step 1 requires approved public event and mortality releases
 * do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2024 1 replace
 
 * =============================================================================
-* 2025 annual report — v1
+* 2025 annual report — v2
 * =============================================================================
 do "$BNR_STATA/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1 replace
 do "$BNR_STATA/reporting/bnr_report_annual_s2_approve.do" 2025 1 "Ian Hambleton" "BNR Analyst" candidate disclosure ready
