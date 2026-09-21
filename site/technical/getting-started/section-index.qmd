@@ -19,7 +19,7 @@ A one-page overview of the Info-Hub analytical and reporting tasks.
 ::: {.g-col-12 .g-col-md-6}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Git cheat sheet](../cheat-sheet/index.qmd) {.card-title}
+### [Git cheat sheet](../cheat-sheet/git.qmd) {.card-title}
 
 A one-page overview of how to use Git for routine Info-Hub work.
 :::
