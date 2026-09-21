@@ -50,6 +50,10 @@
   align-items: stretch;
 }
 
+.bnr-cheat-grid--git-card-gap {
+  margin-top: 1.25rem;
+}
+
 .bnr-cheat-grid--two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -73,6 +77,45 @@
   border-radius: 0.25rem;
   background: #ffffff;
   box-shadow: 0 0.12rem 0.35rem rgba(0, 0, 0, 0.06);
+}
+
+.bnr-cheat-command-panel {
+  min-width: 0;
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem 0.85rem;
+  overflow-x: auto;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-left: 0.32rem solid var(--cheat-accent);
+  border-radius: 0.25rem;
+  background: #ffffff;
+  box-shadow: 0 0.12rem 0.35rem rgba(0, 0, 0, 0.06);
+}
+
+.bnr-cheat-command-panel > h3:first-child {
+  margin-top: 0;
+}
+
+.bnr-cheat-command-panel table {
+  min-width: 46rem;
+  table-layout: auto;
+}
+
+.bnr-cheat-command-panel table th:first-child,
+.bnr-cheat-command-panel table td:first-child {
+  width: 4.4rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bnr-cheat-command-panel code {
+  color: #382a44;
+  font-size: 0.82em;
+  white-space: nowrap;
+}
+
+.bnr-cheat-grid--commands .bnr-cheat-command-panel {
+  height: 100%;
+  margin-bottom: 0;
 }
 
 .bnr-cheat-grid--reports .bnr-cheat-panel > p:last-child {
@@ -188,6 +231,7 @@
   .bnr-cheat-heading,
   .bnr-cheat-rule,
   .bnr-cheat-panel,
+  .bnr-cheat-command-panel,
   .bnr-cheat-rule-card,
   .bnr-cheat-next {
     break-inside: avoid;
@@ -212,6 +256,18 @@
 
   .bnr-cheat-sheet table {
     font-size: 7.7pt;
+  }
+
+  .bnr-cheat-command-panel {
+    overflow: visible;
+  }
+
+  .bnr-cheat-command-panel table {
+    min-width: 0;
+  }
+
+  .bnr-cheat-command-panel code {
+    font-size: 6.8pt;
   }
 
   .bnr-cheat-sheet a {

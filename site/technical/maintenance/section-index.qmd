@@ -36,6 +36,16 @@ Recover from common workstation, workflow, publication, Quarto, Git and deployme
 :::
 :::
 
+::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
+::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
+::: {.card-body}
+### [BNR Info-Hub Git cheat sheet](../cheat-sheet/git.qmd) {.card-title}
+
+Use the safe VS Code or command-line route to branch, review, merge, compare and recover tracked files.
+:::
+:::
+:::
+
 :::
 
 ::: {.bnr-manual-return}

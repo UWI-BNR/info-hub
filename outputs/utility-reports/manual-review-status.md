@@ -6,7 +6,7 @@
 |---|---:|---:|---:|---:|---:|---:|
 | Public Methods Manual | 2 | 0 | 22 | 0 | 0 | 24 |
 | Operations Manual | 0 | 0 | 39 | 0 | 0 | 39 |
-| Technical Manual | 0 | 1 | 49 | 0 | 0 | 50 |
+| Technical Manual | 0 | 0 | 51 | 0 | 0 | 51 |
 
 ## Public Methods Manual
 
@@ -86,7 +86,8 @@
 | Page | Path | Status | Source |
 |---|---|---|---|
 | BNR Technical Manual | `site/technical/index.qmd` | Reviewed by IRH | Page YAML |
-| BNR Info-Hub cheat sheet | `site/technical/cheat-sheet/index.qmd` | Not reviewed | Page YAML |
+| BNR Info-Hub cheat sheet | `site/technical/cheat-sheet/index.qmd` | Reviewed by IRH | Page YAML |
+| BNR Info-Hub Git cheat sheet | `site/technical/cheat-sheet/git.qmd` | Reviewed by IRH | Page YAML |
 | Getting started | `site/technical/getting-started/section-index.qmd` | Reviewed by IRH | Page YAML |
 | The BNR Info-Hub analytics and publishing environment | `site/technical/getting-started/environment.qmd` | Reviewed by IRH | Page YAML |
 | Set up a workstation | `site/technical/getting-started/workstation-setup.qmd` | Reviewed by IRH | Page YAML |

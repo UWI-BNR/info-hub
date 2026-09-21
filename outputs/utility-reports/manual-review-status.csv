@@ -63,7 +63,8 @@ Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,
 Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,reviewed-by-irh,Page YAML
 Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,reviewed-by-irh,Page YAML
 Technical Manual,BNR Technical Manual,site/technical/index.qmd,reviewed-by-irh,Page YAML
-Technical Manual,BNR Info-Hub cheat sheet,site/technical/cheat-sheet/index.qmd,not-reviewed,Page YAML
+Technical Manual,BNR Info-Hub cheat sheet,site/technical/cheat-sheet/index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,BNR Info-Hub Git cheat sheet,site/technical/cheat-sheet/git.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML

@@ -1,0 +1,372 @@
+---
+title: "BNR Info-Hub Git cheat sheet"
+description: "Quick reference for changing, reviewing, comparing and recovering BNR Info-Hub files safely."
+manual-review-status: reviewed-by-irh
+page-layout: full
+toc: false
+page-navigation: false
+format:
+  html:
+    css: cheat-sheet.css
+---
+
+::: {.bnr-cheat-sheet .bnr-cheat-page--git}
+
+::: {.bnr-cheat-heading}
+::: {.bnr-cheat-heading__label}
+QUICK REFERENCE
+:::
+
+Use this page for routine Git work on the BNR Info-Hub. The VS Code and
+PowerShell routes operate on the same repository and can be used together.
+:::
+
+::: {.bnr-cheat-rule}
+**Never edit on `main`.** Start with a clean working tree, update local `main`,
+then create a short development branch. Only a reviewed pull request should
+merge a development branch into protected `main` on GitHub.
+:::
+
+## Git primer
+
+::: {.bnr-cheat-panel}
+
+Git keeps a history of the public Info-Hub source on your computer. GitHub holds
+the shared copy, where BNR can review changes and merge them into `main`.
+
+| Term | Plain meaning | In the BNR Info-Hub |
+|---|---|---|
+| **Git** | The version-control system on your computer. It records changes to files over time. | It records public-safe code, documentation and website source. It must never hold confidential data, tokens or private workflow files. |
+| **GitHub** | The shared online copy of the repository. | It is where branches are reviewed through pull requests and where the protected `main` branch is updated. |
+| **Branch** | A separate working line for one change. | Create one before editing. It keeps unfinished work separate from the live-site branch. |
+| **Stage** | Select the exact file changes that will go into the next saved checkpoint. | Stage only the public-safe files that belong to the current task. |
+| **Commit** | A named saved checkpoint on your local branch. | It records one focused, reviewed change but does not send it to GitHub or change the website. |
+| **Push** | Send the commits on your branch to GitHub. | It makes the branch available for review. It does not change `main` or deploy the website. |
+| **Pull** | Bring changes already on GitHub into your local copy. | Pull updated `main` before starting a new branch and after a pull request is merged. It is not a pull request. |
+| **Pull request and merge** | A request to combine a reviewed branch with another branch; merging accepts it. | A pull request into `main` is the only normal route for a website change to join the protected branch. |
+| **GitHub Actions and deployment** | The automated online build and publication process. | A merge into `main` starts the Quarto build and deployment. Check the Actions run and then the live page. |
+
+:::
+
+## Routine branch-to-deployment route
+
+::: {.bnr-cheat-panel}
+
+### 1. Check, update and branch before editing
+
+Use this before starting any new change to make sure you work from the latest
+approved version without editing `main`.
+
+| Task | VS Code route | PowerShell / CLI route |
+|---:|---|---|
+| Check the current position | Open **Source Control**. Check the branch name in the lower-left status bar and investigate every listed change. | `git status`<br>`git branch --show-current` |
+| Move to `main` | Click the branch name and select `main`. Stop if unexplained local changes prevent the switch. | `git switch main` |
+| Update local `main` | In **Source Control**, select **… > Pull**. Confirm that no merge conflict appears. | `git pull --ff-only origin main` |
+| Create the working branch | Click the branch name, select **Create new branch**, and enter a short task name such as `fix-report-link`. | `git switch -c fix-report-link` |
+| Confirm before editing | Check that the status bar now shows the new branch. | `git branch --show-current`<br>`git status` |
+
+`--ff-only` allows a straightforward update but stops rather than creating an
+unexpected local merge when local `main` has diverged from GitHub.
+
+:::
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two .bnr-cheat-grid--git-card-gap}
+
+::: {.bnr-cheat-panel}
+
+### 2. Review the change
+
+Use this after editing to check exactly what you changed before saving it in
+Git.
+
+**VS Code**
+
+1. Open **Source Control**.
+2. Read the complete **Changes** list.
+3. Select each file to inspect its before-and-after diff.
+4. Confirm every file is public-safe and belongs to this task.
+
+**PowerShell / CLI**
+
+```powershell
+git status
+git diff --check
+git diff
+```
+
+`git diff --check` identifies whitespace errors. A successful command normally
+prints nothing.
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### 3. Stage and commit only intended files
+
+Use this when the change is ready to record and you want the commit to contain
+only the files for this task.
+
+**VS Code**
+
+1. Select `+` beside each intended file.
+2. Check the **Staged Changes** list.
+3. Enter a short commit message and select **Commit**.
+
+**PowerShell / CLI**
+
+```powershell
+git add path/to/first-file path/to/second-file
+git diff --staged
+git commit -m "Describe the focused change"
+```
+
+Prefer named paths to `git add .`. Only staged changes enter the commit.
+
+:::
+
+:::
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two .bnr-cheat-grid--git-card-gap}
+
+::: {.bnr-cheat-panel}
+
+### 4. Push the development branch
+
+Use this after committing to place the development branch on GitHub for review.
+
+**VS Code:** select **Publish Branch** for its first push, or **Push** after
+later commits on the same branch.
+
+**PowerShell / CLI — first push**
+
+```powershell
+git push -u origin fix-report-link
+```
+
+**Later pushes from the same branch**
+
+```powershell
+git push
+```
+
+Pushing the branch stores the proposed change on GitHub. It does not change
+`main` or the live website.
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### 5. Merge the approved change on GitHub
+
+Use this when the branch has been checked and is ready to join the protected
+`main` branch.
+
+1. Open the BNR Info-Hub repository on GitHub.
+2. Create a **pull request** with `main` as the base and the development branch
+   as the compare branch.
+3. Review the changed-file list and required tests.
+4. Complete any required BNR review.
+5. Select **Merge pull request** only when the change is approved.
+
+**Pull** updates a local repository. A **pull request** proposes that GitHub
+merge reviewed branch changes into `main`.
+
+:::
+
+:::
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two .bnr-cheat-grid--git-card-gap}
+
+::: {.bnr-cheat-panel}
+
+### 6. Confirm deployment
+
+Use this after the pull request is merged to confirm that the updated website
+was built and made live successfully.
+
+A merge into `main` starts the **Publish Quarto site** GitHub Actions workflow.
+It installs the declared dependencies, renders the site and deploys the result.
+
+On GitHub:
+
+1. open **Actions**;
+2. open the newest **Publish Quarto site** run;
+3. confirm both build and deploy succeeded; and
+4. check the affected live page, listing and download.
+
+A local render, commit, branch push or approved analytical publication does
+not by itself deploy the website.
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### 7. Update local `main` after the merge
+
+Use this after GitHub has merged the branch so your local `main` contains the
+same approved change.
+
+First confirm that the development branch has no uncommitted work. Then:
+
+```powershell
+git status
+git switch main
+git pull --ff-only origin main
+git branch -d fix-report-link
+```
+
+In VS Code, use the branch selector to return to `main`, select
+**Source Control > … > Pull**, then delete the merged local branch only when it
+is no longer needed. GitHub may separately offer **Delete branch** for the
+merged remote branch.
+
+:::
+
+:::
+
+## Compare branches, commits and files {.bnr-cheat-print-page-break}
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two}
+
+::: {.bnr-cheat-command-panel}
+
+### Compare the current branch with GitHub `main`
+
+Use this when you want to see everything the current branch would add to the
+latest `main` branch on GitHub.
+
+In VS Code, open **Source Control Graph** to inspect the branch and its commits.
+Select a commit to see its changed files and open a file in the diff editor.
+
+For an exact branch comparison:
+
+```powershell
+git fetch origin
+git diff --stat origin/main...HEAD
+git diff origin/main...HEAD
+git log --oneline origin/main..HEAD
+```
+
+The first command refreshes knowledge of GitHub. The other commands show the
+files changed, their exact differences and the commits the branch would add.
+
+:::
+
+::: {.bnr-cheat-command-panel}
+
+### Compare two commit hashes
+
+Use this when you want to see exactly what changed between two known points in
+the repository history.
+
+In **Source Control Graph**, locate a commit by its short hash, select it and
+open its changes. Use the commands below when the comparison must be exactly
+between two named commits:
+
+```powershell
+git diff --stat OLDER_HASH NEWER_HASH
+git diff OLDER_HASH NEWER_HASH
+git diff OLDER_HASH NEWER_HASH -- path/to/file
+```
+
+Use the last command when only one file matters. These commands inspect history;
+they do not alter any file or branch.
+
+:::
+
+:::
+
+::: {.bnr-cheat-panel}
+
+### Reinstate one file from an older commit
+
+Use this when a current file needs to be replaced by a known earlier version
+without moving the whole branch backwards.
+
+Start from updated `main` and create a development branch using the routine
+route above. Do not restore directly on `main`.
+
+| Task | VS Code route | PowerShell / CLI route |
+|---:|---|---|
+| Find the earlier version | Open the file, expand **Timeline** in Explorer and select earlier Git entries to inspect their diffs. | `git log --oneline -- path/to/file` |
+| Reinstate the selected version | After confirming the hash, open **Terminal > New Terminal** and run the exact restore command. | `git restore --source=OLDER_HASH -- path/to/file` |
+| Review the result | Open **Source Control** and inspect the file’s diff against the current branch. | `git diff -- path/to/file` |
+| Keep the reinstatement | Test it, then stage, commit, push and merge it through the normal pull-request route. | Use the normal `git add`, `git commit` and `git push` sequence. |
+
+This copies the named file version into the current development branch. It does
+not move the branch backwards or rewrite Git history.
+
+:::
+
+## Small recovery commands
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--three}
+
+::: {.bnr-cheat-rule-card}
+**Unstage a file but keep its edits**
+
+Use this when you staged a file by mistake but want to keep its local changes.
+
+VS Code: select `−` beside the file under **Staged Changes**.
+
+`git restore --staged -- path/to/file`
+:::
+
+::: {.bnr-cheat-rule-card}
+**Discard one uncommitted edit**
+
+Use this when you are certain that one file's uncommitted changes should be
+removed.
+
+VS Code: right-click the confirmed file and select **Discard Changes**.
+
+`git restore -- path/to/file`
+
+This removes that working-tree edit. Check the exact path first.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Wrong change already merged**
+
+Use this when a problem is found only after the change has entered `main`.
+
+Create a correction branch from current `main`, correct or restore the source,
+test it and merge another pull request. Do not rewrite `main` history.
+:::
+
+:::
+
+## Rules to retain
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--rules}
+
+::: {.bnr-cheat-rule-card}
+**Keep private material out of Git.** Never stage confidential data, tokens,
+private paths, staging packages, logs, approvals or review evidence.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Inspect before staging.** Stop when `git status` shows an unexplained or
+unrelated file. Do not hide it inside the current commit.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Do not bypass protected `main`.** Do not push directly to `main`, force-push,
+rewrite shared history or merge an unreviewed branch.
+:::
+
+::: {.bnr-cheat-rule-card}
+**Stop on conflicts.** Do not guess through a diverged `main`, merge conflict,
+methodological uncertainty or possible disclosure problem.
+:::
+
+:::
+
+::: {.bnr-cheat-next}
+**Need the complete route?** Use [Render and publish the website](../website/render-publish.qmd)
+for website changes, [Make a safe code change](../maintenance/safe-code-change.qmd)
+for maintained code, and [Fix common problems](../maintenance/troubleshooting.qmd)
+when Git, rendering or deployment stops.
+:::
+
+:::

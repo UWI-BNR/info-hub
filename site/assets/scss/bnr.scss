@@ -971,6 +971,14 @@ body.bnr-tech-manual {
   margin-bottom: 0;
 }
 
+/* Keep the compact actions in the Technical Manual's Common Tasks card
+   readable when a narrow display wraps them onto separate lines. */
+.bnr-tech-home-cheat-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
 body.bnr-tech-manual .bnr-manual-flag--technical {
   border-left-color: var(--bnr-manual-accent);
   background: var(--bnr-manual-tint);
