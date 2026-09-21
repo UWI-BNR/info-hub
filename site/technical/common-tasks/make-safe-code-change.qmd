@@ -1,7 +1,7 @@
 ---
 title: "Change maintained code safely"
 description: "Change maintained BNR code on a branch, test it and merge the reviewed result."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -28,9 +28,9 @@ source → review and merge → check the resulting workflow or website.
 
 | Order | Manual | Task | Detailed guidance |
 |---:|---|---|---|
-| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm authority for a material operating change** — responsible owner; affected roles; approval or publication boundary; agreed outcome | Use [Roles and decision rights](../../operations/operating-model/roles-decision-rights.qmd) and agree consequential changes with the BNR Lead before coding. |
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm authority for a material operating change** — responsible owner; affected roles; approval or publication boundary; agreed outcome | Use [Roles and responsibilities](../../operations/operating-model/roles-decision-rights.qmd) and agree consequential changes with the BNR Lead before coding. |
 | 2 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Agree any change to public statistical meaning** — definition; calculation; interpretation; limitation; comparability | Review and update the relevant [Public Methods page](../../methods/index.qmd) whenever the implemented public method changes. |
-| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Complete the controlled code-change route** — current `main`; focused branch; maintained source; exact diff; proportionate tests; dependent documentation; pull-request review and merge | Follow [Make a safe code change](../maintenance/safe-code-change.qmd). Never test by editing a generated output. |
+| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Complete the controlled code-change route** — compare changes on branch with `main`; confirm exact difference; change dependent documentation; pull-request in GitHub; review and merge | Follow [Make a safe code change](../maintenance/safe-code-change.qmd). |
 | 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Check the changed system after merge** — affected analytical workflow, utility or full website; expected result; no unintended public or private files | Use the completion checks in the [safe-code-change procedure](../maintenance/safe-code-change.qmd#step-9-review-and-merge) and, for website changes, confirm the live deployment. |
 
 ## How to confirm completion

@@ -1,7 +1,7 @@
 ---
 title: "Produce another CVD report"
 description: "Choose and complete either a rolling update or a one-off CVD report."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -28,11 +28,11 @@ Choose one route → prepare and review the report → publish the approved prod
 
 | Order | Manual | Task | Detailed guidance |
 |---:|---|---|---|
-| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Choose the report route and confirm responsibility** — rolling update from standard approved releases, or one-off publication of a completed bespoke report | Use [Rolling three-month update](../../operations/post-redcap/rolling-update.qmd) or [One-off CVD report](../../operations/post-redcap/one-off-report.qmd). Complete only the route that matches the product. |
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Choose the report route and confirm responsibility** — rolling update from standard approved releases, or one-off publication of a completed bespoke report | Use [Rolling three-month update](../../operations/post-redcap/rolling-update.qmd) or [One-off CVD report](../../operations/post-redcap/one-off-report.qmd). |
 | 2 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Preserve the approved statistical meaning** — definitions; interpretation; limitations; public wording | Use the relevant part of the [Public Methods Manual](../../methods/index.qmd) while reviewing the report. |
-| 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Build and review a rolling update, when that is the chosen route** — report month; two approved sources; version; generated page; frozen source copies | Follow [Build a rolling three-month CVD update](../workflows/reporting/rolling-update.qmd). |
-| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Prepare, approve and publish a one-off report, when that is the chosen route** — completed PDF; landing page; report record; exact approved package | Follow [Prepare, approve and publish a one-off CVD report](../workflows/reporting/one-off-report.qmd). |
-| 5 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Render and deploy the published report page** — automatic report listing; Git review; pull request; live-site check | Follow [Edit and publish website content](edit-publish-website-content.qmd). Quarto discovers the published landing page during the normal render; no separate listing-refresh action is required. |
+| 3A | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Build and review a rolling update, when that is the chosen route** — report month; two approved sources; version; generated page; frozen source copies | Follow [Build a rolling three-month CVD update](../workflows/reporting/rolling-update.qmd). |
+| 4B | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Prepare, approve and publish a one-off report, when that is the chosen route** — completed PDF; landing page; report record; exact approved package | Follow [Prepare, approve and publish a one-off CVD report](../workflows/reporting/one-off-report.qmd). |
+| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Render and deploy the published report page** — automatic report listing; Git review; pull request; live-site check | Follow [Edit and publish website content](edit-publish-website-content.qmd). Quarto discovers the published landing page during the normal render; no separate listing-refresh action is required. |
 
 ## How to confirm completion
 

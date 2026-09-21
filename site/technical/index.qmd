@@ -50,7 +50,6 @@ Follow a short route through the detailed manuals in the correct order.
 
 ::: {.mt-auto}
 [Explore section](common-tasks/section-index.qmd){.btn .btn-outline-primary .btn-sm}
-[Open cheat sheet](cheat-sheet/index.qmd){.btn .btn-outline-primary .btn-sm}
 :::
 
 :::

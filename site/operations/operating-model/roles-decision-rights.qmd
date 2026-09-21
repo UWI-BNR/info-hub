@@ -1,5 +1,5 @@
 ﻿---
-title: "Roles and decision rights"
+title: "Roles and responsibilities"
 subtitle: "Who performs, checks, approves and publishes BNR work"
 manual-review-status: reviewed-by-irh
 ---

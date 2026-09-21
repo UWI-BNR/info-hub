@@ -1,5 +1,5 @@
 ---
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 title: "Common tasks"
 description: "Follow a complete BNR task from its starting point to the final check."
 ---
@@ -87,15 +87,6 @@ Change maintained code on a branch, test it and merge the reviewed result.
 :::
 :::
 
-::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
-::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
-::: {.card-body}
-### [Check the manuals](check-manuals.qmd) {.card-title}
-
-Check links, review statuses and rendering before publication.
-:::
-:::
-:::
 
 :::
 

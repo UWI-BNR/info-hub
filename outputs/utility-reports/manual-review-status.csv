@@ -25,7 +25,7 @@ Public Methods Manual,Glossary,site/methods/reference/glossary.qmd,reviewed-by-i
 Public Methods Manual,Research data access,site/methods/responsible-data-use/research-data-access.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Operations Manual,site/operations/index.qmd,reviewed-by-irh,Page YAML
 Operations Manual,How the registry works,site/operations/operating-model/section-index.qmd,reviewed-by-irh,Page YAML
-Operations Manual,Roles and decision rights,site/operations/operating-model/roles-decision-rights.qmd,reviewed-by-irh,Page YAML
+Operations Manual,Roles and responsibilities,site/operations/operating-model/roles-decision-rights.qmd,reviewed-by-irh,Page YAML
 Operations Manual,From cases to statistics,site/operations/operating-model/routine-cycle.qmd,reviewed-by-irh,Page YAML
 Operations Manual,BNR operations continuity,site/operations/operating-model/records-handover.qmd,reviewed-by-irh,Page YAML
 Operations Manual,Before REDCap,site/operations/pre-redcap/section-index.qmd,reviewed-by-irh,Page YAML
@@ -63,19 +63,19 @@ Operations Manual,BNR audit summary,site/operations/bnr-refit/audit-summary.qmd,
 Operations Manual,BNR audit findings,site/operations/bnr-refit/audit-full.qmd,reviewed-by-irh,Page YAML
 Operations Manual,CVD Dataset rebuild 2025,site/operations/bnr-refit/cvd-data-rebuild.qmd,reviewed-by-irh,Page YAML
 Technical Manual,BNR Technical Manual,site/technical/index.qmd,reviewed-by-irh,Page YAML
-Technical Manual,BNR Info-Hub cheat sheet,site/technical/cheat-sheet/index.qmd,not-reviewed,Page YAML
+Technical Manual,BNR Info-Hub cheat sheet,site/technical/cheat-sheet/index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,BNR Info-Hub Git cheat sheet,site/technical/cheat-sheet/git.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Getting started,site/technical/getting-started/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,The BNR Info-Hub analytics and publishing environment,site/technical/getting-started/environment.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Set up a workstation,site/technical/getting-started/workstation-setup.qmd,reviewed-by-irh,Page YAML
-Technical Manual,Common tasks,site/technical/common-tasks/section-index.qmd,not-reviewed,Page YAML
-Technical Manual,Release CVD event data,site/technical/common-tasks/release-cvd-event-data.qmd,not-reviewed,Page YAML
-Technical Manual,Release CVD mortality data,site/technical/common-tasks/release-mortality-data.qmd,not-reviewed,Page YAML
-Technical Manual,Produce the annual CVD report,site/technical/common-tasks/produce-annual-report.qmd,not-reviewed,Page YAML
-Technical Manual,Produce another CVD report,site/technical/common-tasks/produce-other-reports.qmd,not-reviewed,Page YAML
-Technical Manual,Set up a new workstation,site/technical/common-tasks/set-up-new-workstation.qmd,not-reviewed,Page YAML
-Technical Manual,Edit and publish website content,site/technical/common-tasks/edit-publish-website-content.qmd,not-reviewed,Page YAML
-Technical Manual,Change maintained code safely,site/technical/common-tasks/make-safe-code-change.qmd,not-reviewed,Page YAML
-Technical Manual,Check the manuals,site/technical/common-tasks/check-manuals.qmd,not-reviewed,Page YAML
+Technical Manual,Common tasks,site/technical/common-tasks/section-index.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Release CVD event data,site/technical/common-tasks/release-cvd-event-data.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Release CVD mortality data,site/technical/common-tasks/release-mortality-data.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Produce the annual CVD report,site/technical/common-tasks/produce-annual-report.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Produce another CVD report,site/technical/common-tasks/produce-other-reports.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Set up a new workstation,site/technical/common-tasks/set-up-new-workstation.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Edit and publish website content,site/technical/common-tasks/edit-publish-website-content.qmd,reviewed-by-irh,Page YAML
+Technical Manual,Change maintained code safely,site/technical/common-tasks/make-safe-code-change.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run analytical workflows,site/technical/workflows/section-index.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Analytical workflows,site/technical/workflows/overview.qmd,reviewed-by-irh,Page YAML
 Technical Manual,Run the CVD events workflow,site/technical/workflows/cvd-events/overview.qmd,reviewed-by-irh,Page YAML

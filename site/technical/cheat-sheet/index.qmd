@@ -1,7 +1,7 @@
 ---
 title: "BNR Info-Hub cheat sheet"
 description: "Quick reference for routine BNR analytical, reporting, website and maintenance work."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 page-layout: full
 toc: false
 page-navigation: false
@@ -149,6 +149,107 @@ PDF; public title and description; and completed disclosure review.
 | Finish | Render and check the landing page, PDF, listing and download link. |
 
 [Open the complete one-off-report procedure](../workflows/reporting/one-off-report.qmd)
+
+:::
+
+:::
+
+## Stata command examples {.bnr-cheat-print-page-break}
+
+Enter these commands in the **Stata command window**. The linked step numbers
+open the full procedure, including the checks required before continuing.
+
+::: {.bnr-cheat-rule}
+These examples are for a routine first run. Add `replace` for an explicitly
+authorised rebuild, reapproval or republication.
+:::
+
+::: {.bnr-cheat-command-panel}
+
+### CVD event data release
+
+This example prepares and publishes the **August 2026** event release, using
+the completed **August 2026** mortality release in Step 4.
+
+| Step | Stata command |
+|---:|---|
+| [1](../workflows/cvd-events/extract-redcap.qmd#run-step-1) | `do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2026 8` |
+| [2](../workflows/cvd-events/prepare-confidential.qmd#run-step-2) | `do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2026 8` |
+| [3](../workflows/cvd-events/create-analysis-inputs.qmd#run-step-3) | `do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" 2026 8 count` |
+| [4](../workflows/cvd-events/generate-metrics.qmd#run-step-4) | `do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2026 8 2026 8` |
+| [5a](../workflows/cvd-events/review-approve.qmd#prepare-the-review-files) | `do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 8 prepare` |
+| [5b](../workflows/cvd-events/review-approve.qmd#approve-the-exact-reviewed-files) | `do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 8 approve "Full Name" "BNR Analyst"` |
+| [6](../workflows/cvd-events/publish-metrics.qmd#run-step-6) | `do "$BNR_STATA/monthly/bnr_step6_publish.do" 2026 8` |
+
+In Step 4, the first year and month identify the event release and the second
+pair identify the mortality release used for death-certificate-only linkage.
+Use the approver's actual name and authorised role: `BNR Analyst` or `BNR Lead`.
+
+Command history: `scripts/stata/runs/bnr_run_cvd_event_workflow_2024_01_to_2026_08.do`
+
+:::
+
+::: {.bnr-cheat-command-panel}
+
+### CVD mortality data release
+
+This example prepares and publishes the **August 2026** mortality release.
+
+| Step | Stata command |
+|---:|---|
+| [1](../workflows/mortality/extract.qmd#run-step-1) | `do "$BNR_STATA/mortality/bnr_mort_s1_extract.do" 2026 8` |
+| [2](../workflows/mortality/classify.qmd#run-step-2) | `do "$BNR_STATA/mortality/bnr_mort_s2_classify.do" 2026 8` |
+| [3](../workflows/mortality/build-burden.qmd#run-step-3) | `do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 8` |
+| [4](../workflows/mortality/review.qmd#create-the-review-package) | `do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 8` |
+| [5](../workflows/mortality/approve.qmd#approve-the-data-package) | `do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 8 "Full Name" "BNR Analyst" release definitions disclosure candidate ready` |
+| [6](../workflows/mortality/publish.qmd#publish-the-approved-files) | `do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 8` |
+
+Use the approver's actual name and authorised role: `BNR Analyst` or `BNR Lead`.
+The five confirmation words in Step 5 record the completed review; do not omit
+or change them.
+
+Command history: `scripts/stata/runs/bnr_run_cvd_mortality_workflow_2024_01_to_2026_08.do`
+
+:::
+
+::: {.bnr-cheat-grid .bnr-cheat-grid--two .bnr-cheat-grid--commands}
+
+::: {.bnr-cheat-command-panel}
+
+### Rolling three-month update
+
+This example publishes the **August 2026** update from the approved August
+2026 event and mortality releases as report version 1.
+
+| Step | Stata command |
+|---:|---|
+| [1](../workflows/reporting/rolling-update.qmd#build-the-update) | `do "$BNR_STATA/reporting/bnr_report_update_build.do" 2026 08 2026 08 2026 08 1` |
+
+The three year-month pairs identify the report, event release and mortality
+release, followed by the report version.
+
+Command history: `scripts/stata/runs/bnr_run_rolling_cvd_updates_2024_01_to_2026_08.do`
+
+:::
+
+::: {.bnr-cheat-command-panel}
+
+### Annual CVD report
+
+This example produces the **2025** annual report from the approved January
+2026 event release and July 2026 mortality release as report version 1.
+
+| Step | Stata command |
+|---:|---|
+| [1](../workflows/reporting/annual-report.qmd#step-1-build-and-check-the-report) | `do "$BNR_STATA/reporting/bnr_report_annual_s1_build.do" 2025 2026 1 2026 7 1` |
+| [2](../workflows/reporting/annual-report.qmd#step-2-approve-the-report) | `do "$BNR_STATA/reporting/bnr_report_annual_s2_approve.do" 2025 1 "Full Name" "BNR Analyst" candidate disclosure ready` |
+| [3](../workflows/reporting/annual-report.qmd#step-3-publish-the-report) | `do "$BNR_STATA/reporting/bnr_report_annual_s3_publish.do" 2025 1` |
+
+The Step 1 values identify the report year, event-release year and month,
+mortality-release year and month, and report version. Use the approver's actual
+name and authorised role in Step 2.
+
+Command history: `scripts/stata/runs/bnr_run_annual_cvd_reports_2024_2026.do`
 
 :::
 

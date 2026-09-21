@@ -9,7 +9,7 @@ description: "Choose an Operations Manual page in this section."
 ::: {.g-col-12 .g-col-md-6 .g-col-xl-4}
 ::: {.card .bnr-manual-section-card .h-100 .bg-light .shadow-sm}
 ::: {.card-body}
-### [Roles and decision rights](roles-decision-rights.qmd) {.card-title}
+### [Roles and responsibilities](roles-decision-rights.qmd) {.card-title}
 
 Who is responsible and where operational decisions are made.
 :::

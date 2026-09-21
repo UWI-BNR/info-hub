@@ -310,6 +310,9 @@ website:
         - text: "Info-Hub cheat sheet"
           href: technical/cheat-sheet/index.qmd
 
+        - text: "Git cheat sheet"
+          href: technical/cheat-sheet/git.qmd
+
         - section: "Getting started"
           contents:
             - text: "Section contents"
@@ -419,6 +422,8 @@ website:
           contents:
             - text: "Section contents"
               href: technical/maintenance/section-index.qmd
+            - text: "Git cheat sheet"
+              href: technical/cheat-sheet/git.qmd
             - text: "Make a safe code change"
               href: technical/maintenance/safe-code-change.qmd
             - text: "Files, data releases and versions"

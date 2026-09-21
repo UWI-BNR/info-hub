@@ -1,7 +1,7 @@
 ---
 title: "Set up a new workstation"
 description: "Prepare and verify a Windows 11 workstation for authorised BNR work."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -28,7 +28,7 @@ the workstation → verify the complete setup.
 
 | Order | Manual | Task | Detailed guidance |
 |---:|---|---|---|
-| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm authorised responsibility and access** — named BNR role; appropriate accounts; approved computer; public and private information kept separate | Check [Roles and decision rights](../../operations/operating-model/roles-decision-rights.qmd#core-roles) and the [BNR Info-Hub system boundary](../../operations/governance/ethics-application-wording.qmd#bnr-info-hub-system). |
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} | **Confirm authorised responsibility and access** — named BNR role; appropriate accounts; approved computer; public and private information kept separate | Check [Roles and decision rights](../../operations/operating-model/roles-decision-rights.qmd#core-roles). |
 | 2 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Understand where each part of the system belongs** — Stata; Python; Quarto; Git; GitHub; public repository; private workspace | Read [The BNR Info-Hub analytics and publishing environment](../getting-started/environment.qmd). |
 | 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Install, configure and verify the complete workstation** — supporting software; repository; private workspace; local paths; REDCap access; Python; Stata profile; Quarto preview; setup record | Follow [Set up a BNR workstation](../getting-started/workstation-setup.qmd) from Stage 1 through the final verification. |
 
