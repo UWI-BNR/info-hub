@@ -1,7 +1,7 @@
 ---
 title: "Edit and publish website content"
 description: "Take an ordinary Info-Hub content change from a working branch to the live website."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
@@ -22,8 +22,8 @@ navigation, then review and publish the change.
   identify the public source page that needs changing.
 - Confirm that any analytical product used by the page has already been
   approved and published.
-- Be ready to work on a development branch. Do not edit or push directly to
-  protected `main`.
+- Be ready to work on a development branch. **Never** edit or push directly to
+  the protected `main` branch.
 
 ::: {.callout-note appearance="simple" title="Procedure at a glance"}
 Confirm responsibility, scope and wording → prepare a development branch → edit,
@@ -34,10 +34,10 @@ preview and render → review and merge → check the live website.
 
 | Order | Manual | Task | Detailed guidance |
 |---:|---|---|---|
-| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Confirm authorised responsibility and the correct change route** — named owner; ordinary public content; analytical corrections excluded | Check the [BNR Developer and Publisher responsibilities](../../operations/operating-model/roles-decision-rights.qmd#core-roles) and [what may be edited directly](../website/update-content.qmd#what-this-page-does). |
+| 1 | [Operations]{.bnr-manual-label .bnr-manual-label--operations} [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Confirm authorised responsibility and the correct change route** — named owner; ordinary public content; analytical corrections excluded | Check the [BNR roles and responsibilities](../../operations/operating-model/roles-decision-rights.qmd#core-roles) and [what may be edited directly](../website/update-content.qmd#what-this-page-does). |
 | 2 | [Public Methods]{.bnr-manual-label .bnr-manual-label--methods} | **Preserve approved statistical meaning, where relevant** — definitions; interpretation; limitations; public wording | Use the [Public Methods Manual](../../methods/index.qmd) when the change explains a statistic or method. |
 | 3 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Prepare a current development branch** — local editing session; latest protected `main`; short task-specific branch name | Follow [Start the editing session, update `main` and create a development branch](../website/render-publish.qmd#step-1-start-the-editing-session). |
-| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Edit and test the public source** — smallest required QMD or Markdown change; local preview; complete site render; affected pages and links checked | Follow [Update website content](../website/update-content.qmd) from opening the source page through the complete local render. |
+| 4 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Edit and test the changes** — smallest required QMD or Markdown change; local preview; complete site render; affected pages and links checked | Follow [Update website content](../website/update-content.qmd) from opening the source page through the complete local render. |
 | 5 | [Technical]{.bnr-manual-label .bnr-manual-label--technical} | **Review and publish the controlled change** — intended files only; commit and push; pull-request review and merge; successful deployment; correct live page | Continue with [Inspect the files to commit, then publish and check the website](../website/render-publish.qmd#step-5-inspect-the-files-to-commit). |
 
 ## How to confirm completion

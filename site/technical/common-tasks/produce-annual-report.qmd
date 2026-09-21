@@ -1,7 +1,7 @@
 ---
 title: "Produce the annual CVD report"
 description: "Build, approve and publish the annual report and one-page public health update."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}

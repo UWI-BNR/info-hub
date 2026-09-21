@@ -1,7 +1,7 @@
 ---
 title: "Release CVD mortality data"
 description: "Create, approve and publish a routine CVD mortality data-package release."
-manual-review-status: not-reviewed
+manual-review-status: reviewed-by-irh
 ---
 
 ::: {.bnr-manual-flag .bnr-manual-flag--technical}
