@@ -1,6 +1,6 @@
 *! BNR Mortality Step 3: Build burden data - Pass 2 final hardening
 VERSION 19.0
-POSITION . . 490 365
+POSITION . . 490 235
 
 * EDIT BLOCK: RELEASE YEARS SHOWN IN THE PULL-DOWN LIST
 * Add later years here when required. Do not change the controller code.
@@ -42,17 +42,16 @@ BEGIN
 12
 END
 
-DIALOG main, label("BNR Mortality Step 3: Build burden data")
+DIALOG main, label("BNR CVD Mortality. Step 3 - calculate metrics")
 BEGIN
-  TEXTBOX tx_intro 15 15 460 38, label("Select the completed Step 2 dataset release. The standard BNR source path is constructed automatically.")
+  TEXTBOX tx_intro 15 15 460 38, label("Step 3 calculates all website mortality metrics.")
   GROUPBOX gb_release 15 68 460 105, label("Completed Step 2 dataset release")
   TEXT tx_year 30 98 105 ., label("Release year:")
   COMBOBOX cb_year 145 95 90 ., dropdownlist contents(release_years) nomemory
   TEXT tx_month 255 98 105 ., label("Release month:")
   COMBOBOX cb_month 365 95 70 ., dropdownlist contents(release_months) nomemory
   TEXTBOX tx_path 30 128 420 30, label("Example: 2026 and 7 selects mortality/y2026/m07/bnr_mort_s2_202607.dta")
-  CHECKBOX ck_replace 20 195 450 ., default(0) nomemory label("Authorise replacement of an existing Step 3 staging package")
-  TEXTBOX tx_boundary 20 235 450 48, label("This step calculates private counts, percentages and annual mortality rates from January 2010. It does not approve or publish.")
+  CHECKBOX ck_replace 20 195 450 ., default(0) nomemory label("Authorise replacement")
 END
 
 OK ok1, label("Run Step 3")

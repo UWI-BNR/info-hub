@@ -3,7 +3,7 @@
 *! Thin interface to mortality/bnr_mort_s5_approve.do
 
 VERSION 19.0
-POSITION . . 560 600
+POSITION . . 560 450
 
 LIST release_years
 BEGIN
@@ -48,9 +48,9 @@ BNR Lead
 BNR Analyst
 END
 
-DIALOG main, label("BNR Mortality Step 5: Record approval")
+DIALOG main, label("BNR CVD Mortality. Step 5 - approve mortality data release")
 BEGIN
-  TEXTBOX tx_intro 15 15 520 36, label("Review: review/mort_s4_review_mort_YYYY_MM.xlsx, including Monthly reference. Step 5 records approval only.")
+  TEXTBOX tx_intro 15 15 520 36, label("Step 5 approves the data package only after you have completed the review.")
 
   GROUPBOX gb_period 15 62 520 64, label("Step 4 release reviewed")
   TEXT tx_year 30 89 100 ., label("Release year:")
@@ -64,18 +64,14 @@ BEGIN
   TEXT tx_role 30 199 110 ., label("BNR role:")
   COMBOBOX cb_role 145 196 355 ., dropdownlist contents(approver_roles) nomemory
 
-  GROUPBOX gb_confirm 15 246 520 212, label("Complete each review action, then tick")
-  CHECKBOX ck_release 30 272 485 28, default(0) nomemory label("Release and QA: selected release is correct; all Step 3/4 QA checks PASS.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
-  CHECKBOX ck_definitions 30 309 485 28, default(0) nomemory label("Definitions and metrics: I spot-checked counts, percentages and quarterly/annual comparators.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
-  CHECKBOX ck_disclosure 30 346 485 28, default(0) nomemory label("Suppression review: I checked protected rows, values and protection routes.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
-  CHECKBOX ck_candidate 30 383 485 34, default(0) nomemory label("Candidate and monthly reference: I checked public masking and the fixed 2015-2019 range.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
-  CHECKBOX ck_ready 30 426 485 22, default(0) nomemory label("This unchanged candidate and reference are ready for Step 6.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  GROUPBOX gb_confirm 15 246 520 165, label("Complete each review action, then tick")
+  CHECKBOX ck_release     30 275 485 28, default(0) nomemory label("Quality Assurance: Step 3 and 4 QA checks PASS.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_definitions 30 300 485 28, default(0) nomemory label("Metrics: results spot-checked.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_disclosure  30 325 485 28, default(0) nomemory label("Suppression: protected rows checked.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_candidate   30 350 485 28, default(0) nomemory label("Data release review completed.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_ready       30 375 485 28, default(0) nomemory label("This data release is ready for Step 6.") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
 
-  GROUPBOX gb_boundary 15 472 520 68, label("Boundary")
-  TEXTBOX tx_boundary 30 496 490 32, label("Creates private public_ready, public_manifest.csv and approval.yml. Nothing is published.")
-
-  TEXTBOX tx_warning 20 554 345 20, label("Synthetic 2099 test releases cannot be approved.")
-  BUTTON bt_approve 390 550 130 30, label("Record approval") onpush(program approve_package)
+  BUTTON bt_approve 390 415 130 30, label("Record approval") onpush(program approve_package)
 END
 
 CANCEL cancel1, label("Cancel")

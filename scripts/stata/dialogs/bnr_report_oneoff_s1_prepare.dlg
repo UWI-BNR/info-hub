@@ -1,11 +1,11 @@
 *! BNR one-off CVD report Step 1: prepare candidate
 *! version 0.1.0, 2 September 2026
 VERSION 19.0
-POSITION . . 620 570
+POSITION . . 620 470
 
-DIALOG main, label("BNR: One-off report Step 1 - prepare candidate")
+DIALOG main, label("BNR One-off report. Step 1 - prepare PDF report")
 BEGIN
-  TEXTBOX tx_intro 15 15 590 50, label("Package a finished analyst-produced PDF. This step creates private candidate files only; it does not run the analysis, approve or publish.")
+  TEXTBOX tx_intro 15 15 590 50, label("Step 1 prepares an analyst-produced PDF.")
   GROUPBOX gb_identity 15 80 590 105, label("Report identity")
   TEXT tx_study 30 108 100 ., label("Study ID:")
   EDIT ed_study 140 105 250 ., nomemory error("Study ID")
@@ -23,12 +23,10 @@ BEGIN
   EDIT ed_title 140 316 440 ., nomemory error("Report title")
   TEXT tx_description 30 359 100 ., label("Description:")
   EDIT ed_description 140 356 440 ., nomemory error("Report description")
-  CHECKBOX ck_replace 30 396 540 ., default(0) nomemory label("Replace this unapproved candidate version")
-
-  TEXTBOX tx_rules 20 445 580 56, label("Study ID uses lowercase letters, numbers and underscores and begins with a letter. Date uses YYYY-MM-DD. Approved versions cannot be rebuilt.")
+  CHECKBOX ck_replace 30 396 540 ., default(0) nomemory label("Authorise replacement")
 END
 
-OK ok1, label("Prepare candidate")
+OK ok1, label("Run Step 1")
 CANCEL cancel1, label("Cancel")
 RESET reset1
 
