@@ -5,7 +5,7 @@
     <tr>
       <th scope="col">Area</th>
       <th scope="col">Period</th>
-      <th scope="col">Version</th>
+      <th scope="col" class="text-center">Version</th>
       <th scope="col">Type</th>
       <th scope="col">Output</th>
       <th scope="col">Contents</th>
@@ -35,7 +35,7 @@
           <%- item.period %>
         </td>
 
-        <td class="listing-version">
+        <td class="listing-version text-center">
           <%- item.version %>
         </td>
 

@@ -400,14 +400,6 @@ def sort_order_value(value):
         return 9999
 
 
-def display_period(period):
-    """Show a CVD monthly release period as YYYY-MM in the downloads list."""
-    match = re.fullmatch(r"cvd_(\d{4})_(0[1-9]|1[0-2])", period)
-    if match:
-        return f"{match.group(1)}-{match.group(2)}"
-    return period
-
-
 def discover_source_records():
     """Return every metric package-level catalogue manifest."""
     source_paths = []
@@ -500,7 +492,7 @@ def rows_from_manifest(manifest, source_path):
                 "version": version,
                 "surveillance_area": surveillance_area,
                 "domain": domain,
-                "period": display_period(period),
+                "period": period,
                 "artefact_type": item.get("artefact_type", "ZIP package"),
                 "format": item_format,
                 "description": description,

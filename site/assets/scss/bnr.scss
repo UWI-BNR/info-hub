@@ -1066,7 +1066,7 @@ body.bnr-briefing-page .quarto-document-content h3 {
 
 /* Keep the updated date on one line */
 .bnr-download-table .listing-updated,
-.bnr-download-table th:nth-child(5) {
+.bnr-download-table th:nth-child(7) {
   white-space: nowrap;
   width: 8rem;
 }
@@ -1078,16 +1078,22 @@ body.bnr-briefing-page .quarto-document-content h3 {
   width: 6rem;
 }
 
-/* Make Oupout fixed width */
-.bnr-download-table .listing-description,
-.bnr-download-table th:nth-child(3) {
-  width: 20%;
+/* Keep the type compact and give output labels enough room to read. */
+.bnr-download-table .listing-output_type,
+.bnr-download-table th:nth-child(4) {
+  width: 10rem;
+  max-width: 10rem;
+}
+
+.bnr-download-table .listing-output_title,
+.bnr-download-table th:nth-child(5) {
+  width: 18%;
   max-width: 22rem;
 }
 
-/* Make Contents fixed width */
+/* Keep package contents readable. */
 .bnr-download-table .listing-description,
-.bnr-download-table th:nth-child(4) {
+.bnr-download-table th:nth-child(6) {
   width: 32%;
   max-width: 22rem;
 }

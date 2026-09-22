@@ -72,7 +72,7 @@ website:
     background: primary 
     pinned: true
     logo: assets/images/uwi-crestonly-20p.png
-    logo-alt: "University of the West Indies crest"
+    logo-alt: "The University of the West Indies crest"
     title: "BNR Hub"
     collapse: true
     toggle-position: right
