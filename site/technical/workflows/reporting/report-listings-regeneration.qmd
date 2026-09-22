@@ -49,6 +49,39 @@ Report-specific fields may also identify the coverage period, source data releas
 
 The date is the publication date used for listing order; it does not rename the surveillance year covered by a report.
 
+## Listing-image pool and rotation
+
+The rolling-update, annual-report and one-off-report builders use
+`scripts/stata/reporting/bnr_report_listing_images.do` to select an image for a
+new page. The active pool and its alternative text are maintained in
+`site/assets/images/listings/listing-images.csv`; do not edit the Stata helper
+to add or withdraw an image.
+
+At the start of every complete Quarto render,
+`site/scripts/refresh_report_listing_images.py` reads that catalogue and
+deterministically assigns images across all published CVD report pages, newest
+first. This corrects historical repetitions as well as allocating new reports.
+The same reports and catalogue always produce the same allocation; images do
+not change randomly from one render to the next.
+
+### Maintain the image pool
+
+1. Place a landscape WebP file in `site/assets/images/listings/`.
+2. Add one row to `listing-images.csv`: the filename, a short accurate image
+   description, and `yes` in the `active` column.
+3. Run a complete local Quarto render and check the CVD reports and Latest
+   Surveillance Outputs pages.
+
+To withdraw an image, change its `active` value to `no`. Leave the file in the
+folder so that repository history remains complete. The render stops with a
+plain-language message if fewer than six active images are available for the
+six Latest Surveillance Output cards.
+
+The image refresh changes only the public landing-page `image` and `image-alt`
+metadata. It does not change report text, files, dates, identities, approval
+records or analytical results. Review the resulting Git changes before commit;
+do not alter the generated assignments by hand.
+
 ## Checks during normal website review
 
 After the normal site render, check both listings as part of website review:

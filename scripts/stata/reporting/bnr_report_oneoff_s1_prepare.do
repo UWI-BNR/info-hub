@@ -155,6 +155,13 @@ if r(filelen) != `source_pdf_size' | r(checksum) != `source_pdf_checksum' {
     exit 459
 }
 
+quietly do "$BNR_REPO/scripts/stata/reporting/bnr_report_listing_images.do"
+bnr_report_listing_images, ///
+    root("$BNR_REPO/site/surveillance/cvd/reports") ///
+    target1("$BNR_REPO/site/surveillance/cvd/reports/studies/`study_id'/index.qmd")
+local listing_image "`r(image1)'"
+local listing_alt "`r(alt1)'"
+
 tempname qmd_handle
 file open `qmd_handle' using "`candidate_qmd'", write text replace
 file write `qmd_handle' "---" _n
@@ -166,8 +173,8 @@ file write `qmd_handle' "report-id: `report_id'" _n
 file write `qmd_handle' "report-type: One-off report" _n
 file write `qmd_handle' "report-version: v`version_num'" _n
 file write `qmd_handle' "study-id: `study_id'" _n
-file write `qmd_handle' "image: /assets/images/listings/listing_mountain_coast.webp" _n
-file write `qmd_handle' "image-alt: Barbados mountain coast." _n
+file write `qmd_handle' "image: /assets/images/listings/`listing_image'" _n
+file write `qmd_handle' "image-alt: `listing_alt'" _n
 file write `qmd_handle' "categories:" _n
 file write `qmd_handle' "  - CVD" _n
 file write `qmd_handle' "  - One-off report" _n

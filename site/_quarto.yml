@@ -6,6 +6,7 @@ project:
     - assets/fonts/**
     - downloads/**
   pre-render:
+    - python scripts/refresh_report_listing_images.py
     - python scripts/build_download_catalogue.py
   render:
     - "*.qmd"

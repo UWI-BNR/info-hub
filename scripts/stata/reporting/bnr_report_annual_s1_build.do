@@ -447,13 +447,16 @@ if _rc {
 capture erase "`candidate_body_pdf'"
 
 
-* Select two different listing images deterministically for this report year.
-* Advancing the report year advances by two images through the seven-image set.
-local listing_images listing_mountain_coast.webp listing_mangrove_reflections.webp listing_reef_shallows.webp listing_salt_pan.webp listing_shore.webp listing_sugarcane_field.webp 
-local annual_listing_index = mod(2 * (`report_year_num' - 2000), 6) + 1
-local update_listing_index = mod(2 * (`report_year_num' - 2000) + 1, 6) + 1
-local annual_listing_image : word `annual_listing_index' of `listing_images'
-local update_listing_image : word `update_listing_index' of `listing_images'
+* Choose two distinct thumbnails from the seven existing listing assets.
+quietly do "$BNR_REPO/scripts/stata/reporting/bnr_report_listing_images.do"
+bnr_report_listing_images, ///
+    root("$BNR_REPO/site/surveillance/cvd/reports") ///
+    target1("$BNR_REPO/site/surveillance/cvd/reports/annual/`report_year4'/index.qmd") ///
+    target2("$BNR_REPO/site/surveillance/cvd/reports/briefings/`report_year4'/index.qmd")
+local annual_listing_image "`r(image1)'"
+local annual_listing_alt "`r(alt1)'"
+local update_listing_image "`r(image2)'"
+local update_listing_alt "`r(alt2)'"
 
 
 * INVARIANT - DO NOT EDIT.
@@ -475,7 +478,7 @@ file write `qmd_handle' "coverage-period: `report_year4'" _n
 file write `qmd_handle' "event-release-id: `event_release'" _n
 file write `qmd_handle' "mortality-release-id: `mortality_release'" _n
 file write `qmd_handle' "image: /assets/images/listings/`annual_listing_image'" _n
-file write `qmd_handle' "image-alt: Barbados landscape." _n
+file write `qmd_handle' "image-alt: `annual_listing_alt'" _n
 file write `qmd_handle' "categories:" _n
 file write `qmd_handle' "  - CVD" _n
 file write `qmd_handle' "  - Annual report" _n
@@ -506,7 +509,7 @@ file write `update_qmd_handle' "event-release-id: `event_release'" _n
 file write `update_qmd_handle' "mortality-release-id: `mortality_release'" _n
 file write `update_qmd_handle' "related-report-id: `report_id'" _n
 file write `update_qmd_handle' "image: /assets/images/listings/`update_listing_image'" _n
-file write `update_qmd_handle' "image-alt: Barbados landscape." _n
+file write `update_qmd_handle' "image-alt: `update_listing_alt'" _n
 file write `update_qmd_handle' "categories:" _n
 file write `update_qmd_handle' "  - CVD" _n
 file write `update_qmd_handle' "  - Public health update" _n
