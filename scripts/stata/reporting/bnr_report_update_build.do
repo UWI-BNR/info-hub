@@ -250,8 +250,15 @@ local published_date : display %tdCCYY-NN-DD daily("`c(current_date)'", "DMY")
 local report_month_name : display %tmMonth ym(`report_year_num', `report_month_num')
 local report_month_name = strtrim("`report_month_name'")
 
+quietly do "$BNR_REPO/scripts/stata/reporting/bnr_report_listing_images.do"
+bnr_report_listing_images, ///
+    root("$BNR_REPO/site/surveillance/cvd/reports") target1("`site_qmd'")
+local listing_image "`r(image1)'"
+local listing_alt "`r(alt1)'"
+
 tempfile template_1 template_2 template_3 template_4 template_5
-tempfile template_6 template_7 template_8 staged_qmd staged_metadata
+tempfile template_6 template_7 template_8 template_9 template_10
+tempfile staged_qmd staged_metadata
 tempfile staged_event_snapshot staged_mortality_snapshot
 
 capture noisily filefilter "`template'" "`template_1'", from("@@REPORT_MONTH_NAME@@") to("`report_month_name'") replace
@@ -302,10 +309,22 @@ if _rc {
     display as error "Update build stopped: event-source-link substitution failed."
     exit `filter_rc'
 }
-capture noisily filefilter "`template_8'" "`staged_qmd'", from("@@MORTALITY_SOURCE_HREF@@") to("`mortality_href'") replace
+capture noisily filefilter "`template_8'" "`template_9'", from("@@MORTALITY_SOURCE_HREF@@") to("`mortality_href'") replace
 if _rc {
     local filter_rc = _rc
     display as error "Update build stopped: mortality-source-link substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_9'" "`template_10'", from("@@LISTING_IMAGE@@") to("`listing_image'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: listing-image substitution failed."
+    exit `filter_rc'
+}
+capture noisily filefilter "`template_10'" "`staged_qmd'", from("@@LISTING_IMAGE_ALT@@") to("`listing_alt'") replace
+if _rc {
+    local filter_rc = _rc
+    display as error "Update build stopped: listing-image-alt substitution failed."
     exit `filter_rc'
 }
 

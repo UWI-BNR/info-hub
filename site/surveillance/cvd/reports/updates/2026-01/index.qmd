@@ -11,8 +11,8 @@ report-type: "Rolling CVD update"
 update-template-version: "1.0.0"
 event-release-id: "cvd_2026_01"
 mortality-release-id: "mort_2026_07"
-image: "/assets/images/listings/listing_tropical_valley.webp"
-image-alt: "Tropical valley."
+image: "/assets/images/listings/listing_shore.webp"
+image-alt: "Caribbean shoreline."
 format:
   html:
     toc: true

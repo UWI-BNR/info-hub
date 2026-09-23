@@ -6,6 +6,7 @@ project:
     - assets/fonts/**
     - downloads/**
   pre-render:
+    - python scripts/refresh_report_listing_images.py
     - python scripts/build_download_catalogue.py
   render:
     - "*.qmd"
@@ -72,7 +73,7 @@ website:
     background: primary 
     pinned: true
     logo: assets/images/uwi-crestonly-20p.png
-    logo-alt: "University of the West Indies crest"
+    logo-alt: "The University of the West Indies crest"
     title: "BNR Hub"
     collapse: true
     toggle-position: right
@@ -346,8 +347,6 @@ website:
                   href: technical/common-tasks/edit-publish-website-content.qmd
                 - text: "Change maintained code safely"
                   href: technical/common-tasks/make-safe-code-change.qmd
-                - text: "Check the manuals"
-                  href: technical/common-tasks/check-manuals.qmd
 
         - section: "Analytical workflows"
           contents:

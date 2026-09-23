@@ -1,11 +1,11 @@
 *! BNR rolling three-month CVD update builder
 *! version 1.0.0, 2 September 2026
 VERSION 19.0
-POSITION . . 540 510
+POSITION . . 540 400
 
-DIALOG main, label("BNR: Build rolling three-month CVD update")
+DIALOG main, label("BNR UPdate Report. Build rolling monthly CVD update")
 BEGIN
-  TEXTBOX tx_intro 15 15 510 54, label("Create one dated online update from exact public event and mortality releases. The resulting page must still be rendered and reviewed before it is committed or deployed.")
+  TEXTBOX tx_intro 15 20 510 54, label("Create rolling update report, using chosen CVVD events and mortality datasets.")
 
   GROUPBOX gb_report 15 86 510 70, label("Report period and version")
   TEXT tx_report_year 30 114 95 ., label("Report year:")
@@ -27,13 +27,10 @@ BEGIN
   TEXT tx_mortality_month 230 286 105 ., label("Release month:")
   SPINNER ed_mortality_month 335 283 65 ., default(7) min(1) max(12) nomemory error("Mortality release month")
 
-  GROUPBOX gb_protection 15 344 510 62, label("Version protection")
-  CHECKBOX ck_replace 30 370 470 ., default(0) nomemory label("Publish a strictly higher version at this period's stable address")
-
-  TEXTBOX tx_boundary 20 426 500 48, label("The builder uses the central QMD template and freezes complete copies of both declared public releases. It does not render, commit or deploy the website.")
+  CHECKBOX ck_replace 30 350 470 ., default(0) nomemory label("Authorise replacement using higher version number")
 END
 
-OK ok1, label("Build update page")
+OK ok1, label("Build report")
 CANCEL cancel1, label("Cancel")
 RESET reset1
 

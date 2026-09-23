@@ -93,7 +93,7 @@ foreach event in all_cvd heart stroke {
         xscale(noline range(2009(1)2026)) 
         yscale(noline) xtitle("") ytitle("") 
         
-        legend(order(4 "National (primary)" 3 "National (inclusive)" 2 "Hospital" 1 "DCO uncertainty") 
+        legend(order(4 "National (Primary)" 3 "National (Inclusive)" 2 "Hospital" 1 "DCO uncertainty") 
         cols(4) size(5) region(lcolor(none)) position(12) ring(1)) 
         
         xsize(10.0) ysize(3.2)
@@ -242,7 +242,7 @@ foreach event in all_cvd heart stroke {
         xscale(noline range(2009(1)2026)) 
         yscale(noline) xtitle("") ytitle("") 
 
-        legend(order(5 "National (primary)" 4 "National (inclusive)" 3 "Hospital" 2 "Rate 95% CI" 1 "DCO uncertainty") 
+        legend(order(5 "National (Primary)" 4 "National (Inclusive)" 3 "Hospital" 2 "Rate 95% CI" 1 "DCO uncertainty") 
         cols(5) size(5) region(lcolor(none)) position(12) ring(1)) 
         xsize(10.0) ysize(3.2)
         name(rate_`event');
@@ -270,7 +270,7 @@ foreach event in all_cvd heart stroke {
     putpdf pagebreak
     putpdf paragraph
     putpdf text ("`event_label' event rates"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
-    putpdf text ("Age-standardised rates per 100,000. Whiskers are published 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
+    putpdf text ("Age-standardised rates per 100,000. Whiskers are 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
 
     * Column widths are percentages of the available table width.
     matrix evt_rate_card_widths = (30, 5, 30, 5, 30)
@@ -731,7 +731,7 @@ foreach event in all_cvd heart stroke {
         xscale(noline range(2009(1)2026)) 
         yscale(noline) xtitle("") ytitle("") 
         
-        legend(order(3 "Deaths (primary)" 2 "Deaths (inclusive)" 1 "Difference between primary & inclusive") 
+        legend(order(3 "Deaths (Primary)" 2 "Deaths (Inclusive)" 1 "Difference between primary & inclusive") 
         cols(4) size(5) region(lcolor(none)) position(12) ring(1)) 
         
         xsize(10.0) ysize(3.2)
@@ -866,7 +866,7 @@ foreach event in all_cvd heart stroke {
         xscale(noline range(2009(1)2026)) 
         yscale(noline) xtitle("") ytitle("") 
 
-        legend(order(4 "National (primary)" 3 "National (inclusive)" 1 "Rate 95% CI") 
+        legend(order(4 "National (Primary)" 3 "National (Inclusive)" 1 "Rate 95% CI") 
         cols(5) size(5) region(lcolor(none)) position(12) ring(1)) 
         xsize(10.0) ysize(3.2)
         name(rate_mort_`event');
@@ -893,7 +893,7 @@ foreach event in all_cvd heart stroke {
     putpdf pagebreak
     putpdf paragraph
     putpdf text ("`event_label' mortality rates"), bold font("`font_title'", `size_page', "`bnr_ink'") linebreak
-    putpdf text ("Primary and Inclusive age-standardised mortality rates per 100,000. Whiskers are published 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
+    putpdf text ("Primary and Inclusive age-standardised mortality rates per 100,000. Whiskers are 95% statistical confidence intervals."), font("`font_body'", 8, "`bnr_muted'")
     matrix mort_rate_card_widths = (47.5, 5, 47.5)
     local primary_width   = strlen(strtrim(string(`primary',   "%21.0f")))
     local inclusive_width = strlen(strtrim(string(`inclusive', "%21.0f")))

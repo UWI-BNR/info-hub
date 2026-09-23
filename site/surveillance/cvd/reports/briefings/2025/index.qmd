@@ -10,8 +10,8 @@ coverage-period: 2025
 event-release-id: cvd_2026_01
 mortality-release-id: mort_2026_07
 related-report-id: bnr_cvd_annual_report_2025_v1
-image: /assets/images/listings/listing_salt_pan.webp
-image-alt: Barbados landscape.
+image: "/assets/images/listings/listing_mountain_coast.webp"
+image-alt: "Mountain coast in the Caribbean."
 categories:
   - CVD
   - Public health update

@@ -11,8 +11,8 @@ report-type: "Rolling CVD update"
 update-template-version: "1.0.0"
 event-release-id: "cvd_2024_01"
 mortality-release-id: "mort_2026_07"
-image: "/assets/images/listings/listing_reef_shallows.webp"
-image-alt: "Sunlit shallow reef water in Barbados."
+image: "/assets/images/listings/listing_salt_pan.webp"
+image-alt: "Caribbean salt pan."
 format:
   html:
     toc: true

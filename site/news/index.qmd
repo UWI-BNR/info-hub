@@ -7,7 +7,7 @@ listing:
   - id: latest-reports
     contents:
       - "../surveillance/*/reports/*/*/index.qmd"
-    type: grid
+    type: default
     sort: "date desc"
     categories: true
     sort-ui: true

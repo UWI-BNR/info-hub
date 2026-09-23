@@ -23,12 +23,12 @@ BNR surveillance only reports aggregate statistics, which are carefully checked 
 
 ## Current surveillance areas
 
-| Area | Current position in this manual |
-|--|-----|
-| **Cardiovascular disease (CVD)** | We present information on event counts, event rates, case fatality and hospital length of stay. Updates are available monthly, and we regularly add more in-depth insights and analyses. |
-| **Hypertension** | We present national data on hypertension prevalence and control. |
-| **Diabetes** | We present national data on diabetes prevalence and control. |
-| **Mortality** | We present information on CVD mortality counts, percentage distributions and annual rates. |
+| Implemented | Area | Current position in this manual |
+|--|---|-----|
+| 2026 | **Cardiovascular disease (CVD)** | We present information on event counts, event rates, case fatality and hospital length of stay. Updates are available monthly, and we regularly add more in-depth insights and analyses. |
+| 2026 | **Mortality** | We present information on CVD mortality counts, percentage distributions and annual rates. |
+| early 2027 | **Hypertension** | We present national data on hypertension prevalence and control. |
+| early 2027 | **Diabetes** | We present national data on diabetes prevalence and control. |
 
 ## What BNR statistics can show
 

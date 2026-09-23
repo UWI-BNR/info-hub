@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE:     bnr_step1_cvd_redcap_extract.do
-VERSION:     1.2.0 (27 July 2026)
+VERSION:     1.2.1 (22 September 2026)
 PROJECT:     BNR Refit Phase 2
 PURPOSE:     Step 1 of the monthly CVD workflow. Extract a private cumulative
              REDCap snapshot from 1 January 2024 through a selected month-end.
@@ -173,11 +173,11 @@ capture mkdir "$BNR_PRIVATE_LOGS"
 capture log close redcap_extract
 log using "`outlog'", text replace name(redcap_extract)
 
-* Keep the Results window and log operational rather than developer-facing.
+* Keep operational messages visible while suppressing routine preflight code.
 quietly {
 
 noisily display as text "BNR CVD STEP 1: REDCAP EXTRACTION"
-noisily display as result "  Script version:   1.2.0"
+noisily display as result "  Script version:   1.2.1"
 noisily display as result "  Selected release: `year4'-`month2'"
 noisily display as result "  Coverage:         2024-01-01 through `end_date'"
 noisily display as result "  Private output:   `release_dir'"
@@ -197,12 +197,18 @@ foreach file in "`outcsv'" "`outdta'" "`outmanifest'" {
     }
 }
 
+}
+
+* End the braced block before returning an error. A failed command within an
+* unfinished block leaves Stata reading its remaining lines as commands.
+if `existing_output' & lower("`replace_existing'") != "replace" ///
+    _bnr_step1_fail 602 "`year4'-`month2'" `"`outlog'"' ///
+        "A REDCap extract already exists. Rerun only with explicit replace authorisation."
+
+* A successful preflight may now explicitly replace an earlier private extract.
+quietly {
+
 if `existing_output' {
-    if lower("`replace_existing'") != "replace" {
-        _bnr_step1_fail 602 "`year4'-`month2'" `"`outlog'"' ///
-            "A REDCap extract already exists. Rerun only with explicit replace authorisation."
-        exit _rc
-    }
 
     foreach file in "`outcsv'" "`outdta'" "`outmanifest'" {
         capture confirm file `"`file'"'

@@ -3,11 +3,11 @@
 *! Thin interface to scripts/stata/monthly/bnr_step2_cvd_confidential.do
 
 VERSION 19.0
-POSITION . . 450 270
+POSITION . . 450 190
 
-DIALOG main, label("BNR CVD - Step 2: confidential cumulative dataset")
+DIALOG main, label("BNR CVD Events. Step 2 - build cumulative dataset")
 BEGIN
-    TEXTBOX intro 15 15 420 42, label("Builds one confidential cumulative CVD dataset by appending the selected post-2023 REDCap release to the frozen 2009-2023 dataset.")
+    TEXTBOX intro 15 15 420 42, label("Step 2 builds one confidential cumulative CVD dataset. It joins a post-2023 REDCap data release to the historical 2010-2023 dataset.")
 
     GROUPBOX period 15 70 420 86, label("Selected cumulative release")
     TEXT year_label 30 95 105 ., label("Release year:")
@@ -16,11 +16,9 @@ BEGIN
     TEXT month_label 30 127 105 ., label("Release month:")
     SPINNER month 145 124 90 ., default(1) min(1) max(12) nomemory error("Release month")
     TEXT month_note 245 127 160 ., label("1 = Jan; 12 = Dec")
-
-    TEXTBOX output_note 25 180 400 52, label("The command finds the matching Step 1 input automatically. It creates only a confidential dataset, YAML receipt and private log; it does not create metric inputs, staging, public or website files.")
 END
 
-OK ok1, label("Build dataset")
+OK ok1, label("Run Step 2")
 CANCEL cancel1, label("Cancel")
 HELP help1, view("help bnr_step2_cvd_confidential")
 RESET reset1

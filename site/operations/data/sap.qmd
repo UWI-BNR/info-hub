@@ -27,6 +27,12 @@ Operations Manual
 | Owner | BNR Lead and BNR Analyst |
 | Companion document | [BNR Metric Specification Register](sap-metrics.qmd) |
 
+::: {.callout-note icon=false}
+## Plain-language guide to the methods
+
+A shorter, plain-language summary of these methods is available in [Chapter 4 of the BNR 2025 Annual Report](https://uwi-bnr.github.io/info-hub/surveillance/cvd/reports/annual/2025/). The annual report explains how BNR identifies cardiovascular events and deaths, and how the Primary and Inclusive results should be interpreted.
+:::
+
 ## Purpose
 
 This plan explains how the BNR Information Hub calculates and presents its routine cardiovascular disease (CVD) event and mortality statistics. It provides one agreed set of methods so that successive releases are consistent, reproducible and open to review.

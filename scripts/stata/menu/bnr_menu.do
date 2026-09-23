@@ -35,7 +35,7 @@ window menu append item "Update CVD events dashboard" ///
     "db bnr_step5_review"
 
 window menu append item "Update CVD events dashboard" ///
-    "Step 6: Publish approved outputs" ///
+    "Step 6: Publish approved data release" ///
     "db bnr_step6_publish"
 
 
@@ -50,11 +50,11 @@ window menu append item "Update CVD mortality dashboard" ///
     "db bnr_mort_s2_classify"
 
 window menu append item "Update CVD mortality dashboard" ///
-    "Step 3: Build mortality burden data" ///
+    "Step 3: calculate metrics for dashboards" ///
     "db bnr_mort_s3_burden"
 
 window menu append item "Update CVD mortality dashboard" ///
-    "Step 4: Review mortality release" ///
+    "Step 4: Review mortality package for release" ///
     "db bnr_mort_s4_review"
 
 window menu append item "Update CVD mortality dashboard" ///
@@ -62,23 +62,23 @@ window menu append item "Update CVD mortality dashboard" ///
     "db bnr_mort_s5_approve"
 
 window menu append item "Update CVD mortality dashboard" ///
-    "Step 6: Publish approved mortality outputs" ///
+    "Step 6: Publish approved mortality data release" ///
     "db bnr_mort_s6_publish"
 
-window menu append submenu "BNR" "Rolling three-month CVD update"
+window menu append submenu "BNR" "Rolling monthly CVD update"
 
-window menu append item "Rolling three-month CVD update" ///
-    "Build dated online update" ///
+window menu append item "Rolling monthly CVD update" ///
+    "Build online update" ///
     "db bnr_report_update_build"
 
 window menu append submenu "BNR" "Annual CVD report"
 
 window menu append item "Annual CVD report" ///
-    "Step 1: Build annual report candidate" ///
+    "Step 1: Build annual PDF report" ///
     "db bnr_report_annual_s1_build"
 
 window menu append item "Annual CVD report" ///
-    "Step 2: Approve annual report candidate" ///
+    "Step 2: Approve annual report" ///
     "db bnr_report_annual_s2_approve"
 
 window menu append item "Annual CVD report" ///
@@ -88,22 +88,22 @@ window menu append item "Annual CVD report" ///
 window menu append submenu "BNR" "One-off CVD report publication"
 
 window menu append item "One-off CVD report publication" ///
-    "Step 1: Prepare one-off report candidate" ///
+    "Step 1: Prepare one-off PDF report" ///
     "db bnr_report_oneoff_s1_prepare"
 
 window menu append item "One-off CVD report publication" ///
-    "Step 2: Approve one-off report candidate" ///
+    "Step 2: Approve one-off report" ///
     "db bnr_report_oneoff_s2_approve"
 
 window menu append item "One-off CVD report publication" ///
     "Step 3: Publish approved one-off report" ///
     "db bnr_report_oneoff_s3_publish"
 
-window menu append submenu "BNR" "Report utilities"
-
-window menu append item "Report utilities" ///
-    "Screen report counts for disclosure review" ///
-    "db bnr_report_disclosure_screen"
+* window menu append submenu "BNR" "Report utilities"
+* 
+* window menu append item "Report utilities" ///
+*     "Screen report counts for disclosure review" ///
+*     "db bnr_report_disclosure_screen"
 
 
 window menu refresh

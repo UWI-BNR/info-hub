@@ -1,7 +1,7 @@
 *! BNR one-off CVD report Step 2: approve candidate
 *! version 0.1.0, 2 September 2026
 VERSION 19.0
-POSITION . . 560 550
+POSITION . . 560 470
 
 LIST approval_roles
 BEGIN
@@ -9,9 +9,9 @@ BNR Lead
 BNR Analyst
 END
 
-DIALOG main, label("BNR: One-off report Step 2 - approve candidate")
+DIALOG main, label("BNR One-off Report. Step 2 - approve report")
 BEGIN
-  TEXTBOX tx_intro 15 15 530 52, label("Approve only after reviewing the exact candidate. Approval copies its three files to public_ready, manifests them, then writes the receipt last.")
+  TEXTBOX tx_intro 15 15 530 52, label("Step 2 approves the report after review.")
   GROUPBOX gb_report 15 82 530 70, label("Candidate")
   TEXT tx_study 30 111 90 ., label("Study ID:")
   EDIT ed_study 130 108 250 ., nomemory error("Study ID")
@@ -23,15 +23,26 @@ BEGIN
   TEXT tx_role 30 236 95 ., label("Role:")
   COMBOBOX cb_role 135 232 190 ., dropdownlist contents(approval_roles) nomemory
   GROUPBOX gb_review 15 289 530 126, label("Required review confirmations")
-  CHECKBOX ck_candidate 30 316 500 ., default(0) nomemory label("I reviewed the complete candidate PDF, landing page and metadata")
-  CHECKBOX ck_disclosure 30 346 500 ., default(0) nomemory label("I completed and recorded disclosure review")
-  CHECKBOX ck_ready 30 376 500 ., default(0) nomemory label("I confirm this exact candidate is ready for public release")
-  TEXTBOX tx_boundary 20 438 520 48, label("Approval publishes nothing and has no replace option. Corrections to an approved package require a higher version.")
+  CHECKBOX ck_candidate 30 316 500 ., default(0) nomemory label("I reviewed the complete candidate PDF, landing page and metadata") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_disclosure 30 346 500 ., default(0) nomemory label("I completed and recorded disclosure review") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  CHECKBOX ck_ready 30 376 500 ., default(0) nomemory label("I confirm this exact candidate is ready for public release") onclickon(program check_approval_boxes) onclickoff(main.bt_approve.disable)
+  BUTTON bt_approve 390 425 130 30, label("Record approval") onpush(program approve_package)
 END
 
-OK ok1, label("Approve candidate")
 CANCEL cancel1, label("Cancel")
 RESET reset1
+
+* Keep the approval button unavailable until the analyst has actively ticked
+* every confirmation. The do-file repeats the checks and remains authoritative.
+PROGRAM check_approval_boxes
+BEGIN
+  if main.ck_candidate & main.ck_disclosure & main.ck_ready {
+    call main.bt_approve.enable
+  }
+  if !(main.ck_candidate & main.ck_disclosure & main.ck_ready) {
+    call main.bt_approve.disable
+  }
+END
 
 PROGRAM command
 BEGIN

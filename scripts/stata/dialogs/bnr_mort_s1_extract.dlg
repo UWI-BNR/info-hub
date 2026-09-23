@@ -3,11 +3,11 @@
 *! Thin interface to scripts/stata/mortality/bnr_mort_s1_extract.do
 
 VERSION 19.0
-POSITION . . 450 300
+POSITION . . 450 220
 
-DIALOG main, label("BNR Mortality - Step 1 extract")
+DIALOG main, label("BNR CVD Mortality. Step 1 - data extract")
 BEGIN
-    TEXTBOX intro 15 15 420 48, label("Extracts the private death-certificate data only and prepares the all-deaths Step 1 dataset. The tracking form is not extracted.")
+    TEXTBOX intro 15 15 420 48, label("Step 1 extracts CVD mortality data from REDCap, from 1 Jan 2024 to the end of the selected month.")
 
     GROUPBOX period 15 73 420 90, label("Release period")
 
@@ -19,9 +19,7 @@ BEGIN
 
     TEXT month_note 245 130 155 ., label("1 = Jan; 12 = Dec")
 
-    CHECKBOX replace 25 178 400 ., default(0) nomemory label("Replace an existing Step 1 extract for this month")
-
-    TEXTBOX output_note 25 215 400 42, label("Outputs: private raw CSV, analytical Stata dataset, YAML receipt and log. The dataset already open in Stata remains unchanged.")
+    CHECKBOX replace 25 178 400 ., default(0) nomemory label("Authorise replacement")
 END
 
 OK ok1, label("Run extract")
