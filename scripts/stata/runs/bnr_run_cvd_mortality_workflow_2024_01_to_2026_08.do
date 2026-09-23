@@ -255,7 +255,7 @@ do "$BNR_STATA/mortality/bnr_mort_s1_extract.do" 2026 1 replace
 do "$BNR_STATA/mortality/bnr_mort_s2_classify.do" 2026 1 replace
 do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 1 replace
 do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 1 replace
-do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 1 "FULL NAME" "BNR Analyst" release definitions disclosure candidate ready replace
+do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 1 "Ian Hambleton" "BNR Analyst" release definitions disclosure candidate ready replace
 do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 1 replace
 
 * =============================================================================
@@ -315,7 +315,7 @@ do "$BNR_STATA/mortality/bnr_mort_s1_extract.do" 2026 7 replace
 do "$BNR_STATA/mortality/bnr_mort_s2_classify.do" 2026 7 replace
 do "$BNR_STATA/mortality/bnr_mort_s3_burden.do" 2026 7 replace
 do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 7 replace
-do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 7 "FULL NAME" "BNR Analyst" release definitions disclosure candidate ready replace
+do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 7 "Ian Hambleton" "BNR Analyst" release definitions disclosure candidate ready replace
 do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 7 replace
 
 * =============================================================================
