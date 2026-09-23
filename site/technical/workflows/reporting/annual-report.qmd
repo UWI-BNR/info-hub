@@ -10,7 +10,7 @@ Technical Manual
 
 ## What this page does
 
-The annual-report workflow creates two linked products from approved CVD event and mortality data releases:
+The annual-report workflow creates two linked products from the CVD event and mortality data releases:
 
 - the full annual CVD report; and
 - a one-page public health update containing the same headline analytical content as the report’s final page.
