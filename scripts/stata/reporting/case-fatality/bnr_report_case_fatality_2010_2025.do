@@ -1,14 +1,18 @@
 /*******************************************************************************
 BNR CASE FATALITY, 2010-2025 — PRIVATE STUDY FILE
-Version: 0.4.1 (23 September 2026)
+Version: 0.6.1 (24 September 2026)
 
 CURRENT STAGE: candidate metrics and disclosure-controlled public-data review.
 The primary outcome is death within 30 days identified by either deterministic
 mortality linkage or a valid hospital death record. Linked-only and in-hospital
 measures are condition-specific secondary measures. This version calculates
 crude estimates with Wilson 95% confidence intervals and age-standardised
-predictive margins. It creates private review files and a suppressed candidate
-public dataset, but deliberately stops before the final report PDF.
+predictive margins. It creates private review files, a disclosure-controlled
+candidate public dataset and the finished one-off report PDF. The PDF presents
+annual primary All-CVD, Heart and Stroke results; secondary measures remain
+available in the candidate public dataset for possible later use. A controlled
+presentation-only helper adds the same running page furniture used by the BNR
+annual report. It does not access data or calculate report measures.
 
 Run from an authorised Stata 19 session with bnr_paths_LOCAL.do loaded:
     do "$BNR_STATA/reporting/case-fatality/bnr_report_case_fatality_2010_2025.do"
@@ -25,7 +29,7 @@ set more off
 EDITABLE SECTION 1 — FROZEN INPUTS AND PRIVATE OUTPUT
 Change only for a deliberately selected pair of releases and study version.
 *******************************************************************************/
-local study_id "cvd_case_fatality_2010_2025_v03"
+local study_id "cvd_case_fatality_2010_2025_v01"
 local event_input "$BNR_PRIVATE/data/derived/cvd/y2026/m01/bnr_cvd_confidential_202601_v01.dta"
 local death_input "$BNR_PRIVATE/data/raw/redcap/mortality/y2026/m07/bnr_mort_s1_202607.dta"
 local mortality_release "2026-07"
@@ -38,12 +42,20 @@ local report_type_root "`stage_root'/case-fatality"
 local study_root "`report_type_root'/`study_id'"
 local review_root "`study_root'/review"
 local candidate_root "`study_root'/candidate"
+local figure_root "`candidate_root'/figures"
+local report_pdf "`candidate_root'/bnr_cvd_case_fatality_2010_2025.pdf"
+local report_body_pdf "`candidate_root'/bnr_cvd_case_fatality_2010_2025_body.pdf"
+local pdf_helper "$BNR_REPO/scripts/python/stamp_annual_report_pdf.py"
+local pdf_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
+local pdf_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
+local cf_equation "$BNR_REPO/scripts/stata/reporting/assets/case_fatality_equation.png"
+local info_hub_web "uwi-bnr.github.io/info-hub/"
 
 /*******************************************************************************
 CONTROLLED SECTION 1 — INPUT CONTRACT AND PRIVATE FOLDERS
 DO NOT EDIT for a routine study update.
 *******************************************************************************/
-foreach path_name in BNR_PRIVATE BNR_STATA {
+foreach path_name in BNR_PRIVATE BNR_STATA BNR_REPO {
     if `"$`path_name'"' == "" {
         display as error "Required path is not configured: `path_name'"
         exit 198
@@ -66,6 +78,7 @@ capture mkdir "`report_type_root'"
 capture mkdir "`study_root'"
 capture mkdir "`review_root'"
 capture mkdir "`candidate_root'"
+capture mkdir "`figure_root'"
 capture log close case_fatality
 log using "`review_root'/case_fatality_input_audit.log", text replace name(case_fatality)
 display as text "Private case-fatality input audit: `study_id'"
@@ -77,10 +90,12 @@ display as text "Eligible death follow-up ends: " %tdCCYY-NN-DD `followup_end'
 tempfile events_source events_prepared cvd_nrn_map index_events ///
     deaths_source deaths_l01 deaths_base l02_candidates l02_summary ///
     l03_candidates l03_summary matched_deaths matched_death_keys ///
-    eligible_pairs event_deaths hospital_only_events primary_annual ///
+    eligible_pairs event_deaths hospital_only_events cvd_index_events ///
+    primary_events primary_annual ///
     primary_unknown_sex secondary_linked secondary_hospital ///
     crude_rows primary_adj secondary_adj candidate_base ///
-    pri_sex_marg pri_all_marg pri_sex_part sec_marg model_results
+    pri_sex_marg pri_all_marg pri_sex_part sec_marg model_results ///
+    model_sample_counts ref_totals report_rows
 
 /*******************************************************************************
 CONTROLLED SECTION 2 — CVD EVENT AND HOSPITAL-OUTCOME AUDIT
@@ -639,6 +654,38 @@ assert one == d_pri30 + d_neither
 
 label data "BNR private annual index-event case-fatality diagnostic"
 save "`review_root'/linked_index_events_private.dta", replace
+
+* Build the additional All-CVD primary cohort by pooling the already-frozen
+* Heart and Stroke condition-specific index events. This retains the approved
+* first-event-of-each-condition rule: a person with both conditions can
+* contribute two index events, and the same later death can be an outcome for
+* both. The private overlap audit quantifies those person-years; the report and
+* metadata explain that All CVD is an event aggregate, not a distinct-person or
+* distinct-death count.
+use "`review_root'/linked_index_events_private.dta", clear
+preserve
+    bysort event_person_key event_year: generate long condition_index_n = _N
+    bysort event_person_key event_year: egen byte has_heart = max(etype==2)
+    bysort event_person_key event_year: egen byte has_stroke = max(etype==1)
+    bysort event_person_key event_year: keep if _n == 1
+    generate byte one_person_year = 1
+    generate byte both_conditions = has_heart==1 & has_stroke==1
+    collapse (sum) cvd_person_years=one_person_year ///
+        condition_index_rows=condition_index_n both_conditions, by(event_year)
+    sort event_year
+    save "`review_root'/cvd_index_event_overlap_audit.dta", replace
+restore
+replace etype = 0
+label data "BNR private pooled All-CVD condition-index-event cohort"
+save `"`cvd_index_events'"', replace
+
+* The primary analytical file contains that pooled reporting series plus the
+* two condition-specific series. Heart and Stroke retain their frozen records.
+use "`review_root'/linked_index_events_private.dta", clear
+append using `"`cvd_index_events'"'
+save `"`primary_events'"', replace
+
+use "`review_root'/linked_index_events_private.dta", clear
 preserve
     keep if d_hsponly == 1
     save `"`hospital_only_events'"', replace
@@ -718,14 +765,16 @@ sort event_year etype sex event_person_key_source hospital_only_reason
 save "`review_root'/hospital_only_linkage_audit_by_year_type_sex.dta", replace
 
 /*******************************************************************************
-CONTROLLED SECTION 7 — CRUDE CONDITION-SPECIFIC MEASURES
+CONTROLLED SECTION 7 — CRUDE PRIMARY AND CONDITION-SPECIFIC SECONDARY MEASURES
 DO NOT EDIT. This section builds the complete table that a public user could
-compare. The primary series remains annual by Heart/Stroke and sex. Each
-secondary series is now also Heart/Stroke-specific, but uses the agreed broad
-periods and both sexes combined. Keeping the two conditions separate avoids
-the ambiguous pooled denominator discussed during methodological review.
+compare. The primary series is annual by All CVD, Heart and Stroke and by sex.
+Each secondary series remains Heart/Stroke-specific, uses the agreed broad
+reporting eras and combines women and men. The eras are intentionally unequal:
+their boundaries describe known changes in data provenance and quality rather
+than equal calendar blocks. Keeping the two conditions separate avoids the
+ambiguous pooled denominator discussed during methodological review.
 *******************************************************************************/
-use "`review_root'/linked_index_events_private.dta", clear
+use `"`primary_events'"', clear
 
 * Step 7.1: audit unknown sex before constructing the displayed sex strata.
 * The combined-sex result can reveal an unknown-sex count when compared with
@@ -742,6 +791,8 @@ restore
 
 * Step 7.2: calculate annual primary counts for women and men. These rows use
 * only valid sex codes. The both-sex row below uses every eligible index event.
+* etype 0 is the pooled All-CVD condition-index-event cohort; etypes 1 and 2
+* are the separate Stroke and Heart condition cohorts.
 preserve
     keep if inlist(sex,1,2)
     collapse (sum) denominator=one numerator=d_pri30, ///
@@ -777,8 +828,14 @@ preserve
     save `"`primary_annual'"', replace
 restore
 
-* Step 7.3: assign the agreed broad periods once at record level. Secondary
-* measures retain etype in the collapse, so Heart and Stroke remain distinct.
+* Step 7.3: return to condition-specific records and assign the four agreed
+* reporting eras once at record level.
+* 2021--23 already uses REDCap, but predates the Info-Hub analytical process.
+* 2024--25 is called the transition and process-improvement era: it spans the
+* late-2024 process change and therefore must not imply uniform quality within
+* the two years. Secondary measures retain etype in the collapse, so Heart and
+* Stroke remain distinct.
+use "`review_root'/linked_index_events_private.dta", clear
 generate byte per_id = .
 replace per_id = 1 if inrange(event_year,2010,2015)
 replace per_id = 2 if inrange(event_year,2016,2020)
@@ -811,7 +868,7 @@ preserve
     generate str12 time_basis = "period"
     generate str24 measure_id = "linked_30d"
     generate str40 quality_flag = ""
-    replace quality_flag = "2024_abstraction_completeness" if per_id == 4
+    replace quality_flag = "contains_2024_completeness_caution" if per_id == 4
     save `"`secondary_linked'"', replace
 restore
 
@@ -832,7 +889,7 @@ preserve
     generate str40 quality_flag = ""
     replace quality_flag = "extreme_dod_values" if per_id == 1
     replace quality_flag = "2023_missing_discharge_status" if per_id == 3
-    replace quality_flag = "2024_abstraction_completeness" if per_id == 4
+    replace quality_flag = "contains_2024_completeness_caution" if per_id == 4
     save `"`secondary_hospital'"', replace
 restore
 
@@ -841,6 +898,35 @@ restore
 * is used. The unrounded values are retained in private review data.
 use `"`primary_annual'"', clear
 append using `"`secondary_linked'"' `"`secondary_hospital'"'
+
+* Step 7.7: attach reader-facing era names and explanations only to the pooled
+* secondary rows. Annual primary rows already state "calendar year" and leave
+* era_name and era_note blank. This prevents an individual year—especially
+* 2025—from being described as though it spans a multi-year process change.
+* The secondary fields explain why their unequal periods are pre-specified.
+generate str40 era_name = ""
+replace era_name = "Early legacy era" if time_basis=="period" & ///
+    inrange(period_start,2010,2015)
+replace era_name = "Later legacy era" if time_basis=="period" & ///
+    inrange(period_start,2016,2020)
+replace era_name = "Third legacy / pre-Info-Hub era" if ///
+    time_basis=="period" & inrange(period_start,2021,2023)
+replace era_name = "Transition and process-improvement era" if ///
+    time_basis=="period" & inrange(period_start,2024,2025)
+generate str48 era_note = ""
+replace era_note = "Early legacy records" if time_basis=="period" & ///
+    inrange(period_start,2010,2015)
+replace era_note = "Later legacy records" if time_basis=="period" & ///
+    inrange(period_start,2016,2020)
+replace era_note = "REDCap records before the Info-Hub process" if ///
+    time_basis=="period" & inrange(period_start,2021,2023)
+replace era_note = "Straddles the late-2024 process change" if ///
+    time_basis=="period" & inrange(period_start,2024,2025)
+generate str32 period_basis = "calendar year"
+replace period_basis = "pre-specified reporting era" if ///
+    time_basis == "period"
+
+* Step 7.8: calculate the crude point estimates and Wilson intervals.
 generate double noncase_n = denominator-numerator
 local z95 = invnormal(.975)
 generate double __p = numerator/denominator
@@ -899,7 +985,8 @@ quietly count if cand_release & time_basis == "period" & ///
     sex == 0 & small_unk
 assert r(N) == 0
 
-order measure_id standardisation time_basis period_label period_start ///
+order measure_id standardisation time_basis period_basis era_name era_note ///
+    period_label period_start ///
     period_end event_year etype sex denominator numerator estimate ///
     ci_lower ci_upper comp_n shared_n noncase_n unk_den unk_num ///
     unk_noncase release_status quality_flag cand_release
@@ -911,14 +998,18 @@ save `"`crude_rows'"', replace
 /*******************************************************************************
 CONTROLLED SECTION 9 — AGE COMPLETENESS AND AGE-STANDARDISED ESTIMATES
 DO NOT EDIT. Ages from 0 through 110 years are accepted. Valid ages are grouped
-as <55, 55--64, 65--74, 75--84 and 85+. Separate Heart and Stroke logistic
-models estimate predictive margins over each condition's pooled valid-age
+as <55, 55--64, 65--74, 75--84 and 85+. Separate All-CVD, Heart and Stroke
+logistic models estimate predictive margins over each cohort's pooled valid-age
 distribution. Primary models include year, sex, year-by-sex and age group.
-Secondary models use broad period and age group. Clustered standard errors allow
-the same deterministic person proxy to contribute an index event in more than
-one year. These are model-based marginal estimates with delta-method 95% CIs.
+Secondary models use reporting era and age group. Every margin is averaged over
+the same fixed 2010--2025 valid-age reference population for that cohort.
+This makes the adjusted series a within-cohort comparison over time; All CVD,
+Heart and Stroke use different internal standards and their adjusted values
+should not be compared directly. Clustered standard errors allow the same deterministic
+person proxy to contribute an index event in more than one year. These are
+model-based marginal estimates with delta-method 95% confidence intervals.
 *******************************************************************************/
-use "`review_root'/linked_index_events_private.dta", clear
+use `"`primary_events'"', clear
 generate byte age_miss = missing(agey)
 generate byte age_bad = !missing(agey) & !inrange(agey,0,110)
 generate byte age_ok = inrange(agey,0,110)
@@ -928,32 +1019,125 @@ replace age_grp = 2 if age_ok & inrange(agey,55,64)
 replace age_grp = 3 if age_ok & inrange(agey,65,74)
 replace age_grp = 4 if age_ok & inrange(agey,75,84)
 replace age_grp = 5 if age_ok & agey >= 85
+generate byte age_excl = !age_ok
+generate byte pri_ageok_d = d_pri30*age_ok
+generate byte pri_ageex_d = d_pri30*age_excl
+generate byte lnk_ageok_d = d_lnk30*age_ok
+generate byte lnk_ageex_d = d_lnk30*age_excl
+generate byte hsp_ageok_d = d_hsp30*age_ok
+generate byte hsp_ageex_d = d_hsp30*age_excl
 
 * Step 9.1: preserve compact private QA tables. They show exactly which records
 * enter the models and whether missing or impossible age values cluster in a
 * particular year, condition or sex stratum.
 preserve
     collapse (sum) events=one age_missing=age_miss age_invalid=age_bad ///
-        age_complete=age_ok primary_deaths=d_pri30, ///
+        age_complete=age_ok primary_deaths=d_pri30 ///
+        primary_deaths_age_complete=pri_ageok_d ///
+        primary_deaths_age_excluded=pri_ageex_d, ///
         by(event_year etype sex)
     sort event_year etype sex
     save "`review_root'/age_model_audit_by_year_type_sex.dta", replace
 restore
 preserve
     keep if age_ok
-    collapse (sum) events=one primary_deaths=d_pri30, ///
+    collapse (sum) ref_events=one ref_deaths=d_pri30, ///
         by(etype age_grp)
+    bysort etype: egen long ref_total = total(ref_events)
+    generate double ref_weight = ref_events/ref_total
+    generate str24 ref_pop = cond(etype==0,"cvd_cases_2010_2025", ///
+        cond(etype==1,"stroke_cases_2010_2025","heart_cases_2010_2025"))
+    order ref_pop etype age_grp ref_events ref_total ref_weight ref_deaths
     sort etype age_grp
     save "`review_root'/age_group_reference_audit.dta", replace
 restore
+preserve
+    use "`review_root'/age_group_reference_audit.dta", clear
+    collapse (firstnm) ref_total, by(etype)
+    save `"`ref_totals'"', replace
+restore
 
-* Step 9.2: fit primary models separately within each condition. The sex-specific
+* Step 9.2: construct one exact model-sample audit row for every crude layout
+* before fitting models. The audit distinguishes the eligible cohort from the
+* valid-age model cohort and records deaths excluded because age was missing or
+* invalid. In-hospital rows from source-quality-excluded eras remain in this
+* audit and are later labelled as not modelled.
+preserve
+    keep if inlist(sex,1,2)
+    collapse (sum) eligible_events=one eligible_deaths=d_pri30 ///
+        model_events=age_ok model_deaths=pri_ageok_d ///
+        age_excluded_events=age_excl age_excluded_deaths=pri_ageex_d, ///
+        by(event_year etype sex)
+    generate int period_start = event_year
+    generate int period_end = event_year
+    generate str24 measure_id = "primary_30d"
+    save `"`model_sample_counts'"', replace
+restore
+preserve
+    collapse (sum) eligible_events=one eligible_deaths=d_pri30 ///
+        model_events=age_ok model_deaths=pri_ageok_d ///
+        age_excluded_events=age_excl age_excluded_deaths=pri_ageex_d, ///
+        by(event_year etype)
+    generate byte sex = 0
+    generate int period_start = event_year
+    generate int period_end = event_year
+    generate str24 measure_id = "primary_30d"
+    append using `"`model_sample_counts'"'
+    save `"`model_sample_counts'"', replace
+restore
+
+* Secondary measures remain condition-specific. Remove the additional All-CVD
+* primary rows before creating their pooled reporting-era samples.
+keep if inlist(etype,1,2)
+generate byte per_id = .
+replace per_id = 1 if inrange(event_year,2010,2015)
+replace per_id = 2 if inrange(event_year,2016,2020)
+replace per_id = 3 if inrange(event_year,2021,2023)
+replace per_id = 4 if inrange(event_year,2024,2025)
+generate int period_start = .
+generate int period_end = .
+replace period_start = 2010 if per_id == 1
+replace period_end   = 2015 if per_id == 1
+replace period_start = 2016 if per_id == 2
+replace period_end   = 2020 if per_id == 2
+replace period_start = 2021 if per_id == 3
+replace period_end   = 2023 if per_id == 3
+replace period_start = 2024 if per_id == 4
+replace period_end   = 2025 if per_id == 4
+preserve
+    collapse (sum) eligible_events=one eligible_deaths=d_lnk30 ///
+        model_events=age_ok model_deaths=lnk_ageok_d ///
+        age_excluded_events=age_excl age_excluded_deaths=lnk_ageex_d, ///
+        by(per_id period_start period_end etype)
+    generate int event_year = .
+    generate byte sex = 0
+    generate str24 measure_id = "linked_30d"
+    append using `"`model_sample_counts'"'
+    save `"`model_sample_counts'"', replace
+restore
+preserve
+    collapse (sum) eligible_events=one eligible_deaths=d_hsp30 ///
+        model_events=age_ok model_deaths=hsp_ageok_d ///
+        age_excluded_events=age_excl age_excluded_deaths=hsp_ageex_d, ///
+        by(per_id period_start period_end etype)
+    generate int event_year = .
+    generate byte sex = 0
+    generate str24 measure_id = "in_hospital_30d"
+    append using `"`model_sample_counts'"'
+    save `"`model_sample_counts'"', replace
+restore
+
+* Step 9.3: fit primary models separately within each cohort. The sex-specific
 * model contains year, sex, their interaction and age group; margins fix year and
-* sex while averaging over one common age distribution. A second combined-sex
-* model contains year and age group only, so its margins standardise age without
-* also imposing a common sex distribution. A missing margin later stops release.
-foreach t in 1 2 {
-    use "`review_root'/linked_index_events_private.dta", clear
+* sex while averaging over the full cohort-specific 2010--25 valid-age
+* reference population. A second combined-sex model contains year and age group
+* only. Its margins use the same fixed cohort-specific age standard without
+* additionally standardising sex. The noesample option is deliberate: it keeps
+* the reference population fixed rather than allowing each fitted model's sample
+* to redefine the standard. A missing margin later stops release.
+local first_primary = 1
+foreach t in 0 1 2 {
+    use `"`primary_events'"', clear
     generate byte age_ok = inrange(agey,0,110)
     generate byte age_grp = .
     replace age_grp = 1 if age_ok & agey < 55
@@ -970,7 +1154,8 @@ foreach t in 1 2 {
         display as error "Primary sex-specific model did not converge: etype `t'."
         exit 430
     }
-    quietly margins, at(event_year=(2010(1)2025) sex=(1 2)) ///
+    quietly margins if age_ok, ///
+        at(event_year=(2010(1)2025) sex=(1 2)) noesample ///
         level(95) saving(`"`pri_sex_marg'"', replace)
     quietly logit d_pri30 i.event_year i.age_grp if age_ok, ///
         vce(cluster __cf_pid)
@@ -978,7 +1163,7 @@ foreach t in 1 2 {
         display as error "Primary combined-sex model did not converge: etype `t'."
         exit 430
     }
-    quietly margins, at(event_year=(2010(1)2025)) ///
+    quietly margins if age_ok, at(event_year=(2010(1)2025)) noesample ///
         level(95) saving(`"`pri_all_marg'"', replace)
 
     use `"`pri_sex_marg'"', clear
@@ -1012,16 +1197,21 @@ foreach t in 1 2 {
     replace ci_lower = 100*ci_lower
     replace ci_upper = 100*ci_upper
     append using `"`pri_sex_part'"'
-    if `t' == 1 save `"`primary_adj'"', replace
+    if `first_primary' == 1 {
+        save `"`primary_adj'"', replace
+        local first_primary = 0
+    }
     else {
         append using `"`primary_adj'"'
         save `"`primary_adj'"', replace
     }
 }
 
-* Step 9.3: fit the two condition-specific secondary models. Linked mortality
-* uses all four periods. In-hospital modelling uses only 2016--20 and 2024--25;
-* excluded source-quality periods cannot influence estimates that may be shown.
+* Step 9.4: fit the two condition-specific secondary models. Linked mortality
+* uses all four reporting eras. In-hospital modelling uses only 2016--20 and
+* 2024--25; excluded source-quality eras cannot influence model coefficients.
+* Regardless of the fitting sample, margins are averaged over the full fixed
+* 2010--25 valid-age reference population for that condition.
 local first_secondary = 1
 foreach t in 1 2 {
     foreach out in d_lnk30 d_hsp30 {
@@ -1058,7 +1248,7 @@ foreach t in 1 2 {
             display as error "Secondary model did not converge: `mid', etype `t'."
             exit 430
         }
-        quietly margins, at(per_id=(`ats')) ///
+        quietly margins if age_ok, at(per_id=(`ats')) noesample ///
             level(95) saving(`"`sec_marg'"', replace)
 
         use `"`sec_marg'"', clear
@@ -1104,6 +1294,37 @@ sort measure_id period_start etype sex
 save `"`model_results'"', replace
 save "`review_root'/age_standardised_model_results.dta", replace
 
+* Step 9.5: bind each proposed adjusted row to its exact model-sample counts
+* and fixed reference-population identifier. Successful model rows can exist
+* only when the fitted model converged and margins were estimable; the script
+* has already stopped on non-convergence. The two source-quality-excluded
+* in-hospital eras are retained with an explicit not-modelled status.
+use `"`model_sample_counts'"', clear
+merge 1:1 measure_id period_start period_end event_year etype sex ///
+    using `"`model_results'"', keep(master match) assert(master match) ///
+    generate(model_merge)
+merge m:1 etype using `"`ref_totals'"', assert(match) nogen
+generate str24 ref_pop = cond(etype==0,"cvd_cases_2010_2025", ///
+    cond(etype==1,"stroke_cases_2010_2025","heart_cases_2010_2025"))
+generate byte estimable = model_merge == 3 & ///
+    !missing(estimate,ci_lower,ci_upper)
+generate str32 model_status = "converged_estimable"
+replace model_status = "not_modelled_source_quality" if ///
+    measure_id == "in_hospital_30d" & inlist(per_id,1,3)
+quietly count if model_status == "converged_estimable" & !estimable
+assert r(N) == 0
+quietly count if model_status == "not_modelled_source_quality" & ///
+    model_merge != 1
+assert r(N) == 0
+drop model_merge estimate ci_lower ci_upper
+order measure_id period_start period_end event_year etype sex ///
+    eligible_events eligible_deaths model_events model_deaths ///
+    age_excluded_events age_excluded_deaths ref_pop ref_total ///
+    estimable model_status
+isid measure_id period_start period_end etype sex
+sort measure_id period_start etype sex
+save "`review_root'/age_model_sample_audit.dta", replace
+
 /*******************************************************************************
 CONTROLLED SECTION 10 — CANDIDATE PUBLIC DATASET AND METADATA
 DO NOT EDIT. Adjusted rows inherit the disclosure and source-quality decision
@@ -1116,7 +1337,7 @@ use `"`candidate_base'"', clear
 drop estimate ci_lower ci_upper standardisation
 generate str20 standardisation = "age_standardised"
 merge 1:1 measure_id period_start period_end event_year etype sex ///
-    using `"`model_results'"', keep(master match) nogen
+    using `"`model_results'"', keep(master match) assert(master match) nogen
 quietly count if release_status == "release" & missing(estimate)
 assert r(N) == 0
 save `"`model_results'"', replace
@@ -1124,6 +1345,7 @@ save `"`model_results'"', replace
 use `"`crude_rows'"', clear
 append using `"`model_results'"'
 generate str6 event_type = ""
+replace event_type = "CVD" if etype == 0
 replace event_type = "Stroke" if etype == 1
 replace event_type = "Heart" if etype == 2
 generate str10 sex_group = "Both"
@@ -1133,9 +1355,9 @@ replace sex_group = "Men" if sex == 2
 * Retain only fields intended for external interpretation, then blank every
 * protected numeric result. Private complement and linkage diagnostics are not
 * copied to the candidate public payload.
-keep measure_id standardisation time_basis period_label period_start ///
-    period_end event_type sex_group denominator numerator estimate ///
-    ci_lower ci_upper release_status quality_flag
+keep measure_id standardisation time_basis period_basis era_name era_note ///
+    period_label period_start period_end event_type sex_group denominator ///
+    numerator estimate ci_lower ci_upper release_status quality_flag
 rename denominator events
 rename numerator deaths
 rename estimate estimate_pct
@@ -1174,36 +1396,57 @@ file open meta using "`candidate_root'/case_fatality_metadata_candidate.txt", //
 file write meta "BNR case-fatality candidate public dataset" _n
 file write meta "Status: private review candidate; not approved for publication." _n _n
 file write meta ///
-    "Primary measure: all-cause death within 30 days of the first annual " ///
-    "index event, identified by deterministic mortality linkage or a valid " ///
-    "hospital death record." _n
+    "Inputs: joined identifiable CVD event release 2026-01 and all-deaths " ///
+    "mortality release `mortality_release'. Death follow-up ends 30 January " ///
+    "2026, providing 30 complete days for events through 31 December 2025." _n
+file write meta ///
+    "Primary measure: all-cause death within 30 days of the first event of " ///
+    "each condition in each calendar year. All CVD pools the Heart and Stroke " ///
+    "condition-specific index events. Deaths are identified by deterministic " ///
+    "mortality linkage or death recorded on the index hospital event record " ///
+    "within 30 days." _n
 file write meta ///
     "Secondary measures: deterministic linked all-cause death within 30 " ///
-    "days; and death recorded in hospital within 30 days. Secondary rows " ///
-    "are condition-specific and use broad periods." _n
+    "days; and death recorded on the index hospital event record within 30 " ///
+    "days. Secondary rows are condition-specific and use four pre-specified " ///
+    "reporting eras. They are calculated for the candidate dataset but are " ///
+    "not presented in the initial report PDF." _n
 file write meta ///
-    "Cohorts: Heart and Stroke are separate disease-specific cohorts. A " ///
-    "person can contribute one index event per year to each cohort. A " ///
+    "Reporting eras: 2010-15 Early legacy; 2016-20 Later legacy; 2021-23 " ///
+    "Third legacy / pre-Info-Hub; and 2024-25 Transition and process-" ///
+    "improvement. The eras " ///
+    "describe changes in data provenance and quality, not equal calendar " ///
+    "blocks. The 2024-25 era straddles a late-2024 process change and should " ///
+    "not be interpreted as having uniform data quality." _n
+file write meta ///
+    "Cohorts: All CVD pools the separate Heart and Stroke disease-specific " ///
+    "cohorts. A person can contribute one index event per year to each " ///
+    "condition-specific cohort. A " ///
     "subsequent all-cause death can therefore be an outcome in both series; " ///
     "this is not a count of distinct national deaths." _n
 file write meta "Crude uncertainty: Wilson 95% binomial confidence intervals." _n
 file write meta ///
     "Age-standardisation: logistic predictive margins using age groups <55, " ///
-    "55-64, 65-74, 75-84 and 85+. Primary sex-specific models are separate " ///
-    "by condition and include year, sex, year-by-sex and age group; combined-" ///
-    "sex models include year and age group. Secondary models are separate by " ///
-    "condition and include period and age group. Records with missing or " ///
-    "invalid age are excluded. Delta-method 95% confidence intervals are " ///
-    "reported." _n
+    "55-64, 65-74, 75-84 and 85+. Every margin for a cohort is averaged " ///
+    "over that cohort's fixed pooled 2010-25 valid-age index-event " ///
+    "population. Primary sex-specific models include year, sex, year-by-sex " ///
+    "and age group; combined-sex models include year and age group. Secondary " ///
+    "models include reporting era and age group. Records with missing or " ///
+    "invalid age are excluded. All CVD, Heart and Stroke use different internal " ///
+    "standards: adjusted results support comparisons over time within a " ///
+    "cohort and should not be compared directly between cohorts. " ///
+    "Delta-method 95% confidence intervals are reported." _n
 file write meta ///
     "Suppression: all numeric outputs are blank when a direct cell, " ///
     "complementary source-only cell, shared-source cell, noncase cell or " ///
     "derivable unknown-sex cell is 1-5. Adjusted rows inherit the crude-row " ///
     "decision." _n
 file write meta ///
-    "Quality flags: 2024 is flagged for abstraction completeness. In-hospital " ///
-    "estimates for 2010-15 and 2021-23 are not released because of historical " ///
-    "source-quality limitations." _n
+    "Quality flags: the 2024 annual primary rows are flagged for possible " ///
+    "abstraction incompleteness. The 2024-25 secondary era is flagged because " ///
+    "it contains 2024 and straddles a process change. In-hospital estimates " ///
+    "for 2010-15 and 2021-23 are not released because of historical source-" ///
+    "quality limitations." _n
 file write meta ///
     "Counts on age-standardised rows describe the observed cohort; the " ///
     "percentage is model-based and is not deaths divided by events." _n
@@ -1216,8 +1459,541 @@ collapse (sum) deaths=one_match, by(final_linkage_rule_id linkage_status)
 gsort final_linkage_rule_id linkage_status
 save "`review_root'/mortality_linkage_rule_audit.dta", replace
 
-display as result "Candidate metrics and disclosure-controlled dataset complete."
+/*******************************************************************************
+CONTROLLED SECTION 11 — FINISHED ONE-OFF REPORT PDF
+DO NOT EDIT for a routine rerun. All result tables and figures read only the
+disclosure-controlled candidate dataset created above. The report presents
+annual primary All-CVD, Heart and Stroke results and never loads secondary
+measures into a report table or figure. Crude estimates are the main measure;
+age-standardised estimates provide supporting within-cohort context. The body
+PDF is composed in Stata and the existing presentation-only annual-report
+helper adds page furniture. The completed PDF remains private until it passes
+the separate one-off prepare, approve and publish workflow.
+*******************************************************************************/
+local crest "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
+foreach required_report_file in crest pdf_helper pdf_python pdf_logo cf_equation {
+    capture confirm file "``required_report_file''"
+    if _rc {
+        display as error "Required report file not found: ``required_report_file''"
+        log close case_fatality
+        exit 601
+    }
+}
+
+* Step 11.1: create the exact aggregate report source. The assertion protects
+* the agreed first-report design: every annual primary result must be released.
+* If a later rerun introduces suppression, the PDF stops rather than silently
+* omitting or reconstructing a protected value.
+use "`candidate_root'/case_fatality_metrics_candidate.dta", clear
+keep if measure_id == "primary_30d"
+quietly count if release_status != "release"
+if r(N) > 0 {
+    display as error "Annual primary rows now include protected values."
+    display as error "Review disclosure control before rebuilding the PDF."
+    log close case_fatality
+    exit 459
+}
+assert !missing(events,deaths,estimate_pct,ci_lower_pct,ci_upper_pct)
+save `"`report_rows'"', replace
+
+* Step 11.2: collect the six sex-specific 2025 headline values plus the crude
+* and age-adjusted combined-sex values used on each detailed results page.
+* These locals feed cards directly, so no report number is typed by hand.
+foreach c in CVD Heart Stroke {
+    local cstem = lower("`c'")
+    foreach s in Women Men {
+        local sstem = lower("`s'")
+        quietly count if event_type == "`c'" & sex_group == "`s'" & ///
+            standardisation == "crude" & period_start == `last_year'
+        assert r(N) == 1
+        quietly summarize estimate_pct if event_type == "`c'" & ///
+            sex_group == "`s'" & standardisation == "crude" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`sstem'_pct : display %4.1f r(mean)
+        quietly summarize ci_lower_pct if event_type == "`c'" & ///
+            sex_group == "`s'" & standardisation == "crude" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`sstem'_lo : display %4.1f r(mean)
+        quietly summarize ci_upper_pct if event_type == "`c'" & ///
+            sex_group == "`s'" & standardisation == "crude" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`sstem'_hi : display %4.1f r(mean)
+    }
+    foreach a in crude age_standardised {
+        local astem "crude"
+        if "`a'" == "age_standardised" local astem "adjusted"
+        quietly count if event_type == "`c'" & sex_group == "Both" & ///
+            standardisation == "`a'" & period_start == `last_year'
+        assert r(N) == 1
+        quietly summarize estimate_pct if event_type == "`c'" & ///
+            sex_group == "Both" & standardisation == "`a'" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`astem'_pct : display %4.1f r(mean)
+        quietly summarize ci_lower_pct if event_type == "`c'" & ///
+            sex_group == "Both" & standardisation == "`a'" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`astem'_lo : display %4.1f r(mean)
+        quietly summarize ci_upper_pct if event_type == "`c'" & ///
+            sex_group == "Both" & standardisation == "`a'" & ///
+            period_start == `last_year', meanonly
+        local `cstem'_`astem'_hi : display %4.1f r(mean)
+    }
+}
+
+* Step 11.3: draw four restrained report figures. One combined Heart-and-Stroke
+* chart appears on the 2025 brief page. The three larger charts show women and
+* men separately for All CVD, Heart and Stroke. Every legend explains both the
+* confidence-interval whiskers and the lightly shaded 2024 completeness-caution
+* band. Axis labels use whole percentages throughout.
+local ink       "44 62 80"
+local teal      "4 81 116"
+local heart_col "178 95 82"
+local stroke_col "47 126 96"
+local cvd_women "4 116 161"
+local cvd_men   "4 46 71"
+local heart_women "233 130 112"
+local heart_men   "123 60 52"
+local stroke_women "72 171 131"
+local stroke_men   "22 81 61"
+local muted     "102 102 102"
+local pale      "240 246 248"
+local pale2     "248 249 250"
+local white     "255 255 255"
+local rule      "222 226 230"
+local amber     "181 103 0"
+local font_title "Montserrat Medium"
+local font_body  "Montserrat"
+
+use `"`report_rows'"', clear
+keep if standardisation == "crude" & sex_group == "Both"
+sort event_type period_start
+quietly count
+local shade_n = r(N)
+local shade_a = `shade_n' + 1
+local shade_b = `shade_n' + 2
+set obs `shade_b'
+generate double shade_x = .
+generate double shade_lo = .
+generate double shade_hi = .
+replace shade_x = 2023.5 in `shade_a'
+replace shade_x = 2024.5 in `shade_b'
+replace shade_lo = 0 in `shade_a'/`shade_b'
+replace shade_hi = 60 in `shade_a'/`shade_b'
+replace period_start = period_start+0.1 if event_type=="Heart"
+#delimit ;
+twoway
+    (rspike ci_lower_pct ci_upper_pct period_start if event_type=="Heart",
+        lcolor("`muted'%60"))
+    (connected estimate_pct period_start if event_type=="Heart",
+        lwidth(0.75) lcolor("`heart_col'%90") mcolor("`heart_col'") msymbol(O) msize(4))
+    (rspike ci_lower_pct ci_upper_pct period_start if event_type=="Stroke",
+        lcolor("`muted'%60"))
+    (connected estimate_pct period_start if event_type=="Stroke",
+        lwidth(0.75) lcolor("`stroke_col'%90") mcolor("`stroke_col'") msymbol(O) msize(4))
+    , 
+
+      graphregion(color("`white'"))
+      plotregion(color("`white'") margin(small))
+      xsize(7.2) ysize(2.35) name(cf_trend_hs, replace)
+
+      ytitle("%", size(6)) xtitle("")
+      xlabel(2010(2)2024 2025, labsize(5) noticks nogrid)
+      xscale(noline range(2009.5 2025))
+
+      ylabel(0(10)60, format(%2.0f) labsize(5) angle(horizontal) noticks nogrid)
+      yscale(noline range(0 60))
+
+      legend(order(2 "Heart" 4 "Stroke" 1 "95% CI") rows(1) position(12)
+          region(lcolor(none)) size(5))
+        ;
+graph export "`figure_root'/heart_stroke_overall.png", replace width(2400);
+#delimit cr
+
+foreach c in CVD Heart Stroke {
+    use `"`report_rows'"', clear
+    keep if standardisation == "crude" & event_type == "`c'" & ///
+        inlist(sex_group,"Women","Men")
+    local stem = lower("`c'")
+    local wcol "``stem'_women'"
+    local mcol "``stem'_men'"
+    quietly count
+    local shade_n = r(N)
+    local shade_a = `shade_n' + 1
+    local shade_b = `shade_n' + 2
+    set obs `shade_b'
+    generate double shade_x = .
+    generate double shade_lo = .
+    generate double shade_hi = .
+    replace shade_x = 2023.5 in `shade_a'
+    replace shade_x = 2024.5 in `shade_b'
+    replace shade_lo = 0 in `shade_a'/`shade_b'
+    replace shade_hi = 60 in `shade_a'/`shade_b'
+    replace period_start = period_start+0.2 if sex_group=="Men"
+    #delimit ;
+    twoway
+        (rspike ci_lower_pct ci_upper_pct period_start if sex_group=="Women",
+            lcolor("`muted'%48"))
+        (connected estimate_pct period_start if sex_group=="Women",
+            lwidth(0.75) lcolor("`wcol'%90") mcolor("`wcol'") msymbol(O) msize(4))
+        (rspike ci_lower_pct ci_upper_pct period_start if sex_group=="Men",
+            lcolor("`muted'%48"))
+        (connected estimate_pct period_start if sex_group=="Men",
+            lwidth(0.75) lcolor("`mcol'%90") mcolor("`mcol'") msymbol(O) msize(4))
+        , 
+
+        graphregion(color("`white'"))
+        plotregion(color("`white'") margin(small))
+        xsize(7.2) ysize(2.35) name(cf_sex_`stem', replace)
+
+        xlabel(2010(2)2024 2025, labsize(5) noticks nogrid)
+        xscale(noline range(2009.5 2025))
+
+        ytitle("%", size(6)) xtitle("")
+        ylabel(0(10)60, format(%2.0f) labsize(5) angle(horizontal) noticks nogrid)
+        yscale(noline range(0 60))
+        
+        legend(order(2 "Women" 4 "Men" 1 "95% CI") rows(1) position(12)
+              region(lcolor(none)) size(5))
+        ;
+    #delimit cr
+    graph export "`figure_root'/`stem'_crude_by_sex.png", ///
+        replace width(2600)
+}
+
+* Step 11.4: compose the finished A4 report. Every figure and table below is
+* derived from report_rows, which contains only released annual primary values.
+capture putpdf clear
+putpdf begin, pagesize(A4) ///
+    margin(top,0.55) margin(bottom,0.55) ///
+    margin(left,0.65) margin(right,0.65) font("Arial",10)
+
+
+
+* COVER PAGE
+putpdf table cf_cover_logo = (5,1), width(15%) border(all,nil) halign(center)
+forvalues r = 1/4 {
+    putpdf table cf_cover_logo(`r',1) = (" ")
+}
+putpdf table cf_cover_logo(5,1) = image("`crest'"), halign(center)
+putpdf table cf_cover = (8,1), width(88%) border(all,nil) halign(center)
+putpdf table cf_cover(1,1) = (" ")
+putpdf table cf_cover(2,1) = (" ")
+putpdf table cf_cover(3,1) = ("BARBADOS NATIONAL REGISTRY"), ///
+    halign(center) font("`font_title'",10,"`teal'")
+putpdf table cf_cover(4,1) = ("Thirty-day case fatality"), ///
+    halign(center) bold font("`font_title'",24,"`ink'")
+putpdf table cf_cover(5,1) = ("after cardiovascular events"), ///
+    halign(center) bold font("`font_title'",20,"`ink'")
+putpdf table cf_cover(6,1) = ("Barbados, 2010-2025"), ///
+    halign(center) font("`font_body'",12,"`muted'")
+putpdf table cf_cover(7,1) = ("Published `c(current_date)'"), ///
+    halign(center) font("`font_body'",8.5,"`muted'")
+putpdf table cf_cover(8,1) = ///
+    ("The University of the West Indies | Cave Hill Campus"), ///
+    halign(center) font("`font_body'",8,"`muted'")
+
+
+
+* PAGE 2: 2025 in brief. Six cards provide the sex-specific headline values.
+* Narrow empty columns create deliberate white space between the three card
+* columns. One combined chart retains the long Heart and Stroke context.
+* The exact 2025 table then reports all three cohorts and all three sex groups.
+putpdf pagebreak
+putpdf paragraph, font("`font_body'",1)
+putpdf text ("2025 IN BRIEF"), ///
+    bold font("`font_title'",7.5,"`teal'") linebreak
+putpdf text ("Thirty-day case fatality at a glance"), ///
+    bold font("`font_title'",18,"`ink'")
+putpdf paragraph, font("`font_body'",1)
+matrix cf_card_w = (30,5,30,5,30)
+putpdf table cf_cards = (6,5), width(100%) width(cf_card_w) border(all,nil)
+putpdf table cf_cards(1,1) = ("CVD | WOMEN"), bold ///
+    font("`font_title'",7.0,"`cvd_women'") border(top,single,"`cvd_women'")
+putpdf table cf_cards(1,3) = ("HEART | WOMEN"), bold ///
+    font("`font_title'",7.0,"`heart_women'") border(top,single,"`heart_women'")
+putpdf table cf_cards(1,5) = ("STROKE | WOMEN"), bold ///
+    font("`font_title'",7.0,"`stroke_women'") border(top,single,"`stroke_women'")
+putpdf table cf_cards(2,1) = ("`cvd_women_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(2,3) = ("`heart_women_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(2,5) = ("`stroke_women_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(3,1) = ("95% CI `cvd_women_lo'-`cvd_women_hi'"), font("`font_body'",8.2,"`muted'")
+putpdf table cf_cards(3,3) = ("95% CI `heart_women_lo'-`heart_women_hi'"), font("`font_body'",8.2,"`muted'")
+putpdf table cf_cards(3,5) = ("95% CI `stroke_women_lo'-`stroke_women_hi'"), font("`font_body'",8.2,"`muted'")
+putpdf table cf_cards(4,1) = ("CVD | MEN"), bold ///
+    font("`font_title'",7.0,"`cvd_men'") border(top,single,"`cvd_men'")
+putpdf table cf_cards(4,3) = ("HEART | MEN"), bold ///
+    font("`font_title'",7.0,"`heart_men'") border(top,single,"`heart_men'")
+putpdf table cf_cards(4,5) = ("STROKE | MEN"), bold ///
+    font("`font_title'",7.0,"`stroke_men'") border(top,single,"`stroke_men'")
+putpdf table cf_cards(5,1) = ("`cvd_men_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(5,3) = ("`heart_men_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(5,5) = ("`stroke_men_pct'%"), bold font("`font_title'",15,"`ink'")
+putpdf table cf_cards(6,1) = ("95% CI `cvd_men_lo'-`cvd_men_hi'"), font("`font_body'",8.2,"`muted'")
+putpdf table cf_cards(6,3) = ("95% CI `heart_men_lo'-`heart_men_hi'"), font("`font_body'",8.2,"`muted'")
+putpdf table cf_cards(6,5) = ("95% CI `stroke_men_lo'-`stroke_men_hi'"), font("`font_body'",8.2,"`muted'")
+
+putpdf paragraph, font("`font_body'",.5)
+putpdf table cf_brief_chart = (1,1), width(100%) border(all,nil) halign(center)
+putpdf table cf_brief_chart(1,1) = image("`figure_root'/heart_stroke_overall.png")
+
+
+* Format the nine exact 2025 rows once: three cohorts by three sex groups.
+use `"`report_rows'"', clear
+keep if period_start == `last_year'
+keep event_type sex_group standardisation events deaths estimate_pct ///
+    ci_lower_pct ci_upper_pct
+rename estimate_pct pct
+rename ci_lower_pct lo
+rename ci_upper_pct hi
+reshape wide events deaths pct lo hi, i(event_type sex_group) ///
+    j(standardisation) string
+generate str32 crude_txt = strtrim(string(pctcrude,"%4.1f")) + ///
+    " (" + strtrim(string(locrude,"%4.1f")) + "-" + ///
+    strtrim(string(hicrude,"%4.1f")) + ")"
+generate str32 adj_txt = strtrim(string(pctage_standardised,"%4.1f")) + ///
+    " (" + strtrim(string(loage_standardised,"%4.1f")) + "-" + ///
+    strtrim(string(hiage_standardised,"%4.1f")) + ")"
+generate byte cond_order = cond(event_type=="CVD",1,cond(event_type=="Heart",2,3))
+generate byte sex_order = cond(sex_group=="Both",1,cond(sex_group=="Women",2,3))
+sort cond_order sex_order
+assert _N == 9
+
+putpdf paragraph, font("`font_body'",.5)
+matrix cf_brief_w = (12,11,10,10,28,29)
+putpdf table cf_brief_tab = (10,6), width(100%) width(cf_brief_w) border(all,nil)
+putpdf table cf_brief_tab(1,1) = ("Event")
+putpdf table cf_brief_tab(1,2) = ("Sex")
+putpdf table cf_brief_tab(1,3) = ("Events")
+putpdf table cf_brief_tab(1,4) = ("Deaths")
+putpdf table cf_brief_tab(1,5) = ("Crude % (95% CI)")
+putpdf table cf_brief_tab(1,6) = ("Adjusted % (95% CI)")
+putpdf table cf_brief_tab(1,.), bold font("`font_title'",7.2,"`ink'") ///
+    border(bottom,single,"`rule'")
+forvalues i = 1/9 {
+    local rr = `i' + 1
+    local ev = event_type[`i']
+    local sx = sex_group[`i']
+    local nn = strtrim(string(eventscrude[`i'],"%8.0fc"))
+    local dd = strtrim(string(deathscrude[`i'],"%8.0fc"))
+    local ct = crude_txt[`i']
+    local at = adj_txt[`i']
+    putpdf table cf_brief_tab(`rr',1) = ("`ev'"), font("`font_body'",7.2,"`ink'")
+    putpdf table cf_brief_tab(`rr',2) = ("`sx'"), font("`font_body'",7.2,"`ink'")
+    putpdf table cf_brief_tab(`rr',3) = ("`nn'"), font("`font_body'",7.2,"`ink'")
+    putpdf table cf_brief_tab(`rr',4) = ("`dd'"), font("`font_body'",7.2,"`ink'")
+    putpdf table cf_brief_tab(`rr',5) = ("`ct'"), font("`font_body'",7.2,"`ink'")
+    putpdf table cf_brief_tab(`rr',6) = ("`at'"), font("`font_body'",7.2,"`ink'")
+}
+putpdf paragraph, font("`font_body'",.5)
+putpdf table cf_brief_note = (2,1), width(100%) border(all,nil)
+putpdf table cf_brief_note(1,1) = ("WHAT THIS MEANS"), bold ///
+    font("`font_title'",8.6,"`teal'") border(top,single,"`teal'")
+putpdf table cf_brief_note(2,1) = ("Crude percentages are the main results. Adjusted percentages show whether the within-cohort pattern changes after accounting for age mix. The shaded 2024 band marks the year affected by the abstraction-completeness caution; that point should not be read as evidence of a true improvement in survival."), ///
+    font("`font_body'",8.6,"`ink'")
+
+
+
+
+* PAGES 3 TO 5: one consistent sex-stratified page for each primary cohort.
+* The compact table uses the five most recent complete years. A tidy row layout
+* keeps women and men visible without forcing nine very narrow table columns.
+foreach c in CVD Heart Stroke {
+    local stem = lower("`c'")
+    local c_upper = upper("`c'")
+    local ccol "`teal'"
+    if "`c'" == "Stroke" local ccol "`stroke_col'"
+    if "`c'" == "Heart" local ccol "`heart_col'"
+    putpdf pagebreak
+    putpdf paragraph, font("`font_body'",1)
+    putpdf text ("`c_upper' EVENTS"), ///
+        bold font("`font_title'",7.5,"`ccol'") linebreak
+    local page_title "Thirty-day case fatality after `c' events"
+    if "`c'" == "CVD" local page_title "Thirty-day case fatality after CVD events"
+    putpdf text ("`page_title'"), ///
+        bold font("`font_title'",18,"`ink'") linebreak
+    putpdf text ("Annual results by sex. The legend identifies the 95% confidence-interval whiskers and the shaded 2024 completeness-caution band."), ///
+        font("`font_body'",8,"`muted'")
+
+    * Two condition-coloured cards place the latest combined-sex crude and
+    * age-adjusted estimates together without crowding them into one cell.
+    local crude_pct "``stem'_crude_pct'"
+    local crude_lo "``stem'_crude_lo'"
+    local crude_hi "``stem'_crude_hi'"
+    local adjusted_pct "``stem'_adjusted_pct'"
+    local adjusted_lo "``stem'_adjusted_lo'"
+    local adjusted_hi "``stem'_adjusted_hi'"
+    putpdf paragraph, font("`font_body'",.6)
+    matrix cf_detail_card_w = (47,6,47)
+    putpdf table cf_`stem'_cards = (3,3), width(100%) ///
+        width(cf_detail_card_w) border(all,nil)
+    putpdf table cf_`stem'_cards(1,1) = ("CRUDE | WOMEN + MEN | 2025"), ///
+        bold font("`font_title'",7.0,"`ccol'") border(top,single,"`ccol'")
+    putpdf table cf_`stem'_cards(1,3) = ("AGE-ADJUSTED | WOMEN + MEN | 2025"), ///
+        bold font("`font_title'",7.0,"`ccol'") border(top,single,"`ccol'")
+    putpdf table cf_`stem'_cards(2,1) = ("`crude_pct'%"), ///
+        bold font("`font_title'",15,"`ink'")
+    putpdf table cf_`stem'_cards(2,3) = ("`adjusted_pct'%"), ///
+        bold font("`font_title'",15,"`ink'")
+    putpdf table cf_`stem'_cards(3,1) = ///
+        ("95% CI `crude_lo'-`crude_hi'"), font("`font_body'",8.2,"`muted'")
+    putpdf table cf_`stem'_cards(3,3) = ///
+        ("95% CI `adjusted_lo'-`adjusted_hi'"), font("`font_body'",8.2,"`muted'")
+
+    putpdf paragraph, font("`font_body'",.5)
+    putpdf table cf_`stem'_img = (1,1), width(100%) ///
+        border(all,nil) halign(center)
+    putpdf table cf_`stem'_img(1,1) = ///
+        image("`figure_root'/`stem'_crude_by_sex.png")
+    putpdf paragraph, font("`font_body'",1)
+    putpdf text ("Recent results by sex"), ///
+        bold font("`font_title'",10.5,"`ink'")
+
+    use `"`report_rows'"', clear
+    keep if event_type == "`c'" & inlist(sex_group,"Women","Men") & ///
+        inrange(period_start,2021,2025)
+    keep period_start sex_group standardisation events deaths estimate_pct ///
+        ci_lower_pct ci_upper_pct
+    rename period_start yr
+    rename estimate_pct pct
+    rename ci_lower_pct lo
+    rename ci_upper_pct hi
+    reshape wide events deaths pct lo hi, i(yr sex_group) ///
+        j(standardisation) string
+    generate str36 crude_txt = strtrim(string(pctcrude,"%4.1f")) + ///
+        " (" + strtrim(string(locrude,"%4.1f")) + "-" + ///
+        strtrim(string(hicrude,"%4.1f")) + ")"
+    generate str36 adj_txt = ///
+        strtrim(string(pctage_standardised,"%4.1f")) + ///
+        " (" + strtrim(string(loage_standardised,"%4.1f")) + "-" + ///
+        strtrim(string(hiage_standardised,"%4.1f")) + ")"
+    generate byte sex_order = cond(sex_group=="Women",1,2)
+    sort yr sex_order
+    assert _N == 10
+
+    matrix cf_result_w = (8,11,11,10,29,31)
+    putpdf table cf_`stem'_tab = (11,6), width(100%) ///
+        width(cf_result_w) border(all,nil)
+    putpdf table cf_`stem'_tab(1,1) = ("Year")
+    putpdf table cf_`stem'_tab(1,2) = ("Sex")
+    putpdf table cf_`stem'_tab(1,3) = ("Events")
+    putpdf table cf_`stem'_tab(1,4) = ("Deaths")
+    putpdf table cf_`stem'_tab(1,5) = ("Crude % (95% CI)")
+    putpdf table cf_`stem'_tab(1,6) = ("Adjusted % (95% CI)")
+    putpdf table cf_`stem'_tab(1,.), ///
+        bold font("`font_title'",7.2,"`ink'") border(bottom,single,"`rule'")
+    forvalues i = 1/10 {
+        local rr = `i' + 1
+        local yy : display %4.0f yr[`i']
+        local sx = sex_group[`i']
+        local nn = strtrim(string(eventscrude[`i'],"%8.0fc"))
+        local dd = strtrim(string(deathscrude[`i'],"%8.0fc"))
+        local ct = crude_txt[`i']
+        local at = adj_txt[`i']
+        putpdf table cf_`stem'_tab(`rr',1) = ("`yy'"), ///
+            font("`font_body'",7.2,"`ink'")
+        putpdf table cf_`stem'_tab(`rr',2) = ("`sx'"), ///
+            font("`font_body'",7.2,"`ink'")
+        putpdf table cf_`stem'_tab(`rr',3) = ("`nn'"), ///
+            font("`font_body'",7.2,"`ink'")
+        putpdf table cf_`stem'_tab(`rr',4) = ("`dd'"), ///
+            font("`font_body'",7.2,"`ink'")
+        putpdf table cf_`stem'_tab(`rr',5) = ("`ct'"), ///
+            font("`font_body'",7.2,"`ink'")
+        putpdf table cf_`stem'_tab(`rr',6) = ("`at'"), ///
+            font("`font_body'",7.2,"`ink'")
+    }
+    local meaning "Women and men should be compared within this cohort and year, with the confidence intervals showing the statistical uncertainty. The 2024 point retains the completeness caution."
+    if "`c'" == "CVD" local meaning "All CVD pools the Heart and Stroke condition-specific index events. A person with both conditions can contribute twice, so this is an event aggregate rather than a count of distinct people or deaths. Compare the pattern over time; the 2024 point retains the completeness caution."
+    putpdf paragraph, font("`font_body'",.6)
+    putpdf table cf_`stem'_note = (2,1), width(100%) border(all,nil)
+    putpdf table cf_`stem'_note(1,1) = ("WHAT THIS MEANS"), bold ///
+        font("`font_title'",8.6,"`ccol'") border(top,single,"`ccol'")
+    putpdf table cf_`stem'_note(2,1) = ("`meaning' Age-standardised percentages use the fixed `c' 2010-2025 valid-age event population and support comparisons over time within this cohort."), ///
+        font("`font_body'",8.6,"`ink'")
+}
+
+* Page 6: concise public methods. Internal cleaning and diagnostic operations
+* remain in the commented analytical sections above and private review files;
+* only information needed to understand or reproduce the public measures is
+* printed here.
+putpdf pagebreak
+putpdf paragraph, font("`font_body'",1)
+putpdf text ("METHODS"), ///
+    bold font("`font_title'",7.5,"`teal'") linebreak
+putpdf text ("How this report was produced"), ///
+    bold font("`font_title'",18,"`ink'")
+putpdf paragraph, font("`font_body'",.5)
+putpdf text ("The same steps were used for every year and for women, men and both sexes combined."), ///
+    font("`font_body'",8,"`muted'")
+putpdf paragraph, font("`font_body'",.5)
+putpdf text ("How case fatality is calculated"), ///
+    bold font("`font_title'",10,"`ink'")
+putpdf table cf_equation_box = (1,1), width(50%) border(all,nil) halign(center)
+putpdf table cf_equation_box(1,1) = image("`cf_equation'"), halign(center)
+putpdf paragraph, font("`font_body'",.5)
+matrix cf_method_w = (26,74)
+putpdf table cf_methods = (8,2), width(100%) ///
+    width(cf_method_w) border(all,nil)
+putpdf table cf_methods(1,1) = ("What was counted?")
+putpdf table cf_methods(1,2) = ("BNR hospital records of Heart and Stroke events from 2010 to 2025. All CVD combines the Heart and Stroke event groups.")
+putpdf table cf_methods(2,1) = ("Which event was used?")
+putpdf table cf_methods(2,2) = ("For each person, we used their first Heart event and their first Stroke event in each calendar year. Someone who had both can therefore contribute twice to All CVD.")
+putpdf table cf_methods(3,1) = ("What counted as a death?")
+putpdf table cf_methods(3,2) = ("A death from any cause on the event date or during the next 30 days. We counted it when either the hospital record reported the death or the event linked to a record in the all-deaths register.")
+putpdf table cf_methods(4,1) = ("How were records linked?")
+putpdf table cf_methods(4,2) = ("We first looked for one matching national registration number with no conflicting information. If that was not available, we required exact agreement on cleaned name, sex and date of birth. The final approved rule used exact first and last name, sex and date of birth, with a limited age-in-years fallback. Possible matches that were not unique were left unlinked.")
+putpdf table cf_methods(5,1) = ("What does crude mean?")
+putpdf table cf_methods(5,2) = ("The crude result is the percentage actually observed in that year's event group, as shown in the equation above. It is the main result in this report.")
+putpdf table cf_methods(6,1) = ("Why adjust for age?")
+putpdf table cf_methods(6,2) = ("The age-adjusted result asks what each year's percentage would look like if its age mix matched the same Barbados reference group. All CVD, Heart and Stroke each use their own pooled 2010-2025 reference group. This supports comparison over time within one series, but not comparison between the three adjusted series. The calculation uses a logistic model and predictive margins.")
+putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
+putpdf table cf_methods(7,2) = ("It shows statistical uncertainty around the percentage; a wider interval means less precision. Crude results use the Wilson method. Adjusted results use a model-based delta method and allow for repeat records from the same person. The intervals do not measure uncertainty from missed events or missed links.")
+putpdf table cf_methods(8,1) = ("How was privacy protected?")
+putpdf table cf_methods(8,2) = ("We checked the complete proposed public dataset before making this report. Counts from 1 to 5 were protected, including small counts that could be worked out by subtracting published values. Every result displayed here passed those checks.")
+putpdf table cf_methods(.,.), font("`font_body'",7.2,"`ink'")
+putpdf table cf_methods(.,1), bold font("`font_title'",7.2,"`teal'")
+putpdf table cf_methods(1,.), border(top,single,"`teal'")
+putpdf table cf_methods(8,.), border(bottom,single,"`teal'")
+putpdf paragraph, font("`font_body'",.8)
+putpdf text ("Data used"), bold font("`font_title'",8,"`ink'") linebreak
+putpdf text ("CVD event release: January 2026. All-deaths release: `mortality_release'. Death follow-up runs through 30 January 2026, giving every event through 31 December 2025 a complete 30-day follow-up period."), ///
+    font("`font_body'",7.2,"`muted'")
+
+* Step 11.5: save the Stata-composed body, then add the same presentation-only
+* running furniture used by the annual report. The helper leaves the cover
+* undecorated; visible numbering begins on the 2025-in-brief page. The new
+* optional centre-footer argument prints the Info-Hub address without changing
+* the annual report unless that argument is deliberately supplied there.
+capture noisily putpdf save "`report_body_pdf'", replace
+if _rc {
+    local pdf_rc = _rc
+    capture log close case_fatality
+    display as error "CASE-FATALITY REPORT BODY PDF COULD NOT BE SAVED"
+    display as error "Check that the destination PDF is not open: `report_body_pdf'"
+    exit `pdf_rc'
+}
+
+local furniture_command `""`pdf_python'" "`pdf_helper'" --input "`report_body_pdf'" --output "`report_pdf'" --report-title "BNR Case-Fatality Report 2010-2025" --report-year "2025" --logo "`pdf_logo'" --skip-first-pages 1 --footer-center "`info_hub_web'""'
+capture noisily shell `furniture_command'
+if _rc {
+    local furniture_rc = _rc
+    capture log close case_fatality
+    display as error "CASE-FATALITY REPORT PAGE FURNITURE FAILED"
+    display as error "Run: python scripts/python/check-python-environment.py"
+    display as error "The unstamped body remains private: `report_body_pdf'"
+    exit `furniture_rc'
+}
+capture confirm file "`report_pdf'"
+if _rc {
+    capture log close case_fatality
+    display as error "The page-furniture helper did not write: `report_pdf'"
+    exit 603
+}
+capture erase "`report_body_pdf'"
+
+display as result "Candidate metrics, public dataset and report PDF complete."
 display as text "Private review files: `review_root'"
 display as text "Candidate public-data files: `candidate_root'"
-display as text "No final report PDF was created; numerical and disclosure review remains required."
+display as text "Finished one-off report PDF: `report_pdf'"
+display as text "The files remain private and require the one-off prepare/approve/publish workflow."
 log close case_fatality

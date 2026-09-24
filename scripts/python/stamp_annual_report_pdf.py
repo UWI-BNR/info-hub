@@ -87,6 +87,10 @@ def parse_args() -> argparse.Namespace:
         help="number of leading pages left undecorated (default: 1 for the cover)",
     )
     parser.add_argument(
+        "--footer-center",
+        help="optional short text centred in the running footer",
+    )
+    parser.add_argument(
         "--toc-spec",
         action="append",
         type=Path,
@@ -430,6 +434,7 @@ def footer_overlay(
     page_total: int,
     report_title: str,
     logo: Path | None,
+    footer_center: str | None,
 ) -> object:
     """Return a one-page PDF overlay matching the target page dimensions."""
     packet = BytesIO()
@@ -463,6 +468,8 @@ def footer_overlay(
     page_canvas.line(36, 31, width - 36, 31)
     page_canvas.setFont("Helvetica", 7.2)
     page_canvas.drawString(36, 19, "Barbados National Registry")
+    if footer_center:
+        page_canvas.drawCentredString(width / 2, 19, footer_center)
     footer_right = f"Page {page_number} of {page_total}"
     page_canvas.drawRightString(width - 36, 19, footer_right)
 
@@ -643,6 +650,7 @@ def finish_pdf(args: argparse.Namespace) -> int:
                 visible_total,
                 args.report_title,
                 args.logo,
+                args.footer_center,
             )
             page.merge_page(overlay)
         writer.add_page(page)
