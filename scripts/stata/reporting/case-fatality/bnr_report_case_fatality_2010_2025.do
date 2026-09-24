@@ -1,6 +1,6 @@
 /*******************************************************************************
 BNR CASE FATALITY, 2010-2025 — PRIVATE STUDY FILE
-Version: 0.6.1 (24 September 2026)
+Version: 0.6.2 (24 September 2026)
 
 CURRENT STAGE: candidate metrics and disclosure-controlled public-data review.
 The primary outcome is death within 30 days identified by either deterministic
@@ -50,6 +50,27 @@ local pdf_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 local pdf_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
 local cf_equation "$BNR_REPO/scripts/stata/reporting/assets/case_fatality_equation.png"
 local info_hub_web "uwi-bnr.github.io/info-hub/"
+
+/*******************************************************************************
+EDITABLE SECTION 2 - YEAR-SPECIFIC REPORT INTERPRETATION
+Review and rewrite these four passages for every new report year. They interpret
+the current results for decision-makers and health professionals; they must not
+be carried forward automatically. Keep methods and data-quality explanations on
+the final Methods page rather than in these passages.
+*******************************************************************************/
+local note_brief = "In 2025, about three in ten CVD events were followed by death within 30 days. " + ///
+    "The heart estimate was higher than the stroke estimate, although the uncertainty ranges overlap. " + ///
+    "Women and men had similar overall crude results. Age adjustment made little difference to the combined-sex estimates, so age mix did not materially change the overall 2025 result."
+
+local note_cvd = "The 2025 crude result was similar for women and men. After age adjustment, the estimate was slightly higher for men, suggesting that differences in age mix affect the sex comparison somewhat; the uncertainty ranges still overlap. " + ///
+    "The overall 2025 estimate returned to the range seen in 2021-2023. The apparent drop in 2024 should be interpreted cautiously; decisions should consider the multi-year pattern rather than one annual point."
+
+local note_heart = "Heart case fatality in 2025 was higher than Stroke case fatality and remained roughly one in three events. " + ///
+    "The crude estimate was higher for women than men, but this gap narrowed after age adjustment and the uncertainty ranges overlap. " + ///
+    "Heart estimates vary more from year to year than Stroke estimates, partly reflecting smaller event numbers; decisions should therefore consider the multi-year pattern rather than one annual point."
+
+local note_stroke = "In 2025, crude stroke case fatality was almost the same for women and men. Age adjustment produced a somewhat higher estimate for men, but the uncertainty ranges overlap. " + ///
+    "The combined estimate was below 2023 and within the broad range seen across the series. The annual pattern does not show a consistent year-on-year improvement. Continued monitoring remains important."
 
 /*******************************************************************************
 CONTROLLED SECTION 1 — INPUT CONTRACT AND PRIVATE FOLDERS
@@ -1788,7 +1809,7 @@ putpdf paragraph, font("`font_body'",.5)
 putpdf table cf_brief_note = (2,1), width(100%) border(all,nil)
 putpdf table cf_brief_note(1,1) = ("WHAT THIS MEANS"), bold ///
     font("`font_title'",8.6,"`teal'") border(top,single,"`teal'")
-putpdf table cf_brief_note(2,1) = ("Crude percentages are the main results. Adjusted percentages show whether the within-cohort pattern changes after accounting for age mix. The shaded 2024 band marks the year affected by the abstraction-completeness caution; that point should not be read as evidence of a true improvement in survival."), ///
+putpdf table cf_brief_note(2,1) = ("`note_brief'"), ///
     font("`font_body'",8.6,"`ink'")
 
 
@@ -1811,7 +1832,7 @@ foreach c in CVD Heart Stroke {
     if "`c'" == "CVD" local page_title "Thirty-day case fatality after CVD events"
     putpdf text ("`page_title'"), ///
         bold font("`font_title'",18,"`ink'") linebreak
-    putpdf text ("Annual results by sex. The legend identifies the 95% confidence-interval whiskers and the shaded 2024 completeness-caution band."), ///
+    putpdf text ("Annual results by sex."), ///
         font("`font_body'",8,"`muted'")
 
     * Two condition-coloured cards place the latest combined-sex crude and
@@ -1902,13 +1923,14 @@ foreach c in CVD Heart Stroke {
         putpdf table cf_`stem'_tab(`rr',6) = ("`at'"), ///
             font("`font_body'",7.2,"`ink'")
     }
-    local meaning "Women and men should be compared within this cohort and year, with the confidence intervals showing the statistical uncertainty. The 2024 point retains the completeness caution."
-    if "`c'" == "CVD" local meaning "All CVD pools the Heart and Stroke condition-specific index events. A person with both conditions can contribute twice, so this is an event aggregate rather than a count of distinct people or deaths. Compare the pattern over time; the 2024 point retains the completeness caution."
+    local meaning "`note_stroke'"
+    if "`c'" == "CVD" local meaning "`note_cvd'"
+    if "`c'" == "Heart" local meaning "`note_heart'"
     putpdf paragraph, font("`font_body'",.6)
     putpdf table cf_`stem'_note = (2,1), width(100%) border(all,nil)
     putpdf table cf_`stem'_note(1,1) = ("WHAT THIS MEANS"), bold ///
         font("`font_title'",8.6,"`ccol'") border(top,single,"`ccol'")
-    putpdf table cf_`stem'_note(2,1) = ("`meaning' Age-standardised percentages use the fixed `c' 2010-2025 valid-age event population and support comparisons over time within this cohort."), ///
+    putpdf table cf_`stem'_note(2,1) = ("`meaning'"), ///
         font("`font_body'",8.6,"`ink'")
 }
 
@@ -1928,32 +1950,63 @@ putpdf text ("The same steps were used for every year and for women, men and bot
 putpdf paragraph, font("`font_body'",.5)
 putpdf text ("How case fatality is calculated"), ///
     bold font("`font_title'",10,"`ink'")
-putpdf table cf_equation_box = (1,1), width(50%) border(all,nil) halign(center)
+putpdf table cf_equation_box = (1,1), width(55%) border(all,nil) halign(center)
 putpdf table cf_equation_box(1,1) = image("`cf_equation'"), halign(center)
 putpdf paragraph, font("`font_body'",.5)
 matrix cf_method_w = (26,74)
-putpdf table cf_methods = (8,2), width(100%) ///
+putpdf table cf_methods = (9,2), width(100%) ///
     width(cf_method_w) border(all,nil)
 putpdf table cf_methods(1,1) = ("What was counted?")
 putpdf table cf_methods(1,2) = ("BNR hospital records of Heart and Stroke events from 2010 to 2025. All CVD combines the Heart and Stroke event groups.")
+
 putpdf table cf_methods(2,1) = ("Which event was used?")
-putpdf table cf_methods(2,2) = ("For each person, we used their first Heart event and their first Stroke event in each calendar year. Someone who had both can therefore contribute twice to All CVD.")
+putpdf table cf_methods(2,2) = ("Within each calendar year, we used each person's first Heart event and first Stroke event. Later events of the same type during that year were not counted. A person who experienced both types could contribute once to the Heart series and once to the Stroke series, and therefore twice to All CVD. All CVD is consequently an event total, not a count of distinct people or deaths.")
+
+putpdf table cf_methods(3,1) = ("What counted as a death?")
+putpdf table cf_methods(3,2) = ("We counted a death from any cause occurring on the event date or during the following 30 days. The recorded cause of death did not have to be cardiovascular. A death was counted when it was reported in the hospital record or when the event record linked to a death in the all-deaths register.")
+
+putpdf table cf_methods(4,1) = ("How were records linked?")
+putpdf table cf_methods(4,2) = ("Hospital and death records were linked using predefined exact matching rules. We first used a valid national registration number when it identified one person and there was no conflicting information. When this was not possible, we required exact agreement on specified combinations of name, sex and date of birth, with a limited age-in-years fallback. A possible match was accepted only when it identified one unique person; ambiguous matches remained unlinked.")
+
+putpdf table cf_methods(5,1) = ("What does crude mean?")
+putpdf table cf_methods(5,2) = ("The crude result is the percentage actually observed in that year's event group: eligible index events followed by death within 30 days, divided by all eligible index events, multiplied by 100. It makes no allowance for differences in patients' ages. It describes the experience recorded by BNR in that year and is the main result in this report. It is a percentage among recorded events, not a population mortality rate.")
+
+putpdf table cf_methods(6,1) = ("Why adjust for age?")
+putpdf table cf_methods(6,2) = ("The chance of dying within 30 days generally increases with age. A year with older event patients can therefore have a higher crude percentage even if outcomes at the same ages have not worsened. The age-adjusted result estimates what each year's percentage would be if its age mix matched a fixed Barbados reference group. The All-CVD, Heart and Stroke series each use their own pooled 2010-2025 reference group. Adjusted results can therefore be compared over time within the same series, but not directly between the three series. We calculate them using logistic regression and predictive margins.")
+
+putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
+putpdf table cf_methods(7,2) = ("The 95% confidence interval shows the statistical precision of the estimated percentage. Wider intervals indicate greater uncertainty, usually because fewer events were available. Crude intervals use the Wilson method; age-adjusted intervals are calculated from the statistical model and allow for repeat records from the same person. These intervals describe uncertainty arising from the observed numbers; they do not account for missed events, incomplete records or deaths that were not successfully linked.")
+
+putpdf table cf_methods(8,1) = ("Why is 2024 shaded?")
+putpdf table cf_methods(8,2) = ("BNR identified 2024 as a transition year when the completeness of hospital-record abstraction may have fallen. We retained the year so that the series remains transparent, but shaded it as a warning to readers. Movement into or out of 2024 should not, by itself, be interpreted as a real improvement or worsening in 30-day case fatality.")
+
+putpdf table cf_methods(9,1) = ("How was privacy protected?")
+putpdf table cf_methods(9,2) = ("Counts from 1 to 5 were suppressed. We also suppressed additional values when necessary to prevent a protected count from being calculated by subtracting other published values. Zero counts were not automatically suppressed. Disclosure checks were applied to the complete proposed public dataset, and every result displayed in this report passed those checks.")
+
+/*
+putpdf table cf_methods(2,1) = ("Which event was used?")
+putpdf table cf_methods(2,2) = ("For each person, we used their first Heart event and their first Stroke event in each calendar year. Someone who had both can therefore contribute twice to All CVD, so All CVD is an event total rather than a count of distinct people or deaths.")
 putpdf table cf_methods(3,1) = ("What counted as a death?")
 putpdf table cf_methods(3,2) = ("A death from any cause on the event date or during the next 30 days. We counted it when either the hospital record reported the death or the event linked to a record in the all-deaths register.")
 putpdf table cf_methods(4,1) = ("How were records linked?")
 putpdf table cf_methods(4,2) = ("We first looked for one matching national registration number with no conflicting information. If that was not available, we required exact agreement on cleaned name, sex and date of birth. The final approved rule used exact first and last name, sex and date of birth, with a limited age-in-years fallback. Possible matches that were not unique were left unlinked.")
 putpdf table cf_methods(5,1) = ("What does crude mean?")
-putpdf table cf_methods(5,2) = ("The crude result is the percentage actually observed in that year's event group, as shown in the equation above. It is the main result in this report.")
+putpdf table cf_methods(5,2) = ("The crude result is the percentage actually observed in that year's event group: eligible index events followed by death within 30 days, divided by all eligible index events, multiplied by 100. It makes no allowance for differences in patients' ages. It describes the experience recorded by BNR in that year and is the main result in this report. It is a percentage among recorded events, not a population mortality rate.")
 putpdf table cf_methods(6,1) = ("Why adjust for age?")
-putpdf table cf_methods(6,2) = ("The age-adjusted result asks what each year's percentage would look like if its age mix matched the same Barbados reference group. All CVD, Heart and Stroke each use their own pooled 2010-2025 reference group. This supports comparison over time within one series, but not comparison between the three adjusted series. The calculation uses a logistic model and predictive margins.")
+putpdf table cf_methods(6,2) = ("The chance of dying within 30 days generally increases with age. A year with older event patients can therefore have a higher crude percentage even if outcomes at the same ages have not worsened. The age-adjusted result estimates what each year's percentage would be if its age mix matched a fixed Barbados reference group. The All-CVD, Heart and Stroke series each use their own pooled 2010-2025 reference group. Adjusted results can therefore be compared over time within the same series, but not directly between the three series. We calculate them using logistic regression and predictive margins.")
 putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
 putpdf table cf_methods(7,2) = ("It shows statistical uncertainty around the percentage; a wider interval means less precision. Crude results use the Wilson method. Adjusted results use a model-based delta method and allow for repeat records from the same person. The intervals do not measure uncertainty from missed events or missed links.")
-putpdf table cf_methods(8,1) = ("How was privacy protected?")
-putpdf table cf_methods(8,2) = ("We checked the complete proposed public dataset before making this report. Counts from 1 to 5 were protected, including small counts that could be worked out by subtracting published values. Every result displayed here passed those checks.")
+putpdf table cf_methods(8,1) = ("Why is 2024 shaded?")
+putpdf table cf_methods(8,2) = ("BNR identified 2024 as a transition year when hospital-record abstraction completeness may have fallen. We kept the year in the report so the series remains transparent, but movement into or out of 2024 alone should not be read as a real change in survival.")
+putpdf table cf_methods(9,1) = ("How was privacy protected?")
+putpdf table cf_methods(9,2) = ("We checked the complete proposed public dataset before making this report. Counts from 1 to 5 were protected, including small counts that could be worked out by subtracting published values. Every result displayed here passed those checks.")
+*/
+
+
 putpdf table cf_methods(.,.), font("`font_body'",7.2,"`ink'")
 putpdf table cf_methods(.,1), bold font("`font_title'",7.2,"`teal'")
 putpdf table cf_methods(1,.), border(top,single,"`teal'")
-putpdf table cf_methods(8,.), border(bottom,single,"`teal'")
+putpdf table cf_methods(9,.), border(bottom,single,"`teal'")
 putpdf paragraph, font("`font_body'",.8)
 putpdf text ("Data used"), bold font("`font_title'",8,"`ink'") linebreak
 putpdf text ("CVD event release: January 2026. All-deaths release: `mortality_release'. Death follow-up runs through 30 January 2026, giving every event through 31 December 2025 a complete 30-day follow-up period."), ///
