@@ -1758,6 +1758,9 @@ putpdf table cf_brief_chart = (1,1), width(100%) border(all,nil) halign(center)
 putpdf table cf_brief_chart(1,1) = image("`figure_root'/heart_stroke_overall.png")
 
 
+putpdf paragraph, font("`font_body'",1)
+putpdf text ("2025 results by sex"), ///
+    bold font("`font_title'",10.5,"`ink'")
 * Format the nine exact 2025 rows once: three cohorts by three sex groups.
 use `"`report_rows'"', clear
 keep if period_start == `last_year'
@@ -1976,9 +1979,6 @@ putpdf table cf_methods(6,2) = ("The chance of dying within 30 days generally in
 
 putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
 putpdf table cf_methods(7,2) = ("The 95% confidence interval shows the statistical precision of the estimated percentage. Wider intervals indicate greater uncertainty, usually because fewer events were available. Crude intervals use the Wilson method; age-adjusted intervals are calculated from the statistical model and allow for repeat records from the same person. These intervals describe uncertainty arising from the observed numbers; they do not account for missed events, incomplete records or deaths that were not successfully linked.")
-
-putpdf table cf_methods(8,1) = ("Why is 2024 shaded?")
-putpdf table cf_methods(8,2) = ("BNR identified 2024 as a transition year when the completeness of hospital-record abstraction may have fallen. We retained the year so that the series remains transparent, but shaded it as a warning to readers. Movement into or out of 2024 should not, by itself, be interpreted as a real improvement or worsening in 30-day case fatality.")
 
 putpdf table cf_methods(9,1) = ("How was privacy protected?")
 putpdf table cf_methods(9,2) = ("Counts from 1 to 5 were suppressed. We also suppressed additional values when necessary to prevent a protected count from being calculated by subtracting other published values. Zero counts were not automatically suppressed. Disclosure checks were applied to the complete proposed public dataset, and every result displayed in this report passed those checks.")
