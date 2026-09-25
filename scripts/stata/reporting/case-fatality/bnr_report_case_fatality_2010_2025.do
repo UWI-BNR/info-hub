@@ -1957,7 +1957,7 @@ putpdf table cf_equation_box = (1,1), width(55%) border(all,nil) halign(center)
 putpdf table cf_equation_box(1,1) = image("`cf_equation'"), halign(center)
 putpdf paragraph, font("`font_body'",.5)
 matrix cf_method_w = (26,74)
-putpdf table cf_methods = (9,2), width(100%) ///
+putpdf table cf_methods = (8,2), width(100%) ///
     width(cf_method_w) border(all,nil)
 putpdf table cf_methods(1,1) = ("What was counted?")
 putpdf table cf_methods(1,2) = ("BNR hospital records of Heart and Stroke events from 2010 to 2025. All CVD combines the Heart and Stroke event groups.")
@@ -1980,33 +1980,13 @@ putpdf table cf_methods(6,2) = ("The chance of dying within 30 days generally in
 putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
 putpdf table cf_methods(7,2) = ("The 95% confidence interval shows the statistical precision of the estimated percentage. Wider intervals indicate greater uncertainty, usually because fewer events were available. Crude intervals use the Wilson method; age-adjusted intervals are calculated from the statistical model and allow for repeat records from the same person. These intervals describe uncertainty arising from the observed numbers; they do not account for missed events, incomplete records or deaths that were not successfully linked.")
 
-putpdf table cf_methods(9,1) = ("How was privacy protected?")
-putpdf table cf_methods(9,2) = ("Counts from 1 to 5 were suppressed. We also suppressed additional values when necessary to prevent a protected count from being calculated by subtracting other published values. Zero counts were not automatically suppressed. Disclosure checks were applied to the complete proposed public dataset, and every result displayed in this report passed those checks.")
-
-/*
-putpdf table cf_methods(2,1) = ("Which event was used?")
-putpdf table cf_methods(2,2) = ("For each person, we used their first Heart event and their first Stroke event in each calendar year. Someone who had both can therefore contribute twice to All CVD, so All CVD is an event total rather than a count of distinct people or deaths.")
-putpdf table cf_methods(3,1) = ("What counted as a death?")
-putpdf table cf_methods(3,2) = ("A death from any cause on the event date or during the next 30 days. We counted it when either the hospital record reported the death or the event linked to a record in the all-deaths register.")
-putpdf table cf_methods(4,1) = ("How were records linked?")
-putpdf table cf_methods(4,2) = ("We first looked for one matching national registration number with no conflicting information. If that was not available, we required exact agreement on cleaned name, sex and date of birth. The final approved rule used exact first and last name, sex and date of birth, with a limited age-in-years fallback. Possible matches that were not unique were left unlinked.")
-putpdf table cf_methods(5,1) = ("What does crude mean?")
-putpdf table cf_methods(5,2) = ("The crude result is the percentage actually observed in that year's event group: eligible index events followed by death within 30 days, divided by all eligible index events, multiplied by 100. It makes no allowance for differences in patients' ages. It describes the experience recorded by BNR in that year and is the main result in this report. It is a percentage among recorded events, not a population mortality rate.")
-putpdf table cf_methods(6,1) = ("Why adjust for age?")
-putpdf table cf_methods(6,2) = ("The chance of dying within 30 days generally increases with age. A year with older event patients can therefore have a higher crude percentage even if outcomes at the same ages have not worsened. The age-adjusted result estimates what each year's percentage would be if its age mix matched a fixed Barbados reference group. The All-CVD, Heart and Stroke series each use their own pooled 2010-2025 reference group. Adjusted results can therefore be compared over time within the same series, but not directly between the three series. We calculate them using logistic regression and predictive margins.")
-putpdf table cf_methods(7,1) = ("What does the 95% CI show?")
-putpdf table cf_methods(7,2) = ("It shows statistical uncertainty around the percentage; a wider interval means less precision. Crude results use the Wilson method. Adjusted results use a model-based delta method and allow for repeat records from the same person. The intervals do not measure uncertainty from missed events or missed links.")
-putpdf table cf_methods(8,1) = ("Why is 2024 shaded?")
-putpdf table cf_methods(8,2) = ("BNR identified 2024 as a transition year when hospital-record abstraction completeness may have fallen. We kept the year in the report so the series remains transparent, but movement into or out of 2024 alone should not be read as a real change in survival.")
-putpdf table cf_methods(9,1) = ("How was privacy protected?")
-putpdf table cf_methods(9,2) = ("We checked the complete proposed public dataset before making this report. Counts from 1 to 5 were protected, including small counts that could be worked out by subtracting published values. Every result displayed here passed those checks.")
-*/
-
+putpdf table cf_methods(8,1) = ("How was privacy protected?")
+putpdf table cf_methods(8,2) = ("Counts from 1 to 5 were suppressed. We also suppressed additional values when necessary to prevent a protected count from being calculated by subtracting other published values. Zero counts were not automatically suppressed. Disclosure checks were applied to the complete proposed public dataset, and every result displayed in this report passed those checks.")
 
 putpdf table cf_methods(.,.), font("`font_body'",7.2,"`ink'")
 putpdf table cf_methods(.,1), bold font("`font_title'",7.2,"`teal'")
 putpdf table cf_methods(1,.), border(top,single,"`teal'")
-putpdf table cf_methods(9,.), border(bottom,single,"`teal'")
+putpdf table cf_methods(8,.), border(bottom,single,"`teal'")
 putpdf paragraph, font("`font_body'",.8)
 putpdf text ("Data used"), bold font("`font_title'",8,"`ink'") linebreak
 putpdf text ("CVD event release: January 2026. All-deaths release: `mortality_release'. Death follow-up runs through 30 January 2026, giving every event through 31 December 2025 a complete 30-day follow-up period."), ///
