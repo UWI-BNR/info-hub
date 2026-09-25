@@ -11,8 +11,8 @@ report-type: "Rolling CVD update"
 update-template-version: "1.0.0"
 event-release-id: "cvd_2026_01"
 mortality-release-id: "mort_2026_07"
-image: "/assets/images/listings/listing_shore.webp"
-image-alt: "Caribbean shoreline."
+image: "/assets/images/listings/listing_sugarcane_field.webp"
+image-alt: "Caribbean sugarcane field."
 format:
   html:
     toc: true

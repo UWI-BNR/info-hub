@@ -91,6 +91,10 @@ def parse_args() -> argparse.Namespace:
         help="optional short text centred in the running footer",
     )
     parser.add_argument(
+        "--author",
+        help="optional PDF document author; omitted reports retain existing metadata",
+    )
+    parser.add_argument(
         "--toc-spec",
         action="append",
         type=Path,
@@ -663,6 +667,13 @@ def finish_pdf(args: argparse.Namespace) -> int:
         }
         if metadata:
             writer.add_metadata(metadata)
+    if args.author:
+        writer.add_metadata(
+            {
+                "/Title": args.report_title,
+                "/Author": args.author,
+            }
+        )
 
     if toc_page_index is not None and toc_layout is not None:
         parent_outline = None
@@ -698,6 +709,12 @@ def finish_pdf(args: argparse.Namespace) -> int:
             raise RuntimeError(
                 f"PDF helper wrote {len(check.pages)} pages; expected {page_total}."
             )
+        if args.author:
+            finished_metadata = check.metadata or {}
+            if finished_metadata.get("/Title") != args.report_title:
+                raise RuntimeError("The finished PDF does not retain its document title.")
+            if finished_metadata.get("/Author") != args.author:
+                raise RuntimeError("The finished PDF does not retain its document author.")
         if toc_page_index is not None:
             annotations = check.pages[toc_page_index].get("/Annots", [])
             if len(annotations) < len(entries):

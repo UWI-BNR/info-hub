@@ -10,7 +10,7 @@ Operations Manual
 
 ## Overview of the process
 
-Use this process after a one-off analysis and its PDF report have been completed and documented in Stata using the Stata `.do` file template. The controlled workflow packages, approves and publishes the finished PDF; it does not run or reproduce the bespoke analysis.
+Use this process after a one-off analysis and its PDF report have been completed and documented in Stata. The controlled workflow packages, approves and publishes the finished PDF and, when supplied, its associated disclosure-controlled dataset; it does not run or reproduce the bespoke analysis.
 
 ## Before Step 1
 
@@ -29,10 +29,10 @@ mortality_methods_study
 ::: {.callout-note collapse="true" title="Details"}
 | Question | Details |
 |---|---|
-| What this step does | Checks and copies the finished PDF, then creates its public landing page and metadata. Nothing is published. |
-| How to run it | Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**. Enter the study ID, version, PDF location, public title, description and report date. |
-| What to check | Read the copied PDF and preview the landing page. Check the title, description, date, study ID, version, link and disclosure safety. |
-| Files and location | The three candidate files are under `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/`. The Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
+| What this step does | Checks and copies the finished PDF, then creates its public landing page and metadata. If CSV, DTA and TXT metadata are all supplied, it also creates a folder-aware dataset ZIP and download-catalogue record. Nothing is published. |
+| How to run it | Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**. Enter the study ID, version, PDF location, public title, description and report date. For an associated dataset, enter all three data-file paths. |
+| What to check | Read the copied PDF and preview the landing page. Check the title, description, date, study ID, version, links and disclosure safety. When present, inspect all three files inside the ZIP and the catalogue record. |
+| Files and location | The candidate folder contains three report files, plus a ZIP and catalogue YML when a dataset is supplied. It is under `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/`. The Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
 | Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-1-prepare-the-candidate). |
 :::
 
@@ -41,9 +41,9 @@ mortality_methods_study
 ::: {.callout-note collapse="true" title="Details"}
 | Question | Details |
 |---|---|
-| What this step does | Records approval of the exact PDF, landing page and metadata reviewed in Step 1. It creates a private public-ready copy, manifest and approval receipt. |
+| What this step does | Records approval of the complete package reviewed in Step 1. It creates a private public-ready copy, manifest and approval receipt. |
 | How to run it | An authorised BNR Lead or BNR Analyst chooses **Step 2: Approve one-off report candidate**, enters their full name and role, and makes all three review confirmations. |
-| What to check | Confirm the summary says the candidate was approved. Check that `public_manifest.csv` lists three files and that `approval.yml` records the intended study, version, approver and role. |
+| What to check | Confirm the summary says the candidate was approved. Check that `public_manifest.csv` lists three files for a PDF-only report or five when a dataset is included, and that `approval.yml` records the intended study, version, approver and role. |
 | Files and location | The approved payload and controls are in the package's `public_ready/` folder. The Step 2 log is under `$BNR_PRIVATE_LOGS/`. |
 | Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-2-approve-the-candidate). |
 :::
@@ -53,10 +53,10 @@ mortality_methods_study
 ::: {.callout-note collapse="true" title="Details"}
 | Question | Details |
 |---|---|
-| What this step does | Verifies the approval and the three approved files, then copies those exact files to the authoritative public area and website. |
+| What this step does | Verifies the approval and every manifested file, then copies those exact files to the authoritative public area and website. |
 | How to run it | Choose **Step 3: Publish approved one-off report** and enter the approved study ID and version. |
-| What to check | Open the public PDF and landing page, check the metadata, render the site and confirm that the report appears once in both report listings. |
-| Files and location | Authoritative files are under `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/`. The website PDF and metadata are under `site/downloads/files/reports/cvd/studies/STUDY_ID/`; the landing page is under `site/surveillance/cvd/reports/studies/STUDY_ID/`. The Step 3 log is under `$BNR_PRIVATE_LOGS/`. |
+| What to check | Open the public PDF and landing page, check the metadata and any dataset ZIP, run the download-catalogue builder, render the site and confirm that the report and download appear in their intended listings. |
+| Files and location | Authoritative files are under `$BNR_PUBLIC/reports/cvd/studies/STUDY_ID/`. Website downloads are under `site/downloads/files/reports/cvd/studies/STUDY_ID/`; the landing page is under `site/surveillance/cvd/reports/studies/STUDY_ID/`. The Step 3 log is under `$BNR_PRIVATE_LOGS/`. |
 | Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-3-publish-the-report). |
 :::
 

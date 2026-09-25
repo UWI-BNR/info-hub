@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_oneoff_s2_approve.do
-VERSION: 0.1.0 (2 September 2026)
+VERSION: 0.2.0 (25 September 2026)
 PURPOSE: Approve a prepared one-off CVD report candidate.
 
 USAGE:
@@ -58,6 +58,19 @@ local ready_dir "`package_dir'/public_ready"
 local approval "`ready_dir'/approval.yml"
 local manifest "`ready_dir'/public_manifest.csv"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_oneoff_s2_`report_id'.log"
+local public_name "bnr_cvd_oneoff_`study_id'"
+local dataset_zip_name "`public_name'_data.zip"
+local dataset_catalogue_name "`public_name'_data.yml"
+local has_dataset 0
+capture confirm file "`candidate_dir'/`dataset_zip_name'"
+if !_rc local has_dataset 1
+capture confirm file "`candidate_dir'/`dataset_catalogue_name'"
+if !_rc local has_dataset = `has_dataset' + 1
+if `has_dataset' == 1 {
+    display as error "The associated dataset ZIP and catalogue must both be present."
+    exit 601
+}
+local has_dataset = (`has_dataset' == 2)
 
 quietly mata: st_local("package_exists", strofreal(direxists("`package_dir'")))
 if "`package_exists'" != "1" {
@@ -76,11 +89,21 @@ if "`ready_exists'" != "1" {
 
 capture log close bnr_report_oneoff_s2
 log using "`private_log'", text replace name(bnr_report_oneoff_s2)
-capture noisily do "$BNR_STATA/reporting/bnr_report_approve_candidate.do" ///
-    "`candidate_dir'" "`ready_dir'" "`report_id'" ///
-    "one_off_cvd_report" "study_id" "`study_id'" "`version_num'" ///
-    "`approver_name'" "`approver_role'" "`confirm_candidate'" ///
-    "`confirm_disclosure'" "`confirm_ready'"
+if `has_dataset' {
+    capture noisily do "$BNR_STATA/reporting/bnr_report_approve_candidate.do" ///
+        "`candidate_dir'" "`ready_dir'" "`report_id'" ///
+        "one_off_cvd_report" "study_id" "`study_id'" "`version_num'" ///
+        "`approver_name'" "`approver_role'" "`confirm_candidate'" ///
+        "`confirm_disclosure'" "`confirm_ready'" "" "" ///
+        "`dataset_zip_name'" "`dataset_catalogue_name'"
+}
+else {
+    capture noisily do "$BNR_STATA/reporting/bnr_report_approve_candidate.do" ///
+        "`candidate_dir'" "`ready_dir'" "`report_id'" ///
+        "one_off_cvd_report" "study_id" "`study_id'" "`version_num'" ///
+        "`approver_name'" "`approver_role'" "`confirm_candidate'" ///
+        "`confirm_disclosure'" "`confirm_ready'"
+}
 local approval_rc = _rc
 if `approval_rc' {
     capture log close bnr_report_oneoff_s2
@@ -103,7 +126,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ONE-OFF CVD REPORT STEP 2: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate approved"
-noisily display as text   "  Script version:          0.1.0"
+noisily display as text   "  Script version:          0.2.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text  `"  Approved by:             `approver_name'"'
 noisily display as text  `"  Public-ready manifest:   `manifest'"'

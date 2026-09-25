@@ -8,7 +8,7 @@ import sys
 # BNR download catalogue builder
 #
 # Purpose:
-#   Combine approved metric-package download records into one site-wide
+#   Combine approved metric and report-dataset download records into one site-wide
 #   downloads/downloads.yml file for the Quarto downloads page.
 #
 # Scope:
@@ -21,6 +21,7 @@ import sys
 #
 # Expected inputs:
 #   site/downloads/files/metrics/**/catalogue/{release_id}.yml
+#   site/downloads/files/reports/**/catalogue/{package_id}.yml
 #
 # Output:
 #   site/downloads/downloads.yml
@@ -48,10 +49,12 @@ SITE_ROOT = SCRIPT_PATH.parent.parent
 
 DOWNLOADS_ROOT = SITE_ROOT / "downloads"
 METRICS_DIR = DOWNLOADS_ROOT / "files" / "metrics"
+REPORTS_DIR = DOWNLOADS_ROOT / "files" / "reports"
 OUTPUT_FILE = DOWNLOADS_ROOT / "downloads.yml"
 
 SUPPORTED_PACKAGE_TYPES = {
     "metric": "Metric dataset",
+    "report_dataset": "Report dataset",
 }
 
 SUPPORTED_SCHEMA = "bnr_download_manifest_v1"
@@ -266,7 +269,7 @@ def package_type_from_manifest(manifest, source_path):
     if package_type not in SUPPORTED_PACKAGE_TYPES:
         raise CatalogueError(
             f"Unsupported package type '{raw_value}' in {source_path}. "
-            "Expected metric."
+            "Expected metric or report_dataset."
         )
 
     return package_type
@@ -409,7 +412,7 @@ def display_period(period):
 
 
 def discover_source_records():
-    """Return every metric package-level catalogue manifest."""
+    """Return every supported package-level catalogue manifest."""
     source_paths = []
 
     if METRICS_DIR.exists():
@@ -418,6 +421,13 @@ def discover_source_records():
         print(f"Metric records found:   {len(metric_paths)}")
     else:
         print("WARNING: Metrics catalogue folder was not found.")
+
+    if REPORTS_DIR.exists():
+        report_paths = sorted(REPORTS_DIR.glob("**/catalogue/*.yml"))
+        source_paths.extend(report_paths)
+        print(f"Report records found:   {len(report_paths)}")
+    else:
+        print("WARNING: Reports catalogue folder was not found.")
 
     return source_paths
 
@@ -595,6 +605,7 @@ def build_catalogue():
     print("BNR download catalogue builder")
     print(f"Site root:        {SITE_ROOT}")
     print(f"Metrics folder:   {METRICS_DIR}")
+    print(f"Reports folder:   {REPORTS_DIR}")
     print(f"Output file:      {OUTPUT_FILE}")
     print("")
 

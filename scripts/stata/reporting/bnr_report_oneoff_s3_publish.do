@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_oneoff_s3_publish.do
-VERSION: 0.1.0 (2 September 2026)
+VERSION: 0.2.0 (25 September 2026)
 PURPOSE: Publish an approved one-off CVD report payload.
 
 USAGE:
@@ -59,6 +59,11 @@ local public_dir "`public_studies'/`study_id'"
 local public_pdf "`public_dir'/`public_name'.pdf"
 local public_qmd "`public_dir'/index.qmd"
 local public_metadata "`public_dir'/report.yml"
+local dataset_zip_name "`public_name'_data.zip"
+local dataset_catalogue_name "`public_name'_data.yml"
+local public_catalogue_dir "`public_dir'/catalogue"
+local public_dataset_zip "`public_dir'/`dataset_zip_name'"
+local public_dataset_catalogue "`public_catalogue_dir'/`dataset_catalogue_name'"
 
 local site_files "$BNR_REPO/site/downloads/files/reports"
 local site_cvd "`site_files'/cvd"
@@ -66,19 +71,34 @@ local site_studies "`site_cvd'/studies"
 local site_pdf_dir "`site_studies'/`study_id'"
 local site_pdf "`site_pdf_dir'/`public_name'.pdf"
 local site_metadata "`site_pdf_dir'/report.yml"
+local site_catalogue_dir "`site_pdf_dir'/catalogue"
+local site_dataset_zip "`site_pdf_dir'/`dataset_zip_name'"
+local site_dataset_catalogue "`site_catalogue_dir'/`dataset_catalogue_name'"
 local site_reports "$BNR_REPO/site/surveillance/cvd/reports/studies"
 local site_report_dir "`site_reports'/`study_id'"
 local site_qmd "`site_report_dir'/index.qmd"
 local private_log "$BNR_PRIVATE_LOGS/bnr_report_oneoff_s3_`report_id'.log"
+local has_dataset 0
+capture confirm file "`ready_dir'/`dataset_zip_name'"
+if !_rc local has_dataset 1
+capture confirm file "`ready_dir'/`dataset_catalogue_name'"
+if !_rc local has_dataset = `has_dataset' + 1
+if `has_dataset' == 1 {
+    display as error "The approved dataset ZIP and catalogue must both be present."
+    exit 601
+}
+local has_dataset = (`has_dataset' == 2)
 
 capture mkdir "`public_reports'"
 capture mkdir "`public_cvd'"
 capture mkdir "`public_studies'"
 capture mkdir "`public_dir'"
+capture mkdir "`public_catalogue_dir'"
 capture mkdir "`site_files'"
 capture mkdir "`site_cvd'"
 capture mkdir "`site_studies'"
 capture mkdir "`site_pdf_dir'"
+capture mkdir "`site_catalogue_dir'"
 capture mkdir "`site_reports'"
 capture mkdir "`site_report_dir'"
 quietly mata: st_local("public_dir_exists", strofreal(direxists("`public_dir'")))
@@ -99,11 +119,24 @@ if "`site_report_dir_exists'" != "1" {
 
 capture log close bnr_report_oneoff_s3
 log using "`private_log'", text replace name(bnr_report_oneoff_s3)
-capture noisily do "$BNR_STATA/reporting/bnr_report_publish_candidate.do" ///
-    "`ready_dir'" "`report_id'" "one_off_cvd_report" ///
-    "study_id" "`study_id'" "`version_num'" ///
-    "`public_pdf'" "`public_qmd'" "`public_metadata'" ///
-    "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'"
+if `has_dataset' {
+    capture noisily do "$BNR_STATA/reporting/bnr_report_publish_candidate.do" ///
+        "`ready_dir'" "`report_id'" "one_off_cvd_report" ///
+        "study_id" "`study_id'" "`version_num'" ///
+        "`public_pdf'" "`public_qmd'" "`public_metadata'" ///
+        "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'" ///
+        "" "" "" "" "" "" ///
+        "`dataset_zip_name'" "`dataset_catalogue_name'" ///
+        "`public_dataset_zip'" "`public_dataset_catalogue'" ///
+        "`site_dataset_zip'" "`site_dataset_catalogue'"
+}
+else {
+    capture noisily do "$BNR_STATA/reporting/bnr_report_publish_candidate.do" ///
+        "`ready_dir'" "`report_id'" "one_off_cvd_report" ///
+        "study_id" "`study_id'" "`version_num'" ///
+        "`public_pdf'" "`public_qmd'" "`public_metadata'" ///
+        "`site_pdf'" "`site_qmd'" "`site_metadata'" "`option'"
+}
 local publication_rc = _rc
 if `publication_rc' {
     capture log close bnr_report_oneoff_s3
@@ -125,11 +158,12 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ONE-OFF CVD REPORT STEP 3: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Published successfully"
-noisily display as text   "  Script version:          0.1.0"
+noisily display as text   "  Script version:          0.2.0"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text  `"  Public report package:   `public_dir'"'
 noisily display as text  `"  Website PDF:             `site_pdf'"'
 noisily display as text  `"  Website landing page:    `site_qmd'"'
+if `has_dataset' noisily display as text `"  Website dataset ZIP:     `site_dataset_zip'"'
 noisily display as text  `"  Private publication log: `private_log'"'
 noisily display as text   "  Next step:               Render and review the Quarto site."
 noisily display as result "============================================================================="

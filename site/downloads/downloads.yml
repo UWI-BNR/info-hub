@@ -88,3 +88,21 @@
   size: "371.5 KB"
   size_bytes: 380439
   sort_order: 30
+- title: "Case-fatality dataset"
+  output_type: "Report dataset"
+  output_title: "Thirty-day case fatality after cardiovascular events - associated dataset"
+  output_id: "bnr_cvd_oneoff_case_fatality_2025_data"
+  version: "—"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "case_fatality_2025"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: "CSV and labelled Stata datasets with companion metadata."
+  href: "files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip"
+  path: "files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip"
+  file: "bnr_cvd_oneoff_case_fatality_2025_data.zip"
+  updated: "2026-09-25"
+  size: "17.6 KB"
+  size_bytes: 18069
+  sort_order: 40

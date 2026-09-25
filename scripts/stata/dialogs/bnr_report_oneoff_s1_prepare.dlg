@@ -1,11 +1,11 @@
 *! BNR one-off CVD report Step 1: prepare candidate
-*! version 0.1.0, 2 September 2026
+*! version 0.2.0, 25 September 2026
 VERSION 19.0
-POSITION . . 620 470
+POSITION . . 620 610
 
-DIALOG main, label("BNR One-off report. Step 1 - prepare PDF report")
+DIALOG main, label("BNR One-off report. Step 1 - prepare report package")
 BEGIN
-  TEXTBOX tx_intro 15 15 590 50, label("Step 1 prepares an analyst-produced PDF.")
+  TEXTBOX tx_intro 15 15 590 50, label("Step 1 prepares an analyst-produced PDF and optional dataset package.")
   GROUPBOX gb_identity 15 80 590 105, label("Report identity")
   TEXT tx_study 30 108 100 ., label("Study ID:")
   EDIT ed_study 140 105 250 ., nomemory error("Study ID")
@@ -18,12 +18,19 @@ BEGIN
   TEXT tx_pdf 30 231 100 ., label("PDF path:")
   EDIT ed_pdf 140 228 440 ., nomemory error("Finished PDF path")
 
-  GROUPBOX gb_listing 15 289 590 135, label("Website listing metadata")
+  GROUPBOX gb_listing 15 289 590 105, label("Website listing metadata")
   TEXT tx_title 30 319 100 ., label("Title:")
   EDIT ed_title 140 316 440 ., nomemory error("Report title")
   TEXT tx_description 30 359 100 ., label("Description:")
   EDIT ed_description 140 356 440 ., nomemory error("Report description")
-  CHECKBOX ck_replace 30 396 540 ., default(0) nomemory label("Authorise replacement")
+  GROUPBOX gb_data 15 410 590 115, label("Optional associated public dataset - supply all three")
+  TEXT tx_csv 30 438 100 ., label("CSV path:")
+  EDIT ed_csv 140 435 440 ., nomemory
+  TEXT tx_dta 30 473 100 ., label("DTA path:")
+  EDIT ed_dta 140 470 440 ., nomemory
+  TEXT tx_metadata 30 508 100 ., label("Metadata TXT:")
+  EDIT ed_metadata 140 505 440 ., nomemory
+  CHECKBOX ck_replace 30 550 540 ., default(0) nomemory label("Authorise replacement")
 END
 
 OK ok1, label("Run Step 1")
@@ -37,6 +44,18 @@ BEGIN
   require main.ed_title
   require main.ed_description
   require main.ed_date
+  if main.ed_csv {
+    require main.ed_dta
+    require main.ed_metadata
+  }
+  if main.ed_dta {
+    require main.ed_csv
+    require main.ed_metadata
+  }
+  if main.ed_metadata {
+    require main.ed_csv
+    require main.ed_dta
+  }
   put "do $BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do "
   put main.ed_study
   put " "
@@ -55,7 +74,31 @@ BEGIN
   put `"""'
   put " "
   put main.ed_date
-  if main.ck_replace {
-    put " replace"
+  if main.ed_csv {
+    put " "
+    if main.ck_replace {
+      put "replace"
+    }
+    else {
+      put `"""'
+      put `"""'
+    }
+    put " "
+    put `"""'
+    put main.ed_csv
+    put `"""'
+    put " "
+    put `"""'
+    put main.ed_dta
+    put `"""'
+    put " "
+    put `"""'
+    put main.ed_metadata
+    put `"""'
+  }
+  else {
+    if main.ck_replace {
+      put " replace"
+    }
   }
 END

@@ -1,5 +1,5 @@
 *! BNR Stata menu
-*! version 1.17.0, 2 September 2026
+*! version 1.18.0, 25 September 2026
 *!
 *! Adds the BNR workflow menu to Stata's built-in User menu.
 *! Run once at Stata startup from profile.do.
@@ -8,6 +8,11 @@
 *! user-defined menus installed in the same Stata session.
 
 version 19.0
+
+* Make repository help files available to dialog HELP buttons and menu items.
+if "$BNR_STATA" != "" {
+    capture adopath ++ "$BNR_STATA/help"
+}
 
 window menu append submenu "stUser" "BNR"
 
@@ -98,6 +103,10 @@ window menu append item "One-off CVD report publication" ///
 window menu append item "One-off CVD report publication" ///
     "Step 3: Publish approved one-off report" ///
     "db bnr_report_oneoff_s3_publish"
+
+window menu append item "One-off CVD report publication" ///
+    "Case-fatality study: files and review" ///
+    "help bnr_report_case_fatality_2010_2025"
 
 * window menu append submenu "BNR" "Report utilities"
 * 

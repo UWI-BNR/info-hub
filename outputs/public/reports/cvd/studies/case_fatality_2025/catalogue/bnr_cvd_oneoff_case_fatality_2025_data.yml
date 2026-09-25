@@ -1,0 +1,27 @@
+schema: bnr_download_manifest_v1
+package_type: report_dataset
+package_id: bnr_cvd_oneoff_case_fatality_2025_data
+release_id: bnr_cvd_oneoff_case_fatality_2025_v1
+surveillance_area: CVD
+domain: cvd
+metric_family: case_fatality
+period: case_fatality_2025
+release_date: 2026-09-25
+
+title: |-
+  Thirty-day case fatality after cardiovascular events - associated dataset
+
+description: |-
+  Disclosure-controlled data and metadata accompanying the report.
+
+downloads:
+  - id: bnr_cvd_oneoff_case_fatality_2025_data_zip
+    title: Case-fatality dataset
+    artefact_type: ZIP package
+    format: ZIP
+    file: bnr_cvd_oneoff_case_fatality_2025_data.zip
+    href: files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip
+    description: |-
+      CSV and labelled Stata datasets with companion metadata.
+    include_in_listing: true
+    sort_order: 40

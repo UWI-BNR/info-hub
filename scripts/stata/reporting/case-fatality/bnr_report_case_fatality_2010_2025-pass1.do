@@ -1,12 +1,11 @@
 /*******************************************************************************
 BNR CASE FATALITY, 2010-2025 — PRIVATE STUDY FILE
-Version: 0.7.6 (25 September 2026)
+Version: 0.7.0 (25 September 2026)
 
 CURRENT STAGE: candidate metrics and disclosure-controlled public-data review.
 The primary outcome is death within 30 days identified by either deterministic
-mortality linkage or a valid hospital death record. Mortality-linked and
-hospital-recorded measures are condition-specific secondary measures. This
-version calculates
+mortality linkage or a valid hospital death record. Linked-only and in-hospital
+measures are condition-specific secondary measures. This version calculates
 crude estimates with Wilson 95% confidence intervals and age-standardised
 predictive margins. It creates four documented private review datasets, a
 disclosure-controlled candidate public dataset and the finished one-off report
@@ -110,8 +109,6 @@ display as text "Death input: `death_input'"
 display as text "Mortality release: `mortality_release'"
 display as text "Eligible death follow-up ends: " %tdCCYY-NN-DD `followup_end'
 
-* Tempfile macro names are deliberately kept to 31 characters or fewer.
-* Stata prefixes their backing files internally, so longer names can fail.
 tempfile events_source events_prepared cvd_nrn_map index_events ///
     deaths_source deaths_l01 deaths_base l02_candidates l02_summary ///
     l03_candidates l03_summary matched_deaths matched_death_keys ///
@@ -120,15 +117,12 @@ tempfile events_source events_prepared cvd_nrn_map index_events ///
     primary_unknown_sex secondary_linked secondary_hospital ///
     crude_rows primary_adj secondary_adj candidate_base ///
     pri_sex_marg pri_all_marg pri_sex_part sec_marg model_results ///
-    model_sample_counts ref_totals candidate_rows report_primary_rows ///
+    model_sample_counts ref_totals report_rows ///
     input_event_part input_mortality_part input_index_part ///
-    linkage_death_overlap_part link_event_death_part ///
-    linkage_cvd_overlap_part ///
+    linkage_death_overlap_part linkage_cvd_overlap_part ///
     linkage_rule_part linkage_outcome_part linkage_hospital_part ///
     linkage_mortality_rule_part age_completeness_part ///
-    age_reference_part age_sample_part disclosure_review ///
-    input_review_clean linkage_review_clean age_review_clean ///
-    disclosure_review_clean
+    age_reference_part age_sample_part disclosure_review
 
 /*******************************************************************************
 CONTROLLED SECTION 2 — CVD EVENT AND HOSPITAL-OUTCOME AUDIT
@@ -276,15 +270,12 @@ save `"`deaths_source'"', replace
 * Retain annual aggregate input checks. Record-level mortality exceptions are
 * investigated from the governed source only when one of these checks changes.
 preserve
-    * Retain an undated row as well as annual rows. Without it, records with
-    * missing or invalid death dates disappear from the aggregate review panel.
-    keep if missing(death_year) | inrange(death_year,`first_year',`last_year'+1)
+    keep if inrange(death_year,`first_year',`last_year'+1)
     collapse (sum) deaths=one invalid_death_date bad_registration_date ///
         registration_before_death registration_over_30 ///
         registration_over_90 flagged_duplicate missing_death_nrn ///
         placeholder_death_nrn unavailable_death_nrn, by(death_year)
     generate str24 review_section = "mortality_input"
-    replace review_section = "mortality_invalid_or_undated" if missing(death_year)
     rename death_year review_year
     order review_section review_year
     sort review_year
@@ -639,17 +630,6 @@ if r(N) == 0 {
             multiple_index_events both_event_types
         save `"`linkage_death_overlap_part'"', replace
     restore
-    preserve
-        generate str32 review_section = "index_event_multi_deaths"
-        generate int review_year = .
-        generate long index_events = .
-        generate long multiple_death_events = .
-        generate long additional_death_records = .
-        generate long differing_death_dates = .
-        keep review_section review_year index_events multiple_death_events ///
-            additional_death_records differing_death_dates
-        save `"`link_event_death_part'"', replace
-    restore
 }
 else {
     joinby event_person_key using `"`index_events'"'
@@ -677,36 +657,6 @@ else {
         order review_section review_year
         sort review_year
         save `"`linkage_death_overlap_part'"', replace
-    restore
-
-    * A single index event should normally have one eligible mortality death
-    * record. Retain an aggregate exception panel before choosing the earliest
-    * death. It contains no identifiers and deliberately flags, rather than
-    * silently resolves, any multiple-death record situation for source review.
-    preserve
-        bysort eid: generate long eligible_death_record_n = _N
-        bysort eid: egen int first_eligible_dod = min(cand_dod)
-        bysort eid: egen int last_eligible_dod = max(cand_dod)
-        bysort eid: keep if _n == 1
-        generate byte one_index_event = 1
-        generate byte multiple_death_events = eligible_death_record_n > 1
-        generate long additional_death_records = eligible_death_record_n - 1
-        generate byte differing_death_dates = ///
-            multiple_death_events == 1 & first_eligible_dod != last_eligible_dod
-        collapse (sum) index_events=one_index_event multiple_death_events ///
-            additional_death_records differing_death_dates, by(event_year)
-        generate str32 review_section = "index_event_multi_deaths"
-        rename event_year review_year
-        order review_section review_year index_events multiple_death_events ///
-            additional_death_records differing_death_dates
-        sort review_year
-        quietly summarize multiple_death_events, meanonly
-        local multiple_death_event_total = r(sum)
-        save `"`link_event_death_part'"', replace
-        if `multiple_death_event_total' > 0 {
-            display as error "REVIEW REQUIRED: `multiple_death_event_total' index event(s) have more than one eligible mortality death record."
-            display as error "See index_event_multi_deaths in the private linkage review."
-        }
     restore
 
     sort eid dtd cand_dod death_record_id
@@ -1464,19 +1414,12 @@ quietly count if release_status == "release" & ///
     missing(events,deaths,estimate_pct,ci_lower_pct,ci_upper_pct)
 assert r(N) == 0
 assert event_type != "" & inlist(sex_group,"Both","Women","Men")
-
-* Keep a private, disclosure-cleared copy at full precision for the PDF. The
-* public CSV and DTA are rounded to two decimals below; the report then formats
-* this protected copy directly to one decimal, avoiding a second rounding step.
-* This is deliberately the complete candidate layout. Section 11 creates a
-* separate annual-primary report source before any figure is drawn.
-sort measure_id standardisation period_start event_type sex_group
-save `"`candidate_rows'"', replace
 replace estimate_pct = round(estimate_pct,.01)
 replace ci_lower_pct = round(ci_lower_pct,.01)
 replace ci_upper_pct = round(ci_upper_pct,.01)
 format events deaths %12.0f
 format estimate_pct ci_lower_pct ci_upper_pct %6.2f
+sort measure_id standardisation period_start event_type sex_group
 
 * Define the public metadata once. The same text is written into the Stata
 * dataset notes and the companion TXT file so the two formats cannot drift.
@@ -1487,11 +1430,11 @@ local meta_eras = "Reporting eras: 2010-15 Early legacy; 2016-20 Later legacy; 2
 local meta_cohorts = "Cohorts: All CVD pools the separate Heart and Stroke disease-specific cohorts. A person can contribute one index event per year to each condition-specific cohort. A subsequent all-cause death can therefore be an outcome in both series; this is not a count of distinct national deaths."
 local meta_uncertainty = "Uncertainty: crude results use Wilson 95% binomial confidence intervals. Age-standardised results use delta-method 95% confidence intervals from the statistical model."
 local meta_age = "Age-standardisation: logistic predictive margins use age groups under 55, 55-64, 65-74, 75-84 and 85 and over. Each cohort uses its own fixed pooled 2010-25 valid-age index-event population. Primary sex-specific models include year, sex, year-by-sex and age group; combined-sex models include year and age group. Secondary models include reporting era and age group. Records with missing or invalid age are excluded. Adjusted results support comparisons over time within a cohort and should not be compared directly between All CVD, Heart and Stroke."
-local meta_suppression = "Suppression: all metric values are blank when a direct cell, complementary source-only cell, shared-source cell, noncase cell or derivable unknown-sex cell is 1-5. The release_status field identifies suppressed and source-quality-excluded rows, so a protected blank is distinguishable from an unavailable value. Adjusted rows inherit the matching crude-row decision. Zero counts are not automatically suppressed."
+local meta_suppression = "Suppression: all numeric outputs are blank when a direct cell, complementary source-only cell, shared-source cell, noncase cell or derivable unknown-sex cell is 1-5. Adjusted rows inherit the matching crude-row decision. Zero counts are not automatically suppressed."
 local meta_quality = "Quality flags: 2024 annual primary rows are flagged for possible abstraction incompleteness. The 2024-25 secondary era is flagged because it contains 2024 and straddles a process change. In-hospital estimates for 2010-15 and 2021-23 are not released because of historical source-quality limitations."
 local meta_adjusted_counts = "Counts on age-standardised rows describe the observed cohort; the percentage is model-based and is not deaths divided by events."
 
-local vd_measure_id "Case-fatality measure: primary, mortality-linked or hospital-recorded"
+local vd_measure_id "Case-fatality measure: primary, linked-only or in-hospital"
 local vd_standardisation "Crude or age-standardised estimate"
 local vd_time_basis "Annual result or pooled reporting-era result"
 local vd_period_basis "Meaning of the period used for the result"
@@ -1502,29 +1445,13 @@ local vd_period_start "First calendar year represented by the row"
 local vd_period_end "Last calendar year represented by the row"
 local vd_event_type "CVD event group: All CVD, Heart or Stroke"
 local vd_sex_group "Sex group represented by the row"
-local vd_events "Eligible index-event denominator; blank when release_status is not release"
-local vd_deaths "30-day death numerator; blank when release_status is not release"
-local vd_estimate_pct "Case-fatality percentage; blank when release_status is not release"
+local vd_events "Eligible index-event denominator; blank when protected"
+local vd_deaths "30-day death numerator; blank when protected"
+local vd_estimate_pct "Case-fatality percentage; blank when protected"
 local vd_ci_lower_pct "Lower limit of the 95% confidence interval"
 local vd_ci_upper_pct "Upper limit of the 95% confidence interval"
-local vd_release_status "Release, small-count suppression or source-quality decision"
+local vd_release_status "Release, suppression or source-quality decision"
 local vd_quality_flag "Data-quality caution attached to the row"
-
-* Export the public CSV before adding Stata metadata. Re-importing that CSV into
-* a new dataset is a deliberate clean boundary: it removes every dataset note,
-* characteristic, value label and other hidden attribute inherited from the
-* confidential source files. Only the case-fatality labels and notes defined
-* below are then added to the public Stata file.
-capture notes drop _all
-export delimited using ///
-    "`candidate_root'/case_fatality_metrics_candidate.csv", replace
-clear
-import delimited using ///
-    "`candidate_root'/case_fatality_metrics_candidate.csv", ///
-    varnames(1) clear
-format events deaths %12.0f
-format estimate_pct ci_lower_pct ci_upper_pct %6.2f
-sort measure_id standardisation period_start event_type sex_group
 
 label data "BNR case-fatality metrics, 2010-2025"
 label variable measure_id "`vd_measure_id'"
@@ -1574,6 +1501,8 @@ notes _dta: `"`meta_suppression'"'
 notes _dta: `"`meta_quality'"'
 notes _dta: `"`meta_adjusted_counts'"'
 save "`candidate_root'/case_fatality_metrics_candidate.dta", replace
+export delimited using ///
+    "`candidate_root'/case_fatality_metrics_candidate.csv", replace
 
 * The companion metadata describes both public data formats. Candidate status
 * is governed by its private location and the separate approval workflow; the
@@ -1633,11 +1562,6 @@ its rows. The datasets contain private counts but no direct identifiers.
 * Review file 1: input quality and annual index-event construction.
 use `"`input_event_part'"', clear
 append using `"`input_mortality_part'"' `"`input_index_part'"'
-* A CSV round trip is a clean metadata boundary. These aggregate review files
-* must not inherit hidden notes, characteristics or labels from source data.
-export delimited using `"`input_review_clean'"', replace
-clear
-import delimited using `"`input_review_clean'"', varnames(1) clear
 label data "BNR private case-fatality input and index-event review"
 label define cf_etype 0 "All CVD" 1 "Stroke" 2 "Heart", replace
 label define cf_sex 0 "Both sexes" 1 "Women" 2 "Men", replace
@@ -1678,7 +1602,7 @@ capture label variable missing_death_nrn "Mortality records with blank identifie
 capture label variable placeholder_death_nrn "Mortality records with 9999999999 identifier"
 capture label variable unavailable_death_nrn "Deaths without a usable identifier"
 notes _dta: Private aggregate review evidence; never include this file in a public package.
-notes _dta: event_input rows are year by event type and sex; mortality_input rows are year only, with an undated row for invalid death dates.
+notes _dta: event_input rows are year by event type and sex; mortality_input rows are year only.
 notes _dta: annual_index_events rows are year by event type, sex and person-key source.
 notes review_section: Filter on this field before interpreting the remaining variables.
 notes event_person_key_source: N=valid NRN; F=exact fallback identity; E=event-only proxy.
@@ -1687,13 +1611,9 @@ save "`review_root'/case_fatality_input_review.dta", replace
 
 * Review file 2: death linkage, source reconciliation and cohort overlap.
 use `"`linkage_death_overlap_part'"', clear
-append using `"`link_event_death_part'"' ///
-    `"`linkage_cvd_overlap_part'"' `"`linkage_rule_part'"' ///
+append using `"`linkage_cvd_overlap_part'"' `"`linkage_rule_part'"' ///
     `"`linkage_outcome_part'"' `"`linkage_hospital_part'"' ///
     `"`linkage_mortality_rule_part'"'
-export delimited using `"`linkage_review_clean'"', replace
-clear
-import delimited using `"`linkage_review_clean'"', varnames(1) clear
 label data "BNR private case-fatality linkage and outcome review"
 label define cf_etype 0 "All CVD" 1 "Stroke" 2 "Heart", replace
 label define cf_sex 0 "Both sexes" 1 "Women" 2 "Men", replace
@@ -1707,9 +1627,6 @@ capture label variable deaths "Death records in linkage panel"
 capture label variable linked_event_pairs "Eligible death-to-index-event pairs"
 capture label variable multiple_index_events "Deaths linked to multiple index events"
 capture label variable both_event_types "Deaths linked to Heart and Stroke events"
-capture label variable multiple_death_events "Index events with multiple eligible mortality death records"
-capture label variable additional_death_records "Eligible mortality death records beyond the first per index event"
-capture label variable differing_death_dates "Multiple-death index events with different eligible death dates"
 capture label variable cvd_person_years "Distinct condition-cohort person-years"
 capture label variable condition_index_rows "Heart plus Stroke index-event rows"
 capture label variable both_conditions "Person-years represented in both conditions"
@@ -1739,8 +1656,6 @@ notes _dta: Private aggregate review evidence; never include this file in a publ
 notes _dta: The annual_outcome_reconciliation panel is the main numerator-source check.
 notes _dta: primary_death_30 must equal linked_only_death plus hospital_only_death plus both_death_sources.
 notes _dta: A death may contribute to both condition series when eligible Heart and Stroke index events both precede it.
-notes _dta: index_event_multi_deaths flags aggregate exceptions before the earliest eligible death is selected.
-notes multiple_death_events: A nonzero count requires governed source-record review before approval; the analysis does not resolve it automatically.
 notes review_section: Filter on this field before interpreting the remaining variables.
 sort review_section review_year etype sex
 save "`review_root'/case_fatality_linkage_review.dta", replace
@@ -1748,9 +1663,6 @@ save "`review_root'/case_fatality_linkage_review.dta", replace
 * Review file 3: age completeness, local reference populations and model samples.
 use `"`age_completeness_part'"', clear
 append using `"`age_reference_part'"' `"`age_sample_part'"'
-export delimited using `"`age_review_clean'"', replace
-clear
-import delimited using `"`age_review_clean'"', varnames(1) clear
 label data "BNR private case-fatality age-standardisation review"
 label define cf_etype 0 "All CVD" 1 "Stroke" 2 "Heart", replace
 label define cf_sex 0 "Both sexes" 1 "Women" 2 "Men", replace
@@ -1800,9 +1712,6 @@ save "`review_root'/case_fatality_age_review.dta", replace
 
 * Review file 4: exact unsuppressed evidence behind the public release decision.
 use `"`disclosure_review'"', clear
-export delimited using `"`disclosure_review_clean'"', replace
-clear
-import delimited using `"`disclosure_review_clean'"', varnames(1) clear
 label data "BNR private complete-payload case-fatality disclosure review"
 label define cf_etype 0 "All CVD" 1 "Stroke" 2 "Heart", replace
 label define cf_sex 0 "Both sexes" 1 "Women" 2 "Men", replace
@@ -1858,10 +1767,9 @@ file write `review_readme' "BNR CASE-FATALITY PRIVATE REVIEW BUNDLE" _n _n
 file write `review_readme' "Study: `study_id'" _n
 file write `review_readme' "These files are confidential review evidence and must not be published." _n _n
 file write `review_readme' "1. case_fatality_input_review.dta" _n
-file write `review_readme' "   Review input volumes, data-quality flags, undated mortality records and annual index-event selection." _n
+file write `review_readme' "   Review input volumes, data-quality flags and annual index-event selection." _n
 file write `review_readme' "2. case_fatality_linkage_review.dta" _n
-file write `review_readme' "   Review deterministic linkage, source reconciliation, cohort overlap and any multiple-death-record exception." _n
-file write `review_readme' "   A nonzero multiple-death-record count requires governed source review before approval." _n
+file write `review_readme' "   Review deterministic linkage, source reconciliation and cohort overlap." _n
 file write `review_readme' "3. case_fatality_age_review.dta" _n
 file write `review_readme' "   Review age completeness, reference weights and exact model samples." _n
 file write `review_readme' "4. case_fatality_disclosure_review.dta" _n
@@ -1913,8 +1821,8 @@ foreach required_report_file in crest pdf_helper pdf_python pdf_logo cf_equation
 * the agreed first-report design: every annual primary result must be released.
 * If a later rerun introduces suppression, the PDF stops rather than silently
 * omitting or reconstructing a protected value.
-use `"`candidate_rows'"', clear
-keep if measure_id == "primary_30d" & time_basis == "annual"
+use "`candidate_root'/case_fatality_metrics_candidate.dta", clear
+keep if measure_id == "primary_30d"
 quietly count if release_status != "release"
 if r(N) > 0 {
     display as error "Annual primary rows now include protected values."
@@ -1923,8 +1831,7 @@ if r(N) > 0 {
     exit 459
 }
 assert !missing(events,deaths,estimate_pct,ci_lower_pct,ci_upper_pct)
-isid standardisation event_type sex_group period_start
-save `"`report_primary_rows'"', replace
+save `"`report_rows'"', replace
 
 * Step 11.2: collect the six sex-specific 2025 headline values plus the crude
 * and age-adjusted combined-sex values used on each detailed results page.
@@ -1972,9 +1879,9 @@ foreach c in CVD Heart Stroke {
 
 * Step 11.3: draw four restrained report figures. One combined Heart-and-Stroke
 * chart appears on the 2025 brief page. The three larger charts show women and
-* men separately for All CVD, Heart and Stroke. Legends identify the 95%
-* confidence intervals. No year-specific warning band is used. Axis labels use
-* whole percentages throughout.
+* men separately for All CVD, Heart and Stroke. Every legend explains both the
+* confidence-interval whiskers and the lightly shaded 2024 completeness-caution
+* band. Axis labels use whole percentages throughout.
 local ink       "44 62 80"
 local teal      "4 81 116"
 local heart_col "178 95 82"
@@ -1994,13 +1901,21 @@ local amber     "181 103 0"
 local font_title "Montserrat Medium"
 local font_body  "Montserrat"
 
-use `"`report_primary_rows'"', clear
-keep if standardisation == "crude" & sex_group == "Both" & ///
-    inlist(event_type,"Heart","Stroke")
-isid event_type period_start
-quietly count
-assert r(N) == 2*(`last_year'-`first_year'+1)
+use `"`report_rows'"', clear
+keep if standardisation == "crude" & sex_group == "Both"
 sort event_type period_start
+quietly count
+local shade_n = r(N)
+local shade_a = `shade_n' + 1
+local shade_b = `shade_n' + 2
+set obs `shade_b'
+generate double shade_x = .
+generate double shade_lo = .
+generate double shade_hi = .
+replace shade_x = 2023.5 in `shade_a'
+replace shade_x = 2024.5 in `shade_b'
+replace shade_lo = 0 in `shade_a'/`shade_b'
+replace shade_hi = 60 in `shade_a'/`shade_b'
 replace period_start = period_start+0.1 if event_type=="Heart"
 #delimit ;
 twoway
@@ -2032,12 +1947,24 @@ graph export "`figure_root'/heart_stroke_overall.png", replace width(2400);
 #delimit cr
 
 foreach c in CVD Heart Stroke {
-    use `"`report_primary_rows'"', clear
+    use `"`report_rows'"', clear
     keep if standardisation == "crude" & event_type == "`c'" & ///
         inlist(sex_group,"Women","Men")
     local stem = lower("`c'")
     local wcol "``stem'_women'"
     local mcol "``stem'_men'"
+    quietly count
+    local shade_n = r(N)
+    local shade_a = `shade_n' + 1
+    local shade_b = `shade_n' + 2
+    set obs `shade_b'
+    generate double shade_x = .
+    generate double shade_lo = .
+    generate double shade_hi = .
+    replace shade_x = 2023.5 in `shade_a'
+    replace shade_x = 2024.5 in `shade_b'
+    replace shade_lo = 0 in `shade_a'/`shade_b'
+    replace shade_hi = 60 in `shade_a'/`shade_b'
     replace period_start = period_start+0.2 if sex_group=="Men"
     #delimit ;
     twoway
@@ -2071,7 +1998,7 @@ foreach c in CVD Heart Stroke {
 }
 
 * Step 11.4: compose the finished A4 report. Every figure and table below is
-* derived from report_primary_rows, which contains only released annual primary values.
+* derived from report_rows, which contains only released annual primary values.
 capture putpdf clear
 putpdf begin, pagesize(A4) ///
     margin(top,0.55) margin(bottom,0.55) ///
@@ -2151,7 +2078,7 @@ putpdf paragraph, font("`font_body'",1)
 putpdf text ("2025 results by sex"), ///
     bold font("`font_title'",10.5,"`ink'")
 * Format the nine exact 2025 rows once: three cohorts by three sex groups.
-use `"`report_primary_rows'"', clear
+use `"`report_rows'"', clear
 keep if period_start == `last_year'
 keep event_type sex_group standardisation events deaths estimate_pct ///
     ci_lower_pct ci_upper_pct
@@ -2261,7 +2188,7 @@ foreach c in CVD Heart Stroke {
     putpdf text ("Recent results by sex"), ///
         bold font("`font_title'",10.5,"`ink'")
 
-    use `"`report_primary_rows'"', clear
+    use `"`report_rows'"', clear
     keep if event_type == "`c'" & inlist(sex_group,"Women","Men") & ///
         inrange(period_start,2021,2025)
     keep period_start sex_group standardisation events deaths estimate_pct ///
@@ -2395,21 +2322,7 @@ if _rc {
     exit `pdf_rc'
 }
 
-* Remove any previous completed PDF before starting the helper. On Windows a
-* PDF left open in a viewer cannot be replaced. This check prevents Stata from
-* accepting that stale file when the external helper cannot write its output.
-capture confirm file "`report_pdf'"
-if !_rc {
-    capture erase "`report_pdf'"
-    if _rc {
-        capture log close case_fatality
-        display as error "CASE-FATALITY REPORT PDF IS OPEN OR CANNOT BE REPLACED"
-        display as error "Close the existing PDF and rerun: `report_pdf'"
-        exit 603
-    }
-}
-
-local furniture_command `""`pdf_python'" "`pdf_helper'" --input "`report_body_pdf'" --output "`report_pdf'" --report-title "BNR Case-Fatality Report 2010-2025" --report-year "2025" --logo "`pdf_logo'" --skip-first-pages 1 --footer-center "`info_hub_web'" --author "Ian Hambleton for the BNR""'
+local furniture_command `""`pdf_python'" "`pdf_helper'" --input "`report_body_pdf'" --output "`report_pdf'" --report-title "BNR Case-Fatality Report 2010-2025" --report-year "2025" --logo "`pdf_logo'" --skip-first-pages 1 --footer-center "`info_hub_web'""'
 capture noisily shell `furniture_command'
 if _rc {
     local furniture_rc = _rc
