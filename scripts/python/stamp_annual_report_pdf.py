@@ -87,6 +87,14 @@ def parse_args() -> argparse.Namespace:
         help="number of leading pages left undecorated (default: 1 for the cover)",
     )
     parser.add_argument(
+        "--footer-center",
+        help="optional short text centred in the running footer",
+    )
+    parser.add_argument(
+        "--author",
+        help="optional PDF document author; omitted reports retain existing metadata",
+    )
+    parser.add_argument(
         "--toc-spec",
         action="append",
         type=Path,
@@ -430,6 +438,7 @@ def footer_overlay(
     page_total: int,
     report_title: str,
     logo: Path | None,
+    footer_center: str | None,
 ) -> object:
     """Return a one-page PDF overlay matching the target page dimensions."""
     packet = BytesIO()
@@ -463,6 +472,8 @@ def footer_overlay(
     page_canvas.line(36, 31, width - 36, 31)
     page_canvas.setFont("Helvetica", 7.2)
     page_canvas.drawString(36, 19, "Barbados National Registry")
+    if footer_center:
+        page_canvas.drawCentredString(width / 2, 19, footer_center)
     footer_right = f"Page {page_number} of {page_total}"
     page_canvas.drawRightString(width - 36, 19, footer_right)
 
@@ -643,6 +654,7 @@ def finish_pdf(args: argparse.Namespace) -> int:
                 visible_total,
                 args.report_title,
                 args.logo,
+                args.footer_center,
             )
             page.merge_page(overlay)
         writer.add_page(page)
@@ -655,6 +667,13 @@ def finish_pdf(args: argparse.Namespace) -> int:
         }
         if metadata:
             writer.add_metadata(metadata)
+    if args.author:
+        writer.add_metadata(
+            {
+                "/Title": args.report_title,
+                "/Author": args.author,
+            }
+        )
 
     if toc_page_index is not None and toc_layout is not None:
         parent_outline = None
@@ -690,6 +709,12 @@ def finish_pdf(args: argparse.Namespace) -> int:
             raise RuntimeError(
                 f"PDF helper wrote {len(check.pages)} pages; expected {page_total}."
             )
+        if args.author:
+            finished_metadata = check.metadata or {}
+            if finished_metadata.get("/Title") != args.report_title:
+                raise RuntimeError("The finished PDF does not retain its document title.")
+            if finished_metadata.get("/Author") != args.author:
+                raise RuntimeError("The finished PDF does not retain its document author.")
         if toc_page_index is not None:
             annotations = check.pages[toc_page_index].get("/Annots", [])
             if len(annotations) < len(entries):

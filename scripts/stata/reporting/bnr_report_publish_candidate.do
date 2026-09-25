@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_publish_candidate.do
-VERSION: 1.2.1 (15 September 2026)
+VERSION: 1.3.0 (25 September 2026)
 PURPOSE: Promote one exact manifested report payload to public and site paths.
 
 This shared helper reads only public_ready. It never reads or alters candidate
@@ -8,6 +8,10 @@ files and never renders, commits, pushes or deploys the Quarto site.
 
 CHANGE 1.2.1:
   Accept only BNR Lead and BNR Analyst approval receipts for publication.
+
+CHANGE 1.3.0:
+  Optionally publish one approved associated dataset ZIP and its catalogue
+  record alongside the report.
 
 CHANGE 1.2.0:
   Optionally publish one approved companion PDF and its landing QMD alongside
@@ -21,7 +25,9 @@ set more off
 args ready_dir report_id report_type period_key period_value report_version ///
     public_pdf public_qmd public_metadata site_pdf site_qmd site_metadata option ///
     companion_pdf_name companion_qmd_name public_companion_pdf ///
-    public_companion_qmd site_companion_pdf site_companion_qmd
+    public_companion_qmd site_companion_pdf site_companion_qmd ///
+    dataset_zip_name dataset_catalogue_name public_dataset_zip ///
+    public_dataset_catalogue site_dataset_zip site_dataset_catalogue
 
 if "`ready_dir'" == "" | "`report_id'" == "" | "`report_type'" == "" | ///
         "`period_key'" == "" | "`period_value'" == "" | ///
@@ -54,7 +60,30 @@ if `has_companion' {
         }
     }
 }
-local required_payload_count = 3 + (2 * `has_companion')
+local dataset_arg_count 0
+foreach dataset_arg in dataset_zip_name dataset_catalogue_name public_dataset_zip public_dataset_catalogue site_dataset_zip site_dataset_catalogue {
+    if "``dataset_arg''" != "" local ++dataset_arg_count
+}
+if !inlist(`dataset_arg_count', 0, 6) {
+    display as error "All six dataset publication arguments must be supplied together."
+    exit 198
+}
+local has_dataset = (`dataset_arg_count' == 6)
+if `has_dataset' {
+    foreach dataset_name in dataset_zip_name dataset_catalogue_name {
+        if strpos("``dataset_name''", "/") | strpos("``dataset_name''", "\") | ///
+                strpos("``dataset_name''", "..") | strpos("``dataset_name''", ",") {
+            display as error "Dataset payload names must be safe filenames: ``dataset_name''"
+            exit 198
+        }
+    }
+    if lower(substr("`dataset_zip_name'", strlen("`dataset_zip_name'") - 3, 4)) != ".zip" | ///
+            lower(substr("`dataset_catalogue_name'", strlen("`dataset_catalogue_name'") - 3, 4)) != ".yml" {
+        display as error "Dataset filenames must end in .zip and .yml."
+        exit 198
+    }
+}
+local required_payload_count = 3 + (2 * `has_companion') + (2 * `has_dataset')
 local replace_existing = (lower("`option'") == "replace")
 local version_num = real("`report_version'")
 if missing(`version_num') | `version_num' != floor(`version_num') | ///
@@ -68,6 +97,8 @@ local ready_qmd "`ready_dir'/index.qmd"
 local ready_metadata "`ready_dir'/report.yml"
 local ready_companion_pdf "`ready_dir'/`companion_pdf_name'"
 local ready_companion_qmd "`ready_dir'/`companion_qmd_name'"
+local ready_dataset_zip "`ready_dir'/`dataset_zip_name'"
+local ready_dataset_catalogue "`ready_dir'/`dataset_catalogue_name'"
 local manifest "`ready_dir'/public_manifest.csv"
 local approval "`ready_dir'/approval.yml"
 
@@ -84,6 +115,15 @@ if `has_companion' {
         capture confirm file "``required_file''"
         if _rc {
             display as error "Required approved companion file is missing: ``required_file''"
+            exit 601
+        }
+    }
+}
+if `has_dataset' {
+    foreach required_file in ready_dataset_zip ready_dataset_catalogue {
+        capture confirm file "``required_file''"
+        if _rc {
+            display as error "Required approved dataset file is missing: ``required_file''"
             exit 601
         }
     }
@@ -190,6 +230,15 @@ if `has_companion' {
         }
     }
 }
+if `has_dataset' {
+    foreach expected_path in "`dataset_zip_name'" "`dataset_catalogue_name'" {
+        quietly count if file_path == "`expected_path'"
+        if r(N) != 1 {
+            display as error "Manifest dataset entry missing or duplicated: `expected_path'"
+            exit 459
+        }
+    }
+}
 forvalues row = 1/`required_payload_count' {
     local relative_path = file_path[`row']
     quietly checksum "`ready_dir'/`relative_path'"
@@ -206,6 +255,12 @@ foreach output_file in public_pdf public_qmd public_metadata site_pdf site_qmd s
 }
 if `has_companion' {
     foreach output_file in public_companion_pdf public_companion_qmd site_companion_pdf site_companion_qmd {
+        capture confirm file "``output_file''"
+        if !_rc local any_output 1
+    }
+}
+if `has_dataset' {
+    foreach output_file in public_dataset_zip public_dataset_catalogue site_dataset_zip site_dataset_catalogue {
         capture confirm file "``output_file''"
         if !_rc local any_output 1
     }
@@ -315,6 +370,32 @@ if `has_companion' {
         exit `copy_rc'
     }
 }
+if `has_dataset' {
+    capture noisily copy "`ready_dataset_zip'" "`public_dataset_zip'", replace
+    if _rc {
+        local copy_rc = _rc
+        display as error "Report publication failed while writing: `public_dataset_zip'"
+        exit `copy_rc'
+    }
+    capture noisily copy "`ready_dataset_catalogue'" "`public_dataset_catalogue'", replace
+    if _rc {
+        local copy_rc = _rc
+        display as error "Report publication failed while writing: `public_dataset_catalogue'"
+        exit `copy_rc'
+    }
+    capture noisily copy "`ready_dataset_zip'" "`site_dataset_zip'", replace
+    if _rc {
+        local copy_rc = _rc
+        display as error "Report publication failed while writing: `site_dataset_zip'"
+        exit `copy_rc'
+    }
+    capture noisily copy "`ready_dataset_catalogue'" "`site_dataset_catalogue'", replace
+    if _rc {
+        local copy_rc = _rc
+        display as error "Report publication failed while writing: `site_dataset_catalogue'"
+        exit `copy_rc'
+    }
+}
 
 quietly checksum "`ready_pdf'"
 local ready_pdf_size = r(filelen)
@@ -384,6 +465,35 @@ if `has_companion' {
     quietly checksum "`site_companion_qmd'"
     if r(filelen) != `companion_qmd_size' | r(checksum) != `companion_qmd_checksum' {
         display as error "Published website companion landing-page verification failed: `site_companion_qmd'"
+        exit 459
+    }
+}
+if `has_dataset' {
+    quietly checksum "`ready_dataset_zip'"
+    local dataset_zip_size = r(filelen)
+    local dataset_zip_checksum = r(checksum)
+    quietly checksum "`public_dataset_zip'"
+    if r(filelen) != `dataset_zip_size' | r(checksum) != `dataset_zip_checksum' {
+        display as error "Published public dataset ZIP verification failed: `public_dataset_zip'"
+        exit 459
+    }
+    quietly checksum "`site_dataset_zip'"
+    if r(filelen) != `dataset_zip_size' | r(checksum) != `dataset_zip_checksum' {
+        display as error "Published website dataset ZIP verification failed: `site_dataset_zip'"
+        exit 459
+    }
+
+    quietly checksum "`ready_dataset_catalogue'"
+    local dataset_catalogue_size = r(filelen)
+    local dataset_catalogue_checksum = r(checksum)
+    quietly checksum "`public_dataset_catalogue'"
+    if r(filelen) != `dataset_catalogue_size' | r(checksum) != `dataset_catalogue_checksum' {
+        display as error "Published public dataset catalogue verification failed: `public_dataset_catalogue'"
+        exit 459
+    }
+    quietly checksum "`site_dataset_catalogue'"
+    if r(filelen) != `dataset_catalogue_size' | r(checksum) != `dataset_catalogue_checksum' {
+        display as error "Published website dataset catalogue verification failed: `site_dataset_catalogue'"
         exit 459
     }
 }

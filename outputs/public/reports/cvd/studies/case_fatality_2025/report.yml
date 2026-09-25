@@ -1,0 +1,20 @@
+schema: bnr_report_metadata_v1
+report_id: bnr_cvd_oneoff_case_fatality_2025_v1
+report_type: one_off_cvd_report
+study_id: case_fatality_2025
+report_version: v1
+public_name: bnr_cvd_oneoff_case_fatality_2025
+report_title: "Thirty-day case fatality after cardiovascular events"
+report_description: "BNR case-fatality results for 2010-2025."
+report_date: 2026-09-25
+source_pdf_size: 1310392
+source_pdf_checksum: 3814860903
+pdf_file: bnr_cvd_oneoff_case_fatality_2025.pdf
+landing_page: index.qmd
+dataset_package_id: bnr_cvd_oneoff_case_fatality_2025_data
+dataset_zip_file: bnr_cvd_oneoff_case_fatality_2025_data.zip
+dataset_zip_size: 18069
+dataset_zip_checksum: 911484035
+dataset_catalogue_file: bnr_cvd_oneoff_case_fatality_2025_data.yml
+built_date: 2026-09-25
+built_time: 15:16:56

@@ -282,7 +282,7 @@ do "$BNR_STATA/monthly/bnr_step2_cvd_confidential.do" 2026 1
 do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" 2026 1 count replace
 do "$BNR_STATA/monthly/bnr_step4_metrics.do" 2026 1 2026 1 replace
 do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 prepare replace
-do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 approve "FULL NAME" "BNR Analyst" replace
+do "$BNR_STATA/monthly/bnr_step5_review.do" 2026 1 approve "Ian Hambleton" "BNR Analyst" replace
 do "$BNR_STATA/monthly/bnr_step6_publish.do" 2026 1 replace
 
 * =============================================================================

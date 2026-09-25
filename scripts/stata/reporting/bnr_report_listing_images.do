@@ -1,4 +1,5 @@
 * Shared, presentation-only selector for CVD report listing thumbnails.
+* Version 0.2.1 (25 September 2026)
 * The editable site/assets/images/listings/listing-images.csv catalogue is the
 * source of the image pool. A rebuild keeps its existing image; a new report
 * uses the least recently used active image.
@@ -57,15 +58,21 @@ program define bnr_report_listing_images, rclass
                 file open `page_handle' using "`page'", read text
                 file read `page_handle' line
                 while r(eof) == 0 & `delimiters' < 2 {
-                    local clean = strtrim("`line'")
-                    local clean = subinstr("`clean'", char(34), "", .)
-                    if "`clean'" == "---" local delimiters = `delimiters' + 1
-                    if `delimiters' == 1 & substr("`clean'", 1, 7) == "image: " {
-                        local page_image = subinstr(substr("`clean'", 8, .), ///
+                    * Front matter may contain quoted prose (for example, a
+                    * description). Keep every line as literal macro text:
+                    * evaluating it as a Stata string expression can turn the
+                    * prose following its first quote into an invalid name.
+                    local clean `"`macval(line)'"'
+                    if `"`clean'"' == "---" local delimiters = `delimiters' + 1
+                    if `delimiters' == 1 & substr(`"`clean'"', 1, 7) == "image: " {
+                        local page_image = subinstr(substr(`"`clean'"', 8, .), ///
+                            char(34), "", .)
+                        local page_image = subinstr("`page_image'", ///
                             "/assets/images/listings/", "", .)
                     }
-                    if `delimiters' == 1 & substr("`clean'", 1, 6) == "date: " {
-                        local page_date = substr("`clean'", 7, 10)
+                    if `delimiters' == 1 & substr(`"`clean'"', 1, 6) == "date: " {
+                        local page_date = subinstr(substr(`"`clean'"', 7, 10), ///
+                            char(34), "", .)
                     }
                     file read `page_handle' line
                 }

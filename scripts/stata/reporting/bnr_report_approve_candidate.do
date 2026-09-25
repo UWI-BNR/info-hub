@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_approve_candidate.do
-VERSION: 1.1.1 (15 September 2026)
+VERSION: 1.2.1 (25 September 2026)
 PURPOSE: Create an approved, manifested report payload in public_ready.
 
 This is a shared mechanical helper. Report-specific Step 2 wrappers supply the
@@ -9,6 +9,13 @@ The candidate itself is never edited. approval.yml is written last.
 
 CHANGE 1.1.1:
   Restrict report approval to authorised BNR Lead and BNR Analyst roles.
+
+CHANGE 1.2.0:
+  Optionally approve one associated dataset ZIP and catalogue record as part
+  of the same report payload.
+
+CHANGE 1.2.1:
+  Keep internal dataset-catalogue checksum locals within Stata's name limit.
 
 CHANGE 1.1.0:
   Optionally approve one companion PDF and its landing QMD in the same fixed
@@ -22,7 +29,8 @@ set more off
 
 args candidate_dir ready_dir report_id report_type period_key period_value ///
     report_version approver_name approver_role confirm_candidate ///
-    confirm_disclosure confirm_ready companion_pdf_name companion_qmd_name
+    confirm_disclosure confirm_ready companion_pdf_name companion_qmd_name ///
+    dataset_zip_name dataset_catalogue_name
 
 if "`candidate_dir'" == "" | "`ready_dir'" == "" | "`report_id'" == "" | ///
         "`report_type'" == "" | "`period_key'" == "" | ///
@@ -52,7 +60,29 @@ if `has_companion' {
     }
     local companion_id = substr("`companion_pdf_name'", 1, strlen("`companion_pdf_name'") - 4)
 }
-local required_payload_count = 3 + (2 * `has_companion')
+
+if ("`dataset_zip_name'" == "") != ("`dataset_catalogue_name'" == "") {
+    display as error "Dataset ZIP and catalogue filenames must be supplied together."
+    exit 198
+}
+local has_dataset = ("`dataset_zip_name'" != "")
+if `has_dataset' {
+    foreach dataset_name in dataset_zip_name dataset_catalogue_name {
+        if strpos("``dataset_name''", "/") | strpos("``dataset_name''", "\") | ///
+                strpos("``dataset_name''", "..") | strpos("``dataset_name''", ",") {
+            display as error "Dataset payload names must be safe filenames: ``dataset_name''"
+            exit 198
+        }
+    }
+    if lower(substr("`dataset_zip_name'", strlen("`dataset_zip_name'") - 3, 4)) != ".zip" | ///
+            lower(substr("`dataset_catalogue_name'", strlen("`dataset_catalogue_name'") - 3, 4)) != ".yml" {
+        display as error "Dataset filenames must end in .zip and .yml."
+        exit 198
+    }
+    local dataset_package_id = substr("`dataset_zip_name'", 1, ///
+        strlen("`dataset_zip_name'") - 4)
+}
+local required_payload_count = 3 + (2 * `has_companion') + (2 * `has_dataset')
 
 local version_num = real("`report_version'")
 if missing(`version_num') | `version_num' != floor(`version_num') | ///
@@ -102,6 +132,10 @@ local candidate_companion_pdf "`candidate_dir'/`companion_pdf_name'"
 local candidate_companion_qmd "`candidate_dir'/`companion_qmd_name'"
 local ready_companion_pdf "`ready_dir'/`companion_pdf_name'"
 local ready_companion_qmd "`ready_dir'/`companion_qmd_name'"
+local candidate_dataset_zip "`candidate_dir'/`dataset_zip_name'"
+local candidate_dataset_catalogue "`candidate_dir'/`dataset_catalogue_name'"
+local ready_dataset_zip "`ready_dir'/`dataset_zip_name'"
+local ready_dataset_catalogue "`ready_dir'/`dataset_catalogue_name'"
 local manifest "`ready_dir'/public_manifest.csv"
 local approval "`ready_dir'/approval.yml"
 
@@ -123,6 +157,16 @@ if `has_companion' {
         }
     }
 }
+if `has_dataset' {
+    foreach required_file in candidate_dataset_zip candidate_dataset_catalogue {
+        capture confirm file "``required_file''"
+        if _rc {
+            display as error "Required dataset candidate file is missing: ``required_file''"
+            display as error "Rebuild the complete report candidate before approval."
+            exit 601
+        }
+    }
+}
 
 capture confirm file "`approval'"
 if !_rc {
@@ -137,6 +181,9 @@ local metadata_period_ok 0
 local metadata_version_ok 0
 local metadata_companion_id_ok = !`has_companion'
 local metadata_companion_qmd_ok = !`has_companion'
+local metadata_dataset_zip_ok = !`has_dataset'
+local metadata_dataset_catalogue_ok = !`has_dataset'
+local metadata_dataset_id_ok = !`has_dataset'
 tempname metadata_handle
 file open `metadata_handle' using "`candidate_metadata'", read text
 file read `metadata_handle' line
@@ -149,14 +196,43 @@ while r(eof) == 0 {
     if "`line'" == "report_version: v`version_num'" local metadata_version_ok 1
     if "`line'" == "public_health_update_id: `companion_id'" local metadata_companion_id_ok 1
     if "`line'" == "public_health_update_landing_page: `companion_qmd_name'" local metadata_companion_qmd_ok 1
+    if "`line'" == "dataset_zip_file: `dataset_zip_name'" local metadata_dataset_zip_ok 1
+    if "`line'" == "dataset_catalogue_file: `dataset_catalogue_name'" local metadata_dataset_catalogue_ok 1
+    if "`line'" == "dataset_package_id: `dataset_package_id'" local metadata_dataset_id_ok 1
     file read `metadata_handle' line
 }
 file close `metadata_handle'
 if !`metadata_report_ok' | !`metadata_type_ok' | !`metadata_period_ok' | ///
         !`metadata_version_ok' | !`metadata_companion_id_ok' | ///
-        !`metadata_companion_qmd_ok' {
+        !`metadata_companion_qmd_ok' | !`metadata_dataset_zip_ok' | ///
+        !`metadata_dataset_catalogue_ok' | !`metadata_dataset_id_ok' {
     display as error "Candidate report.yml does not match the selected report."
     exit 459
+}
+
+if `has_dataset' {
+    local catalogue_schema_ok 0
+    local catalogue_type_ok 0
+    local catalogue_id_ok 0
+    local catalogue_zip_ok 0
+    tempname catalogue_handle
+    file open `catalogue_handle' using "`candidate_dataset_catalogue'", read text
+    file read `catalogue_handle' line
+    while r(eof) == 0 {
+        local line = strtrim(`"`line'"')
+        local line = subinstr(`"`line'"', char(34), "", .)
+        if "`line'" == "schema: bnr_download_manifest_v1" local catalogue_schema_ok 1
+        if "`line'" == "package_type: report_dataset" local catalogue_type_ok 1
+        if "`line'" == "package_id: `dataset_package_id'" local catalogue_id_ok 1
+        if "`line'" == "file: `dataset_zip_name'" local catalogue_zip_ok 1
+        file read `catalogue_handle' line
+    }
+    file close `catalogue_handle'
+    if !`catalogue_schema_ok' | !`catalogue_type_ok' | ///
+            !`catalogue_id_ok' | !`catalogue_zip_ok' {
+        display as error "Dataset catalogue does not match the selected report package."
+        exit 459
+    }
 }
 
 if `has_companion' {
@@ -183,9 +259,17 @@ if `has_companion' {
 foreach incomplete_file in ready_pdf ready_qmd ready_metadata manifest {
     capture erase "``incomplete_file''"
 }
+if `has_dataset' {
+    capture erase "`ready_dataset_zip'"
+    capture erase "`ready_dataset_catalogue'"
+}
 if `has_companion' {
     capture erase "`ready_companion_pdf'"
     capture erase "`ready_companion_qmd'"
+}
+if `has_dataset' {
+    copy "`candidate_dataset_zip'" "`ready_dataset_zip'", replace
+    copy "`candidate_dataset_catalogue'" "`ready_dataset_catalogue'", replace
 }
 
 copy "`candidate_pdf'" "`ready_pdf'", replace
@@ -194,6 +278,14 @@ copy "`candidate_metadata'" "`ready_metadata'", replace
 if `has_companion' {
     copy "`candidate_companion_pdf'" "`ready_companion_pdf'", replace
     copy "`candidate_companion_qmd'" "`ready_companion_qmd'", replace
+}
+if `has_dataset' {
+    quietly checksum "`ready_dataset_zip'"
+    local ready_dataset_zip_size = r(filelen)
+    local ready_dataset_zip_checksum = r(checksum)
+    quietly checksum "`ready_dataset_catalogue'"
+    local ready_cat_size = r(filelen)
+    local ready_cat_checksum = r(checksum)
 }
 
 foreach payload in ready_pdf ready_qmd ready_metadata {
@@ -208,7 +300,6 @@ if `has_companion' {
         local `payload'_checksum = r(checksum)
     }
 }
-
 tempname manifest_handle
 file open `manifest_handle' using "`manifest'", write text replace
 file write `manifest_handle' "file_path,file_size,checksum" _n
@@ -218,6 +309,10 @@ file write `manifest_handle' "report.yml,`ready_metadata_size',`ready_metadata_c
 if `has_companion' {
     file write `manifest_handle' "`companion_pdf_name',`ready_companion_pdf_size',`ready_companion_pdf_checksum'" _n
     file write `manifest_handle' "`companion_qmd_name',`ready_companion_qmd_size',`ready_companion_qmd_checksum'" _n
+}
+if `has_dataset' {
+    file write `manifest_handle' "`dataset_zip_name',`ready_dataset_zip_size',`ready_dataset_zip_checksum'" _n
+    file write `manifest_handle' "`dataset_catalogue_name',`ready_cat_size',`ready_cat_checksum'" _n
 }
 file close `manifest_handle'
 
