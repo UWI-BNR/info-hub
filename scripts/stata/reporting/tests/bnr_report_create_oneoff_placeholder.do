@@ -1,6 +1,6 @@
 /*******************************************************************************
 DO-FILE: bnr_report_create_oneoff_placeholder.do
-VERSION: 0.2.0 (25 September 2026)
+VERSION: 0.3.0 (27 September 2026)
 PURPOSE: Create harmless PDF and public-data inputs for the one-off publication
          workflow test.
 
@@ -22,7 +22,8 @@ local test_dir "$BNR_STAGING/reporting_test_inputs"
 local test_pdf "`test_dir'/bnr_cvd_oneoff_workflow_test.pdf"
 local test_csv "`test_dir'/bnr_cvd_oneoff_workflow_test.csv"
 local test_dta "`test_dir'/bnr_cvd_oneoff_workflow_test.dta"
-local test_txt "`test_dir'/bnr_cvd_oneoff_workflow_test_metadata.txt"
+local test_yml "`test_dir'/bnr_cvd_oneoff_workflow_test_metadata.yml"
+local test_readme "`test_dir'/bnr_cvd_oneoff_workflow_test_readme.md"
 capture mkdir "`test_dir'"
 quietly mata: st_local("test_dir_exists", strofreal(direxists("`test_dir'")))
 if "`test_dir_exists'" != "1" {
@@ -61,21 +62,28 @@ save "`test_dta'", replace
 export delimited using "`test_csv'", replace
 
 tempname metadata_handle
-file open `metadata_handle' using "`test_txt'", write text replace
-file write `metadata_handle' "BNR one-off workflow engineering test data" _n
-file write `metadata_handle' "These values are placeholders and are not surveillance results." _n
+file open `metadata_handle' using "`test_yml'", write text replace
+file write `metadata_handle' "schema: bnr_dataset_metadata_v1" _n
+file write `metadata_handle' "title: BNR one-off workflow engineering test data" _n
+file write `metadata_handle' "status: engineering_placeholder" _n
 file close `metadata_handle'
+tempname readme_handle
+file open `readme_handle' using "`test_readme'", write text replace
+file write `readme_handle' "# BNR one-off workflow engineering test data" _n _n
+file write `readme_handle' "These values are placeholders and are not surveillance results." _n
+file close `readme_handle'
 
 quietly {
 noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ONE-OFF CVD REPORT: PLACEHOLDER INPUT SUMMARY"
 noisily display as text   "  Run status:              Placeholder PDF created"
-noisily display as text   "  Script version:          0.2.0"
+noisily display as text   "  Script version:          0.3.0"
 noisily display as text  `"  Test PDF:                `test_pdf'"'
 noisily display as text  `"  Test CSV:                `test_csv'"'
 noisily display as text  `"  Test DTA:                `test_dta'"'
-noisily display as text  `"  Test metadata:           `test_txt'"'
+noisily display as text  `"  Test metadata YML:       `test_yml'"'
+noisily display as text  `"  Test README:             `test_readme'"'
 noisily display as text   "  Analytical content:      None"
 noisily display as text   "  Next step:               Run one-off report Step 1."
 noisily display as result "============================================================================="

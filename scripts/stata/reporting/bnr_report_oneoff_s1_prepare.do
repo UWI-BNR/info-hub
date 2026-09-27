@@ -1,8 +1,8 @@
 /*******************************************************************************
 DO-FILE: bnr_report_oneoff_s1_prepare.do
-VERSION: 0.2.0 (25 September 2026)
+VERSION: 0.3.2 (27 September 2026)
 PURPOSE: Prepare a private one-off CVD report candidate from a finished PDF,
-         with an optional associated CSV/DTA/TXT public-data package.
+         with an optional associated CSV/DTA public-data package and metadata.
 
 USAGE:
   do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
@@ -17,7 +17,8 @@ USAGE:
       "BNR case-fatality results for 2010-2025." 2026-09-25 "" ///
       "$BNR_STAGING/report_inputs/case_fatality_metrics.csv" ///
       "$BNR_STAGING/report_inputs/case_fatality_metrics.dta" ///
-      "$BNR_STAGING/report_inputs/case_fatality_metadata.txt"
+      "$BNR_STAGING/report_inputs/case_fatality_metadata.yml" ///
+      "$BNR_STAGING/report_inputs/case_fatality_readme.md"
 
 The bespoke analysis and PDF creation happen before this step. This step only
 validates, packages and describes the finished files. It publishes nothing.
@@ -28,7 +29,8 @@ clear all
 set more off
 
 args study_id report_version source_pdf report_title report_description ///
-    report_date option source_csv source_dta source_data_metadata
+    report_date option source_csv source_dta source_data_metadata ///
+    source_data_readme
 
 if "`study_id'" == "" | "`report_version'" == "" | ///
         "`source_pdf'" == "" | "`report_title'" == "" | ///
@@ -43,14 +45,16 @@ if "`option'" != "" & lower("`option'") != "replace" {
 local replace_existing = (lower("`option'") == "replace")
 
 local dataset_arg_count 0
-foreach dataset_arg in source_csv source_dta source_data_metadata {
+foreach dataset_arg in source_csv source_dta source_data_metadata ///
+    source_data_readme {
     if "``dataset_arg''" != "" local ++dataset_arg_count
 }
-if !inlist(`dataset_arg_count',0,3) {
-    display as error "CSV, DTA and TXT metadata must be supplied together."
+if !inlist(`dataset_arg_count',0,3,4) {
+    display as error "CSV, DTA and metadata must be supplied together."
     exit 198
 }
-local has_dataset = (`dataset_arg_count' == 3)
+local has_dataset = inlist(`dataset_arg_count',3,4)
+local has_readme = (`dataset_arg_count' == 4)
 
 if !regexm("`study_id'", "^[a-z][a-z0-9_]*$") {
     display as error "Study ID must use lowercase letters, numbers and underscores."
@@ -69,9 +73,21 @@ if substr(lower("`source_pdf'"), -4, 4) != ".pdf" {
 }
 if `has_dataset' {
     if substr(lower("`source_csv'"), -4, 4) != ".csv" | ///
-            substr(lower("`source_dta'"), -4, 4) != ".dta" | ///
-            substr(lower("`source_data_metadata'"), -4, 4) != ".txt" {
-        display as error "Associated data inputs must be CSV, DTA and TXT files."
+            substr(lower("`source_dta'"), -4, 4) != ".dta" {
+        display as error "Associated data inputs must include CSV and DTA files."
+        exit 198
+    }
+    local metadata_extension = lower(substr("`source_data_metadata'", -4, 4))
+    if !inlist("`metadata_extension'", ".txt", ".yml") {
+        display as error "Dataset metadata must be a TXT or YML file."
+        exit 198
+    }
+    if `has_readme' & substr(lower("`source_data_readme'"), -3, 3) != ".md" {
+        display as error "Dataset README must be a Markdown (.md) file."
+        exit 198
+    }
+    if `has_readme' & "`metadata_extension'" != ".yml" {
+        display as error "A dataset README requires structured YML metadata."
         exit 198
     }
 }
@@ -119,7 +135,9 @@ if `source_pdf_size' < 1 {
     exit 459
 }
 if `has_dataset' {
-    foreach source_file in source_csv source_dta source_data_metadata {
+    local dataset_sources "source_csv source_dta source_data_metadata"
+    if `has_readme' local dataset_sources "`dataset_sources' source_data_readme"
+    foreach source_file of local dataset_sources {
         capture confirm file "``source_file''"
         if _rc {
             display as error "Associated public-data file not found: ``source_file''"
@@ -128,6 +146,56 @@ if `has_dataset' {
         quietly checksum "``source_file''"
         if r(filelen) < 1 {
             display as error "Associated public-data file is empty: ``source_file''"
+            exit 459
+        }
+    }
+
+    * A YAML file can be syntactically readable while its descriptive block
+    * values are blank. Check the standard dataset-metadata structure before
+    * creating or replacing any candidate files. This is a packaging check;
+    * it does not interpret or alter analytical values.
+    if "`metadata_extension'" == ".yml" {
+        local yml_schema_ok 0
+        local yml_methods_ok 0
+        local yml_variables_ok 0
+        local yml_description_count 0
+        local yml_block_count 0
+        local yml_empty_blocks 0
+        local yml_line_number 0
+        tempname yml_check
+        file open `yml_check' using "`source_data_metadata'", read text
+        file read `yml_check' yml_line
+        while r(eof) == 0 {
+            local ++yml_line_number
+            local yml_trim = strtrim(`"`yml_line'"')
+            if "`yml_trim'" == "schema: bnr_dataset_metadata_v1" ///
+                local yml_schema_ok 1
+            if "`yml_trim'" == "methods:" local yml_methods_ok 1
+            if "`yml_trim'" == "variables:" local yml_variables_ok 1
+            if "`yml_trim'" == "description: |-" ///
+                local ++yml_description_count
+
+            local yml_length = strlen(`"`yml_trim'"')
+            if `yml_length' >= 2 {
+                if substr(`"`yml_trim'"',`yml_length'-1,2) == "|-" {
+                    local ++yml_block_count
+                    file read `yml_check' yml_value
+                    local ++yml_line_number
+                    if r(eof) != 0 local ++yml_empty_blocks
+                    else if strtrim(`"`yml_value'"') == "" ///
+                        local ++yml_empty_blocks
+                }
+            }
+            file read `yml_check' yml_line
+        }
+        file close `yml_check'
+
+        if !`yml_schema_ok' | !`yml_methods_ok' | !`yml_variables_ok' | ///
+                `yml_description_count' == 0 | `yml_block_count' == 0 | ///
+                `yml_empty_blocks' > 0 {
+            display as error "Dataset YAML metadata is incomplete."
+            display as error "Required methods and variable descriptions must not be blank."
+            display as error "No candidate files were created or replaced."
             exit 459
         }
     }
@@ -147,6 +215,8 @@ local candidate_metadata "`candidate_dir'/report.yml"
 local package_source "`package_dir'/package_source"
 local package_data "`package_source'/data"
 local package_metadata "`package_source'/metadata"
+local zip_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
+local zip_helper "$BNR_REPO/scripts/python/create_release_data_zip.py"
 local dataset_zip_name "`public_name'_data.zip"
 local dataset_catalogue_name "`public_name'_data.yml"
 local candidate_dataset_zip "`candidate_dir'/`dataset_zip_name'"
@@ -222,12 +292,19 @@ if r(filelen) != `source_pdf_size' | r(checksum) != `source_pdf_checksum' {
 if `has_dataset' {
     local package_csv "data/`study_id'_metrics.csv"
     local package_dta "data/`study_id'_metrics.dta"
-    local package_txt "metadata/`study_id'_metadata.txt"
+    local package_meta "metadata/`study_id'_metadata`metadata_extension'"
+    local package_files "`package_csv' `package_dta' `package_meta'"
+    if `has_readme' {
+        local package_readme "metadata/README.md"
+        local package_files "`package_files' `package_readme'"
+    }
     copy "`source_csv'" "`package_source'/`package_csv'", replace
     copy "`source_dta'" "`package_source'/`package_dta'", replace
-    copy "`source_data_metadata'" "`package_source'/`package_txt'", replace
+    copy "`source_data_metadata'" "`package_source'/`package_meta'", replace
+    if `has_readme' copy "`source_data_readme'" ///
+        "`package_source'/`package_readme'", replace
 
-    foreach source_file in source_csv source_dta source_data_metadata {
+    foreach source_file of local dataset_sources {
         quietly checksum "``source_file''"
         local `source_file'_size = r(filelen)
         local `source_file'_checksum = r(checksum)
@@ -238,25 +315,39 @@ if `has_dataset' {
     quietly checksum "`package_source'/`package_dta'"
     assert r(filelen) == `source_dta_size'
     assert r(checksum) == `source_dta_checksum'
-    quietly checksum "`package_source'/`package_txt'"
+    quietly checksum "`package_source'/`package_meta'"
     assert r(filelen) == `source_data_metadata_size'
     assert r(checksum) == `source_data_metadata_checksum'
+    if `has_readme' {
+        quietly checksum "`package_source'/`package_readme'"
+        assert r(filelen) == `source_data_readme_size'
+        assert r(checksum) == `source_data_readme_checksum'
+    }
 
-    local original_folder "`c(pwd)'"
-    cd "`package_source'"
-    capture quietly zipfile "`package_csv'" "`package_dta'" ///
-        "`package_txt'", saving("`candidate_dataset_zip'", replace)
+    foreach required_zip_file in zip_python zip_helper {
+        capture confirm file "``required_zip_file''"
+        if _rc {
+            capture log close bnr_report_oneoff_s1
+            display as error "Required portable-ZIP helper file is missing: ``required_zip_file''"
+            exit 601
+        }
+    }
+    local zip_command `""`zip_python'" "`zip_helper'" --output "`candidate_dataset_zip'""'
+    local zip_command `"`zip_command' --entry "`package_source'/`package_csv'" "`package_csv'""'
+    local zip_command `"`zip_command' --entry "`package_source'/`package_dta'" "`package_dta'""'
+    local zip_command `"`zip_command' --entry "`package_source'/`package_meta'" "`package_meta'""'
+    if `has_readme' local zip_command `"`zip_command' --entry "`package_source'/`package_readme'" "`package_readme'""'
+    capture noisily shell `zip_command'
     local zip_rc = _rc
-    if !`zip_rc' local zip_files = r(archived)
-    cd "`original_folder'"
     if `zip_rc' {
         capture log close bnr_report_oneoff_s1
         display as error "The associated public-data ZIP could not be created."
         exit `zip_rc'
     }
-    if `zip_files' != 3 {
+    capture confirm file "`candidate_dataset_zip'"
+    if _rc {
         capture log close bnr_report_oneoff_s1
-        display as error "The associated public-data ZIP must contain exactly three files."
+        display as error "The portable-ZIP helper did not write: `candidate_dataset_zip'"
         exit 459
     }
     quietly checksum "`candidate_dataset_zip'"
@@ -353,7 +444,7 @@ if `has_dataset' {
     file write `catalogue_handle' "    file: `dataset_zip_name'" _n
     file write `catalogue_handle' "    href: files/reports/cvd/studies/`study_id'/`dataset_zip_name'" _n
     file write `catalogue_handle' "    description: |-" _n
-    file write `catalogue_handle' "      CSV and labelled Stata datasets with companion metadata." _n
+    file write `catalogue_handle' "      CSV and labelled Stata datasets with structured metadata and a reader guide." _n
     file write `catalogue_handle' "    include_in_listing: true" _n
     file write `catalogue_handle' "    sort_order: 40" _n
     file close `catalogue_handle'
@@ -364,7 +455,7 @@ noisily display as result ""
 noisily display as result "============================================================================="
 noisily display as result "ONE-OFF CVD REPORT STEP 1: OPERATIONAL RUN SUMMARY"
 noisily display as text   "  Run status:              Candidate prepared"
-noisily display as text   "  Script version:          0.2.0"
+noisily display as text   "  Script version:          0.3.2"
 noisily display as text   "  Report identifier:       `report_id'"
 noisily display as text  `"  Source PDF:              `source_pdf'"'
 noisily display as text  `"  Candidate package:       `candidate_dir'"'

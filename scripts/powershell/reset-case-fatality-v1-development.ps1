@@ -2,6 +2,9 @@
 .SYNOPSIS
     Resets generated case-fatality report v1 development artefacts.
 
+.NOTES
+    Version 1.1.0 (27 September 2026)
+
 .DESCRIPTION
     Default mode is audit only: it lists the exact private, public and website
     targets and verifies that any public artefacts identify the expected v1
@@ -69,7 +72,11 @@ function Test-ExpectedYamlValue {
         [Parameter(Mandatory)] [string]$Path,
         [Parameter(Mandatory)] [string]$Key,
         [Parameter(Mandatory)] [string]$ExpectedValue,
-        [Parameter(Mandatory)] [AllowEmptyCollection()] [System.Collections.Generic.List[string]]$Problems
+        # This list is intentionally empty at the start of a successful audit.
+        # Do not make it Mandatory: PowerShell otherwise attempts to bind an
+        # empty generic list as an empty argument collection before this
+        # function can add any diagnostic text.
+        [System.Collections.Generic.List[string]]$Problems
     )
 
     if (Test-Path -LiteralPath $Path -PathType Leaf) {
@@ -91,7 +98,8 @@ function Test-ExpectedQmdLine {
     param(
         [Parameter(Mandatory)] [string]$Path,
         [Parameter(Mandatory)] [string]$ExpectedLine,
-        [Parameter(Mandatory)] [AllowEmptyCollection()] [System.Collections.Generic.List[string]]$Problems
+        # See Test-ExpectedYamlValue: an empty list is valid at audit start.
+        [System.Collections.Generic.List[string]]$Problems
     )
 
     if (Test-Path -LiteralPath $Path -PathType Leaf) {

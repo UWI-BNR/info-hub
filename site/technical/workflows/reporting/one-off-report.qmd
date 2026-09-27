@@ -10,7 +10,7 @@ Technical Manual
 
 ## What this page does
 
-The one-off report workflow packages a completed analyst-produced PDF, creates its public landing page, records approval and publishes the exact approved files. A report may also include one associated public dataset package containing CSV, labelled Stata DTA and TXT metadata files.
+The one-off report workflow packages a completed analyst-produced PDF, creates its public landing page, records approval and publishes the exact approved files. A report may also include one associated public dataset package containing CSV, labelled Stata DTA, structured YAML metadata and a reader README.
 
 The workflow does not run, standardise or verify the analysis method. Complete and retain the analysis code, sources, reproducibility record and review evidence in approved private locations before starting.
 
@@ -27,7 +27,7 @@ The workflow does not run, standardise or verify the analysis method. Complete a
 - Choose a stable study ID containing lowercase letters, numbers and underscores and beginning with a letter—for example, `case_fatality_2025`.
 - Choose a positive whole-number report version and an ISO `YYYY-MM-DD` report date.
 - Prepare a non-empty final PDF in an approved private location.
-- If the report has an associated public dataset, prepare all three public inputs: CSV, labelled DTA and TXT metadata. Suppression must already have been applied and explained in those files.
+- If the report has an associated public dataset, prepare all four public inputs: CSV, labelled DTA, YAML metadata and a Markdown README. Suppression must already have been applied and explained in those files.
 - Prepare the public title and short description. Neither may contain a double quotation mark.
 - Complete and record the report’s analytical and disclosure review. The optional screening utility below supports review but does not replace it.
 
@@ -38,7 +38,7 @@ In the file patterns below, `STUDY_ID` is the chosen study ID, `REVIEW_ID` is th
 | File | What the workflow uses or checks |
 |---|---|
 | Finished private report PDF | Step 1 checks that it exists and is non-empty, then copies it unchanged into the private proposed package. |
-| Optional associated CSV, DTA and TXT metadata | Supply all three or none. Step 1 checks that each exists and is non-empty, then creates one folder-aware ZIP containing `data/` and `metadata/` folders. |
+| Optional associated CSV, DTA, YAML metadata and README | Supply all four or none. Step 1 checks that each exists and is non-empty, then creates one portable folder-aware ZIP containing `data/` and `metadata/` folders. |
 | Optional private Stata count dataset | The disclosure-screen utility requires `output_id`, `cell_id` and numeric `cell_count`. It is not read by Steps 1–3. |
 
 :::
@@ -79,11 +79,11 @@ Step 1 always creates three private proposed report files under `$BNR_STAGING/re
 | `index.qmd` | Generated proposed public landing page. |
 | `report.yml` | Generated report identity, study ID, version, date, public filename and PDF checksum—a value used to detect a changed file. |
 
-When all three associated-data inputs are supplied, Step 1 also creates:
+When all four associated-data inputs are supplied, Step 1 also creates:
 
 | File | Purpose |
 |---|---|
-| `bnr_cvd_oneoff_STUDY_ID_data.zip` | Folder-aware ZIP containing the public CSV and DTA under `data/` and the TXT metadata under `metadata/`. |
+| `bnr_cvd_oneoff_STUDY_ID_data.zip` | Portable folder-aware ZIP containing CSV and DTA under `data/`, and YAML metadata plus README under `metadata/`. |
 | `bnr_cvd_oneoff_STUDY_ID_data.yml` | Catalogue record used to add the ZIP to the central downloads page. |
 
 Step 2 copies the three or five unchanged files into `public_ready/` and adds:
@@ -135,7 +135,7 @@ This utility is an early-warning screen, not disclosure control. It flags intege
 ## Step 1: prepare and review the proposed report
 
 1. In Stata, choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**.
-2. Enter the study ID, report version, report date, finished PDF path, public title and description. If applicable, also enter all three associated-data paths. Leave replacement unticked for the first build and select **Prepare candidate**.
+2. Enter the study ID, report version, report date, finished PDF path, public title and description. If applicable, also enter all four associated-data paths. Leave replacement unticked for the first build and select **Prepare candidate**.
 3. Alternatively, enter the complete routine command in the **Stata command window**:
 
    ```stata
@@ -152,7 +152,8 @@ This utility is an early-warning screen, not disclosure control. It flags intege
        "Public report title" "Public description" 2026-09-17 "" ///
        "C:\path\case_fatality_metrics.csv" ///
        "C:\path\case_fatality_metrics.dta" ///
-       "C:\path\case_fatality_metadata.txt"
+       "C:\path\case_fatality_metadata.yml" ///
+       "C:\path\case_fatality_readme.md"
    ```
 
 4. To rebuild the same unapproved version deliberately, enter the complete replacement command:
