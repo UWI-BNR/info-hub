@@ -22,6 +22,6 @@ downloads:
     file: bnr_cvd_oneoff_case_fatality_2025_data.zip
     href: files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip
     description: |-
-      CSV and labelled Stata datasets with companion metadata.
+      CSV and labelled Stata datasets with structured metadata and a reader guide.
     include_in_listing: true
     sort_order: 40

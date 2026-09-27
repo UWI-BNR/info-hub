@@ -126,8 +126,9 @@ not {cmd:release}. Confirm that the matching candidate public row has blank
 counts, estimate and confidence limits. This file must never be published.
 
 {p 4 8 2}
-5. Compare the candidate CSV and DTA, read the metadata TXT, and inspect every
-page of the PDF before starting the separate one-off publication workflow.
+5. Compare the candidate CSV and DTA, read the YAML metadata and README, and
+inspect every page of the PDF before starting the separate one-off publication
+workflow.
 
 {title:Candidate public data}
 
@@ -143,8 +144,12 @@ Stata labels, formats and case-fatality-specific {cmd:notes}. Source-dataset
 notes and characteristics are deliberately removed before this file is saved;
 
 {p 8 12 2}
-{cmd:case_fatality_metadata_candidate.txt} - plain-text definitions matching
-the DTA metadata;
+{cmd:case_fatality_metadata_candidate.yml} - structured dataset metadata and
+complete variable dictionary matching the DTA metadata;
+
+{p 8 12 2}
+{cmd:case_fatality_readme_candidate.md} - concise reader guide explaining the
+files, primary and secondary measures, interpretation and protected values;
 
 {p 8 12 2}
 {cmd:bnr_cvd_case_fatality_2010_2025.pdf} - finished one-off report candidate.

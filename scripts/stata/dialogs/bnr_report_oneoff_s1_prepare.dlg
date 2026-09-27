@@ -1,5 +1,5 @@
 *! BNR one-off CVD report Step 1: prepare candidate
-*! version 0.2.0, 25 September 2026
+*! version 0.3.0, 27 September 2026
 VERSION 19.0
 POSITION . . 620 610
 
@@ -23,14 +23,16 @@ BEGIN
   EDIT ed_title 140 316 440 ., nomemory error("Report title")
   TEXT tx_description 30 359 100 ., label("Description:")
   EDIT ed_description 140 356 440 ., nomemory error("Report description")
-  GROUPBOX gb_data 15 410 590 115, label("Optional associated public dataset - supply all three")
+  GROUPBOX gb_data 15 410 590 150, label("Optional associated public dataset - supply CSV, DTA, YML and README")
   TEXT tx_csv 30 438 100 ., label("CSV path:")
   EDIT ed_csv 140 435 440 ., nomemory
   TEXT tx_dta 30 473 100 ., label("DTA path:")
   EDIT ed_dta 140 470 440 ., nomemory
-  TEXT tx_metadata 30 508 100 ., label("Metadata TXT:")
+  TEXT tx_metadata 30 508 100 ., label("Metadata YML:")
   EDIT ed_metadata 140 505 440 ., nomemory
-  CHECKBOX ck_replace 30 550 540 ., default(0) nomemory label("Authorise replacement")
+  TEXT tx_readme 30 543 100 ., label("README MD:")
+  EDIT ed_readme 140 540 440 ., nomemory
+  CHECKBOX ck_replace 30 580 540 ., default(0) nomemory label("Authorise replacement")
 END
 
 OK ok1, label("Run Step 1")
@@ -47,14 +49,22 @@ BEGIN
   if main.ed_csv {
     require main.ed_dta
     require main.ed_metadata
+    require main.ed_readme
   }
   if main.ed_dta {
     require main.ed_csv
     require main.ed_metadata
+    require main.ed_readme
   }
   if main.ed_metadata {
     require main.ed_csv
     require main.ed_dta
+    require main.ed_readme
+  }
+  if main.ed_readme {
+    require main.ed_csv
+    require main.ed_dta
+    require main.ed_metadata
   }
   put "do $BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do "
   put main.ed_study
@@ -94,6 +104,10 @@ BEGIN
     put " "
     put `"""'
     put main.ed_metadata
+    put `"""'
+    put " "
+    put `"""'
+    put main.ed_readme
     put `"""'
   }
   else {

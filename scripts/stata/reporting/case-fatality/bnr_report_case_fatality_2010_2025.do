@@ -1,6 +1,6 @@
 /*******************************************************************************
 BNR CASE FATALITY, 2010-2025 — PRIVATE STUDY FILE
-Version: 0.7.6 (25 September 2026)
+Version: 0.7.10 (27 September 2026)
 
 CURRENT STAGE: candidate metrics and disclosure-controlled public-data review.
 The primary outcome is death within 30 days identified by either deterministic
@@ -47,6 +47,8 @@ local candidate_root "`study_root'/candidate"
 local figure_root "`candidate_root'/figures"
 local report_pdf "`candidate_root'/bnr_cvd_case_fatality_2010_2025.pdf"
 local report_body_pdf "`candidate_root'/bnr_cvd_case_fatality_2010_2025_body.pdf"
+local candidate_data_yml "`candidate_root'/case_fatality_metadata_candidate.yml"
+local candidate_readme "`candidate_root'/case_fatality_readme_candidate.md"
 local pdf_helper "$BNR_REPO/scripts/python/stamp_annual_report_pdf.py"
 local pdf_python "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 local pdf_logo "$BNR_REPO/site/assets/images/uwi-crestonly-20p.png"
@@ -1478,8 +1480,10 @@ replace ci_upper_pct = round(ci_upper_pct,.01)
 format events deaths %12.0f
 format estimate_pct ci_lower_pct ci_upper_pct %6.2f
 
-* Define the public metadata once. The same text is written into the Stata
-* dataset notes and the companion TXT file so the two formats cannot drift.
+* Define public metadata once. The same core statements are written into the
+* Stata notes, structured YAML and reader-facing README so the three formats
+* cannot drift. The YAML is the formal data dictionary; the README is a short
+* guide for people opening the public ZIP for the first time.
 local meta_inputs = "Inputs: joined identifiable CVD event release 2026-01 and all-deaths mortality release `mortality_release'. Death follow-up ends 30 January 2026, providing 30 complete days for events through 31 December 2025."
 local meta_primary = "Primary measure: all-cause death within 30 days of the first event of each condition in each calendar year. All CVD pools the Heart and Stroke condition-specific index events. Deaths are identified by deterministic mortality linkage or death recorded on the index hospital event record within 30 days."
 local meta_secondary = "Secondary measures: deterministic linked all-cause death within 30 days; and death recorded on the index hospital event record within 30 days. Secondary rows are condition-specific and use four pre-specified reporting eras. They are included in the dataset but are not presented in the initial report PDF."
@@ -1521,7 +1525,7 @@ export delimited using ///
 clear
 import delimited using ///
     "`candidate_root'/case_fatality_metrics_candidate.csv", ///
-    varnames(1) clear
+    varnames(1) asdouble clear
 format events deaths %12.0f
 format estimate_pct ci_lower_pct ci_upper_pct %6.2f
 sort measure_id standardisation period_start event_type sex_group
@@ -1545,74 +1549,153 @@ label variable ci_lower_pct "`vd_ci_lower_pct'"
 label variable ci_upper_pct "`vd_ci_upper_pct'"
 label variable release_status "`vd_release_status'"
 label variable quality_flag "`vd_quality_flag'"
-notes measure_id: `"`vd_measure_id'"'
-notes standardisation: `"`vd_standardisation'"'
-notes time_basis: `"`vd_time_basis'"'
-notes period_basis: `"`vd_period_basis'"'
-notes era_name: `"`vd_era_name'"'
-notes era_note: `"`vd_era_note'"'
-notes period_label: `"`vd_period_label'"'
-notes period_start: `"`vd_period_start'"'
-notes period_end: `"`vd_period_end'"'
-notes event_type: `"`vd_event_type'"'
-notes sex_group: `"`vd_sex_group'"'
-notes events: `"`vd_events'"'
-notes deaths: `"`vd_deaths'"'
-notes estimate_pct: `"`vd_estimate_pct'"'
-notes ci_lower_pct: `"`vd_ci_lower_pct'"'
-notes ci_upper_pct: `"`vd_ci_upper_pct'"'
-notes release_status: `"`vd_release_status'"'
-notes quality_flag: `"`vd_quality_flag'"'
-notes _dta: `"`meta_inputs'"'
-notes _dta: `"`meta_primary'"'
-notes _dta: `"`meta_secondary'"'
-notes _dta: `"`meta_eras'"'
-notes _dta: `"`meta_cohorts'"'
-notes _dta: `"`meta_uncertainty'"'
-notes _dta: `"`meta_age'"'
-notes _dta: `"`meta_suppression'"'
-notes _dta: `"`meta_quality'"'
-notes _dta: `"`meta_adjusted_counts'"'
+* The notes command treats its remaining text as the note itself. Expand the
+* local directly so compound-quote delimiter characters are not stored in the
+* public DTA metadata.
+notes measure_id: `vd_measure_id'
+notes standardisation: `vd_standardisation'
+notes time_basis: `vd_time_basis'
+notes period_basis: `vd_period_basis'
+notes era_name: `vd_era_name'
+notes era_note: `vd_era_note'
+notes period_label: `vd_period_label'
+notes period_start: `vd_period_start'
+notes period_end: `vd_period_end'
+notes event_type: `vd_event_type'
+notes sex_group: `vd_sex_group'
+notes events: `vd_events'
+notes deaths: `vd_deaths'
+notes estimate_pct: `vd_estimate_pct'
+notes ci_lower_pct: `vd_ci_lower_pct'
+notes ci_upper_pct: `vd_ci_upper_pct'
+notes release_status: `vd_release_status'
+notes quality_flag: `vd_quality_flag'
+notes _dta: `meta_inputs'
+notes _dta: `meta_primary'
+notes _dta: `meta_secondary'
+notes _dta: `meta_eras'
+notes _dta: `meta_cohorts'
+notes _dta: `meta_uncertainty'
+notes _dta: `meta_age'
+notes _dta: `meta_suppression'
+notes _dta: `meta_quality'
+notes _dta: `meta_adjusted_counts'
 save "`candidate_root'/case_fatality_metrics_candidate.dta", replace
 
-* The companion metadata describes both public data formats. Candidate status
-* is governed by its private location and the separate approval workflow; the
-* metadata itself remains correct when the exact files are later packaged.
-file open meta using "`candidate_root'/case_fatality_metadata_candidate.txt", ///
-    write text replace
-file write meta "BNR case-fatality public dataset metadata" _n
-file write meta "Formats: CSV and Stata DTA. Both contain the same rows and values." _n
-file write meta "Publication is governed by the BNR one-off report approval workflow." _n _n
-file write meta `"`meta_inputs'"' _n
-file write meta `"`meta_primary'"' _n
-file write meta `"`meta_secondary'"' _n
-file write meta `"`meta_eras'"' _n
-file write meta `"`meta_cohorts'"' _n
-file write meta `"`meta_uncertainty'"' _n
-file write meta `"`meta_age'"' _n
-file write meta `"`meta_suppression'"' _n
-file write meta `"`meta_quality'"' _n
-file write meta `"`meta_adjusted_counts'"' _n
-file write meta _n "VARIABLES" _n
-file write meta "measure_id: `vd_measure_id'" _n
-file write meta "standardisation: `vd_standardisation'" _n
-file write meta "time_basis: `vd_time_basis'" _n
-file write meta "period_basis: `vd_period_basis'" _n
-file write meta "era_name: `vd_era_name'" _n
-file write meta "era_note: `vd_era_note'" _n
-file write meta "period_label: `vd_period_label'" _n
-file write meta "period_start: `vd_period_start'" _n
-file write meta "period_end: `vd_period_end'" _n
-file write meta "event_type: `vd_event_type'" _n
-file write meta "sex_group: `vd_sex_group'" _n
-file write meta "events: `vd_events'" _n
-file write meta "deaths: `vd_deaths'" _n
-file write meta "estimate_pct: `vd_estimate_pct'" _n
-file write meta "ci_lower_pct: `vd_ci_lower_pct'" _n
-file write meta "ci_upper_pct: `vd_ci_upper_pct'" _n
-file write meta "release_status: `vd_release_status'" _n
-file write meta "quality_flag: `vd_quality_flag'" _n
-file close meta
+* The formal YAML is included inside the public ZIP. It describes both public
+* data formats and is deliberately separate from the report-download catalogue
+* YML created later by the one-off workflow. Candidate status is governed by
+* its private location and approval workflow, not by this reusable dictionary.
+tempname data_yml
+file open `data_yml' using "`candidate_data_yml'", write text replace
+file write `data_yml' "schema: bnr_dataset_metadata_v1" _n
+file write `data_yml' "dataset_id: cvd_case_fatality_2010_2025" _n
+file write `data_yml' "release_id: bnr_cvd_oneoff_case_fatality_2025_v1" _n
+file write `data_yml' "title: BNR thirty-day case-fatality metrics, 2010-2025" _n
+file write `data_yml' "release_version: v1" _n
+file write `data_yml' "analysis_code_version: 0.7.10" _n
+file write `data_yml' "publisher: Barbados National Registry" _n
+file write `data_yml' "coverage_start: 2010" _n
+file write `data_yml' "coverage_end: 2025" _n
+file write `data_yml' "formats:" _n
+file write `data_yml' "  - CSV" _n
+file write `data_yml' "  - Stata DTA" _n
+file write `data_yml' "files:" _n
+file write `data_yml' "  - path: data/case_fatality_2025_metrics.csv" _n
+file write `data_yml' "    role: portable_tabular_data" _n
+file write `data_yml' "  - path: data/case_fatality_2025_metrics.dta" _n
+file write `data_yml' "    role: labelled_stata_data" _n
+file write `data_yml' "  - path: metadata/case_fatality_2025_metadata.yml" _n
+file write `data_yml' "    role: formal_dataset_metadata" _n
+file write `data_yml' "  - path: metadata/README.md" _n
+file write `data_yml' "    role: reader_guide" _n
+file write `data_yml' "methods:" _n
+foreach method_name in inputs primary secondary eras cohorts uncertainty age suppression quality adjusted_counts {
+    * Resolve the constructed local name in two explicit stages. Direct nested
+    * expansion can silently return an empty string when used inside file write.
+    local method_local "meta_`method_name'"
+    local method_text : copy local `method_local'
+    if strtrim(`"`method_text'"') == "" {
+        file close `data_yml'
+        display as error "Required YAML method text is empty: `method_name'"
+        exit 459
+    }
+    file write `data_yml' "  `method_name': |-" _n
+    file write `data_yml' "    `method_text'" _n
+}
+file write `data_yml' "value_definitions:" _n
+file write `data_yml' "  measure_id:" _n
+file write `data_yml' "    primary_30d: Death identified by either route within 30 days." _n
+file write `data_yml' "    linked_30d: Deterministically linked all-cause death within 30 days." _n
+file write `data_yml' "    in_hospital_30d: Hospital-recorded death within 30 days." _n
+file write `data_yml' "  standardisation:" _n
+file write `data_yml' "    crude: Observed percentage in the eligible index-event cohort." _n
+file write `data_yml' "    age_standardised: Model-based predictive margin using a local age standard." _n
+file write `data_yml' "  time_basis:" _n
+file write `data_yml' "    annual: Single calendar year." _n
+file write `data_yml' "    period: Pre-specified pooled reporting era." _n
+file write `data_yml' "  event_type:" _n
+file write `data_yml' "    CVD: Pooled Heart and Stroke condition-index-event cohort." _n
+file write `data_yml' "    Heart: Heart condition-index-event cohort." _n
+file write `data_yml' "    Stroke: Stroke condition-index-event cohort." _n
+file write `data_yml' "  sex_group:" _n
+file write `data_yml' "    Both: All eligible events, including records with unknown sex." _n
+file write `data_yml' "    Women: Eligible events recorded as women." _n
+file write `data_yml' "    Men: Eligible events recorded as men." _n
+file write `data_yml' "  release_status:" _n
+file write `data_yml' "    release: Public values may be shown." _n
+file write `data_yml' "    suppress_small_count: Values are blank to protect a count from 1 to 5." _n
+file write `data_yml' "    not_release_source_quality: Values are blank because that source period is unsuitable for release." _n
+file write `data_yml' "  quality_flag:" _n
+file write `data_yml' "    2024_abstraction_completeness: Annual primary row with a completeness caution." _n
+file write `data_yml' "    contains_2024_completeness_caution: Period includes 2024." _n
+file write `data_yml' "    extreme_dod_values: Historical hospital death-date quality limitation." _n
+file write `data_yml' "    2023_missing_discharge_status: Historical hospital discharge-status limitation." _n
+file write `data_yml' "variables:" _n
+foreach variable_name in measure_id standardisation time_basis period_basis ///
+    era_name era_note period_label period_start period_end event_type sex_group ///
+    events deaths estimate_pct ci_lower_pct ci_upper_pct release_status quality_flag {
+    local variable_type "string"
+    if inlist("`variable_name'","period_start","period_end","events","deaths") ///
+        local variable_type "integer"
+    if inlist("`variable_name'","estimate_pct","ci_lower_pct","ci_upper_pct") ///
+        local variable_type "number"
+    local description_local "vd_`variable_name'"
+    local variable_description : copy local `description_local'
+    if strtrim(`"`variable_description'"') == "" {
+        file close `data_yml'
+        display as error "Required YAML variable description is empty: `variable_name'"
+        exit 459
+    }
+    file write `data_yml' "  - name: `variable_name'" _n
+    file write `data_yml' "    type: `variable_type'" _n
+    file write `data_yml' "    description: |-" _n
+    file write `data_yml' "      `variable_description'" _n
+}
+file close `data_yml'
+
+* The README is intentionally shorter than the YAML. It helps a non-technical
+* user choose and interpret the public files without duplicating the full data
+* dictionary or the report's public methods section.
+tempname data_readme
+file open `data_readme' using "`candidate_readme'", write text replace
+file write `data_readme' "# BNR case-fatality dataset, 2010-2025" _n _n
+file write `data_readme' "This package accompanies the BNR report *Thirty-day case fatality after cardiovascular events, Barbados, 2010-2025*." _n _n
+file write `data_readme' "## Files" _n _n
+file write `data_readme' "- `data/case_fatality_2025_metrics.csv`: portable data file." _n
+file write `data_readme' "- `data/case_fatality_2025_metrics.dta`: the same data with Stata labels and notes." _n
+file write `data_readme' "- `metadata/case_fatality_2025_metadata.yml`: complete structured metadata and data dictionary." _n _n
+file write `data_readme' "## Which result should I use?" _n _n
+file write `data_readme' "Use `primary_30d` as the main case-fatality measure. It counts an all-cause death within 30 days when it is identified by deterministic linkage to the all-deaths register or by a valid hospital death record." _n _n
+file write `data_readme' "`linked_30d` and `in_hospital_30d` are condition-specific secondary measures. They are supplied for analysis but were not presented in the initial PDF report." _n _n
+file write `data_readme' "## Reading the data" _n _n
+file write `data_readme' "Annual primary results are available for CVD, Heart and Stroke, separately for women, men and both sexes. Secondary results are pooled across pre-specified reporting eras and are provided for Heart and Stroke with both sexes combined." _n _n
+file write `data_readme' "Crude percentages are the main descriptive results. Age-standardised percentages support comparisons over time within the same CVD, Heart or Stroke series; they should not be directly compared between those three series." _n _n
+file write `data_readme' "## Protected and unavailable values" _n _n
+file write `data_readme' "Rows remain in the dataset when values cannot be shown. Check `release_status`: blank values indicate either small-count protection or a source-quality decision, not zero. The `quality_flag` field identifies an applicable data-quality caution." _n _n
+file write `data_readme' "## Important cohort note" _n _n
+file write `data_readme' "All CVD pools the Heart and Stroke condition-specific cohorts. A person can contribute one index event per year to each condition cohort, and one later death can therefore contribute to both series. All CVD is an event total, not a count of distinct people or deaths." _n
+file close `data_readme'
 
 * Linkage-rule counts contain no direct identifiers but remain private QA.
 use `"`matched_deaths'"', clear

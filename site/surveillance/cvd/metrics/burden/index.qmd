@@ -2368,13 +2368,17 @@ isolatedProtectedAnnualBridges = rows => {
               <td>${statisticLabel(d)}</td>
               <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${publishedValue(d)}</td>
               ${selected_indicator === "rates"
-                ? html`
-                    <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${statisticalCiText(d)}</td>
-                    <td>${ciMethodLabel(d.ci_method)}</td>
-                    <td class=${isSafe(d) ? "" : "bnr-suppressed"}>${linkageUncertaintyText(d)}</td>
-                  `
+                ? html`<td class=${isSafe(d) ? "" : "bnr-suppressed"}>${statisticalCiText(d)}</td>`
                 : selected_indicator === "counts"
                 ? html`<td class=${isSafe(d) ? "" : "bnr-suppressed"}>${countLinkageUncertaintyText(d)}</td>`
+                : ""}
+
+              ${selected_indicator === "rates"
+                ? html`<td>${ciMethodLabel(d.ci_method)}</td>`
+                : ""}
+
+              ${selected_indicator === "rates"
+                ? html`<td class=${isSafe(d) ? "" : "bnr-suppressed"}>${linkageUncertaintyText(d)}</td>`
                 : ""}
               <td>${unitLabel(d)}</td>
               <td>${isComplete(d) ? "Complete" : "Incomplete"}</td>

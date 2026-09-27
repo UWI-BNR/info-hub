@@ -29,9 +29,9 @@ mortality_methods_study
 ::: {.callout-note collapse="true" title="Details"}
 | Question | Details |
 |---|---|
-| What this step does | Checks and copies the finished PDF, then creates its public landing page and metadata. If CSV, DTA and TXT metadata are all supplied, it also creates a folder-aware dataset ZIP and download-catalogue record. Nothing is published. |
-| How to run it | Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**. Enter the study ID, version, PDF location, public title, description and report date. For an associated dataset, enter all three data-file paths. |
-| What to check | Read the copied PDF and preview the landing page. Check the title, description, date, study ID, version, links and disclosure safety. When present, inspect all three files inside the ZIP and the catalogue record. |
+| What this step does | Checks and copies the finished PDF, then creates its public landing page and metadata. If CSV, DTA, YAML metadata and README are all supplied, it also creates a portable folder-aware dataset ZIP and download-catalogue record. Nothing is published. |
+| How to run it | Choose **User > BNR > One-off CVD report publication > Step 1: Prepare one-off report candidate**. Enter the study ID, version, PDF location, public title, description and report date. For an associated dataset, enter all four data-file paths. |
+| What to check | Read the copied PDF and preview the landing page. Check the title, description, date, study ID, version, links and disclosure safety. When present, inspect all four files inside the ZIP and the catalogue record. |
 | Files and location | The candidate folder contains three report files, plus a ZIP and catalogue YML when a dataset is supplied. It is under `$BNR_STAGING/reports/cvd/studies/bnr_cvd_oneoff_STUDY_ID_vN/candidate/`. The Step 1 log is under `$BNR_PRIVATE_LOGS/`. |
 | Technical detail | See [Technical: one-off CVD report](../../technical/workflows/reporting/one-off-report.qmd#step-1-prepare-the-candidate). |
 :::

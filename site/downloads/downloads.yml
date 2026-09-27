@@ -98,11 +98,11 @@
   period: "case_fatality_2025"
   artefact_type: "ZIP package"
   format: "ZIP"
-  description: "CSV and labelled Stata datasets with companion metadata."
+  description: "CSV and labelled Stata datasets with structured metadata and a reader guide."
   href: "files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip"
   path: "files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip"
   file: "bnr_cvd_oneoff_case_fatality_2025_data.zip"
   updated: "2026-09-25"
-  size: "17.6 KB"
-  size_bytes: 18069
+  size: "19.3 KB"
+  size_bytes: 19810
   sort_order: 40
