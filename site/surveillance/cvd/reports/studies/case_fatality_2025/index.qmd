@@ -7,8 +7,8 @@ report-id: bnr_cvd_oneoff_case_fatality_2025_v1
 report-type: One-off report
 report-version: v1
 study-id: case_fatality_2025
-image: "/assets/images/listings/listing_shore.webp"
-image-alt: "Caribbean shoreline."
+image: "/assets/images/listings/listing_sugarcane_field.webp"
+image-alt: "Caribbean sugarcane field."
 categories:
   - CVD
   - One-off report

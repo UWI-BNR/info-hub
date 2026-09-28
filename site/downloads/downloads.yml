@@ -124,3 +124,21 @@
   size: "441.5 KB"
   size_bytes: 452124
   sort_order: 20
+- title: "Full public output package"
+  output_type: "Metric dataset"
+  output_title: "Combined CVD metrics"
+  output_id: "cvd_metrics_cvd_2024_03"
+  version: "—"
+  surveillance_area: "CVD"
+  domain: "cvd"
+  period: "2024-03"
+  artefact_type: "ZIP package"
+  format: "ZIP"
+  description: "Release-stamped and current combined CVD datasets with metadata."
+  href: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_03.zip"
+  path: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_03.zip"
+  file: "cvd_metrics_cvd_2024_03.zip"
+  updated: "2026-09-28"
+  size: "441.1 KB"
+  size_bytes: 451733
+  sort_order: 20

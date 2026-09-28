@@ -1,18 +1,18 @@
 ---
-title: "Rolling CVD update: January 2026"
+title: "Rolling CVD update: March 2024"
 description: "Recent hospital-recorded CVD events and CVD deaths from the declared public releases."
-date: "2026-09-05"
+date: "2026-09-28"
 categories:
   - CVD
   - Rolling CVD update
-report-id: "bnr_cvd_update_2026_01_v14"
-report-version: "v14"
+report-id: "bnr_cvd_update_2024_03_v1"
+report-version: "v1"
 report-type: "Rolling CVD update"
 update-template-version: "1.0.0"
-event-release-id: "cvd_2026_01"
+event-release-id: "cvd_2024_03"
 mortality-release-id: "mort_2026_07"
-image: "/assets/images/listings/listing-rock-pool-low-tide.webp"
-image-alt: "Coastal rock pool."
+image: "/assets/images/listings/listing_reef_shallows.webp"
+image-alt: "Sunlit shallow reef water in the Caribbean."
 format:
   html:
     toc: true
@@ -292,7 +292,7 @@ releaseDescriptor = releaseId => {
 ::: {.bnr-update-meta-item}
 [Report period]{.bnr-update-meta-label}
 
-[January 2026]{.bnr-update-meta-value}
+[March 2024]{.bnr-update-meta-value}
 :::
 
 ::: {.bnr-update-meta-item}
@@ -303,7 +303,7 @@ releaseDescriptor = releaseId => {
 {
   const value = document.createElement("span")
   value.className = "bnr-update-meta-value"
-  value.textContent = releaseDescriptor("cvd_2026_01")
+  value.textContent = releaseDescriptor("cvd_2024_03")
   return value
 }
 ```
@@ -326,7 +326,7 @@ releaseDescriptor = releaseId => {
 ::: {.bnr-update-meta-item}
 [Report version]{.bnr-update-meta-label}
 
-[v14]{.bnr-update-meta-value}
+[v1]{.bnr-update-meta-value}
 :::
 ::::
 
@@ -1015,10 +1015,10 @@ differenceSummaryText = (current, subject) => {
 
 chartExportRows = ({blocks, chartView, measure, sourceReleaseId, sourceSnapshot, ascertainmentScope = "", mortalityDefinition = "", mortalityDefinitionCode = ""}) =>
   blocks.filter(Boolean).flat().map(row => ({
-    report_id: "bnr_cvd_update_2026_01_v14",
-    report_version: "v14",
-    report_date: "2026-09-05",
-    report_period: "January 2026",
+    report_id: "bnr_cvd_update_2024_03_v1",
+    report_version: "v1",
+    report_date: "2026-09-28",
+    report_period: "March 2024",
     source_release_id: sourceReleaseId,
     source_snapshot: sourceSnapshot,
     chart_view: chartView,
@@ -1085,10 +1085,10 @@ sourceCsvWithMetadata = ({rows, sourceReleaseId, sourceSnapshot, sourceType, pub
     headers.map(csvEscape).join(","),
     ...rows.map(row => {
       const metadata = {
-        report_id: "bnr_cvd_update_2026_01_v14",
-        report_version: "v14",
-        report_date: "2026-09-05",
-        report_period: "January 2026",
+        report_id: "bnr_cvd_update_2024_03_v1",
+        report_version: "v1",
+        report_date: "2026-09-28",
+        report_period: "March 2024",
         source_type: sourceType,
         source_release_id: sourceReleaseId,
         source_release: releaseDescriptor(sourceReleaseId),
@@ -1184,14 +1184,14 @@ viewof eventChartView = Inputs.radio(
       : [eventRollingCurrent, ...eventRollingComparators],
     chartView: differenceView ? "difference_from_2015_2019_monthly_average" : "cumulative_12_month",
     measure: "Hospital-recorded CVD events",
-    sourceReleaseId: "cvd_2026_01",
+    sourceReleaseId: "cvd_2024_03",
     sourceSnapshot: "data/event_release.csv",
     ascertainmentScope: "hospital_only"
   })
   if (!rows.length) return null
   const filename = differenceView
-    ? "bnr_cvd_update_2026_01_v14_events_difference_2015_2019.csv"
-    : "bnr_cvd_update_2026_01_v14_events_rolling12_cumulative.csv"
+    ? "bnr_cvd_update_2024_03_v1_events_difference_2015_2019.csv"
+    : "bnr_cvd_update_2024_03_v1_events_rolling12_cumulative.csv"
   const download = downloadLink(chartCsv(rows), filename)
   invalidation.then(() => URL.revokeObjectURL(download.url))
   const actions = document.createElement("div")
@@ -1410,8 +1410,8 @@ mortalitySharedDifferenceLimit = mortalityDifferenceAxisValues.length
   if (!rows.length) return null
   const slug = mortalityChartChoice.toLowerCase()
   const filename = differenceView
-    ? "bnr_cvd_update_2026_01_v14_mortality_" + slug + "_difference_2015_2019.csv"
-    : "bnr_cvd_update_2026_01_v14_mortality_" + slug + "_rolling12_cumulative.csv"
+    ? "bnr_cvd_update_2024_03_v1_mortality_" + slug + "_difference_2015_2019.csv"
+    : "bnr_cvd_update_2024_03_v1_mortality_" + slug + "_rolling12_cumulative.csv"
   const download = downloadLink(chartCsv(rows), filename)
   invalidation.then(() => URL.revokeObjectURL(download.url))
   const actions = document.createElement("div")
@@ -1435,13 +1435,13 @@ mortalitySharedDifferenceLimit = mortalityDifferenceAxisValues.length
   const eventDownload = downloadLink(
     sourceCsvWithMetadata({
       rows: eventSourceRows,
-      sourceReleaseId: "cvd_2026_01",
+      sourceReleaseId: "cvd_2024_03",
       sourceSnapshot: "data/event_release.csv",
       sourceType: "CVD events",
-      publishedSourceHref: "../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2026_01.csv"
+      publishedSourceHref: "../../../../../downloads/files/metrics/cvd/datasets/cvd_metrics_cvd_2024_03.csv"
     }),
-    "bnr_cvd_update_2026_01_v14_event_release.csv",
-    releaseDescriptor("cvd_2026_01")
+    "bnr_cvd_update_2024_03_v1_event_release.csv",
+    releaseDescriptor("cvd_2024_03")
   )
   invalidation.then(() => URL.revokeObjectURL(eventDownload.url))
   eventRow.append(eventDownload.link)
@@ -1456,7 +1456,7 @@ mortalitySharedDifferenceLimit = mortalityDifferenceAxisValues.length
       sourceType: "CVD mortality",
       publishedSourceHref: "../../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_mort_2026_07.csv"
     }),
-    "bnr_cvd_update_2026_01_v14_mortality_release.csv",
+    "bnr_cvd_update_2024_03_v1_mortality_release.csv",
     releaseDescriptor("mort_2026_07")
   )
   invalidation.then(() => URL.revokeObjectURL(mortalityDownload.url))
@@ -1464,7 +1464,7 @@ mortalitySharedDifferenceLimit = mortalityDifferenceAxisValues.length
 
   const reportRow = document.createElement("p")
   reportRow.textContent =
-    "Report ID: bnr_cvd_update_2026_01_v14 · Report version: v14"
+    "Report ID: bnr_cvd_update_2024_03_v1 · Report version: v1"
 
   box.append(eventRow, mortalityRow, reportRow)
   return box
