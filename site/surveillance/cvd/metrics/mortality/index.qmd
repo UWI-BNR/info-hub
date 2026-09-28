@@ -1714,7 +1714,7 @@ Incomplete year`
     {item: "Release date", value: release_date_label},
     {item: "Latest data period", value: latestCount ? periodLabel(latestCount) : "—"},
     {item: "Status", value: "Published public release"},
-    {item: "Protected values", value: "Protected values are shown exactly as published. The dashboard never tries to work them out."},
+    {item: "Protected values", value: "Protected values are shown as a dash or asterisk."},
     {item: "Monthly comparison", value: "Optional fixed 2015–2019 historical reference; it does not change with each new release."}
   ]
 
@@ -1726,7 +1726,6 @@ Incomplete year`
       <h3 style="margin-top:1rem">Mortality definitions</h3>
       <p><strong>Primary</strong> includes deaths classified as clear or likely CVD. <strong>Inclusive</strong> also includes possible CVD deaths. These BNR categories are designed for registry reporting and are not necessarily the same as official international ICD-10 mortality statistics.</p>
       <p><strong>How deaths are classified:</strong> <a href="../../../../methods/interpretation/classifying-cvd-deaths.html">Read how BNR decides whether a death is classified as CVD, and what Primary and Inclusive mean.</a></p>
-      <p>A dash or asterisk does not mean zero. It means that the value is protected and is not shown. The dashboard does not try to infer or reconstruct protected values.</p>
       <h3 style="margin-top:1rem">Downloads</h3>
       <table class="bnr-download-table"><thead><tr><th>Resource</th><th>Description</th><th>Link</th></tr></thead><tbody>
         <tr><td>Current CSV</td><td>Current published mortality dataset in CSV format.</td><td><a href="../../../../downloads/files/metrics/mortality/burden/datasets/mort_burden_metrics_current.csv" download>Download CSV</a></td></tr>
@@ -1743,7 +1742,7 @@ Incomplete year`
         <span class="bnr-data-tab bnr-data-tab-active">Table</span>
         <a class="bnr-data-tab bnr-data-tab-download" href=${selectedViewUrl} download=${selectedViewFilename}>Download selected view (CSV)</a>
       </div>
-      <p class="bnr-trend-note"><strong>Rows shown:</strong> ${displayRows.length.toLocaleString()}. The selected-view download contains the same rows and displayed values as this table. Protected values stay protected.</p>
+      <p class="bnr-trend-note"><strong>Rows shown:</strong> ${displayRows.length.toLocaleString()}. The table below shows only the selected data rows. For the full data release, download the CSV or ZIP file above.</p>
       <div class="bnr-data-scroll"><table class="bnr-data-table">
         <thead><tr><th>Period</th><th>Definition</th><th>CVD type</th><th>Sex</th><th>Age group</th><th>Measure</th><th>Value</th><th>95% statistical CI</th><th>CI method</th><th>Data status</th><th>Protection note</th></tr></thead>
         <tbody>${displayRows

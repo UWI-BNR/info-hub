@@ -31,6 +31,7 @@ END
 
 OK ok1, label("Run Step 1")
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_annual_s1_build")
 RESET reset1
 
 PROGRAM command

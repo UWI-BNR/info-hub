@@ -1,44 +1,39 @@
 {smcl}
-{title:BNR Step 3: Create deidentified metric-input datasets}
+{* *! version 2.0.0 28sep2026}{...}
+{vieweralsosee "Open this dialog" "db bnr_step3_metric_inputs"}{...}
 
-{p 4 4 2}
-{cmd:db bnr_step3_metric_inputs} opens the Step 3 dialog. It creates only the
-private datasets selected by the analyst.
+{title:BNR CVD events Step 3: Build de-identified datasets}
 
-{title:Syntax}
+{title:What this step does}
 
-{p 8 8 2}
-{cmd:do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do"} {it:year} {it:month} {it:dataset} [{it:dataset} ...] [{cmd:replace}]
+{pstd}
+Step 3 creates the approved de-identified analytical input datasets from the
+confidential cumulative CVD-event dataset.
 
-{p 4 4 2}
-Available dataset names are {cmd:count}, {cmd:case_fatality},
-{cmd:length_of_stay}, {cmd:performance}, and {cmd:all_variables}. At least one
-is required. The optional final word {cmd:replace} deliberately replaces only
-the selected outputs.
+{title:Before you run it}
 
-{title:Examples}
+{pstd}
+Run Step 2 successfully for the same release year and month and resolve any
+source-data issues that prevent the confidential dataset from being accepted.
 
-{p 8 8 2}
-{cmd:. do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" 2024 3 count case_fatality length_of_stay performance all_variables}
+{title:What to enter}
 
-{p 8 8 2}
-Create only the count input:
-{cmd:. do "$BNR_STATA/monthly/bnr_step3_metric_inputs.do" 2024 3 count}
+{phang}{bf:Release year and month} must match the completed Step 2 dataset.
 
-{title:Outputs}
+{phang}{bf:Datasets to create} selects the approved analytical inputs. Leave
+all five selected for the routine workflow unless a documented task requires a
+smaller set.
 
-{p 4 4 2}
-Selected datasets and YAML receipts are saved under:
+{phang}{bf:Authorise replacement} should normally remain unticked. Use it only
+for a deliberate rebuild of the same release.
 
-{p 8 8 2}
-{cmd:$BNR_DATA_DERIVED/cvd/yYYYY/mMM/metric_inputs/}
+{title:After running}
 
-{p 4 4 2}
-All outputs remain confidential and outside Git. Step 3 calculates no metrics
-and creates no staging or public files.
+{pstd}
+Check the final summary and output list. For the routine dashboard workflow,
+continue to CVD events Step 4.
 
-{title:Final check}
+{title:Full instructions}
 
-{p 4 4 2}
-A successful run ends with {bf:STEP 3: OPERATIONAL RUN SUMMARY}. Confirm the
-release, record count, selected datasets, and output folder before continuing.
+{pstd}
+See the {browse "https://uwi-bnr.github.io/info-hub/technical/workflows/cvd-events/create-analysis-inputs.html":Technical Manual: Create de-identified analytical inputs}.

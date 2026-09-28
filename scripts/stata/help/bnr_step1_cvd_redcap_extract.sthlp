@@ -1,52 +1,38 @@
 {smcl}
-{* *! version 1.2.0 27jul2026}{...}
-{vieweralsosee "BNR CVD extract dialog" "db bnr_step1_cvd_redcap_extract"}{...}
+{* *! version 2.0.0 28sep2026}{...}
+{vieweralsosee "Open this dialog" "db bnr_step1_cvd_redcap_extract"}{...}
 
-{title:BNR CVD Step 1: monthly REDCap extract}
+{title:BNR CVD events Step 1: Extract REDCap data}
 
-{pstd}
-The dialog creates a private cumulative snapshot of the BNR CVD REDCap
-database from 1 January 2024 through the final day of a selected month.
-
-{title:Before opening the dialog}
+{title:What this step does}
 
 {pstd}
-Load the workstation's local BNR configuration once in the current Stata
-session. Then open the dialog with:
+Step 1 creates a private cumulative snapshot of the CVD-event records in
+REDCap, from 1 January 2024 through the end of the selected month.
 
-{phang2}{cmd:db bnr_step1_cvd_redcap_extract}
-
-{title:Fields}
-
-{phang}{bf:Release year} must be 2024 or later.
-
-{phang}{bf:Release month} is the final month included in the cumulative extract.
-
-{phang}{bf:Replace an existing extract} should normally remain unticked. Tick it
-only when an existing extract for the same month is deliberately being rerun.
-
-{title:Equivalent command-line use}
-
-{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step1_cvd_redcap_extract.do" 2024 1}
+{title:Before you run it}
 
 {pstd}
-Add {cmd:replace} as the third argument only when replacement is intended.
+Confirm that the selected month is complete and that the REDCap records are
+ready for extraction. The workstation must have the BNR paths and authorised
+REDCap token configured.
 
-{title:Important}
+{title:What to enter}
 
-{pstd}
-The token and output paths are controlled by {cmd:bnr_paths_LOCAL.do}; they are
-not selected in the dialog. The extract runs in a temporary Stata frame, so any
-dataset already open remains unchanged.
+{phang}{bf:Release year and month} identify the final month included in the
+cumulative extract.
 
-{title:Read the final report}
+{phang}{bf:Authorise replacement} should normally remain unticked. Use it only
+when an existing extract for the same period must deliberately be rebuilt.
 
-{pstd}
-Routine controller code runs quietly. A successful run ends with
-{bf:STEP 1: OPERATIONAL RUN SUMMARY}. Check the release, coverage, record
-count and file locations shown there before continuing.
+{title:After running}
 
 {pstd}
-If the run cannot continue, the final block is {bf:STEP 1 DID NOT COMPLETE}.
-Read its reason and log path. Correct the cause before rerunning; do not edit
-generated extract files.
+Read the final operational summary and confirm the period, record count and
+private file locations. If Step 1 completes successfully, continue to CVD
+events Step 2. Do not edit generated files.
+
+{title:Full instructions}
+
+{pstd}
+See the {browse "https://uwi-bnr.github.io/info-hub/technical/workflows/cvd-events/extract-redcap.html":Technical Manual: Extract a REDCap data release}.

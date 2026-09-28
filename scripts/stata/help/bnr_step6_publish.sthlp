@@ -1,16 +1,36 @@
 {smcl}
-{title:BNR Step 6: Publish approved combined CVD metrics}
+{* *! version 2.0.0 28sep2026}{...}
+{vieweralsosee "Open this dialog" "db bnr_step6_publish"}{...}
 
-{pstd}Step 6 verifies {cmd:approval.yml}, {cmd:public_manifest.csv} and every approved payload checksum before promotion. It does not calculate, suppress, approve, render or deploy.
+{title:BNR CVD events Step 6: Publish approved outputs}
 
-{title:Syntax}
-{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step6_publish.do"} {it:year month} [{cmd:replace}]
+{title:What this step does}
 
-{title:Example}
-{phang2}{cmd:. do "$BNR_STATA/monthly/bnr_step6_publish.do" 2024 4}
+{pstd}
+Step 6 verifies the approval, manifest and checksums, then promotes the exact
+approved CVD-event package to the authoritative public and website locations.
+It does not recalculate or approve results.
 
-{title:Outputs}
-{pstd}The authoritative public package is under {cmd:$BNR_PUBLIC/metrics/cvd/}. Step 6 refreshes only the website current CSV under {cmd:$BNR_REPO/site/downloads/files/metrics/cvd/}, copies the release ZIP to {cmd:releases/}, and writes a small catalogue record under {cmd:catalogue/}. The private approval and manifest controls are not published.
+{title:Before you run it}
 
-{title:Next action}
-{pstd}Run {cmd:python site/scripts/build_download_catalogue.py}. An unchanged catalogue is expected when republication replaces the contents of an existing release ZIP without changing its release identifier or catalogue record.
+{pstd}
+Step 5 approval must exist for the same period. Do not publish if the reviewed
+candidate or approval evidence has changed or if any review issue remains.
+
+{title:What to enter}
+
+{phang}{bf:Year and month} identify the approved Step 5 release.
+
+{phang}{bf:Authorise replacement} should normally remain unticked. Use it only
+for an authorised republication of the same release identity.
+
+{title:After running}
+
+{pstd}
+Read the publication summary and confirm the authoritative public package,
+website mirror and release ZIP. Then complete the documented website checks.
+
+{title:Full instructions}
+
+{pstd}
+See the {browse "https://uwi-bnr.github.io/info-hub/technical/workflows/cvd-events/publish-metrics.html":Technical Manual: Publish approved combined CVD metrics}.
