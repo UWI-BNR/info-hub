@@ -18,6 +18,7 @@ END
 
 OK ok1, label("Screen counts")
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_disclosure_screen")
 RESET reset1
 
 PROGRAM command

@@ -402,7 +402,8 @@ GitHub Pages deployment. They do not calculate surveillance statistics.
 
 ## Stata help files
 
-These files provide command help for the current event and mortality dialogs.
+These files provide short, local help for the current Stata dialogs. The
+case-fatality help file supports its separate analysis-and-review menu entry.
 They explain interfaces but contain no analytical calculations.
 
 ::: {.callout-note collapse="true" title="Show Stata help files"}
@@ -420,6 +421,15 @@ They explain interfaces but contain no analytical calculations.
 |  | `bnr_mort_s4_review.sthlp` |
 |  | `bnr_mort_s5_approve.sthlp` |
 |  | `bnr_mort_s6_publish.sthlp` |
+|  | `bnr_report_update_build.sthlp` |
+|  | `bnr_report_annual_s1_build.sthlp` |
+|  | `bnr_report_annual_s2_approve.sthlp` |
+|  | `bnr_report_annual_s3_publish.sthlp` |
+|  | `bnr_report_oneoff_s1_prepare.sthlp` |
+|  | `bnr_report_oneoff_s2_approve.sthlp` |
+|  | `bnr_report_oneoff_s3_publish.sthlp` |
+|  | `bnr_report_disclosure_screen.sthlp` |
+|  | `bnr_report_case_fatality_2010_2025.sthlp` |
 :::
 
 ## Retained, deprecated and generated code-like files

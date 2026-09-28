@@ -16,6 +16,7 @@ END
 
 OK ok1, label("Run Step 3")
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_oneoff_s3_publish")
 RESET reset1
 
 PROGRAM command

@@ -32,6 +32,7 @@ END
 
 OK ok1, label("Build report")
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_update_build")
 RESET reset1
 
 PROGRAM command

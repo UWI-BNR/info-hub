@@ -34,6 +34,7 @@ END
 
 ** OK ok1, label("Run Step 2")
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_annual_s2_approve")
 RESET reset1
 
 * Keep the approval button unavailable until the analyst has actively ticked

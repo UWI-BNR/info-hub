@@ -1,17 +1,42 @@
 {smcl}
-{title:BNR Step 5: Review and approve combined CVD metrics}
+{* *! version 2.0.0 28sep2026}{...}
+{vieweralsosee "Open this dialog" "db bnr_step5_review"}{...}
 
-{pstd}Step 5 has separate {cmd:prepare} and {cmd:approve} actions. It never writes to {cmd:outputs/public/} or the website mirror.
+{title:BNR CVD events Step 5: Review and approve the release}
 
-{title:Syntax}
-{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:prepare} [{cmd:replace}]
-{phang2}{cmd:do "$BNR_STATA/monthly/bnr_step5_review.do"} {it:year month} {cmd:approve} {it:"Full name"} {it:"BNR Lead"|"BNR Analyst"} [{cmd:replace}]
+{title:What this step does}
 
-{title:Prepare}
-{pstd}Prepare reads the combined private Step 4 package at {cmd:$BNR_STAGING/metrics/cvd/cvd_YYYY_MM/}, creates a disclosure-controlled candidate and writes its review evidence to {cmd:review/}. Review {cmd:step5_review.xlsx}, {cmd:step5_disclosure_qa.csv}, {cmd:step5_equation_audit.csv}, {cmd:step5_row_audit.dta} and {cmd:step5_review_basis.csv}. Every automated result must be {cmd:PASS}.
+{pstd}
+Step 5 first prepares the disclosure-controlled review package. After the
+required human review, the same dialog can record approval of the unchanged
+candidate. Approval does not publish the release.
 
-{title:Approval}
-{pstd}After human review, approve rechecks the saved fingerprints and QA before creating {cmd:public_ready/}, its seven-file manifest and {cmd:approval.yml}. A previous approval is immutable unless {cmd:replace} is explicitly supplied.
+{title:Before you run it}
 
-{title:Suppression contract}
-{pstd}Protected public rows remain present but have blank numeric fields and {cmd:display_value} {cmd:*}. For the annual DCO rows, protection is audited across hospital-only, additional-DCO and hospital-plus-DCO count identities and all released rate representations. The dashboard must only filter and display these supplied public rows; it must never reconstruct a protected value.
+{pstd}
+Step 4 must have completed for the selected period. Prepare and inspect the
+full review evidence before choosing the approval action.
+
+{title:What to enter}
+
+{phang}{bf:Year and month} identify the completed Step 4 package.
+
+{phang}{bf:Prepare the review package} is the first action for every candidate.
+
+{phang}{bf:Record approval} is used only after review. Enter the authorised
+approver's full name and BNR role.
+
+{phang}{bf:Authorise replacement} should normally remain unticked. Replacing a
+candidate or approval requires the complete review to be repeated.
+
+{title:After running}
+
+{pstd}
+When preparation succeeds, review every listed file and PASS check. When
+approval succeeds, confirm the status is approved but not yet published, then
+continue to CVD events Step 6.
+
+{title:Full instructions}
+
+{pstd}
+See the {browse "https://uwi-bnr.github.io/info-hub/technical/workflows/cvd-events/review-approve.html":Technical Manual: Review and approve combined CVD metrics}.

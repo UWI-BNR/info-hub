@@ -30,6 +30,7 @@ BEGIN
 END
 
 CANCEL cancel1, label("Cancel")
+HELP help1, view("help bnr_report_oneoff_s2_approve")
 RESET reset1
 
 * Keep the approval button unavailable until the analyst has actively ticked
