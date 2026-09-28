@@ -1,6 +1,6 @@
 ---
 title: "Annual CVD report: 2025"
-description: "Annual CVD surveillance report for Barbados, including the standard surveillance section and annual Special chapter."
+description: "CVD cases and deaths in Barbados in 2025, with trends over time and a special chapter on our reporting improvements."
 date: 2026-11-29
 date-modified: 2026-09-28
 report-id: bnr_cvd_annual_report_2025_v1

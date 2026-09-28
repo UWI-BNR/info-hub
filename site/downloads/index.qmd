@@ -1,6 +1,6 @@
 ---
 title: "Data Downloads"
-description: "Approved Barbados National Registry public output packages."
+description: "Download data published by the Barbados National Registry."
 page-layout: full
 sidebar: false
 
@@ -37,9 +37,7 @@ format:
     link-external-newwindow: false
 ---
 
-This page provides public metric-dataset packages from approved Barbados National Registry surveillance releases.
-
-> Each row represents one approved, versioned `ZIP` metric package containing release-stamped and current datasets with accompanying metadata. Package contents vary by release workflow.
+Download approved data from Barbados National Registry CVD surveillance. Each row provides a ZIP file containing data and supporting information for a specific release.
 
 Use the search box to filter by output type, topic, period, version, surveillance area, or output title.
 

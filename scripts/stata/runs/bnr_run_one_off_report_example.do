@@ -6,7 +6,6 @@
 * Create the finished private PDF and candidate public-data files.
 * do "$BNR_STATA/reporting/case-fatality/bnr_report_case_fatality_2010_2025.do"
 
-/*
 
 * Step 1 — prepare the unapproved candidate package.
 do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///

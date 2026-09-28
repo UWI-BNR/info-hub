@@ -1,13 +1,13 @@
 ---
 title: "Rolling CVD update: @@REPORT_MONTH_NAME@@ @@REPORT_YEAR@@"
-description: "Recent hospital-recorded CVD events and CVD deaths from the declared public releases."
+description: "A three-month summary of recent hospital-recorded CVD cases and CVD deaths in Barbados."
 date: "@@REPORT_DATE@@"
 categories:
   - CVD
-  - Rolling CVD update
+  - Three-month update
 report-id: "@@REPORT_ID@@"
 report-version: "v@@REPORT_VERSION@@"
-report-type: "Rolling CVD update"
+report-type: "Three-month update"
 update-template-version: "1.0.0"
 event-release-id: "@@EVENT_RELEASE_ID@@"
 mortality-release-id: "@@MORTALITY_RELEASE_ID@@"

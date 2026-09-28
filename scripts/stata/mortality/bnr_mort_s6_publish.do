@@ -1175,22 +1175,22 @@ file write `catalogue_handle' "schema: bnr_download_manifest_v1" _n
 file write `catalogue_handle' "package_type: metric" _n
 file write `catalogue_handle' "package_id: `package_id'" _n
 file write `catalogue_handle' "release_id: `release_id'" _n
-file write `catalogue_handle' "surveillance_area: Mortality" _n
+file write `catalogue_handle' "surveillance_area: CVD" _n
 file write `catalogue_handle' "domain: mortality" _n
 file write `catalogue_handle' "metric_family: burden_and_rate" _n
 file write `catalogue_handle' "period: `selected_period'" _n
 file write `catalogue_handle' "release_date: `approved_date'" _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "title: |-" _n
-file write `catalogue_handle' "  Mortality burden metrics" _n
+file write `catalogue_handle' "  CVD deaths" _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "description: |-" _n
 file write `catalogue_handle' ///
-    "  Approved BNR mortality burden datasets and metadata for release `selected_period'." _n
+    "  Approved CVD death data for release `selected_period'." _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "downloads:" _n
 file write `catalogue_handle' "  - id: `package_id'_zip" _n
-file write `catalogue_handle' "    title: Full public output package" _n
+file write `catalogue_handle' "    title: CVD deaths" _n
 file write `catalogue_handle' "    artefact_type: ZIP package" _n
 file write `catalogue_handle' "    format: ZIP" _n
 file write `catalogue_handle' "    file: `zip_name'" _n
@@ -1198,7 +1198,7 @@ file write `catalogue_handle' ///
     "    href: files/metrics/mortality/burden/`zip_name'" _n
 file write `catalogue_handle' "    description: |-" _n
 file write `catalogue_handle' ///
-    "      Release-stamped and current mortality burden datasets with metadata." _n
+    "      CSV and Stata datasets, with metadata." _n
 file write `catalogue_handle' "    include_in_listing: true" _n
 file write `catalogue_handle' "    sort_order: 30" _n
 file close `catalogue_handle'
