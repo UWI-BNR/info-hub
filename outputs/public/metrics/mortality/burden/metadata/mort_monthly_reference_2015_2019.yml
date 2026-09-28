@@ -8,6 +8,6 @@ public_scope: all_cvd_all_sexes_all_ages_only
 statistics: minimum_maximum_mean
 scenario_count: 2
 calendar_month_rows: 24
-source_release_id: mort_2026_03
+source_release_id: mort_2026_06
 recalculation_rule: do_not_recalculate_after_initial_approval
 publication_boundary: pending_step_6
