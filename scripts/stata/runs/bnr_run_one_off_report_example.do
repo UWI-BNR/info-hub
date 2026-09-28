@@ -6,14 +6,13 @@
 * Create the finished private PDF and candidate public-data files.
 * do "$BNR_STATA/reporting/case-fatality/bnr_report_case_fatality_2010_2025.do"
 
-/*
 
 * Step 1 — prepare the unapproved candidate package.
 do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
     case_fatality_2025 1 ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/bnr_cvd_case_fatality_2010_2025.pdf" ///
     "Thirty-day case fatality after cardiovascular events" ///
-    "Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025." ///
+    "BNR case-fatality results for 2010-2025." ///
     2026-09-25 "" ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/case_fatality_metrics_candidate.csv" ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/case_fatality_metrics_candidate.dta" ///
@@ -45,7 +44,7 @@ do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
     case_fatality_2025 1 ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/bnr_cvd_case_fatality_2010_2025.pdf" ///
     "Thirty-day case fatality after cardiovascular events" ///
-    "Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025." ///
+    "BNR case-fatality results for 2010-2025." ///
     2026-09-25 replace ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/case_fatality_metrics_candidate.csv" ///
     "$BNR_PRIVATE/outputs/staging/reports/cvd/case-fatality/cvd_case_fatality_2010_2025_v01/candidate/case_fatality_metrics_candidate.dta" ///
