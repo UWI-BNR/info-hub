@@ -32,6 +32,7 @@ The central rule is:
 | `$BNR_DATA_FROZEN` | Approved fixed historical or reference inputs | Replace only through an explicitly governed reference-data change. |
 | `$BNR_DATA_RAW` and `$BNR_DATA_DERIVED` | Private extracts, confidential cumulative data and purpose-limited analytical inputs | Keep outside Git. Recreate through the documented upstream step. |
 | `$BNR_STAGING` and `$BNR_PRIVATE_LOGS` | Proposed public packages, quality checks, review evidence, approval records and private logs | Keep outside Git and restrict to authorised staff. These files are not public merely because direct identifiers are absent. |
+| `$BNR_PRIVATE/admin/release-archive/` | Recoverable administrative archives of deliberately withdrawn monthly releases | Create only with the monthly release archive utility. Retain its record and SHA-256 manifest; do not commit this private archive to Git. |
 | `$BNR_PUBLIC` | Official approved public analytical and report packages | Write only through the controlled publication step. Use this location to restore a damaged website copy. |
 | `$BNR_REPO/site/downloads/` and public report folders | Website copies of approved datasets, metadata, ZIPs and reports | Rebuild through controlled publication. Do not treat the website copy as the official analytical archive. |
 | Git repository | Public-safe code, Quarto source, documentation and approved website assets | Never commit confidential data, tokens, private paths, logs, review workbooks or approval evidence. |
@@ -86,6 +87,54 @@ If an approved file changes or is missing, do not alter the approval record or f
 | Version-controlled source is damaged | Restore or correct it through Git on a development branch, test it and merge through a pull request. |
 
 Do not keep parallel files named `new`, `final-final` or similar. Git records source history; controlled public packages record analytical and report releases.
+
+## Archive a monthly release
+
+Use `scripts/maintenance/manage-cvd-monthly-release.ps1` when an authorised
+administrator needs to remove one CVD event or mortality month from the working
+public site and private workflow folders. The utility moves only explicitly
+listed artefacts into `$BNR_PRIVATE/admin/release-archive/`; it does not delete
+them. Each archive retains the original folder structure, an administrative
+record and a CSV manifest containing file sizes and SHA-256 hashes.
+
+The command is audit-only unless `-Execute` is supplied. Run it first without
+`-Execute`, review every proposed path, then repeat the same command with
+`-Execute` only after the withdrawal has been authorised.
+
+```powershell
+# Audit one event month. Nothing is moved.
+.\scripts\maintenance\manage-cvd-monthly-release.ps1 `
+  -Workflow Events -Year 2024 -Month 5 `
+  -Reason "Development monthly workflow test cleanup"
+
+# Archive a tested event year. January 2024 remains protected by default.
+.\scripts\maintenance\manage-cvd-monthly-release.ps1 `
+  -Workflow Events -Year 2024 -AllMonths -IncludeRollingUpdates `
+  -Reason "Completed 2024 workflow test cycle" -Execute
+```
+
+The utility stops rather than guessing when:
+
+- the selected month is represented by the current public metadata;
+- a whole-year event cleanup is attempted before `cvd_2024_01` has been
+  republished and verified as current;
+- a rolling update depends on it and `-IncludeRollingUpdates` was not supplied;
+- January 2024 is selected without the exceptional
+  `-AllowBaselineArchive` option;
+- Git is on `main`, `master` or a detached commit; or
+- either root path is missing or unsafe.
+
+Before a year-end archive, publish and verify the approved fallback through the
+normal Step 6 process. For the event test cycle, make January 2024 current first,
+then archive the later months. After execution, inspect Git changes, rebuild the
+Downloads catalogue through the normal site process, render the complete site
+and check that no page or download link still expects an archived month.
+
+Restoration is a controlled administrative action. Use `archive.yml` and
+`archive-manifest.csv` to identify the original locations and verify hashes,
+then repeat the applicable review, approval and publication process. Do not
+copy an archived package straight back to a public location as a substitute
+for Step 6.
 
 ## Before committing or deploying
 

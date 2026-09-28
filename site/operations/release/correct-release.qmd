@@ -92,13 +92,37 @@ Keep:
 
 This makes it possible to understand which version was used at any point and why it was replaced.
 
-::: {.callout-warning title="BNR confirmation required"}
+## Urgently withdraw a monthly data release
 
-BNR should agree and record:
+Only the BNR Lead, or a BNR Analyst acting with the BNR Lead's recorded
+authority, should order a public withdrawal. Record the reason, scope, operator
+and date before making the change. If confidential information may have been
+published, use the incident process first; removing working files does not
+remove them from Git history or from copies already downloaded by users.
 
-- who can order an urgent withdrawal from the public website;
-- where superseded packages are kept;
-- when a public correction note is needed; and
-- how affected data users are told about a material correction.
+1. Identify every affected CVD event or mortality release and every report that
+   uses it.
+2. If the affected release is the current release, publish and verify an
+   approved safe fallback through the normal Step 6 process first.
+3. Run the monthly release archive utility without `-Execute` and review its
+   complete audit list.
+4. If rolling updates use the release, decide explicitly whether they must also
+   be withdrawn. Use `-IncludeRollingUpdates` only for that recorded decision.
+5. Repeat the approved command with `-Execute`. The utility moves the files to
+   the private administrative archive and creates a hash manifest; it does not
+   delete them.
+6. Review the repository changes, rebuild and render the site, test affected
+   listings and links, and publish through the normal pull-request process.
+7. Add a public correction or withdrawal note and notify affected users when
+   the change is material.
 
+See [Files, data releases and versions](../../technical/maintenance/files-releases-versions.qmd#archive-a-monthly-release)
+for commands, safeguards and archive details.
+
+::: {.callout-warning title="Withdrawal authority and communication"}
+The person ordering a withdrawal must record their authority. The BNR Lead
+decides when a public correction note and direct communication to affected data
+users are required. Withdrawn working artefacts are kept in
+`$BNR_PRIVATE/admin/release-archive/` with their administrative record and hash
+manifest.
 :::
