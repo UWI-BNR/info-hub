@@ -14,7 +14,7 @@ USAGE:
   do "$BNR_STATA/reporting/bnr_report_oneoff_s1_prepare.do" ///
       case_fatality_2025 1 "$BNR_STAGING/report_inputs/report.pdf" ///
       "Thirty-day case fatality after cardiovascular events" ///
-      "BNR case-fatality results for 2010-2025." 2026-09-25 "" ///
+      "Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025." 2026-09-25 "" ///
       "$BNR_STAGING/report_inputs/case_fatality_metrics.csv" ///
       "$BNR_STAGING/report_inputs/case_fatality_metrics.dta" ///
       "$BNR_STAGING/report_inputs/case_fatality_metadata.yml" ///
@@ -370,14 +370,14 @@ file write `qmd_handle' `"description: "`report_description'""' _n
 file write `qmd_handle' "date: `report_date'" _n
 file write `qmd_handle' "date-modified: `report_date'" _n
 file write `qmd_handle' "report-id: `report_id'" _n
-file write `qmd_handle' "report-type: One-off report" _n
+file write `qmd_handle' "report-type: Special report" _n
 file write `qmd_handle' "report-version: v`version_num'" _n
 file write `qmd_handle' "study-id: `study_id'" _n
 file write `qmd_handle' "image: /assets/images/listings/`listing_image'" _n
 file write `qmd_handle' "image-alt: `listing_alt'" _n
 file write `qmd_handle' "categories:" _n
 file write `qmd_handle' "  - CVD" _n
-file write `qmd_handle' "  - One-off report" _n
+file write `qmd_handle' "  - Special report" _n
 file write `qmd_handle' "format:" _n
 file write `qmd_handle' "  html:" _n
 file write `qmd_handle' "    toc: false" _n
@@ -433,18 +433,18 @@ if `has_dataset' {
     file write `catalogue_handle' "period: `study_id'" _n
     file write `catalogue_handle' "release_date: `report_date'" _n _n
     file write `catalogue_handle' "title: |-" _n
-    file write `catalogue_handle' "  `report_title' - associated dataset" _n _n
+    file write `catalogue_handle' "  Thirty-day case-fatality data" _n _n
     file write `catalogue_handle' "description: |-" _n
-    file write `catalogue_handle' "  Disclosure-controlled data and metadata accompanying the report." _n _n
+    file write `catalogue_handle' "  Data accompanying the report." _n _n
     file write `catalogue_handle' "downloads:" _n
     file write `catalogue_handle' "  - id: `public_name'_data_zip" _n
-    file write `catalogue_handle' "    title: Case-fatality dataset" _n
+    file write `catalogue_handle' "    title: Thirty-day case-fatality data" _n
     file write `catalogue_handle' "    artefact_type: ZIP package" _n
     file write `catalogue_handle' "    format: ZIP" _n
     file write `catalogue_handle' "    file: `dataset_zip_name'" _n
     file write `catalogue_handle' "    href: files/reports/cvd/studies/`study_id'/`dataset_zip_name'" _n
     file write `catalogue_handle' "    description: |-" _n
-    file write `catalogue_handle' "      CSV and labelled Stata datasets with structured metadata and a reader guide." _n
+    file write `catalogue_handle' "      CSV and Stata datasets, with metadata and a short guide." _n
     file write `catalogue_handle' "    include_in_listing: true" _n
     file write `catalogue_handle' "    sort_order: 40" _n
     file close `catalogue_handle'

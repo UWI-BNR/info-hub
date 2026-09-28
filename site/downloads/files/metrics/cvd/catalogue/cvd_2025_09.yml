@@ -9,19 +9,19 @@ period: cvd_2025_09
 release_date: 2026-09-28
 
 title: |-
-  Combined CVD metrics
+  CVD cases
 
 description: |-
-  Approved combined CVD burden and annual incidence-rate datasets for cvd_2025_09.
+  Approved CVD case data for release cvd_2025_09.
 
 downloads:
   - id: cvd_metrics_cvd_2025_09_zip
-    title: Full public output package
+    title: CVD cases
     artefact_type: ZIP package
     format: ZIP
     file: cvd_metrics_cvd_2025_09.zip
     href: files/metrics/cvd/releases/cvd_metrics_cvd_2025_09.zip
     description: |-
-      Release-stamped and current combined CVD datasets with metadata.
+      CSV and Stata datasets, with metadata.
     include_in_listing: true
     sort_order: 20

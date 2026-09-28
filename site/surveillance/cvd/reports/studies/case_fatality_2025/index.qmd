@@ -1,24 +1,24 @@
 ---
 title: "Thirty-day case fatality after cardiovascular events"
-description: "BNR case-fatality results for 2010-2025."
+description: "Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025."
 date: 2026-09-25
 date-modified: 2026-09-25
 report-id: bnr_cvd_oneoff_case_fatality_2025_v1
-report-type: One-off report
+report-type: Special report
 report-version: v1
 study-id: case_fatality_2025
 image: "/assets/images/listings/listing_shore.webp"
 image-alt: "Caribbean shoreline."
 categories:
   - CVD
-  - One-off report
+  - Special report
 format:
   html:
     toc: false
     page-layout: article
 ---
 
-BNR case-fatality results for 2010-2025.
+Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025.
 
 [Open or download the PDF report](../../../../../downloads/files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025.pdf){.btn .btn-primary}
 

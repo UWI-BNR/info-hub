@@ -53,8 +53,8 @@ REPORTS_DIR = DOWNLOADS_ROOT / "files" / "reports"
 OUTPUT_FILE = DOWNLOADS_ROOT / "downloads.yml"
 
 SUPPORTED_PACKAGE_TYPES = {
-    "metric": "Metric dataset",
-    "report_dataset": "Report dataset",
+    "metric": "Surveillance data",
+    "report_dataset": "Report data",
 }
 
 SUPPORTED_SCHEMA = "bnr_download_manifest_v1"

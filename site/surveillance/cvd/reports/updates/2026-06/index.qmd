@@ -1,13 +1,13 @@
 ---
 title: "Rolling CVD update: June 2026"
-description: "Recent hospital-recorded CVD events and CVD deaths from the declared public releases."
+description: "A three-month summary of recent hospital-recorded CVD cases and CVD deaths in Barbados."
 date: "2026-09-28"
 categories:
   - CVD
-  - Rolling CVD update
+  - Three-month update
 report-id: "bnr_cvd_update_2026_06_v1"
 report-version: "v1"
-report-type: "Rolling CVD update"
+report-type: "Three-month update"
 update-template-version: "1.0.0"
 event-release-id: "cvd_2026_06"
 mortality-release-id: "mort_2026_06"

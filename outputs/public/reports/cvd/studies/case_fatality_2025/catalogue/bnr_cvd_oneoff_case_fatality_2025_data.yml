@@ -9,19 +9,19 @@ period: case_fatality_2025
 release_date: 2026-09-25
 
 title: |-
-  Thirty-day case fatality after cardiovascular events - associated dataset
+  Thirty-day case-fatality data
 
 description: |-
-  Disclosure-controlled data and metadata accompanying the report.
+  Data accompanying the report on deaths within 30 days of a heart attack or stroke event.
 
 downloads:
   - id: bnr_cvd_oneoff_case_fatality_2025_data_zip
-    title: Case-fatality dataset
+    title: Thirty-day case-fatality data
     artefact_type: ZIP package
     format: ZIP
     file: bnr_cvd_oneoff_case_fatality_2025_data.zip
     href: files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip
     description: |-
-      CSV and labelled Stata datasets with structured metadata and a reader guide.
+      CSV and Stata datasets, with metadata and a short guide.
     include_in_listing: true
     sort_order: 40

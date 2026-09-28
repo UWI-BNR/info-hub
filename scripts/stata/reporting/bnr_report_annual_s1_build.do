@@ -468,7 +468,7 @@ tempname qmd_handle
 file open `qmd_handle' using "`candidate_qmd'", write text replace
 file write `qmd_handle' "---" _n
 file write `qmd_handle' `"title: "Annual CVD report: `report_year4'""' _n
-file write `qmd_handle' `"description: "Annual CVD surveillance report for Barbados, including the standard surveillance section and annual Special chapter.""' _n
+file write `qmd_handle' `"description: "CVD cases and deaths in Barbados in `report_year4', with trends over time and a special chapter on our reporting improvements.""' _n
 file write `qmd_handle' "date: `annual_publication_date_iso'" _n
 file write `qmd_handle' "date-modified: `build_date'" _n
 file write `qmd_handle' "report-id: `report_id'" _n
@@ -498,7 +498,7 @@ tempname update_qmd_handle
 file open `update_qmd_handle' using "`candidate_update_qmd'", write text replace
 file write `update_qmd_handle' "---" _n
 file write `update_qmd_handle' `"title: "CVD public health update: `report_year4'""' _n
-file write `update_qmd_handle' `"description: "One-page summary of the latest complete annual CVD event and mortality results for Barbados.""' _n
+file write `update_qmd_handle' `"description: "A one-page summary of CVD cases and deaths in Barbados in `report_year4'.""' _n
 file write `update_qmd_handle' "date: `annual_publication_date_iso'" _n
 file write `update_qmd_handle' "date-modified: `build_date'" _n
 file write `update_qmd_handle' "report-id: `update_id'" _n

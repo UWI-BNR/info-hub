@@ -175,20 +175,20 @@ file write `catalogue_handle' "period: `release_id'" _n
 file write `catalogue_handle' "release_date: `approved_date'" _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "title: |-" _n
-file write `catalogue_handle' "  Combined CVD metrics" _n
+file write `catalogue_handle' "  CVD cases" _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "description: |-" _n
-file write `catalogue_handle' "  Approved combined CVD burden and annual incidence-rate datasets for `release_id'." _n
+file write `catalogue_handle' "  Approved CVD case data for release `release_id'." _n
 file write `catalogue_handle' "" _n
 file write `catalogue_handle' "downloads:" _n
 file write `catalogue_handle' "  - id: `package_id'_zip" _n
-file write `catalogue_handle' "    title: Full public output package" _n
+file write `catalogue_handle' "    title: CVD cases" _n
 file write `catalogue_handle' "    artefact_type: ZIP package" _n
 file write `catalogue_handle' "    format: ZIP" _n
 file write `catalogue_handle' "    file: `zip_name'" _n
 file write `catalogue_handle' "    href: files/metrics/cvd/releases/`zip_name'" _n
 file write `catalogue_handle' "    description: |-" _n
-file write `catalogue_handle' "      Release-stamped and current combined CVD datasets with metadata." _n
+file write `catalogue_handle' "      CSV and Stata datasets, with metadata." _n
 file write `catalogue_handle' "    include_in_listing: true" _n
 file write `catalogue_handle' "    sort_order: 20" _n
 file close `catalogue_handle'
