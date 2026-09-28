@@ -1,8 +1,8 @@
 schema: bnr_public_mortality_dataset_v2
 dataset_type: current
 package_status: public_ready
-package_id: mort_burden_mort_2026_07
-release_id: mort_2026_07
+package_id: mort_burden_mort_2026_03
+release_id: mort_2026_03
 domain: mortality
 metric_family: burden_and_rate
 rows: 4194

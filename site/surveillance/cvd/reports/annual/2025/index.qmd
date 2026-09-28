@@ -2,13 +2,13 @@
 title: "Annual CVD report: 2025"
 description: "Annual CVD surveillance report for Barbados, including the standard surveillance section and annual Special chapter."
 date: 2026-11-29
-date-modified: 2026-09-20
+date-modified: 2026-09-28
 report-id: bnr_cvd_annual_report_2025_v1
 report-type: Annual report
 report-version: v1
 coverage-period: 2025
-event-release-id: cvd_2026_01
-mortality-release-id: mort_2026_07
+event-release-id: cvd_2026_06
+mortality-release-id: mort_2026_06
 image: "/assets/images/listings/listing_mangrove_reflections.webp"
 image-alt: "Mangrove reflections in the Caribbean."
 categories:

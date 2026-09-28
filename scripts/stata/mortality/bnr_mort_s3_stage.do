@@ -1,8 +1,8 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_mort_s3_stage.do
- VERSION:     Pass 4 monthly-public-scope and fixed-reference candidate
-              (21 August 2026)
+ VERSION:     Pass 4.1 December completion boundary
+              (28 September 2026)
  PURPOSE:     Validate and package a private Step 3 mortality burden release.
 
  Called only by bnr_mort_s3_burden.do. This file stages exact private values;
@@ -373,7 +373,7 @@ file write `meta_handle' "schema: bnr_mortality_burden_package_v2" _n
 file write `meta_handle' "package_id: mort_burden_`release_id'" _n
 file write `meta_handle' "package_status: staging" _n
 file write `meta_handle' "workflow_step: 3" _n
-file write `meta_handle' "build_version: pass3_dual_definition_candidate" _n
+file write `meta_handle' "build_version: pass4_1_december_completion_boundary" _n
 file write `meta_handle' "build_date: `build_date'" _n
 file write `meta_handle' "build_time: `build_time'" _n
 file write `meta_handle' "release_id: `release_id'" _n

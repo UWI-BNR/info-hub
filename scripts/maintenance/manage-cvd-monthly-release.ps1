@@ -1,4 +1,5 @@
 #Requires -Version 5.1
+# VERSION: 1.1.2 (28 September 2026)
 <#
 .SYNOPSIS
 Audits or archives one or more monthly CVD releases.
@@ -8,10 +9,10 @@ This administrator utility moves explicitly allow-listed release artefacts to a
 recoverable private archive. It never deletes them. The default is an audit:
 add -Execute only after reviewing the proposed actions.
 
-The utility supports CVD event and mortality releases. It refuses to archive a
-release represented by the current public metadata, a January 2024 event
-baseline (unless explicitly allowed), or a release used by a rolling update
-(unless -IncludeRollingUpdates is supplied).
+The utility supports CVD event and mortality releases. A single-month request
+stops if that release is current or has an unresolved dependency. A whole-year
+request warns and skips current, missing, already archived or dependency-blocked
+months, then continues with eligible releases.
 
 .EXAMPLE
 .\scripts\maintenance\manage-cvd-monthly-release.ps1 `
@@ -39,7 +40,6 @@ param(
 
     [switch]$AllMonths,
     [switch]$IncludeRollingUpdates,
-    [switch]$AllowBaselineArchive,
 
     [Parameter(Mandatory = $true)]
     [ValidateNotNullOrEmpty()]
@@ -75,7 +75,9 @@ function Get-RelativePathWithinRoot {
 
 function Add-ArchiveItem {
     param(
-        [Parameter(Mandatory = $true)][System.Collections.ArrayList]$List,
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [System.Collections.ArrayList]$List,
         [Parameter(Mandatory = $true)][string]$Path,
         [Parameter(Mandatory = $true)][ValidateSet("repository", "private")][string]$Scope,
         [Parameter(Mandatory = $true)][string]$Category
@@ -101,7 +103,9 @@ function Add-ArchiveItem {
 
 function Add-MatchingFiles {
     param(
-        [Parameter(Mandatory = $true)][System.Collections.ArrayList]$List,
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [System.Collections.ArrayList]$List,
         [Parameter(Mandatory = $true)][string]$Directory,
         [Parameter(Mandatory = $true)][string[]]$Patterns,
         [Parameter(Mandatory = $true)][ValidateSet("repository", "private")][string]$Scope,
@@ -159,7 +163,6 @@ $archiveRoot = Join-Path $PrivateRoot "admin\release-archive"
 $timestamp = Get-Date -Format "yyyyMMddTHHmmss"
 $plannedRuns = New-Object System.Collections.ArrayList
 $verifiedCurrentRelease = ""
-$eventBaselineVerified = $false
 
 foreach ($selectedMonth in $months) {
     $year4 = "{0:D4}" -f $Year
@@ -169,10 +172,6 @@ foreach ($selectedMonth in $months) {
 
     if ($Workflow -eq "Events") {
         $releaseId = "cvd_${year4}_${month2}"
-        if ($Year -eq 2024 -and $selectedMonth -eq 1 -and -not $AllowBaselineArchive) {
-            Write-Warning "Skipping protected event baseline $releaseId. Use -AllowBaselineArchive only after an approved alternative baseline is current."
-            continue
-        }
         $currentMetadata = Join-Path $RepoRoot "outputs\public\metrics\cvd\metadata\cvd_metrics_current.yml"
         $dependencyKey = "event_release_id: $releaseId"
     }
@@ -191,30 +190,11 @@ foreach ($selectedMonth in $months) {
     }
     $currentReleaseId = ($currentReleaseMatch.Line -replace '^release_id:\s*', '').Trim()
     $verifiedCurrentRelease = $currentReleaseId
-    if ($Workflow -eq "Events" -and $AllMonths -and $currentReleaseId -ne "cvd_2024_01") {
-        throw "Whole-year event cleanup requires cvd_2024_01 to be current. Republish and verify that fallback through Step 6 first. Current release: $currentReleaseId"
-    }
-    if ($Workflow -eq "Events" -and $AllMonths -and -not $eventBaselineVerified) {
-        $baselineFiles = @(
-            (Join-Path $RepoRoot "outputs\public\metrics\cvd\cvd_metrics_current.csv"),
-            (Join-Path $RepoRoot "outputs\public\metrics\cvd\cvd_metrics_cvd_2024_01.csv"),
-            (Join-Path $RepoRoot "site\downloads\files\metrics\cvd\cvd_metrics_current.csv"),
-            (Join-Path $RepoRoot "site\downloads\files\metrics\cvd\datasets\cvd_metrics_cvd_2024_01.csv")
-        )
-        foreach ($baselineFile in $baselineFiles) {
-            if (-not (Test-Path -LiteralPath $baselineFile -PathType Leaf)) {
-                throw "January 2024 fallback verification failed because a required file is missing: $baselineFile"
-            }
-        }
-        $baselineHashes = @($baselineFiles | ForEach-Object {
-            (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash
-        } | Select-Object -Unique)
-        if ($baselineHashes.Count -ne 1) {
-            throw "January 2024 fallback verification failed because the authoritative and website CSV copies differ. Rerun Step 6 for cvd_2024_01."
-        }
-        $eventBaselineVerified = $true
-    }
     if ($currentReleaseId -eq $releaseId) {
+        if ($AllMonths) {
+            Write-Warning "Skipping current release $releaseId. Publish another approved release as current before archiving this month."
+            continue
+        }
         throw "$releaseId is the current public release. Publish and verify an approved fallback through Step 6 before archiving it."
     }
 
@@ -280,7 +260,9 @@ foreach ($selectedMonth in $months) {
 
     # A release can also be cited by an annual report, dashboard or another
     # surveillance page. Known rolling-update folders can be archived together;
-    # any other reference needs a separate human decision and therefore blocks.
+    # any other active product reference needs a separate human decision and
+    # therefore blocks. Plain Markdown files are implementation notes rather
+    # than rendered product contracts and must not create false dependencies.
     $dependentPeriods = @($dependentReports | ForEach-Object { Split-Path $_ -Leaf } | Select-Object -Unique)
     $otherReferences = New-Object System.Collections.ArrayList
     foreach ($referenceRoot in @(
@@ -291,7 +273,7 @@ foreach ($selectedMonth in $months) {
             continue
         }
         Get-ChildItem -LiteralPath $referenceRoot -File -Recurse | Where-Object {
-            $_.Extension -in @(".qmd", ".yml", ".yaml", ".json", ".md")
+            $_.Extension -in @(".qmd", ".yml", ".yaml", ".json")
         } | ForEach-Object {
             if (Select-String -LiteralPath $_.FullName -SimpleMatch $releaseId -Quiet) {
                 $knownRollingReference = $false
@@ -312,11 +294,19 @@ foreach ($selectedMonth in $months) {
         }
     }
     if ($otherReferences.Count -gt 0) {
+        if ($AllMonths) {
+            Write-Warning "Skipping dependency-blocked release $releaseId. References outside its rolling-update package: $($otherReferences -join '; ')"
+            continue
+        }
         throw "$releaseId has references outside its rolling-update package: $($otherReferences -join '; '). Review those dependencies before archiving."
     }
 
     if ($dependentReports.Count -gt 0 -and -not $IncludeRollingUpdates) {
         $locations = $dependentReports -join "; "
+        if ($AllMonths) {
+            Write-Warning "Skipping $releaseId because rolling updates depend on it. Rerun with -IncludeRollingUpdates if those reports should also be archived. Locations: $locations"
+            continue
+        }
         throw "$releaseId is used by one or more rolling updates: $locations. Review them and rerun with -IncludeRollingUpdates only if those reports must also be archived."
     }
     if ($IncludeRollingUpdates) {

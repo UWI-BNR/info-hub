@@ -31,7 +31,7 @@ system. The counts below use each repository path only once.
 | Stata help `.sthlp` | 12 | Help files for the CVD event and mortality dialogs. |
 | Python `.py` | 8 | Seven current utilities and one retained first-pass link checker. |
 | CSS `.css` | 5 | BNR display styles and three Font Awesome stylesheets from the vendor. |
-| PowerShell `.ps1` | 6 | Five current maintenance utilities and one deprecated first-pass reset script. |
+| PowerShell `.ps1` | 7 | Six current maintenance utilities and one deprecated first-pass reset script. |
 | YAML `.yml` | 3 | Quarto configuration, GitHub deployment and the vendored extension definition. |
 | CSV `.csv` | 2 | Annual-report contents specifications. |
 | Lua `.lua` | 2 | The BNR manual-status filter and the vendored Font Awesome filter. |
@@ -39,7 +39,7 @@ system. The counts below use each repository path only once.
 | Windows batch `.bat` | 1 | The local website editing and preview launcher. |
 | Quarto template `.qmd` | 1 | The rolling-update landing-page template. |
 | SCSS `.scss` | 1 | The main BNR website theme and responsive layout rules. |
-| **Total** | **160** | Unique files within the inventory boundary. |
+| **Total** | **162** | Unique files within the inventory boundary. |
 
 The inventory separates current BNR-maintained code from help files, retained
 or deprecated utilities, generated test evidence and third-party extension
@@ -376,8 +376,9 @@ website editing session. Read their dry-run output before allowing a change.
 | File | What it does |
 |---|---|
 | `scripts/powershell/annual-report-public-reset.ps1` | Audits, then optionally removes the specified 2025 annual-report development packages for a fresh controlled run. |
+| `scripts/powershell/reset-case-fatality-v1-development.ps1` | Audits, then optionally resets the named case-fatality v1 development outputs for a controlled rerun. |
 | `scripts/maintenance/cleanup_reporting_hardening_test_artifacts.ps1` | Audits, then optionally removes named synthetic and superseded reporting-test artefacts. |
-| `scripts/maintenance/manage-cvd-monthly-release.ps1` | Audits, then optionally moves an event or mortality month and approved dependent rolling updates to a recoverable private archive. |
+| `scripts/maintenance/manage-cvd-monthly-release.ps1` | Audits, then optionally moves eligible event or mortality months and approved dependent rolling updates to a recoverable private archive. Its companion Markdown file gives worked commands. |
 | `scripts/maintenance/remove_superseded_cvd_step5_disclosure.ps1` | Audits, then optionally removes the named superseded Step 5 disclosure files after checking the replacement wrapper. |
 | `scripts/maintenance/retire_cvd_linkage_derived_tree.ps1` | Moves the retired private linkage tree to a recoverable private archive; it does not delete it. |
 | `start-info-hub-edit.bat` | Opens VS Code, activates the supported Python environment and starts the local Quarto preview. |

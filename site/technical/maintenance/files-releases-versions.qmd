@@ -101,34 +101,38 @@ The command is audit-only unless `-Execute` is supplied. Run it first without
 `-Execute`, review every proposed path, then repeat the same command with
 `-Execute` only after the withdrawal has been authorised.
 
+A concise command guide is stored beside the utility at
+`scripts/maintenance/manage-cvd-monthly-release.md`.
+
 ```powershell
 # Audit one event month. Nothing is moved.
 .\scripts\maintenance\manage-cvd-monthly-release.ps1 `
   -Workflow Events -Year 2024 -Month 5 `
   -Reason "Development monthly workflow test cleanup"
 
-# Archive a tested event year. January 2024 remains protected by default.
+# Archive every eligible release remaining in a tested event year.
 .\scripts\maintenance\manage-cvd-monthly-release.ps1 `
   -Workflow Events -Year 2024 -AllMonths -IncludeRollingUpdates `
   -Reason "Completed 2024 workflow test cycle" -Execute
 ```
 
-The utility stops rather than guessing when:
+For a single-month request, the utility stops rather than guessing when:
 
 - the selected month is represented by the current public metadata;
-- a whole-year event cleanup is attempted before `cvd_2024_01` has been
-  republished and verified as current;
 - a rolling update depends on it and `-IncludeRollingUpdates` was not supplied;
-- January 2024 is selected without the exceptional
-  `-AllowBaselineArchive` option;
+- an annual report, dashboard or another surveillance product refers to it;
 - Git is on `main`, `master` or a detached commit; or
 - either root path is missing or unsafe.
 
-Before a year-end archive, publish and verify the approved fallback through the
-normal Step 6 process. For the event test cycle, make January 2024 current first,
-then archive the later months. After execution, inspect Git changes, rebuild the
-Downloads catalogue through the normal site process, render the complete site
-and check that no page or download link still expects an archived month.
+For `-AllMonths`, it checks months 1 to 12 and warns and skips the current,
+missing, already archived or dependency-blocked releases. It continues with
+eligible months. No particular year or January release receives special
+protection. If the intended target is current, publish and verify another
+approved release through the normal Step 6 process before archiving it.
+
+After execution, inspect Git changes, rebuild the Downloads catalogue through
+the normal site process, render the complete site and check that no page or
+download link still expects an archived month.
 
 Restoration is a controlled administrative action. Use `archive.yml` and
 `archive-manifest.csv` to identify the original locations and verify hashes,
