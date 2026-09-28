@@ -1,8 +1,8 @@
 /*
 ===============================================================================
  DO-FILE:     bnr_mort_s3_burden.do
- VERSION:     Pass 4 monthly-public-scope and fixed-reference candidate
-              (21 August 2026)
+ VERSION:     Pass 4.1 December completion boundary
+              (28 September 2026)
  PROJECT:     BNR Refit Phase 2
  PURPOSE:     Step 3: build a private mortality burden staging package
 
@@ -124,7 +124,14 @@ if _rc {
     exit 601
 }
 
-* Confirm that this is a completed Step 2 dataset and derive its final year.
+* Confirm that this is a completed Step 2 dataset and derive the reporting
+* boundary. The selected release is a monthly data freeze and may legitimately
+* contain deaths from its own calendar year. Public mortality metrics contain
+* completed calendar years only. January-November releases therefore end in
+* the preceding year. A December release is run only after that month has
+* ended, so it may include its own now-complete calendar year. The calculation
+* helper applies that boundary without removing newer records from the private
+* Step 2 archive.
 * The release ID describes the selected DATA FREEZE. The analysis years are
 * recorded separately and must not be confused with the release identifier.
 * Step 2 retains its full historical range. The dashboard series is deliberately
@@ -146,17 +153,23 @@ if missing(r(min)) | missing(r(max)) {
 }
 
 local source_start_year = floor(r(min))
-local analysis_end_year = floor(r(max))
+local source_end_year = floor(r(max))
 local analysis_start_year = 2010
+if real("`release_month'") == 12 {
+    local analysis_end_year = real("`release_year'")
+}
+else {
+    local analysis_end_year = real("`release_year'") - 1
+}
 
 if `source_start_year' > `analysis_start_year' {
     display as error "The Step 2 dataset does not extend back to the required 2010 dashboard start."
     exit 459
 }
 
-if `analysis_end_year' >= real("`release_year'") {
-    display as error "Step 3 contains completed calendar years only."
-    display as error "The selected release contains death year `analysis_end_year', which is not earlier than release year `release_year'."
+if `source_end_year' < `analysis_end_year' {
+    display as error "The Step 2 dataset does not contain the latest completed calendar year."
+    display as error "Release `release_year_4'-`release_month_2' requires deaths through `analysis_end_year', but the source ends in `source_end_year'."
     exit 459
 }
 
@@ -174,10 +187,11 @@ log using `"`private_log'"', text replace name(mort_s3)
 quietly {
 
 noisily display as text "BNR MORTALITY STEP 3: BUILD BURDEN DATA"
-noisily display as result "  Script version:       Pass 4 monthly-public-scope and fixed-reference candidate"
+noisily display as result "  Script version:       Pass 4.1 December completion boundary"
 noisily display as result "  Step 2 release:       `release_year_4'-`release_month_2'"
 noisily display as result "  Source dataset:       `source_dataset'"
 noisily display as result "  Package release:      `release_id'"
+noisily display as result "  Source death years:   `source_start_year'-`source_end_year'"
 noisily display as result "  Analysis years:       `analysis_start_year'-`analysis_end_year'"
 noisily display as result "  Replace authorised:   " cond(`replace_existing', "yes", "no")
 noisily display as result "  Diagnostic detail:    " cond(`debug_mode', "yes", "no")
