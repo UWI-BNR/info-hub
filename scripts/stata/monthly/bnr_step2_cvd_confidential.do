@@ -83,7 +83,7 @@ local end_date : display %tdCCYY-NN-DD `end_td'
 local today_iso : display %tdCCYY-NN-DD daily("`c(current_date)'", "DMY")
 local analyst "`c(username)'"
 
-local historical_file "$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta"
+local historical_file "$BNR_DATA_FROZEN/releases/y2023/m12/bnr-cvd-indiv-full-202312-v02.dta"
 local release_file "$BNR_DATA_RAW/redcap/cvd/y`year4'/m`month2'/bnr_cvd_step1_`period'.dta"
 local output_root "$BNR_DATA_DERIVED/cvd"
 local output_year "`output_root'/y`year4'"
