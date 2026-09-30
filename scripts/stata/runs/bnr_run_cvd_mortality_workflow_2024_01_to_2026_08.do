@@ -447,7 +447,9 @@ do "$BNR_STATA/mortality/bnr_mort_s4_review.do" 2026 3 replace
 * STOP: inspect the Step 4 review package and make the approval decision.
 
 * FINALISE -- run only after successful human review
-do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 3 "Ian Hambleton" "BNR Analyst" release definitions disclosure candidate ready replac
+do "$BNR_STATA/mortality/bnr_mort_s5_approve.do" 2026 3 "Ian Hambleton" "BNR Analyst" release definitions disclosure candidate ready replace
+do "$BNR_STATA/mortality/bnr_mort_s6_publish.do" 2026 3 replace
+
 * STOP: render Quarto separately and inspect this release on the site.
 
 * =============================================================================

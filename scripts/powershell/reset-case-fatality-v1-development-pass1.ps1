@@ -3,7 +3,7 @@
     Resets generated case-fatality report v1 development artefacts.
 
 .NOTES
-    Version 1.2.0 (30 September 2026)
+    Version 1.1.0 (27 September 2026)
 
 .DESCRIPTION
     Default mode is audit only: it lists the exact private, public and website
@@ -117,26 +117,9 @@ $PrivateRoot = (Resolve-Path -LiteralPath $PrivateRoot).Path
 if (-not (Test-Path -LiteralPath (Join-Path $RepoRoot '.git'))) {
     throw "RepoRoot is not a Git repository: $RepoRoot"
 }
-# Private outputs must be outside the repository, with neither root nested.
-$repoBoundary = [System.IO.Path]::GetFullPath($RepoRoot).TrimEnd('\', '/')
-$privateBoundary = [System.IO.Path]::GetFullPath($PrivateRoot).TrimEnd('\', '/')
-$separator = [System.IO.Path]::DirectorySeparatorChar
-$comparison = [System.StringComparison]::OrdinalIgnoreCase
-if ($repoBoundary.Equals($privateBoundary, $comparison) -or
-    $privateBoundary.StartsWith($repoBoundary + $separator, $comparison) -or
-    $repoBoundary.StartsWith($privateBoundary + $separator, $comparison)) {
-    throw "Safety stop: repository and private roots must be separate, non-nested folders."
-}
-
-# Permit named working branches; protect the primary branches and detached HEAD.
-$branchOutput = & git -C $RepoRoot branch --show-current
-if ($LASTEXITCODE -ne 0) {
-    throw "Cannot determine the repository branch."
-}
-$branch = "$branchOutput".Trim()
-if ([string]::IsNullOrWhiteSpace($branch) -or
-    $branch -in @('main', 'master')) {
-    throw "Safety stop: use a named working branch, not main/master or detached HEAD."
+$branch = (& git -C $RepoRoot branch --show-current).Trim()
+if ($branch -ne 'case-fatality-dev') {
+    throw "Safety stop: current branch is '$branch', not 'case-fatality-dev'."
 }
 
 $studyId = 'case_fatality_2025'

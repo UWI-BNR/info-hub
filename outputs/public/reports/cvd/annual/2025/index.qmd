@@ -2,15 +2,15 @@
 title: "Annual CVD report: 2025"
 description: "CVD cases and deaths in Barbados in 2025, with trends over time and a special chapter on our reporting improvements."
 date: 2026-11-29
-date-modified: 2026-09-28
+date-modified: 2026-09-30
 report-id: bnr_cvd_annual_report_2025_v1
 report-type: Annual report
 report-version: v1
 coverage-period: 2025
 event-release-id: cvd_2026_06
 mortality-release-id: mort_2026_06
-image: /assets/images/listings/listing_salt_pan.webp
-image-alt: Caribbean salt pan.
+image: /assets/images/listings/listing_reef_shallows.webp
+image-alt: Sunlit shallow reef water in the Caribbean.
 categories:
   - CVD
   - Annual report

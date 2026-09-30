@@ -6,7 +6,7 @@ surveillance_area: CVD
 domain: mortality
 metric_family: burden_and_rate
 period: 2025-09
-release_date: 2026-09-28
+release_date: 2026-09-30
 
 title: |-
   CVD deaths

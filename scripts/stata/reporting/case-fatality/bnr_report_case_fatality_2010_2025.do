@@ -32,9 +32,9 @@ EDITABLE SECTION 1 — FROZEN INPUTS AND PRIVATE OUTPUT
 Change only for a deliberately selected pair of releases and study version.
 *******************************************************************************/
 local study_id "cvd_case_fatality_2010_2025_v01"
-local event_input "$BNR_PRIVATE/data/derived/cvd/y2026/m01/bnr_cvd_confidential_202601_v01.dta"
-local death_input "$BNR_PRIVATE/data/raw/redcap/mortality/y2026/m07/bnr_mort_s1_202607.dta"
-local mortality_release "2026-07"
+local event_input "$BNR_PRIVATE/data/derived/cvd/y2026/m03/bnr_cvd_confidential_202603_v01.dta"
+local death_input "$BNR_PRIVATE/data/raw/redcap/mortality/y2026/m06/bnr_mort_s1_202606.dta"
+local mortality_release "2026-06"
 local first_year 2010
 local last_year 2025
 local followup_end = mdy(12,31,`last_year') + 30

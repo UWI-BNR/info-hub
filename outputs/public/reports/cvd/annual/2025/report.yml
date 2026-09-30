@@ -6,11 +6,11 @@ report_version: v1
 publication_date: 2026-11-29
 public_name: bnr_cvd_annual_report_2025
 event_release_id: cvd_2026_06
-event_source_size: 1213719
-event_source_checksum: 2829621286
+event_source_size: 1213607
+event_source_checksum: 1346912379
 mortality_release_id: mort_2026_06
-mortality_source_size: 1131231
-mortality_source_checksum: 1494540780
+mortality_source_size: 1131215
+mortality_source_checksum: 267953487
 pdf_file: bnr_cvd_annual_report_2025.pdf
 public_health_update_id: bnr_cvd_public_health_update_2025_v1
 public_health_update_pdf_file: bnr_cvd_public_health_update_2025.pdf
@@ -18,5 +18,5 @@ public_health_update_landing_page: public_health_update.qmd
 pdf_finishing: controlled_python_v3
 pdf_contents: dynamic_two_level_adaptive
 landing_page: index.qmd
-built_date: 2026-09-28
-built_time: 15:03:03
+built_date: 2026-09-30
+built_time: 10:36:21
