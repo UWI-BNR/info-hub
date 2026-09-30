@@ -13,8 +13,8 @@
   path: "files/reports/cvd/studies/case_fatality_2025/bnr_cvd_oneoff_case_fatality_2025_data.zip"
   file: "bnr_cvd_oneoff_case_fatality_2025_data.zip"
   updated: "2026-09-25"
-  size: "19.3 KB"
-  size_bytes: 19810
+  size: "19.1 KB"
+  size_bytes: 19540
   sort_order: 40
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -30,9 +30,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_03.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_03.zip"
   file: "cvd_metrics_cvd_2024_03.zip"
-  updated: "2026-09-28"
-  size: "441.4 KB"
-  size_bytes: 452041
+  updated: "2026-09-30"
+  size: "499.2 KB"
+  size_bytes: 511139
   sort_order: 20
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -48,9 +48,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_09.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2024_09.zip"
   file: "cvd_metrics_cvd_2024_09.zip"
-  updated: "2026-09-28"
-  size: "443.8 KB"
-  size_bytes: 454429
+  updated: "2026-09-30"
+  size: "446.6 KB"
+  size_bytes: 457276
   sort_order: 20
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -66,9 +66,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2025_03.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2025_03.zip"
   file: "cvd_metrics_cvd_2025_03.zip"
-  updated: "2026-09-28"
+  updated: "2026-09-30"
   size: "469.9 KB"
-  size_bytes: 481158
+  size_bytes: 481167
   sort_order: 20
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -84,9 +84,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2025_09.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2025_09.zip"
   file: "cvd_metrics_cvd_2025_09.zip"
-  updated: "2026-09-28"
-  size: "473.9 KB"
-  size_bytes: 485241
+  updated: "2026-09-30"
+  size: "474.4 KB"
+  size_bytes: 485758
   sort_order: 20
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -102,9 +102,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2026_03.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2026_03.zip"
   file: "cvd_metrics_cvd_2026_03.zip"
-  updated: "2026-09-28"
-  size: "553.9 KB"
-  size_bytes: 567163
+  updated: "2026-09-30"
+  size: "554.2 KB"
+  size_bytes: 567463
   sort_order: 20
 - title: "CVD cases"
   output_type: "Surveillance data"
@@ -120,9 +120,9 @@
   href: "files/metrics/cvd/releases/cvd_metrics_cvd_2026_06.zip"
   path: "files/metrics/cvd/releases/cvd_metrics_cvd_2026_06.zip"
   file: "cvd_metrics_cvd_2026_06.zip"
-  updated: "2026-09-28"
-  size: "554.9 KB"
-  size_bytes: 568231
+  updated: "2026-09-30"
+  size: "553.8 KB"
+  size_bytes: 567129
   sort_order: 20
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -138,9 +138,9 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2024_03.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2024_03.zip"
   file: "bnr_mort_burden_mort_2024_03.zip"
-  updated: "2026-09-28"
-  size: "338.7 KB"
-  size_bytes: 346815
+  updated: "2026-09-30"
+  size: "337.1 KB"
+  size_bytes: 345185
   sort_order: 30
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -156,9 +156,9 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2024_09.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2024_09.zip"
   file: "bnr_mort_burden_mort_2024_09.zip"
-  updated: "2026-09-28"
-  size: "337.2 KB"
-  size_bytes: 345339
+  updated: "2026-09-30"
+  size: "348.9 KB"
+  size_bytes: 357322
   sort_order: 30
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -174,9 +174,9 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2025_03.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2025_03.zip"
   file: "bnr_mort_burden_mort_2025_03.zip"
-  updated: "2026-09-28"
-  size: "346.6 KB"
-  size_bytes: 354901
+  updated: "2026-09-30"
+  size: "359.1 KB"
+  size_bytes: 367718
   sort_order: 30
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -192,9 +192,9 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2025_09.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2025_09.zip"
   file: "bnr_mort_burden_mort_2025_09.zip"
-  updated: "2026-09-28"
-  size: "358.6 KB"
-  size_bytes: 367182
+  updated: "2026-09-30"
+  size: "359.6 KB"
+  size_bytes: 368230
   sort_order: 30
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -210,9 +210,9 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_03.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_03.zip"
   file: "bnr_mort_burden_mort_2026_03.zip"
-  updated: "2026-09-28"
-  size: "381.6 KB"
-  size_bytes: 390786
+  updated: "2026-09-30"
+  size: "371.1 KB"
+  size_bytes: 380012
   sort_order: 30
 - title: "CVD deaths"
   output_type: "Surveillance data"
@@ -228,7 +228,7 @@
   href: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_06.zip"
   path: "files/metrics/mortality/burden/bnr_mort_burden_mort_2026_06.zip"
   file: "bnr_mort_burden_mort_2026_06.zip"
-  updated: "2026-09-28"
-  size: "379.6 KB"
-  size_bytes: 388713
+  updated: "2026-09-30"
+  size: "369.6 KB"
+  size_bytes: 378521
   sort_order: 30

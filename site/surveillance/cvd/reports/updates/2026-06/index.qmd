@@ -1,7 +1,7 @@
 ---
 title: "Rolling CVD update: June 2026"
 description: "A three-month summary of recent hospital-recorded CVD cases and CVD deaths in Barbados."
-date: "2026-09-28"
+date: "2026-09-30"
 categories:
   - CVD
   - Three-month update
@@ -1017,7 +1017,7 @@ chartExportRows = ({blocks, chartView, measure, sourceReleaseId, sourceSnapshot,
   blocks.filter(Boolean).flat().map(row => ({
     report_id: "bnr_cvd_update_2026_06_v1",
     report_version: "v1",
-    report_date: "2026-09-28",
+    report_date: "2026-09-30",
     report_period: "June 2026",
     source_release_id: sourceReleaseId,
     source_snapshot: sourceSnapshot,
@@ -1087,7 +1087,7 @@ sourceCsvWithMetadata = ({rows, sourceReleaseId, sourceSnapshot, sourceType, pub
       const metadata = {
         report_id: "bnr_cvd_update_2026_06_v1",
         report_version: "v1",
-        report_date: "2026-09-28",
+        report_date: "2026-09-30",
         report_period: "June 2026",
         source_type: sourceType,
         source_release_id: sourceReleaseId,

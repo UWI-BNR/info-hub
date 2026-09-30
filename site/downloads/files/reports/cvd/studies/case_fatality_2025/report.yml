@@ -5,16 +5,16 @@ study_id: case_fatality_2025
 report_version: v1
 public_name: bnr_cvd_oneoff_case_fatality_2025
 report_title: "Thirty-day case fatality after cardiovascular events"
-report_description: "Deaths within 30 days of a heart attack or stroke event in Barbados, 2010–2025."
+report_description: "BNR case-fatality results for 2010-2025."
 report_date: 2026-09-25
-source_pdf_size: 1310393
-source_pdf_checksum: 3402514874
+source_pdf_size: 1310250
+source_pdf_checksum: 2644989911
 pdf_file: bnr_cvd_oneoff_case_fatality_2025.pdf
 landing_page: index.qmd
 dataset_package_id: bnr_cvd_oneoff_case_fatality_2025_data
 dataset_zip_file: bnr_cvd_oneoff_case_fatality_2025_data.zip
-dataset_zip_size: 19810
-dataset_zip_checksum: 732500480
+dataset_zip_size: 19540
+dataset_zip_checksum: 125833200
 dataset_catalogue_file: bnr_cvd_oneoff_case_fatality_2025_data.yml
-built_date: 2026-09-27
-built_time: 15:37:55
+built_date: 2026-09-30
+built_time: 11:19:45

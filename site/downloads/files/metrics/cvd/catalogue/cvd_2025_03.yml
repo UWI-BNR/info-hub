@@ -6,7 +6,7 @@ surveillance_area: CVD
 domain: cvd
 metric_family: combined_cvd_metrics
 period: cvd_2025_03
-release_date: 2026-09-28
+release_date: 2026-09-30
 
 title: |-
   CVD cases
