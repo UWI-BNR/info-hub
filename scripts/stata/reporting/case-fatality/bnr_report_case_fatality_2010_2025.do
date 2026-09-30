@@ -1484,7 +1484,7 @@ format estimate_pct ci_lower_pct ci_upper_pct %6.2f
 * Stata notes, structured YAML and reader-facing README so the three formats
 * cannot drift. The YAML is the formal data dictionary; the README is a short
 * guide for people opening the public ZIP for the first time.
-local meta_inputs = "Inputs: joined identifiable CVD event release 2026-01 and all-deaths mortality release `mortality_release'. Death follow-up ends 30 January 2026, providing 30 complete days for events through 31 December 2025."
+local meta_inputs = "Inputs: joined identifiable CVD event release 2026-03 and all-deaths mortality release `mortality_release'. Death follow-up ends 30 January 2026, providing 30 complete days for events through 31 December 2025."
 local meta_primary = "Primary measure: all-cause death within 30 days of the first event of each condition in each calendar year. All CVD pools the Heart and Stroke condition-specific index events. Deaths are identified by deterministic mortality linkage or death recorded on the index hospital event record within 30 days."
 local meta_secondary = "Secondary measures: deterministic linked all-cause death within 30 days; and death recorded on the index hospital event record within 30 days. Secondary rows are condition-specific and use four pre-specified reporting eras. They are included in the dataset but are not presented in the initial report PDF."
 local meta_eras = "Reporting eras: 2010-15 Early legacy; 2016-20 Later legacy; 2021-23 Third legacy / pre-Info-Hub; and 2024-25 Transition and process-improvement. These describe changes in data provenance and quality, not equal calendar blocks. The 2024-25 era straddles a late-2024 process change and should not be interpreted as having uniform data quality."
@@ -2461,7 +2461,7 @@ putpdf table cf_methods(1,.), border(top,single,"`teal'")
 putpdf table cf_methods(8,.), border(bottom,single,"`teal'")
 putpdf paragraph, font("`font_body'",.8)
 putpdf text ("Data used"), bold font("`font_title'",8,"`ink'") linebreak
-putpdf text ("CVD event release: January 2026. All-deaths release: `mortality_release'. Death follow-up runs through 30 January 2026, giving every event through 31 December 2025 a complete 30-day follow-up period."), ///
+putpdf text ("CVD event release: March 2026. All-deaths release: `mortality_release'. Death follow-up runs through 30 January 2026, giving every event through 31 December 2025 a complete 30-day follow-up period."), ///
     font("`font_body'",7.2,"`muted'")
 
 * Step 11.5: save the Stata-composed body, then add the same presentation-only
