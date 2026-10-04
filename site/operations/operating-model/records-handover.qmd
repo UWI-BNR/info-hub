@@ -53,6 +53,7 @@ The person handing over and the person taking over should check together that:
 - Everyone knows which release is the latest complete version, and what work is still under way.
 - Any unresolved questions, failed runs and approvals still needed are clearly listed.
 - The usual workflow can be run safely, either as a test or during the current reporting cycle.
+- A new or replacement workstation has followed [Set up a workstation](../../technical/getting-started/workstation-setup.qmd#private-workspace): the private folders exist, required retained inputs are restored, and any work in progress and its review/approval evidence have been recovered securely.
 - Everyone understands who is responsible for backup and recovery.
 - The current repository branch and Git status are clear.
 - Access for people who no longer need it has been removed.

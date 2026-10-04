@@ -35,7 +35,7 @@ Use a workstation that meets this practical BNR baseline:
 |---|---|---|
 | **1** | Install the supporting software | Git, Python 3.13, Quarto, VS Code and Firefox are available. |
 | **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
-| **3** | Set up the private workspace | The authorised `info-hub-private` data and reference structure is available. |
+| **3** | Set up the private workspace | The helper creates the folders; the required retained data and reference files are restored securely. |
 | **4** | Configure local paths and REDCap access | The public root, private root and required CVD/mortality token-file locations resolve correctly. |
 | **5** | Create the Python environment | The project Python packages and PyCap are available. |
 | **6** | Configure Stata startup with `profile.do` | Paths, Python, dialogs and the BNR menu load automatically when Stata starts. |
@@ -53,7 +53,7 @@ Use a workstation that meets this practical BNR baseline:
 | `requirements-freeze.txt` | Complete Windows/Python 3.13 environment tested at handover. Use for comparison or controlled reproduction, not routine installation. |
 | Location selected for `$BNR_REDCAP_TOKEN_FILE` | CVD REDCap token file used for authorised event extracts. Store outside Git with the token alone on one line. |
 | Location selected for `$BNR_MORT_REDCAP_TOKEN_FILE` | Mortality REDCap token file used for authorised mortality extracts. Store outside Git with the token alone on one line. |
-| `$BNR_PRIVATE/data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta` | Retained historical CVD event source used by Step 2. Restore through the approved secure-storage process. |
+| `$BNR_PRIVATE/data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v02.dta` | Corrected retained historical CVD event source used by Step 2. Restore through the approved secure-storage process. Do not substitute `v01`. |
 | `$BNR_PRIVATE/data/reference/population/wpp2024_brb_population_2010_2035_5y.dta` | Approved Barbados population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
 | `$BNR_PRIVATE/data/reference/population/who_world_standard_2000_2025.dta` | Approved standard-population input used by rate workflows. Confirm that it exists in the authorised private workspace. |
 | `site/_extensions/quarto-ext/fontawesome/` | Committed Font Awesome extension used by the site. Confirm that the directory is present after cloning; do not reinstall it routinely. |
@@ -63,6 +63,7 @@ Use a workstation that meets this practical BNR baseline:
 
 | File | Purpose and use |
 |---|---|
+| `scripts/powershell/setup-private-workspace.ps1` | Creates the standard empty private folders safely and reports whether the three retained input files are present. Run it in Stage 3; it does not restore data or configure credentials. |
 | `scripts/stata/config/bnr_paths_TEMPLATE.do` | Defines and checks the standard workstation folder settings. Copy it to the local settings file that Git deliberately ignores, then enter the machine-specific public folder, private folder and token-file paths. |
 | `scripts/python/check-python-environment.py` | Checks Python 3.13 and the required project packages. Run it directly from the repository root after installing `requirements.txt`. |
 | `scripts/stata/menu/bnr_menu.do` | Builds the **User > BNR** workflow menu. The workstation's `profile.do` calls it automatically. |
@@ -471,50 +472,135 @@ Run these commands in a VS Code PowerShell terminal opened in the intended paren
 :::
 
 ::: {.callout-note collapse="true"}
-## Stage 3: Set up the private companion workspace
+## Stage 3: Set up the private companion workspace {#private-workspace}
 
-The public repository is not enough to run the BNR analytical workflows.
+The public repository is enough to preview the existing website once the supporting software is configured. Running the analytical workflows also needs a separate authorised private workspace, later assigned to `$BNR_PRIVATE`.
 
-The workstation also needs an authorised private companion root, later assigned to:
+There are two tasks: **create the folders**, then **restore the retained inputs**. Empty folders alone do not make the analytical workflows ready.
 
-`$BNR_PRIVATE`
+### 1. Choose the private location
 
-The private root contains or receives:
-
-```text
-data/
-  raw/
-  frozen/
-  derived/
-  reference/
-    population/
-
-outputs/
-  staging/
-
-logs/
-  private/
-
-work/
-```
-
-Set up or restore this workspace using the organisation's approved secure-storage process.
-
-Do **not** copy private registry data from an informal or unapproved source simply to make the workstation run.
-
-### Required retained inputs
-
-Check that the authorised private workspace includes these retained inputs:
+Choose an approved location outside every Git repository, with access restricted to authorised staff and suitable backup arrangements. For example:
 
 ```text
-data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v01.dta
-data/reference/population/wpp2024_brb_population_2010_2035_5y.dta
-data/reference/population/who_world_standard_2000_2025.dta
+C:\BNR\info-hub
+C:\BNR\info-hub-private
 ```
 
-The first file is the frozen historical CVD source used by CVD event Step 2. The two population files are the approved inputs used by the CVD event and mortality rate workflows.
+These are separate neighbouring folders. Do not put `info-hub-private` inside `info-hub`. You may choose another drive or approved storage location; use its full path throughout Stages 3 and 4.
 
-The exact machine path is configured in Stage 4.
+The helper inherits the storage location's permissions. It does not set access rights or arrange backups. Confirm those arrangements with the responsible person before restoring confidential files.
+
+### 2. Open a PowerShell terminal in VS Code
+
+PowerShell is Windows' command window. No PowerShell programming knowledge or additional packages are needed for this helper.
+
+1. Open **VS Code**.
+2. Choose **File > Open Folder**, then select your local `info-hub` repository folder from Stage 2.
+3. Choose **Terminal > New Terminal**. A command window appears below the editor.
+4. Check the terminal label says **PowerShell**. If it does not, use the small arrow beside the **+** in the terminal panel and select **Windows PowerShell** or **PowerShell**.
+5. Check that the command prompt ends at your `info-hub` folder. If necessary, type the following, replacing the example path, and press **Enter**:
+
+```powershell
+Set-Location "C:\BNR\info-hub"
+```
+
+Commands below are typed or pasted into this terminal, not into Stata or a new text file. Press **Enter** after each command. Keep quotation marks around paths, especially when they contain spaces.
+
+### 3. Find and preview the helper
+
+The helper is already in the repository at:
+
+`scripts/powershell/setup-private-workspace.ps1`
+
+In VS Code's left-hand Explorer, expand **scripts > powershell** to find it. A `.ps1` file is a PowerShell script. Run it from the terminal rather than double-clicking it.
+
+First preview the folders that would be created. Replace the example private path with your chosen full path:
+
+```powershell
+.\scripts\powershell\setup-private-workspace.ps1 -PrivateRoot "C:\BNR\info-hub-private" -WhatIf
+```
+
+`-PrivateRoot` supplies the private folder location. `-WhatIf` means **show the proposed actions without changing anything**. The output should list the missing folders and finish with `PREVIEW ONLY`. Required retained files may be reported as `MISSING`; that is expected on a new laptop.
+
+If PowerShell says that running scripts is disabled, use this command in the same terminal:
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+```
+
+If prompted, type **Y** and press **Enter**, then rerun the preview. This setting ends when you close that terminal. If an institutional policy still blocks the script, ask the responsible IT person for help.
+
+If Windows specifically reports that this downloaded script is not trusted or is unsigned, after confirming it is the repository helper, unblock that one file:
+
+```powershell
+Unblock-File -LiteralPath .\scripts\powershell\setup-private-workspace.ps1
+```
+
+Then rerun the preview. Do not unblock unrelated files.
+
+### 4. Create the folders
+
+When the preview shows the intended private location, run the same command without `-WhatIf`:
+
+```powershell
+.\scripts\powershell\setup-private-workspace.ps1 -PrivateRoot "C:\BNR\info-hub-private"
+```
+
+The helper reports each new folder and finishes with `FOLDER SETUP COMPLETE`, followed by the retained-input checks. It creates these standard locations and their parent folders:
+
+| Location below the private root | What belongs there |
+|---|---|
+| `data/raw/redcap/cvd/` | CVD event extracts produced by Step 1. |
+| `data/raw/redcap/mortality/` | Mortality extracts produced by Mortality Step 1. |
+| `data/frozen/releases/y2023/m12/` | The retained historical CVD dataset listed below. |
+| `data/derived/cvd/` and `data/derived/mortality/` | Confidential datasets and analytical inputs produced by the workflows. |
+| `data/reference/population/` | The two approved population reference datasets listed below. |
+| `outputs/staging/` | Proposed release packages, report candidates and review evidence. |
+| `logs/private/` | Private operational logs. |
+| `work/` | Other authorised private working files. |
+
+The helper preserves existing files and folders and can be rerun safely. It stops if a required folder path is occupied by a file, the chosen root overlaps the public repository, or a required path passes through a Git workspace, junction or symbolic link. Use a direct authorised folder path if a redirected path is refused.
+
+The helper creates no datasets, token files, local configuration, approval records or public outputs. The existing workflows create their own dated output folders when run.
+
+### 5. Restore the absolute minimum retained inputs
+
+For a new workstation that will run the routine CVD event and mortality pathways, restore these **three existing Stata datasets** from the approved secure source. Paths below are relative to the private root chosen above:
+
+| Exact private file location | Why it is needed |
+|---|---|
+| `data/frozen/releases/y2023/m12/bnr-cvd-indiv-full-202312-v02.dta` | Corrected frozen 2009-2023 CVD history required by CVD event Step 2. The current workflow requires `v02`; `v01` is not a substitute. |
+| `data/reference/population/wpp2024_brb_population_2010_2035_5y.dta` | Barbados population denominators required for CVD event and mortality rates. |
+| `data/reference/population/who_world_standard_2000_2025.dta` | Standard-population weights required for age-standardised rates. |
+
+For example, the historical dataset would be placed at:
+
+```text
+C:\BNR\info-hub-private\data\frozen\releases\y2023\m12\bnr-cvd-indiv-full-202312-v02.dta
+```
+
+Obtain the exact approved datasets from the BNR Lead or the authorised secure backup. Copy them to the locations above without renaming them. Do not create empty placeholder files, replace them with similarly named versions, or copy private registry data from an informal source.
+
+Rerun the helper after restoring them. It should report `PRESENT` for all three files and `Missing retained inputs: 0`. This confirms their presence only; the workflows still check their contents when used.
+
+### 6. Understand what else is needed before a workflow can run
+
+| Intended task | Minimum additional requirement |
+|---|---|
+| Preview or render the existing public website | No private data or REDCap tokens are needed. Complete the software and website setup stages. |
+| Load the standard BNR Stata configuration | The private folders must exist and Stage 4 must define the public, private and both token-file paths. Token files themselves are checked by the relevant extract workflow. |
+| Obtain fresh CVD event records | An authorised CVD REDCap token file, configured in Stage 4, plus working REDCap access and the Python environment. Step 1 creates the saved extract. |
+| Obtain fresh mortality records | An authorised mortality REDCap token file, configured in Stage 4, plus working REDCap access and the Python environment. Mortality Step 1 creates the saved extract. |
+| Run later steps without a fresh extract | The exact saved source extract or preceding-step outputs for the selected release, restored securely or created by the earlier workflow steps. |
+| Build annual or rolling reports | The exact declared approved public CVD event and mortality releases. Restore or reproduce them through their controlled workflows; private folders alone are insufficient. |
+| Continue an unfinished report or release on the replacement laptop | The relevant private working files, staging package and review/approval evidence from the authorised backup, in addition to the baseline inputs above. Bespoke analyses may require further study-specific inputs. |
+
+For fresh extracts in both domains, Stage 4 configures two separate token text files. Each holds its own API token alone on one line. Their locations must be outside Git; they may be inside the private root. The helper does not create, read or test tokens.
+
+On a fresh setup, `data/raw/`, `data/derived/`, `outputs/staging/`, `logs/private/` and `work/` can start empty. Routine workflows populate them. **On a replacement machine with work in progress, also restore the relevant existing private workspace; the three baseline datasets do not recover unfinished work.**
+
+Stage 3 is complete when the folders exist, the three baseline datasets have been restored for analytical use, and their authorised provenance is known. Continue to Stage 4 using the same private root.
 
 See [The BNR analytics and publishing environment](environment.qmd) for the purpose of each private location.
 :::
@@ -966,7 +1052,7 @@ display "$BNR_PRIVATE_WORK"
 display "$BNR_PRIVATE_LOGS"
 ```
 
-Go to the folders and confirm the required retained private/reference files actually exist.
+Go to the folders and confirm the required retained private/reference files actually exist. Follow the [Stage 3 retained-input checks](#private-workspace) to rerun the helper; folder creation alone is not proof that the inputs are ready.
 
 ### 3. REDCap configuration
 
