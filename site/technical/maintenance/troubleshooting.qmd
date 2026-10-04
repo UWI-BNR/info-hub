@@ -96,6 +96,20 @@ Correct `bnr_paths_LOCAL.do` or the way `profile.do` loads it. Do not hard-code 
 
 :::
 
+### A required private folder is missing
+
+::: {.callout-note collapse="true"}
+
+First check the private root in `scripts/stata/config/bnr_paths_LOCAL.do`. If it points to an unavailable drive or the wrong location, correct that problem before creating folders.
+
+For the intended authorised location, rerun `scripts/powershell/setup-private-workspace.ps1`. Follow the beginner instructions in [Set up the private workspace](../getting-started/workstation-setup.qmd#private-workspace), including how to open a VS Code PowerShell terminal and preview the actions.
+
+The helper creates missing standard folders and preserves existing contents. It does not recover deleted data or recreate workflow outputs. Restore retained inputs from the approved secure source, or rerun the preceding workflow step for generated files. A replacement machine may also need existing staging packages and review evidence restored.
+
+Afterwards, reload the local path configuration in Stata and repeat the affected step.
+
+:::
+
 ### A REDCap extract cannot find its token
 
 ::: {.callout-note collapse="true"}
