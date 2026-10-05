@@ -37,9 +37,9 @@ Use a workstation that meets this practical BNR baseline:
 | **2** | Clone and check the public repository | `info-hub` is available locally and Git recognises it. |
 | **3** | Set up the private workspace | The helper creates the folders; the required retained data and reference files are restored securely. |
 | **4** | Configure local paths and REDCap access | The public root, private root and required CVD/mortality token-file locations resolve correctly. |
-| **5** | Create the Python environment | The project Python packages and PyCap are available. |
-| **6** | Configure Stata startup with `profile.do` | Paths, Python, dialogs and the BNR menu load automatically when Stata starts. |
-| **7** | Check Quarto and start an editing session | The site previews locally using `start-info-hub-edit.bat`. |
+| **5** | Create/check the BNR Python environment | `setup-bnr-python.bat -EnvironmentOnly` verifies the project venv and its packages. |
+| **6** | Configure Stata startup with `profile.do` | The setup helper selects the BNR venv; paths, dialogs and the BNR menu load automatically. |
+| **7** | Check Quarto and start an editing session | The site previews locally using `start-bnr-info-hub-edit.bat`. |
 | **8** | Record and verify the workstation setup | Git, private inputs, Stata and Quarto have all been inspected. |
 :::
 
@@ -65,10 +65,13 @@ Use a workstation that meets this practical BNR baseline:
 |---|---|
 | `scripts/powershell/setup-private-workspace.ps1` | Creates the standard empty private folders safely and reports whether the three retained input files are present. Run it in Stage 3; it does not restore data or configure credentials. |
 | `scripts/stata/config/bnr_paths_TEMPLATE.do` | Defines and checks the standard workstation folder settings. Copy it to the local settings file that Git deliberately ignores, then enter the machine-specific public folder, private folder and token-file paths. |
+| `setup-bnr-python.bat` | One-time Python setup/repair launcher in the repository root. Double-click it for an existing workstation, or use `-EnvironmentOnly` in Stage 5 and the default launcher in Stage 6. |
+| `scripts/powershell/setup-bnr-python.ps1` | Called by the BAT launcher; creates/checks the BNR venv, installs requirements and opens the profile chooser. |
+| `scripts/python/configure-bnr-stata-profile.py` | Called automatically by the setup helper; checks LOCAL.do without editing it, backs up the selected profile and updates its BNR startup entries while retaining SHG entries. |
 | `scripts/python/check-python-environment.py` | Checks Python 3.13 and the required project packages. Run it directly from the repository root after installing `requirements.txt`. |
 | `scripts/stata/menu/bnr_menu.do` | Builds the **User > BNR** workflow menu. The workstation's `profile.do` calls it automatically. |
 | `site/_quarto.yml` | Defines the Quarto website and the commands that run automatically before each site build. `quarto preview` and `quarto render` read it automatically. |
-| `start-info-hub-edit.bat` | Opens VS Code, activates the project environment for preview, starts Quarto and opens the local site in Firefox. Double-click it from the repository root for a normal editing session. |
+| `start-bnr-info-hub-edit.bat` | Opens VS Code, activates the project environment for preview, starts Quarto and opens the local site in Firefox. Double-click it from the repository root for a normal editing session. |
 | Personal `profile.do` | Loads BNR paths and the menu and configures Stata's Python executable. Create it in Stata's personal directory; Stata runs it automatically at startup. |
 :::
 
@@ -80,6 +83,7 @@ Use a workstation that meets this practical BNR baseline:
 | Local path selected for `$BNR_PRIVATE` | Private companion workspace containing source data, derived data, reference files, proposed packages awaiting review or publication, work files and logs. Authorised private storage only. |
 | `scripts/stata/config/bnr_paths_LOCAL.do` | Machine-specific public/private folder and token-file settings. Git deliberately ignores this local file; never commit it. |
 | `venv-info-hub/` | Workstation's installed Python packages and executable. This is a local generated folder; do not commit it. |
+| `profile.bnr_backup_YYYYMMDD_HHMMSS_microseconds.bak` beside `profile.do` | Original personal profile before a helper update. Local backup outside Git; use it to undo that profile change. |
 | `profile.do` in Stata's `PERSONAL` directory | Personal Stata startup file that loads the BNR environment automatically. This is a machine-specific local file. |
 | `local-setup-notes.md` | Paths, versions and completed setup checks without token values. This is a machine-specific local file; do not commit it. |
 | `site/_site/` | Locally rendered static site used for inspection. This is generated local output; recreate it through Quarto. |
@@ -196,7 +200,13 @@ py -3.13 -m pip --version
 py -3.13 -c "import sys; print(sys.executable)"
 ```
 
-The first two commands must report Python 3.13 and its `pip` installation. The final command prints the Python executable path. Record that path; Stage 5 creates the project virtual environment used by BNR.
+The first two commands must report Python 3.13 and its `pip` installation. The final command prints the **base Python** executable path. Confirm that this installation is accessible to your current Windows account; do not use another user's AppData installation.
+
+Base Python creates the project virtual environment in Stage 5. **Do not paste the base executable path into `profile.do`.** Stata's BNR extraction uses the interpreter inside the BNR repository's `venv-info-hub`, selected automatically in Stage 6.
+
+Keep base Python installed: the virtual environment still depends on it. On another computer, install base Python there and rebuild the venv from `requirements.txt`; do not copy the old venv.
+
+BNR and SHG retain separate project venvs and separate requirements files. BNR uses its venv for Python embedded inside Stata. SHG's transfer controller launches `$SHG_PYTHON_EXE` as a separate process, so both can operate in the same Stata session without changing the embedded interpreter.
 
 ### 4. Install Quarto
 
@@ -589,7 +599,7 @@ Rerun the helper after restoring them. It should report `PRESENT` for all three 
 | Intended task | Minimum additional requirement |
 |---|---|
 | Preview or render the existing public website | No private data or REDCap tokens are needed. Complete the software and website setup stages. |
-| Load the standard BNR Stata configuration | The private folders must exist and Stage 4 must define the public, private and both token-file paths. Token files themselves are checked by the relevant extract workflow. |
+| Load the standard BNR Stata configuration | The private folders must exist, Stage 4 must define the public/private and token-file paths, and Stage 5 must create the BNR venv. Token files themselves are checked by the relevant extract workflow. |
 | Obtain fresh CVD event records | An authorised CVD REDCap token file, configured in Stage 4, plus working REDCap access and the Python environment. Step 1 creates the saved extract. |
 | Obtain fresh mortality records | An authorised mortality REDCap token file, configured in Stage 4, plus working REDCap access and the Python environment. Mortality Step 1 creates the saved extract. |
 | Run later steps without a fresh extract | The exact saved source extract or preceding-step outputs for the selected release, restored securely or created by the earlier workflow steps. |
@@ -647,6 +657,7 @@ The CVD token is used by CVD event Step 1. The mortality token is used by Mortal
 The remaining standard globals are derived automatically, including:
 
 - `$BNR_STATA`
+- `$BNR_PYTHON_EXE` — the BNR repo's `venv-info-hub/Scripts/python.exe`
 - `$BNR_DATA_RAW`
 - `$BNR_DATA_FROZEN`
 - `$BNR_DATA_DERIVED`
@@ -668,7 +679,17 @@ Do not put the token itself in `bnr_paths_LOCAL.do`, another DO file, a log, Git
 
 ### 3. Test the configuration
 
-In Stata:
+Save the LOCAL file now. Complete Stage 5 before running this check: the updated template checks that the BNR Python executable exists.
+
+**Existing workstations:** Git does not update an existing `bnr_paths_LOCAL.do`. Add this single line under **Derived public-repository folders**, replacing any earlier `BNR_PYTHON_EXE` definition:
+
+```stata
+global BNR_PYTHON_EXE "$BNR_REPO/venv-info-hub/Scripts/python.exe"
+```
+
+Keep your current repo root, private root and token-file paths. The Python setup helper will check this definition but will not edit the LOCAL file.
+
+After Stage 5, in Stata:
 
 ```stata
 do "scripts/stata/config/bnr_paths_LOCAL.do"
@@ -678,6 +699,7 @@ Then:
 
 ```stata
 display "$BNR_REPO"
+display "$BNR_PYTHON_EXE"
 display "$BNR_PRIVATE"
 display "$BNR_DATA_RAW"
 display "$BNR_DATA_DERIVED"
@@ -687,7 +709,7 @@ display "$BNR_SITE"
 ```
 
 Loading the configuration now stops with an error if the repository root is
-wrong, a required private folder is absent, or the private workspace/token path
+wrong, a required private folder or the BNR Python executable is absent, or the private workspace/token path
 sits inside the public Git repository.
 
 Check the token files exist without displaying their contents:
@@ -705,131 +727,108 @@ confirm file "$BNR_MORT_REDCAP_TOKEN_FILE"
 ::: {.callout-note collapse="true"}
 ## Stage 5: Create the Python environment
 
-The repository uses a local Python virtual environment called:
+The BNR virtual environment is `venv-info-hub` inside the repository. It contains the interpreter and packages used by BNR Stata extraction, support scripts and website editing. Keep `requirements.txt`: it defines this environment.
 
-`venv-info-hub`
+### 1. Run the setup helper
 
-A virtual environment is a local folder containing the Python executable and packages used by this project. It keeps BNR support packages separate from unrelated Python work.
+In a **VS Code PowerShell terminal** at the BNR repository root, type:
 
-### 1. Create the environment
+```powershell
+.\setup-bnr-python.bat -EnvironmentOnly
+```
 
-In a VS Code PowerShell terminal at the repository root, type:
+The launcher calls `scripts/powershell/setup-bnr-python.ps1`. It derives the repo location, creates the venv with Python 3.13 if missing, installs `requirements.txt`, runs the existing environment checker and checks package dependency compatibility. An existing venv is checked and reused, rather than deleted. Neither LOCAL.do nor the Stata profile is changed in this mode.
+
+Wait for `BNR PYTHON ENVIRONMENT PASSED`. Press a key to close the helper window. Installation may take several minutes. No Python path, venv activation or persistent execution-policy change is required.
+
+### 2. Recognise the successful check
+
+The environment check must show:
+
+- Python 3.13;
+- an executable inside this repository's `venv-info-hub\Scripts\python.exe`;
+- `Virtual env: yes`;
+- all required packages imported successfully; and
+- `PASSED`, followed by a successful dependency check.
+
+For a later check without installing packages or changing the profile:
+
+```powershell
+.\setup-bnr-python.bat -CheckOnly
+```
+
+Do not install PyCap into base Python to repair a BNR extract. The package distribution is called **PyCap**; the extraction imports it as `redcap`.
+
+### 3. Command alternative without the helper
+
+In a **VS Code PowerShell terminal** at the repository root, if no venv exists:
 
 ```powershell
 py -3.13 -m venv venv-info-hub
 ```
 
-The command may take a short time and normally prints nothing. Confirm that the environment was created:
+Then install and check using that executable directly:
 
 ```powershell
-dir venv-info-hub
+.\venv-info-hub\Scripts\python.exe -m pip install -r requirements.txt
+.\venv-info-hub\Scripts\python.exe -c "import sys; print(sys.executable)"
+.\venv-info-hub\Scripts\python.exe -c "from redcap import Project; print('PyCap OK')"
+.\venv-info-hub\Scripts\python.exe scripts\python\check-python-environment.py
+.\venv-info-hub\Scripts\python.exe -m pip check
 ```
 
-### 2. Activate it
+The checker must finish with `PASSED`; `pip check` must report no broken requirements. This route also needs no activation. The final Windows/Stata check remains Stage 6.
 
-In the same terminal, type:
+### 4. Record the environment
 
-```powershell
-.\venv-info-hub\Scripts\Activate.ps1
-```
-
-The prompt should begin with:
-
-```text
-(venv-info-hub)
-```
-
-If PowerShell blocks activation, use the smallest practical policy change for the current user:
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-Then activate the environment again.
-
-### 3. Install the project packages
-
-With the virtual environment active in the VS Code PowerShell terminal, type:
-
-```powershell
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-This installs the supported analyst/notebook packages and **PyCap**, the Python
-package used to connect to REDCap. The extraction code imports it as `redcap`.
-
-### 4. Check the environment
-
-From the repository root in the same terminal, run the tracked environment check:
-
-```powershell
-python scripts/python/check-python-environment.py
-```
-
-It must report Python 3.13, list every required package and finish with
-`PASSED`. It does not connect to REDCap or read private data.
-
-Then type:
-
-```powershell
-where.exe python
-```
-
-The first Python path should point inside:
-
-`venv-info-hub\Scripts\python.exe`
-
-### 5. Record the environment
-
-Record the Python version and environment path in `local-setup-notes.md`.
+Record the Python version and BNR environment path in `local-setup-notes.md`.
 
 The two requirement files have different purposes:
 
-- `requirements.txt` is the maintained list of direct project packages and
-  compatible version ranges. Use it for routine workstation setup and CI.
-- `requirements-freeze.txt` records the exact full Windows/Python 3.13
-  environment that was tested at handover, including packages installed automatically by other packages.
-  Use it to compare or reproduce a known environment when troubleshooting; it
-  is not the routine cross-platform installation file.
+- `requirements.txt` is the maintained list of direct project packages and compatible version ranges. Use it for routine workstation setup and CI.
+- `requirements-freeze.txt` records the exact full Windows/Python 3.13 environment tested at handover, including dependencies installed automatically. Use it to compare or reproduce that environment when troubleshooting; it is not the routine cross-platform installation file.
 
-After an authorised Python package change has been installed and tested on the
-canonical BNR Windows workstation, refresh the frozen record from the repository
-root:
+After an authorised package change has been installed and tested on the canonical BNR Windows workstation, refresh the frozen record from the repository root:
 
 ```powershell
-python -m pip freeze --all | Set-Content -Encoding utf8 requirements-freeze.txt
+.\venv-info-hub\Scripts\python.exe -m pip freeze --all | Set-Content -Encoding utf8 requirements-freeze.txt
 ```
 
-Review and commit changes to both requirement files together.
+Review the requirement-file changes together before committing. A secondary workstation should not refresh the tracked handover freeze merely because it ran setup; use a separately named ignored local snapshot if needed.
 :::
 
 ::: {.callout-note collapse="true"}
 ## Stage 6: Configure Stata startup with `profile.do`
 
-Stata is assumed to be installed. The workstation still needs the BNR project configuration to load automatically at startup.
+Complete Stage 5 and the deferred Stage 4 path checks first. The BNR LOCAL configuration derives `$BNR_PYTHON_EXE` from the repo root. Stata startup selects that interpreter before embedded Python is used.
 
-The BNR `profile.do` loads the local path configuration, builds the **User > BNR** menu and tells Stata which Python executable to use. The path configuration adds the BNR ado and dialog directories automatically.
+### 1. Identify the personal profile
 
-### 1. Find the personal Stata directory
-
-In Stata:
+In the **Stata command window**, type:
 
 ```stata
 sysdir
 ```
 
-Identify the `PERSONAL` directory.
+Note the `PERSONAL` directory. The startup file is `profile.do` in that directory. If you already have a working personal profile, use that file rather than creating a competing startup file.
 
-Place or edit:
+Close Stata completely before the next step.
 
-`profile.do`
+### 2. Run the profile setup
 
-in that personal directory so Stata runs it automatically at startup.
+In File Explorer, open the BNR repository root and double-click:
 
-### 2. Use the BNR profile pattern
+`setup-bnr-python.bat`
 
-The current workstation profile follows this pattern:
+The helper repeats the environment checks, verifies the LOCAL Python global and opens a file chooser. Select the existing `profile.do` in the PERSONAL directory. If none exists, navigate to that directory and enter `profile.do` as the filename.
+
+It updates the BNR configuration-file path and replaces the old base-Python setting with `$BNR_PYTHON_EXE`. It adds the BNR menu load if missing. It preserves existing SHG configuration/menu commands and other startup entries. Before changing an existing profile, it saves the original beside it as `profile.bnr_backup_YYYYMMDD_HHMMSS_microseconds.bak`.
+
+Look for `BNR PYTHON SETUP COMPLETED`. The helper never changes LOCAL.do or reads token files. If it reports ambiguous startup commands, it leaves the profile unchanged for manual review. See the helper guide at `scripts/powershell/setup-bnr-python.md` for supported syntax, command options and recovery.
+
+### 3. Understand the resulting BNR startup pattern
+
+The following shows the BNR portion of a profile. The helper writes the repo path for you; SHG entries can remain alongside it.
 
 ```stata
 * Load BNR workstation configuration
@@ -838,31 +837,31 @@ do "C:/your/path/info-hub/scripts/stata/config/bnr_paths_LOCAL.do"
 * Build the BNR menu
 do "$BNR_STATA/menu/bnr_menu.do"
 
-* Python
-python set exec ///
-    "C:/your/path/info-hub/venv-info-hub/Scripts/python.exe", permanently
+* Use the BNR repository virtual environment
+capture confirm file "$BNR_PYTHON_EXE"
+if _rc {
+    display as error "BNR Python venv not found: $BNR_PYTHON_EXE"
+    display as error "Run setup-bnr-python.bat from the BNR repository root."
+    exit 601
+}
+python set exec "$BNR_PYTHON_EXE", permanently
 noisily python query
 ```
 
-Replace both example paths with the paths on the new workstation.
+For manual setup, only the configuration-file path above is machine-specific. Do not add a separate base-Python path. The LOCAL file already adds the BNR ado and dialog directories.
 
-This is based on the active BNR workstation `profile.do`; do not copy another user's absolute paths unchanged.
+### 4. Restart and verify Stata Python
 
-### 3. Restart Stata
-
-Close and reopen Stata.
-
-Confirm the startup sequence completes without an error.
-
-Check:
+Reopen Stata and confirm startup completes without an error. In its command window:
 
 ```stata
+display "$BNR_PYTHON_EXE"
 python query
 ```
 
-The Python executable should be the one configured in `profile.do`.
+Both must identify this BNR repository's `venv-info-hub\Scripts\python.exe`. The embedded interpreter must not point to base Python under `AppData`, `WindowsApps`, another Windows user's installation or SHG's venv.
 
-### 4. Check Python from inside Stata
+Then run:
 
 ```stata
 python:
@@ -871,13 +870,11 @@ print("BNR Python / PyCap check passed")
 end
 ```
 
-### 5. Check the menu
+It must print `BNR Python / PyCap check passed`. If Python was already used before changing its setting, close Stata completely and restart; `python clear` is not an interpreter switch.
 
-Confirm:
+### 5. Check the menu and project coexistence
 
-**User > BNR**
-
-is visible and contains:
+Confirm **User > BNR** is visible and contains:
 
 - **Update CVD events dashboard**
 - **Update CVD mortality dashboard**
@@ -886,13 +883,13 @@ is visible and contains:
 - **One-off CVD report publication**
 - **Report utilities**
 
-The menu should now load automatically whenever Stata starts.
+For the development-machine migration, use the normal controlled procedures to test one CVD event extract and one mortality extract with authorised inputs. Respect their existing-output checks; do not overwrite a retained extract merely to test startup.
+
+If SHG is also installed, run its usual preview in the same Stata session and confirm its configured `$SHG_PYTHON_EXE` still works. SHG's external Python process is separate from BNR's embedded interpreter; this helper does not configure SHG or rebuild its venv.
 
 ### Why `profile.do` matters
 
-Routine analysts should not need to remember a sequence of setup commands before running a workflow.
-
-Loading paths, dialogs, the BNR menu and Python at Stata startup makes the workstation state predictable and reduces reliance on hard-coded fallback paths inside individual DO files.
+Routine analysts should not need to remember a sequence of setup commands. Loading paths, dialogs, the BNR menu and the correct interpreter at startup makes the workstation state predictable.
 :::
 
 ::: {.callout-note collapse="true"}
@@ -967,7 +964,7 @@ Ctrl + C
 
 The repository includes:
 
-`start-info-hub-edit.bat`
+`start-bnr-info-hub-edit.bat`
 
 Use this file to start a normal Info-Hub editing session on Windows. It is designed to be run at the beginning of the working day, before changing files.
 
@@ -1074,7 +1071,7 @@ Restart Stata one final time.
 Confirm:
 
 - `profile.do` runs without error;
-- `python query` points to the intended Python;
+- `python query` and `$BNR_PYTHON_EXE` both point inside the BNR repo's `venv-info-hub\Scripts\python.exe`;
 - PyCap imports successfully; and
 - **User > BNR** is available without manually loading any setup file.
 
@@ -1146,9 +1143,10 @@ Machine-specific:
 - `local-setup-notes.md`; and
 - the authorised private workspace.
 
-Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live data or report publication.
+Rebuild each project venv from its own requirements file; never copy a venv or reuse another machine's Python executable path. Use `setup-bnr-python.bat` for the BNR environment/profile, and configure SHG separately if needed. Recreate the machine-specific pieces deliberately, then repeat Stage 8 before using the workstation for a live data or report publication.
 
 ## Related procedures
 
 - [Fix common problems](../maintenance/troubleshooting.qmd) — recover from setup, Stata, Quarto or Git problems.
 - [Render and publish the website](../website/render-publish.qmd) — begin normal Info-Hub editing after setup is complete.
+

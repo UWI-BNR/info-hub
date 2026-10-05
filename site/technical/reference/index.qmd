@@ -381,7 +381,8 @@ website editing session. Read their dry-run output before allowing a change.
 | `scripts/maintenance/manage-cvd-monthly-release.ps1` | Audits, then optionally moves eligible event or mortality months and approved dependent rolling updates to a recoverable private archive. Its companion Markdown file gives worked commands. |
 | `scripts/maintenance/remove_superseded_cvd_step5_disclosure.ps1` | Audits, then optionally removes the named superseded Step 5 disclosure files after checking the replacement wrapper. |
 | `scripts/maintenance/retire_cvd_linkage_derived_tree.ps1` | Moves the retired private linkage tree to a recoverable private archive; it does not delete it. |
-| `start-info-hub-edit.bat` | Opens VS Code, activates the supported Python environment and starts the local Quarto preview. |
+| `setup-bnr-python.bat` | One-time BNR Python setup/repair. Calls `scripts/powershell/setup-bnr-python.ps1` and the standard-library profile updater, checks the project venv and backs up/updates the chosen personal Stata profile. See workstation setup Stages 5–6. |
+| `start-bnr-info-hub-edit.bat` | Opens VS Code, activates the supported Python environment and starts the local Quarto preview. |
 :::
 
 ## Website and deployment code
@@ -476,3 +477,4 @@ the complete proposed public package before approval.
 Follow [Make a safe code change](../maintenance/safe-code-change.qmd). Check the
 menu labels, run the relevant tests, check links, render the full site and make
 sure Git does not contain private or unintended files.
+

@@ -153,7 +153,7 @@ An interrupted move is marked `status: incomplete`.
 1. Review `git status` and confirm that only the intended reports were removed.
 2. Stop any running Quarto preview.
 3. Run a complete `quarto render` from `site/`.
-4. Restart `start-info-hub-edit.bat`.
+4. Restart `start-bnr-info-hub-edit.bat`.
 5. Check News, annual-report listings, rolling-update listings and direct URLs.
 6. Confirm that the retained event and mortality downloads remain available.
 7. Commit only the intended repository changes.
@@ -164,3 +164,4 @@ After `-AllVersions` has archived the complete working-tree and private package
 history for a report period, the normal builder can create v1 again. This is a
 development reset. It does not erase earlier versions from Git history or from
 the recoverable administrative archive.
+

@@ -45,7 +45,7 @@ Confirm that the workstation is set up, the required analytical data package or 
 
 | File | Purpose |
 |---|---|
-| `start-info-hub-edit.bat` | Opens VS Code, starts the local preview and opens Firefox. Run directly by double-clicking it from the repository root. |
+| `start-bnr-info-hub-edit.bat` | Opens VS Code, starts the local preview and opens Firefox. Run directly by double-clicking it from the repository root. |
 | `site/_quarto.yml` | Controls the Quarto site, including the pre-render Downloads catalogue builder. |
 | `.github/workflows/publish-site.yml` | GitHub Actions controller that renders and deploys the site after `main` changes. It is called automatically by GitHub. |
 | `requirements.txt` | Python packages installed by GitHub Actions before rendering. Do not change it for an ordinary content update. |
@@ -64,7 +64,7 @@ Confirm that the workstation is set up, the required analytical data package or 
 
 At the repository root, double-click:
 
-`start-info-hub-edit.bat`
+`start-bnr-info-hub-edit.bat`
 
 It checks that the repository, site configuration and local Python virtual environment exist; opens the repository in VS Code; starts a **BNR info-hub Quarto Preview** Command Prompt; and opens `http://127.0.0.1:4200/` in Firefox.
 
@@ -177,3 +177,4 @@ For the small number of consequential recovery cases, use [Fix common problems](
 - [Update website content](update-content.qmd)
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
 - [Safe code changes](../maintenance/safe-code-change.qmd)
+

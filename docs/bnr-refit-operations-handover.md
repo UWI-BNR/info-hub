@@ -112,7 +112,7 @@ Machine-specific roots and the REDCap token-file location are defined in the unt
 
 3a. Local website and documentation editing
 
-start-info-hub-edit.bat is a tracked Windows convenience launcher in the public repository root. It derives the repository folder from its own location, opens VS Code (or File Explorer if VS Code is unavailable), activates venv-info-hub, and starts a local Quarto preview at http://127.0.0.1:4200/.
+start-bnr-info-hub-edit.bat is a tracked Windows convenience launcher in the public repository root. It derives the repository folder from its own location, opens VS Code (or File Explorer if VS Code is unavailable), activates venv-info-hub, and starts a local Quarto preview at http://127.0.0.1:4200/.
 
 It requires Quarto and the local Python environment to have been installed. It does not run Stata, access REDCap, prepare data, approve or publish outputs, commit Git changes, or deploy the site. Close the separate BNR info-hub Quarto Preview command window at the end of the editing session.
 
@@ -441,3 +441,4 @@ agreed disclosure controls are applied before publication; and
 material methodological, structural or governance changes are handled through explicit change control.
 
 Record exceptions and decisions. Do not create routine paperwork when the assumptions remain unchanged.
+

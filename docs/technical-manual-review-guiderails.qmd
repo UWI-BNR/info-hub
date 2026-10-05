@@ -98,7 +98,7 @@ This document consolidates the review approach agreed before the review with the
 | 41 | For Git actions, provide both the VS Code interface route and equivalent commands, followed by the expected result. Do not assume prior Git knowledge. |
 | 42 | Routine changes use a development branch. Pull GitHub’s `main` into local `main`, create and work on a development branch, push that branch to GitHub, and merge it through a pull request. Do not describe GitHub as “pulling” a local branch. |
 | 43 | Do not instruct users to push directly to protected `main`. After a GitHub merge, update local `main` by pulling from GitHub. |
-| 44 | Treat `start-info-hub-edit.bat` as the normal Windows start-of-day route. Explain that it opens VS Code, activates the environment for Quarto preview and opens the local site, but does not update Git, choose a branch, commit, publish or deploy. |
+| 44 | Treat `start-bnr-info-hub-edit.bat` as the normal Windows start-of-day route. Explain that it opens VS Code, activates the environment for Quarto preview and opens the local site, but does not update Git, choose a branch, commit, publish or deploy. |
 
 ## Workstation and software conventions
 
@@ -217,3 +217,4 @@ This document consolidates the review approach agreed before the review with the
 | Decision | Status | Agreed treatment |
 |---|:---:|---|
 | **TM-01 — Retire duplicated generic control pages** | Complete | Use the product-specific workflow pages as the operational instructions and the three rules registers for cross-cutting classification, linkage and disclosure rules. The former generic control pages are archived in `docs/deprecated/site/technical/controls/` and are not part of the website navigation. |
+

@@ -2,7 +2,7 @@
 
 **Status:** Current development guiderails
 
-**Updated:** 6 September 2026
+**Updated:** 5 October 2026
 
 **Pre-manual-update baseline and recovery point:** `d34a1d1cd1a952a26a30c4a37894395ed5bdd6eb`
 
@@ -93,7 +93,7 @@ The recognised technical approval roles are **BNR Lead**, **BNR Analyst** and **
 
 ## Local editing utility
 
-`start-info-hub-edit.bat` is the tracked Windows launcher for a local website
+`start-bnr-info-hub-edit.bat` is the tracked Windows launcher for a local website
 and documentation editing session. It opens the repository in VS Code and starts
 a local Quarto preview using `venv-info-hub`. It derives its root from its own
 location and must remain in the repository root.
@@ -102,6 +102,19 @@ It is not an analytical, approval, publication, Git or deployment workflow. It
 does not access REDCap or private analytical data. The controlled Stata menu and
 product-specific approval and publication steps remain the only operational
 entry points for surveillance outputs.
+
+## Local Python setup utility
+
+`setup-bnr-python.bat` is the one-time Windows Python setup/repair entry point.
+It derives the BNR repo root, creates/checks `venv-info-hub`, installs the
+maintained requirements and backs up/updates the selected personal Stata
+profile. It checks but does not edit `bnr_paths_LOCAL.do` and does not read
+token files, access REDCap, run analyses, approve, publish or deploy anything.
+
+BNR embedded Stata Python uses `$BNR_PYTHON_EXE`, derived from `$BNR_REPO`.
+Project venvs and requirements files remain separate; this utility does not
+configure SHG's external Python interpreter. Detailed setup belongs in the
+Technical Manual.
 
 ## Documentation boundaries
 
@@ -139,3 +152,4 @@ The signed Terms of Reference remains the scope baseline. In particular:
 - material methodological, structural, governance or scope changes require explicit review.
 
 Where the ToR, repository and manuals appear inconsistent, stop and resolve the discrepancy rather than silently changing the implementation.
+

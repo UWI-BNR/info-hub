@@ -35,10 +35,11 @@ the workstation → verify the complete setup.
 ## How to confirm completion
 
 The final workstation checks pass, Stata can see the BNR menu and configured
-paths, and `start-info-hub-edit.bat` opens the local website preview.
+paths, and `start-bnr-info-hub-edit.bat` opens the local website preview.
 
 ## Related guidance
 
 - [Analytics and publishing environment](../getting-started/environment.qmd)
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
 - [Fix common problems](../maintenance/troubleshooting.qmd)
+
