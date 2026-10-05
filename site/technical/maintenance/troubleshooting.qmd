@@ -129,28 +129,36 @@ For mortality, use `$BNR_MORT_REDCAP_TOKEN_FILE`. Correct the secure local token
 
 ::: {.callout-note collapse="true"}
 
-In Stata:
+`ModuleNotFoundError: No module named 'redcap'` can mean that Stata selected the wrong interpreter, even if PyCap is installed somewhere else.
+
+In the **Stata command window**:
 
 ```stata
+display "$BNR_PYTHON_EXE"
 python query
 ```
 
-In a **VS Code PowerShell terminal** at the repository root:
+Both must point inside this BNR repo's `venv-info-hub\Scripts\python.exe`. If the global is blank, add the derived global shown in workstation setup Stage 4. If Stata points at base Python, rerun `setup-bnr-python.bat`, select the active personal profile and restart Stata completely.
+
+In a **VS Code PowerShell terminal** at the repository root, check the actual BNR environment without changing it:
 
 ```powershell
-.\venv-info-hub\Scripts\Activate.ps1
-python -c "from redcap import Project; print('PyCap available')"
-python scripts/python/check-python-environment.py
+.\setup-bnr-python.bat -CheckOnly
 ```
 
-If packages are missing, reinstall the maintained requirements:
+For missing packages, run `setup-bnr-python.bat` normally. It installs `requirements.txt`, checks imports/dependency compatibility and updates the selected profile after making a backup. It does not install into base Python or edit LOCAL.do.
+
+The equivalent direct checks are:
 
 ```powershell
-python -m pip install -r requirements.txt
-python scripts/python/check-python-environment.py
+.\venv-info-hub\Scripts\python.exe -c "from redcap import Project; print('PyCap available')"
+.\venv-info-hub\Scripts\python.exe scripts\python\check-python-environment.py
+.\venv-info-hub\Scripts\python.exe -m pip check
 ```
 
-Restart Stata afterwards. If setup remains incomplete, return to [Set up a workstation](../getting-started/workstation-setup.qmd).
+Restart Stata after profile changes and repeat the embedded PyCap import check. `python clear` does not change the loaded interpreter. SHG transfer failures need separate checks of `$SHG_PYTHON_EXE` and SHG's own requirements; changing BNR's embedded interpreter will not repair that external process.
+
+Return to [Set up a workstation](../getting-started/workstation-setup.qmd#stage-5-create-the-python-environment) for the complete setup procedure. For a profile rollback, restore the named backup beside the selected `profile.do` with Stata closed, then restart.
 
 :::
 
@@ -232,7 +240,7 @@ Check the data-release or report identity, the generated manifest and the expect
 
 ## Quarto {#quarto-problems}
 
-### `start-info-hub-edit.bat` does not start
+### `start-bnr-info-hub-edit.bat` does not start
 
 ::: {.callout-note collapse="true"}
 
@@ -400,3 +408,4 @@ Record the exact error, selected data release or report identity, relevant priva
 - [Set up a workstation](../getting-started/workstation-setup.qmd)
 - [Run the relevant analytical workflow](../workflows/section-index.qmd)
 - [Files, data releases and versions](files-releases-versions.qmd)
+

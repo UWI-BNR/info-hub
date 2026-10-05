@@ -25,7 +25,7 @@ Use this page to change ordinary public website content: explanatory text, links
 
 Confirm that any required data package or report has already completed its controlled Stata approval and publication route. The website may use only approved public products in `site/`.
 
-Start `start-info-hub-edit.bat`, update local `main`, and create a development branch as described in [Render and publish the website](render-publish.qmd). Identify the public source file that owns the content before making a change.
+Start `start-bnr-info-hub-edit.bat`, update local `main`, and create a development branch as described in [Render and publish the website](render-publish.qmd). Identify the public source file that owns the content before making a change.
 
 ::: {.callout-note collapse="true"}
 ## Input files and public source
@@ -99,7 +99,7 @@ Do not enter analytical values in a QMD when an approved generated product owns 
 
 ## Step 3: Save and check the local preview
 
-Save the file. The preview started by `start-info-hub-edit.bat` should refresh in Firefox.
+Save the file. The preview started by `start-bnr-info-hub-edit.bat` should refresh in Firefox.
 
 Check the changed page for wording, headings, tables, figures, links and normal-window readability. If you changed metadata or `_quarto.yml`, also check the affected listing, navbar or sidebar.
 
@@ -146,3 +146,4 @@ See [Fix common problems](../maintenance/troubleshooting.qmd#quarto-problems) fo
 - [Render and publish the website](render-publish.qmd)
 - [The BNR analytics and publishing environment](../getting-started/environment.qmd)
 - [Safe code changes](../maintenance/safe-code-change.qmd)
+

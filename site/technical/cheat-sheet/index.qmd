@@ -294,7 +294,7 @@ navigation. Do not use it to correct published statistics or generated files.
 
 | Order | What you do |
 |--:|------|
-| 1 | Double-click `start-info-hub-edit.bat` at the repository root. Keep its preview window open. |
+| 1 | Double-click `start-bnr-info-hub-edit.bat` at the repository root. Keep its preview window open. |
 | 2 | In VS Code, switch to `main`, pull from GitHub and create a short development branch. |
 | 3 | Edit the public QMD, Markdown, configuration or asset source. Save and check the local preview. |
 | 4 | Activate `venv-info-hub`, change to `site`, and run `quarto render`. |
@@ -447,3 +447,4 @@ decisions, the [Technical Manual](../index.qmd) for exact procedures, and the
 :::
 
 :::
+

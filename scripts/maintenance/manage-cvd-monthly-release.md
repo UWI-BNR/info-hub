@@ -144,7 +144,7 @@ An interrupted move is marked `status: incomplete` in `archive.yml`.
    were removed from their working locations.
 2. Stop any running Quarto preview.
 3. Run a complete `quarto render` from `site/`.
-4. Restart `start-info-hub-edit.bat` so newly removed report routes and listings
+4. Restart `start-bnr-info-hub-edit.bat` so newly removed report routes and listings
    are fully refreshed.
 5. Check dashboards, tables, Downloads, News and report listings.
 6. Commit only the intended repository changes.
@@ -156,3 +156,4 @@ Restoration is a controlled administrative action. Use `archive.yml` and
 appropriate private inputs, then repeat the normal review, approval and Step 6
 publication pathway. Do not copy archived files directly into public locations
 as a substitute for controlled publication.
+

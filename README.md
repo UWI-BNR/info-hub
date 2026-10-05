@@ -58,7 +58,7 @@ The website copies under `site/downloads/` can be rebuilt from `outputs/public/`
 
 ## Local editing launcher
 
-`start-info-hub-edit.bat` is a version-controlled Windows convenience launcher
+`start-bnr-info-hub-edit.bat` is a version-controlled Windows convenience launcher
 for website and documentation editing. Run it from the repository root to:
 
 1. open the repository in VS Code (or File Explorer if VS Code is unavailable);
@@ -98,6 +98,17 @@ Machine-specific paths are kept outside version control. To configure a workstat
 
 ## Python environment
 
+For one-time setup or repair, double-click `setup-bnr-python.bat` at the repo
+root. It builds/checks the BNR venv and updates the selected personal Stata
+profile with a backup. LOCAL.do is checked but not edited. The detailed
+procedure is in `site/technical/getting-started/workstation-setup.qmd`; helper
+options are in `scripts/powershell/setup-bnr-python.md`.
+
+The normal daily editing launcher remains `start-bnr-info-hub-edit.bat`.
+Base Python creates the venv; BNR embedded Stata Python uses the interpreter
+inside `venv-info-hub`, selected through `$BNR_PYTHON_EXE`. SHG retains its own
+external interpreter and requirements file.
+
 Python 3.13 is the tested baseline. From an activated project virtual
 environment, install and check it with:
 
@@ -133,3 +144,4 @@ If a released result is wrong, correct the authoritative REDCap record, referenc
 ## Current development boundary
 
 The CVD event and mortality release workflows and their public dashboards are operational. The CVD reference-tables page consumes their approved public datasets directly. The former Stata tabulations and briefing workflows have been retired; annual, quarterly and one-off reporting will be redesigned separately. Remaining development also includes hypertension and diabetes analytical modules and final operational testing and handover. The repository history records implementation detail; these summary documents should change only when the operating model, methods, controls or responsibilities materially change.
+

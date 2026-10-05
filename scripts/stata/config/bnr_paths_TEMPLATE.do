@@ -7,7 +7,7 @@ Instructions:
 
        bnr_paths_LOCAL.do
 
-  3. Edit the three machine-specific values for your workstation.
+  3. Edit the four machine-specific values for your workstation.
   4. Do not commit bnr_paths_LOCAL.do.
 
 Use:
@@ -33,6 +33,9 @@ global BNR_SCRIPTS  "$BNR_REPO/scripts"
 global BNR_STATA    "$BNR_REPO/scripts/stata"
 global BNR_ADO      "$BNR_REPO/scripts/stata/ado"
 global BNR_DIALOGS  "$BNR_REPO/scripts/stata/dialogs"
+
+* BNR embedded Stata Python and standalone helpers use this project venv.
+global BNR_PYTHON_EXE "$BNR_REPO/venv-info-hub/Scripts/python.exe"
 
 global BNR_OUTPUTS  "$BNR_REPO/outputs"
 global BNR_PUBLIC   "$BNR_REPO/outputs/public"
@@ -123,6 +126,15 @@ foreach global_name in BNR_PRIVATE BNR_DATA_RAW BNR_DATA_FROZEN ///
     }
 }
 
+* Create/check the BNR venv in workstation setup Stage 5 before loading paths.
+capture confirm file "$BNR_PYTHON_EXE"
+if _rc {
+    display as error "BNR Python virtual environment not found."
+    display as error "Expected: $BNR_PYTHON_EXE"
+    display as error "Run setup-bnr-python.bat from the BNR repository root."
+    exit 601
+}
+
 * Token files themselves are checked only by the relevant Step 1 workflow.
 * This allows staff without REDCap credentials to run authorised downstream workflows.
 
@@ -135,7 +147,9 @@ adopath ++ "$BNR_DIALOGS"
 
 display as text "BNR paths loaded:"
 display as result "  Repo:      $BNR_REPO"
+display as result "  Python:    $BNR_PYTHON_EXE"
 display as result "  Private:   $BNR_PRIVATE"
 display as result "  Staging:   $BNR_STAGING"
 display as result "  Public:    $BNR_PUBLIC"
 display as result "  Site:      $BNR_SITE"
+
